@@ -1,15 +1,13 @@
 'use client'
 import { useState } from "react";
+import { submitQuestion } from "@/app/API Services";
 export default function QuestionCreatePage() {
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
 
   function handleSubmit(e: React.FormEvent){
     e.preventDefault();
-    const newQuestion = {
-      title,
-      description,
-    };
+    submitQuestion(title, description)
   };
 
   return (
