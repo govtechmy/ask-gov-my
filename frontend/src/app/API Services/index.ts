@@ -1,3 +1,4 @@
+'use server'
 // this file will act as a middlepart for the components and API / mockup db in next
 
 // todo list: 
@@ -15,3 +16,15 @@
 // todo list for API integration
 // create function to get all questions list for home page( maybe max 10 question per page)
 // create function to ask a question
+
+import { db } from "@/db/prismaService";
+
+export async function fetchQuestions() {
+    return await db.question.findMany();
+  }
+  
+export async function submitQuestion(title: string, description: string) {
+  return await db.question.create({
+    data: { title, description },
+  });
+}
