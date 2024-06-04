@@ -1,9 +1,13 @@
 import Head from 'next/head';
 import QuestionBox from '@/components/QuestionBox';
+import AgencyListNavbar from '@/components/AgencyListNavbar';
+import SearchNavbar from '@/components/SearchNavBar';
 
 export default function Home() {
   return (
     <div className="container mx-auto px-4">
+      <AgencyListNavbar></AgencyListNavbar>
+      <SearchNavbar></SearchNavbar>
       <Head>
         <title>Government Q&A</title>
         <meta name="description" content="Ask questions to the government" />
@@ -18,6 +22,6 @@ export default function Home() {
       </main>
     </div>
   );
-  }
+}
 
 
