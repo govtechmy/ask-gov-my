@@ -1,8 +1,17 @@
+import AgencyListComp from "./AgencyListComp";
+
 const AgencyListNavbar = () => {
     return (
-        <header className="p-5 bg-#0000ff text-left border border-black rounded-md">
+        <div className="p-5 bg-#0000ff text-left border border-black rounded-md">
+            <div>&nbsp;</div>
             <h1>Agencies List</h1>
-        </header>
+            <AgencyListComp></AgencyListComp>
+            <AgencyListComp></AgencyListComp>
+            <AgencyListComp></AgencyListComp>
+            <AgencyListComp></AgencyListComp>
+            <AgencyListComp></AgencyListComp>
+            <AgencyListComp></AgencyListComp>
+        </div>
     );
 };
 
