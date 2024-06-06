@@ -12,6 +12,9 @@ const MainQuestionBox = () => {
             <QuestionBox></QuestionBox>
             <QuestionBox></QuestionBox>
             <QuestionBox></QuestionBox>
+            <div>&nbsp;</div>
+            <div className="text-center">paging</div>
+            {/* do paging later on after link with plane.so */}
         </header>
     );
 };
