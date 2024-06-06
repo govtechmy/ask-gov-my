@@ -1,0 +1,5 @@
+{
+  "devDependencies": {
+    "@types/prop-types": "^15.7.12"
+  }
+}
