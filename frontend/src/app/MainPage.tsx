@@ -8,20 +8,20 @@ import Footer from "@/components/Footer";
 const MainPage = () => {
     return (
         <div className="container max-w-full">
-            <div className="fixed top-0 left-0 w-full bg-white">
-                <div className="">
+            <div className="sticky top-0 left-0 w-full bg-white">
+                <div>
                     <IdentifyWebsite />
                     <ClickHomeLogo />
                     <SearchNavbar />
                 </div>
             </div>
-
-            <div className="pt-96">
+    
+            <div>
                 <div className="main-content flex">
                     <div className="w-3/4">
                         <MainQuestionBox />
                     </div>
-                    <div className="w-1/4">
+                    <div className="w-1/4 fixed -right-1">
                         <AgencyListNavbar />
                     </div>
                 </div>
@@ -29,6 +29,7 @@ const MainPage = () => {
             </div>
         </div>
     );
+    
 };
 
 export default MainPage;
