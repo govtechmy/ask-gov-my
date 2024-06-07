@@ -5,7 +5,7 @@ import MainQuestionBox from '@/components/QuestionBox/MainQuestionBox';
 import AgencyListNavbar from '@/components/AgencyListNavbar';
 import Footer from '@/components/Footer';
 
-const MainPage: React.FC = () => {
+const MainPage = () => {
     return (
         <div className="container max-w-full">
             <div className="sticky top-0 left-0 w-full bg-white">
