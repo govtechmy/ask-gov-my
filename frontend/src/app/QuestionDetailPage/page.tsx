@@ -1,9 +1,7 @@
 import IdentifyWebsite from "@/components/IdentifyWebsite";
-import ClickHomeLogo from "@/components/ClickHomeLogo";
 import SearchNavbar from "@/components/SearchNavBar";
-import MainQuestionBox from "@/components/MainQuestionBox";
-import AgencyListNavbar from "@/components/AgencyListNavbar";
 import Footer from "@/components/Footer";
+import DetailQuestionBox from "@/components/QuestionBox/DetailQuestionBox";
 
 
 const QuestionDetailPage = () => {
@@ -13,9 +11,12 @@ const QuestionDetailPage = () => {
                 <div>
                     <IdentifyWebsite />
                     <SearchNavbar />
-                    <div>Navigation Panel</div>
                 </div>
             </div>
+            <div>Navigation Panel</div>
+            <DetailQuestionBox></DetailQuestionBox>
+            <div>Recommended Question Box</div>
+            <div>Cant find what youre looking for? ask a question button</div>
             <Footer></Footer>
         </div>
     );

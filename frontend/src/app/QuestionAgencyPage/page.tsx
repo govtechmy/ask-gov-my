@@ -1,18 +1,19 @@
 import IdentifyWebsite from '@/components/IdentifyWebsite';
 import ClickHomeLogo from '@/components/ClickHomeLogo';
-import SearchNavbar from '@/components/SearchNavBar';
+import SearchNavbarAgency from '@/components/SearchNavBarAgency';
 import MainQuestionBox from '@/components/QuestionBox/MainQuestionBox';
 import AgencyListNavbar from '@/components/AgencyListNavbar';
 import Footer from '@/components/Footer';
 
-const MainPage: React.FC = () => {
+
+const QuestionDetailPage = () => {
     return (
         <div className="container max-w-full">
             <div className="sticky top-0 left-0 w-full bg-white">
                 <div>
                     <IdentifyWebsite />
                     <ClickHomeLogo />
-                    <SearchNavbar />
+                    <SearchNavbarAgency />
                 </div>
             </div>
 
@@ -29,6 +30,7 @@ const MainPage: React.FC = () => {
             </div>
         </div>
     );
+
 };
 
-export default MainPage;
+export default QuestionDetailPage;

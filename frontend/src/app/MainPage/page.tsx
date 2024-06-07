@@ -1,9 +1,9 @@
-import IdentifyWebsite from "@/components/IdentifyWebsite";
-import ClickHomeLogo from "@/components/ClickHomeLogo";
-import SearchNavbar from "@/components/SearchNavBar";
-import MainQuestionBox from "@/components/MainQuestionBox";
-import AgencyListNavbar from "@/components/AgencyListNavbar";
-import Footer from "@/components/Footer";
+import IdentifyWebsite from '@/components/IdentifyWebsite';
+import ClickHomeLogo from '@/components/ClickHomeLogo';
+import SearchNavbar from '@/components/SearchNavBar';
+import MainQuestionBox from '@/components/QuestionBox/MainQuestionBox';
+import AgencyListNavbar from '@/components/AgencyListNavbar';
+import Footer from '@/components/Footer';
 
 const MainPage = () => {
     return (
@@ -15,7 +15,7 @@ const MainPage = () => {
                     <SearchNavbar />
                 </div>
             </div>
-    
+
             <div>
                 <div className="main-content flex">
                     <div className="w-3/4">
@@ -29,7 +29,6 @@ const MainPage = () => {
             </div>
         </div>
     );
-    
 };
 
 export default MainPage;
