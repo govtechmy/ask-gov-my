@@ -11,16 +11,34 @@ import { db } from "@/db/prismaService";
 //   });
 // }
 
-export async function fetchQuestions() {
-  const slug = process.env.NEXT_PUBLIC_SLUG;
-  const projectId = process.env.NEXT_PUBLIC_PROJECT_ID;
-  const apiKey = process.env.NEXT_PUBLIC_API_KEY;
+interface Agency {
+  id: number;
+  name: string;
+  slug: string;
+  projectId: string;
+  apiKey: string;
+}
 
-  const url = `https://api.plane.so/api/v1/workspaces/${slug}/projects/${projectId}/issues/`;
+ interface Question {
+  id: string;
+  name: string;
+  description_html: string;
+}
+
+export async function fetchAgencyQuestions(agencyName: string) {
+  const agency: Agency | null = await db.agency.findUnique({
+    where: { name: agencyName },
+  });
+
+  if (agency === null) {
+    throw new Error(`Agency ${agencyName} not found`);
+  } //just adding throw new error to hide ts syntax highlight
+
+  const url = `https://api.plane.so/api/v1/workspaces/${agency.slug}/projects/${agency.projectId}/issues/`;
   const response = await fetch(url, {
     method: 'GET',
     headers: {
-      'X-API-Key': apiKey,
+      'X-API-Key': agency.apiKey,
     },
   });
 
@@ -28,14 +46,19 @@ export async function fetchQuestions() {
     throw new Error(`${response.statusText}`);
   }
 
-  const data = await response.json()
-  return data.results //all issues is nested inside results array
+  const data = await response.json();
+  return data.results; // all issues or questions are nested inside the results array
 }
 
+
 export async function submitQuestion(name: string, description_html: string, agencyName: string) { //title = name, description = description_html
-  const agency = await db.agency.findUnique({ 
+  const agency : Agency | null = await db.agency.findUnique({ 
     where: { name: agencyName },
   });
+
+  if (agency === null) {
+    throw new Error(`Agency ${agencyName} not found`);
+  }
 
   const url = `https://api.plane.so/api/v1/workspaces/${agency.slug}/projects/${agency.projectId}/issues/`;
   const response = await fetch(url, {
@@ -66,10 +89,14 @@ export async function submitQuestion(name: string, description_html: string, age
 }
 
 export async function questionDetail(questionId:string, agencyName:string, title:string, description:string) {
-  const agency = await db.agency.findUnique({ // the title and description is being send from components to save time from making another request
+  const agency: Agency | null = await db.agency.findUnique({ // the title and description is being send from components to save time from making another request
     where: { name: agencyName },
   });
 
+  if (agency === null) {
+    throw new Error(`Agency ${agencyName} not found`);
+  }
+  
   const url = `https://api.plane.so/api/v1/workspaces/${agency.slug}/projects/${agency.projectId}/issues/${questionId}/comments`;
   const response = await fetch(url, {
     method: 'get',

@@ -8,9 +8,10 @@ generator client {
 }
 
 model Question {
-  id          Int      @id @default(autoincrement())
+  id          String      @id
   title       String
   description String
+  agency      String
   createdAt   DateTime @default(now())
 }
 
