@@ -28,8 +28,8 @@ export async function fetchQuestions() {
     throw new Error(`${response.statusText}`);
   }
 
-  const data = await response.json();
-  return data
+  const data = await response.json()
+  return data.results //all issues is nested inside results array
 }
 
 export async function submitQuestion(name: string, description_html: string, agencyName: string) { //title = name, description = description_html
