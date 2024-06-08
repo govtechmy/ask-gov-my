@@ -1,3 +1,4 @@
+'use server'
 import { db } from "@/db/prismaService";
 const schedule = require('node-schedule');
 
