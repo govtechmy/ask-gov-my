@@ -1,16 +1,6 @@
 'use server'
 import { db } from "@/db/prismaService";
 
-// export async function fetchQuestions() {
-//     return await db.question.findMany();
-//   }
-  
-// export async function submitQuestion(title: string, description: string) {
-//   return await db.question.create({
-//     data: { title, description },
-//   });
-// }
-
 interface Agency {
   id: number;
   name: string;
