@@ -23,10 +23,11 @@ services:
       - postgres
     volumes:
       - ./backups:/backups
+      - .:/scripts  # This line mounts the current directory to /scripts inside the container
     environment:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres
-    entrypoint: [ "/bin/bash", "-c", "/backups/backup.sh" ]
+    entrypoint: [ "/bin/bash", "-c", "/scripts/backup.sh" ]
 
 volumes:
   postgres_data:
