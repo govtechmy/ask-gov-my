@@ -16,7 +16,9 @@ services:
       - ./backups:/backups
 
   pg_backup:
-    image: postgres:13
+    build:
+      context: .
+      dockerfile: Dockerfile
     depends_on:
       - postgres
     volumes:
