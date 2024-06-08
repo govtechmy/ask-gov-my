@@ -1,4 +1,5 @@
 version: '3.8'
+
 services:
   postgres:
     image: postgres:13
@@ -11,6 +12,27 @@ services:
       - "5555:5432"
     volumes:
       - postgres_data:/var/lib/postgresql/data
+      - ./initdb:/docker-entrypoint-initdb.d
+
+  pg_backup:
+    image: postgres:13
+    depends_on:
+      - postgres
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: mydb
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./initdb:/docker-entrypoint-initdb.d
+    entrypoint: >
+      bash -c "
+      if [ ! -f /docker-entrypoint-initdb.d/db_backup.sql ]; then
+        pg_dumpall -h postgres -U postgres -f /docker-entrypoint-initdb.d/db_backup.sql;
+      else
+        echo 'Backup file already exists.';
+      fi
+      "
 
 volumes:
   postgres_data:
