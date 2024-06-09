@@ -6,16 +6,16 @@ interface OverflowContainerQuestBoxProps {
     description: string;
 }
 
-const OverflowContainerQuestBox: React.FC<OverflowContainerQuestBoxProps> = ({ id, title, description }) => {
+const OverflowContainerQuestBox: React.FC<OverflowContainerQuestBoxProps> = ({ title, description }) => {
     return (
         <div className="p-5 bg-#0000ff text-left border border-black rounded-md" style={{ overflow: 'hidden', textOverflow: 'ellipsis' }}>
-            <h2>{title}</h2>
-            <p>{description}</p>
+            <h2 style={{ fontWeight: 'bold', color: 'blue' }}>
+                {title}
+            </h2>
             {/* control overflow here using any style you want */}
-            <DetailQuestionBox id={id} />
+            <DetailQuestionBox description={description} />
         </div>
     );
 };
 
 export default OverflowContainerQuestBox;
-
