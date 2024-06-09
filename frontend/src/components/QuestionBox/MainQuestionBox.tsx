@@ -11,6 +11,7 @@ interface Question {
   }
   
 const MainQuestionBox = () => {
+
     const [questions, setQuestions] = useState<Question[]>([]);
 
     const fetchQuestions = async () => {
@@ -30,7 +31,7 @@ const MainQuestionBox = () => {
 
 
     return (
-        <header className="p-5 bg-#0000ff text-left border border-black rounded-md">
+        <div className="p-5 bg-#0000ff text-left border border-black rounded-md">
             <h1>Top Questions From Citizens</h1>
             {questions.map((question) => (
                 <OverflowContainerQuestBox 
@@ -42,7 +43,7 @@ const MainQuestionBox = () => {
             ))}
             <div className="text-center">paging</div>
             {/* do paging later on after link with plane.so */}
-        </header> /*why the question box inside header?
+        </div> 
     );
 };
 
