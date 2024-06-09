@@ -2,8 +2,6 @@ import Footer from "@/components/Footer";
 import AgencyListComp from "@/components/AgencyListComp";
 import IdentifyWebsite from "@/components/IdentifyWebsite";
 import SearchNavbar from "@/components/SearchNavBar";
-import { getAgencies } from "@/API Services/AgencyServices";
-import { useState, useEffect } from "react";
 
 const AgencyListPage = () => {
     return (
