@@ -32,20 +32,17 @@ const MainQuestionBox = () => {
     return (
         <header className="p-5 bg-#0000ff text-left border border-black rounded-md">
             <h1>Top Questions From Citizens</h1>
-            {/* change some detail question box so it can onlyt show limit of the box */}
-            <OverflowContainerQuestBox></OverflowContainerQuestBox>
-            <OverflowContainerQuestBox></OverflowContainerQuestBox>
-            <OverflowContainerQuestBox></OverflowContainerQuestBox>
-            <OverflowContainerQuestBox></OverflowContainerQuestBox>
-            <OverflowContainerQuestBox></OverflowContainerQuestBox>
-            <OverflowContainerQuestBox></OverflowContainerQuestBox>
-            <OverflowContainerQuestBox></OverflowContainerQuestBox>
-            <OverflowContainerQuestBox></OverflowContainerQuestBox>
-            <OverflowContainerQuestBox></OverflowContainerQuestBox>
-            <OverflowContainerQuestBox></OverflowContainerQuestBox>
+            {questions.map((question) => (
+                <OverflowContainerQuestBox 
+                    key={question.id} 
+                    id={question.id} 
+                    title={question.title} 
+                    description={question.description} 
+                />
+            ))}
             <div className="text-center">paging</div>
             {/* do paging later on after link with plane.so */}
-        </header>
+        </header> /*why the question box inside header?
     );
 };
 
