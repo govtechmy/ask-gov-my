@@ -1,6 +1,7 @@
 'use client'
 import { useState } from "react";
-import { submitQuestion } from "/src/API Services/questionServices.ts";
+import { submitQuestion } from "@/API Services/questionServices";
+// import { submitQuestion } from "/src/API Services/questionServices.ts";
 export default function QuestionCreatePage() {
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
