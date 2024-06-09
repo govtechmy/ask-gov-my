@@ -1,5 +1,6 @@
 'use client'
 import { useEffect, useState } from "react";
+import Link from "next/link";
 import OverflowContainerQuestBox from "./OverflowContainerQuestBox";
 import { getRandomQuestionsFromDB } from "@/API Services/questionServices";
 
@@ -31,12 +32,22 @@ const MainQuestionBox = () => {
         <div className="p-5 bg-#0000ff text-left border border-black rounded-md">
             <h1>Top Questions From Citizens</h1>
             {questions.map((question) => (
-                <OverflowContainerQuestBox 
+                <Link 
                     key={question.id} 
-                    id={question.id}
-                    title={question.title} 
-                    description={question.description} 
-                />
+                    href={{
+                        pathname: '/QuestionDetailPage',
+                        query: { id: question.id }
+                    }}
+                    passHref
+                >
+                    <p style={{ textDecoration: 'none', color: 'inherit' }}>
+                        <OverflowContainerQuestBox 
+                            id={question.id}
+                            title={question.title} 
+                            description={question.description} 
+                        />
+                    </p>
+                </Link>
             ))}
             <div className="text-center">paging</div>
             {/* do paging later on after link with plane.so */}
