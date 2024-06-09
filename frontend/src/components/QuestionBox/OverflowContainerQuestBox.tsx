@@ -1,7 +1,7 @@
 import DetailQuestionBox from "./DetailQuestionBox";
 
 interface OverflowContainerQuestBoxProps {
-    id: number;
+    id: string;
     title: string;
     description: string;
 }
