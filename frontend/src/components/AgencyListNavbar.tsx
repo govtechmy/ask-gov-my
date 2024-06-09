@@ -2,6 +2,7 @@
 import { useEffect, useState } from "react";
 import { getAgencies } from "@/API Services/AgencyServices";
 import { Agency } from "@prisma/client";
+import Link from "next/link";
 
 const AgencyListNavbar = () => {
     const [agencies, setAgencies] = useState<Agency[]>([]);
@@ -31,10 +32,11 @@ const AgencyListNavbar = () => {
                 ))}
             </div>
             <div>&nbsp;</div>
-            <h1 className="underline" style={{ cursor: 'pointer' }}>
-            {/* add onClick after finish all */}
-            See All Agencies
-            </h1>
+            <Link href="/AgencyListPage">
+                <h1 className="underline" style={{ cursor: 'pointer' }}>
+                    See All Agencies
+                </h1>
+            </Link>
         </div>
     );
 };
