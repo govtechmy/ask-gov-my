@@ -7,7 +7,7 @@ interface Question {
     id: string;
     agency: string;
     description: string;
-    name: string;
+    title: string;
   }
   
 const MainQuestionBox = () => {
@@ -27,16 +27,13 @@ const MainQuestionBox = () => {
         fetchQuestions();
     }, []);
 
-    console.log(questions);
-
-
     return (
         <div className="p-5 bg-#0000ff text-left border border-black rounded-md">
             <h1>Top Questions From Citizens</h1>
             {questions.map((question) => (
                 <OverflowContainerQuestBox 
                     key={question.id} 
-                    id={question.id} 
+                    id={question.id}
                     title={question.title} 
                     description={question.description} 
                 />
