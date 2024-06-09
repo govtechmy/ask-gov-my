@@ -142,6 +142,15 @@ export async function fetchQuestions() {
   }
 }
 
+export async function getQuestionById(Id:string) {
+  const question = await db.question.findUnique({
+    where: {
+      id:Id
+    }
+  })
+  return question
+}
+
 export async function getRandomQuestionsFromDB() {
   const questions = await db.question.findMany({
     orderBy: { createdAt: 'desc' },
