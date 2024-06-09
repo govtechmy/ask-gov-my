@@ -14,17 +14,6 @@ const AgencyListPage = () => {
                 <div>
                     <div>view questions and answers pertaining to the following public agencies</div>
                     <AgencyListComp></AgencyListComp>
-                    <AgencyListComp></AgencyListComp>
-                    <AgencyListComp></AgencyListComp>
-                    <AgencyListComp></AgencyListComp>
-                    <AgencyListComp></AgencyListComp>
-                    <AgencyListComp></AgencyListComp>
-                    <AgencyListComp></AgencyListComp>
-                    <AgencyListComp></AgencyListComp>
-                    <AgencyListComp></AgencyListComp>
-                    <AgencyListComp></AgencyListComp>
-                    <AgencyListComp></AgencyListComp>
-                    <AgencyListComp></AgencyListComp>
                 </div>
                 <Footer></Footer>
             </div>
