@@ -49,7 +49,11 @@ const QuestionDetailPage = () => {
             </div>
             <div className="p-5">
                 <h1 className="text-2xl font-bold">{question.title}</h1>
-                <div dangerouslySetInnerHTML={{ __html: question.description }} />
+                {question.description ? (
+                    <div dangerouslySetInnerHTML={{ __html: question.description }} />
+                ) : (
+                    <p>This question has not yet been answered.</p>
+                )}
             </div>
             <div>Navigation Panel</div>
             <div>Recommended Question Box</div>
