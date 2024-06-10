@@ -157,53 +157,100 @@ const prisma = new PrismaClient();
 //     await prisma.$disconnect();
 //   });
 
-async function fetchQuestionDescription() { // function to fetch all the question descriptions
-    const questions = await prisma.question.findMany();
-  
-    for (const question of questions) {
-      if (question.description !== "") {  // skip updating if the description already exists
-        continue;
+
+async function fetchQuestions() {
+  const agencies = await prisma.agency.findMany();
+
+  for (const agency of agencies) {
+    const url = `https://api.plane.so/api/v1/workspaces/${agency.slug}/projects/${agency.projectId}/issues/`;
+    const response = await fetch(url, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+        'X-API-Key': agency.apiKey,
+      },
+    });
+
+    if (!response.ok) {
+      console.error(`Failed to fetch questions for ${agency.name}: ${response.statusText}`);
+      continue;
+    }
+
+    const data = await response.json();
+    const questions = data.results;
+
+    if (questions.length > 0) {
+      for (const question of questions) {
+        const existingQuestion = await prisma.question.findUnique({
+          where: { id: question.id },
+        });
+
+        if (!existingQuestion) {
+          console.log(`Fetching question ${question.id}`)
+          await prisma.question.create({
+            data: {
+              id: question.id,
+              agency: agency.name,
+              title: question.name,
+              description: "", // Initialize with an empty string
+            },
+          });
+        }
       }
-  
-      const agency = await prisma.agency.findUnique({ // find the related agency based on question.agency
-        where: { name: question.agency },
-      });
-  
-      if (!agency) {
-        console.error(`Agency ${question.agency} not found for question ${question.id}`);
-        continue;
-      }
-  
-      // make API call to fetch the description
-      const commentUrl = `https://api.plane.so/api/v1/workspaces/${agency.slug}/projects/${agency.projectId}/issues/${question.id}/comments`;
-      const response = await fetch(commentUrl, {
-        method: 'GET',
-        headers: {
-          'Content-Type': 'application/json',
-          'X-API-Key': agency.apiKey,
-        },
-      });
-  
-      if (!response.ok) {
-        console.error(`Failed to fetch comments for question ${question.id}: ${response.statusText}`);
-        continue;
-      }
-  
-      const commentData = await response.json();
-      const commentHtml = commentData.results[0]?.comment_html || '';
-  
-      await prisma.question.update({  // update the question description in the database
-        where: { id: question.id },
-        data: { description: commentHtml },
-      });
     }
   }
-  
-  fetchQuestionDescription()
-    .catch(e => {
-      console.error(e);
-      process.exit(1);
-    })
-    .finally(async () => {
-      await prisma.$disconnect();
+  await fetchQuestionDescriptions();
+}
+
+async function fetchQuestionDescriptions() {
+  const questions = await prisma.question.findMany();
+
+  for (const question of questions) {
+    if (question.description !== "") {
+      continue;
+    }
+
+    const agency = await prisma.agency.findUnique({
+      where: { name: question.agency },
     });
+
+    if (!agency) {
+      console.error(`Agency ${question.agency} not found for question ${question.id}`);
+      continue;
+    }
+
+    const commentUrl = `https://api.plane.so/api/v1/workspaces/${agency.slug}/projects/${agency.projectId}/issues/${question.id}/comments`;
+    const response = await fetch(commentUrl, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+        'X-API-Key': agency.apiKey,
+      },
+    });
+
+    if (!response.ok) {
+      console.error(`Failed to fetch description for question ${question.id}: ${response.statusText}`);
+      continue;
+    }
+
+    const commentData = await response.json();
+    const commentHtml = commentData.results[0]?.comment_html || '';
+    console.log(`Updating question ${question.id} description`)
+    await prisma.question.update({
+      where: { id: question.id },
+      data: { description: commentHtml },
+    });
+  }
+}
+
+async function main() {
+  try {
+    await fetchQuestions();
+  } catch (error) {
+    console.error(error);
+  } finally {
+    await prisma.$disconnect();
+  }
+}
+
+main();
