@@ -1,14 +1,44 @@
 'use client'
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { submitQuestion } from "@/API Services/questionServices";
-// import { submitQuestion } from "/src/API Services/questionServices.ts";
+import { getAgencies } from "@/API Services/AgencyServices";
+
+interface Agency {
+  id: number;
+  name: string;
+  slug: string;
+  projectId: string;
+  apiKey: string;
+}
+
 export default function QuestionCreatePage() {
   const [title, setTitle] = useState('');
-  const [description, setDescription] = useState('');
+  const [agency, setAgency] = useState('');
+  const [agencies, setAgencies] = useState<Agency[]>([]);
+  const [loading, setLoading] = useState(true);
 
-  function handleSubmit(e: React.FormEvent){
+  const fetchAgencies = async () => {
+    try {
+      const fetchedAgencies = await getAgencies();
+      setAgencies(fetchedAgencies);
+    } catch (error) {
+      console.error("Error fetching agencies:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchAgencies();
+  }, []);
+
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    submitQuestion(title, description)
+    try {
+      await submitQuestion(agency, title);
+    } catch (error) {
+      console.error("Error submitting question:", error);
+    }
   };
 
   return (
@@ -18,7 +48,7 @@ export default function QuestionCreatePage() {
           <h1 className="text-2xl font-semibold mb-4">Ask a New Question</h1>
           <form onSubmit={handleSubmit} className="space-y-4">
             <div>
-              <label htmlFor="title" className="block text-gray-700">Title</label>
+              <label htmlFor="title" className="block text-gray-700">Question</label>
               <input
                 type="text"
                 id="title"
@@ -29,15 +59,19 @@ export default function QuestionCreatePage() {
               />
             </div>
             <div>
-              <label htmlFor="description" className="block text-gray-700">Description</label>
-              <textarea
-                id="description"
-                value={description}
-                onChange={(e) => setDescription(e.target.value)}
+              <label htmlFor="agency" className="block text-gray-700">Select Agency</label>
+              <select
+                id="agency"
+                value={agency}
+                onChange={(e) => setAgency(e.target.value)}
                 className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring focus:ring-opacity-50"
-                rows={4}
                 required
-              />
+              >
+                <option value="" disabled>Select an agency</option>
+                {agencies.map((agency) => (
+                  <option key={agency.id} value={agency.name}>{agency.name}</option>
+                ))}
+              </select>
             </div>
             <button
               type="submit"
@@ -51,4 +85,3 @@ export default function QuestionCreatePage() {
     </div>
   );
 }
-
