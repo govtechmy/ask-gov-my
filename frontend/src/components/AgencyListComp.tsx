@@ -1,9 +1,15 @@
 "use client"
+
 import { useEffect, useState } from "react";
+import Link from "next/link";
 import { getAgencies } from "@/API Services/AgencyServices";
 import { Agency } from "@prisma/client";
 
-const AgencyListComp = () => {
+interface AgencyListProps {
+    onAgencySelect: (agencyName: string) => void;
+}
+
+const AgencyListComp: React.FC<AgencyListProps> = ({ onAgencySelect }) => {
     const [agencies, setAgencies] = useState<Agency[]>([]);
 
     useEffect(() => {
@@ -24,7 +30,14 @@ const AgencyListComp = () => {
             {agencies.map((agency) => (
                 <div key={agency.id} className="agency-item">
                     <div>
-                        <h2 className="p-5 bg-#0000ff text-left border border-black rounded-md">{agency.name}</h2>
+                        <Link href="/QuestionAgencyPage">
+                            <div
+                                className="p-5 bg-#0000ff text-left border border-black rounded-md"
+                                onClick={() => onAgencySelect(agency.name)}
+                            >
+                                {agency.name}
+                            </div>
+                        </Link>
                     </div>
                 </div>
             ))}
