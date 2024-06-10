@@ -1,6 +1,7 @@
 'use server'
 import { db } from "@/db/prismaService";
 const schedule = require('node-schedule');
+import { redirect } from "next/navigation";
 
 interface Agency {
   id: number;
@@ -53,7 +54,7 @@ export async function submitQuestion(agencyName: string, title: string) {
       },
     });
 
-  return question;
+  redirect(`/QuestionDetailPage?id=${question.id}`);
 }
 
 
