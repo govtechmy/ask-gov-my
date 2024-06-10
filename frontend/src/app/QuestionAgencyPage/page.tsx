@@ -1,4 +1,6 @@
+'use client'
 import IdentifyWebsite from '@/components/IdentifyWebsite';
+import { useSearchParams } from 'next/navigation';
 import ClickHomeLogo from '@/components/ClickHomeLogo';
 import SearchNavbarAgency from '@/components/SearchNavBarAgency';
 import MainQuestionBox from '@/components/QuestionBox/MainQuestionBox';
@@ -7,7 +9,9 @@ import Footer from '@/components/Footer';
 import MainQuestionBoxAgency from '@/components/QuestionBox/MainQuestionBoxAgency';
 
 
-const QuestionDetailPage = () => {
+const QuestionAgencyPage = () => {
+    const searchParams = useSearchParams();
+    const agencyName = searchParams.get('name');
     return (
         <div className="container max-w-full">
             <div className="sticky top-0 left-0 w-full bg-white">
@@ -21,7 +25,7 @@ const QuestionDetailPage = () => {
             <div>
                 <div className="main-content flex">
                     <div className="w-3/4">
-                        <MainQuestionBoxAgency />
+                        <MainQuestionBoxAgency agencyName= {agencyName} />
                     </div>
                     <div className="w-1/4 fixed -right-1">
                         <AgencyListNavbar />
@@ -34,4 +38,4 @@ const QuestionDetailPage = () => {
 
 };
 
-export default QuestionDetailPage;
+export default QuestionAgencyPage;

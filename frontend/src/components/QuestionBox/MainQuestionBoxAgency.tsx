@@ -2,8 +2,7 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import OverflowContainerQuestBox from "./OverflowContainerQuestBox";
-import { fetchAgencyQuestions, getAgencies } from "@/API Services/AgencyServices";
-import { Agency } from "@prisma/client";
+import { fetchAgencyQuestions } from "@/API Services/AgencyServices";
 
 interface Question {
     id: string;
@@ -12,44 +11,42 @@ interface Question {
     title: string;
 }
 
-const MainQuestionBoxAgency = () => {
-    const [selectedAgency, setSelectedAgency] = useState<string>('Health Ministry');
+interface MainQuestionBoxAgencyProps {
+    agencyName: string;
+}
+
+const MainQuestionBoxAgency: React.FC<MainQuestionBoxAgencyProps> = ({ agencyName }) => {
     const [questions, setQuestions] = useState<Question[]>([]);
-    const [agencies, setAgencies] = useState<Agency[]>([]);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState<string | null>(null);
 
     useEffect(() => {
-        async function fetchAgenciesData() {
+        const fetchQuestions = async (agencyName: string) => {
             try {
-                const fetchedAgencies = await getAgencies();
-                setAgencies(fetchedAgencies);
-            } catch (error) {
-                console.error("Error fetching agencies:", error);
+                const data = await fetchAgencyQuestions(agencyName);
+                setQuestions(data);
+            } catch (err) {
+                setError("Failed to fetch questions.");
+            } finally {
+                setLoading(false);
             }
-        }
-        fetchAgenciesData();
-    }, []);
+        };
 
-    useEffect(() => {
-        fetchQuestions(selectedAgency);
-    }, [selectedAgency]);
+        fetchQuestions(agencyName);
+    }, [agencyName]);
 
-    const fetchQuestions = async (agencyName: string) => {
-        try {
-            const fetchedQuestions: Question[] | null = await fetchAgencyQuestions(agencyName);
-            if (fetchedQuestions !== null) {
-                setQuestions(fetchedQuestions);
-            } else {
-                setQuestions([]);
-            }
-        } catch (error) {
-            console.error("Error fetching questions: ", error);
-        }
-    };
+    if (loading) {
+        return <div>Loading...</div>;
+    }
+
+    if (error) {
+        return <div>{error}</div>;
+    }
 
     return (
         <div className="p-5 bg-#0000ff text-left border border-black rounded-md">
             <h1>Top Questions From Citizens</h1>
-            <p>Displaying questions for Health Ministry</p>
+            <p>Displaying questions for {agencyName}</p>
             {questions.length > 0 ? (
                 questions.map((question) => (
                     <Link
@@ -60,17 +57,17 @@ const MainQuestionBoxAgency = () => {
                         }}
                         passHref
                     >
-                        <p style={{ textDecoration: 'none', color: 'inherit' }}>
+                        <div style={{ textDecoration: 'none', color: 'inherit' }}>
                             <OverflowContainerQuestBox
                                 id={question.id}
                                 title={question.title}
                                 description={question.description}
                             />
-                        </p>
+                        </div>
                     </Link>
                 ))
             ) : (
-                <p>No questions found for Health Ministry</p>
+                <p>No questions found for {agencyName}</p>
             )}
             <div className="text-center">paging</div>
             {/* do paging later on after link with plane.so */}
