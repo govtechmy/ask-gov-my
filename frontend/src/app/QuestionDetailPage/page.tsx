@@ -7,11 +7,10 @@ import SearchNavbar from "@/components/SearchNavBar";
 import Footer from "@/components/Footer";
 import { getQuestionById } from '@/API Services/questionServices';
 
-
 const QuestionDetailPage = () => {
     const searchParams = useSearchParams();
     const id = searchParams.get('id');
-    const [question, setQuestion] = useState<{title: string, description: string} | null>(null);
+    const [question, setQuestion] = useState<{ title: string, description: string } | null>(null);
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
@@ -25,19 +24,13 @@ const QuestionDetailPage = () => {
                 } finally {
                     setLoading(false);
                 }
+            } else {
+                setLoading(false);
             }
         };
 
         fetchQuestion();
     }, [id]);
-
-    if (loading) {
-        return <div>Loading...</div>;
-    }
-
-    if (!question) {
-        return <div>Question not found</div>;
-    }
 
     return (
         <div className="container max-w-full">
@@ -48,11 +41,21 @@ const QuestionDetailPage = () => {
                 </div>
             </div>
             <div className="p-5">
-                <h1 className="text-2xl font-bold">{question.title}</h1>
-                {question.description ? (
-                    <div dangerouslySetInnerHTML={{ __html: question.description }} />
+                {loading ? (
+                    <div>Loading...</div>
                 ) : (
-                    <p>This question has not yet been answered.</p>
+                    question ? (
+                        <>
+                            <h1 className="text-2xl font-bold">{question.title}</h1>
+                            {question.description ? (
+                                <div dangerouslySetInnerHTML={{ __html: question.description }} />
+                            ) : (
+                                <p>This question has not yet been answered.</p>
+                            )}
+                        </>
+                    ) : (
+                        <div>Question not found</div>
+                    )
                 )}
             </div>
             <div>Navigation Panel</div>
