@@ -129,7 +129,7 @@ export async function fetchQuestions() {
     });
 
     if (!response.ok) {
-      console.error(`Failed to fetch comments for question ${question.id}: ${response.statusText}`);
+      console.error(`Failed to fetch description for question ${question.id}: ${response.statusText}`);
       continue;
     }
 
@@ -143,13 +143,52 @@ export async function fetchQuestions() {
   }
 }
 
-export async function getQuestionById(Id:string) {
+export async function getQuestionById(id: string) {
   const question = await db.question.findUnique({
     where: {
-      id:Id
+      id: id
     }
-  })
-  return question
+  });
+
+  if (!question) {
+    throw new Error(`Question with id ${id} not found`);
+  }
+
+  if (!question.description) {
+    const agency: Agency | null = await db.agency.findUnique({
+      where: { name: question.agency },
+    });
+
+    if (!agency) {
+      throw new Error(`Agency ${question.agency} not found`);
+    }
+
+    const commentUrl = `https://api.plane.so/api/v1/workspaces/${agency.slug}/projects/${agency.projectId}/issues/${question.id}/comments`;
+    const response = await fetch(commentUrl, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+        'X-API-Key': agency.apiKey,
+      },
+    });
+
+    if (!response.ok) {
+      console.error(`Failed to fetch description for question ${question.id}: ${response.statusText}`);
+      throw new Error(`Failed to fetch description for question ${question.id}`);
+    }
+
+    const commentData = await response.json();
+    const commentHtml = commentData.results[0]?.comment_html || '';
+
+    await db.question.update({
+      where: { id: question.id },
+      data: { description: commentHtml },
+    });
+
+    question.description = commentHtml; // Update the question object with the new description
+  }
+
+  return question;
 }
 
 export async function getRandomQuestionsFromDB() {
