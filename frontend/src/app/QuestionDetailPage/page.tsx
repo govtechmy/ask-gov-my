@@ -6,6 +6,7 @@ import IdentifyWebsite from "@/components/IdentifyWebsite";
 import SearchNavbar from "@/components/SearchNavBar";
 import Footer from "@/components/Footer";
 import { getQuestionById } from '@/API Services/questionServices';
+import ClickHomeLogo from '@/components/ClickHomeLogo';
 
 const QuestionDetailPage = () => {
     const searchParams = useSearchParams();
@@ -37,6 +38,7 @@ const QuestionDetailPage = () => {
             <div className="sticky top-0 left-0 w-full bg-white">
                 <div>
                     <IdentifyWebsite />
+                    <ClickHomeLogo></ClickHomeLogo>
                     <SearchNavbar />
                 </div>
             </div>
@@ -58,7 +60,6 @@ const QuestionDetailPage = () => {
                     )
                 )}
             </div>
-            <div>Navigation Panel</div>
             <div>Recommended Question Box</div>
             <div>
                 Can&apos;t find what you&apos;re looking for? 
