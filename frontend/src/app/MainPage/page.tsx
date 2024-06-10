@@ -4,6 +4,7 @@ import SearchNavbar from '@/components/SearchNavBar';
 import MainQuestionBox from '@/components/QuestionBox/MainQuestionBox';
 import AgencyListNavbar from '@/components/AgencyListNavbar';
 import Footer from '@/components/Footer';
+import AgencyListComp from '@/components/AgencyListComp';
 
 const MainPage = () => {
     return (
@@ -22,7 +23,7 @@ const MainPage = () => {
                         <MainQuestionBox />
                     </div>
                     <div className="w-1/4 fixed -right-1">
-                        <AgencyListNavbar />
+                        <AgencyListNavbar></AgencyListNavbar>
                     </div>
                 </div>
                 <Footer />

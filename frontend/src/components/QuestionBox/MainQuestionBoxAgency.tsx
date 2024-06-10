@@ -1,4 +1,3 @@
-"use client"
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import OverflowContainerQuestBox from "./OverflowContainerQuestBox";
@@ -18,7 +17,7 @@ interface MainQuestionBoxAgencyProps {
 const MainQuestionBoxAgency: React.FC<MainQuestionBoxAgencyProps> = ({ agencyName }) => {
     const [questions, setQuestions] = useState<Question[]>([]);
     const [loading, setLoading] = useState(true);
-    const [error, setError] = useState<string | null>(null);
+    const [error, setError] = useState<string>();
 
     useEffect(() => {
         const fetchQuestions = async (agencyName: string) => {
@@ -26,7 +25,7 @@ const MainQuestionBoxAgency: React.FC<MainQuestionBoxAgencyProps> = ({ agencyNam
                 const data = await fetchAgencyQuestions(agencyName);
                 setQuestions(data);
             } catch (err) {
-                setError("Failed to fetch questions.");
+                setError("Failed to fetch questions. Go to ");
             } finally {
                 setLoading(false);
             }
@@ -40,7 +39,11 @@ const MainQuestionBoxAgency: React.FC<MainQuestionBoxAgencyProps> = ({ agencyNam
     }
 
     if (error) {
-        return <div>{error}</div>;
+        return (
+            <div>
+                <p>{error}<Link href="/AgencyListPage"><div>Agency List Page</div></Link> to choose your agency.</p>
+            </div>
+        );
     }
 
     return (
