@@ -22,7 +22,7 @@ const MainPage = () => {
                         <MainQuestionBox />
                     </div>
                     <div className="w-1/4 fixed -right-1">
-                        <AgencyListNavbar />
+                        <AgencyListNavbar></AgencyListNavbar>
                     </div>
                 </div>
                 <Footer />
