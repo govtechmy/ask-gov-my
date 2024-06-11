@@ -4,7 +4,6 @@ import SearchNavbar from '@/components/SearchNavBar';
 import MainQuestionBox from '@/components/QuestionBox/MainQuestionBox';
 import AgencyListNavbar from '@/components/AgencyListNavbar';
 import Footer from '@/components/Footer';
-import AgencyListComp from '@/components/AgencyListComp';
 
 const MainPage = () => {
     return (

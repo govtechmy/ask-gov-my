@@ -1,4 +1,5 @@
-'use client'
+"use client"
+
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import OverflowContainerQuestBox from "./OverflowContainerQuestBox";
@@ -20,6 +21,7 @@ const MainQuestionBox: React.FC<MainQuestionBoxProps> = ({ agencyName }) => {
     const [questions, setQuestions] = useState<Question[]>([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
+    const [currentPage, setCurrentPage] = useState(1);
 
     const fetchQuestions = async () => {
         try {
@@ -41,6 +43,14 @@ const MainQuestionBox: React.FC<MainQuestionBoxProps> = ({ agencyName }) => {
         fetchQuestions();
     }, [agencyName]);
 
+    const paginate = (pageNumber: number) => {
+        setCurrentPage(pageNumber);
+    };
+
+    const indexOfLastQuestion = currentPage * 5;
+    const indexOfFirstQuestion = indexOfLastQuestion - 5;
+    const currentQuestions = questions.slice(indexOfFirstQuestion, indexOfLastQuestion);
+
     if (loading) {
         return <div>Loading...</div>;
     }
@@ -57,8 +67,8 @@ const MainQuestionBox: React.FC<MainQuestionBoxProps> = ({ agencyName }) => {
         <div className="p-5 bg-#0000ff text-left border border-black rounded-md">
             <h1>Top Questions From Citizens</h1>
             {agencyName && <p>Displaying questions for {agencyName}</p>}
-            {questions.length > 0 ? (
-                questions.map((question) => (
+            {currentQuestions.length > 0 ? (
+                currentQuestions.map((question) => (
                     <Link
                         key={question.id}
                         href={{
@@ -79,8 +89,11 @@ const MainQuestionBox: React.FC<MainQuestionBoxProps> = ({ agencyName }) => {
             ) : (
                 <p>No questions found {agencyName ? `for ${agencyName}` : ''}</p>
             )}
-            <div className="text-center">paging</div>
-            {/* do paging later on after link with plane.so */}
+            <div className="text-center">
+                {Array.from({ length: Math.ceil(questions.length / 5) }, (_, i) => (
+                    <button className="bg-transparent hover:bg-blue-500 text-blue-700 font-semibold hover:text-white py-2 px-4 border border-blue-500 hover:border-transparent rounded" key={i} onClick={() => paginate(i + 1)}>{i + 1}</button>
+                ))}
+            </div>
         </div>
     );
 };
