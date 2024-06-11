@@ -1,36 +1,64 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+## Ask.gov.my Front-end
 
-## Getting Started
+### Overview
+Ask.gov.my is a web application designed to allow citizens to ask questions to various agencies. It provides functionalities for browsing questions, searching for specific topics, and accessing agency information.
 
-First, run the development server:
+### Functionality
+1. **Viewing Questions**
+   - Users can view a list of questions from citizens on the main page (`MainQuestionBox`).
+   - Questions are paginated to display a maximum of 5 questions per page.
+   - Users can click on a question to view its details.
+2. **Searching Questions**
+   - Users can search for specific questions using keywords or topics in the `SearchNavbar`.
+   - The search functionality filters questions based on the entered keywords.
+3. **Filtering by Agency**
+   - Users can filter questions by agency using the `AgencyListNavbar`.
+   - Selecting an agency will display questions related to that agency.
+4. **Navigation**
+   - Users can navigate between pages using the navigation links provided.
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+### Technologies Used
+- **React**: Front-end JavaScript library for building user interfaces.
+- **Next.js**: React framework for building server-side rendered and statically generated web applications.
+- **Tailwind CSS**: Utility-first CSS framework for styling web applications.
+- **TypeScript**: Typed superset of JavaScript for improved code quality and developer experience.
+- **API Services**: Custom APIs for fetching questions and agency information.
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+### Development Setup
+For the development setup, follow these steps:
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+1. **Clone Repository**:
+   - Clone the repository to your local machine using Git. Open your terminal and run the following command:
+     ```
+     git clone <repository_url>
+     ```
+   - Replace `<repository_url>` with the URL of the repository.
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
+2. **Navigate to Frontend Directory**:
+   - Change directory into the frontend folder using the `cd` command:
+     ```
+     cd frontend
+     ```
 
-## Learn More
+3. **Install Dependencies**:
+   - Once you're inside the frontend directory, install the project dependencies using npm:
+     ```
+     npm install
+     ```
 
-To learn more about Next.js, take a look at the following resources:
+4. **Start Development Server**:
+   - After the dependencies are installed successfully, you can start the development server:
+     ```
+     npm run dev
+     ```
+   - This command will start the development server, and you can access the application in your web browser at `http://localhost:3000`.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+5. **Development**:
+   - Now you're ready to start development! Make changes to the codebase as needed, and the development server will automatically reload with the updated changes.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
+By following these steps, you should have the development environment set up and ready to work on the frontend of your application. If you encounter any issues or have questions, feel free to ask!
 
-## Deploy on Vercel
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+### Deployment
+1. Build the application using `npm run build`.
+2. Deploy the built files to a hosting service like Vercel, Netlify, or AWS.
