@@ -1,14 +1,21 @@
 import DetailQuestionBox from "./DetailQuestionBox";
 
-const OverflowContainerQuestBox = () => {
+interface OverflowContainerQuestBoxProps {
+    id: string;
+    title: string;
+    description: string;
+}
+
+const OverflowContainerQuestBox: React.FC<OverflowContainerQuestBoxProps> = ({ title, description }) => {
     return (
-        <div  className="p-5 bg-#0000ff text-left border border-black rounded-md">
+        <div className="p-5 bg-#0000ff text-left border border-black rounded-md" style={{ overflow: 'hidden', textOverflow: 'ellipsis' }}>
+            <h2 style={{ fontWeight: 'bold', color: 'blue' }}>
+                {title}
+            </h2>
             {/* control overflow here using any style you want */}
-            overflow controller
-            <DetailQuestionBox></DetailQuestionBox>
+            <DetailQuestionBox description={description} />
         </div>
     );
 };
 
 export default OverflowContainerQuestBox;
-

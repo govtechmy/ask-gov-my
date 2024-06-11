@@ -1,0 +1,24 @@
+datasource db {
+  provider = "postgresql"
+  url      = "postgresql://postgres:postgres@localhost:5555/mydb?schema=public"
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model Question {
+  id          String      @id
+  title       String
+  description String
+  agency      String
+  createdAt   DateTime @default(now())
+}
+
+model Agency {
+  id        Int     @id @default(autoincrement())
+  name      String  @unique
+  slug      String
+  projectId String
+  apiKey    String
+}
