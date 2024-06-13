@@ -2,11 +2,7 @@
 import { useSearchParams } from 'next/navigation';
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
-import IdentifyWebsite from "@/components/IdentifyWebsite";
-import SearchNavbar from "@/components/SearchNavBar";
-import Footer from "@/components/Footer";
 import { getQuestionById } from '@/API Services/questionServices';
-import ClickHomeLogo from '@/components/ClickHomeLogo';
 
 const QuestionDetailPage = () => {
     const searchParams = useSearchParams();
@@ -35,13 +31,6 @@ const QuestionDetailPage = () => {
 
     return (
         <div className="container max-w-full">
-            <div className="sticky top-0 left-0 w-full bg-white">
-                <div>
-                    <IdentifyWebsite />
-                    <ClickHomeLogo></ClickHomeLogo>
-                    <SearchNavbar />
-                </div>
-            </div>
             <div className="p-5">
                 {loading ? (
                     <div>Loading...</div>
@@ -67,7 +56,6 @@ const QuestionDetailPage = () => {
                     <button className="bg-blue-500 text-white px-4 py-2 rounded ml-2">Ask a Question</button>
                 </Link>
             </div>
-            <Footer />
         </div>
     );
 };
