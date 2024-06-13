@@ -8,11 +8,12 @@ generator client {
 }
 
 model Question {
-  id          String      @id
-  title       String
-  description String
-  agency      String
-  createdAt   DateTime @default(now())
+  id                String      @id
+  name              String
+  description_html  String
+  agency            String
+  labels            String[]
+  createdAt         DateTime @default(now())
 }
 
 model Agency {

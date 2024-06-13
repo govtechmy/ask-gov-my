@@ -1,11 +1,17 @@
+import { getAllQuestions } from '@/API Services/questionServices';
+import QuestionBox from '@/components/QuestionBox/QuestionBox';
 import IdentifyWebsite from '@/components/IdentifyWebsite';
 import ClickHomeLogo from '@/components/ClickHomeLogo';
 import SearchNavbar from '@/components/SearchNavBar';
-import MainQuestionBox from '@/components/QuestionBox/MainQuestionBox';
 import AgencyListNavbar from '@/components/AgencyListNavbar';
 import Footer from '@/components/Footer';
 
-const MainPage: React.FC = () => {
+const MainPage = async ({ searchParams }: { searchParams: { page?: string } }) => {
+    const page = parseInt(searchParams.page || '1', 10);
+    const pageSize = 10;
+    const { questions, total } = await getAllQuestions(page, pageSize);
+    const totalPages = Math.ceil(total / pageSize);
+
     return (
         <div className="container max-w-full">
             <div className="sticky top-0 left-0 w-full bg-white">
@@ -16,17 +22,15 @@ const MainPage: React.FC = () => {
                 </div>
             </div>
 
-            <div>
-                <div className="main-content flex">
-                    <div className="w-3/4">
-                        <MainQuestionBox />
-                    </div>
-                    <div className="w-1/4 fixed -right-1">
-                        <AgencyListNavbar />
-                    </div>
+            <div className="main-content flex">
+                <div className="w-3/4">
+                    <QuestionBox questions={questions} totalPages={totalPages} currentPage={page} />
                 </div>
-                <Footer />
+                <div className="w-1/4 fixed right-0">
+                    <AgencyListNavbar />
+                </div>
             </div>
+            <Footer />
         </div>
     );
 };
