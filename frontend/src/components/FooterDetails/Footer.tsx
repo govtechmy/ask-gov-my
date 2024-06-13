@@ -5,7 +5,7 @@ const Footer = () => {
     return (
         <div className="bg-background dark:bg-white border-t pt-12 pb-16 z-10">
             <div className="container mx-auto px-6 lg:px-16 flex flex-col lg:flex-row justify-between max-w-screen-2xl">
-                <div className="flex flex-col lg:flex-row items-center lg:items-start lg:w-1/4 mb-6 lg:mb-0">
+                <div className="flex flex-col lg:flex-row items-center lg:items-start mb-6 lg:mb-0">
                     <div className="flex items-center">
                         <Image
                             src="/jata_logo.png"
@@ -14,7 +14,7 @@ const Footer = () => {
                             alt="Logo Jata Negara"
                         />
                         <div className="ml-4 text-center lg:text-left">
-                            <h1 className="text-lg font-bold">GOVERNMENT OF MALAYSIA</h1>
+                            <h1 className="text-lg font-bold whitespace-nowrap">GOVERNMENT OF MALAYSIA</h1>
                             <div>© 2024 Public Sector Open Data</div>
                         </div>
                     </div>
