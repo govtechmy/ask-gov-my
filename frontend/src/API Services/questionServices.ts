@@ -4,9 +4,11 @@ const prisma = new PrismaClient();
 //using db for this is only temporary to build components and pages as direct request everytime a page reload is very slow
 
 const AGENCY = {
-    "finance-ministry": "a30895aa-0f27-46b1-b782-9a4ff919cf2d",
-    "education-ministry": "ef40d294-8737-4f3a-a97b-c1ed4ce2f174",
-    "transport-ministry": "d13c5167-f77d-43d6-8efc-35f2985316a3"
+    "FINANCE MINISTRY": "a30895aa-0f27-46b1-b782-9a4ff919cf2d",
+    "EDUCATION MINISTRY": "ef40d294-8737-4f3a-a97b-c1ed4ce2f174",
+    "TRANSPORT MINISTRY": "d13c5167-f77d-43d6-8efc-35f2985316a3",
+    "HEALTH MINISTRY": "ac051d6a-39b6-4df2-b6a6-12d64b48c780",
+    "TOURISM MINISTRY": "a43e382b-6445-43d2-bf03-eeeb74feb0c8",
 };
 
 const API_KEY = 'plane_api_1cbdb318805f491b842a89c4a078ea9f';
@@ -23,7 +25,7 @@ interface Question {
 export async function fetchQuestions(): Promise<void> {
   for (const [agencyName, projectId] of Object.entries(AGENCY)) {
       const url = `https://api.plane.so/api/v1/workspaces/govtech/projects/${projectId}/issues/`;
-      
+    
       const response = await fetch(url, {
           method: 'GET',
           headers: {
@@ -66,6 +68,10 @@ export async function getAllQuestions(page: number = 1, pageSize: number = 10): 
   });
   const total = await prisma.question.count();
   return { questions, total };
+
 }
 
+export async function getAgencyList(): Promise<{ id: string, name: string }[]> {
+    return Object.entries(AGENCY).map(([name, id]) => ({ id, name }));
+}
 fetchQuestions()
