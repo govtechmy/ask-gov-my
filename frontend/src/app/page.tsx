@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 import { getAllQuestions } from '@/API Services/questionServices';
 import QuestionBox from '@/components/QuestionBox/QuestionBox';
 import IdentifyWebsite from '@/components/IdentifyWebsite';
@@ -13,9 +14,14 @@ const MainPage = async ({ searchParams }: { searchParams: { page?: string } }) =
     const { questions, total } = await getAllQuestions(page, pageSize);
     const totalPages = Math.ceil(total / pageSize);
     const agencies = await getAgencyList();
+=======
+import MainQuestionBox from '@/components/QuestionBox/MainQuestionBox';
+import AgencyListNavbar from '@/components/AgencyListNavbar';
+>>>>>>> FooterNHeader
 
     return (
         <div className="container max-w-full">
+<<<<<<< HEAD
             <div className="sticky top-0 left-0 w-full bg-white">
                 <div>
                     <IdentifyWebsite />
@@ -30,6 +36,16 @@ const MainPage = async ({ searchParams }: { searchParams: { page?: string } }) =
                 </div>
                 <div className="w-3/4">
                     <QuestionBox questions={questions} totalPages={totalPages} currentPage={page} />
+=======
+            <div>
+                <div className="main-content flex">
+                    <div className="w-3/4">
+                        <MainQuestionBox />
+                    </div>
+                    <div className="w-1/4 fixed -right-1">
+                        <AgencyListNavbar />
+                    </div>
+>>>>>>> FooterNHeader
                 </div>
             </div>
             <Footer />
