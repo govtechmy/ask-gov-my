@@ -1,6 +1,6 @@
 'use client'
 import QuestionCard from "./QuestionCard";
-import { useRouter } from "next/navigation";
+import { useRouter, usePathname } from "next/navigation";
 
 interface Question {
     id: string;
@@ -14,13 +14,19 @@ interface QuestionBoxProps {
     questions: Question[];
     totalPages: number;
     currentPage: number;
+    agencyId?: string; // agencyId for dynamic routing
 }
 
-const QuestionBox: React.FC<QuestionBoxProps> = ({ questions, totalPages, currentPage }) => {
+const QuestionBox: React.FC<QuestionBoxProps> = ({ questions, totalPages, currentPage, agencyId }) => {
     const router = useRouter();
+    const pathname = usePathname();
 
     const handlePageChange = (page: number) => {
-        router.push(`/?page=${page}`);
+        if (agencyId) {
+            router.push(`/${agencyId}?page=${page}`);
+        } else {
+            router.push(`/?page=${page}`);
+        }
     };
 
     return (
