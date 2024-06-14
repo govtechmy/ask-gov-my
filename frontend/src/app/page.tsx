@@ -5,7 +5,7 @@ import { getAgencyList } from '@/API Services/questionServices';
 
 const MainPage = async ({ searchParams }: { searchParams: { page?: string } }) => {
     const page = parseInt(searchParams.page || '1', 10);
-    const pageSize = 10;
+    const pageSize = 12;
     const { questions, total } = await getAllQuestions(page, pageSize);
     const totalPages = Math.ceil(total / pageSize);
     const agencies = await getAgencyList();
@@ -16,7 +16,8 @@ const MainPage = async ({ searchParams }: { searchParams: { page?: string } }) =
                 <div className="w-1/4">
                     <AgencySidebar agencies={agencies} />
                 </div>
-                <div className="w-3/4">
+                <div className="w-3/4 pr-6">
+                    <div className='px-4 py-5 font-semibold'>Top Questions From Citizens</div>
                     <QuestionBox questions={questions} totalPages={totalPages} currentPage={page} />
                 </div>
             </div>
