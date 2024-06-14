@@ -12,6 +12,7 @@ interface AgencySidebarProps {
 }
 
 const AgencySidebar: React.FC<AgencySidebarProps> = ({ agencies }) => {
+
     const router = useRouter();
 
     const handleAgencyClick = (id: string) => {
@@ -34,7 +35,7 @@ const AgencySidebar: React.FC<AgencySidebarProps> = ({ agencies }) => {
 
     return (
         <div className="px-4 py-4 lg:px-10 max-w-screen-lg mx-auto">
-            <div className='py-2 font-semibold'>Agency</div>
+            <div className='py-2 pb-4 font-semibold'>Agency</div>
             <ul className="space-y-2">
                 {agencies.map(agency => {
                     const { formattedName, acronym } = formatAgencyName(agency.name);
