@@ -1,10 +1,6 @@
 import { getAllQuestions } from '@/API Services/questionServices';
 import QuestionBox from '@/components/QuestionBox/QuestionBox';
-import IdentifyWebsite from '@/components/IdentifyWebsite';
-import ClickHomeLogo from '@/components/ClickHomeLogo';
-import SearchNavbar from '@/components/SearchNavBar';
 import AgencySidebar from '@/components/AgencySideBar';
-import Footer from '@/components/Footer';
 import { getAgencyList } from '@/API Services/questionServices';
 
 const MainPage = async ({ searchParams }: { searchParams: { page?: string } }) => {
@@ -16,14 +12,6 @@ const MainPage = async ({ searchParams }: { searchParams: { page?: string } }) =
 
     return (
         <div className="container max-w-full">
-            <div className="sticky top-0 left-0 w-full bg-white">
-                <div>
-                    <IdentifyWebsite />
-                    <ClickHomeLogo />
-                    <SearchNavbar />
-                </div>
-            </div>
-
             <div className="flex mt-4">
                 <div className="w-1/4">
                     <AgencySidebar agencies={agencies} />
@@ -32,7 +20,6 @@ const MainPage = async ({ searchParams }: { searchParams: { page?: string } }) =
                     <QuestionBox questions={questions} totalPages={totalPages} currentPage={page} />
                 </div>
             </div>
-            <Footer />
         </div>
     );
 };
