@@ -1,8 +1,5 @@
 "use Client"
 import AgencyListComp from "@/components/AgencyListComp";
-import IdentifyWebsite from "@/components/IdentifyWebsite";
-import SearchNavbar from "@/components/SearchNavBar";
-import ClickHomeLogo from "@/components/ClickHomeLogo";
 
 const AgencyListPage = () => {
     return (
