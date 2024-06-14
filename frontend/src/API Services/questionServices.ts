@@ -23,6 +23,14 @@ interface Question {
   createdAt: string;
 }
 
+interface ApiResponse {
+  id: string;
+  name: string;
+  description_html: string;
+  labels: string[];
+  created_at: string;
+}
+
 export async function getAllQuestions(
   page: number = 1,
   pageSize: number = 10
@@ -31,7 +39,7 @@ export async function getAllQuestions(
 
   if (process.env.NODE_ENV.toLowerCase() === 'local') {
     fullArrayDummy.forEach((ministry) => {
-      ministry.results.forEach((res) => {
+      ministry.results.forEach((res: ApiResponse) => { // Add type for 'res'
         Questions.push({
           id: res.id,
           agency: res.name,
@@ -54,7 +62,7 @@ export async function getAllQuestions(
 
       if (response.ok) {
         const data = await response.json();
-        data.results.forEach((res) => {
+        data.results.forEach((res: ApiResponse) => { // Add type for 'res'
           Questions.push({
             id: res.id,
             agency: agencyName,
@@ -80,4 +88,3 @@ export async function getAllQuestions(
 export async function getAgencyList(): Promise<{ id: string; name: string }[]> {
   return Object.entries(AGENCY).map(([name, id]) => ({ id, name }));
 }
-
