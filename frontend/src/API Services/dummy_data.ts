@@ -1,4 +1,5 @@
 const transport_dummy_data = {
+    agencyName: "TRANSPORT MINISTRY",
     next_cursor: "100:1:0",
     prev_cursor: "100:-1:1",
     next_page_results: false,
@@ -152,6 +153,7 @@ const transport_dummy_data = {
   };
   
   const finance_dummy_data = {
+    agencyName: "FINANCE MINISTRY",
     next_cursor: "100:1:0",
     prev_cursor: "100:-1:1",
     next_page_results: false,
@@ -462,6 +464,7 @@ const transport_dummy_data = {
   };
   
   const education_dummy_data = {
+    agencyName: "EDUCATION MINISTRY",
     next_cursor: "100:1:0",
     prev_cursor: "100:-1:1",
     next_page_results: false,
@@ -587,6 +590,7 @@ const transport_dummy_data = {
   };
   
   const health_dummy_data = {
+    agencyName: "HEALTH MINISTRY",
     next_cursor: "100:1:0",
     prev_cursor: "100:-1:1",
     next_page_results: false,
@@ -740,6 +744,7 @@ const transport_dummy_data = {
   };
   
   const tourism_dummy_data = {
+    agencyName: "TOURISM MINISTRY",
     next_cursor: "100:1:0",
     prev_cursor: "100:-1:1",
     next_page_results: false,
