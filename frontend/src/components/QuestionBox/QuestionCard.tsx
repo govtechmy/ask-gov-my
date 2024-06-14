@@ -1,4 +1,3 @@
-import Image from "next/image";
 
 interface Question {
     id: string;
@@ -21,18 +20,29 @@ const QuestionCard: React.FC<QuestionCardProps> = ({ question }) => {
         return description;
     };
 
+    const formatAgencyName = (name: string) => {
+        const words = name.split(' ');
+        const acronym = words.map(word => word.charAt(0).toUpperCase()).join('');
+    
+        const formattedName = words.map(word => {
+            if (word.toLowerCase() === 'of') {
+                return 'of';
+            }
+            return word.charAt(0).toUpperCase() + word.substr(1).toLowerCase();
+        }).join(' ');
+    
+        return { formattedName, acronym };
+    };
+
+    const { formattedName } = formatAgencyName(question.agency);
+
     return (
-        <div className="border p-4 rounded-md shadow-sm">
+        <div className="border p-4 rounded-md shadow-sm items-center">
             <h2 className="text-lg font-semibold">{question.name}</h2>
             <div className="mt-2 text-sm" dangerouslySetInnerHTML={{ __html: truncateDescription(question.description_html, 30) }} />
             <div className="flex items-center mt-4">
-            <Image 
-            src="/jata_logo.png" 
-            alt="Logo Jata Negara" 
-            width={30}
-            height={30}/>
-            <span className="text-gray-600">{question.agency}</span>
-                <span className="ml-auto text-gray-400 text-xs">{new Date(question.createdAt).toLocaleDateString()}</span>
+                <span className="text-gray-600">{formattedName}</span>
+                <span className="ml-auto text-gray-400 text-xs">{new Date(question.createdAt).toLocaleDateString('en-GB')}</span>
             </div>
         </div>
     );
