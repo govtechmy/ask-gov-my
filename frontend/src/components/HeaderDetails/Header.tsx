@@ -1,6 +1,6 @@
-import IdentifyWebsite from "../IdentifyWebsite";
-import ClickHomeLogo from "../ClickHomeLogo";
-import SearchNavbar from "../SearchNavBar";
+import IdentifyWebsite from "./IdentifyWebsite";
+import ClickHomeLogo from "./ClickHomeLogo";
+import SearchNavbar from "./SearchNavBar";
 
 const Header = () => {
     return (
