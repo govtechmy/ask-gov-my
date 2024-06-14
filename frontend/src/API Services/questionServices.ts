@@ -23,6 +23,14 @@ interface Question {
   createdAt: string;
 }
 
+interface ApiResponse {
+  id: string;
+  name: string;
+  description_html: string;
+  labels: string[];
+  created_at: string;
+}
+
 export async function getAllQuestions(
   page: number = 1,
   pageSize: number = 10
@@ -34,7 +42,7 @@ export async function getAllQuestions(
       ministry.results.forEach((res) => {
         Questions.push({
           id: res.id,
-          agency: res.name,
+          agency: ministry.agencyName, //this attribute is added manually to the dummy data, wont include from plane.so
           description_html: res.description_html,
           name: res.name,
           labels: res.labels,
@@ -54,7 +62,7 @@ export async function getAllQuestions(
 
       if (response.ok) {
         const data = await response.json();
-        data.results.forEach((res) => {
+        data.results.forEach((res:ApiResponse) => {
           Questions.push({
             id: res.id,
             agency: agencyName,
@@ -74,6 +82,60 @@ export async function getAllQuestions(
   const end = start + pageSize;
   const paginatedQuestions = Questions.slice(start, end);
 
+  return { questions: paginatedQuestions, total: Questions.length };
+}
+
+export async function getQuestionsByAgency(
+  agencyId: string,
+  page: number = 1,
+  pageSize: number = 10
+): Promise<{ questions: Question[]; total: number }> {
+  let Questions: Question[] = [];
+
+  const agencyName = Object.keys(AGENCY).find(key => AGENCY[key as keyof typeof AGENCY] === agencyId) || 'Unknown Agency';
+  if (process.env.NODE_ENV.toLowerCase() === 'local') {
+    const ministry = fullArrayDummy.find((ministry) => ministry.agencyName === agencyName);
+    if (ministry) {
+      ministry.results.forEach((res) => {
+        Questions.push({
+          id: res.id,
+          agency: ministry.agencyName,
+          description_html: res.description_html,
+          name: res.name,
+          labels: res.labels,
+          createdAt: res.created_at,
+        });
+      });
+    }
+  } else {
+    const response = await fetch(`https://api.plane.so/api/v1/workspaces/govtech/projects/${agencyId}/issues/`, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+        'X-API-Key': API_KEY,
+      },
+    });
+
+    if (response.ok) {
+      const data = await response.json();
+      data.results.forEach((res:ApiResponse) => {
+        Questions.push({
+          id: res.id,
+          agency: agencyName,
+          description_html: res.description_html,
+          name: res.name,
+          labels: res.labels,
+          createdAt: res.created_at,
+        });
+      });
+    } else {
+      console.error(`Failed to fetch questions for agency: ${agencyId}`);
+    }
+  }
+
+  const start = (page - 1) * pageSize;
+  const end = start + pageSize;
+  const paginatedQuestions = Questions.slice(start, end);
   return { questions: paginatedQuestions, total: Questions.length };
 }
 
