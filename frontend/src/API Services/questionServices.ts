@@ -47,11 +47,10 @@ export async function getAllQuestions(
 
   if (process.env.NODE_ENV.toLowerCase() === 'local') {
     fullArrayDummy.forEach((ministry) => {
-      ministry.results.forEach((res: ApiResponse) => { // Add type for 'res'
-      ministry.results.forEach((res: ApiResponse) => { // Add type for 'res'
+      ministry.results.forEach((res: ApiResponse) => {
         Questions.push({
           id: res.id,
-          agency: ministry.agencyName, //this attribute is added manually to the dummy data, wont include from plane.so
+          agency: ministry.agencyName, // This attribute is added manually to the dummy data, won't include from plane.so
           description_html: res.description_html,
           name: res.name,
           labels: res.labels,
@@ -68,10 +67,10 @@ export async function getAllQuestions(
           'X-API-Key': API_KEY,
         },
       });
-
+  
       if (response.ok) {
         const data = await response.json();
-        data.results.forEach((res:ApiResponse) => {
+        data.results.forEach((res: ApiResponse) => {
           Questions.push({
             id: res.id,
             agency: agencyName,
@@ -86,7 +85,7 @@ export async function getAllQuestions(
       }
     }
   }
-
+  
   const start = (page - 1) * pageSize;
   const end = start + pageSize;
   const paginatedQuestions = Questions.slice(start, end);
