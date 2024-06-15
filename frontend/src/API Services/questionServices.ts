@@ -21,6 +21,7 @@ interface Question {
   name: string;
   labels: string[];
   createdAt: string;
+  agencyId: string;
 }
 
 interface ApiResponse {
@@ -39,14 +40,15 @@ export async function getAllQuestions(
 
   if (process.env.NODE_ENV.toLowerCase() === 'local') {
     fullArrayDummy.forEach((ministry) => {
-      ministry.results.forEach((res: ApiResponse) => {
+      ministry.results.forEach((res) => {
         Questions.push({
           id: res.id,
-          agency: ministry.agencyName, // This attribute is added manually to the dummy data, won't include from plane.so
+          agency: ministry.agencyName,
           description_html: res.description_html,
           name: res.name,
           labels: res.labels,
           createdAt: res.created_at,
+          agencyId: ministry.agencyId
         });
       });
     });
@@ -59,10 +61,10 @@ export async function getAllQuestions(
           'X-API-Key': API_KEY,
         },
       });
-  
+
       if (response.ok) {
         const data = await response.json();
-        data.results.forEach((res: ApiResponse) => {
+        data.results.forEach((res:ApiResponse) => {
           Questions.push({
             id: res.id,
             agency: agencyName,
@@ -70,6 +72,7 @@ export async function getAllQuestions(
             name: res.name,
             labels: res.labels,
             createdAt: res.created_at,
+            agencyId: projectId
           });
         });
       } else {
@@ -77,7 +80,7 @@ export async function getAllQuestions(
       }
     }
   }
-  
+
   const start = (page - 1) * pageSize;
   const end = start + pageSize;
   const paginatedQuestions = Questions.slice(start, end);
@@ -93,6 +96,7 @@ export async function getQuestionsByAgency(
   let Questions: Question[] = [];
 
   const agencyName = Object.keys(AGENCY).find(key => AGENCY[key as keyof typeof AGENCY] === agencyId) || 'Unknown Agency';
+
   if (process.env.NODE_ENV.toLowerCase() === 'local') {
     const ministry = fullArrayDummy.find((ministry) => ministry.agencyName === agencyName);
     if (ministry) {
@@ -104,6 +108,7 @@ export async function getQuestionsByAgency(
           name: res.name,
           labels: res.labels,
           createdAt: res.created_at,
+          agencyId: ministry.agencyId
         });
       });
     }
@@ -126,6 +131,7 @@ export async function getQuestionsByAgency(
           name: res.name,
           labels: res.labels,
           createdAt: res.created_at,
+          agencyId 
         });
       });
     } else {
@@ -136,7 +142,35 @@ export async function getQuestionsByAgency(
   const start = (page - 1) * pageSize;
   const end = start + pageSize;
   const paginatedQuestions = Questions.slice(start, end);
+
   return { questions: paginatedQuestions, total: Questions.length };
+}
+
+export async function getQuestionById(agencyId: string, questionId: string): Promise<Question | null> {
+  const { questions } = await getQuestionsByAgency(agencyId);
+  const question = questions.find(q => q.id === questionId);
+  return question || null;
+}
+
+export async function submitQuestion(agencyId: string, question: string): Promise<void> {
+  const url = `https://api.plane.so/api/v1/workspaces/govtech/projects/${agencyId}/inbox-issues/`;
+
+  const response = await fetch(url, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'X-API-Key': API_KEY,
+    },
+    body: JSON.stringify({
+      issue: {
+        name: question,
+      },
+    }),
+  });
+
+  if (!response.ok) {
+    throw new Error('Failed to submit question');
+  }
 }
 
 export async function getAgencyList(): Promise<{ id: string; name: string }[]> {
