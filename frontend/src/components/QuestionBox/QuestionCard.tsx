@@ -1,3 +1,5 @@
+"use client";
+import { useRouter } from "next/navigation";
 
 interface Question {
     id: string;
@@ -5,6 +7,7 @@ interface Question {
     description_html: string;
     agency: string;
     createdAt: string;
+    agencyId: string; 
 }
 
 interface QuestionCardProps {
@@ -12,6 +15,8 @@ interface QuestionCardProps {
 }
 
 const QuestionCard: React.FC<QuestionCardProps> = ({ question }) => {
+    const router = useRouter();
+
     const truncateDescription = (description: string, maxWords: number) => {
         const words = description.replace(/<\/?[^>]+(>|$)/g, "").split(' ');
         if (words.length > maxWords) {
@@ -36,8 +41,12 @@ const QuestionCard: React.FC<QuestionCardProps> = ({ question }) => {
 
     const { formattedName } = formatAgencyName(question.agency);
 
+    const handleClick = () => {
+        router.push(`/${question.agencyId}/${question.id}`);
+    };
+
     return (
-        <div className="border p-4 rounded-md shadow-sm items-center">
+        <div className="border p-4 rounded-md shadow-sm items-center cursor-pointer" onClick={handleClick}>
             <h2 className="text-lg font-semibold">{question.name}</h2>
             <div className="mt-2 text-sm" dangerouslySetInnerHTML={{ __html: truncateDescription(question.description_html, 30) }} />
             <div className="flex items-center mt-4">
