@@ -31,14 +31,6 @@ interface ApiResponse {
   created_at: string;
 }
 
-interface ApiResponse {
-  id: string;
-  name: string;
-  description_html: string;
-  labels: string[];
-  created_at: string;
-}
-
 export async function getAllQuestions(
   page: number = 1,
   pageSize: number = 10
