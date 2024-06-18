@@ -7,7 +7,7 @@ interface Question {
     description_html: string;
     agency: string;
     createdAt: string;
-    agencyId: string; 
+    agencyId: string;
 }
 
 interface QuestionCardProps {
