@@ -20,7 +20,7 @@ const AgencySidebar: React.FC<AgencySidebarProps> = ({ agencies }) => {
     };
 
     const formatAgencyName = (name: string) => {
-        const words = name.split(' ');
+        const words = name.split('_');
         const acronym = words.map(word => word.charAt(0).toUpperCase()).join('');
     
         const formattedName = words.map(word => {
