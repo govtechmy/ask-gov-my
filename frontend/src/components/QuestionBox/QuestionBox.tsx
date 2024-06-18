@@ -8,6 +8,7 @@ interface Question {
     description_html: string;
     agency: string;
     createdAt: string;
+    agencyId: string;
 }
 
 interface QuestionBoxProps {
