@@ -36,10 +36,15 @@ def get_agency_data():
 
 class BonsaiSearch:
     def __init__(self, url=BONSAI_URL):
-        self.es = Elasticsearch(url)
+        # self.es = Elasticsearch(url)
+        self.es = Elasticsearch(CONN,
+                                api_key=ES_API)
 
     def info(self):
         return self.es.info()
+
+    def search(self, index, query):
+        return self.es.search(index=index, q=query)
 
     def create_index(self, index_name):
         return self.es.indices.create(index=index_name)
@@ -51,22 +56,38 @@ class BonsaiSearch:
             doc=document
         )
 
+    def bulk(self, documents):
+        return self.es.bulk(operations=documents, pipeline='ent-search-generic-ingestion')
+
     def delete_index(self, index_name):
         return self.es.indices.delete(index=index_name)
 
 
 if __name__ == '__main__':
     es = BonsaiSearch()
-    print(es.info())
+    # print(f'INFO: {es.info()}')
 
     # create = es.create_index('askgovvmy')
     # print(create)
 
-    agencies = get_agency_data()
-    # print(agencies)
+    # documents = []
+    # agencies = get_agency_data()
+    # for a in agencies:
+    #     print(a)
+    #     print('\n')
+    #     documents.append({
+    #         'index': {'_index': 'askgovmy', '_id': a['id']}}
+    #     )
+    #     documents.append({'name': a['name'], '_reduce_whitespace': True, '_run_ml_interference': True}
+    #                      )
+    # bulk = es.bulk(documents=documents)
+    # print(bulk)
+    #
+    # indexing = es.index(index_name='askgovvmy', id=1, document=agencies)
+    # print(indexing)
+    #
+    # delete = es.delete_index('askgovvmy')
+    # print(delete)
 
-    indexing = es.index(index_name='askgovvmy', id=1, document=agencies)
-    print(indexing)
-
-    delete = es.delete_index('askgovvmy')
-    print(delete)
+    search = es.search(index='askgovmy', query='ministry')
+    print(search)
