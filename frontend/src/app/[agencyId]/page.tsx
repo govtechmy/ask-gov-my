@@ -34,5 +34,3 @@ const AgencyPage = async ({ params, searchParams }: Props) => {
 };
 
 export default AgencyPage;
-
-//this is comment2
