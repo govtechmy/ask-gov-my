@@ -39,18 +39,26 @@ const QuestionCard: React.FC<QuestionCardProps> = ({ question }) => {
     
         const formattedName = words.map(word => {
             if (word.toLowerCase() === 'of') {
-                return 'of';
+                return 'OF';
             }
-            return word.charAt(0).toUpperCase() + word.substr(1).toLowerCase();
-        }).join(' ');
+            return word.charAt(0).toUpperCase() + word.substr(1).toUpperCase();
+        }).join('_');
     
         return { formattedName, acronym };
     };
 
     const { formattedName } = formatAgencyName(question.agency);
+    const formattedNameParts = formattedName.toLowerCase().split('_');
+    const formattedName2 = formattedNameParts.map((part, index) => {
+      if (index === 0 || part !== 'of') {
+        return part.charAt(0).toUpperCase() + part.slice(1);
+      } else {
+        return part;
+      }
+    }).join(' ');
 
     const handleClick = () => {
-        const agencyId = AGENCY_NAME_TO_ID[question.agency];
+        const agencyId = AGENCY_NAME_TO_ID[question.agency as keyof typeof AGENCY_NAME_TO_ID]; // Type assertion
         if (agencyId) {
             router.push(`/${formattedName}/${question.id}`);
         } else {
@@ -63,7 +71,7 @@ const QuestionCard: React.FC<QuestionCardProps> = ({ question }) => {
             <h2 className="text-lg font-semibold">{question.name}</h2>
             <div className="mt-2 text-sm" dangerouslySetInnerHTML={{ __html: truncateDescription(question.description_html, 30) }} />
             <div className="flex items-center mt-4">
-                <span className="text-gray-600">{formattedName}</span>
+                <span className="text-gray-600">{formattedName2}</span>
                 <span className="ml-auto text-gray-400 text-xs">{new Date(question.createdAt).toLocaleDateString('en-GB')}</span>
             </div>
         </div>
