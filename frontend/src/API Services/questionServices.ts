@@ -6,10 +6,19 @@ import {
 
 const AGENCY = {
   "MINISTRY OF FINANCE": "a30895aa-0f27-46b1-b782-9a4ff919cf2d",
-  "EDUCATION MINISTRY": "ef40d294-8737-4f3a-a97b-c1ed4ce2f174",
-  "TRANSPORT MINISTRY": "d13c5167-f77d-43d6-8efc-35f2985316a3",
+  "MINISTRY OF EDUCATION": "ef40d294-8737-4f3a-a97b-c1ed4ce2f174",
+  "MINISTRY OF TRANSPORTATION": "d13c5167-f77d-43d6-8efc-35f2985316a3",
   "MINISTRY OF HEALTH": "ac051d6a-39b6-4df2-b6a6-12d64b48c780",
-  "TOURISM MINISTRY": "a43e382b-6445-43d2-bf03-eeeb74feb0c8",
+  "MINISTRY OF ECONOMY": "108f76f0-7b0a-4b4f-828e-7c840156a3f9",
+  "MINISTRY OF TOURISM, ARTS AND CULTURE": "214d9194-ff01-46fc-9436-97586581f057",
+  "MINISTRY OF WOMEN, FAMILY AND COMMUNITY DEVELOPMENT": "2dc0554f-7951-46ee-9fe4-57541f133038",
+  "MINISTRY OF NATURAL RESOURCES AND ENVIRONMENTAL SUSTAINABILITY": "9ac53fde-ce7c-4d86-ab69-7f53a9a91b56",
+  "MINISTRY OF YOUTH AND SPORTS": "68f639d-56df-4e7a-a0af-8062b66198b8",
+  "MINISTRY OF HIGHER EDUCATION": "4576929f-1438-4ae9-970b-30f087b8365e",
+  "MINISTRY OF PLANTATION AND COMMODITIES": "64236d33-b92b-4383-ac97-a4451a981cbe",
+  "MINISTRY OF HOUSING AND LOCAL GOVERNMENT": "371218a4-f4f2-4e8e-88ac-128ccc03e4c1",
+  "MINISTRY OF HUMAN RESOURCES": "183a3cab-0d49-468f-8915-aadbe2ecab20",
+  "MINISTRY OF INVESTMENT, TRADE AND INDUSTRY": "74137394-b689-4fd7-88a9-e3b2f7558758"
 };
 
 const API_KEY = "plane_api_1cbdb318805f491b842a89c4a078ea9f";
@@ -100,7 +109,7 @@ export async function getQuestionsByAgency(
   if (process.env.NODE_ENV.toLowerCase() === 'local') {
     const ministry = fullArrayDummy.find((ministry) => ministry.agencyName === agencyName);
     if (ministry) {
-      ministry.results.forEach((res) => {
+      ministry.results.forEach((res:ApiResponse) => {
         Questions.push({
           id: res.id,
           agency: ministry.agencyName,
