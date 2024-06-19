@@ -7,16 +7,21 @@ const AGENCY = {
 };
 
 function findAgencyIdByName(name) {
-  // Lookup agency ID based on name in the AGENCY object
   return AGENCY[name];
 }
 
 export default {
   async rewrites() {
-    const rewriteRules = Object.keys(AGENCY).map((name) => ({
-      source: `/${name}`, // Matches any URL with an agency name segment
-      destination: `/${findAgencyIdByName(name)}`, // Function to lookup agency ID
-    }));
+    const rewriteRules = Object.keys(AGENCY).flatMap(name => [
+      {
+        source: `/${name}`,
+        destination: `/${findAgencyIdByName(name)}`,
+      },
+      {
+        source: `/${name}/:questionId`,
+        destination: `/${findAgencyIdByName(name)}/:questionId`,
+      } 
+    ]);
 
     return rewriteRules;
   },
