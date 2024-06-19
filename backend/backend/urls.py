@@ -17,6 +17,13 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 
+from plane.views import MinistryView, QnAView
+from search.views import SearchView, SearchAgenciesView
+
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('', MinistryView.as_view(), name='ministry'),
+    path('qna/<uuid:id>', QnAView.as_view(), name='qna'),
+    path('search', SearchView.as_view(), name='search'),
+    path('agency-search', SearchAgenciesView.as_view(), name='agency_search'),
 ]
