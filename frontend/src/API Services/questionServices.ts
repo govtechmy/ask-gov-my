@@ -1,9 +1,5 @@
 "use server";
 
-import {
-  fullArrayDummy,
-} from "./dummy_data";
-
 const AGENCY = {
   "MINISTRY_OF_FINANCE": "a30895aa-0f27-46b1-b782-9a4ff919cf2d",
   "MINISTRY_OF_EDUCATION": "ef40d294-8737-4f3a-a97b-c1ed4ce2f174",
@@ -49,21 +45,6 @@ export async function getAllQuestions(
 ): Promise<{ questions: Question[]; total: number }> {
   let Questions: Question[] = [];
 
-  if (process.env.NODE_ENV.toLowerCase() === 'local') {
-    fullArrayDummy.forEach((ministry) => {
-      ministry.results.forEach((res) => {
-        Questions.push({
-          id: res.id,
-          agency: ministry.agencyName,
-          description_html: res.description_html,
-          name: res.name,
-          labels: res.labels,
-          createdAt: res.created_at,
-          agencyId: ministry.agencyId
-        });
-      });
-    });
-  } else {
     for (const [agencyName, projectId] of Object.entries(AGENCY)) {
       const response = await fetch(`https://api.plane.so/api/v1/workspaces/govtech/projects/${projectId}/issues/`, {
         method: 'GET',
@@ -89,7 +70,7 @@ export async function getAllQuestions(
       } else {
         console.error(`Failed to fetch questions for agency: ${agencyName}`);
       }
-    }
+
   }
 
   const start = (page - 1) * pageSize;
@@ -108,22 +89,7 @@ export async function getQuestionsByAgency(
 
   const agencyName = Object.keys(AGENCY).find(key => AGENCY[key as keyof typeof AGENCY] === agencyId) || 'Unknown Agency';
 
-  if (process.env.NODE_ENV.toLowerCase() === 'local') {
-    const ministry = fullArrayDummy.find((ministry) => ministry.agencyName === agencyName);
-    if (ministry) {
-      ministry.results.forEach((res:ApiResponse) => {
-        Questions.push({
-          id: res.id,
-          agency: ministry.agencyName,
-          description_html: res.description_html,
-          name: res.name,
-          labels: res.labels,
-          createdAt: res.created_at,
-          agencyId: ministry.agencyId
-        });
-      });
-    }
-  } else {
+
     const response = await fetch(`https://api.plane.so/api/v1/workspaces/govtech/projects/${agencyId}/issues/`, {
       method: 'GET',
       headers: {
@@ -148,7 +114,6 @@ export async function getQuestionsByAgency(
     } else {
       console.error(`Failed to fetch questions for agency: ${agencyId}`);
     }
-  }
 
   const start = (page - 1) * pageSize;
   const end = start + pageSize;
