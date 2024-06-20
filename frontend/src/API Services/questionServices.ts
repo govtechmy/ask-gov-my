@@ -21,6 +21,7 @@ const AGENCY = {
   "MINISTRY_OF_INVESTMENT_TRADE_AND_INDUSTRY": "74137394-b689-4fd7-88a9-e3b2f7558758"
 };
 
+//important update for agency, style is X_OF_X
 
 const API_KEY = "plane_api_1cbdb318805f491b842a89c4a078ea9f";
 
