@@ -42,7 +42,7 @@
     {% for a in agencies %}
     <tr>
         <td>{{ a.id }}</td>
-        <td><a href="{% url 'qna' id=a.id %}">{{ a.name }}</a></td>
+        <td><a href="{% url 'question' id=a.id %}">{{ a.name }}</a></td>
         <td>{{ a.identifier }}</td>
     </tr>
     {% endfor %}
