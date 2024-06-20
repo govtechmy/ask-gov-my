@@ -18,26 +18,33 @@ class Plane:
         #     print(r['id'], r['name'])
         return res
 
-    def get_questions(self):
+    def get_all_questions(self):
         agencies_id = [a['id'] for a in self.get_agencies()]
         # print(agencies_id)
+        questions = []
         for a in agencies_id:
             url = f"{self.plane_url}api/v1/workspaces/{self.slug}/projects/{a}/issues/"
             r = requests.get(url=url, headers=self.headers)
-            res = r.json()['results']
-            for r in res:
-                print(r)
-                print('\n')
+            questions.append(r.json()['results'])
+            # for r in res:
+            #     print(r)
+            #     print('\n')
+        return questions
 
-    def get_question_by_agency(self, id):
-        url = f"{self.plane_url}api/v1/workspaces/{self.slug}/projects/{id}/issues/"
+    def get_question_by_agency(self, project_id):
+        url = f"{self.plane_url}api/v1/workspaces/{self.slug}/projects/{project_id}/issues/"
         r = requests.get(url=url, headers=self.headers)
-        return r.json()
+        return r.json()['results']
 
     def get_question_and_answers(self, agency_id, question_id):
         url = f"https://api.plane.so/api/v1/workspaces/{self.slug}/projects/{agency_id}/issues/{question_id}/comments/"
         r = requests.get(url=url, headers=self.headers)
         return r.json()
+
+    def get_answer(self, agency_id, question_id):
+        url = f"https://api.plane.so/api/v1/workspaces/{self.slug}/projects/{agency_id}/issues/{question_id}/comments/"
+        r = requests.get(url=url, headers=self.headers)
+        return r.json()['results']
 
 
 if __name__ == '__main__':
