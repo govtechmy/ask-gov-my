@@ -110,7 +110,7 @@ export async function getQuestionsByAgency(
   if (process.env.NODE_ENV.toLowerCase() === 'local') {
     const ministry = fullArrayDummy.find((ministry) => ministry.agencyName === agencyName);
     if (ministry) {
-      ministry.results.forEach((res) => {
+      ministry.results.forEach((res:ApiResponse) => {
         Questions.push({
           id: res.id,
           agency: ministry.agencyName,
