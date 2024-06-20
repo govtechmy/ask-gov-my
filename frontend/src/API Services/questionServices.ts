@@ -57,7 +57,6 @@ export async function getAllQuestions(
       if (response.ok) {
         const data = await response.json();
         data.results.forEach((res:ApiResponse) => {
-          console.log(`${res.name} for agency ${agencyName}`)
           Questions.push({
             id: res.id,
             agency: agencyName,
