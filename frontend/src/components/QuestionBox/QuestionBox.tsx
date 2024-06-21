@@ -1,5 +1,5 @@
 'use client'
-import { useRouter } from 'next/navigation';
+import { useState } from 'react';
 import QuestionCard from './QuestionCard';
 
 interface Question {
@@ -13,28 +13,27 @@ interface Question {
 
 interface QuestionBoxProps {
     questions: Question[];
-    totalPages: number;
-    currentPage: number;
-    agencyId?: string;
 }
 
-const QuestionBox: React.FC<QuestionBoxProps> = ({ questions, totalPages, currentPage, agencyId }) => {
-    const router = useRouter();
+const QuestionBox: React.FC<QuestionBoxProps> = ({ questions }) => {
+    const [currentPage, setCurrentPage] = useState(1);
+    const itemsPerPage = 10;
+    const totalPages = Math.ceil(questions.length / itemsPerPage);
 
     const handlePageChange = (page: number) => {
-        const formattedAgencyId = agencyId ? agencyId.replace(/\s+/g, '_').toUpperCase() : '';
-
-        if (formattedAgencyId) {
-            router.push(`/${formattedAgencyId}?page=${page}`);
-        } else {
-            router.push(`/?page=${page}`);
+        if (page >= 1 && page <= totalPages) {
+            setCurrentPage(page);
         }
     };
+
+    const startIdx = (currentPage - 1) * itemsPerPage;
+    const endIdx = startIdx + itemsPerPage;
+    const currentQuestions = questions.slice(startIdx, endIdx);
 
     return (
         <div className="flex flex-col gap-4 justify-center">
             <div className="grid grid-cols-3 gap-6">
-                {questions.map((question) => (
+                {currentQuestions.map((question) => (
                     <QuestionCard key={question.id} question={question} />
                 ))}
             </div>
