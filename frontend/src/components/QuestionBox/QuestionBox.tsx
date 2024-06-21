@@ -1,6 +1,6 @@
-"use client"
-import QuestionCard from "./QuestionCard";
-import { useRouter, usePathname } from "next/navigation";
+'use client'
+import { useState } from 'react';
+import QuestionCard from './QuestionCard';
 
 interface Question {
     id: string;
@@ -8,31 +8,32 @@ interface Question {
     description_html: string;
     agency: string;
     createdAt: string;
+    agencyId: string;
 }
 
 interface QuestionBoxProps {
     questions: Question[];
-    totalPages: number;
-    currentPage: number;
-    agencyId?: string; // agencyId for dynamic routing
 }
 
-const QuestionBox: React.FC<QuestionBoxProps> = ({ questions, totalPages, currentPage, agencyId }) => {
-    const router = useRouter();
-    const pathname = usePathname();
+const QuestionBox: React.FC<QuestionBoxProps> = ({ questions }) => {
+    const [currentPage, setCurrentPage] = useState(1);
+    const itemsPerPage = 10;
+    const totalPages = Math.ceil(questions.length / itemsPerPage);
 
     const handlePageChange = (page: number) => {
-        if (agencyId) {
-            router.push(`/${agencyId}?page=${page}`);
-        } else {
-            router.push(`/?page=${page}`);
+        if (page >= 1 && page <= totalPages) {
+            setCurrentPage(page);
         }
     };
+
+    const startIdx = (currentPage - 1) * itemsPerPage;
+    const endIdx = startIdx + itemsPerPage;
+    const currentQuestions = questions.slice(startIdx, endIdx);
 
     return (
         <div className="flex flex-col gap-4 justify-center">
             <div className="grid grid-cols-3 gap-6">
-                {questions.map((question) => (
+                {currentQuestions.map((question) => (
                     <QuestionCard key={question.id} question={question} />
                 ))}
             </div>
