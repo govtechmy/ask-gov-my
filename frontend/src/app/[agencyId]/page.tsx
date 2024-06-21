@@ -17,7 +17,10 @@ const AgencyPage = async ({ params, searchParams }: Props) => {
     const pageSize = 10;
     const { questions, total } = await getQuestionsByAgency(agencyId, page, pageSize);
     const totalPages = Math.ceil(total / pageSize);
+
     const agencies = await getAgencyList();
+
+    const formattedAgencyId = agencyId.replace(/\s+/g, '_').toUpperCase();
 
     return (
         <div className="container max-w-full">
@@ -26,7 +29,7 @@ const AgencyPage = async ({ params, searchParams }: Props) => {
                     <AgencySidebar agencies={agencies} />
                 </div>
                 <div className="w-3/4">
-                <QuestionBox questions={questions} totalPages={totalPages} currentPage={page} agencyId={agencyId} />
+                    <QuestionBox questions={questions} totalPages={totalPages} currentPage={page} agencyId={formattedAgencyId} />
                 </div>
             </div>
         </div>
@@ -34,5 +37,3 @@ const AgencyPage = async ({ params, searchParams }: Props) => {
 };
 
 export default AgencyPage;
-
-//this is comment2
