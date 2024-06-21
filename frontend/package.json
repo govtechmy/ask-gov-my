@@ -10,8 +10,6 @@
     "lint": "next lint"
   },
   "dependencies": {
-    "branch": "^0.0.0",
-    "git": "^0.1.5",
     "next": "14.2.3",
     "react": "^18",
     "react-dom": "^18"
