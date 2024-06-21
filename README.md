@@ -1,20 +1,96 @@
-# ask-back
+# Frontend Project
 
-Public-facing
-1) [Home] Make people search for their question first (not allowed to ask Q right away, to encourage perusal)
-2) [Knowledge Page] After asking, page with all previous FAQs, with appropriate filtering and searching capabilities
-3) [Ask a Question] Press button from (2) to go to a page / modal popup to ask a question. (AI opportunity: Auto-assign ministry in charge)
-4) [Tickets] Track my ticket (can search for ticket No)
+This project is a frontend application built with Next.js, React, and TailwindCSS. Below are the instructions to set up, develop, build, and start the application.
 
-Ticket status:
-Quarantine (pre-admin filter) --> In Review (for Ministry action) --> Published
-or
-Quaratnine --> Deleted (spam/abuse/etc; also AI opportunity)
+## Prerequisites
 
-Private:
-4) Admin page for main admin to move tickets out of quarantine and ensure assigned to correct ministry
-5) Admin page to add the "person-in-charge" for agencies.
-6) Page for agency PIC to answer questions, including with attachments and pictures if required.
+Ensure you have the following installed on your machine:
 
-Developer:
-7) API for anything in the knowledge base. Docs page on main site (Nextra). 
+- [Node.js](https://nodejs.org/) (v18 or higher recommended)
+- [npm](https://www.npmjs.com/) (v6 or higher)
+
+## Getting Started
+
+1. **Clone the repository**
+
+   ```sh
+   git clone <repository-url>
+   cd frontend
+   ```
+
+2. **Install dependencies**
+
+   ```sh
+   npm install
+   ```
+
+3. **Run the development server**
+
+   ```sh
+   npm run dev
+   ```
+
+   Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+
+## Scripts
+
+- **Development**
+
+  To start the development server:
+
+  ```sh
+  npm run dev
+  ```
+
+- **Build**
+
+  To build the application for production:
+
+  ```sh
+  npm run build
+  ```
+
+- **Start**
+
+  To start the application in production mode:
+
+  ```sh
+  npm run start
+  ```
+
+- **Lint**
+
+  To run ESLint:
+
+  ```sh
+  npm run lint
+  ```
+
+## Dependencies
+
+- `next`: Next.js framework
+- `react`: React library
+- `react-dom`: React DOM library
+
+## DevDependencies
+
+- `@types/node`: TypeScript definitions for Node.js
+- `@types/react`: TypeScript definitions for React
+- `@types/react-dom`: TypeScript definitions for React DOM
+- `eslint`: JavaScript linter
+- `eslint-config-next`: ESLint configuration for Next.js
+- `postcss`: Tool for transforming CSS
+- `tailwindcss`: Utility-first CSS framework
+
+## Tailwind CSS
+
+This project uses Tailwind CSS for styling. To customize Tailwind CSS, edit the `tailwind.config.js` file.
+
+## Learn More
+
+To learn more about Next.js, React, and Tailwind CSS, check out the following resources:
+
+- [Next.js Documentation](https://nextjs.org/docs)
+- [React Documentation](https://reactjs.org/docs/getting-started.html)
+- [Tailwind CSS Documentation](https://tailwindcss.com/docs)
+
