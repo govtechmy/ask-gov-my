@@ -45,7 +45,7 @@ export async function getAllQuestions(
   pageSize: number = 10
 ): Promise<{ questions: Question[]; total: number }> {
   let Questions: Question[] = [];
-  fetchAndIndexQuestions()
+  // fetchAndIndexQuestions()
 
     for (const [agencyName, projectId] of Object.entries(AGENCY)) {
       const response = await fetch(`https://api.plane.so/api/v1/workspaces/govtech/projects/${projectId}/issues/`, {
