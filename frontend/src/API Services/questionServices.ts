@@ -1,4 +1,5 @@
 "use server";
+import { fetchAndIndexQuestions } from "./searchServices";
 
 const AGENCY = {
   "MINISTRY_OF_FINANCE": "a30895aa-0f27-46b1-b782-9a4ff919cf2d",
@@ -44,6 +45,7 @@ export async function getAllQuestions(
   pageSize: number = 10
 ): Promise<{ questions: Question[]; total: number }> {
   let Questions: Question[] = [];
+  fetchAndIndexQuestions()
 
     for (const [agencyName, projectId] of Object.entries(AGENCY)) {
       const response = await fetch(`https://api.plane.so/api/v1/workspaces/govtech/projects/${projectId}/issues/`, {
