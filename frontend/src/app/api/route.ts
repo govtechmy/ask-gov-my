@@ -2,10 +2,15 @@ import { NextResponse } from 'next/server';
 
 export const dynamic = 'force-dynamic' // defaults to auto
 
+const webhook_secret = "a9ccba1e-0de1-4021-b6de-1aa9ceafb9dc"
+
 export async function POST(req: Request) {
     try {
         const body = await req.json();
-        console.log('Received POST request:', body);
+        if (webhook_secret != body.webhook_id) {
+            return new Response('Forbidden', { status: 403 });
+        }
+        console.log('Received POST request:', body.webhook_id);
         return NextResponse.json(body);
     } catch (error) {
         console.error('Error processing POST request:', error);
