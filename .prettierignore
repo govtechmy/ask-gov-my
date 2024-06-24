@@ -26,3 +26,9 @@ yarn-error.log*
 
 # vercel
 .vercel
+
+**/.git
+**/.svn
+**/.hg
+**/node_modules
+**/.yaml
