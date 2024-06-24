@@ -35,4 +35,14 @@ yarn-error.log*
 *.tsbuildinfo
 next-env.d.ts
 
+# jetbrains related files
+.idea
+
+# python/django related
+venv
+__pycache__
+.ipynb_checkpoints
+
+#sqlite
+*.sqlite3
 .vscode
