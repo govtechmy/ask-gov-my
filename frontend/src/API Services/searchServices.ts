@@ -110,3 +110,20 @@ export async function searchQuestions(query: string) {
 
     return result.hits.hits.map((hit: any) => hit._source);
 }
+
+export async function handleWebhook() {
+    //check data type for update
+
+}
+
+async function updateQuestionTitle() {
+
+}
+
+async function updateQuestionDescription() {
+
+}
+
+async function deleteQuestion() {
+
+}
