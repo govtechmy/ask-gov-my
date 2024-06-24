@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+{% for ask in qna %}
+    ID: {{ ask.id }}<br>
+    <a href="{% url 'answer' agency_id=ask.project question_id=ask.id %}">Name: {{ ask.name }}</a><br>
+    Project: {{ ask.project }}<br>
+    Parent: {{ ask.parent }}<br>
+    Description HTML: {{ ask.description_html }}<br>
+    Description Binary: {{ ask.description_binary }}<br>
+    Sequence ID: {{ ask.sequence_id }}<br>
+    Labels: {{ ask.labels }}
+    <br><br>
+    <hr>
+{% endfor %}
+{% for ask in qna %}
+    {{ ask.keys }}
+{% endfor %}
+</body>
+</html>
