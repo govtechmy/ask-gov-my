@@ -1,0 +1,31 @@
+{
+  "Footer": {
+    "api_docs": "API Docs",
+    "admin_login": "Admin Login",
+    "gov_mys": "Government of Malaysia"
+  },
+  "Nav": {
+    "Theme": {
+      "toggle_theme": "Change theme",
+      "toggle_light": "Toggle Light",
+      "toggle_dark": "Toggle Dark"
+    }
+  },
+  "AgencySidebar": {
+    "agency": "Agency",
+    "EKONOMI": "Ministry of Economy",
+    "KPWKM": "Ministry of Women, Family & Community Development",
+    "KBS": "Ministry of Youth and Sport",
+    "KPK": "Ministry of Plantation and Commodities",
+    "KPKT": "Ministry of Housing and Local Government",
+    "MITI": "Ministry of International Trade & Industry",
+    "MOE": "Ministry of Education",
+    "MOF": "Ministry of Finance",
+    "MOH": "Ministry of Health",
+    "MOHE": "Ministry of Higher Education",
+    "MOHR": "Ministry of Human Resources",
+    "MOT": "Ministry of Transportation",
+    "MOTAC": "Ministry of Tourism, Arts & Culture",
+    "NRES": "Ministry of Natural Resources & Environmental Sustainability"
+  }
+}
