@@ -1,3 +1,45 @@
 from django.db import models
 
-# Create your models here.
+class Agency(models.Model):
+    name = models.CharField(max_length=255)
+    acronym_en = models.CharField(max_length=50, null=True, blank=True)
+
+    def __str__(self):
+        return self.name
+
+class Topic(models.Model):
+    title = models.CharField(max_length=255)
+    agency = models.ForeignKey(Agency, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return self.title
+
+class User(models.Model):
+    name = models.CharField(max_length=255)
+    password = models.CharField(max_length=255)  # Consider hashing passwords
+    agency = models.ForeignKey(Agency, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return self.name
+
+class Question(models.Model):
+    BACKLOG = 'backlog'
+    COMPLETED = 'completed'
+    SPAM = 'spam'
+    
+    STATE_CHOICES = [
+        (BACKLOG, 'Backlog'),
+        (COMPLETED, 'Completed'),
+        (SPAM, 'Spam'),
+    ]
+
+    question = models.TextField()
+    date = models.DateTimeField(auto_now_add=True)
+    state = models.CharField(max_length=10, choices=STATE_CHOICES, default=BACKLOG)
+    agency = models.ForeignKey(Agency, on_delete=models.CASCADE)
+    answer = models.TextField(null=True, blank=True)
+    topics = models.ManyToManyField(Topic)
+    email = models.EmailField()
+
+    def __str__(self):
+        return self.question[:50]
