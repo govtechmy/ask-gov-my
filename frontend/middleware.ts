@@ -1,4 +1,4 @@
-import { defaultLocale, locales } from "@/lib/i18n";
+import { defaultLocale, localePrefix, locales } from "@/lib/i18n";
 import createIntlMiddleware from "next-intl/middleware";
 import { NextRequest } from "next/server";
 
@@ -6,6 +6,7 @@ export default async function middleware(request: NextRequest) {
   // Create and call the next-intl middleware
   const handleI18nRouting = createIntlMiddleware({
     locales,
+    localePrefix,
     defaultLocale,
   });
 
@@ -34,6 +35,10 @@ export default async function middleware(request: NextRequest) {
 }
 
 export const config = {
-  // Match only internationalized pathnames
-  matcher: ["/", `/(en|my)/:path*`],
+  matcher: [
+    // Match all pathnames except for
+    // - if they start with `/api`, `/_next` or `/_vercel`
+    // - the ones containing a dot (e.g. `favicon.ico`)
+    "/((?!api|_next|_vercel|.*\\..*).*)",
+  ],
 };
