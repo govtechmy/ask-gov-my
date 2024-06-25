@@ -3,16 +3,23 @@
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { usePathname, useRouter } from "@/lib/i18n";
 import { useSearchParams } from "next/navigation";
+import { useTransition } from "react";
 
 export default function LocaleSwitch({ locale }: { locale: string }) {
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
+  const [isPending, startTransition] = useTransition();
 
   const onSelectChange = (locale: string) => {
-    router.replace(`${pathname}?${searchParams}`, {
-      locale,
-      scroll: false,
+    startTransition(() => {
+      router.replace(
+        `${pathname}?${searchParams}`,
+        {
+          locale,
+          scroll: false,
+        },
+      );
     });
   };
 
