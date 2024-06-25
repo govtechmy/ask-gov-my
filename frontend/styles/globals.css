@@ -1,0 +1,53 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --black-900: 21% 0.006 285.9; /* Zinc 900 */
+    --black-800: 27% 0.005 286; /* Zinc 800 */
+    --black-700: 37% 0.012 285.8; /* Zinc 700 */
+    --base-white: 100% 0 0; /* White */
+    --dim-500: 55% 0.014 285.9; /* Zinc 500 */
+    --outline-400: 71% 0.013 286.1; /* Zinc 400 */
+    --outline-300: 87% 0.005 286.3; /* Zinc 300 */
+    --outline-200: 92% 0.004 286.3; /* Zinc 200 */
+    --washed-100: 97% 0.001 286.4; /* Zinc 100 */
+    --background-50: 99% 0 0; /* Zinc 50 */
+  }
+
+  .dark {
+    --black-900: 100% 0 0; /* White */
+    --black-800: 97% 0.001 286.4; /* Zinc 100 */
+    --black-700: 87% 0.005 286.3; /* Zinc 300 */
+    --base-white: 21% 0.006 285.9; /* Zinc 900 */
+    --dim-500: 71% 0.013 286.1; /* Zinc 400 */
+    --outline-400: 44% 0.015 285.8; /* Zinc 600 */
+    --outline-300: 37% 0.012 285.8; /* Zinc 700 */
+    --outline-200: 27% 0.005 286; /* Zinc 800 */
+    --washed-100: 23% 0.008 285.8;
+    --background-50: 20% 0.006 285.9;
+  }
+
+  html {
+    box-sizing: border-box;
+  }
+
+  * {
+    @apply border-outline-200;
+  }
+
+  *,
+  *:before,
+  *:after {
+    box-sizing: inherit;
+  }
+
+  :focus:not(:focus-visible) {
+    outline: none;
+  }
+
+  body {
+    @apply bg-background text-foreground;
+  }
+}
