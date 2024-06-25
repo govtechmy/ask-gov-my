@@ -1,5 +1,4 @@
 "use server";
-import { fetchAndIndexQuestions } from "./searchServices";
 const API_URL = "http://localhost:8000/api";
 
 interface Question {
@@ -24,7 +23,6 @@ export async function getAllQuestions(
   page: number = 1,
   pageSize: number = 10
 ): Promise<{ questions: Question[]; total: number }> {
-  fetchAndIndexQuestions()
   try {
     const response = await fetch(`${API_URL}/questions/`);
     if (!response.ok) {
