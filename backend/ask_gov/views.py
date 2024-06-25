@@ -29,3 +29,12 @@ def submit_question(request, agency_id):
         return Response({"error": "Agency not found"}, status=404)
     except Exception as e:
         return Response({"error": str(e)}, status=400)
+
+def get_questions_by_agency(request, agency_id):
+    try:
+        agency = Agency.objects.get(pk=agency_id)
+        questions = Question.objects.filter(agency=agency)
+        serializer = QuestionSerializer(questions, many=True)
+        return Response(serializer.data)
+    except Agency.DoesNotExist:
+        return Response({"error": "Agency not found"}, status=404)
