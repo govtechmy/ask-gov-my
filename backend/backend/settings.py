@@ -39,7 +39,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'ask_gov'
 ]
-# AUTH_USER_MODEL = 'ask_gov.CustomUser'
+AUTH_USER_MODEL = 'ask_gov.CustomUser'
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
