@@ -3,10 +3,11 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
+    "format": "prettier --write --ignore-unknown \"!**/*.{yaml}\"",
     "prepare": "husky"
   },
   "lint-staged": {
-    "**/*": "prettier --write --ignore-unknown"
+    "**/*": "prettier --write --ignore-unknown \"!**/*.{yaml}\""
   },
   "devDependencies": {
     "eslint": "^9.5.0",
