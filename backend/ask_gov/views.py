@@ -18,17 +18,19 @@ class AgencyListView(generics.ListAPIView):
     queryset = Agency.objects.all()
     serializer_class = AgencySerializer
 
-@api_view(['POST'])
-def submit_question(request, agency_id):
-    try:
-        agency = Agency.objects.get(pk=agency_id)
-        question_text = request.data.get('question')
-        question = Question.objects.create(question=question_text, agency=agency)
-        return Response({"message": "Question submitted successfully"})
-    except Agency.DoesNotExist:
-        return Response({"error": "Agency not found"}, status=404)
-    except Exception as e:
-        return Response({"error": str(e)}, status=400)
+class SubmitQuestionView(APIView):
+    def post(self, request, agency_id):
+        try:
+            agency = Agency.objects.get(id=agency_id)
+        except Agency.DoesNotExist:
+            return Response({"error": "Agency not found"}, status=status.HTTP_404_NOT_FOUND)
+
+        data = request.data.get('data')
+        serializer = QuestionSerializer(data=data)
+        if serializer.is_valid():
+            serializer.save(agency=agency)
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 def get_questions_by_agency(request, agency_id):
     try:
