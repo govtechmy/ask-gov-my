@@ -1,4 +1,5 @@
 from django.db import models
+from django.contrib.auth.models import AbstractUser
 
 class Agency(models.Model):
     name = models.CharField(max_length=255)
@@ -14,13 +15,11 @@ class Topic(models.Model):
     def __str__(self):
         return self.title
 
-# class User(models.Model):
-#     name = models.CharField(max_length=255)
-#     password = models.CharField(max_length=255)  # Consider hashing passwords
-#     agency = models.ForeignKey(Agency, on_delete=models.CASCADE)
+# class CustomUser(AbstractUser):
+#     agency = models.OneToOneField(Agency, on_delete=models.SET_NULL, null=True, blank=True)
 
 #     def __str__(self):
-#         return self.name
+#         return self.username
 
 class Question(models.Model):
     BACKLOG = 'backlog'
