@@ -24,7 +24,10 @@ const config: Config = {
         card: "0px 2px 6px 0 rgba(0, 0, 0, 0.05), 0px 6px 24px 0 rgba(0, 0, 0, 0.05)",
       },
       colors: {
-        // primary: "oklch(var(--primary))",
+        brand: {
+          600: "oklch(var(--brand-600))",
+          700: "oklch(var(--brand-700))",
+        },
         foreground: "oklch(var(--black-900))",
         background: {
           DEFAULT: "oklch(var(--base-white))",
