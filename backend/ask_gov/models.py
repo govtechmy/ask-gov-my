@@ -15,11 +15,11 @@ class Topic(models.Model):
     def __str__(self):
         return self.title
 
-# class CustomUser(AbstractUser):
-#     agency = models.OneToOneField(Agency, on_delete=models.SET_NULL, null=True, blank=True)
+class CustomUser(AbstractUser):
+    agency = models.OneToOneField(Agency, on_delete=models.SET_NULL, null=True, blank=True)
 
-#     def __str__(self):
-#         return self.username
+    def __str__(self):
+        return self.username
 
 class Question(models.Model):
     BACKLOG = 'backlog'
