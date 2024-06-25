@@ -1,0 +1,31 @@
+{
+  "Footer": {
+    "api_docs": "Dokumentasi API",
+    "admin_login": "Admin Log Masuk",
+    "gov_mys": "Kerajaan Malaysia"
+  },
+  "Nav": {
+    "Theme": {
+      "toggle_theme": "Pilih Mod",
+      "toggle_light": "Pilih Mod Terang",
+      "toggle_dark": "Pilih Mod Gelap"
+    }
+  },
+  "AgencySidebar": {
+    "agency": "Agensi",
+    "EKONOMI": "Kementerian Ekonomi",
+    "KPWKM": "Kementerian Pembangunan Wanita, Keluarga dan Masyarakat",
+    "KBS": "Kementerian Belia & Sukan",
+    "KPK": "Kementerian Perladangan & Komoditi",
+    "KPKT": "Kementerian Perumahan & Kerajaan Tempatan",
+    "MITI": "Kementerian Pelaburan, Perdagangan & Industri",
+    "MOE": "Kementerian Pendidikan",
+    "MOF": "Kementerian Kewangan",
+    "MOH": "Kementerian Kesihatan",
+    "MOHE": "Kementerian Pendidikan Tinggi",
+    "MOHR": "Kementerian Sumber Manusia",
+    "MOT": "Kementerian Pengangkutan",
+    "MOTAC": "Kementerian Pelancongan, Seni & Budaya",
+    "NRES": "Kementerian Sumber Asli & Kelestarian Alam"
+  }
+}
