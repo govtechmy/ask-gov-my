@@ -2,7 +2,7 @@ from django.db import models
 
 class Agency(models.Model):
     name = models.CharField(max_length=255)
-    acronym_en = models.CharField(max_length=50, null=True, blank=True)
+    acronym = models.CharField(max_length=50, null=True, blank=True)
 
     def __str__(self):
         return self.name
@@ -14,13 +14,13 @@ class Topic(models.Model):
     def __str__(self):
         return self.title
 
-class User(models.Model):
-    name = models.CharField(max_length=255)
-    password = models.CharField(max_length=255)  # Consider hashing passwords
-    agency = models.ForeignKey(Agency, on_delete=models.CASCADE)
+# class User(models.Model):
+#     name = models.CharField(max_length=255)
+#     password = models.CharField(max_length=255)  # Consider hashing passwords
+#     agency = models.ForeignKey(Agency, on_delete=models.CASCADE)
 
-    def __str__(self):
-        return self.name
+#     def __str__(self):
+#         return self.name
 
 class Question(models.Model):
     BACKLOG = 'backlog'
