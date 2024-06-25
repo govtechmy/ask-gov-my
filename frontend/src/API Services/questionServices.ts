@@ -72,7 +72,7 @@ export async function getQuestionById(questionId: string): Promise<Question | nu
   return null;
 }
 
-export async function submitQuestion(agencyId: string, question: string): Promise<void> {
+export async function submitQuestion(agencyId: string, data:Question): Promise<void> {
   const url = `${API_URL}/submit-question/${agencyId}/`;
 
   const response = await fetch(url, {
@@ -80,7 +80,7 @@ export async function submitQuestion(agencyId: string, question: string): Promis
     headers: {
       'Content-Type': 'application/json',
     },
-    body: JSON.stringify({ question }),
+    body: JSON.stringify({ data }),
   });
 
   if (!response.ok) {
