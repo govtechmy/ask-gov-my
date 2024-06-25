@@ -16,7 +16,7 @@ interface AgencySidebarProps {
 //important update on agency
 
 const AgencySidebar: React.FC<AgencySidebarProps> = ({ agencies }) => {
-  const t = useTranslations("AgencySidebar");
+  const t = useTranslations("Agency");
 
   const router = useRouter();
   const [searchTerm, setSearchTerm] = useState("");
