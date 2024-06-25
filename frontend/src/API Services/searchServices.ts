@@ -2,7 +2,6 @@
 import { Client } from '@elastic/elasticsearch-serverless';
 
 const URL = "https://askgov-fc58f6.es.us-east-1.aws.elastic.cloud"
-const KEY = "rjSDb9NwRMmRrwB-Ve4CdA"
 
 const client = new Client({
     node: URL,
