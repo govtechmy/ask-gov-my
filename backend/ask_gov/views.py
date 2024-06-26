@@ -19,15 +19,19 @@ class QuestionListCreateView(generics.ListCreateAPIView):
     queryset = Question.objects.all()
     serializer_class = QuestionSerializer
 
+
 class QuestionDetailView(generics.RetrieveAPIView):
     queryset = Question.objects.all()
     serializer_class = QuestionSerializer
+
 
 class AgencyListView(generics.ListAPIView):
     queryset = Agency.objects.all()
     serializer_class = AgencySerializer
 
+
 class SubmitQuestionView(APIView):
+
     def post(self, request, agency_id):
         try:
             agency = Agency.objects.get(id=agency_id)
@@ -53,6 +57,7 @@ class SubmitQuestionView(APIView):
         
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
+
 class QuestionsByAgencyView(APIView):
     def get(self, request, agency_id):
         agency = get_object_or_404(Agency, pk=agency_id)
@@ -60,12 +65,14 @@ class QuestionsByAgencyView(APIView):
         serializer = QuestionSerializer(questions, many=True)
         return Response(serializer.data)
 
+
 def get_tokens_for_user(user):
     refresh = RefreshToken.for_user(user)
     return {
         'refresh': str(refresh),
         'access': str(refresh.access_token),
     }
+
 
 class LoginView(APIView):
     permission_classes = (AllowAny,)
@@ -84,6 +91,7 @@ class LoginView(APIView):
         logger.debug('Login successful')
         return Response(tokens, status=status.HTTP_200_OK)
     
+
 class UserAgencyQuestionsView(APIView):
     permission_classes = [IsAuthenticated]
 
@@ -115,10 +123,25 @@ class SubmitAnswerView(APIView):
         try:
             question = Question.objects.get(id=question_id)
             question.answer = answer
+            question.state = 'completed' 
             question.save()
+            
+            client.update(
+                index='questions',
+                id=str(question.id),
+                body={
+                    "doc": {
+                        "answer": answer,
+                        "state": "completed"
+                    }
+                }
+            )
+            
             return Response({"detail": "Answer submitted successfully"}, status=status.HTTP_200_OK)
         except Question.DoesNotExist:
             return Response({"detail": "Question not found"}, status=status.HTTP_404_NOT_FOUND)
+        except Exception as e:
+            return Response({"detail": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
     
 class UserAgencyTopicsView(APIView):
     permission_classes = [IsAuthenticated]
