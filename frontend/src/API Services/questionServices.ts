@@ -19,6 +19,16 @@ interface Question {
   email: string;
 }
 
+interface Topic {
+  id: number;
+  title: string;
+  agency: {
+    id: number;
+    name: string;
+    acronym: string;
+  };
+}
+
 export async function getAllQuestions(
   page: number = 1,
   pageSize: number = 10
@@ -40,6 +50,21 @@ export async function getAllQuestions(
     console.error("Error in getAllQuestions:", error);
     return { questions: [], total: 0 };
   }
+}
+export async function getAllTopics(): Promise<Topic[]> {
+  const response = await fetch(`${API_URL}/topics/`, {
+    method: 'GET',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+  });
+
+  if (!response.ok) {
+    throw new Error('Failed to fetch topics');
+  }
+
+  const data = await response.json();
+  return data;
 }
 
 export async function getQuestionsByAgency(
