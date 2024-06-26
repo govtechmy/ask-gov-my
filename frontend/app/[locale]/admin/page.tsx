@@ -9,7 +9,7 @@ export function AdminPage() {
   return (
     <div className="flex flex-col min-h-screen"> 
       <HeaderAdmin />
-      <div className="flex-grow flex items-center justify-center py-12 border">
+      <div className="flex-grow flex items-center justify-center py-12">
         <div className=" min-w-96 ">
           <div className="text-center">
             <div className="text-2xl font-semibold px-5 py-5">Log in to AskGovMy</div>
