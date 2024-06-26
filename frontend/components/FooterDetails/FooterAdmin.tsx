@@ -5,7 +5,7 @@ const FooterAdmin = () => {
   const t = useTranslations("Footer");
 
   return (
-    <div className="bg-background px-6 lg:px-8">
+    <div className="px-6 lg:px-8">
       <div className="gap-4.5 flex flex-col justify-between sm:flex-row pb-6">
         <div className="flex items-center gap-x-2.5">
           <Image
