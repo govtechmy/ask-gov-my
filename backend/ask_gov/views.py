@@ -29,6 +29,9 @@ class AgencyListView(generics.ListAPIView):
     queryset = Agency.objects.all()
     serializer_class = AgencySerializer
 
+class TopicListView(generics.ListAPIView):
+    queryset = Topic.objects.all()
+    serializer_class = TopicSerializer
 
 class SubmitQuestionView(APIView):
 
