@@ -47,7 +47,7 @@ export async function getQuestionsByAgency(
   page: number = 1,
   pageSize: number = 10
 ): Promise<{ questions: Question[]; total: number }> {
-  const response = await fetch(`${API_URL}/questions-by-agency/${agencyId}`);
+  const response = await fetch(`${API_URL}/questions/by-agency/${agencyId}`);
   if (!response.ok) {
     throw new Error('Failed to fetch questions');
   }
