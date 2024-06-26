@@ -9,7 +9,7 @@ https://docs.djangoproject.com/en/5.0/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.0/ref/settings/
 """
-
+import os
 from pathlib import Path
 from datetime import timedelta
 
@@ -94,6 +94,9 @@ DATABASES = {
     }
 }
 
+#Elasticsearch settings
+ELASTICSEARCH_URL = os.getenv('ELASTICSEARCH_URL', 'https://askgov-fc58f6.es.us-east-1.aws.elastic.cloud')
+ELASTICSEARCH_API_KEY = os.getenv('ELASTICSEARCH_API_KEY', 'NWNHNVRaQUI3cVdKTXhCbHk4Sl86Um1LTmRKNjFSMjJXeUVtNGFVMEtldw==')
 
 
 # Password validation
