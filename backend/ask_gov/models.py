@@ -35,9 +35,9 @@ class Question(models.Model):
     question = models.TextField()
     date = models.DateTimeField(auto_now_add=True)
     state = models.CharField(max_length=10, choices=STATE_CHOICES, default=BACKLOG)
-    agency = models.ForeignKey(Agency, on_delete=models.CASCADE)
+    agency = models.ForeignKey(Agency, on_delete=models.CASCADE, null=True, blank=True)
     answer = models.TextField(null=True, blank=True)
-    topics = models.ManyToManyField(Topic)
+    topics = models.ManyToManyField(Topic, blank=True)
     email = models.EmailField()
 
     def __str__(self):
