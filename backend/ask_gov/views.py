@@ -7,6 +7,7 @@ from rest_framework.views import APIView
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from django.contrib.auth import get_user_model
 from rest_framework_simplejwt.tokens import RefreshToken
+from .elasticsearch_client import client
 import logging
 
 logger = logging.getLogger(__name__)
@@ -34,10 +35,22 @@ class SubmitQuestionView(APIView):
             return Response({"error": "Agency not found"}, status=status.HTTP_404_NOT_FOUND)
 
         data = request.data.get('data')
+
         serializer = QuestionSerializer(data=data)
         if serializer.is_valid():
-            serializer.save(agency=agency)
+            question = serializer.save()
+            question.agency = agency
+            question.save()
+            
+            document = serializer.data
+            client.index(
+                index='questions',
+                id=str(question.id),
+                document=document
+            )
+            
             return Response(serializer.data, status=status.HTTP_201_CREATED)
+        
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 class QuestionsByAgencyView(APIView):
