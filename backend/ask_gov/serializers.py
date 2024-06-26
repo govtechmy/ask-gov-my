@@ -17,13 +17,6 @@ class UserSerializer(serializers.ModelSerializer):
         fields = ['id', 'username', 'email', 'agency']
 
 
-class UserSerializer(serializers.ModelSerializer):
-    agency = AgencySerializer()
-
-    class Meta:
-        model = User
-        fields = ['id', 'username', 'email', 'agency']
-
 class TopicSerializer(serializers.ModelSerializer):
     agency = AgencySerializer()
 
