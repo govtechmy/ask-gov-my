@@ -1,11 +1,17 @@
-from django.shortcuts import render
-
-from rest_framework import generics
-from .models import Question, Agency
-from .serializers import QuestionSerializer, AgencySerializer
+from django.shortcuts import get_object_or_404
+from rest_framework import generics, status
+from .models import Question, Agency, Topic
+from .serializers import QuestionSerializer, AgencySerializer, TopicSerializer
 from rest_framework.response import Response
-from rest_framework.decorators import api_view
 from rest_framework.views import APIView
+from rest_framework.permissions import AllowAny, IsAuthenticated
+from django.contrib.auth import get_user_model
+from rest_framework_simplejwt.tokens import RefreshToken
+import logging
+
+logger = logging.getLogger(__name__)
+User = get_user_model()
+
 
 
 class QuestionListCreateView(generics.ListCreateAPIView):
@@ -34,11 +40,101 @@ class SubmitQuestionView(APIView):
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-def get_questions_by_agency(request, agency_id):
-    try:
-        agency = Agency.objects.get(pk=agency_id)
+class QuestionsByAgencyView(APIView):
+    def get(self, request, agency_id):
+        agency = get_object_or_404(Agency, pk=agency_id)
         questions = Question.objects.filter(agency=agency)
         serializer = QuestionSerializer(questions, many=True)
         return Response(serializer.data)
-    except Agency.DoesNotExist:
-        return Response({"error": "Agency not found"}, status=404)
+
+def get_tokens_for_user(user):
+    refresh = RefreshToken.for_user(user)
+    return {
+        'refresh': str(refresh),
+        'access': str(refresh.access_token),
+    }
+
+class LoginView(APIView):
+    permission_classes = (AllowAny,)
+
+    def post(self, request, *args, **kwargs):
+        logger.debug('LoginView POST request received')
+        username = request.data.get("username")
+        password = request.data.get("password")
+        logger.debug(f'Username: {username}, Password: {password}')
+        user = User.objects.filter(username=username).first()
+        if user is None or not user.check_password(password):
+            logger.debug('Invalid credentials')
+            return Response({"detail": "Invalid credentials"}, status=status.HTTP_401_UNAUTHORIZED)
+
+        tokens = get_tokens_for_user(user)
+        logger.debug('Login successful')
+        return Response(tokens, status=status.HTTP_200_OK)
+    
+class UserAgencyQuestionsView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request):
+        user = request.user
+        agency = user.agency
+
+        if agency is None:
+            return Response({"detail": "User has no agency assigned"}, status=status.HTTP_400_BAD_REQUEST)
+
+        questions = Question.objects.filter(agency=agency)
+        serializer = QuestionSerializer(questions, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+    
+class SubmitAnswerView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def post(self, request, question_id):
+        user = request.user
+        data = request.data.get('data')
+        
+        if not data:
+            return Response({"detail": "Data is required"}, status=status.HTTP_400_BAD_REQUEST)
+        
+        answer = data.get('answer')
+        if not answer:
+            return Response({"detail": "Answer is required"}, status=status.HTTP_400_BAD_REQUEST)
+        
+        try:
+            question = Question.objects.get(id=question_id)
+            question.answer = answer
+            question.save()
+            return Response({"detail": "Answer submitted successfully"}, status=status.HTTP_200_OK)
+        except Question.DoesNotExist:
+            return Response({"detail": "Question not found"}, status=status.HTTP_404_NOT_FOUND)
+    
+class UserAgencyTopicsView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request):
+        user = request.user
+        agency = user.agency
+
+        if agency is None:
+            return Response({"detail": "User has no agency assigned"}, status=status.HTTP_400_BAD_REQUEST)
+
+        topics = Topic.objects.filter(agency=agency)
+        serializer = TopicSerializer(topics, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
+class AddTopicView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def post(self, request):
+        user = request.user
+        agency = user.agency
+
+        if agency is None:
+            return Response({"detail": "User has no agency assigned"}, status=status.HTTP_400_BAD_REQUEST)
+
+        title = request.data.get('title')
+        if not title:
+            return Response({"detail": "Title is required"}, status=status.HTTP_400_BAD_REQUEST)
+
+        topic = Topic.objects.create(title=title, agency=agency)
+        serializer = TopicSerializer(topic)
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
