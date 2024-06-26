@@ -1,8 +1,6 @@
 import type { Metadata } from "next";
 import { Inter, Poppins } from "next/font/google";
 import "@/styles/globals.css";
-import Footer from "@/components/FooterDetails/Footer";
-import Header from "@/components/HeaderDetails/Header";
 import { getMessages, unstable_setRequestLocale } from "next-intl/server";
 import { NextIntlClientProvider } from "next-intl";
 import { locales } from "@/lib/i18n";
@@ -43,9 +41,7 @@ export default async function RootLayout({
       <body className={cn(inter.className, poppins.variable)}>
         <ThemeProvider attribute="class">
           <NextIntlClientProvider messages={messages}>
-            <Header locale={locale} />
             {children}
-            <Footer />
           </NextIntlClientProvider>
         </ThemeProvider>
       </body>

@@ -39,7 +39,7 @@ export default async function RootLayout({
   return (
     <html lang={locale} suppressHydrationWarning>
       <body className={cn(inter.className, poppins.variable)}>
-      <ThemeProvider attribute="class">
+        <ThemeProvider attribute="class">
           <NextIntlClientProvider messages={messages}>
              {children}
           </NextIntlClientProvider>

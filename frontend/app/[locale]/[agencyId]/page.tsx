@@ -5,6 +5,9 @@ import {
 import QuestionBox from "@/components/QuestionBox/QuestionBox";
 import AgencySidebar from "@/components/AgencySideBar";
 import { AGENCY_TO_UUID } from "@/lib/agency";
+import Header from "@/components/HeaderDetails/Header";
+import SearchNavbar from "@/components/HeaderDetails/SearchNavBar";
+import Footer from "@/components/FooterDetails/Footer";
 
 interface Props {
   params: {
@@ -31,7 +34,9 @@ const AgencyPage = async ({ params, searchParams }: Props) => {
   const formattedAgencyId = agencyId.replace(/\s+/g, "_").toUpperCase();
 
   return (
-    <div className="container max-w-full">
+    <div className="container max-w-full max-h-full">
+      <Header></Header>
+      <SearchNavbar></SearchNavbar>
       <div className="mt-4 flex">
         <div className="w-1/4">
           <AgencySidebar agencies={agencies} />
@@ -45,6 +50,7 @@ const AgencyPage = async ({ params, searchParams }: Props) => {
           />
         </div>
       </div>
+      <Footer></Footer>
     </div>
   );
 };

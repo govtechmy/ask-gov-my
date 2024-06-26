@@ -3,6 +3,8 @@ import QuestionBox from "@/components/QuestionBox/QuestionBox";
 import AgencySidebar from "@/components/AgencySideBar";
 import { getAgencyList } from "@/actions/questionServices";
 import SearchNavbar from "@/components/HeaderDetails/SearchNavBar";
+import Footer from "@/components/FooterDetails/Footer";
+import Header from "@/components/HeaderDetails/Header";
 
 const MainPage = async ({
   searchParams,
@@ -17,6 +19,7 @@ const MainPage = async ({
 
   return (
     <div className="container max-w-full">
+      <Header></Header>
       <SearchNavbar />
       <div className="mt-4 flex">
         <div className="w-1/4">
@@ -33,6 +36,7 @@ const MainPage = async ({
           />
         </div>
       </div>
+      <Footer></Footer>
     </div>
   );
 };
