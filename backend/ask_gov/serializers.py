@@ -16,11 +16,6 @@ class UserSerializer(serializers.ModelSerializer):
         model = User
         fields = ['id', 'username', 'email', 'agency']
 
-class QuestionSerializer(serializers.ModelSerializer):
-    agency = AgencySerializer()
-    class Meta:
-        model = Question
-        fields = '__all__'
 
 class UserSerializer(serializers.ModelSerializer):
     agency = AgencySerializer()
@@ -34,4 +29,20 @@ class TopicSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Topic
-        fields = ['id', 'title', 'agency']
+        fields = '__all__'
+
+class QuestionSerializer(serializers.ModelSerializer):
+    topics = serializers.PrimaryKeyRelatedField(many=True, queryset=Topic.objects.all(), required=False)
+
+    class Meta:
+        model = Question
+        fields = '__all__'
+
+    def create(self, validated_data):
+        topics = validated_data.pop('topics', [])
+        question = Question.objects.create(**validated_data)
+        
+        for topic in topics:
+            question.topics.add(topic)
+        
+        return question
