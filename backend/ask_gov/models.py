@@ -39,6 +39,9 @@ class Question(models.Model):
     answer = models.TextField(null=True, blank=True)
     topics = models.ManyToManyField(Topic, blank=True)
     email = models.EmailField()
+    likes = models.IntegerField(default=0)  
+    dislikes = models.IntegerField(default=0)
+
 
     def __str__(self):
         return self.question[:50]
