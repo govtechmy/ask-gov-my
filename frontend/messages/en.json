@@ -12,6 +12,7 @@
       "toggle_dark": "Toggle Dark"
     }
   },
+
   "Agency": {
     "agency": "Agency",
     "EKONOMI": "Ministry of Economy",
@@ -28,5 +29,13 @@
     "MOT": "Ministry of Transportation",
     "MOTAC": "Ministry of Tourism, Arts & Culture",
     "NRES": "Ministry of Natural Resources & Environmental Sustainability"
+  },
+
+  "Adminlogin": {
+    "checkmail": "Check your email",
+    "para1": "We've emailed a magic link to",
+    "para2": "Click the link to login.",
+    "backclick": "Back to Log in"
   }
+  
 }
