@@ -191,15 +191,15 @@ class LikeQuestionView(APIView):
             question.likes += 1
             question.save()
             
-            # client.update(
-            #     index='questions',
-            #     id=str(question.id),
-            #     body={
-            #         "doc": {
-            #             "likes": question.likes
-            #         }
-            #     }
-            # )
+            client.update(
+                index='questions',
+                id=str(question.id),
+                body={
+                    "doc": {
+                        "likes": question.likes
+                    }
+                }
+            )
             
             serializer = QuestionSerializer(question)
             return Response(serializer.data, status=status.HTTP_200_OK)
@@ -213,15 +213,15 @@ class DislikeQuestionView(APIView):
             question.dislikes += 1
             question.save()
             
-            # client.update(
-            #     index='questions',
-            #     id=str(question.id),
-            #     body={
-            #         "doc": {
-            #             "dislikes": question.dislikes
-            #         }
-            #     }
-            # )
+            client.update(
+                index='questions',
+                id=str(question.id),
+                body={
+                    "doc": {
+                        "dislikes": question.dislikes
+                    }
+                }
+            )
             
             serializer = QuestionSerializer(question)
             return Response(serializer.data, status=status.HTTP_200_OK)
