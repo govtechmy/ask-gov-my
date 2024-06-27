@@ -8,17 +8,19 @@ const FooterAdmin = () => {
     <div className="px-6 lg:px-8">
       <div className="gap-4.5 flex flex-col justify-between sm:flex-row pb-6">
         <div className="flex items-center gap-x-2.5">
-          <Image
-            src="/jata_logo.png"
-            width={48}
-            height={36}
-            alt="Logo Jata Negara"
-          />
+          <div className="h-[30px] w-[30px]">
+            <Image
+              src="/jata_logo.png"
+              width={96}
+              height={96}
+              alt="Logo Jata Negara"
+            />
+          </div>
           <div className="flex items-center">
-            <p className="font-poppins whitespace-nowrap font-semibold">
+            <p className="font-poppins whitespace-nowrap font-semibold text-sm">
               {t("gov_mys")}
             </p>
-            <p className="text-xs text-zinc-500">
+            <p className="text-xs text-zinc-500 font-normal">
               © {new Date().getFullYear()} {t("gov_mys")}
             </p>
           </div>
