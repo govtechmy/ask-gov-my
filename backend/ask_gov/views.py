@@ -29,9 +29,11 @@ class AgencyListView(generics.ListAPIView):
     queryset = Agency.objects.all()
     serializer_class = AgencySerializer
 
+
 class TopicListView(generics.ListAPIView):
     queryset = Topic.objects.all()
     serializer_class = TopicSerializer
+
 
 class SubmitQuestionView(APIView):
 
@@ -109,6 +111,7 @@ class UserAgencyQuestionsView(APIView):
         serializer = QuestionSerializer(questions, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
     
+
 class SubmitAnswerView(APIView):
     permission_classes = [IsAuthenticated]
 
@@ -145,7 +148,8 @@ class SubmitAnswerView(APIView):
             return Response({"detail": "Question not found"}, status=status.HTTP_404_NOT_FOUND)
         except Exception as e:
             return Response({"detail": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
-    
+
+
 class UserAgencyTopicsView(APIView):
     permission_classes = [IsAuthenticated]
 
@@ -159,6 +163,7 @@ class UserAgencyTopicsView(APIView):
         topics = Topic.objects.filter(agency=agency)
         serializer = TopicSerializer(topics, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
+
 
 class AddTopicView(APIView):
     permission_classes = [IsAuthenticated]
@@ -177,3 +182,48 @@ class AddTopicView(APIView):
         topic = Topic.objects.create(title=title, agency=agency)
         serializer = TopicSerializer(topic)
         return Response(serializer.data, status=status.HTTP_201_CREATED)
+    
+
+class LikeQuestionView(APIView):
+    def post(self, request, question_id):
+        try:
+            question = Question.objects.get(id=question_id)
+            question.likes += 1
+            question.save()
+            
+            # client.update(
+            #     index='questions',
+            #     id=str(question.id),
+            #     body={
+            #         "doc": {
+            #             "likes": question.likes
+            #         }
+            #     }
+            # )
+            
+            serializer = QuestionSerializer(question)
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        except Question.DoesNotExist:
+            return Response({"error": "Question not found"}, status=status.HTTP_404_NOT_FOUND)
+
+class DislikeQuestionView(APIView):
+    def post(self, request, question_id):
+        try:
+            question = Question.objects.get(id=question_id)
+            question.dislikes += 1
+            question.save()
+            
+            # client.update(
+            #     index='questions',
+            #     id=str(question.id),
+            #     body={
+            #         "doc": {
+            #             "dislikes": question.dislikes
+            #         }
+            #     }
+            # )
+            
+            serializer = QuestionSerializer(question)
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        except Question.DoesNotExist:
+            return Response({"error": "Question not found"}, status=status.HTTP_404_NOT_FOUND)
