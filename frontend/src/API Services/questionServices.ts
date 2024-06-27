@@ -51,13 +51,9 @@ export async function getAllQuestions(
     return { questions: [], total: 0 };
   }
 }
+
 export async function getAllTopics(): Promise<Topic[]> {
-  const response = await fetch(`${API_URL}/topics/`, {
-    method: 'GET',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-  });
+  const response = await fetch(`${API_URL}/topics/`);
 
   if (!response.ok) {
     throw new Error('Failed to fetch topics');
@@ -114,4 +110,34 @@ export async function submitQuestion(agencyId: string, data:Question): Promise<v
 export async function getAgencyList(): Promise<{ id: string; name: string }[]> {
   const response = await fetch(`${API_URL}/agencies/`);
   return response.json();
+}
+
+export async function likeQuestion(questionId: string): Promise<void> {
+  const url = `${API_URL}/questions/${questionId}/like/`;
+
+  const response = await fetch(url, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+  });
+
+  if (!response.ok) {
+    throw new Error('Failed to like question');
+  }
+}
+
+export async function dislikeQuestion(questionId: string): Promise<void> {
+  const url = `${API_URL}/questions/${questionId}/dislike/`;
+
+  const response = await fetch(url, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+  });
+
+  if (!response.ok) {
+    throw new Error('Failed to dislike question');
+  }
 }
