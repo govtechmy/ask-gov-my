@@ -7,7 +7,7 @@ import Arrowleft from "@/icons/arrowleft";
 import { useTranslations } from "next-intl";
 
 export function AdminPage() {
-  const t = useTranslations("Adminlogin");
+  const t = useTranslations("Checkmail");
 
   return (
     <div className="flex flex-col min-h-screen"> 
