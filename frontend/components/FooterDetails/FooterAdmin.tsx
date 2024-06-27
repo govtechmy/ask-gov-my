@@ -20,7 +20,7 @@ const FooterAdmin = () => {
             <p className="font-poppins whitespace-nowrap font-semibold text-sm">
               {t("gov_mys")}
             </p>
-            <p className="text-xs text-zinc-500 font-normal">
+            <p className="text-xs text-zinc-500 font-normal px-2">
               © {new Date().getFullYear()} {t("gov_mys")}
             </p>
           </div>

@@ -31,11 +31,22 @@
     "NRES": "Ministry of Natural Resources & Environmental Sustainability"
   },
 
-  "Adminlogin": {
+  "Checkmail": {
     "checkmail": "Check your email",
     "para1": "We've emailed a magic link to",
     "para2": "Click the link to login.",
     "backclick": "Back to Log in"
+  },
+
+  "Adminlogin": {
+    "h1": "Log in to AskGovMy",
+    "para1": "Welcome back! Please enter your details.",
+    "email": "Email",
+    "1stbutton": "Continue with Email",
+    "or":"OR",
+    "2ndbutton": "Continue with MyGovUC",
+    "forgotpass":"Forgot password?"
+    
   }
   
 }
