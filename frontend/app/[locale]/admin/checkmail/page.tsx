@@ -6,12 +6,12 @@ import Maillogo from '@/icons/mail';
 import Arrowleft from '@/icons/arrowleft';
 import { useTranslations } from 'next-intl';
 
-export function AdminPage() {
+export function CheckmailPage({ locale }: { locale: string }) {
   const t = useTranslations('Checkmail');
 
   return (
     <div className="flex flex-col min-h-screen">
-      <HeaderAdmin />
+      <HeaderAdmin locale={locale} />
       <div className="flex-grow flex items-center justify-center py-12">
         <div className="flex flex-col items-center justify-center">
           <Maillogo></Maillogo>
@@ -53,4 +53,4 @@ export function AdminPage() {
   );
 }
 
-export default AdminPage;
+export default CheckmailPage;
