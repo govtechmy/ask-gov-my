@@ -1,7 +1,7 @@
-"use client";
-import { useState, useEffect } from "react";
-import { useRouter } from "@/lib/i18n";
-import { submitQuestion, getAgencyList } from "@/actions/questionServices";
+'use client';
+import { useState, useEffect } from 'react';
+import { useRouter } from '@/lib/i18n';
+import { submitQuestion, getAgencyList } from '@/actions/questionServices';
 
 interface Agency {
   id: string;
@@ -9,8 +9,8 @@ interface Agency {
 }
 
 const SubmitQuestionPage = () => {
-  const [question, setQuestion] = useState("");
-  const [agencyId, setAgencyId] = useState("");
+  const [question, setQuestion] = useState('');
+  const [agencyId, setAgencyId] = useState('');
   const [agencies, setAgencies] = useState<Agency[]>([]);
   const router = useRouter();
 
@@ -27,7 +27,7 @@ const SubmitQuestionPage = () => {
     e.preventDefault();
     if (agencyId && question) {
       await submitQuestion(agencyId, question);
-      router.push("/");
+      router.push('/');
     }
   };
 
@@ -48,7 +48,7 @@ const SubmitQuestionPage = () => {
             rows={4}
             className="mt-1 block w-full rounded-md border border-gray-300 p-2 shadow-sm"
             value={question}
-            onChange={(e) => setQuestion(e.target.value)}
+            onChange={e => setQuestion(e.target.value)}
             required
           />
         </div>
@@ -64,11 +64,11 @@ const SubmitQuestionPage = () => {
             name="agency"
             className="mt-1 block w-full rounded-md border border-gray-300 p-2 shadow-sm"
             value={agencyId}
-            onChange={(e) => setAgencyId(e.target.value)}
+            onChange={e => setAgencyId(e.target.value)}
             required
           >
             <option value="">Select an agency</option>
-            {agencies.map((agency) => (
+            {agencies.map(agency => (
               <option key={agency.id} value={agency.id}>
                 {agency.name}
               </option>

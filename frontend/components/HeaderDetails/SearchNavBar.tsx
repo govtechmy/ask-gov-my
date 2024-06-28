@@ -1,4 +1,4 @@
-"use client";
+'use client';
 
 import {
   Command,
@@ -7,13 +7,13 @@ import {
   CommandInput,
   CommandItem,
   CommandList,
-} from "@/components/ui/command";
-import Info from "@/icons/info";
-import Search from "@/icons/search";
-import React, { useState } from "react";
+} from '@/components/ui/command';
+import Info from '@/icons/info';
+import Search from '@/icons/search';
+import React, { useState } from 'react';
 
 const SearchNavbar: React.FC = () => {
-  const [searchQuery, setSearchQuery] = useState<string>(""); // State to hold the search query
+  const [searchQuery, setSearchQuery] = useState<string>(''); // State to hold the search query
 
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setSearchQuery(event.target.value); // Update the search query state

@@ -1,8 +1,8 @@
-import Image from "next/image";
-import { useTranslations } from "next-intl";
+import Image from 'next/image';
+import { useTranslations } from 'next-intl';
 
 const Footer = () => {
-  const t = useTranslations("Footer");
+  const t = useTranslations('Footer');
 
   return (
     <div className="bg-background z-10 border-t px-6 pb-16 pt-12 lg:px-8">
@@ -16,10 +16,10 @@ const Footer = () => {
           />
           <div>
             <p className="font-poppins whitespace-nowrap font-semibold">
-              {t("gov_mys")}
+              {t('gov_mys')}
             </p>
             <p className="text-xs text-zinc-500">
-              © {new Date().getFullYear()} {t("gov_mys")}
+              © {new Date().getFullYear()} {t('gov_mys')}
             </p>
           </div>
         </div>
@@ -28,13 +28,13 @@ const Footer = () => {
             href="#"
             className="text-sm text-zinc-500 [text-underline-position:from-font] hover:text-black hover:underline dark:hover:text-white"
           >
-            {t("api_docs")}
+            {t('api_docs')}
           </a>
           <a
             href="#"
             className="text-sm text-zinc-500 [text-underline-position:from-font] hover:text-black hover:underline dark:hover:text-white"
           >
-            {t("admin_login")}
+            {t('admin_login')}
           </a>
         </div>
       </div>

@@ -1,6 +1,6 @@
-"use server";
+'use server';
 
-import { AGENCY_TO_UUID } from "@/lib/agency";
+import { AGENCY_TO_UUID } from '@/lib/agency';
 
 //important update for agency, style is X_OF_X
 
@@ -32,10 +32,10 @@ export async function getAllQuestions(
     const response = await fetch(
       `https://api.plane.so/api/v1/workspaces/${process.env.PLANE_WORKSPACE_ID}/projects/${projectId}/issues/`,
       {
-        method: "GET",
+        method: 'GET',
         headers: {
-          "Content-Type": "application/json",
-          "X-API-Key": process.env.PLANE_API_KEY,
+          'Content-Type': 'application/json',
+          'X-API-Key': process.env.PLANE_API_KEY,
         },
       },
     );
@@ -74,16 +74,16 @@ export async function getQuestionsByAgency(
 
   const agencyName =
     Object.keys(AGENCY_TO_UUID).find(
-      (key) => AGENCY_TO_UUID[key as keyof typeof AGENCY_TO_UUID] === agencyId,
-    ) || "Unknown Agency";
+      key => AGENCY_TO_UUID[key as keyof typeof AGENCY_TO_UUID] === agencyId,
+    ) || 'Unknown Agency';
 
   const response = await fetch(
     `https://api.plane.so/api/v1/workspaces/${process.env.PLANE_WORKSPACE_ID}/projects/${agencyId}/issues/`,
     {
-      method: "GET",
+      method: 'GET',
       headers: {
-        "Content-Type": "application/json",
-        "X-API-Key": process.env.PLANE_API_KEY,
+        'Content-Type': 'application/json',
+        'X-API-Key': process.env.PLANE_API_KEY,
       },
     },
   );
@@ -117,7 +117,7 @@ export async function getQuestionById(
   questionId: string,
 ): Promise<Question | null> {
   const { questions } = await getQuestionsByAgency(agencyId);
-  const question = questions.find((q) => q.id === questionId);
+  const question = questions.find(q => q.id === questionId);
   return question || null;
 }
 
@@ -128,10 +128,10 @@ export async function submitQuestion(
   const url = `https://api.plane.so/api/v1/workspaces/${process.env.PLANE_WORKSPACE_ID}/projects/${agencyId}/inbox-issues/`;
 
   const response = await fetch(url, {
-    method: "POST",
+    method: 'POST',
     headers: {
-      "Content-Type": "application/json",
-      "X-API-Key": process.env.PLANE_API_KEY,
+      'Content-Type': 'application/json',
+      'X-API-Key': process.env.PLANE_API_KEY,
     },
     body: JSON.stringify({
       issue: {
@@ -141,7 +141,7 @@ export async function submitQuestion(
   });
 
   if (!response.ok) {
-    throw new Error("Failed to submit question");
+    throw new Error('Failed to submit question');
   }
 }
 

@@ -43,10 +43,8 @@
     "para1": "Welcome back! Please enter your details.",
     "email": "Email",
     "1stbutton": "Continue with Email",
-    "or":"OR",
+    "or": "OR",
     "2ndbutton": "Continue with MyGovUC",
-    "forgotpass":"Forgot password?"
-    
+    "forgotpass": "Forgot password?"
   }
-  
 }

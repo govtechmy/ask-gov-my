@@ -1,9 +1,11 @@
 ## Ask.gov.my Front-end
 
 ### Overview
+
 Ask.gov.my is a web application designed to allow citizens to ask questions to various agencies. It provides functionalities for browsing questions, searching for specific topics, and accessing agency information.
 
 ### Functionality
+
 1. **Viewing Questions**
    - Users can view a list of questions from citizens on the main page (`MainQuestionBox`).
    - Questions are paginated to display a maximum of 5 questions per page.
@@ -18,6 +20,7 @@ Ask.gov.my is a web application designed to allow citizens to ask questions to v
    - Users can navigate between pages using the navigation links provided.
 
 ### Technologies Used
+
 - **React**: Front-end JavaScript library for building user interfaces.
 - **Next.js**: React framework for building server-side rendered and statically generated web applications.
 - **Tailwind CSS**: Utility-first CSS framework for styling web applications.
@@ -25,9 +28,11 @@ Ask.gov.my is a web application designed to allow citizens to ask questions to v
 - **API Services**: Custom APIs for fetching questions and agency information.
 
 ### Development Setup
+
 For the development setup, follow these steps:
 
 1. **Clone Repository**:
+
    - Clone the repository to your local machine using Git. Open your terminal and run the following command:
      ```
      git clone <repository_url>
@@ -35,18 +40,21 @@ For the development setup, follow these steps:
    - Replace `<repository_url>` with the URL of the repository.
 
 2. **Navigate to Frontend Directory**:
+
    - Change directory into the frontend folder using the `cd` command:
      ```
      cd frontend
      ```
 
 3. **Install Dependencies**:
+
    - Once you're inside the frontend directory, install the project dependencies using npm:
      ```
      npm install
      ```
 
 4. **Start Development Server**:
+
    - After the dependencies are installed successfully, you can start the development server:
      ```
      npm run dev
@@ -58,7 +66,7 @@ For the development setup, follow these steps:
 
 By following these steps, you should have the development environment set up and ready to work on the frontend of your application. If you encounter any issues or have questions, feel free to ask!
 
-
 ### Deployment
+
 1. Build the application using `npm run build`.
 2. Deploy the built files to a hosting service like Vercel, Netlify, or AWS.

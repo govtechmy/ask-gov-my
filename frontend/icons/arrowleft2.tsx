@@ -5,7 +5,7 @@ interface ArrowleftProps {
 }
 
 const Arrowleft1: React.FC<ArrowleftProps> = ({
-  className = "stroke-zinc-700 dark:stroke-zinc-300",
+  className = 'stroke-zinc-700 dark:stroke-zinc-300',
   ...props
 }) => {
   return (
@@ -31,4 +31,6 @@ const Arrowleft1: React.FC<ArrowleftProps> = ({
 export default Arrowleft1;
 
 // using it in text
-{/* <Arrowleft className="stroke-[#3F3F46] dark:stroke-[#D4D4D8]"></Arrowleft> */}
+{
+  /* <Arrowleft className="stroke-[#3F3F46] dark:stroke-[#D4D4D8]"></Arrowleft> */
+}
