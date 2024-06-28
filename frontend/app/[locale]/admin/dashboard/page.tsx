@@ -5,12 +5,12 @@ import Google from '@/icons/google';
 import { useTranslations } from 'next-intl';
 import HeaderDashboard from '@/components/HeaderDetails/HeaderDashboard';
 
-export function AdminPage() {
+export function DashboardPage({ locale }: { locale: string }) {
   const t = useTranslations('Adminlogin');
 
   return (
     <div className="flex flex-col min-h-screen">
-      <HeaderDashboard />
+      <HeaderDashboard locale={locale} />
       <div className="flex-grow flex items-center justify-center py-12">
         HELLOO WORLDOOOO
       </div>
@@ -18,4 +18,4 @@ export function AdminPage() {
   );
 }
 
-export default AdminPage;
+export default DashboardPage;
