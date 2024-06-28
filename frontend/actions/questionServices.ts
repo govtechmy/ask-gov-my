@@ -1,150 +1,136 @@
 "use server";
-
-import { AGENCY_TO_UUID } from "@/lib/agency";
-
-//important update for agency, style is X_OF_X
+const API_URL = "http://localhost:8000/api";
 
 interface Question {
-  id: string;
-  agency: string;
-  description_html: string;
-  name: string;
-  labels: string[];
-  createdAt: string;
-  agencyId: string;
+  id: number;
+  question: string;
+  date: string;
+  state: string;
+  agency: number;
+  answer: string;
+  topics: number[];
+  email: string;
 }
 
-interface ApiResponse {
-  id: string;
-  name: string;
-  description_html: string;
-  labels: string[];
-  created_at: string;
+interface Topic {
+  id: number;
+  title: string;
+  agency: {
+    id: number;
+    name: string;
+    acronym: string;
+  };
 }
 
 export async function getAllQuestions(
   page: number = 1,
-  pageSize: number = 10,
+  pageSize: number = 10
 ): Promise<{ questions: Question[]; total: number }> {
-  let Questions: Question[] = [];
-
-  for (const [agencyName, projectId] of Object.entries(AGENCY_TO_UUID)) {
-    const response = await fetch(
-      `https://api.plane.so/api/v1/workspaces/${process.env.PLANE_WORKSPACE_ID}/projects/${projectId}/issues/`,
-      {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-          "X-API-Key": process.env.PLANE_API_KEY,
-        },
-      },
-    );
-
-    if (response.ok) {
-      const data = await response.json();
-      data.results.forEach((res: ApiResponse) => {
-        Questions.push({
-          id: res.id,
-          agency: agencyName,
-          description_html: res.description_html,
-          name: res.name,
-          labels: res.labels,
-          createdAt: res.created_at,
-          agencyId: projectId,
-        });
-      });
-    } else {
-      console.error(`Failed to fetch questions for agency: ${agencyName}`);
+  try {
+    const response = await fetch(`${API_URL}/questions/`);
+    if (!response.ok) {
+      throw new Error('Failed to fetch questions');
     }
+
+    const data = await response.json();
+
+    const start = (page - 1) * pageSize;
+    const end = start + pageSize;
+    const paginatedQuestions = data.slice(start, end);
+
+    return { questions: paginatedQuestions, total: data.length };
+  } catch (error) {
+    console.error("Error in getAllQuestions:", error);
+    return { questions: [], total: 0 };
+  }
+}
+
+export async function getAllTopics(): Promise<Topic[]> {
+  const response = await fetch(`${API_URL}/topics/`);
+
+  if (!response.ok) {
+    throw new Error('Failed to fetch topics');
   }
 
-  const start = (page - 1) * pageSize;
-  const end = start + pageSize;
-  const paginatedQuestions = Questions.slice(start, end);
-
-  return { questions: paginatedQuestions, total: Questions.length };
+  const data = await response.json();
+  return data;
 }
 
 export async function getQuestionsByAgency(
   agencyId: string,
   page: number = 1,
-  pageSize: number = 10,
+  pageSize: number = 10
 ): Promise<{ questions: Question[]; total: number }> {
-  let Questions: Question[] = [];
-
-  const agencyName =
-    Object.keys(AGENCY_TO_UUID).find(
-      (key) => AGENCY_TO_UUID[key as keyof typeof AGENCY_TO_UUID] === agencyId,
-    ) || "Unknown Agency";
-
-  const response = await fetch(
-    `https://api.plane.so/api/v1/workspaces/${process.env.PLANE_WORKSPACE_ID}/projects/${agencyId}/issues/`,
-    {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-        "X-API-Key": process.env.PLANE_API_KEY,
-      },
-    },
-  );
-
-  if (response.ok) {
-    const data = await response.json();
-    data.results.forEach((res: ApiResponse) => {
-      Questions.push({
-        id: res.id,
-        agency: agencyName,
-        description_html: res.description_html,
-        name: res.name,
-        labels: res.labels,
-        createdAt: res.created_at,
-        agencyId,
-      });
-    });
-  } else {
-    console.error(`Failed to fetch questions for agency: ${agencyId}`);
+  const response = await fetch(`${API_URL}/questions/by-agency/${agencyId}`);
+  if (!response.ok) {
+    throw new Error('Failed to fetch questions');
   }
+
+  const data = await response.json();
+  const Questions: Question[] = data;
 
   const start = (page - 1) * pageSize;
   const end = start + pageSize;
   const paginatedQuestions = Questions.slice(start, end);
 
-  return { questions: paginatedQuestions, total: Questions.length };
+  return { questions: paginatedQuestions, total: data.count };
 }
 
-export async function getQuestionById(
-  agencyId: string,
-  questionId: string,
-): Promise<Question | null> {
-  const { questions } = await getQuestionsByAgency(agencyId);
-  const question = questions.find((q) => q.id === questionId);
-  return question || null;
+export async function getQuestionById(questionId: string): Promise<Question | null> {
+  const response = await fetch(`${API_URL}/questions/${questionId}/`);
+  if (response.ok) {
+    return response.json();
+  }
+  return null;
 }
 
-export async function submitQuestion(
-  agencyId: string,
-  question: string,
-): Promise<void> {
-  const url = `https://api.plane.so/api/v1/workspaces/${process.env.PLANE_WORKSPACE_ID}/projects/${agencyId}/inbox-issues/`;
+export async function submitQuestion(agencyId: string, data:Question): Promise<void> {
+  const url = `${API_URL}/submit-question/${agencyId}/`;
 
   const response = await fetch(url, {
-    method: "POST",
+    method: 'POST',
     headers: {
-      "Content-Type": "application/json",
-      "X-API-Key": process.env.PLANE_API_KEY,
+      'Content-Type': 'application/json',
     },
-    body: JSON.stringify({
-      issue: {
-        name: question,
-      },
-    }),
+    body: JSON.stringify({ data }),
   });
 
   if (!response.ok) {
-    throw new Error("Failed to submit question");
+    throw new Error('Failed to submit question');
   }
 }
 
 export async function getAgencyList(): Promise<{ id: string; name: string }[]> {
-  return Object.entries(AGENCY_TO_UUID).map(([name, id]) => ({ id, name }));
+  const response = await fetch(`${API_URL}/agencies/`);
+  return response.json();
+}
+
+export async function likeQuestion(questionId: string): Promise<void> {
+  const url = `${API_URL}/questions/${questionId}/like/`;
+
+  const response = await fetch(url, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+  });
+
+  if (!response.ok) {
+    throw new Error('Failed to like question');
+  }
+}
+
+export async function dislikeQuestion(questionId: string): Promise<void> {
+  const url = `${API_URL}/questions/${questionId}/dislike/`;
+
+  const response = await fetch(url, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+  });
+
+  if (!response.ok) {
+    throw new Error('Failed to dislike question');
+  }
 }

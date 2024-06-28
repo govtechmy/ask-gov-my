@@ -29,34 +29,6 @@ interface Question {
     email: string;
 }
 
-export async function fetchAndIndexQuestions() {
-    try {
-        const response = await fetch(BACKEND_API_URL, {
-            method: 'GET',
-        });
-
-        if (!response.ok) {
-            throw new Error('Failed to fetch questions from backend');
-        }
-
-        const data = await response.json();
-        const questions: Question[] = data;
-
-        for (const question of questions) {
-            console.log(`Indexing question ${question.id} to Elasticsearch`);
-            await client.index({
-                index: 'questions',
-                id: String(question.id),
-                document: question,
-            });
-        }
-
-        console.log(`Indexed ${questions.length} questions to Elasticsearch.`);
-    } catch (error) {
-        console.error('Error fetching and indexing questions:', error);
-    }
-}
-
 export async function searchQuestions(query: string) {
     try {
         const result = await client.search({
