@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "format": "prettier --write --ignore-unknown \"!**/*.{yaml}\"",
+    "format": "prettier . --write",
     "prepare": "husky"
   },
   "lint-staged": {

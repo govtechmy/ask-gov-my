@@ -1,17 +1,17 @@
-import { getAllQuestions } from "@/actions/questionServices";
-import QuestionBox from "@/components/QuestionBox/QuestionBox";
-import AgencySidebar from "@/components/AgencySideBar";
-import { getAgencyList } from "@/actions/questionServices";
-import SearchNavbar from "@/components/HeaderDetails/SearchNavBar";
-import Footer from "@/components/FooterDetails/Footer";
-import Header from "@/components/HeaderDetails/Header";
+import { getAllQuestions } from '@/actions/questionServices';
+import QuestionBox from '@/components/QuestionBox/QuestionBox';
+import AgencySidebar from '@/components/AgencySideBar';
+import { getAgencyList } from '@/actions/questionServices';
+import SearchNavbar from '@/components/HeaderDetails/SearchNavBar';
+import Footer from '@/components/FooterDetails/Footer';
+import Header from '@/components/HeaderDetails/Header';
 
 const MainPage = async ({
   searchParams,
 }: {
   searchParams: { page?: string };
 }) => {
-  const page = parseInt(searchParams.page || "1", 10);
+  const page = parseInt(searchParams.page || '1', 10);
   const pageSize = 12;
   const { questions, total } = await getAllQuestions(page, pageSize);
   const totalPages = Math.ceil(total / pageSize);

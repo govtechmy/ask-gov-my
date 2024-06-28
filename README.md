@@ -93,4 +93,3 @@ To learn more about Next.js, React, and Tailwind CSS, check out the following re
 - [Next.js Documentation](https://nextjs.org/docs)
 - [React Documentation](https://reactjs.org/docs/getting-started.html)
 - [Tailwind CSS Documentation](https://tailwindcss.com/docs)
-

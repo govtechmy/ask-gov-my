@@ -1,6 +1,6 @@
-import Link from "next/link";
-import { getQuestionById } from "@/actions/questionServices";
-import { AGENCY_TO_UUID } from "@/lib/agency";
+import Link from 'next/link';
+import { getQuestionById } from '@/actions/questionServices';
+import { AGENCY_TO_UUID } from '@/lib/agency';
 
 interface Props {
   params: {
@@ -12,7 +12,10 @@ interface Props {
 const QuestionDetailPage: React.FC<Props> = async ({ params }) => {
   const { agencyId, questionId } = params;
 
-  const question = await getQuestionById(AGENCY_TO_UUID[agencyId.toUpperCase()], questionId);
+  const question = await getQuestionById(
+    AGENCY_TO_UUID[agencyId.toUpperCase()],
+    questionId,
+  );
 
   if (!question) {
     return <div>Question not found</div>;
@@ -25,7 +28,7 @@ const QuestionDetailPage: React.FC<Props> = async ({ params }) => {
         <div className="mb-4">
           <strong>Category:</strong>
           <ul className="list-inside list-disc">
-            {question.labels.map((label) => (
+            {question.labels.map(label => (
               <li key={label}>{label}</li>
             ))}
           </ul>

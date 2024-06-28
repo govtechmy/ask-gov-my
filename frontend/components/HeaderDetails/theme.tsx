@@ -1,12 +1,12 @@
-"use client";
+'use client';
 
-import { Button } from "@/components/ui/button";
-import { useTranslations } from "next-intl";
-import { useTheme } from "next-themes";
-import { useEffect, useState } from "react";
+import { Button } from '@/components/ui/button';
+import { useTranslations } from 'next-intl';
+import { useTheme } from 'next-themes';
+import { useEffect, useState } from 'react';
 
 export default function ThemeToggle() {
-  const t = useTranslations("Nav.Theme");
+  const t = useTranslations('Nav.Theme');
   const [mounted, setMounted] = useState(false);
   const { theme, setTheme, resolvedTheme } = useTheme();
 
@@ -15,22 +15,22 @@ export default function ThemeToggle() {
   if (!mounted) return null;
   return (
     <Button
-      title={t("toggle_theme")}
+      title={t('toggle_theme')}
       variant="tertiary"
       size="icon"
       className="group"
-      onClick={() => setTheme(theme === "light" ? "dark" : "light")}
+      onClick={() => setTheme(theme === 'light' ? 'dark' : 'light')}
     >
       <MoonIcon
-        data-state={resolvedTheme === "light" ? "dark" : "light"}
+        data-state={resolvedTheme === 'light' ? 'dark' : 'light'}
         className="text-dim animate-in fade-in-0 zoom-in-95 slide-in-from-bottom-2 size-4 group-hover:text-black data-[state=dark]:flex data-[state=light]:hidden"
       />
       <SunIcon
-        data-state={resolvedTheme === "light" ? "dark" : "light"}
+        data-state={resolvedTheme === 'light' ? 'dark' : 'light'}
         className="text-dim animate-in fade-in-0 zoom-in-95 slide-in-from-bottom-2 -m-0.5 size-5 group-hover:text-white data-[state=light]:flex data-[state=dark]:hidden"
       />
       <div className="sr-only">
-        {theme === "light" ? t("toggle_dark") : t("toggle_light")}
+        {theme === 'light' ? t('toggle_dark') : t('toggle_light')}
       </div>
     </Button>
   );
