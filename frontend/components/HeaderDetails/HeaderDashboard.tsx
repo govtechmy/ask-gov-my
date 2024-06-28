@@ -52,6 +52,7 @@ const HeaderDashboard = ({ locale }: { locale: string }) => {
             <div className="bg-zinc-800 dark:bg-black-900 rounded-md font-bold text-xs flex justify-center items-center text-background-50 w-[200px] h-[22px]">
               Harris Azmi Super Admin
             </div>
+            <div>Hekasd</div>
           </div>
         </div>
       </div>

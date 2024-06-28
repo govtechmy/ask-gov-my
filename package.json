@@ -7,7 +7,7 @@
     "prepare": "husky"
   },
   "lint-staged": {
-    "**/*": "prettier --write --ignore-unknown \"!**/*.{yaml}\""
+    "**/*": "prettier . --write"
   },
   "devDependencies": {
     "eslint": "^9.5.0",
