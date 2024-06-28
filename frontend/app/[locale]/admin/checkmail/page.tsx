@@ -11,7 +11,7 @@ export function AdminPage() {
 
   return (
     <div className="flex flex-col min-h-screen"> 
-      <HeaderAdmin />
+      <HeaderAdmin/>
       <div className="flex-grow flex items-center justify-center py-12">
         <div className="flex flex-col items-center justify-center">
 
