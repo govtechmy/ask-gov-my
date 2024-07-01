@@ -12,40 +12,42 @@ Topic.objects.all().delete()
 Question.objects.all().delete()
 
 agencies = [
-    ("Ministry of Agriculture and Food Security", "MAFS"),
-    ("Ministry of Communications and Digital", "KOMUNIKASI"),
-    ("Ministry of Defence", "MINDEF"),
-    ("Ministry of Domestic Trade and Cost of Living", "KPDN"),
-    ("Ministry of Economy", "EKONOMI"),
-    ("Ministry of Education", "MOE"),
-    ("Ministry of Energy Transition and Water Transformation", "PETRA"),
-    ("Ministry of Entrepreneurship Development and Co-operatives", "MEDC"),
-    ("Ministry of Finance", "MOF"),
-    ("Ministry of Foreign Affairs", "MFA"),
-    ("Ministry of Health", "MOH"),
-    ("Ministry of Higher Education", "MOHE"),
-    ("Ministry of Home Affairs", "KDN"),
-    ("Ministry of Housing and Local Government", "KPKT"),
-    ("Ministry of Human Resources", "MOHR"),
-    ("Ministry of Investment, Trade and Industry", "MITI"),
-    ("Ministry of National Unity", "KPN"),
-    ("Ministry of Natural Resources and Environmental Sustainability", "NRES"),
-    ("Ministry of Plantation and Commodities", "MPIC"),
-    ("Ministry of Rural and Regional Development", "KKDW"),
-    ("Ministry of Science, Technology and Innovation", "MOSTI"),
-    ("Ministry of Tourism, Arts and Culture", "MOTAC"),
-    ("Ministry of Transport", "MOT"),
-    ("Ministry of Women, Family and Community Development", "KPWKM"),
-    ("Ministry of Works", "KKR"),
-    ("Ministry of Youth and Sports", "KBS")
+    ("Ministry of Agriculture and Food Security", "MAFS", "Kementerian Pertanian dan Keterjaminan Makanan"),
+    ("Ministry of Communications and Digital", "KOMUNIKASI", "Kementerian Komunikasi dan Digital"),
+    ("Ministry of Defence", "MINDEF", "Kementerian Pertahanan"),
+    ("Ministry of Domestic Trade and Cost of Living", "KPDN", "Kementerian Perdagangan Dalam Negeri dan Kos Sara Hidup"),
+    ("Ministry of Economy", "EKONOMI", "Kementerian Ekonomi"),
+    ("Ministry of Education", "MOE", "Kementerian Pendidikan"),
+    ("Ministry of Energy Transition and Water Transformation", "PETRA", "Kementerian Peralihan Tenaga dan Transformasi Air"),
+    ("Ministry of Entrepreneurship Development and Co-operatives", "MEDC", "Kementerian Pembangunan Usahawan dan Koperasi"),
+    ("Ministry of Finance", "MOF", "Kementerian Kewangan"),
+    ("Ministry of Foreign Affairs", "MFA", "Kementerian Luar Negeri"),
+    ("Ministry of Health", "MOH", "Kementerian Kesihatan"),
+    ("Ministry of Higher Education", "MOHE", "Kementerian Pendidikan Tinggi"),
+    ("Ministry of Home Affairs", "KDN", "Kementerian Dalam Negeri"),
+    ("Ministry of Housing and Local Government", "KPKT", "Kementerian Perumahan dan Kerajaan Tempatan"),
+    ("Ministry of Human Resources", "MOHR", "Kementerian Sumber Manusia"),
+    ("Ministry of Investment, Trade and Industry", "MITI", "Kementerian Pelaburan, Perdagangan dan Industri"),
+    ("Ministry of National Unity", "KPN", "Kementerian Perpaduan Negara"),
+    ("Ministry of Natural Resources and Environmental Sustainability", "NRES", "Kementerian Sumber Asli dan Kelestarian Alam Sekitar"),
+    ("Ministry of Plantation and Commodities", "MPIC", "Kementerian Perladangan dan Komoditi"),
+    ("Ministry of Rural and Regional Development", "KKDW", "Kementerian Pembangunan Luar Bandar dan Wilayah"),
+    ("Ministry of Science, Technology and Innovation", "MOSTI", "Kementerian Sains, Teknologi dan Inovasi"),
+    ("Ministry of Tourism, Arts and Culture", "MOTAC", "Kementerian Pelancongan, Seni dan Budaya"),
+    ("Ministry of Transport", "MOT", "Kementerian Pengangkutan"),
+    ("Ministry of Women, Family and Community Development", "KPWKM", "Kementerian Pembangunan Wanita, Keluarga dan Masyarakat"),
+    ("Ministry of Works", "KKR", "Kementerian Kerja Raya"),
+    ("Ministry of Youth and Sports", "KBS", "Kementerian Belia dan Sukan")
 ]
 
-for name, acronym in agencies:
-    agency = Agency.objects.create(name=name, acronym=acronym)
+for name, acronym, name_ms in agencies:
+    agency = Agency.objects.create(name=name, acronym=acronym, name_ms=name_ms)
+    print(f'Creating {name} Agency')
     topics = []
     for i in range(1, 11):
-        topic = Topic.objects.create(title=f"Topic {i} for {name}", agency=agency)
+        topic = Topic.objects.create(title=f"Topic {i} for {name}", title_ms=f"Topik {i} untuk {name_ms}", agency=agency)
         topics.append(topic)
+        print(f"Adding Topic {i} for {name}")
 
     for j in range(1, 11):
         question = Question.objects.create(
@@ -57,5 +59,6 @@ for name, acronym in agencies:
         )
         question.topics.set(random.sample(topics, k=random.randint(1, 5)))
         question.save()
+        print(f"Creating question ID {question.id}")
 
 print("Successfully seeded agencies, topics, and questions data")

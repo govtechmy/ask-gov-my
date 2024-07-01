@@ -176,10 +176,11 @@ class AddTopicView(APIView):
             return Response({"detail": "User has no agency assigned"}, status=status.HTTP_400_BAD_REQUEST)
 
         title = request.data.get('title')
+        title_ms = request.data.get('title_ms')
         if not title:
             return Response({"detail": "Title is required"}, status=status.HTTP_400_BAD_REQUEST)
 
-        topic = Topic.objects.create(title=title, agency=agency)
+        topic = Topic.objects.create(title=title, title_ms=title_ms, agency=agency)  # Include the new field
         serializer = TopicSerializer(topic)
         return Response(serializer.data, status=status.HTTP_201_CREATED)
     

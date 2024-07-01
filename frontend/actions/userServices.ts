@@ -25,6 +25,7 @@ interface Question {
 export interface Topic {
   id: number;
   title: string;
+  title_ms?: string; //can be null
   agency: {
     id: number;
     name: string;
@@ -128,7 +129,7 @@ export async function listUserAgencyTopics(): Promise<Topic[]> {
   return data;
 }
 
-export async function addUserAgencyTopic(title: string): Promise<Topic> {
+export async function addUserAgencyTopic(title: string, title_ms: string): Promise<Topic> {  // Include the new parameter
   const token = getAccessToken();
   const response = await fetch(`${API_URL}/topics/add/`, {
     method: 'POST',
@@ -136,7 +137,7 @@ export async function addUserAgencyTopic(title: string): Promise<Topic> {
       'Content-Type': 'application/json',
       'Authorization': `Bearer ${token}`,
     },
-    body: JSON.stringify({ title }),
+    body: JSON.stringify({ title, title_ms }),
   });
 
   if (!response.ok) {

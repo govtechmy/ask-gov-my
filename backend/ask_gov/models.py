@@ -3,6 +3,7 @@ from django.contrib.auth.models import AbstractUser
 
 class Agency(models.Model):
     name = models.CharField(max_length=255)
+    name_ms = models.CharField(max_length=255, null=True, blank=True)
     acronym = models.CharField(max_length=50, null=True, blank=True)
 
     def __str__(self):
@@ -10,6 +11,7 @@ class Agency(models.Model):
 
 class Topic(models.Model):
     title = models.CharField(max_length=255)
+    title_ms = models.CharField(max_length=255, null=True, blank=True)
     agency = models.ForeignKey(Agency, on_delete=models.CASCADE)
 
     def __str__(self):

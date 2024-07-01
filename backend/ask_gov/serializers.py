@@ -7,7 +7,7 @@ User = get_user_model()
 class AgencySerializer(serializers.ModelSerializer):
     class Meta:
         model = Agency
-        fields = ['id', 'name', 'acronym']
+        fields = ['id', 'name','name_ms', 'acronym']
 
 class UserSerializer(serializers.ModelSerializer):
     agency = AgencySerializer()
