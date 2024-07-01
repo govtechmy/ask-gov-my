@@ -23,6 +23,11 @@ interface Topic {
   };
 }
 
+interface QuestionSubmission {
+  question: string;
+  email: string;
+}
+
 export async function getAllQuestions(
   page: number = 1,
   pageSize: number = 1000,
@@ -98,11 +103,8 @@ export async function getQuestionById(
   return null;
 }
 
-export async function submitQuestion(
-  agencyId: string,
-  data: Question,
-): Promise<void> {
-  const url = `${API_URL}/submit-question/${agencyId}/`;
+export async function submitQuestion(data: QuestionSubmission): Promise<void> {
+  const url = `${API_URL}/submit-question/`;
 
   const response = await fetch(url, {
     method: "POST",
