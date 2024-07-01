@@ -1,5 +1,8 @@
 from django.urls import path
-from .views import QuestionListCreateView, QuestionDetailView, AgencyListView, SubmitQuestionView, QuestionsByAgencyView, LoginView, UserAgencyQuestionsView, SubmitAnswerView, UserAgencyTopicsView, AddTopicView, TopicListView, LikeQuestionView, DislikeQuestionView
+from .views import (QuestionListCreateView, QuestionDetailView, AgencyListView, SubmitQuestionView, 
+                    QuestionsByAgencyView, LoginView, UserAgencyQuestionsView, SubmitAnswerView, 
+                    UserAgencyTopicsView, AddTopicView, TopicListView, LikeQuestionView, DislikeQuestionView,
+                    AssignAgencyToQuestionView)
 urlpatterns = [
     path('questions/', QuestionListCreateView.as_view(), name='question-list-create'),
     path('questions/<int:pk>/', QuestionDetailView.as_view(), name='question-detail'),
@@ -14,4 +17,6 @@ urlpatterns = [
     path('topics/', TopicListView.as_view(), name='topics-list'),
     path('questions/<int:question_id>/like/', LikeQuestionView.as_view(), name='like-question'),
     path('questions/<int:question_id>/dislike/', DislikeQuestionView.as_view(), name='dislike-question'),
+    path('questions/<int:question_id>/agency/', AssignAgencyToQuestionView.as_view(), name='assign-agency-to-question'),  # New endpoint
+
 ]

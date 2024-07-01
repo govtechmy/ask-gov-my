@@ -9,16 +9,9 @@ interface Question {
   question: string;
   date: string;
   state: string;
-  agency: {
-    id: number;
-    name: string;
-    acronym_en: string | null;
-  };
+  agency: number;
   answer: string;
-  topics: Array<{
-    id: number;
-    title: string;
-  }>;
+  topics: number[];
   email: string;
 }
 
@@ -33,58 +26,61 @@ export interface Topic {
   };
 }
 
-export async function login(username: string, password: string): Promise<LoginResponse> {
+export async function login(
+  username: string,
+  password: string,
+): Promise<LoginResponse> {
   const response = await fetch(`${API_URL}/login/`, {
-    method: 'POST',
+    method: "POST",
     headers: {
-      'Content-Type': 'application/json',
+      "Content-Type": "application/json",
     },
     body: JSON.stringify({ username, password }),
   });
 
   if (!response.ok) {
-    throw new Error('Failed to log in');
+    throw new Error("Failed to log in");
   }
 
   const data: LoginResponse = await response.json();
-  localStorage.setItem('access_token', data.access);
-  localStorage.setItem('refresh_token', data.refresh);
+  localStorage.setItem("access_token", data.access);
+  localStorage.setItem("refresh_token", data.refresh);
   return data;
 }
 
 export function logout() {
-  localStorage.removeItem('access_token');
-  localStorage.removeItem('refresh_token');
+  localStorage.removeItem("access_token");
+  localStorage.removeItem("refresh_token");
 }
 
 export function getAccessToken(): string | null {
-  return localStorage.getItem('access_token');
+  return localStorage.getItem("access_token");
 }
 
 export function getRefreshToken(): string | null {
-  return localStorage.getItem('refresh_token');
+  return localStorage.getItem("refresh_token");
 }
 
 export async function getUserAgencyQuestions( // this function is strictly use for logged in admin
   page: number = 1,
-  pageSize: number = 10
+  pageSize: number = 10,
 ): Promise<{ questions: Question[]; total: number }> {
   try {
     const token = getAccessToken();
     const response = await fetch(`${API_URL}/questions/user-agency/`, {
-      method: 'GET',
+      method: "GET",
       headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${token}`,
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
       },
     });
 
     if (!response.ok) {
-      throw new Error('Failed to fetch questions');
+      throw new Error("Failed to fetch questions");
     }
 
     const data = await response.json();
-    console.log(data)
+    console.log(data);
     const start = (page - 1) * pageSize;
     const end = start + pageSize;
     const paginatedQuestions = data.slice(start, end);
@@ -95,55 +91,86 @@ export async function getUserAgencyQuestions( // this function is strictly use f
   }
 }
 
-export async function submitAnswer(questionId: number, data: Question): Promise<void> {
+export async function submitAnswer(
+  questionId: number,
+  data: Question,
+): Promise<void> {
   const token = getAccessToken();
-  const response = await fetch(`${API_URL}/questions/${questionId}/submit-answer/`, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      'Authorization': `Bearer ${token}`,
+  const response = await fetch(
+    `${API_URL}/questions/${questionId}/submit-answer/`,
+    {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify({ data }),
     },
-    body: JSON.stringify({ data }),
-  });
+  );
 
   if (!response.ok) {
-    throw new Error('Failed to submit answer');
+    throw new Error("Failed to submit answer");
   }
 }
 
 export async function listUserAgencyTopics(): Promise<Topic[]> {
+  // function to display all topics for the user (agency)
   const token = getAccessToken();
   const response = await fetch(`${API_URL}/topics/user-agency/`, {
-    method: 'GET',
+    method: "GET",
     headers: {
-      'Content-Type': 'application/json',
-      'Authorization': `Bearer ${token}`,
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
     },
   });
 
   if (!response.ok) {
-    throw new Error('Failed to fetch topics');
+    throw new Error("Failed to fetch topics");
   }
 
   const data = await response.json();
   return data;
 }
 
-export async function addUserAgencyTopic(title: string, title_ms: string): Promise<Topic> {  // Include the new parameter
+export async function addUserAgencyTopic(
+  title: string,
+  title_ms: string,
+): Promise<Topic> {
+  // Include the new parameter
   const token = getAccessToken();
   const response = await fetch(`${API_URL}/topics/add/`, {
-    method: 'POST',
+    method: "POST",
     headers: {
-      'Content-Type': 'application/json',
-      'Authorization': `Bearer ${token}`,
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
     },
     body: JSON.stringify({ title, title_ms }),
   });
 
   if (!response.ok) {
-    throw new Error('Failed to add topic');
+    throw new Error("Failed to add topic");
   }
 
   const data = await response.json();
   return data;
+}
+
+// function to assign agency to question
+export async function assignAgencyToQuestion(
+  questionId: number,
+  agencyId: number,
+): Promise<void> {
+  const token = getAccessToken();
+  const response = await fetch(`${API_URL}/questions/${questionId}/agency/`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
+    },
+    body: JSON.stringify({ agency_id: agencyId }),
+  });
+
+  if (!response.ok) {
+    throw new Error("Failed to assign agency to question");
+  }
 }
