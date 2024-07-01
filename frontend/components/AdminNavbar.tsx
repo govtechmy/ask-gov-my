@@ -1,9 +1,15 @@
 'use client';
 import Calendar from '@/icons/calendar';
 import React, { useState } from 'react';
-import { Input } from './ui/input';
 import Search from '@/icons/search';
 import { cn } from '@/lib/utils';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select';
 
 const AdminNavbar = () => {
   const [activeTab, setActiveTab] = useState('all');
@@ -31,6 +37,20 @@ const AdminNavbar = () => {
         </button>
       </div>
       <div className="flex space-x-4 items-center">
+        <Select>
+          <SelectTrigger className="w-[120px] h-8 bg-[#FFFFFF] dark:bg-[#18181B]">
+            <SelectValue placeholder="Agency: All" />
+          </SelectTrigger>
+          <SelectContent className="bg-[#FFFFFF] dark:bg-[#18181B] w-[120px]">
+            <SelectItem value="user1" className="">
+              Agency: All
+            </SelectItem>
+            <SelectItem value="user1" className="">
+              MITI
+            </SelectItem>
+          </SelectContent>
+        </Select>
+
         <button className="px-3 border rounded-md h-8 items-center bg-[#FFFFFF] dark:bg-[#18181B]">
           <div className="flex items-center">
             <Calendar />
