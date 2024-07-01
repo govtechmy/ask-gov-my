@@ -36,20 +36,12 @@ class TopicListView(generics.ListAPIView):
 
 
 class SubmitQuestionView(APIView):
-
-    def post(self, request, agency_id):
-        try:
-            agency = Agency.objects.get(id=agency_id)
-        except Agency.DoesNotExist:
-            return Response({"error": "Agency not found"}, status=status.HTTP_404_NOT_FOUND)
-
+    def post(self, request):
         data = request.data.get('data')
 
         serializer = QuestionSerializer(data=data)
         if serializer.is_valid():
             question = serializer.save()
-            question.agency = agency
-            question.save()
             
             document = serializer.data
             client.index(
