@@ -25,29 +25,28 @@ const config: Config = {
       },
       colors: {
         brand: {
-          600: 'oklch(var(--brand-600))',
-          700: 'oklch(var(--brand-700))',
+          600: 'oklch(var(--myds-brand-600))',
+          700: 'oklch(var(--myds-brand-700))',
         },
-        foreground: 'oklch(var(--black-900))',
+        foreground: 'oklch(var(--myds-black-900))',
         background: {
-          DEFAULT: 'oklch(var(--base-white))',
-          50: 'oklch(var(--background-50))',
+          DEFAULT: 'oklch(var(--myds-background-50))',
         },
         washed: {
-          100: 'oklch(var(--washed-100))',
+          100: 'oklch(var(--myds-washed-100))',
         },
         outline: {
-          200: 'oklch(var(--outline-200))',
-          300: 'oklch(var(--outline-300))',
-          400: 'oklch(var(--outline-400))',
+          200: 'oklch(var(--myds-outline-200))',
+          300: 'oklch(var(--myds-outline-300))',
+          400: 'oklch(var(--myds-outline-400))',
         },
         dim: {
-          500: 'oklch(var(--dim-500))',
+          500: 'oklch(var(--myds-dim-500))',
         },
         black: {
-          700: 'oklch(var(--black-700))',
-          800: 'oklch(var(--black-800))',
-          900: 'oklch(var(--black-900))',
+          700: 'oklch(var(--myds-black-700))',
+          800: 'oklch(var(--myds-black-800))',
+          900: 'oklch(var(--myds-black-900))',
         },
       },
       fontFamily: {
