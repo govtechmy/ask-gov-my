@@ -1,4 +1,4 @@
-const API_URL = "http://localhost:8000/api";
+const API_URL = "http://ask.juwaini.com/api";
 
 export interface LoginResponse {
   access: string;
