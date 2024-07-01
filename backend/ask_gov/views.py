@@ -246,3 +246,18 @@ class AssignAgencyToQuestionView(APIView):
 
         serializer = QuestionSerializer(question)
         return Response(serializer.data, status=status.HTTP_200_OK)
+    
+
+class AddAgencyView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def post(self, request):
+        name = request.data.get('name')
+        name_ms = request.data.get('name_ms')
+
+        if not name or not name_ms:
+            return Response({"detail": "Both name and name_ms are required"}, status=status.HTTP_400_BAD_REQUEST)
+
+        agency = Agency.objects.create(name=name, name_ms=name_ms)
+        serializer = AgencySerializer(agency)
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
