@@ -23,9 +23,9 @@ const HeaderDashboard = ({ locale }: { locale: string }) => {
   };
 
   return (
-    <div className="sticky left-0 top-0 w-full">
+    <div className="sticky">
       <div>
-        <div className="bg-background flex justify-between p-2">
+        <div className="bg-background flex justify-between py-2">
           <div className="font-poppins flex h-full gap-2.5 text-lg font-semibold items-center">
             <Asklogo />
             AskGovMY
