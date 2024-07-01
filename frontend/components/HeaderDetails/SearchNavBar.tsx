@@ -1,5 +1,6 @@
 "use client";
 
+import { searchQuestions } from "@/actions/searchServices";
 import {
   Command,
   CommandEmpty,

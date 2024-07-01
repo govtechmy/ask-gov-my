@@ -18,7 +18,7 @@ interface Props {
 const AgencyPage = async ({ params, searchParams }: Props) => {
   const { agencyId } = params;
   const page = parseInt(searchParams.page || "1", 10);
-  const pageSize = 10;
+  const pageSize = 1000;
   const { questions, total } = await getQuestionsByAgency(
     AGENCY_TO_UUID[agencyId.toUpperCase()],
     page,
@@ -37,12 +37,7 @@ const AgencyPage = async ({ params, searchParams }: Props) => {
           <AgencySidebar agencies={agencies} />
         </div>
         <div className="w-3/4">
-          <QuestionBox
-            questions={questions}
-            totalPages={totalPages}
-            currentPage={page}
-            agencyId={formattedAgencyId}
-          />
+          <QuestionBox questions={questions} />
         </div>
       </div>
     </div>

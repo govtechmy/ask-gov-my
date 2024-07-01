@@ -3,12 +3,14 @@ import { useState } from "react";
 import QuestionCard from "./QuestionCard";
 
 interface Question {
-  id: string;
-  name: string;
-  description_html: string;
-  agency: string;
-  createdAt: string;
-  agencyId: string;
+  id: number;
+  question: string;
+  date: string;
+  state: string;
+  agency: number;
+  answer: string;
+  topics: number[];
+  email: string;
 }
 
 interface QuestionBoxProps {
