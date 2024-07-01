@@ -174,3 +174,20 @@ export async function assignAgencyToQuestion(
     throw new Error("Failed to assign agency to question");
   }
 }
+
+//function to add agency HAVE TO INCLUDE name and name_ms
+export async function addAgency(name: string, name_ms: string): Promise<void> {
+  const token = getAccessToken();
+  const response = await fetch(`${API_URL}/agencies/add/`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
+    },
+    body: JSON.stringify({ name, name_ms }),
+  });
+
+  if (!response.ok) {
+    throw new Error("Failed to add agency");
+  }
+}
