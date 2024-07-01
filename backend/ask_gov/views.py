@@ -199,6 +199,7 @@ class LikeQuestionView(APIView):
         except Question.DoesNotExist:
             return Response({"error": "Question not found"}, status=status.HTTP_404_NOT_FOUND)
 
+
 class DislikeQuestionView(APIView):
     def post(self, request, question_id):
         try:
@@ -220,3 +221,28 @@ class DislikeQuestionView(APIView):
             return Response(serializer.data, status=status.HTTP_200_OK)
         except Question.DoesNotExist:
             return Response({"error": "Question not found"}, status=status.HTTP_404_NOT_FOUND)
+        
+
+class AssignAgencyToQuestionView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def post(self, request, question_id):
+        try:
+            question = Question.objects.get(id=question_id)
+        except Question.DoesNotExist:
+            return Response({"detail": "Question not found"}, status=status.HTTP_404_NOT_FOUND)
+
+        agency_id = request.data.get('agency_id')
+        if not agency_id:
+            return Response({"detail": "Agency ID is required"}, status=status.HTTP_400_BAD_REQUEST)
+
+        try:
+            agency = Agency.objects.get(id=agency_id)
+        except Agency.DoesNotExist:
+            return Response({"detail": "Agency not found"}, status=status.HTTP_404_NOT_FOUND)
+
+        question.agency = agency
+        question.save()
+
+        serializer = QuestionSerializer(question)
+        return Response(serializer.data, status=status.HTTP_200_OK)
