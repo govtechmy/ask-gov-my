@@ -25,18 +25,18 @@ const HeaderDashboard = ({ locale }: { locale: string }) => {
   return (
     <div className="sticky">
       <div>
-        <div className="bg-background flex justify-between py-2">
+        <div className="flex justify-between py-2">
           <div className="font-poppins flex h-full gap-2.5 text-lg font-semibold items-center">
             <Asklogo />
             AskGovMY
-            <div className="bg-zinc-800 dark:bg-black-900 rounded-md font-bold text-xs flex justify-center items-center text-background-50 w-[53px] h-[22px]">
+            <div className="bg-[#27272A] text-[#FFFFFF] dark:bg-[#F4F4F5] dark:text-[#18181B] rounded-md font-bold text-xs flex justify-center items-center w-[53px] h-[22px]">
               ADMIN
             </div>
             <Link href="/admin/dashboard/" passHref>
               <div
-                className={`rounded-md font-medium text-sm flex justify-center items-center w-[88px] h-[32px] px-2 ${
+                className={`rounded-md font-medium text-sm flex justify-center items-center w-[88px] h-8 px-2 ${
                   activeLink === 'questions'
-                    ? 'text-brand-600 bg-[#F4EFFF]'
+                    ? 'text-[#702FF9] bg-[#F4EFFF] dark:text-[#9E70FF] dark:bg-[#201636]'
                     : 'text-black-700'
                 }`}
                 onClick={() => handleSetActiveLink('questions')}
@@ -46,9 +46,9 @@ const HeaderDashboard = ({ locale }: { locale: string }) => {
             </Link>
             <Link href="/admin/dashboard/" passHref>
               <div
-                className={`rounded-md font-medium text-sm flex justify-center items-center w-[145px] h-[32px] px-1 ${
+                className={`rounded-md font-medium text-sm flex justify-center items-center w-[145px] h-8 px-1 ${
                   activeLink === 'manageagencies'
-                    ? 'text-brand-600 bg-[#F4EFFF]'
+                    ? 'text-[#702FF9] bg-[#F4EFFF] dark:text-[#9E70FF] dark:bg-[#201636]'
                     : 'text-black-700'
                 }`}
                 onClick={() => handleSetActiveLink('manageagencies')}
@@ -62,12 +62,12 @@ const HeaderDashboard = ({ locale }: { locale: string }) => {
             <ThemeToggle />
             <LocaleSwitch locale={locale} />
             <Select>
-              <SelectTrigger className="w-[250px] h-[32px]">
+              <SelectTrigger className="w-[250px] h-8 bg-[#FFFFFF] dark:bg-[#18181B]">
                 <SelectValue placeholder="Choose User" />
               </SelectTrigger>
-              <SelectContent>
+              <SelectContent className="bg-[#FFFFFF] dark:bg-[#18181B]">
                 <SelectItem value="superadmin">
-                  <div className="flex items-center flex-grow-0">
+                  <div className="flex items-center flex-grow-0 bg-[#FFFFFF] dark:bg-[#18181B]">
                     <User />
                     <div className="px-1 font-medium text-sm text-black-900">
                       Akeem Irfan
@@ -78,7 +78,7 @@ const HeaderDashboard = ({ locale }: { locale: string }) => {
                   </div>
                 </SelectItem>
                 <SelectItem value="user">
-                  <div className="flex items-center flex-grow-0">
+                  <div className="flex items-center flex-grow-0 bg-[#FFFFFF] dark:bg-[#18181B]">
                     <User />
                     <div className="px-1 font-medium text-sm text-black-900">
                       Harris Azmi
@@ -89,7 +89,7 @@ const HeaderDashboard = ({ locale }: { locale: string }) => {
                   </div>
                 </SelectItem>
                 <SelectItem value="hacker">
-                  <div className="flex items-center flex-grow-0">
+                  <div className="flex items-center flex-grow-0 bg-[#FFFFFF] dark:bg-[#18181B]">
                     <User />
                     <div className="px-1 font-medium text-sm text-black-900">
                       Lenny
