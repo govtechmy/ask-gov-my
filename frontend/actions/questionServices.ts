@@ -1,5 +1,5 @@
 "use server";
-const API_URL = "http://localhost:8000/api";
+const API_URL = "http://ask.juwaini.com/api";
 import { AGENCY_TO_UUID } from "@/lib/agency";
 
 interface Question {
