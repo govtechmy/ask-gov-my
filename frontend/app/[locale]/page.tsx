@@ -5,6 +5,7 @@ import { getAgencyList } from '@/actions/questionServices';
 import SearchNavbar from '@/components/HeaderDetails/SearchNavBar';
 import Footer from '@/components/FooterDetails/Footer';
 import Header from '@/components/HeaderDetails/Header';
+import AgencyListDropdown from '@/components/AgencyListDropdown';
 
 const MainPage = async ({
   params: { locale },
@@ -34,6 +35,7 @@ const MainPage = async ({
           <QuestionBox questions={questions} />
         </div>
       </div>
+      <AgencyListDropdown></AgencyListDropdown>
       <Footer />
     </div>
   );

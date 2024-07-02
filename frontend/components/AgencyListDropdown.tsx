@@ -1,0 +1,26 @@
+'use client';
+import { useTranslations } from 'next-intl';
+import { AGENCY_TO_UUID } from '@/lib/agency';
+
+const AgencyListDropdown = () => {
+  const t = useTranslations('Agency');
+  const agencylists = Object.entries(AGENCY_TO_UUID).map(([name, id]) => ({
+    id,
+    name,
+  }));
+
+  return (
+    <div>
+      <label htmlFor="agency-dropdown" className=""></label>
+      <select id="agency-dropdown" name="agency" className="">
+        {agencylists.map(agency => (
+          <option key={agency.id} value={agency.id}>
+            {agency.name}
+          </option>
+        ))}
+      </select>
+    </div>
+  );
+};
+
+export default AgencyListDropdown;

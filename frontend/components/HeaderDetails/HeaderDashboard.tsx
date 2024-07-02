@@ -1,8 +1,8 @@
 'use client';
 import { useState } from 'react';
 import Link from 'next/link';
-import ThemeToggle from './theme';
-import LocaleSwitch from './locale-switch';
+import ThemeToggle from './Theme';
+import LocaleSwitch from './LocaleSwitch';
 import Asklogo from '@/icons/asklogo';
 import User from '@/icons/user';
 import {

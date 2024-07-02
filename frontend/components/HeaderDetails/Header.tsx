@@ -1,6 +1,6 @@
 import IdentifyWebsite from './IdentifyWebsite';
-import ThemeToggle from './theme';
-import LocaleSwitch from './locale-switch';
+import ThemeToggle from './Theme';
+import LocaleSwitch from './LocaleSwitch';
 import Asklogo from '@/icons/asklogo';
 
 const Header = ({ locale }: { locale: string }) => {
