@@ -13,7 +13,7 @@ export function AdminPage({ locale }: { locale: string }) {
     <div className="flex flex-col min-h-screen">
       <HeaderAdmin locale={locale} />
       <div className="flex-grow flex items-center justify-center py-12">
-        <div className=" min-w-96 ">
+        <div className="min-w-96">
           <div className="text-center">
             <div className="text-2xl font-semibold px-5 py-5">{t('h1')}</div>
             <div className="text-base pb-6 text-zinc-700 dark:text-[#D4D4D8]">
@@ -34,7 +34,7 @@ export function AdminPage({ locale }: { locale: string }) {
 
             <Button
               type="submit"
-              className="text-base font-medium text-white rounded-md py-2 from-[#702FF9] to-[#B379FF]  dark:from-[#702FF9] dark:to-[#B379FF] border-[1px] border-[#702FF9]"
+              className="text-base font-medium text-white rounded-md py-2 from-[#702FF9] to-[#B379FF] dark:from-[#702FF9] dark:to-[#B379FF] border-[1px] border-[#702FF9]"
             >
               {t('1stbutton')}
             </Button>
@@ -43,11 +43,9 @@ export function AdminPage({ locale }: { locale: string }) {
               {t('or')}
             </div>
 
-            <Button className="flex justify-center py-2 rounded-md from-[#FFF] to-[#FFF]  dark:from-[#18181B] dark:to-[#18181B] border-[1px] border-[#E4E4E7] dark:border-[#27272A]">
-              <Google></Google>
-              <div className="px-2 font-medium text-base  ">
-                {t('2ndbutton')}
-              </div>
+            <Button className="flex justify-center py-2 rounded-md from-[#FFF] to-[#FFF] dark:from-[#18181B] dark:to-[#18181B] border-[1px] border-[#E4E4E7] dark:border-[#27272A]">
+              <Google />
+              <div className="px-2 font-medium text-base">{t('2ndbutton')}</div>
             </Button>
           </div>
 
