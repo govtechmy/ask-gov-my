@@ -8,7 +8,6 @@ export function DashboardPage({
   params: { locale: string };
 }) {
   const t = useTranslations('Adminlogin');
-  console.log('dashboard', locale);
 
   return (
     <div className="flex flex-col min-h-screen pt-5">
