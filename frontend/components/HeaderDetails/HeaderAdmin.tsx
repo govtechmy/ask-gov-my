@@ -12,7 +12,7 @@ const HeaderAdmin = ({ locale }: { locale: string }) => {
           <div className="font-poppins flex h-full gap-2.5 text-lg font-semibold items-center">
             <Asklogo />
             AskGovMY
-            <div className="bg-zinc-800 dark:bg-black-900 rounded-md font-bold text-xs flex justify-center items-center text-background-50 w-[53px] h-[22px]">
+            <div className="bg-[#27272A] dark:bg-[#F4F4F5] dark:text-[#18181B] text-[#FFFFFF] rounded-md font-bold text-xs flex justify-center items-center w-[53px] h-[22px]">
               ADMIN
             </div>
           </div>
