@@ -18,7 +18,6 @@ const MainPage = async ({
   const { questions, total } = await getAllQuestions(page, pageSize);
   const totalPages = Math.ceil(total / pageSize);
   const agencies = await getAgencyList();
-  console.log('locale page', locale);
 
   return (
     <div className="container max-w-full">

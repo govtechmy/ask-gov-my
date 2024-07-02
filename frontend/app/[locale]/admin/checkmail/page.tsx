@@ -12,7 +12,6 @@ export function CheckmailPage({
   params: { locale: string };
 }) {
   const t = useTranslations('Checkmail');
-  console.log('checkmail', locale);
 
   return (
     <div className="flex flex-col min-h-screen">
