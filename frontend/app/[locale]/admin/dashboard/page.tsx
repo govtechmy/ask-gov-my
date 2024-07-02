@@ -2,8 +2,13 @@ import { useTranslations } from 'next-intl';
 import HeaderDashboard from '@/components/HeaderDetails/HeaderDashboard';
 import AdminNavbar from '@/components/AdminNavbar';
 
-export function DashboardPage({ locale }: { locale: string }) {
+export function DashboardPage({
+  params: { locale },
+}: {
+  params: { locale: string };
+}) {
   const t = useTranslations('Adminlogin');
+  console.log('dashboard', locale);
 
   return (
     <div className="flex flex-col min-h-screen pt-5">

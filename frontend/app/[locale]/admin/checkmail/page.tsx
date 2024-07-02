@@ -6,8 +6,13 @@ import Maillogo from '@/icons/mail';
 import Arrowleft from '@/icons/arrowleft';
 import { useTranslations } from 'next-intl';
 
-export function CheckmailPage({ locale }: { locale: string }) {
+export function CheckmailPage({
+  params: { locale },
+}: {
+  params: { locale: string };
+}) {
   const t = useTranslations('Checkmail');
+  console.log('checkmail', locale);
 
   return (
     <div className="flex flex-col min-h-screen">
