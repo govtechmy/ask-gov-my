@@ -10,7 +10,7 @@ const MainPage = async ({
   searchParams: { page?: string };
 }) => {
   const page = parseInt(searchParams.page || "1", 10);
-  const pageSize = 12;
+  const pageSize = 1000;
   const { questions, total } = await getAllQuestions(page, pageSize);
   const totalPages = Math.ceil(total / pageSize);
   const agencies = await getAgencyList();
@@ -26,11 +26,7 @@ const MainPage = async ({
           <div className="px-4 py-5 font-semibold">
             Top Questions From Citizens
           </div>
-          <QuestionBox
-            questions={questions}
-            totalPages={totalPages}
-            currentPage={page}
-          />
+          <QuestionBox questions={questions} />
         </div>
       </div>
     </div>
