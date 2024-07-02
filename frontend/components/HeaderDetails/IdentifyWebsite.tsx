@@ -1,7 +1,7 @@
-"use client";
+'use client';
 
-import React, { useState } from "react";
-import Image from "next/image";
+import React, { useState } from 'react';
+import Image from 'next/image';
 
 const IdentifyWebsite: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false);

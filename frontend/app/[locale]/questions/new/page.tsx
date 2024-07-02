@@ -1,18 +1,18 @@
-"use client";
-import { useState } from "react";
-import { useRouter } from "@/lib/i18n";
-import { submitQuestion } from "@/actions/questionServices";
+'use client';
+import { useState } from 'react';
+import { useRouter } from '@/lib/i18n';
+import { submitQuestion } from '@/actions/questionServices';
 
 const SubmitQuestionPage = () => {
-  const [question, setQuestion] = useState("");
-  const [email, setEmail] = useState("");
+  const [question, setQuestion] = useState('');
+  const [email, setEmail] = useState('');
   const router = useRouter();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (question && email) {
       await submitQuestion({ question, email });
-      router.push("/");
+      router.push('/');
     }
   };
 
@@ -33,7 +33,7 @@ const SubmitQuestionPage = () => {
             rows={4}
             className="mt-1 block w-full rounded-md border border-gray-300 p-2 shadow-sm"
             value={question}
-            onChange={(e) => setQuestion(e.target.value)}
+            onChange={e => setQuestion(e.target.value)}
             required
           />
         </div>
@@ -50,7 +50,7 @@ const SubmitQuestionPage = () => {
             type="email"
             className="mt-1 block w-full rounded-md border border-gray-300 p-2 shadow-sm"
             value={email}
-            onChange={(e) => setEmail(e.target.value)}
+            onChange={e => setEmail(e.target.value)}
             required
           />
         </div>

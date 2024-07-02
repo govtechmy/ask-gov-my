@@ -1,6 +1,6 @@
-"use client";
-import { useState } from "react";
-import QuestionCard from "./QuestionCard";
+'use client';
+import { useState } from 'react';
+import QuestionCard from './QuestionCard';
 
 interface Question {
   id: number;
@@ -35,7 +35,7 @@ const QuestionBox: React.FC<QuestionBoxProps> = ({ questions }) => {
   return (
     <div className="flex flex-col justify-center gap-4">
       <div className="flex flex-col gap-6">
-        {currentQuestions.map((question) => (
+        {currentQuestions.map(question => (
           <QuestionCard key={question.id} question={question} />
         ))}
       </div>
@@ -54,8 +54,8 @@ const QuestionBox: React.FC<QuestionBoxProps> = ({ questions }) => {
               onClick={() => handlePageChange(index + 1)}
               className={`rounded border px-4 py-2 ${
                 index + 1 === currentPage
-                  ? "border-blue-500 bg-blue-500 text-white"
-                  : "border-gray-300"
+                  ? 'border-blue-500 bg-blue-500 text-white'
+                  : 'border-gray-300'
               }`}
             >
               {index + 1}

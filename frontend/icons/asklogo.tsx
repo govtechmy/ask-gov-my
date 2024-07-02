@@ -1,27 +1,4 @@
-import ThemeToggle from './theme';
-import LocaleSwitch from './locale-switch';
-import { Link } from '@/lib/i18n';
-
-const ClickHomeLogo = ({ locale }: { locale: string }) => {
-  return (
-    <div className="bg-background flex justify-between p-3">
-      <Link
-        href="/"
-        className="font-poppins flex h-full gap-2.5 text-lg font-semibold"
-      >
-        <Logo />
-        AskGovMY
-      </Link>
-
-      <div className="flex gap-3">
-        <ThemeToggle />
-        <LocaleSwitch locale={locale} />
-      </div>
-    </div>
-  );
-};
-
-function Logo() {
+export default function Asklogo() {
   return (
     <svg
       width="28"
@@ -61,5 +38,3 @@ function Logo() {
     </svg>
   );
 }
-
-export default ClickHomeLogo;

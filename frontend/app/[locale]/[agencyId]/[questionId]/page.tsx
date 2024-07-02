@@ -1,5 +1,5 @@
-import Link from "next/link";
-import { getQuestionById, getTopicsDetail } from "@/actions/questionServices";
+import Link from 'next/link';
+import { getQuestionById, getTopicsDetail } from '@/actions/questionServices';
 
 interface Props {
   params: {
