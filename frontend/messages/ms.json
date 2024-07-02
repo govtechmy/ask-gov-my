@@ -12,6 +12,24 @@
       "toggle_dark": "Pilih Mod Gelap"
     }
   },
+  
+  "Checkmail": {
+    "checkmail": "Sila semak email anda",
+    "para1": "Kami telah menghantar pautan magic ke emel ",
+    "para2": "Klik pautan untuk log masuk.",
+    "backclick": "Kembali untuk Log masuk "
+  },
+
+  "Adminlogin": {
+    "h1": "Log masuk ke AskGovMy",
+    "para1": "Selamat kembali! Sila masukkan butiran anda.",
+    "email": "Emel",
+    "1stbutton": "Teruskan dengan Emel",
+    "or": "ATAU",
+    "2ndbutton": "Teruskan dengan MyGovUC",
+    "forgotpass": "Lupa kata laluan?"
+  },
+
   "Agency": {
     "agency": "Agensi",
     "MAFS": "Kementerian Pertanian dan Keterjaminan Makanan",
