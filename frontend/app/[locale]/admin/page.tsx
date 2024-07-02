@@ -6,8 +6,13 @@ import { Input } from '@/components/ui/input';
 import Google from '@/icons/google';
 import { useTranslations } from 'next-intl';
 
-export function AdminPage({ locale }: { locale: string }) {
+export function AdminPage({
+  params: { locale },
+}: {
+  params: { locale: string };
+}) {
   const t = useTranslations('Adminlogin');
+  console.log('admin page ', locale);
 
   return (
     <div className="flex flex-col min-h-screen">
