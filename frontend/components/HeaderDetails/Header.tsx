@@ -3,7 +3,7 @@ import ThemeToggle from './Theme';
 import LocaleSwitch from './LocaleSwitch';
 import Asklogo from '@/icons/asklogo';
 
-const Header = ({ locale }: { locale: string }) => {
+const Header = () => {
   return (
     <div className="sticky left-0 top-0 w-full">
       <div>
@@ -15,7 +15,7 @@ const Header = ({ locale }: { locale: string }) => {
           </div>
           <div className="flex gap-3">
             <ThemeToggle />
-            <LocaleSwitch locale={locale} />
+            <LocaleSwitch />
           </div>
         </div>
       </div>
