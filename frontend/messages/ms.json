@@ -14,36 +14,31 @@
   },
   "Agency": {
     "agency": "Agensi",
+    "MAFS": "Kementerian Pertanian dan Keterjaminan Makanan",
+    "KOMUNIKASI": "Kementerian Komunikasi",
+    "MINDEF": "Kementerian Pertahanan",
+    "KPDN": "Kementerian Perdagangan Dalam Negeri dan Kos Sara Hidup ",
     "EKONOMI": "Kementerian Ekonomi",
-    "KPWKM": "Kementerian Pembangunan Wanita, Keluarga dan Masyarakat",
-    "KBS": "Kementerian Belia & Sukan",
-    "KPK": "Kementerian Perladangan & Komoditi",
-    "KPKT": "Kementerian Perumahan & Kerajaan Tempatan",
-    "MITI": "Kementerian Pelaburan, Perdagangan & Industri",
     "MOE": "Kementerian Pendidikan",
+    "PETRA": "Kementerian Peralihan Tenaga Dan Transformasi Air ",
+    "MEDC": "Kementerian Pembangunan Usahawan",
     "MOF": "Kementerian Kewangan",
+    "MFA": "Kementerian Luar Negeri Malaysia",
     "MOH": "Kementerian Kesihatan",
-    "MOHE": "Kementerian Pendidikan Tinggi",
+    "MOHE": "Kementerian Pendidikan Tinggi ",
+    "KDN": "Kementerian Dalam Negeri",
+    "KPKT": "Kementerian Perumahan Dan Kerajaan Tempatan",
     "MOHR": "Kementerian Sumber Manusia",
+    "MITI": "Kementerian Pelaburan, Perdagangan dan Industri",
+    "KPN": "Kementerian Perpaduan Negara",
+    "NRES": "Kementerian Sumber Asli Dan Kelestarian Alam",
+    "MPIC": "Kementerian Perladangan dan Komoditi",
+    "KKDW": "Kementerian Kemajuan Desa dan Wilayah",
+    "MOSTI": "Kementerian Sains, Teknologi dan Inovasi",
+    "MOTAC": "Kementerian Pelancongan, Seni dan Budaya",
     "MOT": "Kementerian Pengangkutan",
-    "MOTAC": "Kementerian Pelancongan, Seni & Budaya",
-    "NRES": "Kementerian Sumber Asli & Kelestarian Alam"
-  },
-
-  "Checkmail": {
-    "checkmail": "Sila semak email anda",
-    "para1": "Kami telah menghantar pautan magic ke emel ",
-    "para2": "Klik pautan untuk log masuk.",
-    "backclick": "Kembali untuk Log masuk "
-  },
-
-  "Adminlogin": {
-    "h1": "Log masuk ke AskGovMy",
-    "para1": "Selamat kembali! Sila masukkan butiran anda.",
-    "email": "Emel",
-    "1stbutton": "Teruskan dengan Emel",
-    "or": "ATAU",
-    "2ndbutton": "Teruskan dengan MyGovUC",
-    "forgotpass": "Lupa kata laluan?"
+    "KPWKM": "Kementerian Pembangunan Wanita, Keluarga dan Masyarakat",
+    "KKR": "Kementerian Kerja Raya",
+    "KBS": "Kementerian Belia Dan Sukan"
   }
 }

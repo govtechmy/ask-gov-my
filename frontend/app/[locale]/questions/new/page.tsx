@@ -1,32 +1,17 @@
 'use client';
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { useRouter } from '@/lib/i18n';
-import { submitQuestion, getAgencyList } from '@/actions/questionServices';
-
-interface Agency {
-  id: string;
-  name: string;
-}
+import { submitQuestion } from '@/actions/questionServices';
 
 const SubmitQuestionPage = () => {
   const [question, setQuestion] = useState('');
-  const [agencyId, setAgencyId] = useState('');
-  const [agencies, setAgencies] = useState<Agency[]>([]);
+  const [email, setEmail] = useState('');
   const router = useRouter();
-
-  // Fetch agency list
-  useEffect(() => {
-    const fetchAgencies = async () => {
-      const agencyList = await getAgencyList();
-      setAgencies(agencyList);
-    };
-    fetchAgencies();
-  }, []);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (agencyId && question) {
-      await submitQuestion(agencyId, question);
+    if (question && email) {
+      await submitQuestion({ question, email });
       router.push('/');
     }
   };
@@ -54,26 +39,20 @@ const SubmitQuestionPage = () => {
         </div>
         <div>
           <label
-            htmlFor="agency"
+            htmlFor="email"
             className="block text-sm font-medium text-gray-700"
           >
-            Select Agency
+            Email
           </label>
-          <select
-            id="agency"
-            name="agency"
+          <input
+            id="email"
+            name="email"
+            type="email"
             className="mt-1 block w-full rounded-md border border-gray-300 p-2 shadow-sm"
-            value={agencyId}
-            onChange={e => setAgencyId(e.target.value)}
+            value={email}
+            onChange={e => setEmail(e.target.value)}
             required
-          >
-            <option value="">Select an agency</option>
-            {agencies.map(agency => (
-              <option key={agency.id} value={agency.id}>
-                {agency.name}
-              </option>
-            ))}
-          </select>
+          />
         </div>
         <button
           type="submit"
