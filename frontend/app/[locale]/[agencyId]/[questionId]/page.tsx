@@ -1,6 +1,5 @@
 import Link from 'next/link';
-import { getQuestionById } from '@/actions/questionServices';
-import { AGENCY_TO_UUID } from '@/lib/agency';
+import { getQuestionById, getTopicsDetail } from '@/actions/questionServices';
 
 interface Props {
   params: {
@@ -12,30 +11,29 @@ interface Props {
 const QuestionDetailPage: React.FC<Props> = async ({ params }) => {
   const { agencyId, questionId } = params;
 
-  const question = await getQuestionById(
-    AGENCY_TO_UUID[agencyId.toUpperCase()],
-    questionId,
-  );
+  const question = await getQuestionById(questionId);
 
   if (!question) {
     return <div>Question not found</div>;
   }
 
+  const topicTitles = await getTopicsDetail(question.topics);
+
   return (
     <div className="container mx-auto">
       <div className="rounded p-6 shadow">
-        <h1 className="mb-4 text-2xl font-bold">{question.name}</h1>
+        <h1 className="mb-4 text-2xl font-bold">{question.question}</h1>
         <div className="mb-4">
           <strong>Category:</strong>
           <ul className="list-inside list-disc">
-            {question.labels.map(label => (
-              <li key={label}>{label}</li>
+            {topicTitles.map((title, index) => (
+              <li key={index}>{title}</li>
             ))}
           </ul>
         </div>
         <div
           className="mt-4"
-          dangerouslySetInnerHTML={{ __html: question.description_html }}
+          dangerouslySetInnerHTML={{ __html: question.answer }}
         />
       </div>
       <div className="mt-6">

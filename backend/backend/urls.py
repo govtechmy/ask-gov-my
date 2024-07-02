@@ -15,17 +15,14 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
-from django.urls import path
-
-from plane.views import MinistryView, QuestionsView, QnAView, AnswerView
-from search.views import SearchView, SearchAgenciesView
+from django.urls import path, include
+from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', MinistryView.as_view(), name='ministry'),
-    path('questions', QuestionsView.as_view(), name='questions'),
-    path('answer/<uuid:agency_id>/<uuid:question_id>', AnswerView.as_view(), name='answer'),
-    path('question/<uuid:id>', QnAView.as_view(), name='question'),
-    path('search', SearchView.as_view(), name='search'),
-    path('agency-search', SearchAgenciesView.as_view(), name='agency_search'),
+    path('api/', include('ask_gov.urls')),
+    path('api/token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
+    path('api/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
 ]
+
+

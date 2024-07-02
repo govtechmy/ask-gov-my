@@ -15,36 +15,31 @@
 
   "Agency": {
     "agency": "Agency",
+    "MAFS": "Ministry of Agriculture and Food Security",
+    "KOMUNIKASI": "Ministry of Communications and Digital",
+    "MINDEF": "Ministry of Defence",
+    "KPDN": "Ministry of Domestic Trade and Cost of Living",
     "EKONOMI": "Ministry of Economy",
-    "KPWKM": "Ministry of Women, Family & Community Development",
-    "KBS": "Ministry of Youth and Sport",
-    "KPK": "Ministry of Plantation and Commodities",
-    "KPKT": "Ministry of Housing and Local Government",
-    "MITI": "Ministry of International Trade & Industry",
     "MOE": "Ministry of Education",
+    "PETRA": "Ministry of Energy Transition and Water Transformation",
+    "MEDC": "Ministry of Entrepreneurship Development and Co-operatives",
     "MOF": "Ministry of Finance",
+    "MFA": "Ministry of Foreign Affairs",
     "MOH": "Ministry of Health",
     "MOHE": "Ministry of Higher Education",
+    "KDN": "Ministry of Home Affairs",
+    "KPKT": "Ministry of Housing and Local Government",
     "MOHR": "Ministry of Human Resources",
-    "MOT": "Ministry of Transportation",
-    "MOTAC": "Ministry of Tourism, Arts & Culture",
-    "NRES": "Ministry of Natural Resources & Environmental Sustainability"
-  },
-
-  "Checkmail": {
-    "checkmail": "Check your email",
-    "para1": "We've emailed a magic link to",
-    "para2": "Click the link to login.",
-    "backclick": "Back to Log in"
-  },
-
-  "Adminlogin": {
-    "h1": "Log in to AskGovMy",
-    "para1": "Welcome back! Please enter your details.",
-    "email": "Email",
-    "1stbutton": "Continue with Email",
-    "or": "OR",
-    "2ndbutton": "Continue with MyGovUC",
-    "forgotpass": "Forgot password?"
+    "MITI": "Ministry of Investment, Trade and Industry",
+    "KPN": "Ministry of National Unity",
+    "NRES": "Ministry of Natural Resources and Environmental Sustainability",
+    "MPIC": "Ministry of Plantation and Commodities",
+    "KKDW": "Ministry of Rural and Regional Development",
+    "MOSTI": "Ministry of Science, Technology and Innovation",
+    "MOTAC": "Ministry of Tourism, Arts and Culture",
+    "MOT": "Ministry of Transport",
+    "KPWKM": "Ministry of Women, Family and Community Development",
+    "KKR": "Ministry of Works",
+    "KBS": "Ministry of Youth and Sports"
   }
 }
