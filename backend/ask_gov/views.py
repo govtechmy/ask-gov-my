@@ -16,7 +16,7 @@ User = get_user_model()
 
 
 class QuestionListCreateView(generics.ListCreateAPIView):
-    queryset = Question.objects.all()
+    queryset = Question.objects.filter(state='completed')
     serializer_class = QuestionSerializer
 
 
@@ -58,7 +58,7 @@ class SubmitQuestionView(APIView):
 class QuestionsByAgencyView(APIView):
     def get(self, request, agency_id):
         agency = get_object_or_404(Agency, pk=agency_id)
-        questions = Question.objects.filter(agency=agency)
+        questions = Question.objects.filter(agency=agency, state='completed')
         serializer = QuestionSerializer(questions, many=True)
         return Response(serializer.data)
 
