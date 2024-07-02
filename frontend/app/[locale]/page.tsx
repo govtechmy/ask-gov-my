@@ -8,10 +8,8 @@ import Header from '@/components/HeaderDetails/Header';
 import AgencyListDropdown from '@/components/AgencyListDropdown';
 
 const MainPage = async ({
-  params: { locale },
   searchParams,
 }: {
-  params: { locale: string };
   searchParams: { page?: string };
 }) => {
   const page = parseInt(searchParams.page || '1', 10);
@@ -22,7 +20,7 @@ const MainPage = async ({
 
   return (
     <div className="container max-w-full">
-      <Header locale={locale} />
+      <Header />
       <SearchNavbar />
       <div className="mt-4 flex">
         <div className="w-1/4">

@@ -13,7 +13,7 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 
-const HeaderDashboard = ({ locale }: { locale: string }) => {
+const HeaderDashboard = () => {
   const [activeLink, setActiveLink] = useState<'questions' | 'manageagencies'>(
     'questions',
   );
@@ -60,7 +60,7 @@ const HeaderDashboard = ({ locale }: { locale: string }) => {
 
           <div className="flex gap-3">
             <ThemeToggle />
-            <LocaleSwitch locale={locale} />
+            <LocaleSwitch />
             <Select>
               <SelectTrigger className="w-[250px] h-8 bg-[#FFFFFF] dark:bg-[#18181B]">
                 <SelectValue placeholder="Choose User" />
