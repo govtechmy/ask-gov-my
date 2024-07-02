@@ -7,10 +7,10 @@ import Footer from '@/components/FooterDetails/Footer';
 import Header from '@/components/HeaderDetails/Header';
 
 const MainPage = async ({
-  locale,
+  params: { locale },
   searchParams,
 }: {
-  locale: string;
+  params: { locale: string };
   searchParams: { page?: string };
 }) => {
   const page = parseInt(searchParams.page || '1', 10);
@@ -21,7 +21,7 @@ const MainPage = async ({
 
   return (
     <div className="container max-w-full">
-      <Header locale={locale}></Header>
+      <Header locale={locale} />
       <SearchNavbar />
       <div className="mt-4 flex">
         <div className="w-1/4">
@@ -38,7 +38,7 @@ const MainPage = async ({
           />
         </div>
       </div>
-      <Footer></Footer>
+      <Footer />
     </div>
   );
 };
