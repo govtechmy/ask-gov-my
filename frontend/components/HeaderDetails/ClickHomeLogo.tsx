@@ -1,5 +1,5 @@
-import ThemeToggle from './theme';
-import LocaleSwitch from './locale-switch';
+import ThemeToggle from './Theme';
+import LocaleSwitch from './LocaleSwitch';
 import { Link } from '@/lib/i18n';
 
 const ClickHomeLogo = ({ locale }: { locale: string }) => {
