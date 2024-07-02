@@ -24,22 +24,34 @@ interface Question {
 
 export async function searchQuestions(query: string) {
   try {
-    const result = await client.search({
-      index: "questions",
-      size: 5, // limit to 5 results
-      body: {
-        query: {
-          query_string: {
-            query: `*${query}*`,
-            fields: ["question", "topics.title", "answer"],
-          },
-        },
-      },
-    });
+      const result = await client.search({
+          index: 'questions',
+          size: 5, // limit to 5 results
+          body: {
+              query: {
+                  bool: {
+                      must: [
+                          {
+                              query_string: {
+                                  query: `*${query}*`,
+                                  fields: ['question', 'agency.name', 'topics.title', 'answer']
+                              }
+                          },
+                          {
+                              match: {
+                                  state: 'completed'
+                              }
+                          }
+                      ]
+                  }
+              }
+          }
+      });
 
-    return result.hits.hits.map((hit: any) => hit._source);
+      return result.hits.hits.map((hit: any) => hit._source);
   } catch (error) {
-    console.error("Error searching questions:", error);
-    return [];
+      console.error('Error searching questions:', error);
+      return [];
   }
 }
+
