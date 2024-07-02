@@ -3,7 +3,7 @@ import ThemeToggle from './theme';
 import LocaleSwitch from './locale-switch';
 import Asklogo from '@/icons/asklogo';
 
-const Header = ({ locale }: { locale: string }) => {
+const HeaderAdmin = ({ locale }: { locale: string }) => {
   return (
     <div className="sticky left-0 top-0 w-full">
       <div>
@@ -12,7 +12,11 @@ const Header = ({ locale }: { locale: string }) => {
           <div className="font-poppins flex h-full gap-2.5 text-lg font-semibold items-center">
             <Asklogo />
             AskGovMY
+            <div className="bg-[#27272A] dark:bg-[#F4F4F5] dark:text-[#18181B] text-[#FFFFFF] rounded-md font-bold text-xs flex justify-center items-center w-[53px] h-[22px]">
+              ADMIN
+            </div>
           </div>
+
           <div className="flex gap-3">
             <ThemeToggle />
             <LocaleSwitch locale={locale} />
@@ -23,4 +27,4 @@ const Header = ({ locale }: { locale: string }) => {
   );
 };
 
-export default Header;
+export default HeaderAdmin;

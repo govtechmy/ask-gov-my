@@ -2,7 +2,8 @@
   "Footer": {
     "api_docs": "API Docs",
     "admin_login": "Admin Login",
-    "gov_mys": "Government of Malaysia"
+    "gov_mys": "Government of Malaysia",
+    "Home": "Home"
   },
   "Nav": {
     "Theme": {
@@ -11,6 +12,7 @@
       "toggle_dark": "Toggle Dark"
     }
   },
+
   "Agency": {
     "agency": "Agency",
     "MAFS": "Ministry of Agriculture and Food Security",

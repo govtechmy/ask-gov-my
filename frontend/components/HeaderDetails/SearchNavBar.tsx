@@ -1,13 +1,13 @@
-"use client";
+'use client';
 
-import { searchQuestions } from "@/actions/searchServices";
-import { AGENCY_TO_UUID } from "@/lib/agency";
-import Info from "@/icons/info";
-import Link from "next/link";
-import React, { useState, useEffect } from "react";
+import { searchQuestions } from '@/actions/searchServices';
+import { AGENCY_TO_UUID } from '@/lib/agency';
+import Info from '@/icons/info';
+import Link from 'next/link';
+import React, { useState, useEffect } from 'react';
 
 const SearchNavbar: React.FC = () => {
-  const [searchQuery, setSearchQuery] = useState<string>(""); // State to hold the search query
+  const [searchQuery, setSearchQuery] = useState<string>(''); // State to hold the search query
   const [searchResults, setSearchResults] = useState<any[]>([]); // State to hold the search results
 
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -27,9 +27,9 @@ const SearchNavbar: React.FC = () => {
   }, [searchQuery]);
 
   const truncateText = (text: string, maxWords: number) => {
-    const words = text.split(" ");
+    const words = text.split(' ');
     if (words.length > maxWords) {
-      return words.slice(0, maxWords).join(" ") + "...";
+      return words.slice(0, maxWords).join(' ') + '...';
     }
     return text;
   };
@@ -56,7 +56,7 @@ const SearchNavbar: React.FC = () => {
               <ul>
                 {searchResults.map((result, index) => {
                   const agencyAcronym = Object.keys(AGENCY_TO_UUID).find(
-                    (key) => AGENCY_TO_UUID[key] === result.agency.toString(),
+                    key => AGENCY_TO_UUID[key] === result.agency.toString(),
                   );
 
                   return (

@@ -1,8 +1,8 @@
-"use client";
+'use client';
 
-import { Link } from "@/lib/i18n";
-import { useTranslations } from "next-intl";
-import { AGENCY_TO_UUID } from "@/lib/agency";
+import { Link } from '@/lib/i18n';
+import { useTranslations } from 'next-intl';
+import { AGENCY_TO_UUID } from '@/lib/agency';
 
 interface Question {
   id: number;
@@ -20,18 +20,18 @@ interface QuestionCardProps {
 }
 
 const QuestionCard: React.FC<QuestionCardProps> = ({ question }) => {
-  const t = useTranslations("Agency");
+  const t = useTranslations('Agency');
 
   const truncateDescription = (description: string, maxWords: number) => {
-    const words = description.replace(/<\/?[^>]+(>|$)/g, "").split(" ");
+    const words = description.replace(/<\/?[^>]+(>|$)/g, '').split(' ');
     if (words.length > maxWords) {
-      return words.slice(0, maxWords).join(" ") + "...";
+      return words.slice(0, maxWords).join(' ') + '...';
     }
     return description;
   };
 
   const agencyAcronym = Object.keys(AGENCY_TO_UUID).find(
-    (key) => AGENCY_TO_UUID[key] === question.agency.toString(),
+    key => AGENCY_TO_UUID[key] === question.agency.toString(),
   );
 
   return (
@@ -49,7 +49,7 @@ const QuestionCard: React.FC<QuestionCardProps> = ({ question }) => {
       <div className="mt-4 flex items-center">
         <span className="text-gray-600">{t(agencyAcronym)}</span>
         <span className="ml-auto text-xs text-gray-400">
-          {new Date(question.date).toLocaleDateString("en-GB")}
+          {new Date(question.date).toLocaleDateString('en-GB')}
         </span>
       </div>
     </Link>

@@ -1,40 +1,42 @@
 import Image from 'next/image';
 import { useTranslations } from 'next-intl';
 
-const Footer = () => {
+const FooterAdmin = () => {
   const t = useTranslations('Footer');
 
   return (
-    <div className="bg-background z-10 border-t px-6 pb-16 pt-12 lg:px-8">
-      <div className="gap-4.5 flex flex-col justify-between sm:flex-row">
+    <div className="px-6 lg:px-8">
+      <div className="gap-4.5 flex flex-col justify-between sm:flex-row pb-6">
         <div className="flex items-center gap-x-2.5">
-          <Image
-            src="/jata_logo.png"
-            width={48}
-            height={36}
-            alt="Logo Jata Negara"
-          />
-          <div>
-            <p className="font-poppins whitespace-nowrap font-semibold">
+          <div className="h-[30px] w-[30px]">
+            <Image
+              src="/jata_logo.png"
+              width={96}
+              height={96}
+              alt="Logo Jata Negara"
+            />
+          </div>
+          <div className="flex items-center">
+            <p className="font-poppins whitespace-nowrap font-semibold text-sm">
               {t('gov_mys')}
             </p>
-            <p className="text-xs text-zinc-500">
+            <p className="text-xs text-zinc-500 font-normal px-2">
               © {new Date().getFullYear()} {t('gov_mys')}
             </p>
           </div>
         </div>
-        <div className="gap-4.5 flex flex-col sm:flex-row">
+        <div className="gap-4.5 flex flex-col sm:flex-row items-center">
           <a
             href="#"
             className="text-sm text-zinc-500 [text-underline-position:from-font] hover:text-black hover:underline dark:hover:text-white"
           >
-            {t('api_docs')}
+            {t('Home')}
           </a>
           <a
             href="#"
             className="text-sm text-zinc-500 [text-underline-position:from-font] hover:text-black hover:underline dark:hover:text-white"
           >
-            {t('admin_login')}
+            {t('api_docs')}
           </a>
         </div>
       </div>
@@ -42,4 +44,4 @@ const Footer = () => {
   );
 };
 
-export default Footer;
+export default FooterAdmin;

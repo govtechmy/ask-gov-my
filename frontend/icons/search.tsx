@@ -1,4 +1,8 @@
-export default function Search({ ...props }) {
+export default function Search({
+  currentColor = 'currentColor',
+  strokeWidth = 1.5,
+  ...props
+}) {
   return (
     <svg
       width="20"
@@ -10,8 +14,8 @@ export default function Search({ ...props }) {
     >
       <path
         d="M17.25 17.25L13.5 13.5M2.75 9C2.75 5.54822 5.54822 2.75 9 2.75C12.4518 2.75 15.25 5.54822 15.25 9C15.25 12.4518 12.4518 15.25 9 15.25C5.54822 15.25 2.75 12.4518 2.75 9Z"
-        stroke="currentColor"
-        strokeWidth="1.5"
+        stroke={currentColor}
+        strokeWidth={strokeWidth}
         strokeLinecap="round"
         strokeLinejoin="round"
       />

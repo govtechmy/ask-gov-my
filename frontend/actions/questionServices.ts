@@ -107,7 +107,7 @@ export async function submitQuestion(data: QuestionSubmission): Promise<void> {
   const url = `${API_URL}/submit-question/`;
 
   const response = await fetch(url, {
-    method: "POST",
+    method: 'POST',
     headers: {
       "Content-Type": "application/json",
     },
@@ -115,7 +115,7 @@ export async function submitQuestion(data: QuestionSubmission): Promise<void> {
   });
 
   if (!response.ok) {
-    throw new Error("Failed to submit question");
+    throw new Error('Failed to submit question');
   }
 }
 

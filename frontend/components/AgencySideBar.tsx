@@ -1,8 +1,8 @@
-"use client";
-import { useState } from "react";
-import { useRouter } from "@/lib/i18n";
-import { AGENCY_TO_UUID } from "@/lib/agency";
-import { useTranslations } from "next-intl";
+'use client';
+import { useState } from 'react';
+import { useRouter } from '@/lib/i18n';
+import { AGENCY_TO_UUID } from '@/lib/agency';
+import { useTranslations } from 'next-intl';
 
 interface Agency {
   id: string;
@@ -16,10 +16,10 @@ interface AgencySidebarProps {
 //important update on agency
 
 const AgencySidebar: React.FC<AgencySidebarProps> = ({ agencies }) => {
-  const t = useTranslations("Agency");
+  const t = useTranslations('Agency');
 
   const router = useRouter();
-  const [searchTerm, setSearchTerm] = useState("");
+  const [searchTerm, setSearchTerm] = useState('');
 
   const handleAgencyClick = (name: string) => {
     const id = AGENCY_TO_UUID[name as keyof typeof AGENCY_TO_UUID]; // Type assertion
@@ -27,22 +27,22 @@ const AgencySidebar: React.FC<AgencySidebarProps> = ({ agencies }) => {
   };
 
   const formatAgencyName = (name: string) => {
-    const words = name.split("_");
-    const acronym = words.map((word) => word.charAt(0).toUpperCase()).join("");
+    const words = name.split('_');
+    const acronym = words.map(word => word.charAt(0).toUpperCase()).join('');
 
     const formattedName = words
-      .map((word) => {
-        if (word.toLowerCase() === "of") {
-          return "of";
+      .map(word => {
+        if (word.toLowerCase() === 'of') {
+          return 'of';
         }
         return word.charAt(0).toUpperCase() + word.substr(1).toLowerCase();
       })
-      .join(" ");
+      .join(' ');
 
     return { formattedName, acronym };
   };
 
-  const filteredAgencies = agencies.filter((agency) => {
+  const filteredAgencies = agencies.filter(agency => {
     const { formattedName, acronym } = formatAgencyName(agency.name);
     return (
       formattedName.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -52,16 +52,16 @@ const AgencySidebar: React.FC<AgencySidebarProps> = ({ agencies }) => {
 
   return (
     <div className="mx-auto max-w-screen-lg px-4 py-4 lg:px-10">
-      <div className="py-2 pb-4 font-semibold">{t("agency")}</div>
+      <div className="py-2 pb-4 font-semibold">{t('agency')}</div>
       <input
         type="text"
         placeholder="Search agencies..."
         className="mb-4 w-full rounded-md border border-gray-300 p-2"
         value={searchTerm}
-        onChange={(e) => setSearchTerm(e.target.value)}
+        onChange={e => setSearchTerm(e.target.value)}
       />
       <ul className="space-y-2">
-        {filteredAgencies.map((agency) => {
+        {filteredAgencies.map(agency => {
           const { formattedName, acronym } = formatAgencyName(agency.name);
           return (
             <li
