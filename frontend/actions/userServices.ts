@@ -1,8 +1,6 @@
 // userServices.ts
 'use server';
 
-import { getAccessToken } from './authServices';
-
 const API_URL = "http://ask.juwaini.com/api";
 
 interface Question {
@@ -29,12 +27,10 @@ export interface Topic {
 
 export async function getUserAgencyQuestions(page: number = 1, pageSize: number = 10): Promise<{ questions: Question[]; total: number }> {
   try {
-    // const token = getAccessToken();
     const response = await fetch(`${API_URL}/questions/`, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
-        // Authorization: `Bearer ${token}`,
       },
     });
 
@@ -54,12 +50,10 @@ export async function getUserAgencyQuestions(page: number = 1, pageSize: number 
 }
 
 export async function submitAnswer(questionId: number, data: Question): Promise<void> {
-  // const token = getAccessToken();
   const response = await fetch(`${API_URL}/questions/${questionId}/submit-answer/`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
-      // Authorization: `Bearer ${token}`,
     },
     body: JSON.stringify({ data }),
   });
@@ -70,12 +64,10 @@ export async function submitAnswer(questionId: number, data: Question): Promise<
 }
 
 export async function listUserAgencyTopics(): Promise<Topic[]> {
-  // const token = getAccessToken();
   const response = await fetch(`${API_URL}/topics/user-agency/`, {
     method: "GET",
     headers: {
       "Content-Type": "application/json",
-      // Authorization: `Bearer ${token}`,
     },
   });
 
@@ -88,12 +80,10 @@ export async function listUserAgencyTopics(): Promise<Topic[]> {
 }
 
 export async function addUserAgencyTopic(title: string, title_ms: string): Promise<Topic> {
-  // const token = getAccessToken();
   const response = await fetch(`${API_URL}/topics/add/`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
-      // Authorization: `Bearer ${token}`,
     },
     body: JSON.stringify({ title, title_ms }),
   });
@@ -107,12 +97,10 @@ export async function addUserAgencyTopic(title: string, title_ms: string): Promi
 }
 
 export async function assignAgencyToQuestion(questionId: number, agencyId: number): Promise<void> {
-  // const token = getAccessToken();
   const response = await fetch(`${API_URL}/questions/${questionId}/agency/`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
-      // Authorization: `Bearer ${token}`,
     },
     body: JSON.stringify({ agency_id: agencyId }),
   });
@@ -123,12 +111,10 @@ export async function assignAgencyToQuestion(questionId: number, agencyId: numbe
 }
 
 export async function addAgency(name: string, name_ms: string): Promise<void> {
-  // const token = getAccessToken();
   const response = await fetch(`${API_URL}/agencies/add/`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
-      // Authorization: `Bearer ${token}`,
     },
     body: JSON.stringify({ name, name_ms }),
   });
