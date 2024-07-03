@@ -6,16 +6,12 @@ import { Input } from '@/components/ui/input';
 import Google from '@/icons/google';
 import { useTranslations } from 'next-intl';
 
-export function AdminPage({
-  params: { locale },
-}: {
-  params: { locale: string };
-}) {
+export function AdminPage() {
   const t = useTranslations('Adminlogin');
 
   return (
     <div className="flex flex-col min-h-screen">
-      <HeaderAdmin locale={locale} />
+      <HeaderAdmin />
       <div className="flex-grow flex items-center justify-center py-12">
         <div className="min-w-96">
           <div className="text-center">

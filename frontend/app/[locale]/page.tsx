@@ -1,11 +1,9 @@
 import { getAllQuestions } from '@/actions/questionServices';
 import QuestionBox from '@/components/QuestionBox/QuestionBox';
-import AgencySidebar from '@/components/AgencySideBar';
-import { getAgencyList } from '@/actions/questionServices';
 import SearchNavbar from '@/components/HeaderDetails/SearchNavBar';
 import Footer from '@/components/FooterDetails/Footer';
 import Header from '@/components/HeaderDetails/Header';
-import AgencyListDropdown from '@/components/AgencyListDropdown';
+import TrendingAgencies from '@/components/TrendingAgencies';
 
 const MainPage = async ({
   searchParams,
@@ -14,27 +12,36 @@ const MainPage = async ({
 }) => {
   const page = parseInt(searchParams.page || '1', 10);
   const pageSize = 1000;
-  const { questions, total } = await getAllQuestions(page, pageSize);
-  const totalPages = Math.ceil(total / pageSize);
-  const agencies = await getAgencyList();
+  const { questions } = await getAllQuestions(page, pageSize);
 
   return (
-    <div className="container max-w-full">
-      <Header />
-      <SearchNavbar />
-      <div className="mt-4 flex">
-        <div className="w-1/4">
-          <AgencySidebar agencies={agencies} />
+    <div className="">
+      <div className="">
+        <div className="container flex justify-center mx-auto">
+          <Header />
         </div>
-        <div className="w-3/4 pr-6">
-          <div className="px-4 py-5 font-semibold">
-            Top Questions From Citizens
+        <SearchNavbar />
+
+        <div className="container mt-10 flex text-out">
+          <div className="max-w-screen-2xl">
+            <div className="font-semibold text-base text-black-700 pb-7">
+              Trending Questions
+            </div>
+            <QuestionBox questions={questions} />
           </div>
-          <QuestionBox questions={questions} />
+
+          <div className="pl-10 w-[500px]">
+            <div className="font-semibold text-base text-black-700">
+              Trending Agencies
+            </div>
+            <TrendingAgencies />
+          </div>
+        </div>
+
+        <div className="container justify-center mx-auto">
+          <Footer />
         </div>
       </div>
-      <AgencyListDropdown></AgencyListDropdown>
-      <Footer />
     </div>
   );
 };
