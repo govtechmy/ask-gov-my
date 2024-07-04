@@ -1,6 +1,8 @@
 import { useTranslations } from 'next-intl';
 import HeaderDashboard from '@/components/HeaderDetails/HeaderDashboard';
 import AdminNavbar from '@/components/AdminNavbar';
+import { getToken } from 'next-auth/jwt';
+import { get } from 'http';
 
 export function DashboardPage({
   params: { locale },
@@ -8,7 +10,7 @@ export function DashboardPage({
   params: { locale: string };
 }) {
   const t = useTranslations('Adminlogin');
-
+  console.log(getToken)
   return (
     <div className="flex flex-col min-h-screen pt-5">
       {/* check background color! */}
