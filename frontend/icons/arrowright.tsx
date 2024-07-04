@@ -10,9 +10,9 @@ export default function ArrowRight() {
       <path
         d="M7 4.83337L11.1667 9.00004L7 13.1667"
         stroke="#71717A"
-        stroke-width="1.25"
-        stroke-linecap="round"
-        stroke-linejoin="round"
+        strokeWidth="1.25"
+        strokeLinecap="round"
+        strokeLinejoin="round"
       />
     </svg>
   );
