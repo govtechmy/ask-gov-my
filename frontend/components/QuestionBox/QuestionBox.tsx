@@ -32,7 +32,6 @@ const QuestionBox: React.FC<QuestionBoxProps> = ({ questions }) => {
   const renderPageNumbers = () => {
     const pageNumbers = [];
 
-    // Always display first page
     pageNumbers.push(
       <button
         key={1}
@@ -47,8 +46,8 @@ const QuestionBox: React.FC<QuestionBoxProps> = ({ questions }) => {
       </button>,
     );
 
-    // Display ellipsis after the first page if necessary
-    if (currentPage > 3) {
+    if (currentPage > 1) {
+      //need if more than 1
       pageNumbers.push(
         <span key="ellipsis-start" className="px-2">
           ...
@@ -56,20 +55,18 @@ const QuestionBox: React.FC<QuestionBoxProps> = ({ questions }) => {
       );
     }
 
-    // Determine range of pages to display
     let startPage, endPage;
     if (currentPage <= 2) {
       startPage = 2;
       endPage = Math.min(4, totalPages - 1);
     } else if (currentPage >= totalPages - 2) {
-      startPage = Math.max(2, totalPages - 4);
+      startPage = Math.max(2, totalPages - 3); // make sure end is around 4 + 1
       endPage = totalPages - 1;
     } else {
       startPage = Math.max(2, currentPage - 1);
       endPage = Math.min(currentPage + 1, totalPages - 1);
     }
 
-    // Display pages within range
     for (let i = startPage; i <= endPage; i++) {
       pageNumbers.push(
         <button
@@ -86,7 +83,6 @@ const QuestionBox: React.FC<QuestionBoxProps> = ({ questions }) => {
       );
     }
 
-    // Display ellipsis before the last page if necessary
     if (currentPage < totalPages - 2) {
       pageNumbers.push(
         <span key="ellipsis-end" className="px-2">
@@ -95,7 +91,6 @@ const QuestionBox: React.FC<QuestionBoxProps> = ({ questions }) => {
       );
     }
 
-    // Always display last page
     if (totalPages > 1) {
       pageNumbers.push(
         <button
