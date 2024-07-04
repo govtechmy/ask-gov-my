@@ -4,8 +4,8 @@ import { searchQuestions } from '@/actions/searchServices';
 import { AGENCY_TO_UUID } from '@/lib/agency';
 import Search from '@/icons/search';
 import JataNegaraIcon from '@/icons/jatanegaraicon';
-import ArrowRight from '@/icons/arrowright';
 import Close from '@/icons/close';
+import RightArrow from '@/icons/rightarrow';
 
 interface InputNavbarProps {
   searchQuery: string;
@@ -132,7 +132,8 @@ const InputNavbar: React.FC<InputNavbarProps> = ({
               )}
               {searchResults.length > 0 && (
                 <ul>
-                  {searchResults.map((result, index) => {
+                  {searchResults.slice(0, 20).map((result, index) => {
+                    // take 20 result max
                     const agencyAcronym = Object.keys(AGENCY_TO_UUID).find(
                       key => AGENCY_TO_UUID[key] === result.agency.toString(),
                     );
@@ -161,7 +162,7 @@ const InputNavbar: React.FC<InputNavbarProps> = ({
                               {agencyAcronym}
                             </div>
                             <div className="px-1">
-                              <ArrowRight />
+                              <RightArrow />
                             </div>
                           </div>
                         </span>
