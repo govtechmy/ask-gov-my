@@ -25,8 +25,8 @@ export default function IconQuestionSmile() {
       <path
         d="M12 32V40"
         stroke="#D4D4D8"
-        stroke-width="2"
-        stroke-linecap="round"
+        strokeWidth="2"
+        strokeLinecap="round"
       />
       <defs>
         <radialGradient
@@ -37,8 +37,8 @@ export default function IconQuestionSmile() {
           gradientUnits="userSpaceOnUse"
           gradientTransform="translate(12 9) rotate(90) scale(18)"
         >
-          <stop offset="0.232862" stop-color="#F8F4FF" />
-          <stop offset="1" stop-color="#DDC7FF" />
+          <stop offset="0.232862" stopColor="#F8F4FF" />
+          <stop offset="1" stopColor="#DDC7FF" />
         </radialGradient>
       </defs>
     </svg>
