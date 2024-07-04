@@ -40,7 +40,7 @@ const QuestionCard: React.FC<QuestionCardProps> = ({ question }) => {
 
   return (
     <Link
-      className="cursor-pointer items-center rounded-md border p-4 shadow-sm"
+      className="cursor-pointer bg-white items-center rounded-md border p-4 shadow-sm"
       href={`/${agencyAcronym?.toLowerCase()}/${question.id}`}
     >
       <div className="flex">
