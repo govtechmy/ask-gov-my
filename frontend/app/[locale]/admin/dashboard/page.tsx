@@ -1,9 +1,10 @@
 'use client'
-import { useEffect } from 'react';
-import { getSession } from 'next-auth/react';
+
 import { useTranslations } from 'next-intl';
 import HeaderDashboard from '@/components/HeaderDetails/HeaderDashboard';
 import AdminNavbar from '@/components/AdminNavbar';
+import { useSession } from 'next-auth/react';
+import { useRouter } from '@/lib/i18n';
 
 export default function DashboardPage({
   params: { locale },
@@ -11,17 +12,21 @@ export default function DashboardPage({
   params: { locale: string };
 }) {
   const t = useTranslations('Adminlogin');
-
-  useEffect(() => {
-    const checkSession = async () => {
-      const session = await getSession();
-      if (!session) {
-        window.location.href = '/admin';
-      }
-    };
-
-    checkSession();
-  }, []);
+  const session = useSession()
+  const router = useRouter()
+  
+  if (session.status === 'loading') {
+    return (
+      <p>LOADING...</p>
+    )
+  }
+  
+  if (session.status != 'authenticated') {
+    router.push('/admin')
+    return (
+      <p>goodbye</p>
+    )
+  }
 
   return (
     <div className="flex flex-col min-h-screen pt-5">
