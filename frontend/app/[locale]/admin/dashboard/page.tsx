@@ -1,19 +1,30 @@
+'use client'
+import { useEffect } from 'react';
+import { getSession } from 'next-auth/react';
 import { useTranslations } from 'next-intl';
 import HeaderDashboard from '@/components/HeaderDetails/HeaderDashboard';
 import AdminNavbar from '@/components/AdminNavbar';
-import { getToken } from 'next-auth/jwt';
-import { get } from 'http';
 
-export function DashboardPage({
+export default function DashboardPage({
   params: { locale },
 }: {
   params: { locale: string };
 }) {
   const t = useTranslations('Adminlogin');
-  console.log(getToken)
+
+  useEffect(() => {
+    const checkSession = async () => {
+      const session = await getSession();
+      if (!session) {
+        window.location.href = '/admin';
+      }
+    };
+
+    checkSession();
+  }, []);
+
   return (
     <div className="flex flex-col min-h-screen pt-5">
-      {/* check background color! */}
       <div className="mx-[10%]">
         <HeaderDashboard locale={locale} />
         <AdminNavbar />
@@ -24,5 +35,3 @@ export function DashboardPage({
     </div>
   );
 }
-
-export default DashboardPage;
