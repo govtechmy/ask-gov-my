@@ -133,7 +133,6 @@ const QuestionBox: React.FC<QuestionBoxProps> = ({ questions }) => {
         <button
           onClick={() => handlePageChange(currentPage + 1)}
           disabled={currentPage === totalPages}
-          // className="bg-white h-8 w-8 border-[#E4E4E7] border-[1px] rounded-lg flex items-center justify-center shadow-button"
           className={`rounded-lg h-8 w-8 bg-whit shadow-button text-black-900 border-[1px] border-[#E4E4E7]  ${currentPage === totalPages ? ' opacity-30' : 'opacity-100'} `}
         >
           <div className="h-8 w-8 rounded-lg flex items-center justify-center">

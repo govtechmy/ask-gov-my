@@ -4,6 +4,7 @@ import SearchNavbar from '@/components/HeaderDetails/SearchNavBar';
 import Footer from '@/components/FooterDetails/Footer';
 import Header from '@/components/HeaderDetails/Header';
 import TrendingAgencies from '@/components/TrendingAgencies';
+import IdentifyWebsite from '@/components/HeaderDetails/IdentifyWebsite';
 
 const MainPage = async ({
   searchParams,
@@ -17,9 +18,17 @@ const MainPage = async ({
   return (
     <div className="">
       <div className="">
-        <div className="container flex justify-center mx-auto">
-          <Header />
+        <div className="sticky top-0 z-10 bg-white border-b-[1px] border-zinc-800">
+          <div className="container">
+            <IdentifyWebsite />
+          </div>
         </div>
+        <div className="bg-white">
+          <div className="container flex justify-center mx-auto bg-black-700">
+            <Header />
+          </div>
+        </div>
+
         <SearchNavbar />
 
         <div className="container mt-10 flex text-out">

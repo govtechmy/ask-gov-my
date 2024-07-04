@@ -88,7 +88,7 @@ const InputNavbar: React.FC<InputNavbarProps> = ({
   }, [searchQuery, debouncedFetchSearchResults]);
 
   return (
-    <div className="flex items-center border-outline-200 rounded-full border px-4 py-2 bg-white w-[800px] relative">
+    <div className="flex items-center border-outline-200 shadow-button rounded-full border px-4 py-2 bg-white w-[800px] relative">
       <input
         className="flex-1 border-none outline-none px-2 py-1"
         placeholder="Search by keyword or agency name (eg. MOH, MOT)"
