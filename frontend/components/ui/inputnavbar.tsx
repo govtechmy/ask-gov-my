@@ -33,6 +33,8 @@ const InputNavbar: React.FC<InputNavbarProps> = ({
   displayAllMatches,
   setDisplayAllMatches,
 }) => {
+  const [isSearching, setIsSearching] = useState(false);
+
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setSearchQuery(event.target.value);
   };
@@ -53,15 +55,17 @@ const InputNavbar: React.FC<InputNavbarProps> = ({
 
   const fetchSearchResults = async (query: string) => {
     if (query.length > 0) {
+      setIsSearching(true);
       const results = await searchQuestions(query);
       setSearchResults(results);
+      setIsSearching(false);
     } else {
       setSearchResults([]);
     }
   };
 
   const debouncedFetchSearchResults = useCallback(
-    debounce((query: string) => fetchSearchResults(query), 300),
+    debounce((query: string) => fetchSearchResults(query), 300), // 300 milliseconds delay
     [],
   );
 
@@ -88,7 +92,7 @@ const InputNavbar: React.FC<InputNavbarProps> = ({
               Press ENTER to display all matches
             </div>
           )}
-          {searchResults.length === 0 ? (
+          {!isSearching && searchResults.length === 0 ? (
             <div className="px-4 py-2 text-center">No results found.</div>
           ) : (
             <ul>
