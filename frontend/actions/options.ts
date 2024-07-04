@@ -21,9 +21,10 @@ export const authOptions: NextAuthOptions = {
   },
   callbacks: {
     async session({ session, token }) {
-      if (session.user) {
+      if (token) {
         session.user.id = token.id as string;
         session.user.role = token.role as string;
+        session.user.agency = token.agency as string;
       }
       return session;
     },
@@ -31,14 +32,14 @@ export const authOptions: NextAuthOptions = {
       if (user) {
         token.id = user.id;
         token.role = user.role;
+        token.agency = user.agency;
       }
       return token;
     },
     async redirect({ url, baseUrl }) {
-      // ensure the user is redirected to /admin/dashboard after login
       if (url.startsWith(baseUrl)) return url;
       if (url.startsWith("/admin/dashboard")) return baseUrl + url;
       return baseUrl;
     },
   },
-};
+}
