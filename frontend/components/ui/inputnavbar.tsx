@@ -1,3 +1,5 @@
+'use client';
+
 import React, { useEffect, useState, useCallback } from 'react';
 import Link from 'next/link';
 import { searchQuestions } from '@/actions/searchServices';
@@ -6,6 +8,7 @@ import Search from '@/icons/search';
 import JataNegaraIcon from '@/icons/jatanegaraicon';
 import Close from '@/icons/close';
 import RightArrow from '@/icons/rightarrow';
+import QuestionCircle from '@/icons/questioncircle';
 
 interface InputNavbarProps {
   searchQuery: string;
@@ -122,57 +125,73 @@ const InputNavbar: React.FC<InputNavbarProps> = ({
         <Search className="text-white" />
       </div>
       {searchQuery.length > 0 && (
-        <div className="absolute top-full left-0 mt-2 rounded-md bg-white shadow-lg w-full z-10 overflow-y-auto max-h-60">
-          {isSearching ? (
-            <div className="px-4 py-2 text-center">Searching...</div>
-          ) : (
-            <>
-              {searchResults.length === 0 && showNoResults && (
-                <div className="px-4 py-2 text-center">No results found.</div>
-              )}
-              {searchResults.length > 0 && (
-                <ul>
-                  {searchResults.slice(0, 20).map((result, index) => {
-                    // take 20 result max
-                    const agencyAcronym = Object.keys(AGENCY_TO_UUID).find(
-                      key => AGENCY_TO_UUID[key] === result.agency.toString(),
-                    );
+        <div className="absolute top-full left-0 border-t-[1px] rounded-b-3xl bg-white shadow-lg w-full max-h-96 overflow-y-auto">
+          <div className="overflow-y-auto max-h-60 pl-2 pr-3 pt-2">
+            {' '}
+            {/* Wrapper for scrollbar */}
+            {isSearching ? (
+              <div className="px-4 py-2 text-center">Searching...</div>
+            ) : (
+              <>
+                {searchResults.length === 0 && showNoResults && (
+                  <div className="px-4 py-2 text-center">No results found.</div>
+                )}
+                {searchResults.length > 0 && (
+                  <ul>
+                    {searchResults.slice(0, 20).map((result, index) => {
+                      // take 20 result max
+                      const agencyAcronym = Object.keys(AGENCY_TO_UUID).find(
+                        key => AGENCY_TO_UUID[key] === result.agency.toString(),
+                      );
 
-                    return (
-                      <li
-                        key={index}
-                        className="flex items-center justify-between border-b pr-2 pl-4 py-2 last:border-0 hover:bg-gray-100"
-                      >
-                        <Link
-                          href={`/${agencyAcronym?.toLowerCase()}/${result.id}`}
+                      return (
+                        <div
+                          key={index}
+                          className="flex items-center justify-between pr-2 pl-4 py-2 last:border-0 hover:bg-gray-100 h-[60px] w-[788px]"
                         >
-                          <span className="block font-medium text-sm text-black-700 truncate max-w-[600px]">
-                            {result.question}
+                          <Link
+                            href={`/${agencyAcronym?.toLowerCase()}/${result.id}`}
+                          >
+                            <span className="block font-medium text-sm text-black-700 truncate max-w-[600px]">
+                              {result.question}
+                            </span>
+                            <span className="mt-1 block font-normal text-sm text-dim-500 truncate max-w-[600px]">
+                              {result.answer}
+                            </span>
+                          </Link>
+                          <span className="">
+                            <div className="flex">
+                              <div className="pr-1.5">
+                                <JataNegaraIcon className="stroke-[#E4E4E7] dark:stroke-[#27272A] h-5 w-5"></JataNegaraIcon>
+                              </div>
+                              <div className="font-normal text-sm text-black-800">
+                                {agencyAcronym}
+                              </div>
+                              <div className="px-1">
+                                <RightArrow />
+                              </div>
+                            </div>
                           </span>
-                          <span className="mt-1 block font-normal text-sm text-dim-500 truncate max-w-[600px]">
-                            {result.answer}
-                          </span>
-                        </Link>
-                        <span className="">
-                          <div className="flex">
-                            <div className="pr-1.5">
-                              <JataNegaraIcon className="stroke-[#E4E4E7] dark:stroke-[#27272A] h-5 w-5"></JataNegaraIcon>
-                            </div>
-                            <div className="font-normal text-sm text-black-800">
-                              {agencyAcronym}
-                            </div>
-                            <div className="px-1">
-                              <RightArrow />
-                            </div>
-                          </div>
-                        </span>
-                      </li>
-                    );
-                  })}
-                </ul>
-              )}
-            </>
-          )}
+                        </div>
+                      );
+                    })}
+                  </ul>
+                )}
+              </>
+            )}
+          </div>
+          <div className="items-center px-4 py-2 text-center border-outline-200 h-[60px] w-[788px]">
+            {' '}
+            {/* Wrapper for "I can't find" message */}
+            <div className="text-sm items-center flex text-primary-500 justify-center h-full ">
+              <div className="flex items-center text-[#702FF9] font-medium text-base border-[1px] border-[#D4C0FF] shadow-button bg-white px-4 py-2 rounded-lg hover:cursor-pointer">
+                <div className="pr-2">
+                  <QuestionCircle></QuestionCircle>
+                </div>
+                <div className="">I can't find what I am looking for.</div>
+              </div>
+            </div>
+          </div>
         </div>
       )}
     </div>
