@@ -22,7 +22,7 @@ interface QuestionBoxProps {
 
 const QuestionBox: React.FC<QuestionBoxProps> = ({ questions }) => {
   const [currentPage, setCurrentPage] = useState(1);
-  const itemsPerPage = 10;
+  const itemsPerPage = 6;
   const totalPages = Math.ceil(questions.length / itemsPerPage);
 
   const handlePageChange = (page: number) => {

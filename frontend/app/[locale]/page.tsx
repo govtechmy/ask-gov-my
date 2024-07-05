@@ -18,7 +18,7 @@ const MainPage = async ({
   return (
     <div className="">
       <div className="">
-        <div className="sticky top-0 z-10 bg-white border-b-[1px] border-zinc-800">
+        <div className="sticky top-0 z-10 bg-white border-b-[1px]">
           <div className="container">
             <IdentifyWebsite />
           </div>
@@ -47,8 +47,10 @@ const MainPage = async ({
           </div>
         </div>
 
-        <div className="container justify-center mx-auto">
-          <Footer />
+        <div className="bg-white border-t">
+          <div className="container justify-center mx-auto">
+            <Footer />
+          </div>
         </div>
       </div>
     </div>
