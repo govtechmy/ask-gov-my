@@ -1,11 +1,12 @@
 from django.urls import path
-from .views import (QuestionListCreateView, QuestionDetailView, AgencyListView, SubmitQuestionView, 
+from .views import (CompletedQuestionListView, QuestionDetailView, AgencyListView, SubmitQuestionView, 
                     QuestionsByAgencyView, LoginView, UserAgencyQuestionsView, SubmitAnswerView, 
                     UserAgencyTopicsView, AddTopicView, TopicListView, LikeQuestionView, DislikeQuestionView,
-                    AssignAgencyToQuestionView, AddAgencyView)
+                    AssignAgencyToQuestionView, AddAgencyView, AllQuestionListView, TrendingAgenciesView)
 
 urlpatterns = [
-    path('questions/', QuestionListCreateView.as_view(), name='question-list-create'),
+    path('questions/', CompletedQuestionListView.as_view(), name='question-list-create'),
+    path('questions/all/', AllQuestionListView.as_view(), name='all-user-questions'),
     path('questions/<int:pk>/', QuestionDetailView.as_view(), name='question-detail'),
     path('agencies/', AgencyListView.as_view(), name='agency-list'),
     path('submit-question/', SubmitQuestionView.as_view(), name='submit-question'),
@@ -20,4 +21,5 @@ urlpatterns = [
     path('questions/<int:question_id>/dislike/', DislikeQuestionView.as_view(), name='dislike-question'),
     path('questions/<int:question_id>/agency/', AssignAgencyToQuestionView.as_view(), name='assign-agency-to-question'),  # New endpoint
     path('agencies/add/', AddAgencyView.as_view(), name='add-agency'),
+    path('agencies/trending/', TrendingAgenciesView.as_view(), name='trending-agencies'),
 ]
