@@ -3,14 +3,26 @@ import EmailProvider from 'next-auth/providers/email';
 import { PrismaAdapter } from '@next-auth/prisma-adapter';
 import { PrismaClient } from '@prisma/client';
 import { NextAuthOptions } from 'next-auth';
+import nodemailer from "nodemailer";
+import { JSXElementConstructor, ReactElement } from 'react';
+import LoginLink from './logic-link';
+import { sendEmail } from './sendMail';
 
 const prisma = new PrismaClient();
 
 export const authOptions: NextAuthOptions = {
   providers: [
     EmailProvider({
-      server: process.env.EMAIL_SERVER,
-      from: process.env.EMAIL_FROM,
+      async sendVerificationRequest({ identifier, url }) {
+        console.log("Callback URL:" + url);
+        console.log("identifier" + identifier)
+        await sendEmail({
+          email: identifier,
+          subject: `Your ${process.env.NEXT_PUBLIC_APP_NAME} Login Link`,
+          react: LoginLink({ url, email: identifier }),
+        });
+        return;
+      }
     }),
   ],
   adapter: PrismaAdapter(prisma),
@@ -18,6 +30,7 @@ export const authOptions: NextAuthOptions = {
   pages: {
     signIn: '/admin',
     verifyRequest: '/admin/checkmail', // send users here after they sign in to check their email
+    error: '/'
   },
   callbacks: {
     async session({ session, token }) {

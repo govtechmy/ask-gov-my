@@ -23,7 +23,7 @@ export default function DashboardPage() {
       <p>goodbye</p>
     )
   }
-
+  console.log(session)
   return (
     <div className="flex flex-col min-h-screen pt-5">
       <div className="mx-[10%]">
