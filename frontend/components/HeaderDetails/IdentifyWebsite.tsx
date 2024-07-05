@@ -7,7 +7,7 @@ const IdentifyWebsite: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false);
 
   return (
-    <div className="bg-background border-b px-3 py-1">
+    <div className="bg-white sticky top-0 z-10 px-3 py-1">
       <div
         className="flex w-full cursor-pointer"
         onClick={() => setIsOpen(!isOpen)}

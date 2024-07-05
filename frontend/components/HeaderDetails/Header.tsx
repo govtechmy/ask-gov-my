@@ -1,21 +1,20 @@
 import IdentifyWebsite from './IdentifyWebsite';
-import ThemeToggle from './theme';
-import LocaleSwitch from './locale-switch';
+import ThemeToggle from './Theme';
+import LocaleSwitch from './LocaleSwitch';
 import Asklogo from '@/icons/asklogo';
 
-const Header = ({ locale }: { locale: string }) => {
+const Header = () => {
   return (
-    <div className="sticky left-0 top-0 w-full">
+    <div className="w-full">
       <div>
-        <IdentifyWebsite />
-        <div className="bg-background flex justify-between p-2">
+        <div className="bg-white flex justify-between p-2">
           <div className="font-poppins flex h-full gap-2.5 text-lg font-semibold items-center">
             <Asklogo />
             AskGovMY
           </div>
           <div className="flex gap-3">
             <ThemeToggle />
-            <LocaleSwitch locale={locale} />
+            <LocaleSwitch />
           </div>
         </div>
       </div>
