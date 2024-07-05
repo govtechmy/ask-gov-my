@@ -6,11 +6,7 @@ import AdminNavbar from '@/components/AdminNavbar';
 import { useSession } from 'next-auth/react';
 import { useRouter } from '@/lib/i18n';
 
-export default function DashboardPage({
-  params: { locale },
-}: {
-  params: { locale: string };
-}) {
+export default function DashboardPage() {
   const t = useTranslations('Adminlogin');
   const session = useSession()
   const router = useRouter()
