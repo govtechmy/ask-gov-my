@@ -7,12 +7,9 @@ import FooterAdmin from '@/components/FooterDetails/FooterAdmin';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { useTranslations } from 'next-intl';
+import IdentifyWebsite from '@/components/HeaderDetails/IdentifyWebsite';
 
-export function AdminPage({
-  params: { locale },
-}: {
-  params: { locale: string };
-}) {
+export function AdminPage() {
   const t = useTranslations('Adminlogin');
   const [email, setEmail] = useState('');
 
@@ -26,7 +23,10 @@ export function AdminPage({
 
   return (
     <div className="flex flex-col min-h-screen">
-      <HeaderAdmin locale={locale} />
+      <IdentifyWebsite />
+      <div className="bg-white">
+        <HeaderAdmin />
+      </div>
       <div className="flex-grow flex items-center justify-center py-12">
         <div className="min-w-96">
           <div className="text-center">
@@ -70,7 +70,9 @@ export function AdminPage({
         </div>
       </div>
 
-      <FooterAdmin />
+      <div className="bg-white pt-3">
+        <FooterAdmin />
+      </div>
     </div>
   );
 }

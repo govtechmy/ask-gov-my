@@ -2,10 +2,11 @@
 
 import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { usePathname, useRouter } from '@/lib/i18n';
-import { useSearchParams } from 'next/navigation';
+import { useParams, useSearchParams } from 'next/navigation';
 import { useTransition } from 'react';
 
-export default function LocaleSwitch({ locale }: { locale: string }) {
+export default function LocaleSwitch() {
+  const params = useParams();
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
@@ -21,7 +22,11 @@ export default function LocaleSwitch({ locale }: { locale: string }) {
   };
 
   return (
-    <Tabs defaultValue="en" value={locale} onValueChange={onSelectChange}>
+    <Tabs
+      defaultValue="en"
+      value={params.locale as string}
+      onValueChange={onSelectChange}
+    >
       <TabsList className="bg-washed-100 dark:bg-[#1D1D21] h-8 gap-0 rounded-lg">
         {['ms', 'en'].map(locale => (
           <TabsTrigger
