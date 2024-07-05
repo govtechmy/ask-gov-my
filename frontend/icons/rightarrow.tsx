@@ -10,9 +10,9 @@ export default function RightArrow() {
       <path
         d="M8 5L13 10L8 15"
         stroke="#18181B"
-        stroke-width="1.5"
-        stroke-linecap="round"
-        stroke-linejoin="round"
+        strokeWidth="1.5"
+        strokeLinecap="round"
+        strokeLinejoin="round"
       />
     </svg>
   );
