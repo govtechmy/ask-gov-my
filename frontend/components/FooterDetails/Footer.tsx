@@ -5,7 +5,7 @@ const Footer = () => {
   const t = useTranslations('Footer');
 
   return (
-    <div className="bg-white z-10 px-6 pb-16 pt-12 lg:px-8">
+    <div className="bg-white px-6 pb-16 pt-12 lg:px-8">
       <div className="gap-4.5 flex flex-col justify-between sm:flex-row">
         <div className="flex items-center gap-x-2.5">
           <Image
