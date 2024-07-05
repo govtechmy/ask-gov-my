@@ -11,6 +11,8 @@ interface Question {
   answer: string;
   topics: number[];
   email: string;
+  likes: number;
+  dislikes: number;
 }
 
 interface Topic {
