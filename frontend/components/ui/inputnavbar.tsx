@@ -91,7 +91,9 @@ const InputNavbar: React.FC<InputNavbarProps> = ({
   }, [searchQuery, debouncedFetchSearchResults]);
 
   return (
-    <div className="flex items-center border-outline-200 shadow-button rounded-full border px-4 py-2 bg-white w-[800px] relative">
+    <div
+      className={`flex items-center border-outline-200 shadow-button border px-4 py-2 bg-white w-[800px] relative ${searchQuery.length > 0 ? 'rounded-b-none rounded-t-3xl' : 'rounded-full'}`}
+    >
       <input
         className="flex-1 border-none outline-none px-2 py-1"
         placeholder="Search by keyword or agency name (eg. MOH, MOT)"
@@ -159,7 +161,7 @@ const InputNavbar: React.FC<InputNavbarProps> = ({
                               {result.answer}
                             </span>
                           </Link>
-                          <span className="">
+                          <span className="on hover:cursor-pointer">
                             <div className="flex">
                               <div className="pr-1.5">
                                 <JataNegaraIcon className="stroke-[#E4E4E7] dark:stroke-[#27272A] h-5 w-5"></JataNegaraIcon>
