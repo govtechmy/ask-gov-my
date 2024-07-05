@@ -129,7 +129,6 @@ const InputNavbar: React.FC<InputNavbarProps> = ({
       {searchQuery.length > 0 && (
         <div className="absolute top-full left-0 border-t-[1px] rounded-b-3xl bg-white shadow-lg w-full max-h-96 overflow-y-auto">
           <div className="overflow-y-auto max-h-60 pl-2 pr-3 pt-2">
-            {' '}
             {/* Wrapper for scrollbar */}
             {isSearching ? (
               <div className="px-4 py-2 text-center">Searching...</div>
