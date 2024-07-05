@@ -1,7 +1,11 @@
+import os
 from elasticsearch import Elasticsearch
+from dotenv import load_dotenv
 
-ELASTICSEARCH_URL = "https://askgov-fc58f6.es.us-east-1.aws.elastic.cloud"
-ELASTICSEARCH_API_KEY = "NWNHNVRaQUI3cVdKTXhCbHk4Sl86Um1LTmRKNjFSMjJXeUVtNGFVMEtldw=="
+load_dotenv()
+
+ELASTICSEARCH_URL = os.getenv('ELASTICSEARCH_URL')
+ELASTICSEARCH_API_KEY = os.getenv('ELASTICSEARCH_API_KEY')
 
 client = Elasticsearch(
     [ELASTICSEARCH_URL],
