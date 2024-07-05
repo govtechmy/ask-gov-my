@@ -6,6 +6,7 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework.permissions import AllowAny
 from django.contrib.auth import get_user_model
+from django.db.models import Sum
 from rest_framework_simplejwt.tokens import RefreshToken
 from .elasticsearch_client import client
 import logging
@@ -13,8 +14,12 @@ import logging
 logger = logging.getLogger(__name__)
 User = get_user_model()
 
-class QuestionListCreateView(generics.ListCreateAPIView):
+class CompletedQuestionListView(generics.ListCreateAPIView):
     queryset = Question.objects.filter(state='completed')
+    serializer_class = QuestionSerializer
+
+class AllQuestionListView(generics.ListCreateAPIView):
+    queryset = Question.objects.all()
     serializer_class = QuestionSerializer
 
 class QuestionDetailView(generics.RetrieveAPIView):
@@ -195,3 +200,9 @@ class AddAgencyView(APIView):
         agency = Agency.objects.create(name=name, name_ms=name_ms)
         serializer = AgencySerializer(agency)
         return Response(serializer.data, status=status.HTTP_201_CREATED)
+
+class TrendingAgenciesView(APIView):
+    def get(self, request):
+        agencies = Agency.objects.annotate(total_likes=Sum('question__likes')).order_by('-total_likes')
+        serializer = AgencySerializer(agencies, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)

@@ -5,6 +5,7 @@ import { Button } from '@/components/ui/button';
 import Maillogo from '@/icons/mail';
 import Arrowleft from '@/icons/arrowleft';
 import { useTranslations } from 'next-intl';
+import { useSession } from 'next-auth/react';
 
 export function CheckmailPage({
   params: { locale },
@@ -12,23 +13,24 @@ export function CheckmailPage({
   params: { locale: string };
 }) {
   const t = useTranslations('Checkmail');
+  // const { data: session } = useSession();
 
   return (
     <div className="flex flex-col min-h-screen">
       <HeaderAdmin locale={locale} />
       <div className="flex-grow flex items-center justify-center py-12">
         <div className="flex flex-col items-center justify-center">
-          <Maillogo></Maillogo>
-          <div className=" font-semibold text-2xl py-4">{t('checkmail')}</div>
-          <div className=" font-normal text-base text-zinc-700 dark:text-zinc-300">
+          <Maillogo />
+          <div className="font-semibold text-2xl py-4">{t('checkmail')}</div>
+          <div className="font-normal text-base text-zinc-700 dark:text-zinc-300">
             {t('para1')}
           </div>
 
           <div className="flex pb-6">
-            <div className=" font-medium text-base px-1">
-              alonso@agency.gov.my
+            <div className="font-medium text-base px-1">
+              {/* {session?.user?.email || 'yourname@example.com'} */}
             </div>
-            <div className=" font-normal text-base text-zinc-700 dark:text-zinc-300">
+            <div className="font-normal text-base text-zinc-700 dark:text-zinc-300">
               {t('para2')}
             </div>
           </div>
@@ -43,7 +45,7 @@ export function CheckmailPage({
               "
             >
               <div className="px-3">
-                <Arrowleft></Arrowleft>
+                <Arrowleft />
               </div>
               <div className="pr-3 font-medium text-base ">
                 {t('backclick')}
