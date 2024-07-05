@@ -10,9 +10,9 @@ export default function LeftArrow() {
       <path
         d="M11 5L6 10L11 15"
         stroke="#18181B"
-        stroke-width="1.5"
-        stroke-linecap="round"
-        stroke-linejoin="round"
+        strokeWidth="1.5"
+        strokeLinecap="round"
+        strokeLinejoin="round"
       />
     </svg>
   );

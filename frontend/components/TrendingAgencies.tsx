@@ -19,7 +19,7 @@ const AgencyList = () => {
           <li key={agency.id} className="py-2">
             <div className="flex items-center ">
               <div className="pr-2">
-                <JataNegaraIcon className="stroke-[#E4E4E7] dark:stroke-[#27272A] w-8 h-8"></JataNegaraIcon>
+                <JataNegaraIcon className="stroke-[#E4E4E7] dark:[#27272A] w-8 h-8"></JataNegaraIcon>
               </div>
               <div className="text-base font-normal text-black-800">
                 {agency.name}
