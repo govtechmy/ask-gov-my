@@ -12,6 +12,8 @@ interface Question {
   answer: string;
   topics: number[];
   email: string;
+  likes: number;
+  dislikes: number;
 }
 
 export interface Topic {
@@ -24,10 +26,10 @@ export interface Topic {
     acronym: string;
   };
 }
-
-export async function getUserAgencyQuestions(page: number = 1, pageSize: number = 10): Promise<{ questions: Question[]; total: number }> {
+// get questions by the user agency, to be used only by user.role = staff
+export async function getUserAgencyQuestions(agencyId: number, page: number = 1, pageSize: number = 10): Promise<{ questions: Question[]; total: number }> {
   try {
-    const response = await fetch(`${API_URL}/questions/`, {
+    const response = await fetch(`${API_URL}/questions/by-agency/${agencyId}/`, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
@@ -48,6 +50,32 @@ export async function getUserAgencyQuestions(page: number = 1, pageSize: number 
     return { questions: [], total: 0 };
   }
 }
+
+// get all questions for user.role = super_admin
+export async function getAllUserQuestions(page: number = 1, pageSize: number = 10): Promise<{ questions: Question[]; total: number }> {
+  try {
+    const response = await fetch(`${API_URL}/questions/all/`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+
+    if (!response.ok) {
+      throw new Error("Failed to fetch user questions");
+    }
+
+    const data = await response.json();
+    const start = (page - 1) * pageSize;
+    const end = start + pageSize;
+    const paginatedQuestions = data.slice(start, end);
+    return { questions: paginatedQuestions, total: data.length };
+  } catch (error) {
+    console.error("Error in getAllUserQuestions:", error);
+    return { questions: [], total: 0 };
+  }
+}
+
 
 export async function submitAnswer(questionId: number, data: Question): Promise<void> {
   const response = await fetch(`${API_URL}/questions/${questionId}/submit-answer/`, {

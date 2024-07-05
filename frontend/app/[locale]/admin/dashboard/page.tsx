@@ -1,9 +1,28 @@
+'use client'
+
 import { useTranslations } from 'next-intl';
 import HeaderDashboard from '@/components/HeaderDetails/HeaderDashboard';
 import AdminNavbar from '@/components/AdminNavbar';
+import { useSession } from 'next-auth/react';
+import { useRouter } from '@/lib/i18n';
 
-export function DashboardPage() {
+export default function DashboardPage() {
   const t = useTranslations('Adminlogin');
+  const session = useSession()
+  const router = useRouter()
+  
+  if (session.status === 'loading') {
+    return (
+      <p>LOADING...</p>
+    )
+  }
+  
+  if (session.status != 'authenticated') {
+    router.push('/admin')
+    return (
+      <p>goodbye</p>
+    )
+  }
 
   return (
     <div className="flex flex-col min-h-screen pt-5">
@@ -17,5 +36,3 @@ export function DashboardPage() {
     </div>
   );
 }
-
-export default DashboardPage;
