@@ -34,14 +34,18 @@ export const authOptions: NextAuthOptions = {
         session.user.id = token.id as string;
         session.user.role = token.role as string;
         session.user.agency = token.agency as string;
+        session.accessToken = token.accessToken as string;
       }
       return session;
     },
-    async jwt({ token, user }) {
+    async jwt({ token, user, account }) {
       if (user) {
         token.id = user.id;
         token.role = user.role;
         token.agency = user.agency;
+      }
+      if (account) {
+        token.accessToken = account.access_token;
       }
       return token;
     },
@@ -52,3 +56,5 @@ export const authOptions: NextAuthOptions = {
     },
   },
 };
+
+export default NextAuth(authOptions);
