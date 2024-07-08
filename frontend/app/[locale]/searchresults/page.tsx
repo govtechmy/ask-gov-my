@@ -33,15 +33,17 @@ const MainPage = async ({
 
         <div className="container mt-10 flex text-out">
           <div className="max-w-screen-2xl">
-            <div className="font-semibold text-base text-black-700 pb-7">
-              Trending Questions
+            <div className="font-semibold text-base text-black-700 pb-7 flex">
+              <div>x value &nbsp;</div>
+              <div>search results for &nbsp; </div>
+              <div>x value</div>
             </div>
             <QuestionBox questions={questions} />
           </div>
 
           <div className="pl-10 w-[500px]">
             <div className="font-semibold text-base text-black-700">
-              Trending Agencies
+              Relevant Agencies
             </div>
             <TrendingAgencies />
           </div>
