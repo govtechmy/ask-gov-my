@@ -1,29 +1,29 @@
-'use client'
+'use client';
 
 import { useTranslations } from 'next-intl';
 import HeaderDashboard from '@/components/HeaderDetails/HeaderDashboard';
-import AdminNavbar from '@/components/AdminNavbar';
+import AdminNavbar from '@/components/AdminDashboard/AdminNavbar';
 import { useSession } from 'next-auth/react';
-import { useRouter } from '@/lib/i18n';
+import { useRouter, useSearchParams } from 'next/navigation';
 
 export default function DashboardPage() {
   const t = useTranslations('Adminlogin');
-  const session = useSession()
-  const router = useRouter()
-  
+  const session = useSession();
+  const router = useRouter();
+  const searchParams = useSearchParams();
+  const activeTab = searchParams.get('tab') || 'all';
+
   if (session.status === 'loading') {
-    return (
-      <p>LOADING...</p>
-    )
+    return <p>LOADING...</p>;
   }
-  
-  if (session.status != 'authenticated') {
-    router.push('/admin')
-    return (
-      <p>goodbye</p>
-    )
+
+  if (session.status !== 'authenticated') {
+    router.push('/admin');
+    return <p>goodbye</p>;
   }
-  console.log(session)
+
+  console.log('Active Tab:', activeTab);
+
   return (
     <div className="flex flex-col min-h-screen pt-5">
       <div className="mx-[10%]">

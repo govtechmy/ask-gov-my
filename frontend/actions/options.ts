@@ -3,10 +3,8 @@ import EmailProvider from 'next-auth/providers/email';
 import { PrismaAdapter } from '@next-auth/prisma-adapter';
 import { PrismaClient } from '@prisma/client';
 import { NextAuthOptions } from 'next-auth';
-import nodemailer from "nodemailer";
-import { JSXElementConstructor, ReactElement } from 'react';
-import LoginLink from './logic-link';
 import { sendEmail } from './sendMail';
+import LoginLink from './logic-link';
 
 const prisma = new PrismaClient();
 
@@ -14,8 +12,6 @@ export const authOptions: NextAuthOptions = {
   providers: [
     EmailProvider({
       async sendVerificationRequest({ identifier, url }) {
-        console.log("Callback URL:" + url);
-        console.log("identifier" + identifier)
         await sendEmail({
           email: identifier,
           subject: `Your ${process.env.NEXT_PUBLIC_APP_NAME} Login Link`,
@@ -55,4 +51,4 @@ export const authOptions: NextAuthOptions = {
       return baseUrl;
     },
   },
-}
+};

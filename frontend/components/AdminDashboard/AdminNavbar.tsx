@@ -1,6 +1,6 @@
 'use client';
 import Calendar from '@/icons/calendar';
-import React, { useState } from 'react';
+import React, { useEffect } from 'react';
 import Search from '@/icons/search';
 import { cn } from '@/lib/utils';
 import {
@@ -10,9 +10,22 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
+import { useSearchParams, useRouter } from 'next/navigation';
 
 const AdminNavbar = () => {
-  const [activeTab, setActiveTab] = useState('all');
+  const searchParams = useSearchParams();
+  const router = useRouter();
+  const activeTab = searchParams.get('tab') || 'all';
+
+  const setActiveTab = (tab: string) => {
+    const params = new URLSearchParams(window.location.search);
+    params.set('tab', tab);
+    router.push(`${window.location.pathname}?${params.toString()}`);
+  };
+
+  useEffect(() => {
+    console.log('Active Tab:', activeTab);
+  }, [activeTab]);
 
   return (
     <div className="flex items-center justify-between pt-3 pb-2 border-b border-[#E4E4E7] dark:border-[#27272A]">
