@@ -31,7 +31,7 @@ export function AdminPage() {
         await signIn('email', {
           email,
           callbackUrl: '/admin/dashboard',
-          redirect: false
+          redirect: true
         }).then((res) => {
           setAlertSuccess(true);
         });
@@ -61,12 +61,12 @@ export function AdminPage() {
               {t('para1')}
             </div>
           </div>
-          {alertSuccess == true ? <div>
+          {/* {alertSuccess == true ? <div>
             <div className="p-4 mb-4 text-sm text-blue-800 rounded-lg bg-blue-50 dark:bg-gray-800 dark:text-blue-400" role="alert">
   <span className="font-medium">Info alert!</span> Change a few things up and try submitting again.
 </div>
 
-          </div> : <div></div>}
+          </div> : <div></div>} */}
 
 
           <form onSubmit={handleSignIn}>
