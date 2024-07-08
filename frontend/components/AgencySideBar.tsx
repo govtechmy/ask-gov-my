@@ -1,3 +1,4 @@
+// for this moment remove from main page. later may be used in other places
 'use client';
 import { useState } from 'react';
 import { useRouter } from '@/lib/i18n';

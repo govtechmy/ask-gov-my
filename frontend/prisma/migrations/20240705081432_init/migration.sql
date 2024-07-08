@@ -11,7 +11,7 @@ CREATE TABLE "User" (
     "role" "UserRole" NOT NULL DEFAULT 'staff',
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
-    "agency" INTEGER NOT NULL,
+    "agency" INTEGER,
 
     CONSTRAINT "User_pkey" PRIMARY KEY ("id")
 );

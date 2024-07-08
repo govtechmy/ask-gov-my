@@ -7,26 +7,52 @@ import FooterAdmin from '@/components/FooterDetails/FooterAdmin';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { useTranslations } from 'next-intl';
+import IdentifyWebsite from '@/components/HeaderDetails/IdentifyWebsite';
 
-export function AdminPage({
-  params: { locale },
-}: {
-  params: { locale: string };
-}) {
+export function AdminPage() {
   const t = useTranslations('Adminlogin');
   const [email, setEmail] = useState('');
-
+  const [alertSuccess, setAlertSuccess] = useState(false);
+  const [alertFailed, setAlertFailed] = useState(false);
+  
   const handleSignIn = async (e: React.FormEvent) => {
     e.preventDefault();
-    await signIn('email', {
-      email,
-      callbackUrl: '/admin/dashboard',
-    });
+
+    // When login button is clicked
+    // Let's check if this user exists in the User Table
+    // fetch("/api/auth/account-exists", {
+    //   method: "POST",
+    //   headers: { "Content-Type": "application/json" },
+    //   body: JSON.stringify({ email }),
+    // }).then(async (res) => {
+    //   const { exists } = await res.json();
+
+      // if (exists) {
+        await signIn('email', {
+          email,
+          callbackUrl: '/admin/dashboard',
+          redirect: false
+        }).then((res) => {
+          setAlertSuccess(true);
+        });
+      // } else {
+        // Bagitau dekat UI error message: Account tidak wujud
+        // toast.error(message?.no_account);
+        // setNoSuchAccount(true);
+        // setClickedEmail(false);
+      // }
+
+    // })
   };
 
   return (
-    <div className="flex flex-col min-h-screen">
-      <HeaderAdmin locale={locale} />
+    <>
+        <div className="flex flex-col min-h-screen">
+      
+      <IdentifyWebsite />
+      <div className="bg-white">
+        <HeaderAdmin />
+      </div>
       <div className="flex-grow flex items-center justify-center py-12">
         <div className="min-w-96">
           <div className="text-center">
@@ -35,6 +61,13 @@ export function AdminPage({
               {t('para1')}
             </div>
           </div>
+          {alertSuccess == true ? <div>
+            <div className="p-4 mb-4 text-sm text-blue-800 rounded-lg bg-blue-50 dark:bg-gray-800 dark:text-blue-400" role="alert">
+  <span className="font-medium">Info alert!</span> Change a few things up and try submitting again.
+</div>
+
+          </div> : <div></div>}
+
 
           <form onSubmit={handleSignIn}>
             <div className="grid gap-4">
@@ -43,7 +76,7 @@ export function AdminPage({
                 <Input
                   id="email"
                   type="email"
-                  placeholder="yourname@example.com"
+                  placeholder="officer@agency.gov.my"
                   required
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
@@ -70,8 +103,11 @@ export function AdminPage({
         </div>
       </div>
 
-      <FooterAdmin />
+      <div className="bg-white pt-3">
+        <FooterAdmin />
+      </div>
     </div>
+    </>
   );
 }
 

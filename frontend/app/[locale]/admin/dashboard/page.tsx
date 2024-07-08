@@ -6,11 +6,7 @@ import AdminNavbar from '@/components/AdminNavbar';
 import { useSession } from 'next-auth/react';
 import { useRouter } from '@/lib/i18n';
 
-export default function DashboardPage({
-  params: { locale },
-}: {
-  params: { locale: string };
-}) {
+export default function DashboardPage() {
   const t = useTranslations('Adminlogin');
   const session = useSession()
   const router = useRouter()
@@ -27,11 +23,11 @@ export default function DashboardPage({
       <p>goodbye</p>
     )
   }
-
+  console.log(session)
   return (
     <div className="flex flex-col min-h-screen pt-5">
       <div className="mx-[10%]">
-        <HeaderDashboard locale={locale} />
+        <HeaderDashboard />
         <AdminNavbar />
         <div className="flex-grow flex items-center justify-center py-12">
           HELLOO WORLDOOOO

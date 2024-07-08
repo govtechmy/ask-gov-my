@@ -1,6 +1,9 @@
 'use client';
-import { useState } from 'react';
+
+import React, { useState } from 'react';
 import QuestionCard from './QuestionCard';
+import RightArrow from '@/icons/rightarrow';
+import LeftArrow from '@/icons/leftarrow';
 
 interface Question {
   id: number;
@@ -19,13 +22,86 @@ interface QuestionBoxProps {
 
 const QuestionBox: React.FC<QuestionBoxProps> = ({ questions }) => {
   const [currentPage, setCurrentPage] = useState(1);
-  const itemsPerPage = 10;
+  const itemsPerPage = 6;
   const totalPages = Math.ceil(questions.length / itemsPerPage);
 
   const handlePageChange = (page: number) => {
     if (page >= 1 && page <= totalPages) {
       setCurrentPage(page);
     }
+  };
+
+  const renderPageNumbers = () => {
+    const pageNumbers = [];
+
+    // Add first page button
+    pageNumbers.push(
+      <button
+        key={1}
+        onClick={() => handlePageChange(1)}
+        className={` rounded-lg h-8 w-7 ${currentPage === 1 ? 'bg-[#F4EFFF] text-[#702FF9]' : 'bg-transparent text-black-700'}`}
+      >
+        {1}
+      </button>,
+    );
+
+    if (currentPage > 1) {
+      // Add ellipsis if more than one page away from the start
+      pageNumbers.push(
+        <span key="ellipsis-start" className="px-2 py-2">
+          ...
+        </span>,
+      );
+    }
+
+    let startPage, endPage;
+    if (currentPage <= 2) {
+      startPage = 2;
+      endPage = Math.min(4, totalPages - 1);
+    } else if (currentPage >= totalPages - 2) {
+      startPage = Math.max(2, totalPages - 3);
+      endPage = totalPages - 1;
+    } else {
+      startPage = Math.max(2, currentPage - 1);
+      endPage = Math.min(currentPage + 1, totalPages - 1);
+    }
+
+    // Add intermediate page buttons
+    for (let i = startPage; i <= endPage; i++) {
+      pageNumbers.push(
+        <button
+          key={i}
+          onClick={() => handlePageChange(i)}
+          className={`rounded-lg h-8 w-7   ${i === currentPage ? 'bg-[#F4EFFF] text-[#702FF9]' : 'bg-transparent text-black-700'} `}
+        >
+          {i}
+        </button>,
+      );
+    }
+
+    if (currentPage < totalPages - 2) {
+      // Add ellipsis if more than one page away from the end
+      pageNumbers.push(
+        <span key="ellipsis-end" className="px-2 py-2 rounded-lg">
+          ...
+        </span>,
+      );
+    }
+
+    // Add last page button
+    if (totalPages > 1) {
+      pageNumbers.push(
+        <button
+          key={totalPages}
+          onClick={() => handlePageChange(totalPages)}
+          className={` rounded-lg h-8 w-7 ${totalPages === currentPage ? 'bg-[#F4EFFF] text-[#702FF9] rounded-lg' : 'bg-transparent text-black-700'}`}
+        >
+          {totalPages}
+        </button>,
+      );
+    }
+
+    return <div className="flex rounded items-center">{pageNumbers}</div>;
   };
 
   const startIdx = (currentPage - 1) * itemsPerPage;
@@ -39,35 +115,31 @@ const QuestionBox: React.FC<QuestionBoxProps> = ({ questions }) => {
           <QuestionCard key={question.id} question={question} />
         ))}
       </div>
-      <div className="mt-4 flex items-center justify-center">
+      <div className="mt-4 rounded-lg flex items-center justify-center pb-7">
         <button
           onClick={() => handlePageChange(currentPage - 1)}
           disabled={currentPage === 1}
-          className="m-4 rounded border border-gray-300 px-4 py-2"
+          className={`rounded-lg h-8 w-8 bg-whit shadow-button text-black-900 border-[1px] border-[#E4E4E7]  ${currentPage === 1 ? ' opacity-30' : 'opacity-100'} `}
         >
-          Previous
+          <div className="h-8 w-8 rounded-lg flex items-center justify-center">
+            <div className="flex items-center justify-center h-4 w-4">
+              <LeftArrow />
+            </div>
+          </div>
         </button>
-        <div className="">
-          {Array.from({ length: totalPages }, (_, index) => (
-            <button
-              key={index}
-              onClick={() => handlePageChange(index + 1)}
-              className={`rounded border px-4 py-2 ${
-                index + 1 === currentPage
-                  ? 'border-blue-500 bg-blue-500 text-white'
-                  : 'border-gray-300'
-              }`}
-            >
-              {index + 1}
-            </button>
-          ))}
-        </div>
+
+        <div className="rounded-lg p-3">{renderPageNumbers()}</div>
+
         <button
           onClick={() => handlePageChange(currentPage + 1)}
           disabled={currentPage === totalPages}
-          className="m-4 rounded border border-gray-300 px-4 py-2"
+          className={`rounded-lg h-8 w-8 bg-whit shadow-button text-black-900 border-[1px] border-[#E4E4E7]  ${currentPage === totalPages ? ' opacity-30' : 'opacity-100'} `}
         >
-          Next
+          <div className="h-8 w-8 rounded-lg flex items-center justify-center">
+            <div className="flex items-center justify-center h-4 w-4">
+              <RightArrow />
+            </div>
+          </div>
         </button>
       </div>
     </div>
