@@ -52,7 +52,7 @@ export async function getUserAgencyQuestions(agencyId: number, page: number = 1,
 }
 
 // get all questions for user.role = super_admin
-export async function getAllUserQuestions(page: number = 1, pageSize: number = 10): Promise<{ questions: Question[]; total: number }> {
+export async function getAllUserQuestions(page: number = 1, pageSize: number = 1000): Promise<{ questions: Question[]; total: number }> {
   try {
     const response = await fetch(`${API_URL}/questions/all/`, {
       method: "GET",
