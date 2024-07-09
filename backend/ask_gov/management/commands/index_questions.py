@@ -20,9 +20,15 @@ class Command(BaseCommand):
                     "acronym": agency.acronym,
                     "name_ms": agency.name_ms
                 }
-                document['agency'] = agency_data
             else:
-                document['agency'] = None
+                agency_data = {
+                    "id": "",
+                    "name": "",
+                    "acronym": "",
+                    "name_ms": ""
+                }
+
+            document['agency'] = agency_data
 
             client.index(
                 index='questions',
