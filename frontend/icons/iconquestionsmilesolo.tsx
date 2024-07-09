@@ -22,7 +22,7 @@ export default function IconQuestionSmileSolo() {
         height="31.2381"
         rx="15.619"
         stroke="#E4E4E7"
-        stroke-width="0.761905"
+        strokeWidth="0.761905"
       />
       <rect
         x="8"
@@ -53,8 +53,8 @@ export default function IconQuestionSmileSolo() {
           gradientUnits="userSpaceOnUse"
           gradientTransform="translate(16 12) rotate(90) scale(24)"
         >
-          <stop offset="0.232862" stop-color="#F8F4FF" />
-          <stop offset="1" stop-color="#DDC7FF" />
+          <stop offset="0.232862" stopColor="#F8F4FF" />
+          <stop offset="1" stopColor="#DDC7FF" />
         </radialGradient>
       </defs>
     </svg>

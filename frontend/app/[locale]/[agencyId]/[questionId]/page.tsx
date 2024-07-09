@@ -12,6 +12,11 @@ interface Props {
     agencyId: string;
     questionId: string;
   };
+  question: Question;
+}
+
+interface Question {
+  topics: string;
 }
 
 const QuestionDetailPage: React.FC<Props> = async ({ params }) => {
@@ -24,6 +29,8 @@ const QuestionDetailPage: React.FC<Props> = async ({ params }) => {
   }
 
   const topicTitles = await getTopicsDetail(question.topics);
+  console.log(topicTitles);
+  const topics = topicTitles.map(title => title.match(/Topic \d+/)?.[0] ?? '');
 
   return (
     <div className="">
@@ -58,13 +65,47 @@ const QuestionDetailPage: React.FC<Props> = async ({ params }) => {
               </div>
 
               <div className="py-6 text-brand-700 font-medium text-2xl">
-                How do I input health data into MySejahtera?
+                {question.question}
               </div>
 
               <div className="pb-6">
                 <div className="bg-[#FFFFFF] border-[1px] border-outline-200 rounded-lg ">
-                  <div>Card</div>
-                  <div>Supporting Attachments</div>
+                  <div>
+                    <div className="">
+                      <div className="p-8"> {question.answer} </div>
+
+                      <div className="p-8">
+                        <div className="flex gap-3 items-center border-b-[1px] border-outline-200 pb-[18px]">
+                          <div className=" font-medium text-sm">Topics: </div>
+                          <div className="flex gap-[6px]">
+                            {topics.map((topic, index) => (
+                              <div
+                                key={index}
+                                className="flex text-base font-medium text-[#702FF9] bg-[#F4EFFF] border-[1px] border-[#D4C0FF] px-2 py-1 rounded-lg"
+                              >
+                                {topic}
+                              </div>
+                            ))}
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div>
+                    <div>Supporting Attachments:</div>
+                    <div>
+                      <div className="flex">
+                        <div>
+                          <div>logo item</div>
+                          <div className="flex">
+                            <div>name item</div>
+                            <div>size item</div>
+                          </div>
+                        </div>
+                        <div>div 1</div>
+                      </div>
+                    </div>
+                  </div>
                   <div>
                     <ThumbsCounter></ThumbsCounter>
                   </div>
@@ -99,3 +140,17 @@ const QuestionDetailPage: React.FC<Props> = async ({ params }) => {
 };
 
 export default QuestionDetailPage;
+
+{
+  /* <div className="mt-6">
+  <p>Can&apos;t find what you&apos;re looking for?</p>
+  <Link href={`/questions/new`}>
+    <button className="ml-2 rounded bg-blue-500 px-4 py-2 text-white">
+      Ask a Question
+    </button>
+  </Link>
+</div>; 
+
+THIS ONE USE IN THE CLICK TO ASK QUESTION PART
+*/
+}
