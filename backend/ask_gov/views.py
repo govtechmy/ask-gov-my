@@ -40,7 +40,16 @@ class SubmitQuestionView(APIView):
         serializer = QuestionSerializer(data=data)
         if serializer.is_valid():
             question = serializer.save()
+            
             document = serializer.data
+
+            document['agency'] = {
+                "id": "",
+                "name": "",
+                "acronym": "",
+                "name_ms": ""
+            }
+            
             client.index(
                 index='questions',
                 id=str(question.id),
@@ -48,6 +57,7 @@ class SubmitQuestionView(APIView):
             )
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
 
 class QuestionsByAgencyView(APIView):
     def get(self, request, agency_id):
