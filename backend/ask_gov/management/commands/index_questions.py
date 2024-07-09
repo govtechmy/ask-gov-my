@@ -11,11 +11,24 @@ class Command(BaseCommand):
         for question in questions:
             serializer = QuestionSerializer(question)
             document = serializer.data
+
+            agency = question.agency
+            if agency:
+                agency_data = {
+                    "id": agency.id,
+                    "name": agency.name,
+                    "acronym": agency.acronym,
+                    "name_ms": agency.name_ms
+                }
+                document['agency'] = agency_data
+            else:
+                document['agency'] = None
+
             client.index(
                 index='questions',
                 id=str(question.id),
                 document=document
             )
             self.stdout.write(self.style.SUCCESS(f'Indexed question {question.id}'))
-        
+
         self.stdout.write(self.style.SUCCESS('Successfully indexed all questions.'))
