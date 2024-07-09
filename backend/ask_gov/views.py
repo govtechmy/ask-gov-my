@@ -179,17 +179,40 @@ class AssignAgencyToQuestionView(APIView):
             question = Question.objects.get(id=question_id)
         except Question.DoesNotExist:
             return Response({"detail": "Question not found"}, status=status.HTTP_404_NOT_FOUND)
+
         agency_id = request.data.get('agency_id')
         if not agency_id:
             return Response({"detail": "Agency ID is required"}, status=status.HTTP_400_BAD_REQUEST)
+
         try:
             agency = Agency.objects.get(id=agency_id)
         except Agency.DoesNotExist:
             return Response({"detail": "Agency not found"}, status=status.HTTP_404_NOT_FOUND)
+
         question.agency = agency
         question.save()
+
+        agency_data = {
+            "id": agency.id,
+            "name": agency.name,
+            "acronym": agency.acronym,
+            "name_ms": agency.name_ms
+        }
+        
+        client.update(
+            index='questions',
+            id=str(question.id),
+            body={
+                "doc": {
+                    "agency": agency_data
+                }
+            }
+        )
+
         serializer = QuestionSerializer(question)
         return Response(serializer.data, status=status.HTTP_200_OK)
+
+
 
 class AddAgencyView(APIView):
     def post(self, request):
