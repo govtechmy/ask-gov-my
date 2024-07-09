@@ -3,15 +3,19 @@
 import React, { useState } from 'react';
 import Info from '@/icons/info';
 import InputNavbar from '../ui/inputnavbar';
+import { useSearchParams } from 'next/navigation';
 
 const SearchNavbar: React.FC = () => {
-  const [searchQuery, setSearchQuery] = useState<string>('');
   const [searchResults, setSearchResults] = useState<any[]>([]);
   const [displayAllMatches, setDisplayAllMatches] = useState<boolean>(false);
+  const searchparams = useSearchParams();
+  const [searchQuery, setSearchQuery] = useState<string>(
+    searchparams.get('q') || '',
+  );
 
   return (
     <div className="bg-gradient-radial from-[#D4C0FF] to-[#F4EFFF] dark:from-[#4F1FB4] dark:to-[#201636] py-2 h-56 flex flex-col items-center">
-      <div className="font-poppins pb-6 pt-10 text-2xl font-semibold text-[#482D7C] dark:text-white text-center">
+      <div className="font-poppins pb-6 pt-10 text-2xl font-semibold text-[#482D7C] dark:text-[#FFFFFF] text-center">
         Your one-stop centre to ask questions to Government officers!
       </div>
       <div className="relative flex justify-center w-full">

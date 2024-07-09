@@ -27,7 +27,7 @@ export default function ThemeToggle() {
       />
       <SunIcon
         data-state={resolvedTheme === 'light' ? 'dark' : 'light'}
-        className="text-dim animate-in fade-in-0 zoom-in-95 slide-in-from-bottom-2 -m-0.5 size-5 group-hover:text-white data-[state=light]:flex data-[state=dark]:hidden"
+        className="text-dim animate-in fade-in-0 zoom-in-95 slide-in-from-bottom-2 -m-0.5 size-5 group-hover:text-[#FFFFFF] data-[state=light]:flex data-[state=dark]:hidden"
       />
       <div className="sr-only">
         {theme === 'light' ? t('toggle_dark') : t('toggle_light')}
