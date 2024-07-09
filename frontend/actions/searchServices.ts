@@ -1,15 +1,20 @@
 "use server";
+import dotenv from 'dotenv';
 import { Client } from "@elastic/elasticsearch";
 import { AGENCY_TO_UUID } from "@/lib/agency";
+dotenv.config();
 
-const URL = "https://askgov-fc58f6.es.us-east-1.aws.elastic.cloud";
+const elasticsearchURL = process.env.ELASTICSEARCH_URL;
+const elasticsearchApiKey = process.env.ELASTICSEARCH_API_KEY;
 
 const client = new Client({
-    node: URL,
-    auth: {
-        apiKey: "NWNHNVRaQUI3cVdKTXhCbHk4Sl86Um1LTmRKNjFSMjJXeUVtNGFVMEtldw==",
-    },
+
+  node: elasticsearchURL,
+  auth: {
+    apiKey: elasticsearchApiKey,
+  },
 });
+
 
 interface Question {
     id: number;
