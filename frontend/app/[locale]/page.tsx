@@ -15,6 +15,11 @@ const MainPage = async ({
   const pageSize = 1000;
   const { questions } = await getAllQuestions(page, pageSize);
 
+  async function submitactions(params: FormData) {
+    'use server';
+    console.log('Hello');
+  }
+
   return (
     <div className="">
       <div className="">
@@ -29,7 +34,9 @@ const MainPage = async ({
           </div>
         </div>
 
-        <SearchNavbar />
+        <form action={submitactions}>
+          <SearchNavbar />
+        </form>
 
         <div className="container mt-10 flex text-out">
           <div className="max-w-screen-2xl">

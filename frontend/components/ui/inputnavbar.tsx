@@ -92,10 +92,10 @@ const InputNavbar: React.FC<InputNavbarProps> = ({
 
   return (
     <div
-      className={`flex items-center border-outline-200 shadow-button border px-4 py-2 bg-white w-[800px] relative ${searchQuery.length > 0 ? 'rounded-b-none rounded-t-3xl' : 'rounded-full'}`}
+      className={`flex items-center border-outline-200 h-11 shadow-button border pl-3 pr-2  py-2 bg-white w-[800px] relative ${searchQuery.length > 0 ? 'rounded-b-none rounded-t-3xl' : 'rounded-full'}`}
     >
       <input
-        className="flex-1 border-none outline-none px-2 py-1"
+        className="flex-1 border-none outline-none px-2 py-1 bg-inherit w-[740px]"
         placeholder="Search by keyword or agency name (eg. MOH, MOT)"
         value={searchQuery}
         onChange={handleInputChange}
@@ -123,7 +123,7 @@ const InputNavbar: React.FC<InputNavbarProps> = ({
           </div>
         </div>
       )}
-      <div className="flex items-center justify-center w-7 h-7 rounded-full bg-gradient-to-b from-[#B379FF] to-[#702FF9] to-[60.94%] p-1 ml-2">
+      <div className="flex items-center justify-center w-7 h-7 rounded-full bg-gradient-to-b from-[#B379FF] to-[#702FF9] to-[60.94%]">
         <Search className="text-white" />
       </div>
       {searchQuery.length > 0 && (
@@ -185,7 +185,7 @@ const InputNavbar: React.FC<InputNavbarProps> = ({
             {' '}
             {/* Wrapper for "I can't find" message */}
             <div className="text-sm items-center flex text-primary-500 justify-center h-full ">
-              <div className="flex items-center text-[#702FF9] font-medium text-base border-[1px] border-[#D4C0FF] shadow-button bg-white px-4 py-2 rounded-lg hover:cursor-pointer">
+              <div className="flex items-center text-[#702FF9] font-medium text-base border-[1px] border-[#D4C0FF] dark:border-[#4F1FB4] shadow-button bg-white px-4 py-2 rounded-lg hover:cursor-pointer">
                 <div className="pr-2">
                   <QuestionCircle></QuestionCircle>
                 </div>

@@ -21,7 +21,7 @@ const AgencyList = () => {
               <div className="pr-2">
                 <JataNegaraIcon className="stroke-[#E4E4E7] dark:stroke-[#27272A] w-8 h-8"></JataNegaraIcon>
               </div>
-              <div className="text-base font-normal text-black-800">
+              <div className="text-base font-normal text-black-800 hover:cursor-pointer hover:text-[#702FF9] dark:hover:text-[#9E70FF] ">
                 {agency.name}
               </div>
             </div>

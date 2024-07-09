@@ -39,7 +39,7 @@ const QuestionBox: React.FC<QuestionBoxProps> = ({ questions }) => {
       <button
         key={1}
         onClick={() => handlePageChange(1)}
-        className={` rounded-lg h-8 w-7 ${currentPage === 1 ? 'bg-[#F4EFFF] text-[#702FF9]' : 'bg-transparent text-black-700'}`}
+        className={` rounded-lg h-10 w-10 ${currentPage === 1 ? 'bg-[#F4EFFF] text-[#702FF9] dark:bg-[#201636] dark:text-[#9E70FF]' : 'bg-transparent text-black-700 dark:text-[#D4D4D8]'}`}
       >
         {1}
       </button>,
@@ -72,7 +72,7 @@ const QuestionBox: React.FC<QuestionBoxProps> = ({ questions }) => {
         <button
           key={i}
           onClick={() => handlePageChange(i)}
-          className={`rounded-lg h-8 w-7   ${i === currentPage ? 'bg-[#F4EFFF] text-[#702FF9]' : 'bg-transparent text-black-700'} `}
+          className={`rounded-lg h-10 w-10   ${i === currentPage ? 'bg-[#F4EFFF] text-[#702FF9] dark:bg-[#201636] dark:text-[#9E70FF]' : 'bg-transparent text-black-700 dark:text-[#D4D4D8]'} `}
         >
           {i}
         </button>,
@@ -94,7 +94,7 @@ const QuestionBox: React.FC<QuestionBoxProps> = ({ questions }) => {
         <button
           key={totalPages}
           onClick={() => handlePageChange(totalPages)}
-          className={` rounded-lg h-8 w-7 ${totalPages === currentPage ? 'bg-[#F4EFFF] text-[#702FF9] rounded-lg' : 'bg-transparent text-black-700'}`}
+          className={` rounded-lg h-10 w-10 ${totalPages === currentPage ? 'bg-[#F4EFFF] dark:bg-[#201636] text-[#702FF9] dark:text-[#9E70FF]' : 'bg-transparent text-black-700 dark:text-[#D4D4D8]'}`}
         >
           {totalPages}
         </button>,
@@ -119,11 +119,11 @@ const QuestionBox: React.FC<QuestionBoxProps> = ({ questions }) => {
         <button
           onClick={() => handlePageChange(currentPage - 1)}
           disabled={currentPage === 1}
-          className={`rounded-lg h-8 w-8 bg-whit shadow-button text-black-900 border-[1px] border-[#E4E4E7]  ${currentPage === 1 ? ' opacity-30' : 'opacity-100'} `}
+          className={`rounded-lg h-10 w-10 bg-[#FFFFFF] dark:bg-[#18181B] shadow-button text-[#FFFFFF] border-[1px] border-[#E4E4E7] dark:border-[#27272A]  ${currentPage === 1 ? ' opacity-30' : 'opacity-100'} `}
         >
-          <div className="h-8 w-8 rounded-lg flex items-center justify-center">
-            <div className="flex items-center justify-center h-4 w-4">
-              <LeftArrow />
+          <div className="h-10 w-10 rounded-lg flex items-center justify-center">
+            <div className="flex items-center justify-center h-5 w-5">
+              <LeftArrow className="stroke-[#18181B] dark:stroke-[#FFFFFF]" />
             </div>
           </div>
         </button>
@@ -133,11 +133,11 @@ const QuestionBox: React.FC<QuestionBoxProps> = ({ questions }) => {
         <button
           onClick={() => handlePageChange(currentPage + 1)}
           disabled={currentPage === totalPages}
-          className={`rounded-lg h-8 w-8 bg-whit shadow-button text-black-900 border-[1px] border-[#E4E4E7]  ${currentPage === totalPages ? ' opacity-30' : 'opacity-100'} `}
+          className={`rounded-lg h-10 w-10 bg-[#FFFFFF] dark:bg-[#18181B] shadow-button text-[#FFFFFF] border-[1px] border-[#E4E4E7] dark:border-[#27272A]  ${currentPage === totalPages ? ' opacity-30' : 'opacity-100'} `}
         >
-          <div className="h-8 w-8 rounded-lg flex items-center justify-center">
-            <div className="flex items-center justify-center h-4 w-4">
-              <RightArrow />
+          <div className="h-10 w-10 rounded-lg flex items-center justify-center">
+            <div className="flex items-center justify-center h-5 w-5">
+              <RightArrow className="stroke-[#18181B] dark:stroke-[#FFFFFF]" />
             </div>
           </div>
         </button>
