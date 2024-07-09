@@ -12,7 +12,7 @@ interface Question {
   topics: number[];
   email: string;
   likes: number;
-  dislikes: number;
+  dislikes: number
 }
 
 interface Topic {
