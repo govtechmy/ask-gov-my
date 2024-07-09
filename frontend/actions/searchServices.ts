@@ -25,7 +25,9 @@ interface Question {
     answer: string;
     topics: number[];
     email: string;
-}
+    likes: number;
+    dislikes: number;
+  }
 
 export async function searchQuestions(query: string) {
     try {

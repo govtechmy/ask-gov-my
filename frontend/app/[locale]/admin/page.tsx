@@ -1,17 +1,54 @@
+'use client'
+import { useState } from 'react';
+import { signIn } from 'next-auth/react';
 import Link from 'next/link';
 import HeaderAdmin from '@/components/HeaderDetails/HeaderAdmin';
 import FooterAdmin from '@/components/FooterDetails/FooterAdmin';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import Google from '@/icons/google';
 import { useTranslations } from 'next-intl';
 import IdentifyWebsite from '@/components/HeaderDetails/IdentifyWebsite';
 
 export function AdminPage() {
   const t = useTranslations('Adminlogin');
+  const [email, setEmail] = useState('');
+  const [alertSuccess, setAlertSuccess] = useState(false);
+  const [alertFailed, setAlertFailed] = useState(false);
+  
+  const handleSignIn = async (e: React.FormEvent) => {
+    e.preventDefault();
+
+    // When login button is clicked
+    // Let's check if this user exists in the User Table
+    // fetch("/api/auth/account-exists", {
+    //   method: "POST",
+    //   headers: { "Content-Type": "application/json" },
+    //   body: JSON.stringify({ email }),
+    // }).then(async (res) => {
+    //   const { exists } = await res.json();
+
+      // if (exists) {
+        await signIn('email', {
+          email,
+          callbackUrl: '/admin/dashboard',
+          redirect: true
+        }).then((res) => {
+          setAlertSuccess(true);
+        });
+      // } else {
+        // Bagitau dekat UI error message: Account tidak wujud
+        // toast.error(message?.no_account);
+        // setNoSuchAccount(true);
+        // setClickedEmail(false);
+      // }
+
+    // })
+  };
 
   return (
-    <div className="flex flex-col min-h-screen">
+    <>
+        <div className="flex flex-col min-h-screen">
+      
       <IdentifyWebsite />
       <div className="bg-white">
         <HeaderAdmin />
@@ -24,34 +61,36 @@ export function AdminPage() {
               {t('para1')}
             </div>
           </div>
+          {/* {alertSuccess == true ? <div>
+            <div className="p-4 mb-4 text-sm text-blue-800 rounded-lg bg-blue-50 dark:bg-gray-800 dark:text-blue-400" role="alert">
+  <span className="font-medium">Info alert!</span> Change a few things up and try submitting again.
+</div>
 
-          <div className="grid gap-4">
-            <div className="grid gap-2 pb-4">
-              <div className="text-zinc-500 text-sm">{t('email')}</div>
-              <Input
-                id="email"
-                type="email"
-                placeholder="yourname@example.com"
-                required
-              />
+          </div> : <div></div>} */}
+
+
+          <form onSubmit={handleSignIn}>
+            <div className="grid gap-4">
+              <div className="grid gap-2 pb-4">
+                <div className="text-zinc-500 text-sm">{t('email')}</div>
+                <Input
+                  id="email"
+                  type="email"
+                  placeholder="officer@agency.gov.my"
+                  required
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                />
+              </div>
+
+              <Button
+                type="submit"
+                className="text-base font-medium text-white rounded-md py-2 from-[#702FF9] to-[#B379FF] dark:from-[#702FF9] dark:to-[#B379FF] border-[1px] border-[#702FF9]"
+              >
+                {t('1stbutton')}
+              </Button>
             </div>
-
-            <Button
-              type="submit"
-              className="text-base font-medium text-white rounded-md py-2 from-[#702FF9] to-[#B379FF] dark:from-[#702FF9] dark:to-[#B379FF] border-[1px] border-[#702FF9]"
-            >
-              {t('1stbutton')}
-            </Button>
-
-            <div className="text-center font-normal text-zinc-500 text-sm">
-              {t('or')}
-            </div>
-
-            <Button className="flex justify-center py-2 rounded-md from-[#FFF] to-[#FFF] dark:from-[#18181B] dark:to-[#18181B] border-[1px] border-[#E4E4E7] dark:border-[#27272A]">
-              <Google />
-              <div className="px-2 font-medium text-base">{t('2ndbutton')}</div>
-            </Button>
-          </div>
+          </form>
 
           <div className="mt-4 text-center pt-4">
             <Link
@@ -68,6 +107,7 @@ export function AdminPage() {
         <FooterAdmin />
       </div>
     </div>
+    </>
   );
 }
 

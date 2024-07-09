@@ -5,9 +5,11 @@ from .models import Agency, Question, Topic
 User = get_user_model()
 
 class AgencySerializer(serializers.ModelSerializer):
+    total_likes = serializers.IntegerField(read_only=True)
+
     class Meta:
         model = Agency
-        fields = ['id', 'name','name_ms', 'acronym']
+        fields = ['id', 'name', 'name_ms', 'acronym', 'total_likes']
 
 class UserSerializer(serializers.ModelSerializer):
     agency = AgencySerializer()
