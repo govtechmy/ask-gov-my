@@ -79,7 +79,7 @@ const AdminNavbar = () => {
               'font-normal placeholder:text-dim-500 flex h-11 w-full rounded-md bg-transparent py-3 text-sm pl-2',
             )}
           />
-          <Search strokeWidth={1.88} currentColor="#52525B" />
+          <Search strokeWidth={1.88} className="stroke-[#FFFFFF]" />
         </div>
       </div>
     </div>
