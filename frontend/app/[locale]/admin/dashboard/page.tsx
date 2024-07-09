@@ -1,27 +1,75 @@
-'use client'
+'use client';
 
 import { useTranslations } from 'next-intl';
 import HeaderDashboard from '@/components/HeaderDetails/HeaderDashboard';
-import AdminNavbar from '@/components/AdminNavbar';
+import AdminNavbar from '@/components/AdminDashboard/AdminNavbar';
 import { useSession } from 'next-auth/react';
 import { useRouter } from '@/lib/i18n';
+import { useSearchParams } from 'next/navigation';
+import { useState, useEffect } from 'react';
+import { getAllUserQuestions } from '@/actions/userServices';
+import AdminQuestionBox from '@/components/AdminDashboard/AdminQuestionBox';
+
+interface Question {
+  id: number;
+  question: string;
+  date: string;
+  state: string;
+  agency: number | null;
+  answer: string;
+  topics: number[];
+  email: string;
+}
 
 export default function DashboardPage() {
   const t = useTranslations('Adminlogin');
-  const session = useSession()
-  const router = useRouter()
-  
+  const session = useSession();
+  const router = useRouter();
+  const searchParams = useSearchParams();
+  const activeTab = searchParams.get('tab') || 'all';
+
+  const [questions, setQuestions] = useState<Question[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    const fetchQuestions = async () => {
+      if (session.status === 'authenticated') {
+        try {
+          const { questions } = await getAllUserQuestions();
+          setQuestions(questions);
+        } catch (error) {
+          if (error instanceof Error) {
+            console.log(error.message);
+            setError(error.message);
+          } else {
+            console.log('An unknown error occurred');
+            setError('An unknown error occurred');
+          }
+        } finally {
+          setLoading(false);
+        }
+      }
+    };
+
+    fetchQuestions();
+  }, [session]);
+
   if (session.status === 'loading') {
-    return (
-      <p>LOADING...</p>
-    )
+    return <p>LOADING...</p>;
   }
-  
-  if (session.status != 'authenticated') {
-    router.push('/admin')
-    return (
-      <p>goodbye</p>
-    )
+
+  if (session.status !== 'authenticated') {
+    router.push('/admin');
+    return <p>goodbye</p>;
+  }
+
+  if (loading) {
+    return <p>Loading questions...</p>;
+  }
+
+  if (error) {
+    return <p>Error: {error}</p>;
   }
 
   return (
@@ -30,7 +78,7 @@ export default function DashboardPage() {
         <HeaderDashboard />
         <AdminNavbar />
         <div className="flex-grow flex items-center justify-center py-12">
-          HELLOO WORLDOOOO
+          <AdminQuestionBox questions={questions} />
         </div>
       </div>
     </div>
