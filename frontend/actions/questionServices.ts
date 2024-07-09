@@ -11,6 +11,8 @@ interface Question {
   answer: string;
   topics: number[];
   email: string;
+  likes: number;
+  dislikes: number
 }
 
 interface Topic {
@@ -26,6 +28,14 @@ interface Topic {
 interface QuestionSubmission {
   question: string;
   email: string;
+}
+
+export interface Agency {
+  id: number;
+  name: string;
+  name_ms?: string;
+  acronym?: string;
+  total_likes?: number;
 }
 
 export async function getAllQuestions(
@@ -150,5 +160,26 @@ export async function dislikeQuestion(questionId: string): Promise<void> {
 
   if (!response.ok) {
     throw new Error("Failed to dislike question");
+  }
+}
+
+export async function getTrendingAgencies(): Promise<Agency[]> {
+  try {
+    const response = await fetch(`${API_URL}/agencies/trending/`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+
+    if (!response.ok) {
+      throw new Error("Failed to fetch trending agencies");
+    }
+
+    const data = await response.json();
+    return data;
+  } catch (error) {
+    console.error("Error in getTrendingAgencies:", error);
+    return [];
   }
 }
