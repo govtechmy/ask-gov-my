@@ -202,25 +202,26 @@ class AssignAgencyToQuestionView(APIView):
         question.agency = agency
         question.save()
 
-        client.delete(index='questions', id=str(question.id))
+        agency_data = {
+            "id": agency.id,
+            "name": agency.name,
+            "acronym": agency.acronym,
+            "name_ms": agency.name_ms
+        }
 
-        # serializer = QuestionSerializer(question)
-        # document = serializer.data
+        client.update(
+            index='questions',
+            id=str(question.id),
+            body={
+                "doc": {
+                    "agency": agency_data
+                }
+            }
+        )
 
-        # document['agency'] = {
-        #     "id": agency.id,
-        #     "name": agency.name,
-        #     "acronym": agency.acronym,
-        #     "name_ms": agency.name_ms
-        # }
+        serializer = QuestionSerializer(question)
+        return Response(serializer.data, status=status.HTTP_200_OK)
 
-        # client.index(
-        #     index='questions',
-        #     id=str(question.id),
-        #     document=document
-        # )
-
-        return Response( status=status.HTTP_200_OK)
 
 
 
