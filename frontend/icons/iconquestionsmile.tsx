@@ -1,4 +1,7 @@
-export default function IconQuestionSmile() {
+export default function IconQuestionSmile({
+  className = 'stroke-[#E4E4E7] dark:stroke-[##27272A]',
+  ...props
+}) {
   return (
     <svg
       width="24"
@@ -6,6 +9,8 @@ export default function IconQuestionSmile() {
       viewBox="0 0 24 41"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
+      className={className}
+      {...props}
     >
       <rect
         x="0.5"
@@ -15,7 +20,14 @@ export default function IconQuestionSmile() {
         rx="11.5"
         fill="url(#paint0_radial_19240_684)"
       />
-      <rect x="0.5" y="0.5" width="23" height="23" rx="11.5" stroke="#E4E4E7" />
+      <rect
+        x="0.5"
+        y="0.5"
+        width="23"
+        height="23"
+        rx="11.5"
+        className={className}
+      />
       <rect x="6" y="9" width="2" height="4" rx="1" fill="#5B1AE6" />
       <rect x="16" y="9" width="2" height="4" rx="1" fill="#5B1AE6" />
       <path
