@@ -1,6 +1,6 @@
-"use server";
-const API_URL = "http://ask.juwaini.com/api";
-import { AGENCY_TO_UUID } from "@/lib/agency";
+'use server';
+const API_URL = 'http://ask.juwaini.com/api';
+import { AGENCY_TO_UUID } from '@/lib/agency';
 
 interface Question {
   id: number;
@@ -12,7 +12,7 @@ interface Question {
   topics: number[];
   email: string;
   likes: number;
-  dislikes: number
+  dislikes: number;
 }
 
 interface Topic {
@@ -45,7 +45,7 @@ export async function getAllQuestions(
   try {
     const response = await fetch(`${API_URL}/questions/`);
     if (!response.ok) {
-      throw new Error("Failed to fetch questions");
+      throw new Error('Failed to fetch questions');
     }
 
     const data = await response.json();
@@ -56,7 +56,7 @@ export async function getAllQuestions(
 
     return { questions: paginatedQuestions, total: data.length };
   } catch (error) {
-    console.error("Error in getAllQuestions:", error);
+    console.error('Error in getAllQuestions:', error);
     return { questions: [], total: 0 };
   }
 }
@@ -65,7 +65,7 @@ export async function getAllTopics(): Promise<Topic[]> {
   const response = await fetch(`${API_URL}/topics/`);
 
   if (!response.ok) {
-    throw new Error("Failed to fetch topics");
+    throw new Error('Failed to fetch topics');
   }
 
   const data = await response.json();
@@ -76,11 +76,11 @@ export async function getTopicsDetail(topicIds: number[]): Promise<string[]> {
   const topics = await getAllTopics();
   const topicIdToTitleMap: { [key: number]: string } = {};
 
-  topics.forEach((topic) => {
+  topics.forEach(topic => {
     topicIdToTitleMap[topic.id] = topic.title;
   });
 
-  return topicIds.map((id) => topicIdToTitleMap[id] || "Unknown Topic");
+  return topicIds.map(id => topicIdToTitleMap[id] || 'Unknown Topic');
 }
 
 export async function getQuestionsByAgency(
@@ -90,7 +90,7 @@ export async function getQuestionsByAgency(
 ): Promise<{ questions: Question[]; total: number }> {
   const response = await fetch(`${API_URL}/questions/by-agency/${agencyId}`);
   if (!response.ok) {
-    throw new Error("Failed to fetch questions");
+    throw new Error('Failed to fetch questions');
   }
 
   const data = await response.json();
@@ -119,7 +119,7 @@ export async function submitQuestion(data: QuestionSubmission): Promise<void> {
   const response = await fetch(url, {
     method: 'POST',
     headers: {
-      "Content-Type": "application/json",
+      'Content-Type': 'application/json',
     },
     body: JSON.stringify({ data }),
   });
@@ -137,14 +137,14 @@ export async function likeQuestion(questionId: string): Promise<void> {
   const url = `${API_URL}/questions/${questionId}/like/`;
 
   const response = await fetch(url, {
-    method: "POST",
+    method: 'POST',
     headers: {
-      "Content-Type": "application/json",
+      'Content-Type': 'application/json',
     },
   });
 
   if (!response.ok) {
-    throw new Error("Failed to like question");
+    throw new Error('Failed to like question');
   }
 }
 
@@ -152,34 +152,34 @@ export async function dislikeQuestion(questionId: string): Promise<void> {
   const url = `${API_URL}/questions/${questionId}/dislike/`;
 
   const response = await fetch(url, {
-    method: "POST",
+    method: 'POST',
     headers: {
-      "Content-Type": "application/json",
+      'Content-Type': 'application/json',
     },
   });
 
   if (!response.ok) {
-    throw new Error("Failed to dislike question");
+    throw new Error('Failed to dislike question');
   }
 }
 
 export async function getTrendingAgencies(): Promise<Agency[]> {
   try {
     const response = await fetch(`${API_URL}/agencies/trending/`, {
-      method: "GET",
+      method: 'GET',
       headers: {
-        "Content-Type": "application/json",
+        'Content-Type': 'application/json',
       },
     });
 
     if (!response.ok) {
-      throw new Error("Failed to fetch trending agencies");
+      throw new Error('Failed to fetch trending agencies');
     }
 
     const data = await response.json();
     return data;
   } catch (error) {
-    console.error("Error in getTrendingAgencies:", error);
+    console.error('Error in getTrendingAgencies:', error);
     return [];
   }
 }

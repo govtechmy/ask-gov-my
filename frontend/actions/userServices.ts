@@ -1,7 +1,7 @@
 // userServices.ts
 'use server';
 
-const API_URL = "http://ask.juwaini.com/api";
+const API_URL = 'http://ask.juwaini.com/api';
 
 interface Question {
   id: number;
@@ -27,17 +27,24 @@ export interface Topic {
   };
 }
 // get questions by the user agency, to be used only by user.role = staff
-export async function getUserAgencyQuestions(agencyId: number, page: number = 1, pageSize: number = 10): Promise<{ questions: Question[]; total: number }> {
+export async function getUserAgencyQuestions(
+  agencyId: number,
+  page: number = 1,
+  pageSize: number = 10,
+): Promise<{ questions: Question[]; total: number }> {
   try {
-    const response = await fetch(`${API_URL}/questions/by-agency/${agencyId}/`, {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
+    const response = await fetch(
+      `${API_URL}/questions/by-agency/${agencyId}/`,
+      {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+        },
       },
-    });
+    );
 
     if (!response.ok) {
-      throw new Error("Failed to fetch questions");
+      throw new Error('Failed to fetch questions');
     }
 
     const data = await response.json();
@@ -46,23 +53,26 @@ export async function getUserAgencyQuestions(agencyId: number, page: number = 1,
     const paginatedQuestions = data.slice(start, end);
     return { questions: paginatedQuestions, total: data.length };
   } catch (error) {
-    console.error("Error in getUserAgencyQuestions:", error);
+    console.error('Error in getUserAgencyQuestions:', error);
     return { questions: [], total: 0 };
   }
 }
 
 // get all questions for user.role = super_admin
-export async function getAllUserQuestions(page: number = 1, pageSize: number = 1000): Promise<{ questions: Question[]; total: number }> {
+export async function getAllUserQuestions(
+  page: number = 1,
+  pageSize: number = 1000,
+): Promise<{ questions: Question[]; total: number }> {
   try {
     const response = await fetch(`${API_URL}/questions/all/`, {
-      method: "GET",
+      method: 'GET',
       headers: {
-        "Content-Type": "application/json",
+        'Content-Type': 'application/json',
       },
     });
 
     if (!response.ok) {
-      throw new Error("Failed to fetch user questions");
+      throw new Error('Failed to fetch user questions');
     }
 
     const data = await response.json();
@@ -71,83 +81,94 @@ export async function getAllUserQuestions(page: number = 1, pageSize: number = 1
     const paginatedQuestions = data.slice(start, end);
     return { questions: paginatedQuestions, total: data.length };
   } catch (error) {
-    console.error("Error in getAllUserQuestions:", error);
+    console.error('Error in getAllUserQuestions:', error);
     return { questions: [], total: 0 };
   }
 }
 
-
-export async function submitAnswer(questionId: number, data: Question): Promise<void> {
-  const response = await fetch(`${API_URL}/questions/${questionId}/submit-answer/`, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
+export async function submitAnswer(
+  questionId: number,
+  data: Question,
+): Promise<void> {
+  const response = await fetch(
+    `${API_URL}/questions/${questionId}/submit-answer/`,
+    {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ data }),
     },
-    body: JSON.stringify({ data }),
-  });
+  );
 
   if (!response.ok) {
-    throw new Error("Failed to submit answer");
+    throw new Error('Failed to submit answer');
   }
 }
 
 export async function listUserAgencyTopics(): Promise<Topic[]> {
   const response = await fetch(`${API_URL}/topics/user-agency/`, {
-    method: "GET",
+    method: 'GET',
     headers: {
-      "Content-Type": "application/json",
+      'Content-Type': 'application/json',
     },
   });
 
   if (!response.ok) {
-    throw new Error("Failed to fetch topics");
+    throw new Error('Failed to fetch topics');
   }
 
   const data = await response.json();
   return data;
 }
 
-export async function addUserAgencyTopic(title: string, title_ms: string): Promise<Topic> {
+export async function addUserAgencyTopic(
+  title: string,
+  title_ms: string,
+): Promise<Topic> {
   const response = await fetch(`${API_URL}/topics/add/`, {
-    method: "POST",
+    method: 'POST',
     headers: {
-      "Content-Type": "application/json",
+      'Content-Type': 'application/json',
     },
     body: JSON.stringify({ title, title_ms }),
   });
 
   if (!response.ok) {
-    throw new Error("Failed to add topic");
+    throw new Error('Failed to add topic');
   }
 
   const data = await response.json();
   return data;
 }
 
-export async function assignAgencyToQuestion(questionId: number, agencyId: number): Promise<void> {
+export async function assignAgencyToQuestion(
+  questionId: number,
+  agencyId: number,
+): Promise<void> {
   const response = await fetch(`${API_URL}/questions/${questionId}/agency/`, {
-    method: "POST",
+    method: 'POST',
     headers: {
-      "Content-Type": "application/json",
+      'Content-Type': 'application/json',
     },
     body: JSON.stringify({ agency_id: agencyId }),
   });
 
   if (!response.ok) {
-    throw new Error("Failed to assign agency to question");
+    throw new Error('Failed to assign agency to question');
   }
 }
 
 export async function addAgency(name: string, name_ms: string): Promise<void> {
   const response = await fetch(`${API_URL}/agencies/add/`, {
-    method: "POST",
+    method: 'POST',
     headers: {
-      "Content-Type": "application/json",
+      'Content-Type': 'application/json',
     },
     body: JSON.stringify({ name, name_ms }),
   });
 
   if (!response.ok) {
-    throw new Error("Failed to add agency");
+    throw new Error('Failed to add agency');
   }
 }

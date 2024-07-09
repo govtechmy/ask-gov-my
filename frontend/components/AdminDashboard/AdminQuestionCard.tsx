@@ -29,7 +29,7 @@ const AdminQuestionCard: React.FC<QuestionCardProps> = ({ question }) => {
   useEffect(() => {
     if (question.agency !== null) {
       const agencyAcronym = Object.keys(AGENCY_TO_UUID).find(
-        key => AGENCY_TO_UUID[key] === question.agency!.toString()
+        key => AGENCY_TO_UUID[key] === question.agency!.toString(),
       );
       if (agencyAcronym) {
         setSelectedAgency(agencyAcronym);
@@ -37,9 +37,14 @@ const AdminQuestionCard: React.FC<QuestionCardProps> = ({ question }) => {
     }
   }, [question.agency]);
 
-  const handleAgencyChange = async (e: React.ChangeEvent<HTMLSelectElement>) => {
+  const handleAgencyChange = async (
+    e: React.ChangeEvent<HTMLSelectElement>,
+  ) => {
     const newAgencyAcronym = e.target.value;
-    const newAgencyId = newAgencyAcronym === 'Unassigned' ? null : AGENCY_TO_UUID[newAgencyAcronym];
+    const newAgencyId =
+      newAgencyAcronym === 'Unassigned'
+        ? null
+        : AGENCY_TO_UUID[newAgencyAcronym];
     setSelectedAgency(newAgencyAcronym);
 
     if (newAgencyId !== null) {
@@ -53,20 +58,26 @@ const AdminQuestionCard: React.FC<QuestionCardProps> = ({ question }) => {
 
   const formatDate = (dateString: string) => {
     const date = new Date(dateString);
-    return date.toLocaleDateString('en-GB', {
-      day: '2-digit',
-      month: 'long',
-      year: 'numeric',
-    }) + ', ' + date.toLocaleTimeString('en-GB', {
-      hour: '2-digit',
-      minute: '2-digit',
-      hour12: true,
-    });
+    return (
+      date.toLocaleDateString('en-GB', {
+        day: '2-digit',
+        month: 'long',
+        year: 'numeric',
+      }) +
+      ', ' +
+      date.toLocaleTimeString('en-GB', {
+        hour: '2-digit',
+        minute: '2-digit',
+        hour12: true,
+      })
+    );
   };
 
   const truncateText = (text: string, maxWords: number) => {
     const words = text.split(' ');
-    return words.length > maxWords ? words.slice(0, maxWords).join(' ') + '...' : text;
+    return words.length > maxWords
+      ? words.slice(0, maxWords).join(' ') + '...'
+      : text;
   };
 
   return (
@@ -100,7 +111,8 @@ const AdminQuestionCard: React.FC<QuestionCardProps> = ({ question }) => {
       </div>
       <Modal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)}>
         <div className="text-sm text-gray-500">
-          Question posted on {formatDate(question.date)} &nbsp; | &nbsp; ID: {question.id}
+          Question posted on {formatDate(question.date)} &nbsp; | &nbsp; ID:{' '}
+          {question.id}
         </div>
         <h2 className="text-xl font-semibold mb-4 mt-2">Question Details</h2>
         <p className="mb-4">{question.question}</p>

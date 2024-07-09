@@ -49,8 +49,8 @@ const config: Config = {
           900: 'oklch(var(--myds-black-900))',
         },
         white: {
-          DEFAULT: 'oklch(var(--myds-white))'
-        }
+          DEFAULT: 'oklch(var(--myds-white))',
+        },
       },
       fontFamily: {
         poppins: ['var(--font-poppins)'],

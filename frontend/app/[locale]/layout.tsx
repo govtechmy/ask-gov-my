@@ -42,9 +42,7 @@ export default async function RootLayout({
       <body className={cn(inter.className, poppins.variable)}>
         <ThemeProvider attribute="class">
           <NextIntlClientProvider messages={messages}>
-            <Providers>
-            {children}
-            </Providers>
+            <Providers>{children}</Providers>
           </NextIntlClientProvider>
         </ThemeProvider>
       </body>

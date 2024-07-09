@@ -18,7 +18,7 @@ export const authOptions: NextAuthOptions = {
           react: LoginLink({ url, email: identifier }),
         });
         return;
-      }
+      },
     }),
   ],
   adapter: PrismaAdapter(prisma),
@@ -26,7 +26,7 @@ export const authOptions: NextAuthOptions = {
   pages: {
     signIn: '/admin',
     verifyRequest: '/admin/checkmail', // send users here after they sign in to check their email
-    error: '/'
+    error: '/',
   },
   callbacks: {
     async session({ session, token }) {
@@ -51,7 +51,7 @@ export const authOptions: NextAuthOptions = {
     },
     async redirect({ url, baseUrl }) {
       if (url.startsWith(baseUrl)) return url;
-      if (url.startsWith("/admin/dashboard")) return baseUrl + url;
+      if (url.startsWith('/admin/dashboard')) return baseUrl + url;
       return baseUrl;
     },
   },
