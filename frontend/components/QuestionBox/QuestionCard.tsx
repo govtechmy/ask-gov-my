@@ -13,7 +13,7 @@ interface Question {
   question: string;
   date: string;
   state: string;
-  agency: number;
+  agency: number | { id: number };  // Updated to handle both types
   answer: string;
   topics: number[];
   email: string;
@@ -35,8 +35,10 @@ const QuestionCard: React.FC<QuestionCardProps> = ({ question }) => {
     return description;
   };
 
+  // Extract the agency ID, whether it's an object or a number
+  const agencyId = typeof question.agency === 'object' ? question.agency.id : question.agency;
   const agencyAcronym = Object.keys(AGENCY_TO_UUID).find(
-    key => AGENCY_TO_UUID[key] === question.agency.toString(),
+    key => AGENCY_TO_UUID[key] === agencyId.toString(),
   );
 
   return (

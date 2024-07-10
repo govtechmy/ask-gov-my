@@ -9,6 +9,8 @@ import JataNegaraIcon from '@/icons/jatanegaraicon';
 import Close from '@/icons/close';
 import RightArrow from '@/icons/rightarrow';
 import QuestionCircle from '@/icons/questioncircle';
+import { useRouter } from '@/lib/i18n';
+
 
 interface InputNavbarProps {
   searchQuery: string;
@@ -38,6 +40,7 @@ const InputNavbar: React.FC<InputNavbarProps> = ({
   const [isTyping, setIsTyping] = useState(false);
   const [isSearching, setIsSearching] = useState(false);
   const [showNoResults, setShowNoResults] = useState(false);
+  const router = useRouter();
 
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setSearchQuery(event.target.value);
@@ -48,6 +51,7 @@ const InputNavbar: React.FC<InputNavbarProps> = ({
   const handleKeyPress = (event: React.KeyboardEvent<HTMLInputElement>) => {
     if (event.key === 'Enter') {
       setDisplayAllMatches(true);
+      router.push(`/searchresults?query=${searchQuery}`);
     }
   };
 
