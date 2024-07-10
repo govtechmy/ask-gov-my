@@ -5,8 +5,10 @@ import RelatedTopics from '@/components/RelatedTopics';
 import RightArrow from '@/icons/rightarrow';
 import IconQuestionSmileSolo from '@/icons/iconquestionsmilesolo';
 import ThumbsCounter from '@/components/ThumbsCounter';
+import AgencyName from '@/components/AgencyName';
 import JataNegaraIcon from '@/icons/jatanegaraicon';
 import Pdf from '@/icons/pdf';
+import { AGENCY_TO_UUID } from '@/lib/agency';
 
 interface Props {
   params: {
@@ -14,24 +16,35 @@ interface Props {
     questionId: string;
     locale: string;
   };
-  question: Question;
 }
 
 interface Question {
-  topics: string;
+  id: number;
+  question: string;
+  date: string;
+  state: string;
+  agency: number;
+  answer: string;
+  topics: number[];
+  email: string;
+  likes: number;
 }
 
 const QuestionDetailPage: React.FC<Props> = async ({ params }) => {
   const { locale, agencyId, questionId } = params;
 
+  const agencyAcronym = (id: number): string | undefined => {
+    return Object.keys(AGENCY_TO_UUID).find(key => AGENCY_TO_UUID[key] === id.toString());
+  };
+
   const question = await getQuestionById(questionId);
-  console.log(locale);
 
   if (!question) {
     return <div>Question not found</div>;
   }
 
   const topicTitles = await getTopicsDetail(question.topics);
+  const acronym = agencyAcronym(question.agency);
 
   return (
     <div className="">
@@ -51,14 +64,14 @@ const QuestionDetailPage: React.FC<Props> = async ({ params }) => {
               <div className="flex items-center gap-1">
                 <div className="font-medium text-dim-500 text-sm">Home</div>
                 <div>
-                  <RightArrow></RightArrow>
+                  <RightArrow />
                 </div>
                 <div className="font-medium text-black-800 text-sm">EPF</div>
               </div>
 
               <div className="flex items-center gap-3 mt-3">
                 <div>
-                  <IconQuestionSmileSolo></IconQuestionSmileSolo>
+                  <IconQuestionSmileSolo />
                 </div>
                 <div className="text-black-700 text-basem font-medium">
                   Posted 5 days ago
@@ -75,10 +88,10 @@ const QuestionDetailPage: React.FC<Props> = async ({ params }) => {
                     <div className="">
                       <div className="flex px-8 pt-8 pb-0 items-center">
                         <div className="w-6 h-6">
-                          <JataNegaraIcon className="stroke-[#E4E4E7] dark:stroke-[#27272A]"></JataNegaraIcon>
+                          <JataNegaraIcon className="stroke-[#E4E4E7] dark:stroke-[#27272A]" />
                         </div>
                         <div className="font-medium text-sm text-black-700 px-2">
-                          Ministry of Health (MOH)
+                          <AgencyName acronym={acronym} />
                         </div>
                         <div className="font-medium text-sm text-dim-500">
                           Answered 1 year ago
@@ -113,7 +126,7 @@ const QuestionDetailPage: React.FC<Props> = async ({ params }) => {
                       <div className="flex gap-2">
                         <div className="items-center border-[1px] border-outline-200 bg-white rounded-lg flex w-[200px] h-[54px]">
                           <div className="p-2">
-                            <Pdf></Pdf>
+                            <Pdf />
                           </div>
                           <div className="">
                             <div className="font-normal text-sm text-black-900 truncate w-[140px]">
@@ -126,7 +139,7 @@ const QuestionDetailPage: React.FC<Props> = async ({ params }) => {
                         </div>
                         <div className="items-center border-[1px] border-outline-200 bg-white rounded-lg flex w-[200px] h-[54px]">
                           <div className="p-2">
-                            <Pdf></Pdf>
+                            <Pdf />
                           </div>
                           <div className="">
                             <div className="font-normal text-sm text-black-900 truncate w-[140px]">
@@ -141,7 +154,7 @@ const QuestionDetailPage: React.FC<Props> = async ({ params }) => {
                     </div>
                   </div>
                   <div>
-                    <ThumbsCounter></ThumbsCounter>
+                    <ThumbsCounter questionId={questionId} totalLikes={question.likes} />
                   </div>
                 </div>
               </div>
@@ -158,7 +171,7 @@ const QuestionDetailPage: React.FC<Props> = async ({ params }) => {
           <div className="pl-10 w-[500px]">
             <div className="font-semibold text-base text-black-700">
               Related Topics
-              <RelatedTopics></RelatedTopics>
+              <RelatedTopics />
             </div>
           </div>
         </div>
@@ -174,17 +187,3 @@ const QuestionDetailPage: React.FC<Props> = async ({ params }) => {
 };
 
 export default QuestionDetailPage;
-
-{
-  /* <div className="mt-6">
-  <p>Can&apos;t find what you&apos;re looking for?</p>
-  <Link href={`/questions/new`}>
-    <button className="ml-2 rounded bg-blue-500 px-4 py-2 text-white">
-      Ask a Question
-    </button>
-  </Link>
-</div>; 
-
-THIS ONE USE IN THE CLICK TO ASK QUESTION PART
-*/
-}
