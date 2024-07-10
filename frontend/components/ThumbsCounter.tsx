@@ -31,7 +31,7 @@ const ThumbsCounter = () => {
       <div className="flex items-center px-2">
         <div
           onClick={handleLike}
-          className={`w-[66px] h-11 rounded-3xl border-[1px] flex items-center justify-center hover:bg-[#F4EFFF] cursor-pointer ${feedbackLike ? 'bg-gradient-to-b from-[#B379FF] to-[#702FF9] border-[#702FF9]' : 'border-[#702FF9]'} `}
+          className={`w-[66px] h-11 rounded-3xl border-[1px] flex items-center justify-center hover:bg-[#F4EFFF] dark:hover:bg-[#201636] cursor-pointer ${feedbackLike ? 'bg-gradient-to-b from-[#B379FF] to-[#702FF9] border-[#702FF9]' : 'border-[#702FF9]'} `}
         >
           <div className="pl-1">
             <ThumbsUp
@@ -48,7 +48,7 @@ const ThumbsCounter = () => {
       <div className="flex items-center">
         <div
           onClick={handleDislike}
-          className={`w-11 h-11 rounded-full border-[1px] flex items-center justify-center hover:bg-[#F4EFFF] cursor-pointer ${feedbackDislike ? 'bg-gradient-to-b from-[#B379FF] to-[#702FF9] border-[#702FF9]' : 'border-[#702FF9]'} `}
+          className={`w-11 h-11 rounded-full border-[1px] flex items-center justify-center hover:bg-[#F4EFFF] dark:hover:bg-[#201636] cursor-pointer ${feedbackDislike ? 'bg-gradient-to-b from-[#B379FF] to-[#702FF9] border-[#702FF9]' : 'border-[#702FF9]'} `}
         >
           <div className="flex items-center">
             <ThumbsDown

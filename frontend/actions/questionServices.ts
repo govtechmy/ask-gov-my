@@ -1,6 +1,7 @@
 'use server';
 const API_URL = 'http://ask.juwaini.com/api';
 import { AGENCY_TO_UUID } from '@/lib/agency';
+import { localePrefix } from '@/lib/i18n';
 
 interface Question {
   id: number;
@@ -79,7 +80,7 @@ export async function getTopicsDetail(topicIds: number[]): Promise<string[]> {
   topics.forEach(topic => {
     topicIdToTitleMap[topic.id] = topic.title;
   });
-
+  //topic.title_ms for malay , no ms for en
   return topicIds.map(id => topicIdToTitleMap[id] || 'Unknown Topic');
 }
 
