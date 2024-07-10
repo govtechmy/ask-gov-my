@@ -1,30 +1,39 @@
 'use client';
 import { useTranslations } from 'next-intl';
-import { AGENCY_TO_UUID } from '@/lib/agency';
 import JataNegaraIcon from '@/icons/jatanegaraicon';
+import { Link } from '@/lib/i18n';
 
-const AgencyList = () => {
+export interface Agency {
+  id: number;
+  name: string;
+  name_ms: string;
+  acronym: string;
+  total_likes: number;
+}
+
+interface TrendingAgenciesProps {
+  agencies: Agency[];
+}
+
+const TrendingAgencies: React.FC<TrendingAgenciesProps> = ({ agencies }) => {
   const t = useTranslations('Agency');
-  const agencylists = Object.entries(AGENCY_TO_UUID).map(([name, id]) => ({
-    id,
-    name: t(name),
-  }));
-
-  const top5Agencies = agencylists.slice(0, 5);
+  const top5Agencies = agencies.slice(0, 5);
 
   return (
     <div className="pt-4">
       <ul className="flex flex-col justify-between h-full">
         {top5Agencies.map(agency => (
           <li key={agency.id} className="py-2">
-            <div className="flex items-center ">
-              <div className="pr-2">
-                <JataNegaraIcon className="stroke-[#E4E4E7] dark:stroke-[#27272A] w-8 h-8"></JataNegaraIcon>
+            <Link href={`/${agency.acronym.toLowerCase()}`}>
+              <div className="flex items-center">
+                <div className="pr-2">
+                  <JataNegaraIcon className="stroke-[#E4E4E7] dark:[#27272A] w-8 h-8" />
+                </div>
+                <div className="text-base font-normal text-black-800">
+                  {t(agency.acronym)}
+                </div>
               </div>
-              <div className="text-base font-normal text-black-800 hover:cursor-pointer hover:text-[#702FF9] dark:hover:text-[#9E70FF] ">
-                {agency.name}
-              </div>
-            </div>
+            </Link>
           </li>
         ))}
       </ul>
@@ -32,4 +41,4 @@ const AgencyList = () => {
   );
 };
 
-export default AgencyList;
+export default TrendingAgencies;
