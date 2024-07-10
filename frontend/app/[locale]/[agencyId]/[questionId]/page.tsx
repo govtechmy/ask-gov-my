@@ -7,6 +7,7 @@ import IconQuestionSmileSolo from '@/icons/iconquestionsmilesolo';
 import ThumbsCounter from '@/components/ThumbsCounter';
 import JataNegaraIcon from '@/icons/jatanegaraicon';
 import Pdf from '@/icons/pdf';
+import { redirect } from 'next/navigation';
 
 interface Props {
   params: {
@@ -18,32 +19,35 @@ interface Props {
 }
 
 interface Question {
-  topics: string;
+  id: number;
+  question: string;
+  date: string;
+  state: string;
+  agency: number;
+  answer: string;
+  topics: number[];
+  email: string;
+  likes: number;
+  dislikes: number;
 }
 
 const QuestionDetailPage: React.FC<Props> = async ({ params }) => {
   const { locale, agencyId, questionId } = params;
 
-  let question = await getQuestionById(questionId);
+  let question: Question | null = null;
+  let topicTitles: Array<any> = [];
 
-  if (!question) {
-    question = {
-      id: 1,
-      question: 'not found',
-      date: 'not found',
-      state: 'not found',
-      agency: 1,
-      answer: 'not found',
-      topics: [],
-      email: 'not found',
-      likes: 1,
-      dislikes: 1,
-    };
+  try {
+    question = await getQuestionById(questionId);
+
+    if (!question) {
+      throw new Error('Question not found');
+    }
+
+    topicTitles = await getTopicsDetail(question.topics, locale);
+  } catch (error) {
+    redirect('/');
   }
-
-  const topicTitles = await getTopicsDetail(question.topics, locale);
-
-  //question possibly null find solution, right now simple solution
 
   console.log(locale);
 
