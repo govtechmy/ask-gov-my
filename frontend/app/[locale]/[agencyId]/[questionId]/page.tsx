@@ -31,8 +31,6 @@ const QuestionDetailPage: React.FC<Props> = async ({ params }) => {
 
   const topicTitles = await getTopicsDetail(question.topics);
 
-  const topics = topicTitles.map(title => title.match(/Topic \d+/)?.[0] ?? '');
-
   return (
     <div className="">
       <div className="">
