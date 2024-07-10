@@ -11,7 +11,10 @@ interface ThumbsCounterProps {
   totalLikes: number;
 }
 
-const ThumbsCounter: React.FC<ThumbsCounterProps> = ({ questionId, totalLikes }) => {
+const ThumbsCounter: React.FC<ThumbsCounterProps> = ({
+  questionId,
+  totalLikes,
+}) => {
   const [likes, setLikes] = useState(totalLikes);
   const [feedbackLike, setFeedbackLike] = useState(false);
   const [feedbackDislike, setFeedbackDislike] = useState(false);
@@ -32,7 +35,9 @@ const ThumbsCounter: React.FC<ThumbsCounterProps> = ({ questionId, totalLikes })
     if (isProcessing) return;
 
     const savedFeedback = Cookies.get(`feedback_${questionId}`);
-    const feedback = savedFeedback ? JSON.parse(savedFeedback) : { voted_like: false, voted_dislike: false };
+    const feedback = savedFeedback
+      ? JSON.parse(savedFeedback)
+      : { voted_like: false, voted_dislike: false };
 
     setLastVote('like');
     setFeedbackLike(true);
@@ -41,7 +46,14 @@ const ThumbsCounter: React.FC<ThumbsCounterProps> = ({ questionId, totalLikes })
     if (feedback.last_vote !== 'like') {
       setLikes(prevLikes => prevLikes + 1);
 
-      Cookies.set(`feedback_${questionId}`, JSON.stringify({ voted_like: true, voted_dislike: feedback.voted_dislike, last_vote: 'like' }));
+      Cookies.set(
+        `feedback_${questionId}`,
+        JSON.stringify({
+          voted_like: true,
+          voted_dislike: feedback.voted_dislike,
+          last_vote: 'like',
+        }),
+      );
 
       if (!feedback.voted_like) {
         setIsProcessing(true);
@@ -65,7 +77,9 @@ const ThumbsCounter: React.FC<ThumbsCounterProps> = ({ questionId, totalLikes })
     if (isProcessing) return;
 
     const savedFeedback = Cookies.get(`feedback_${questionId}`);
-    const feedback = savedFeedback ? JSON.parse(savedFeedback) : { voted_like: false, voted_dislike: false };
+    const feedback = savedFeedback
+      ? JSON.parse(savedFeedback)
+      : { voted_like: false, voted_dislike: false };
 
     // Update UI instantly
     setLastVote('dislike');
@@ -75,7 +89,14 @@ const ThumbsCounter: React.FC<ThumbsCounterProps> = ({ questionId, totalLikes })
     if (feedback.last_vote !== 'dislike') {
       setLikes(prevLikes => prevLikes - 1);
 
-      Cookies.set(`feedback_${questionId}`, JSON.stringify({ voted_like: feedback.voted_like, voted_dislike: true, last_vote: 'dislike' }));
+      Cookies.set(
+        `feedback_${questionId}`,
+        JSON.stringify({
+          voted_like: feedback.voted_like,
+          voted_dislike: true,
+          last_vote: 'dislike',
+        }),
+      );
 
       if (!feedback.voted_dislike) {
         setIsProcessing(true);
@@ -108,9 +129,13 @@ const ThumbsCounter: React.FC<ThumbsCounterProps> = ({ questionId, totalLikes })
           className={`w-[66px] h-11 rounded-3xl border-[1px] flex items-center justify-center hover:bg-[#F4EFFF] dark:hover:bg-[#201636] cursor-pointer ${lastVote === 'like' ? 'bg-gradient-to-b from-[#B379FF] to-[#702FF9] border-[#702FF9]' : 'border-[#702FF9]'}`}
         >
           <div className="pl-1">
-            <ThumbsUp className={`${lastVote === 'like' ? 'stroke-[#FFFFFF]' : 'stroke-[#702FF9]'}`} />
+            <ThumbsUp
+              className={`${lastVote === 'like' ? 'stroke-[#FFFFFF]' : 'stroke-[#702FF9]'}`}
+            />
           </div>
-          <div className={`text-${lastVote === 'like' ? '[#FFFFFF]' : '[#702FF9]'} px-1`}>
+          <div
+            className={`text-${lastVote === 'like' ? '[#FFFFFF]' : '[#702FF9]'} px-1`}
+          >
             {likes}
           </div>
         </div>
@@ -121,7 +146,9 @@ const ThumbsCounter: React.FC<ThumbsCounterProps> = ({ questionId, totalLikes })
           className={`w-11 h-11 rounded-full border-[1px] flex items-center justify-center hover:bg-[#F4EFFF] dark:hover:bg-[#201636] cursor-pointer ${lastVote === 'dislike' ? 'bg-gradient-to-b from-[#B379FF] to-[#702FF9] border-[#702FF9]' : 'border-[#702FF9]'}`}
         >
           <div className="flex items-center">
-            <ThumbsDown className={`${lastVote === 'dislike' ? 'stroke-[#FFFFFF]' : 'stroke-[#702FF9]'}`} />
+            <ThumbsDown
+              className={`${lastVote === 'dislike' ? 'stroke-[#FFFFFF]' : 'stroke-[#702FF9]'}`}
+            />
           </div>
         </div>
       </div>

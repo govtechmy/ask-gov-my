@@ -1,4 +1,6 @@
-export default function Pdf() {
+export default function Pdf({
+  className = 'stroke-[#18181B] dark:stroke-[#FFFFFF]',
+}) {
   return (
     <svg
       width="27"
@@ -9,14 +11,14 @@ export default function Pdf() {
     >
       <path
         d="M9.06657 23.6667H20.3999C21.8727 23.6667 23.0666 22.4728 23.0666 21V10L17.3999 4.33334H9.06657C7.59381 4.33334 6.3999 5.52725 6.3999 7.00001V21C6.3999 22.4728 7.59381 23.6667 9.06657 23.6667Z"
-        stroke="#18181B"
+        className={className}
         strokeWidth="2"
         strokeLinecap="round"
         strokeLinejoin="round"
       />
       <path
         d="M22.7331 10.3334H17.0664V4.66669"
-        stroke="#18181B"
+        className={className}
         strokeWidth="2"
         strokeLinecap="round"
         strokeLinejoin="round"

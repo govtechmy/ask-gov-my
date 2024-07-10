@@ -27,7 +27,7 @@ const TrendingAgencies: React.FC<TrendingAgenciesProps> = ({ agencies }) => {
             <Link href={`/${agency.acronym.toLowerCase()}`}>
               <div className="flex items-center">
                 <div className="pr-2">
-                  <JataNegaraIcon className="stroke-[#E4E4E7] dark:[#27272A] w-8 h-8" />
+                  <JataNegaraIcon className="stroke-[#E4E4E7] dark:stroke-[#27272A] w-8 h-8" />
                 </div>
                 <div className="text-base font-normal text-black-800">
                   {t(agency.acronym)}

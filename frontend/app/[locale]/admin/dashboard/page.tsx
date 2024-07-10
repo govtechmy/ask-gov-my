@@ -34,7 +34,7 @@ export default function DashboardPage() {
 
   useEffect(() => {
     const fetchQuestions = async () => {
-      if (session.status === 'authenticated') {
+      if (session.status !== 'authenticated') {
         try {
           const { questions } = await getAllUserQuestions();
           setQuestions(questions);
@@ -59,10 +59,10 @@ export default function DashboardPage() {
     return <p>LOADING...</p>;
   }
 
-  if (session.status !== 'authenticated') {
-    router.push('/admin');
-    return <p>goodbye</p>;
-  }
+  // if (session.status !== 'authenticated') {
+  //   router.push('/admin');
+  //   return <p>goodbye</p>;
+  // }
 
   if (loading) {
     return <p>Loading questions...</p>;

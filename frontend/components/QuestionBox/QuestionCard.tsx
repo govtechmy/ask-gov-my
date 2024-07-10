@@ -13,11 +13,11 @@ interface Question {
   question: string;
   date: string;
   state: string;
-  agency: number | { id: number };  
+  agency: number | { id: number };
   answer: string;
   topics: number[];
   email: string;
-  likes: number;  
+  likes: number;
 }
 
 interface QuestionCardProps {
@@ -35,7 +35,8 @@ const QuestionCard: React.FC<QuestionCardProps> = ({ question }) => {
     return description;
   };
 
-  const agencyId = typeof question.agency === 'object' ? question.agency.id : question.agency;
+  const agencyId =
+    typeof question.agency === 'object' ? question.agency.id : question.agency;
   const agencyAcronym = Object.keys(AGENCY_TO_UUID).find(
     key => AGENCY_TO_UUID[key] === agencyId.toString(),
   );
@@ -80,7 +81,9 @@ const QuestionCard: React.FC<QuestionCardProps> = ({ question }) => {
         <div className="mr-2">
           <LikeIcon />
         </div>
-        <div className="mr-1 font-semibold text-sm text-dim-500">{question.likes}</div>
+        <div className="mr-1 font-semibold text-sm text-dim-500">
+          {question.likes}
+        </div>
         <div className="font-normal text-sm text-dim-500">
           people found this useful
         </div>
