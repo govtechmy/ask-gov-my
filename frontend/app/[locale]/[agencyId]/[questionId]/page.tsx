@@ -49,8 +49,6 @@ const QuestionDetailPage: React.FC<Props> = async ({ params }) => {
     redirect('/');
   }
 
-  console.log(locale);
-
   return (
     <div className="">
       <div className="">
