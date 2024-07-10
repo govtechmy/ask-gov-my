@@ -1,4 +1,7 @@
-import { getAllQuestions, getTrendingAgencies } from '@/actions/questionServices';
+import {
+  getAllQuestions,
+  getTrendingAgencies,
+} from '@/actions/questionServices';
 import QuestionBox from '@/components/QuestionBox/QuestionBox';
 import SearchNavbar from '@/components/HeaderDetails/SearchNavBar';
 import Footer from '@/components/FooterDetails/Footer';
@@ -15,7 +18,6 @@ const MainPage = async ({
   const pageSize = 1000;
   const { questions } = await getAllQuestions(page, pageSize);
   const trendingAgencies = await getTrendingAgencies();
-
 
   async function submitactions(params: FormData) {
     'use server';

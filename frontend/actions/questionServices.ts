@@ -34,9 +34,9 @@ interface QuestionSubmission {
 export interface Agency {
   id: number;
   name: string;
-  name_ms: string;
-  acronym: string;
-  total_likes: number;
+  name_ms?: string;
+  acronym?: string;
+  total_likes?: number;
 }
 
 export async function getAllQuestions(
