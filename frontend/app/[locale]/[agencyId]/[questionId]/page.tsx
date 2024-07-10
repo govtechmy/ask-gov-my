@@ -140,7 +140,7 @@ const QuestionDetailPage: React.FC<Props> = async ({ params }) => {
                         </div>
                         <div className="items-center border-[1px] border-outline-200 bg-white rounded-lg flex w-[200px] h-[54px]">
                           <div className="p-2">
-                            <Pdf></Pdf>
+                            <Pdf className="stroke-[#18181B] dark:stroke-[#FFFFFF]"></Pdf>
                           </div>
                           <div className="">
                             <div className="font-normal text-sm text-black-900 truncate w-[140px]">

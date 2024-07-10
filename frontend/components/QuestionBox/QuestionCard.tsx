@@ -17,7 +17,7 @@ interface Question {
   answer: string;
   topics: number[];
   email: string;
-  likes: number;  // Add the likes property here
+  likes: number; // Add the likes property here
 }
 
 interface QuestionCardProps {
@@ -79,7 +79,9 @@ const QuestionCard: React.FC<QuestionCardProps> = ({ question }) => {
         <div className="mr-2">
           <LikeIcon />
         </div>
-        <div className="mr-1 font-semibold text-sm text-dim-500">{question.likes}</div>
+        <div className="mr-1 font-semibold text-sm text-dim-500">
+          {question.likes}
+        </div>
         <div className="font-normal text-sm text-dim-500">
           people found this useful
         </div>
