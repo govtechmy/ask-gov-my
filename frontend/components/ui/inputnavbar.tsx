@@ -142,7 +142,7 @@ const InputNavbar: React.FC<InputNavbarProps> = ({
                     {searchResults.slice(0, 20).map((result, index) => {
                       // take 20 result max
                       const agencyAcronym = Object.keys(AGENCY_TO_UUID).find(
-                        key => AGENCY_TO_UUID[key] === result.agency.toString(),
+                        key => AGENCY_TO_UUID[key] === result.agency.id.toString(),
                       );
 
                       return (
