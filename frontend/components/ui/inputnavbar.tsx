@@ -9,8 +9,8 @@ import JataNegaraIcon from '@/icons/jatanegaraicon';
 import Close from '@/icons/close';
 import RightArrow from '@/icons/rightarrow';
 import QuestionCircle from '@/icons/questioncircle';
+import AskQuestion from '../AskQuestion';
 import { useRouter } from '@/lib/i18n';
-
 
 interface InputNavbarProps {
   searchQuery: string;
@@ -103,7 +103,6 @@ const InputNavbar: React.FC<InputNavbarProps> = ({
         placeholder="Search by keyword or agency name (eg. MOH, MOT)"
         value={searchQuery}
         onChange={handleInputChange}
-        onKeyPress={handleKeyPress}
       />
       {searchQuery.length > 0 && (
         <div className="absolute right-10 bg-transparent flex text-dim-500 items-center">
@@ -146,7 +145,8 @@ const InputNavbar: React.FC<InputNavbarProps> = ({
                     {searchResults.slice(0, 20).map((result, index) => {
                       // take 20 result max
                       const agencyAcronym = Object.keys(AGENCY_TO_UUID).find(
-                        key => AGENCY_TO_UUID[key] === result.agency.id.toString(),
+                        key =>
+                          AGENCY_TO_UUID[key] === result.agency.id.toString(),
                       );
 
                       return (
@@ -185,18 +185,7 @@ const InputNavbar: React.FC<InputNavbarProps> = ({
               </>
             )}
           </div>
-          <div className="items-center px-4 py-2 text-center border-outline-200 h-[60px] w-[788px]">
-            {' '}
-            {/* Wrapper for "I can't find" message */}
-            <div className="text-sm items-center flex text-primary-500 justify-center h-full ">
-              <div className="flex items-center text-[#702FF9] font-medium text-base border-[1px] border-[#D4C0FF] dark:border-[#4F1FB4] shadow-button bg-white px-4 py-2 rounded-lg hover:cursor-pointer">
-                <div className="pr-2">
-                  <QuestionCircle></QuestionCircle>
-                </div>
-                <div className="">I can't find what I am looking for.</div>
-              </div>
-            </div>
-          </div>
+          <AskQuestion></AskQuestion>
         </div>
       )}
     </div>

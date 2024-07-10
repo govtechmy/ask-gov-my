@@ -9,6 +9,7 @@ import AgencyName from '@/components/AgencyName';
 import JataNegaraIcon from '@/icons/jatanegaraicon';
 import Pdf from '@/icons/pdf';
 import { AGENCY_TO_UUID } from '@/lib/agency';
+import { redirect } from 'next/navigation';
 
 interface Props {
   params: {
@@ -16,6 +17,7 @@ interface Props {
     questionId: string;
     locale: string;
   };
+  question?: Question;
 }
 
 interface Question {
@@ -28,22 +30,32 @@ interface Question {
   topics: number[];
   email: string;
   likes: number;
+  dislikes: number;
 }
 
 const QuestionDetailPage: React.FC<Props> = async ({ params }) => {
   const { locale, agencyId, questionId } = params;
 
   const agencyAcronym = (id: number): string | undefined => {
-    return Object.keys(AGENCY_TO_UUID).find(key => AGENCY_TO_UUID[key] === id.toString());
+    return Object.keys(AGENCY_TO_UUID).find(
+      key => AGENCY_TO_UUID[key] === id.toString(),
+    );
   };
 
-  const question = await getQuestionById(questionId);
+  let question: Question | null = null;
+  let topicTitles: Array<any> = [];
 
-  if (!question) {
-    return <div>Question not found</div>;
+  try {
+    question = await getQuestionById(questionId);
+
+    if (!question) {
+      throw new Error('Question not found');
+    }
+
+    topicTitles = await getTopicsDetail(question.topics, locale);
+  } catch (error) {
+    redirect('/');
   }
-
-  const topicTitles = await getTopicsDetail(question.topics);
   const acronym = agencyAcronym(question.agency);
 
   return (
@@ -139,7 +151,7 @@ const QuestionDetailPage: React.FC<Props> = async ({ params }) => {
                         </div>
                         <div className="items-center border-[1px] border-outline-200 bg-white rounded-lg flex w-[200px] h-[54px]">
                           <div className="p-2">
-                            <Pdf />
+                            <Pdf className="stroke-[#18181B] dark:stroke-[#FFFFFF]" />
                           </div>
                           <div className="">
                             <div className="font-normal text-sm text-black-900 truncate w-[140px]">
@@ -154,7 +166,10 @@ const QuestionDetailPage: React.FC<Props> = async ({ params }) => {
                     </div>
                   </div>
                   <div>
-                    <ThumbsCounter questionId={questionId} totalLikes={question.likes} />
+                    <ThumbsCounter
+                      questionId={questionId}
+                      totalLikes={question.likes}
+                    />
                   </div>
                 </div>
               </div>

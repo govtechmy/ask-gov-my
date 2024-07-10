@@ -47,7 +47,7 @@ const QuestionBox: React.FC<QuestionBoxProps> = ({ questions }) => {
         className={`rounded-lg h-10 w-10 ${currentPage === 1 ? 'bg-[#F4EFFF] text-[#702FF9] dark:bg-[#201636] dark:text-[#9E70FF]' : 'bg-transparent text-black-700 dark:text-[#D4D4D8]'}`}
       >
         {1}
-      </button>
+      </button>,
     );
 
     if (currentPage > 1) {
@@ -55,7 +55,7 @@ const QuestionBox: React.FC<QuestionBoxProps> = ({ questions }) => {
       pageNumbers.push(
         <span key="ellipsis-start" className="px-2 py-2">
           ...
-        </span>
+        </span>,
       );
     }
 
@@ -80,7 +80,7 @@ const QuestionBox: React.FC<QuestionBoxProps> = ({ questions }) => {
           className={`rounded-lg h-10 w-10 ${i === currentPage ? 'bg-[#F4EFFF] text-[#702FF9] dark:bg-[#201636] dark:text-[#9E70FF]' : 'bg-transparent text-black-700 dark:text-[#D4D4D8]'}`}
         >
           {i}
-        </button>
+        </button>,
       );
     }
 
@@ -89,7 +89,7 @@ const QuestionBox: React.FC<QuestionBoxProps> = ({ questions }) => {
       pageNumbers.push(
         <span key="ellipsis-end" className="px-2 py-2 rounded-lg">
           ...
-        </span>
+        </span>,
       );
     }
 
@@ -102,7 +102,7 @@ const QuestionBox: React.FC<QuestionBoxProps> = ({ questions }) => {
           className={`rounded-lg h-10 w-10 ${totalPages === currentPage ? 'bg-[#F4EFFF] dark:bg-[#201636] text-[#702FF9] dark:text-[#9E70FF]' : 'bg-transparent text-black-700 dark:text-[#D4D4D8]'}`}
         >
           {totalPages}
-        </button>
+        </button>,
       );
     }
 
