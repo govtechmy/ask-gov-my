@@ -14,7 +14,7 @@ const AgencyName: React.FC<AgencyNameProps> = ({ acronym }) => {
   }
 
   return (
-    <p>{t(acronym)}</p>
+    <p>{t(acronym)} ({acronym}) </p>
   );
 };
 
