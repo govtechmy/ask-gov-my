@@ -1,4 +1,5 @@
-import { getAllQuestions } from '@/actions/questionServices';
+import { getTrendingAgencies } from '@/actions/questionServices';
+import { searchQuestions } from '@/actions/searchServices';
 import QuestionBox from '@/components/QuestionBox/QuestionBox';
 import SearchNavbar from '@/components/HeaderDetails/SearchNavBar';
 import Footer from '@/components/FooterDetails/Footer';
@@ -6,15 +7,14 @@ import Header from '@/components/HeaderDetails/Header';
 import TrendingAgencies from '@/components/TrendingAgencies';
 import IdentifyWebsite from '@/components/HeaderDetails/IdentifyWebsite';
 
-const MainPage = async ({
+const SearchResultPage = async ({
   searchParams,
 }: {
-  searchParams: { page?: string };
+  searchParams: { query?: string };
 }) => {
-  const page = parseInt(searchParams.page || '1', 10);
-  const pageSize = 1000;
-  const { questions } = await getAllQuestions(page, pageSize);
-
+  const query = searchParams.query || '';
+  const questions = await searchQuestions(query);
+  const trendingAgencies = await getTrendingAgencies();
   return (
     <div className="">
       <div className="">
@@ -34,9 +34,8 @@ const MainPage = async ({
         <div className="container mt-10 flex text-out">
           <div className="max-w-screen-2xl">
             <div className="font-semibold text-base text-black-700 pb-7 flex">
-              <div>x value &nbsp;</div>
-              <div>search results for &nbsp; </div>
-              <div>x value</div>
+              <div>{questions.length} search results for &nbsp;</div>
+              <div>{query}</div>
             </div>
             <QuestionBox questions={questions} />
           </div>
@@ -45,7 +44,7 @@ const MainPage = async ({
             <div className="font-semibold text-base text-black-700">
               Relevant Agencies
             </div>
-            <TrendingAgencies />
+            <TrendingAgencies agencies={trendingAgencies} />
           </div>
         </div>
 
@@ -59,4 +58,4 @@ const MainPage = async ({
   );
 };
 
-export default MainPage;
+export default SearchResultPage;

@@ -17,7 +17,7 @@ const MainPage = async ({
   const page = parseInt(searchParams.page || '1', 10);
   const pageSize = 1000;
   const { questions } = await getAllQuestions(page, pageSize);
-  const trendingAgencies = await getTrendingAgencies();
+  const agencies = await getTrendingAgencies();
 
   async function submitactions(params: FormData) {
     'use server';
@@ -54,7 +54,7 @@ const MainPage = async ({
             <div className="font-semibold text-base text-black-700">
               Trending Agencies
             </div>
-            <TrendingAgencies agencies={trendingAgencies} />
+            {/* <TrendingAgencies agencies={agencies} /> */}
           </div>
         </div>
 
