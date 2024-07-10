@@ -14,7 +14,7 @@ interface Props {
     questionId: string;
     locale: string;
   };
-  question: Question;
+  question?: Question;
 }
 
 interface Question {
@@ -24,14 +24,28 @@ interface Question {
 const QuestionDetailPage: React.FC<Props> = async ({ params }) => {
   const { locale, agencyId, questionId } = params;
 
-  const question = await getQuestionById(questionId);
-  console.log(locale);
+  let question = await getQuestionById(questionId);
 
   if (!question) {
-    return <div>Question not found</div>;
+    question = {
+      id: 1,
+      question: 'not found',
+      date: 'not found',
+      state: 'not found',
+      agency: 1,
+      answer: 'not found',
+      topics: [],
+      email: 'not found',
+      likes: 1,
+      dislikes: 1,
+    };
   }
 
-  const topicTitles = await getTopicsDetail(question.topics);
+  const topicTitles = await getTopicsDetail(question.topics, locale);
+
+  //question possibly null find solution, right now simple solution
+
+  console.log(locale);
 
   return (
     <div className="">
