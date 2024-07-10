@@ -7,7 +7,6 @@ import IconQuestionSmileSolo from '@/icons/iconquestionsmilesolo';
 import ThumbsCounter from '@/components/ThumbsCounter';
 import JataNegaraIcon from '@/icons/jatanegaraicon';
 import Pdf from '@/icons/pdf';
-import LocaleParams from '@/components/LocaleParams';
 
 interface Props {
   params: {
@@ -44,10 +43,6 @@ const QuestionDetailPage: React.FC<Props> = async ({ params }) => {
           <div className="container flex justify-center mx-auto bg-black-700">
             <Header />
           </div>
-        </div>
-
-        <div>
-          HAHAHAHAHAHAHAHAHHAHAH<LocaleParams></LocaleParams>
         </div>
 
         <div className="container mt-10 flex text-out">
