@@ -34,26 +34,30 @@ const ThumbsCounter: React.FC<ThumbsCounterProps> = ({ questionId, totalLikes })
     const savedFeedback = Cookies.get(`feedback_${questionId}`);
     const feedback = savedFeedback ? JSON.parse(savedFeedback) : { voted_like: false, voted_dislike: false };
 
+    // Update UI instantly
     setLastVote('like');
     setFeedbackLike(true);
     setFeedbackDislike(false);
-    setLikes(likes + 1);
 
-    Cookies.set(`feedback_${questionId}`, JSON.stringify({ voted_like: true, voted_dislike: feedback.voted_dislike, last_vote: 'like' }));
+    if (feedback.last_vote !== 'like') {
+      setLikes(prevLikes => prevLikes + 1);
 
-    if (!feedback.voted_like) {
-      setIsProcessing(true);
-      try {
-        await likeQuestion(questionId);
-        feedback.voted_like = true;
-      } catch (error) {
-        console.error('Failed to like question:', error);
-        setLikes(likes - 1);
-        setFeedbackLike(false);
-        setLastVote(null);
-        Cookies.remove(`feedback_${questionId}`);
-      } finally {
-        setIsProcessing(false);
+      Cookies.set(`feedback_${questionId}`, JSON.stringify({ voted_like: true, voted_dislike: feedback.voted_dislike, last_vote: 'like' }));
+
+      if (!feedback.voted_like) {
+        setIsProcessing(true);
+        try {
+          await likeQuestion(questionId);
+          feedback.voted_like = true;
+        } catch (error) {
+          console.error('Failed to like question:', error);
+          setLikes(prevLikes => prevLikes - 1);
+          setFeedbackLike(false);
+          setLastVote(null);
+          Cookies.remove(`feedback_${questionId}`);
+        } finally {
+          setIsProcessing(false);
+        }
       }
     }
   };
@@ -64,26 +68,30 @@ const ThumbsCounter: React.FC<ThumbsCounterProps> = ({ questionId, totalLikes })
     const savedFeedback = Cookies.get(`feedback_${questionId}`);
     const feedback = savedFeedback ? JSON.parse(savedFeedback) : { voted_like: false, voted_dislike: false };
 
+    // Update UI instantly
     setLastVote('dislike');
     setFeedbackLike(false);
     setFeedbackDislike(true);
-    setLikes(likes - 1);
 
-    Cookies.set(`feedback_${questionId}`, JSON.stringify({ voted_like: feedback.voted_like, voted_dislike: true, last_vote: 'dislike' }));
+    if (feedback.last_vote !== 'dislike') {
+      setLikes(prevLikes => prevLikes - 1);
 
-    if (!feedback.voted_dislike) {
-      setIsProcessing(true);
-      try {
-        await dislikeQuestion(questionId);
-        feedback.voted_dislike = true;
-      } catch (error) {
-        console.error('Failed to dislike question:', error);
-        setLikes(likes + 1);
-        setFeedbackDislike(false);
-        setLastVote(null);
-        Cookies.remove(`feedback_${questionId}`);
-      } finally {
-        setIsProcessing(false);
+      Cookies.set(`feedback_${questionId}`, JSON.stringify({ voted_like: feedback.voted_like, voted_dislike: true, last_vote: 'dislike' }));
+
+      if (!feedback.voted_dislike) {
+        setIsProcessing(true);
+        try {
+          await dislikeQuestion(questionId);
+          feedback.voted_dislike = true;
+        } catch (error) {
+          console.error('Failed to dislike question:', error);
+          setLikes(prevLikes => prevLikes + 1);
+          setFeedbackDislike(false);
+          setLastVote(null);
+          Cookies.remove(`feedback_${questionId}`);
+        } finally {
+          setIsProcessing(false);
+        }
       }
     }
   };
