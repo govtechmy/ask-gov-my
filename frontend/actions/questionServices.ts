@@ -17,6 +17,7 @@ interface Question {
 }
 
 interface Topic {
+  title_ms: string;
   id: number;
   title: string;
   agency: {
@@ -73,13 +74,23 @@ export async function getAllTopics(): Promise<Topic[]> {
   return data;
 }
 
-export async function getTopicsDetail(topicIds: number[]): Promise<string[]> {
+export async function getTopicsDetail(
+  topicIds: number[],
+  locale: string,
+): Promise<string[]> {
   const topics = await getAllTopics();
   const topicIdToTitleMap: { [key: number]: string } = {};
 
-  topics.forEach(topic => {
-    topicIdToTitleMap[topic.id] = topic.title;
-  });
+  if (locale == 'en') {
+    topics.forEach(topic => {
+      topicIdToTitleMap[topic.id] = topic.title;
+    });
+  } else {
+    topics.forEach(topic => {
+      topicIdToTitleMap[topic.id] = topic.title_ms;
+    });
+  }
+
   //topic.title_ms for malay , no ms for en
   return topicIds.map(id => topicIdToTitleMap[id] || 'Unknown Topic');
 }
