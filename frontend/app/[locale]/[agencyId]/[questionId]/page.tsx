@@ -1,4 +1,3 @@
-import Link from 'next/link';
 import { getQuestionById, getTopicsDetail } from '@/actions/questionServices';
 import Header from '@/components/HeaderDetails/Header';
 import Footer from '@/components/FooterDetails/Footer';
@@ -6,6 +5,9 @@ import RelatedTopics from '@/components/RelatedTopics';
 import RightArrow from '@/icons/rightarrow';
 import IconQuestionSmileSolo from '@/icons/iconquestionsmilesolo';
 import ThumbsCounter from '@/components/ThumbsCounter';
+import JataNegaraIcon from '@/icons/jatanegaraicon';
+import Pdf from '@/icons/pdf';
+import LocaleParams from '@/components/LocaleParams';
 
 interface Props {
   params: {
@@ -29,7 +31,7 @@ const QuestionDetailPage: React.FC<Props> = async ({ params }) => {
   }
 
   const topicTitles = await getTopicsDetail(question.topics);
-  console.log(topicTitles);
+
   const topics = topicTitles.map(title => title.match(/Topic \d+/)?.[0] ?? '');
 
   return (
@@ -42,6 +44,10 @@ const QuestionDetailPage: React.FC<Props> = async ({ params }) => {
           <div className="container flex justify-center mx-auto bg-black-700">
             <Header />
           </div>
+        </div>
+
+        <div>
+          HAHAHAHAHAHAHAHAHHAHAH<LocaleParams></LocaleParams>
         </div>
 
         <div className="container mt-10 flex text-out">
@@ -68,22 +74,35 @@ const QuestionDetailPage: React.FC<Props> = async ({ params }) => {
                 {question.question}
               </div>
 
-              <div className="pb-6">
-                <div className="bg-[#FFFFFF] border-[1px] border-outline-200 rounded-lg ">
+              <div className="pb-6 max-w-[932px]">
+                <div className="bg-[#FFFFFF] dark:bg-[#1D1D21] border-[1px] border-outline-200 rounded-lg ">
                   <div>
                     <div className="">
-                      <div className="p-8"> {question.answer} </div>
+                      <div className="flex px-8 pt-8 pb-0 items-center">
+                        <div className="w-6 h-6">
+                          <JataNegaraIcon className="stroke-[#E4E4E7] dark:stroke-[#27272A]"></JataNegaraIcon>
+                        </div>
+                        <div className="font-medium text-sm text-black-700 px-2">
+                          Ministry of Health (MOH)
+                        </div>
+                        <div className="font-medium text-sm text-dim-500">
+                          Answered 1 year ago
+                        </div>
+                      </div>
+                      <div className="flex px-8 pb-5 pt-4 text-justify text-black-700">
+                        {question.answer}
+                      </div>
 
-                      <div className="p-8">
-                        <div className="flex gap-3 items-center border-b-[1px] border-outline-200 pb-[18px]">
+                      <div className="px-8 pb-8 pt-0">
+                        <div className="flex gap-3 items-center border-b-[1px] border-outline-200 pb-[22px]">
                           <div className=" font-medium text-sm">Topics: </div>
                           <div className="flex gap-[6px]">
-                            {topics.map((topic, index) => (
+                            {topicTitles.map((TopicTitles, index) => (
                               <div
+                                className="flex text-base font-medium text-[#702FF9] dark:text-[#9E70FF] bg-[#F4EFFF] dark:bg-[#201636] border-[1px] border-[#D4C0FF] dark:border-[#4F1FB4] px-2 py-1 rounded-lg"
                                 key={index}
-                                className="flex text-base font-medium text-[#702FF9] bg-[#F4EFFF] border-[1px] border-[#D4C0FF] px-2 py-1 rounded-lg"
                               >
-                                {topic}
+                                {TopicTitles}
                               </div>
                             ))}
                           </div>
@@ -92,17 +111,37 @@ const QuestionDetailPage: React.FC<Props> = async ({ params }) => {
                     </div>
                   </div>
                   <div>
-                    <div>Supporting Attachments:</div>
-                    <div>
-                      <div className="flex">
-                        <div>
-                          <div>logo item</div>
-                          <div className="flex">
-                            <div>name item</div>
-                            <div>size item</div>
+                    <div className="px-8 pb-8 pt-0">
+                      Supporting Attachments:
+                    </div>
+                    <div className="px-8 pb-8 pt-0">
+                      <div className="flex gap-2">
+                        <div className="items-center border-[1px] border-outline-200 bg-white rounded-lg flex w-[200px] h-[54px]">
+                          <div className="p-2">
+                            <Pdf></Pdf>
+                          </div>
+                          <div className="">
+                            <div className="font-normal text-sm text-black-900 truncate w-[140px]">
+                              KKM 2024-06-05 PAPER CONF
+                            </div>
+                            <div className="font-normal text-sm text-dim-500">
+                              1.2MB
+                            </div>
                           </div>
                         </div>
-                        <div>div 1</div>
+                        <div className="items-center border-[1px] border-outline-200 bg-white rounded-lg flex w-[200px] h-[54px]">
+                          <div className="p-2">
+                            <Pdf></Pdf>
+                          </div>
+                          <div className="">
+                            <div className="font-normal text-sm text-black-900 truncate w-[140px]">
+                              KKM 2024-06-05 PAPER CONF
+                            </div>
+                            <div className="font-normal text-sm text-dim-500">
+                              1.2MB
+                            </div>
+                          </div>
+                        </div>
                       </div>
                     </div>
                   </div>
