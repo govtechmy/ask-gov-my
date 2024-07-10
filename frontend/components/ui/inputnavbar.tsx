@@ -10,6 +10,7 @@ import Close from '@/icons/close';
 import RightArrow from '@/icons/rightarrow';
 import QuestionCircle from '@/icons/questioncircle';
 import AskQuestion from '../AskQuestion';
+import { useRouter } from '@/lib/i18n';
 
 interface InputNavbarProps {
   searchQuery: string;
@@ -39,6 +40,7 @@ const InputNavbar: React.FC<InputNavbarProps> = ({
   const [isTyping, setIsTyping] = useState(false);
   const [isSearching, setIsSearching] = useState(false);
   const [showNoResults, setShowNoResults] = useState(false);
+  const router = useRouter();
 
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setSearchQuery(event.target.value);
@@ -47,9 +49,18 @@ const InputNavbar: React.FC<InputNavbarProps> = ({
   };
 
   const handleKeyPress = (event: React.KeyboardEvent<HTMLInputElement>) => {
-    // if (event.key === 'Enter') {
-    //   setDisplayAllMatches(true);
-    // }f
+    if (event.key === 'Enter') {
+      setDisplayAllMatches(true);
+      router.push(`/searchresults?query=${searchQuery}`);
+    }
+  };
+
+  const truncateText = (text: string, maxWords: number) => {
+    const words = text.split(' ');
+    if (words.length > maxWords) {
+      return words.slice(0, maxWords).join(' ') + '...';
+    }
+    return text;
   };
 
   const fetchSearchResults = async (query: string) => {
@@ -134,7 +145,8 @@ const InputNavbar: React.FC<InputNavbarProps> = ({
                     {searchResults.slice(0, 20).map((result, index) => {
                       // take 20 result max
                       const agencyAcronym = Object.keys(AGENCY_TO_UUID).find(
-                        key => AGENCY_TO_UUID[key] === result.agency.toString(),
+                        key =>
+                          AGENCY_TO_UUID[key] === result.agency.id.toString(),
                       );
 
                       return (
