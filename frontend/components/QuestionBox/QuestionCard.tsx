@@ -17,6 +17,7 @@ interface Question {
   answer: string;
   topics: number[];
   email: string;
+  likes: number;  // Add the likes property here
 }
 
 interface QuestionCardProps {
@@ -45,7 +46,7 @@ const QuestionCard: React.FC<QuestionCardProps> = ({ question }) => {
     >
       <div className="flex">
         <div className="pr-4">
-          <IconQuestionSmile></IconQuestionSmile>
+          <IconQuestionSmile />
         </div>
         <div className="text-base font-medium text-brand-600">
           {question.question}
@@ -56,13 +57,12 @@ const QuestionCard: React.FC<QuestionCardProps> = ({ question }) => {
         <span>
           <div className="flex items-center font-medium text-sm">
             <div className="pr-4">
-              <JataNegaraIcon className="w-6 h-6 stroke-[#E4E4E7] dark:stroke-[#27272A]"></JataNegaraIcon>
+              <JataNegaraIcon className="w-6 h-6 stroke-[#E4E4E7] dark:stroke-[#27272A]" />
             </div>
             <div className="text-black-800">{t(agencyAcronym)}</div>
             <div className="px-1 text-black-700">({agencyAcronym})</div>
             <div className="font-normal text-sm text-dim-500">
-              {/* {new Date(question.date).toLocaleDateString('en-GB')} */}
-              <DateComponent date={question.date}></DateComponent>
+              <DateComponent date={question.date} />
             </div>
           </div>
         </span>
@@ -77,9 +77,9 @@ const QuestionCard: React.FC<QuestionCardProps> = ({ question }) => {
 
       <div className="mt-3 ml-10 flex items-center">
         <div className="mr-2">
-          <LikeIcon></LikeIcon>
+          <LikeIcon />
         </div>
-        <div className="mr-1 font-semibold text-sm text-dim-500"> 100 </div>
+        <div className="mr-1 font-semibold text-sm text-dim-500">{question.likes}</div>
         <div className="font-normal text-sm text-dim-500">
           people found this useful
         </div>
