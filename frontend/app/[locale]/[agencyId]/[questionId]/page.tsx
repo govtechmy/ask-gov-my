@@ -5,8 +5,10 @@ import RelatedTopics from '@/components/RelatedTopics';
 import RightArrow from '@/icons/rightarrow';
 import IconQuestionSmileSolo from '@/icons/iconquestionsmilesolo';
 import ThumbsCounter from '@/components/ThumbsCounter';
+import AgencyName from '@/components/AgencyName';
 import JataNegaraIcon from '@/icons/jatanegaraicon';
 import Pdf from '@/icons/pdf';
+import { AGENCY_TO_UUID } from '@/lib/agency';
 
 interface Props {
   params: {
@@ -31,14 +33,18 @@ interface Question {
 const QuestionDetailPage: React.FC<Props> = async ({ params }) => {
   const { locale, agencyId, questionId } = params;
 
-  const question: Question = await getQuestionById(questionId);
-  console.log(locale);
+  const agencyAcronym = (id: number): string | undefined => {
+    return Object.keys(AGENCY_TO_UUID).find(key => AGENCY_TO_UUID[key] === id.toString());
+  };
+
+  const question = await getQuestionById(questionId);
 
   if (!question) {
     return <div>Question not found</div>;
   }
 
   const topicTitles = await getTopicsDetail(question.topics);
+  const acronym = agencyAcronym(question.agency);
 
   return (
     <div className="">
@@ -85,7 +91,7 @@ const QuestionDetailPage: React.FC<Props> = async ({ params }) => {
                           <JataNegaraIcon className="stroke-[#E4E4E7] dark:stroke-[#27272A]" />
                         </div>
                         <div className="font-medium text-sm text-black-700 px-2">
-                          Ministry of Health (MOH)
+                          <AgencyName acronym={acronym} />
                         </div>
                         <div className="font-medium text-sm text-dim-500">
                           Answered 1 year ago

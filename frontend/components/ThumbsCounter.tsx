@@ -34,7 +34,6 @@ const ThumbsCounter: React.FC<ThumbsCounterProps> = ({ questionId, totalLikes })
     const savedFeedback = Cookies.get(`feedback_${questionId}`);
     const feedback = savedFeedback ? JSON.parse(savedFeedback) : { voted_like: false, voted_dislike: false };
 
-    // Update UI instantly
     setLastVote('like');
     setFeedbackLike(true);
     setFeedbackDislike(false);
