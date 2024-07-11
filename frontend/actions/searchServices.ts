@@ -39,7 +39,7 @@ export async function searchQuestions(query: string) {
               {
                 query_string: {
                   query: `*${query}*`,
-                  fields: ['question', 'agency.name', 'topics.title', 'answer'],
+                  fields: ['question', 'agency.name', 'topics.title', 'answer', 'agency.acronym'],
                 },
               },
               {

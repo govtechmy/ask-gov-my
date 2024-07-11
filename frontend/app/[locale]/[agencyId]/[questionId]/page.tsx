@@ -10,6 +10,7 @@ import JataNegaraIcon from '@/icons/jatanegaraicon';
 import Pdf from '@/icons/pdf';
 import { AGENCY_TO_UUID } from '@/lib/agency';
 import { redirect } from 'next/navigation';
+import DateComponent from '@/components/date';
 
 interface Props {
   params: {
@@ -85,8 +86,9 @@ const QuestionDetailPage: React.FC<Props> = async ({ params }) => {
                 <div>
                   <IconQuestionSmileSolo />
                 </div>
-                <div className="text-black-700 text-basem font-medium">
-                  Posted 5 days ago
+                <div className="text-black-700 flex text-basem font-medium">
+                  <div>Posted</div>
+                  <DateComponent date={question.date}/>
                 </div>
               </div>
 
