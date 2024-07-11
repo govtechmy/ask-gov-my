@@ -17,7 +17,7 @@ interface TrendingAgenciesProps {
 
 const TrendingAgencies: React.FC<TrendingAgenciesProps> = ({ agencies }) => {
   const t = useTranslations('Agency');
-  const top5Agencies = agencies.slice(0, 5);
+  const top5Agencies = agencies.slice(0, 10);
 
   return (
     <div className="pt-4">
