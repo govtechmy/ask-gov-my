@@ -14,9 +14,9 @@ class Command(BaseCommand):
         with open(csv_file_path, mode='r', encoding='utf-8') as file:
             reader = csv.DictReader(file)
             for row in reader:
-                question_text = row['Question']
-                answer_text = row['Answer']
-                agency_name = row['Agency']
+                question_text = row['question']
+                answer_text = row['answer']
+                agency_name = row['agency']
 
                 agency = Agency.objects.get(name=agency_name)
 
