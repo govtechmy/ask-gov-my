@@ -1,6 +1,6 @@
 import csv
 from django.core.management.base import BaseCommand
-from ask_gov.models import Agency, Question, Topic
+from ask_gov.models import Agency, Question
 
 class Command(BaseCommand):
     help = 'Load questions from a CSV file into the database'
@@ -16,16 +16,20 @@ class Command(BaseCommand):
             for row in reader:
                 question_text = row['question']
                 answer_text = row['answer']
-                agency_name = row['agency']
+                agency_id = row['agency']
 
-                agency = Agency.objects.get(name=agency_name)
+                try:
+                    agency = Agency.objects.get(id=agency_id)
+                except Agency.DoesNotExist:
+                    self.stdout.write(self.style.ERROR(f'Agency with ID {agency_id} does not exist.'))
+                    continue
 
                 question = Question.objects.create(
                     question=question_text,
                     answer=answer_text,
                     agency=agency,
                     state='completed',  
-                    email="example@example.com" 
+                    email="example@example.com"  
                 )
 
                 self.stdout.write(self.style.SUCCESS(f'Successfully added question "{question_text}"'))
