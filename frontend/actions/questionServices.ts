@@ -73,6 +73,11 @@ export async function getAllTopics(): Promise<Topic[]> {
   const data = await response.json();
   return data;
 }
+export async function getTopicByAgency(agencyId: number): Promise<Topic[]> {
+  const topics = await getAllTopics();
+  const filteredTopics = topics.filter(topic => topic.agency.id === agencyId);
+  return filteredTopics;
+}
 
 export async function getTopicsDetail(
   topicIds: number[],
