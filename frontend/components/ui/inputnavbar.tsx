@@ -96,7 +96,7 @@ const InputNavbar: React.FC<InputNavbarProps> = ({
 
   return (
     <div
-      className={`flex items-center border-outline-200 h-11 shadow-button border pl-3 pr-2  py-2 bg-white w-[800px] relative ${searchQuery.length > 0 ? 'rounded-b-none rounded-t-3xl' : 'rounded-full'}`}
+      className={`flex items-center border-outline-200 h-11 shadow-button border pl-3 pr-2  py-2 bg-[#FFFFFF] dark:bg-[#1D1D21] w-[800px] relative ${searchQuery.length > 0 ? 'rounded-b-none rounded-t-3xl' : 'rounded-full'}`}
     >
       <input
         className="flex-1 border-none outline-none px-2 py-1 bg-inherit w-[740px]"
@@ -130,7 +130,7 @@ const InputNavbar: React.FC<InputNavbarProps> = ({
         <Search className="text-white" />
       </div>
       {searchQuery.length > 0 && (
-        <div className="absolute top-full left-0 border-t-[1px] rounded-b-3xl bg-white shadow-lg w-full max-h-96 overflow-y-auto">
+        <div className="absolute top-full left-0 border-t-[1px] rounded-b-3xl bg-[#FFFFFF] dark:bg-[#1D1D21] shadow-lg w-full max-h-96 overflow-y-auto">
           <div className="overflow-y-auto max-h-60 pl-2 pr-3 pt-2">
             {/* Wrapper for scrollbar */}
             {isSearching ? (
@@ -152,7 +152,7 @@ const InputNavbar: React.FC<InputNavbarProps> = ({
                       return (
                         <div
                           key={index}
-                          className="flex items-center justify-between pr-2 pl-4 py-2 last:border-0 hover:bg-gray-100 h-[60px] w-[788px]"
+                          className="flex rounded-md items-center justify-between pr-2 pl-4 py-2 last:border-0 hover:bg-outline-200 h-[60px] w-[780px]"
                         >
                           <Link
                             href={`/${agencyAcronym?.toLowerCase()}/${result.id}`}
