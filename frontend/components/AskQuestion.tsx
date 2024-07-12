@@ -2,10 +2,34 @@
 import React, { useState } from 'react';
 import QuestionCircle from '@/icons/questioncircle';
 import PlusIcon from '@/icons/plusicon';
+import Close from '@/icons/close';
+import QuestionMarkWithBox from '@/icons/questionmarkwithbox';
+import MailLogo from '@/icons/maillogo';
+import Info from '@/icons/info';
+import TickCheckCircle from '@/icons/tickcheckcircle';
+import { submitQuestion } from '@/actions/questionServices';
 
 const AskQuestion = () => {
   const [isClicked, setIsClicked] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isModalOpenSubmit, setIsModalOpenSubmit] = useState(false);
+  const [question, setQuestion] = useState('');
+  const [email, setEmail] = useState('');
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (question && email) {
+      try {
+        await submitQuestion({ question, email });
+        console.log('Question submitted:', question, email);
+        handleModalCloseOpenModalSubmit();
+      } catch (error) {
+        console.error('Error submitting question:', error);
+      }
+    } else {
+      console.warn('Form is incomplete');
+    }
+  };
 
   const handleClick = () => {
     setIsClicked(true);
@@ -19,11 +43,24 @@ const AskQuestion = () => {
     setIsModalOpen(false);
   };
 
+  const handleModalDisplaySubmit = () => {
+    setIsModalOpenSubmit(true);
+  };
+
+  const closeModalSubmit = () => {
+    setIsModalOpenSubmit(false);
+  };
+
+  const handleModalCloseOpenModalSubmit = () => {
+    closeModal();
+    handleModalDisplaySubmit();
+  };
+
   return (
     <div className="items-center px-4 py-2 text-center border-outline-200 h-[60px] w-[788px]">
       <div className="text-sm items-center flex text-primary-500 justify-center h-full">
         {isClicked ? (
-          <div className="h-10 flex items-center text-white font-medium text-base border-[1px] border-[#702FF9] shadow-button bg-gradient-to-b from-[#B379FF] to-[#702FF9] px-4 py-2 rounded-lg">
+          <div className="h-10 flex items-center text-white font-medium text-base border-[1px] border-[#702FF9] shadow-button bg-gradient-to-b from-[#B379FF] to-[#702FF9] px-4 py-2 rounded-lg hover:cursor-pointer">
             <div className="pr-2">
               <PlusIcon className="stroke-[#FFFFFF] dark:stroke-[#FFFFFF]"></PlusIcon>
             </div>
@@ -39,74 +76,151 @@ const AskQuestion = () => {
         )}
       </div>
       {isModalOpen && (
-        //edit below
         <div className="fixed inset-0 bg-gray-900 bg-opacity-50 flex items-center justify-center">
-          <div className="bg-white p-6 rounded-lg shadow-lg w-[500px]">
-            <div
-              onClick={closeModal}
-              className="bg-black-800 rounded-lg shadow-button"
-            >
-              X
-            </div>
-            <h2 className="text-xl font-semibold mb-4">Ask a new question</h2>
-            <form>
-              <div className="mb-4">
-                <label
-                  htmlFor="question"
-                  className="block text-sm font-medium text-gray-700"
-                >
-                  Your question
-                </label>
-                <textarea
-                  id="question"
-                  name="question"
-                  rows={4}
-                  className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm focus:border-indigo-500 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
-                ></textarea>
-              </div>
-              <div className="mb-4">
-                <label
-                  htmlFor="name"
-                  className="block text-sm font-medium text-gray-700"
-                >
-                  Your name
-                </label>
-                <input
-                  type="text"
-                  id="name"
-                  name="name"
-                  className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm focus:border-indigo-500 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
-                />
-              </div>
-              <div className="mb-4">
-                <label
-                  htmlFor="notify"
-                  className="block text-sm font-medium text-gray-700"
-                >
-                  Notify me
-                </label>
-                <input
-                  type="email"
-                  id="notify"
-                  name="notify"
-                  className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm focus:border-indigo-500 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
-                />
-              </div>
-              <div className="text-xs text-gray-500 mb-4">
-                We usually respond within 3 to 15 working days, but it may take
-                longer if your question requires collaboration with other
-                parties. Once we've responded, the question and answer may be
-                published publicly on AskGovMY to assist other Rakyat.
-              </div>
+          <div className="bg-white rounded-xl shadow-card h-[750px] w-[600px] border-outline-200 border-[1px]">
+            <div className="p-[14px]">
               <div className="flex justify-end">
-                <button
-                  type="submit"
-                  className="inline-flex items-center px-4 py-2 border border-transparent text-base font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                <div
+                  onClick={closeModal}
+                  className="hover:cursor-pointer rounded-lg shadow-button h-8 w-8 flex items-center justify-center border-[1px] border-outline-200"
                 >
-                  Submit
-                </button>
+                  <Close />
+                </div>
               </div>
-            </form>
+              <div className="text-lg font-semibold pt-[18px] px-[18px] pb-[24px] text-left -mt-8 flex items-center text-black-900">
+                <div className="pr-3">
+                  <QuestionMarkWithBox></QuestionMarkWithBox>
+                </div>
+                <div>Ask a new question</div>
+              </div>
+              <form className="px-[18px]" onSubmit={handleSubmit}>
+                <div className="text-left">
+                  <div className="text-base font-medium pb-0 mb-0 text-black-700">
+                    Your question
+                  </div>
+                  <textarea
+                    placeholder="Type your question.."
+                    className="mt-[6px] h-[120px] text-left pl-3 pt-2
+                    w-full rounded-lg shadow-sm border-[1px] border-outline-200
+                    focus:border-none focus:outline-none focus:shadow-[0_0_0_1px_#B794FF,0_0_0_4px_#E2D5FE]
+                    placeholder:text-black-900 placeholder:font-normal placeholder:text-base"
+                    name="question"
+                    value={question}
+                    onChange={e => setQuestion(e.target.value)}
+                    required
+                  ></textarea>
+                </div>
+
+                <div className="text-left mt-4 mb-5">
+                  <div className="text-base font-medium pb-0 mb-0 text-black-700">
+                    Your name
+                  </div>
+                  <input
+                    className="h-10 pl-3
+                    w-full rounded-md shadow-sm border-[1px] border-outline-200
+                    focus:border-none focus:outline-none focus:shadow-[0_0_0_1px_#B794FF,0_0_0_4px_#E2D5FE]"
+                    // onChange={e => setName(e.target.value)}
+                  />
+                  <div className="text-sm font-normal pt-[6px] mb-0 text-dim-500">
+                    This will not be displayed publicly.
+                  </div>
+                </div>
+
+                <div className="text-left">
+                  <div className="mb-[4px] text-base font-medium pb-0 text-black-700">
+                    Notify me
+                  </div>
+                  <div className="flex items-center border-[1px] border-outline-200 shadow-sm rounded-md h-10 w-full">
+                    <div className="pl-3 pr-2">
+                      <MailLogo></MailLogo>
+                    </div>
+                    <input
+                      placeholder="yourname@example.com"
+                      className="w-full outline-none"
+                      name="email"
+                      type="email"
+                      value={email}
+                      onChange={e => setEmail(e.target.value)}
+                      required
+                    ></input>
+                  </div>
+
+                  <div className="text-sm font-normal pt-[6px] mb-6 text-dim-500">
+                    We'll send updates regarding your question.
+                  </div>
+
+                  <div className="flex border-[1px] border-[#D4C0FF] shadow-sm rounded-md w-full bg-[#F4EFFF]">
+                    <div className="pl-3 pt-3 pr-[10px]">
+                      <Info></Info>
+                    </div>
+                    <div className="items-center text-sm text-black-700 py-3 pr-3">
+                      <div className="flex ">
+                        <div className="">
+                          We usually respond within&nbsp;
+                          <span className="font-semibold text-[#702FF9]">
+                            3 to 15 working days
+                          </span>
+                          , but it may take longer if your question requires
+                          collaboration with other parties.
+                        </div>
+                      </div>
+                      <div className="pt-3">
+                        Once we've responded, the question and answer&nbsp;
+                        <span className="font-semibold text-[#702FF9]">
+                          may be published publicly on AskMyGov&nbsp;
+                        </span>
+                        to assist other rakyats.
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="flex flex-col items-center pt-9">
+                  <button
+                    type="submit"
+                    className="h-10 flex items-center text-white font-medium text-base border-[1px] border-[#702FF9]
+                    shadow-button bg-gradient-to-b from-[#B379FF] to-[#702FF9] px-4 py-2 rounded-lg hover:cursor-pointer"
+                    onClick={handleSubmit}
+                  >
+                    Submit
+                  </button>
+                  <div className="pt-3 text-dim-500 font-normal text-sm text-center">
+                    By submitting, you agree to AskMyGov's&nbsp;
+                    <span className="text-[#702FF9]">Terms of Use&nbsp;</span>
+                    and&nbsp;
+                    <span className="text-[#702FF9]">Privacy Policy.</span>
+                  </div>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {isModalOpenSubmit && (
+        <div className="fixed inset-0 bg-gray-900 bg-opacity-50 flex items-center justify-center">
+          <div className="bg-white rounded-xl shadow-card h-[248px] w-[400px] border-outline-200 border-[1px]">
+            <div className="p-6">
+              <div className="pb-4">
+                <TickCheckCircle className="stroke-[#15803D]"></TickCheckCircle>
+              </div>
+              <div className="pb-6 text-left">
+                <div className="text-black-900 font-semibold text-lg">
+                  Submission Received
+                </div>
+                <div className="text-black-700 font-normal text-sm">
+                  Your question has been received. We&apos;ll make every effort
+                  to connect you with the relevant agencies.
+                </div>
+              </div>
+              <div
+                onClick={closeModalSubmit}
+                className="bg-white rounded-lg shadow-button h-[44px] w-[352px] border-outline-200 border-[1px] hover:cursor-pointer flex items-center justify-center"
+              >
+                <Close></Close>
+                <div className="ml-2">Close</div>
+              </div>
+            </div>
           </div>
         </div>
       )}
