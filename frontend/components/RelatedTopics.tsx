@@ -1,26 +1,47 @@
+// RelatedTopics.tsx
+
 'use client';
 import { useTranslations } from 'next-intl';
-import { AGENCY_TO_UUID } from '@/lib/agency';
-import JataNegaraIcon from '@/icons/jatanegaraicon';
+import Link from 'next/link';
 
-const RelatedTopics = () => {
-  const t = useTranslations('Agency');
-  const agencylists = Object.entries(AGENCY_TO_UUID).map(([name, id]) => ({
-    id,
-    name: t(name),
-  }));
+interface Topic {
+  id: number;
+  title: string;
+  title_ms?: string;
+}
 
-  const top5Agencies = agencylists.slice(0, 5);
+interface RelatedTopicsProps {
+  topics: Topic[];
+  locale: string;
+  agencyId: string; 
+}
+
+const RelatedTopics: React.FC<RelatedTopicsProps> = ({ topics, locale, agencyId }) => {
+  const t = useTranslations('Topics');
 
   return (
     <div className="pt-4">
       <ul className="flex flex-col justify-between h-full">
-        {top5Agencies.map(agency => (
-          <li key={agency.id} className="py-2">
-            <div className="flex items-center ">
-              <div className="text-base font-normal text-black-800 hover:cursor-pointer hover:text-[#702FF9] dark:hover:text-[#9E70FF] ">
-                {agency.name}
+        <li className="py-2">
+          <div className="flex items-center ">
+            <div className="text-base font-normal text-black-800 hover:cursor-pointer hover:text-[#702FF9] dark:hover:text-[#9E70FF] ">
+              <div className="font-semibold text-base text-black-700">
+                {t('relatedtopics')}
               </div>
+              <Link href={`/${agencyId}`}>
+                {t('alltopics')}
+              </Link>
+            </div>
+          </div>
+        </li>
+        {topics.map((topic) => (
+          <li key={topic.id} className="py-2">
+            <div className="flex items-center ">
+              <Link href={`/${agencyId}/topics/${topic.id}`}>
+                <div className="text-base font-normal text-black-800 hover:cursor-pointer hover:text-[#702FF9] dark:hover:text-[#9E70FF] ">
+                  {locale === 'ms' ? topic.title_ms : topic.title}
+                </div>
+              </Link>
             </div>
           </li>
         ))}

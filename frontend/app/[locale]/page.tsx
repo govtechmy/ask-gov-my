@@ -19,11 +19,6 @@ const MainPage = async ({
   const { questions } = await getAllQuestions(page, pageSize);
   const agencies = await getTrendingAgencies();
 
-  async function submitactions(params: FormData) {
-    'use server';
-    console.log('Hello');
-  }
-
   return (
     <div className="">
       <div className="">
@@ -38,9 +33,7 @@ const MainPage = async ({
           </div>
         </div>
 
-        <form action={submitactions}>
           <SearchNavbar />
-        </form>
 
         <div className="container mt-10 flex text-out">
           <div className="max-w-screen-2xl">
@@ -54,7 +47,7 @@ const MainPage = async ({
             <div className="font-semibold text-base text-black-700">
               Trending Agencies
             </div>
-            {/* <TrendingAgencies agencies={agencies} /> */}
+            <TrendingAgencies agencies={agencies} />
           </div>
         </div>
 

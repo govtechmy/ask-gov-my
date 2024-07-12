@@ -103,6 +103,7 @@ const InputNavbar: React.FC<InputNavbarProps> = ({
         placeholder="Search by keyword or agency name (eg. MOH, MOT)"
         value={searchQuery}
         onChange={handleInputChange}
+        onKeyPress={handleKeyPress}
       />
       {searchQuery.length > 0 && (
         <div className="absolute right-10 bg-transparent flex text-dim-500 items-center">
