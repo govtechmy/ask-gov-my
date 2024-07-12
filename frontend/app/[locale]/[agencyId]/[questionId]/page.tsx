@@ -11,6 +11,7 @@ import Pdf from '@/icons/pdf';
 import { AGENCY_TO_UUID } from '@/lib/agency';
 import { redirect } from 'next/navigation';
 import DateComponent from '@/components/date';
+import Link from 'next/link';
 
 interface Props {
   params: {
@@ -76,11 +77,13 @@ const QuestionDetailPage: React.FC<Props> = async ({ params }) => {
           <div className="max-w-screen-2xl">
             <div className="pb-7">
               <div className="flex items-center gap-1">
+                <Link href={"/"}>
                 <div className="font-medium text-dim-500 text-sm">Home</div>
+                </Link>
                 <div>
                   <RightArrow />
                 </div>
-                <div className="font-medium text-black-800 text-sm">EPF</div>
+                <div className="font-medium text-black-800 text-sm">{acronym}</div>
               </div>
 
               <div className="flex items-center gap-3 mt-3">
