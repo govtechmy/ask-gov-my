@@ -1,4 +1,6 @@
 'use client';
+import { useState, useEffect } from 'react';
+import { useTranslations } from 'next-intl';
 
 interface Topic {
   id: number;
@@ -17,9 +19,17 @@ const TopicList: React.FC<TopicListProps> = ({
   locale,
   selectedTopicId,
 }) => {
+  const t = useTranslations('Topics');
+  const [currentPath, setCurrentPath] = useState('');
+
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      setCurrentPath(window.location.pathname);
+    }
+  }, []);
+
   const constructHref = (topicId: number) => {
-    const currentPath = window.location.pathname;
-    return currentPath.includes('/topics/') //do ternary operator to check if already got 'topics' in url
+    return currentPath.includes('/topics/')
       ? currentPath.replace(/\/topics\/\d+$/, `/topics/${topicId}`)
       : `${currentPath}/topics/${topicId}`;
   };
