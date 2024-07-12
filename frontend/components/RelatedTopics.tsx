@@ -1,5 +1,3 @@
-// RelatedTopics.tsx
-
 'use client';
 import { useTranslations } from 'next-intl';
 import Link from 'next/link';
