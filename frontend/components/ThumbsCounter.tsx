@@ -81,13 +81,12 @@ const ThumbsCounter: React.FC<ThumbsCounterProps> = ({
       ? JSON.parse(savedFeedback)
       : { voted_like: false, voted_dislike: false };
 
-    // Update UI instantly
     setLastVote('dislike');
     setFeedbackLike(false);
     setFeedbackDislike(true);
 
-    if (feedback.last_vote !== 'dislike') {
-      setLikes(prevLikes => prevLikes - 1);
+    if (feedback.last_vote !== 'dislike' && likes > 0) {
+      setLikes(prevLikes => Math.max(prevLikes - 1, 0));
 
       Cookies.set(
         `feedback_${questionId}`,
