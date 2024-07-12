@@ -1,9 +1,11 @@
 import csv
 from django.core.management.base import BaseCommand
 from ask_gov.models import Agency, Question
+from ask_gov.serializers import QuestionSerializer
+from ask_gov.elasticsearch_client import client
 
 class Command(BaseCommand):
-    help = 'Load questions from a CSV file into the database'
+    help = 'Load questions from a CSV file into the database and index them into Elasticsearch'
 
     def add_arguments(self, parser):
         parser.add_argument('csv_file', type=str, help='The path to the CSV file')
@@ -29,9 +31,27 @@ class Command(BaseCommand):
                     answer=answer_text,
                     agency=agency,
                     state='completed',  
-                    email="example@example.com"  
+                    email="example@example.com" 
                 )
 
-                self.stdout.write(self.style.SUCCESS(f'Successfully added question "{question_text}"'))
+                serializer = QuestionSerializer(question)
+                document = serializer.data
 
-        self.stdout.write(self.style.SUCCESS('Successfully loaded all questions from the CSV file.'))
+                agency_data = {
+                    "id": agency.id,
+                    "name": agency.name,
+                    "acronym": agency.acronym,
+                    "name_ms": agency.name_ms 
+                }
+
+                document['agency'] = agency_data
+
+                client.index(
+                    index='questions',
+                    id=str(question.id),
+                    document=document
+                )
+
+                self.stdout.write(self.style.SUCCESS(f'Successfully added and indexed question "{question_text}"'))
+
+        self.stdout.write(self.style.SUCCESS('Successfully loaded and indexed all questions from the CSV file.'))
