@@ -30,6 +30,13 @@
     "forgotpass": "Lupa kata laluan?"
   },
 
+  "Topics": {
+    "alltopics": "Semua Topik",
+    "relatedtopics": "Topik Berkaitan"
+
+  },
+
+
   "Agency": {
     "agency": "Agensi",
     "MAFS": "Kementerian Pertanian dan Keterjaminan Makanan",
