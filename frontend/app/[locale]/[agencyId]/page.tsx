@@ -1,17 +1,16 @@
-import {
-  getQuestionsByAgency,
-  getAgencyList,
-} from '@/actions/questionServices';
+import { getQuestionsByAgency } from '@/actions/questionServices';
 import QuestionBox from '@/components/QuestionBox/QuestionBox';
-import AgencySidebar from '@/components/AgencySideBar';
 import { AGENCY_TO_UUID } from '@/lib/agency';
 import Header from '@/components/HeaderDetails/Header';
 import SearchNavbar from '@/components/HeaderDetails/SearchNavBar';
 import Footer from '@/components/FooterDetails/Footer';
+import TopicList from '@/components/TopicList';
+import { getTopicByAgency } from '@/actions/questionServices';
 
 interface Props {
   params: {
     agencyId: string;
+    locale: string;
   };
   searchParams: {
     page?: string;
@@ -19,33 +18,24 @@ interface Props {
 }
 
 const AgencyPage = async ({ params, searchParams }: Props) => {
-  const { agencyId } = params;
-  const page = parseInt(searchParams.page || '1', 10);
-  const pageSize = 1000;
-  const { questions, total } = await getQuestionsByAgency(
-    AGENCY_TO_UUID[agencyId.toUpperCase()],
-    page,
-    pageSize,
-  );
-  const totalPages = Math.ceil(total / pageSize);
-
-  const agencies = await getAgencyList();
-
-  const formattedAgencyId = agencyId.replace(/\s+/g, '_').toUpperCase();
+  const { agencyId, locale } = params; //agencyId is actually agency acronym
+  const agencyUUID = AGENCY_TO_UUID[agencyId.toUpperCase()]
+  const { questions } = await getQuestionsByAgency(agencyUUID);
+  const topics = await getTopicByAgency(parseInt(agencyUUID))
 
   return (
     <div className="container max-w-full max-h-full">
-      <Header></Header>
-      <SearchNavbar></SearchNavbar>
+      <Header />
+      <SearchNavbar />
       <div className="mt-4 flex">
-        <div className="w-1/4">
-          <AgencySidebar agencies={agencies} />
-        </div>
         <div className="w-3/4">
           <QuestionBox questions={questions} />
         </div>
+        <div className="w-1/4">
+          <TopicList topics={topics} locale={locale} />
+        </div>
       </div>
-      <Footer></Footer>
+      <Footer />
     </div>
   );
 };
