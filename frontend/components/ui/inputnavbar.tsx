@@ -8,7 +8,6 @@ import Search from '@/icons/search';
 import JataNegaraIcon from '@/icons/jatanegaraicon';
 import Close from '@/icons/close';
 import RightArrow from '@/icons/rightarrow';
-import QuestionCircle from '@/icons/questioncircle';
 import AskQuestion from '../AskQuestion';
 import { useRouter } from '@/lib/i18n';
 
