@@ -19,9 +19,9 @@ interface Props {
 
 const AgencyPage = async ({ params, searchParams }: Props) => {
   const { agencyId, locale } = params; //agencyId is actually agency acronym
-  const agencyUUID = AGENCY_TO_UUID[agencyId.toUpperCase()]
+  const agencyUUID = AGENCY_TO_UUID[agencyId.toUpperCase()];
   const { questions } = await getQuestionsByAgency(agencyUUID);
-  const topics = await getTopicByAgency(parseInt(agencyUUID))
+  const topics = await getTopicByAgency(parseInt(agencyUUID));
 
   return (
     <div className="container max-w-full max-h-full">

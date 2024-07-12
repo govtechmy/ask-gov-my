@@ -1,4 +1,8 @@
-import { getQuestionById, getTopicsDetail, getTopicByAgency } from '@/actions/questionServices';
+import {
+  getQuestionById,
+  getTopicsDetail,
+  getTopicByAgency,
+} from '@/actions/questionServices';
 import Header from '@/components/HeaderDetails/Header';
 import Footer from '@/components/FooterDetails/Footer';
 import RelatedTopics from '@/components/RelatedTopics';
@@ -11,6 +15,7 @@ import Pdf from '@/icons/pdf';
 import { AGENCY_TO_UUID } from '@/lib/agency';
 import { redirect } from 'next/navigation';
 import DateComponent from '@/components/date';
+import Link from 'next/link';
 
 interface Props {
   params: {
@@ -76,20 +81,22 @@ const QuestionDetailPage: React.FC<Props> = async ({ params }) => {
           <div className="max-w-screen-2xl">
             <div className="pb-7">
               <div className="flex items-center gap-1">
+                <Link href={"/"}>
                 <div className="font-medium text-dim-500 text-sm">Home</div>
+                </Link>
                 <div>
                   <RightArrow />
                 </div>
-                <div className="font-medium text-black-800 text-sm">EPF</div>
+                <div className="font-medium text-black-800 text-sm">{acronym}</div>
               </div>
 
               <div className="flex items-center gap-3 mt-3">
                 <div>
                   <IconQuestionSmileSolo />
                 </div>
-                <div className="text-black-700 flex text-basem font-medium">
+                <div className="text-black-700 flex text-base font-medium">
                   <div>Posted</div>
-                  <DateComponent date={question.date}/>
+                  <DateComponent date={question.date} />
                 </div>
               </div>
 
@@ -188,7 +195,11 @@ const QuestionDetailPage: React.FC<Props> = async ({ params }) => {
 
           <div className="pl-10 w-[500px]">
             <div className="font-semibold text-base text-black-700">
-              <RelatedTopics topics={topics} locale={locale} agencyId={agencyId}/>
+              <RelatedTopics
+                topics={topics}
+                locale={locale}
+                agencyId={agencyId}
+              />
             </div>
           </div>
         </div>
