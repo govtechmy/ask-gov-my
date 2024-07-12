@@ -4,6 +4,13 @@
 
 @layer base {
   :root {
+    /* askmygovbrand */
+    --askmygov-brand-600: 66.53% 0.271 297.01; /* #702FF9 */
+    --askmygov-brand-700: 60.92% 0.271 296.12; /* #5B1AE6 */
+    --askmygov-brand-300: 78.42% 0.135 297.08; /* #B794FF */
+    --askmygov-brand-200: 87.62% 0.076 297.11; /* #D4C0FF */
+    --askmygov-brand-50: 97.56% 0.02 297.1; /* #F4EFFF */
+
     /* base */
     --myds-black-900: 21.03% 0.006 285.89; /* #18181B or Zinc 900 */
     --myds-black-800: 27.39% 0.005 286.03; /* #27272A or Zinc 800 */
@@ -42,6 +49,13 @@
   }
 
   .dark {
+    /* askmygovbrand */
+    --askmygov-brand-600: 66.53% 0.271 297.01; /* #702FF9 */
+    --askmygov-brand-700: 60.92% 0.271 296.12; /* #5B1AE6 */
+    --askmygov-brand-300: 44.21% 0.235 295.08; /* #4F20B2 */
+    --askmygov-brand-200: 43.25% 0.234 295.12; /* #4F1FB4 */
+    --askmygov-brand-50: 23.34% 0.082 295.88; /* #201636 */
+
     /* base */
     --myds-black-900: 100% 0 0; /* #FFFFFF */
     --myds-black-800: 96.74% 0.001 286.38; /* #F4F4F5 */
