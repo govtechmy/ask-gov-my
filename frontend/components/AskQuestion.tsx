@@ -65,7 +65,7 @@ const AskQuestion = () => {
     <div className="items-center px-4 py-2 text-center border-outline-200 h-[60px] w-[788px]">
       <div className="text-sm items-center flex text-primary-500 justify-center h-full">
         {isClicked ? (
-          <div className="h-10 flex items-center text-white font-medium text-base border-[1px] border-[#702FF9] shadow-button bg-gradient-to-b from-[#B379FF] to-[#702FF9] px-4 py-2 rounded-lg hover:cursor-pointer">
+          <div className="h-10 flex items-center text-[#FFFFFF] font-medium text-base border-[1px] border-[#702FF9] shadow-button bg-gradient-to-b from-[#B379FF] to-[#702FF9] px-4 py-2 rounded-lg hover:cursor-pointer">
             <div className="pr-2">
               <PlusIcon className="stroke-[#FFFFFF] dark:stroke-[#FFFFFF]"></PlusIcon>
             </div>
