@@ -139,6 +139,8 @@ export async function submitQuestion(data: QuestionSubmission): Promise<void> {
   if (!response.ok) {
     throw new Error('Failed to submit question');
   }
+
+  return response.json();
 }
 
 export async function getAgencyList(): Promise<{ id: string; name: string }[]> {
