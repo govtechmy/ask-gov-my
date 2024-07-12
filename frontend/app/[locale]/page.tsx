@@ -33,7 +33,7 @@ const MainPage = async ({
           </div>
         </div>
 
-          <SearchNavbar />
+        <SearchNavbar />
 
         <div className="container mt-10 flex text-out">
           <div className="max-w-screen-2xl">
