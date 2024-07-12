@@ -1,4 +1,4 @@
-import { getQuestionById, getTopicsDetail } from '@/actions/questionServices';
+import { getQuestionById, getTopicsDetail, getTopicByAgency } from '@/actions/questionServices';
 import Header from '@/components/HeaderDetails/Header';
 import Footer from '@/components/FooterDetails/Footer';
 import RelatedTopics from '@/components/RelatedTopics';
@@ -36,7 +36,8 @@ interface Question {
 
 const QuestionDetailPage: React.FC<Props> = async ({ params }) => {
   const { locale, agencyId, questionId } = params;
-
+  const agencyUUID = parseInt(AGENCY_TO_UUID[agencyId.toUpperCase()]);
+  const topics = await getTopicByAgency(agencyUUID);
   const agencyAcronym = (id: number): string | undefined => {
     return Object.keys(AGENCY_TO_UUID).find(
       key => AGENCY_TO_UUID[key] === id.toString(),
@@ -187,8 +188,7 @@ const QuestionDetailPage: React.FC<Props> = async ({ params }) => {
 
           <div className="pl-10 w-[500px]">
             <div className="font-semibold text-base text-black-700">
-              Related Topics
-              <RelatedTopics />
+              <RelatedTopics topics={topics} locale={locale} agencyId={agencyId}/>
             </div>
           </div>
         </div>
