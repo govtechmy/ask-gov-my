@@ -6,10 +6,13 @@ import Close from '@/icons/close';
 import QuestionMarkWithBox from '@/icons/questionmarkwithbox';
 import MailLogo from '@/icons/maillogo';
 import Info from '@/icons/info';
+import { MailIcon } from 'lucide-react';
+import TickCheckCircle from '@/icons/tickcheckcircle';
 
 const AskQuestion = () => {
   const [isClicked, setIsClicked] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isModalOpenSubmit, setIsModalOpenSubmit] = useState(false);
 
   const handleClick = () => {
     setIsClicked(true);
@@ -21,6 +24,19 @@ const AskQuestion = () => {
 
   const closeModal = () => {
     setIsModalOpen(false);
+  };
+
+  const handleModalDisplaySubmit = () => {
+    setIsModalOpenSubmit(true);
+  };
+
+  const closeModalSubmit = () => {
+    setIsModalOpenSubmit(false);
+  };
+
+  const handleModalCloseOpenModalSubmit = () => {
+    closeModal();
+    handleModalDisplaySubmit();
   };
 
   return (
@@ -140,6 +156,7 @@ const AskQuestion = () => {
                     type="submit"
                     className="h-10 flex items-center text-white font-medium text-base border-[1px] border-[#702FF9]
                     shadow-button bg-gradient-to-b from-[#B379FF] to-[#702FF9] px-4 py-2 rounded-lg hover:cursor-pointer"
+                    onClick={handleModalCloseOpenModalSubmit}
                   >
                     Submit
                   </button>
@@ -147,10 +164,39 @@ const AskQuestion = () => {
                     By submitting, you agree to AskMyGov's&nbsp;
                     <span className="text-[#702FF9]">Terms of Use&nbsp;</span>
                     and&nbsp;
-                    <span className="text-[#702FF9]">Privacy Policy</span>
+                    <span className="text-[#702FF9]">Privacy Policy.</span>
                   </div>
                 </div>
               </form>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {isModalOpenSubmit && (
+        <div className="fixed inset-0 bg-gray-900 bg-opacity-50 flex items-center justify-center">
+          {/* under here big white background */}
+          <div className="bg-white rounded-xl shadow-card h-[248px] w-[400px] border-outline-200 border-[1px]">
+            <div className="p-6">
+              <div className="pb-4">
+                <TickCheckCircle className="stroke-[#15803D]"></TickCheckCircle>
+              </div>
+              <div className="pb-6 text-left">
+                <div className="text-black-900 font-semibold text-lg">
+                  Submission Received
+                </div>
+                <div className="text-black-700 font-normal text-sm">
+                  Your question has been received. We&apos;ll make every effort
+                  to connect you with the relevant agencies.
+                </div>
+              </div>
+              <div
+                onClick={closeModalSubmit}
+                className="bg-white rounded-lg shadow-button h-[44px] w-[352px] border-outline-200 border-[1px] hover:cursor-pointer flex items-center justify-center"
+              >
+                <Close></Close>
+                <div className="ml-2">Close</div>
+              </div>
             </div>
           </div>
         </div>
