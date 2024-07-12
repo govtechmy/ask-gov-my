@@ -29,6 +29,10 @@
     "2ndbutton": "Continue with MyGovUC",
     "forgotpass": "Forgot password?"
   },
+  "Topics": {
+    "alltopics": "All Topics",
+    "relatedtopics": "Related Topics"
+  },
 
   "Agency": {
     "agency": "Agency",
