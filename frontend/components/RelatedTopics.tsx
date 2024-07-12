@@ -13,10 +13,14 @@ interface Topic {
 interface RelatedTopicsProps {
   topics: Topic[];
   locale: string;
-  agencyId: string; 
+  agencyId: string;
 }
 
-const RelatedTopics: React.FC<RelatedTopicsProps> = ({ topics, locale, agencyId }) => {
+const RelatedTopics: React.FC<RelatedTopicsProps> = ({
+  topics,
+  locale,
+  agencyId,
+}) => {
   const t = useTranslations('Topics');
 
   return (
@@ -28,13 +32,11 @@ const RelatedTopics: React.FC<RelatedTopicsProps> = ({ topics, locale, agencyId 
               <div className="font-semibold text-base text-black-700">
                 {t('relatedtopics')}
               </div>
-              <Link href={`/${agencyId}`}>
-                {t('alltopics')}
-              </Link>
+              <Link href={`/${agencyId}`}>{t('alltopics')}</Link>
             </div>
           </div>
         </li>
-        {topics.map((topic) => (
+        {topics.map(topic => (
           <li key={topic.id} className="py-2">
             <div className="flex items-center ">
               <Link href={`/${agencyId}/topics/${topic.id}`}>
