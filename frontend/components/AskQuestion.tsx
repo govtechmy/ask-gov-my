@@ -6,13 +6,31 @@ import Close from '@/icons/close';
 import QuestionMarkWithBox from '@/icons/questionmarkwithbox';
 import MailLogo from '@/icons/maillogo';
 import Info from '@/icons/info';
-import { MailIcon } from 'lucide-react';
 import TickCheckCircle from '@/icons/tickcheckcircle';
+import { submitQuestion } from '@/actions/questionServices';
 
 const AskQuestion = () => {
   const [isClicked, setIsClicked] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isModalOpenSubmit, setIsModalOpenSubmit] = useState(false);
+  const [question, setQuestion] = useState('');
+  const [email, setEmail] = useState('');
+  // const [name, setName] = useState('');
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (question && email) {
+      try {
+        await submitQuestion({ question, email });
+        console.log('Question submitted:', question, email);
+        handleModalCloseOpenModalSubmit();
+      } catch (error) {
+        console.error('Error submitting question:', error);
+      }
+    } else {
+      console.warn('Form is incomplete');
+    }
+  };
 
   const handleClick = () => {
     setIsClicked(true);
@@ -39,6 +57,10 @@ const AskQuestion = () => {
     handleModalDisplaySubmit();
   };
 
+  function testingprint() {
+    console.log('Function not implemented.');
+  }
+
   return (
     <div className="items-center px-4 py-2 text-center border-outline-200 h-[60px] w-[788px]">
       <div className="text-sm items-center flex text-primary-500 justify-center h-full">
@@ -59,10 +81,7 @@ const AskQuestion = () => {
         )}
       </div>
       {isModalOpen && (
-        //edit below
-        //under here background no color
         <div className="fixed inset-0 bg-gray-900 bg-opacity-50 flex items-center justify-center">
-          {/* under here big white background */}
           <div className="bg-white rounded-xl shadow-card h-[750px] w-[600px] border-outline-200 border-[1px]">
             <div className="p-[14px]">
               <div className="flex justify-end">
@@ -79,7 +98,7 @@ const AskQuestion = () => {
                 </div>
                 <div>Ask a new question</div>
               </div>
-              <form className="px-[18px]">
+              <form className="px-[18px]" onSubmit={handleSubmit}>
                 <div className="text-left">
                   <div className="text-base font-medium pb-0 mb-0 text-black-700">
                     Your question
@@ -90,6 +109,9 @@ const AskQuestion = () => {
                     w-full rounded-lg shadow-sm border-[1px] border-outline-200
                     focus:border-none focus:outline-none focus:shadow-[0_0_0_1px_#B794FF,0_0_0_4px_#E2D5FE]
                     placeholder:text-black-900 placeholder:font-normal placeholder:text-base"
+                    name="question"
+                    value={question}
+                    onChange={e => setQuestion(e.target.value)}
                   ></textarea>
                 </div>
 
@@ -101,6 +123,7 @@ const AskQuestion = () => {
                     className="h-10 pl-3
                     w-full rounded-md shadow-sm border-[1px] border-outline-200
                     focus:border-none focus:outline-none focus:shadow-[0_0_0_1px_#B794FF,0_0_0_4px_#E2D5FE]"
+                    // onChange={e => setName(e.target.value)}
                   />
                   <div className="text-sm font-normal pt-[6px] mb-0 text-dim-500">
                     This will not be displayed publicly.
@@ -118,6 +141,11 @@ const AskQuestion = () => {
                     <input
                       placeholder="yourname@example.com"
                       className="w-full outline-none"
+                      name="email"
+                      type="email"
+                      value={email}
+                      onChange={e => setEmail(e.target.value)}
+                      required
                     ></input>
                   </div>
 
@@ -156,7 +184,7 @@ const AskQuestion = () => {
                     type="submit"
                     className="h-10 flex items-center text-white font-medium text-base border-[1px] border-[#702FF9]
                     shadow-button bg-gradient-to-b from-[#B379FF] to-[#702FF9] px-4 py-2 rounded-lg hover:cursor-pointer"
-                    onClick={handleModalCloseOpenModalSubmit}
+                    onClick={testingprint}
                   >
                     Submit
                   </button>
@@ -175,7 +203,6 @@ const AskQuestion = () => {
 
       {isModalOpenSubmit && (
         <div className="fixed inset-0 bg-gray-900 bg-opacity-50 flex items-center justify-center">
-          {/* under here big white background */}
           <div className="bg-white rounded-xl shadow-card h-[248px] w-[400px] border-outline-200 border-[1px]">
             <div className="p-6">
               <div className="pb-4">
