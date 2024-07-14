@@ -31,7 +31,7 @@ const Footer = () => {
             {t('api_docs')}
           </a>
           <a
-            href="#"
+            href="/admin"
             className="text-sm text-zinc-500 [text-underline-position:from-font] hover:text-black hover:underline dark:hover:text-white"
           >
             {t('admin_login')}
