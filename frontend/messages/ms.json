@@ -47,7 +47,7 @@
     "trendingQ": "Soalan-soalan sohor kini",
     "trendingA": "Agensi-agensi sohor kini"
   },
-
+  
   "Agency": {
     "agency": "Agensi",
     "MAFS": "Kementerian Pertanian dan Keterjaminan Makanan",
@@ -76,5 +76,24 @@
     "KPWKM": "Kementerian Pembangunan Wanita, Keluarga dan Masyarakat",
     "KKR": "Kementerian Kerja Raya",
     "KBS": "Kementerian Belia Dan Sukan"
+  },
+
+  "Askquestions": {
+    "ask_new_question": "Tanya soalan baru",
+    "cant_find": "Saya tidak dapat mencari apa yang saya cari.",
+    "your_question": "Soalan anda",
+    "type_your_question": "Taip soalan anda...",
+    "your_name": "Nama anda",
+    "name_not_displayed": "Nama anda tidak akan dipaparkan secara terbuka.",
+    "notify_me": "Beritahu saya",
+    "your_email": "namaanda@contoh.com",
+    "email_updates": "Kami akan menghantar kemas kini mengenai soalan anda.",
+    "response_time": "Kami biasanya menjawab dalam masa 3 hingga 15 hari bekerja, tetapi mungkin mengambil masa lebih lama jika soalan anda memerlukan kerjasama dengan pihak lain.",
+    "response_public": "Setelah kami menjawab, soalan dan jawapan mungkin diterbitkan secara terbuka di AskMyGov untuk membantu rakyat-rakyat lain.",
+    "submit": "Hantar",
+    "terms": "Dengan menghantar, anda bersetuju dengan Terma Penggunaan dan Dasar Privasi AskMyGov.",
+    "submission_received": "Penerimaan Penghantaran",
+    "submission_received_detail": "Soalan anda telah diterima. Kami akan berusaha sedaya upaya untuk menghubungkan anda dengan agensi yang berkaitan.",
+    "close": "Tutup"
   }
 }

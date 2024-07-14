@@ -75,5 +75,24 @@
     "KPWKM": "Ministry of Women, Family and Community Development",
     "KKR": "Ministry of Works",
     "KBS": "Ministry of Youth and Sports"
+  },
+  
+  "Askquestions": {
+    "ask_new_question": "Ask a new question",
+    "cant_find": "I can't find what I am looking for.",
+    "your_question": "Your question",
+    "type_your_question": "Type your question...",
+    "your_name": "Your name",
+    "name_not_displayed": "This will not be displayed publicly.",
+    "notify_me": "Notify me",
+    "your_email": "yourname@example.com",
+    "email_updates": "We'll send updates regarding your question.",
+    "response_time": "We usually respond within 3 to 15 working days, but it may take longer if your question requires collaboration with other parties.",
+    "response_public": "Once we've responded, the question and answer may be published publicly on AskMyGov to assist other rakyats.",
+    "submit": "Submit",
+    "terms": "By submitting, you agree to AskMyGov's Terms of Use and Privacy Policy.",
+    "submission_received": "Submission Received",
+    "submission_received_detail": "Your question has been received. We'll make every effort to connect you with the relevant agencies.",
+    "close": "Close"
   }
 }
