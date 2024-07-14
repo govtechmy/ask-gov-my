@@ -45,11 +45,11 @@ const InputNavbar: React.FC<InputNavbarProps> = ({
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setSearchQuery(event.target.value);
     setIsTyping(true);
-    setShowNoResults(false); // Reset no results message on input change
+    setShowNoResults(false);
   };
 
   const handleKeyPress = (event: React.KeyboardEvent<HTMLInputElement>) => {
-    if (event.key === 'Enter') {
+    if (event.key === 'Enter' && searchQuery.trim().length > 0) {
       setDisplayAllMatches(true);
       router.push(`/searchresults?query=${searchQuery}`);
     }
@@ -70,11 +70,11 @@ const InputNavbar: React.FC<InputNavbarProps> = ({
       setSearchResults(results);
       setIsSearching(false);
       setIsTyping(false);
-      setShowNoResults(results.length === 0); // Show no results if results array is empty
+      setShowNoResults(results.length === 0); // show no results if results array is empty
     } else {
       setSearchResults([]);
       setIsTyping(false);
-      setShowNoResults(false); // Reset no results message if query is empty
+      setShowNoResults(false); // reset no results message if query is empty
     }
   };
 
@@ -87,7 +87,7 @@ const InputNavbar: React.FC<InputNavbarProps> = ({
     setSearchQuery('');
     setSearchResults([]);
     setIsTyping(false);
-    setShowNoResults(false); // Reset no results message on clear
+    setShowNoResults(false); // reset no results message on clear
   };
 
   useEffect(() => {
@@ -96,7 +96,7 @@ const InputNavbar: React.FC<InputNavbarProps> = ({
 
   return (
     <div
-      className={`flex items-center border-outline-200 h-11 shadow-button border pl-3 pr-2  py-2 bg-[#FFFFFF] dark:bg-[#1D1D21] w-[800px] relative ${searchQuery.length > 0 ? 'rounded-b-none rounded-t-3xl' : 'rounded-full'}`}
+      className={`flex items-center border-outline-200 h-11 shadow-button border pl-3 pr-2 py-2 bg-[#FFFFFF] dark:bg-[#1D1D21] w-[800px] relative ${searchQuery.length > 0 ? 'rounded-b-none rounded-t-3xl' : 'rounded-full'}`}
     >
       <input
         className="flex-1 border-none outline-none px-2 py-1 bg-inherit w-[740px]"
