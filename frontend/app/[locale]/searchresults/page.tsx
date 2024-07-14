@@ -37,7 +37,7 @@ const SearchResultPage = async ({
             <div className="font-semibold text-base text-black-700 pb-7 flex">
                 {questions.length}
               <div>
-              <WordTranslate translate={'Search'} keyword={'searchresult'}></WordTranslate>
+              <WordTranslate translate={'Search'} keyword={'search_result'}></WordTranslate>
               </div>
               <div> "{query}"</div>
             </div>
