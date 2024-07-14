@@ -39,7 +39,12 @@
     "title": "Your one-stop centre to ask questions to Government officers!",
     "reminder": "You must search among existing questions before you are allowed to ask",
     "search": "Search by keyword or agency name (eg. MOH, MOT)",
-    "searchresult":"search results for"
+    "searchresult":"search results for",
+    "press_enter": "Press",
+    "enter_key": "ENTER",
+    "display_matches": "to display all matches",
+    "searching": "Searching...",
+    "no_results": "No results found."
   },
 
   "Mainpage": {

@@ -40,7 +40,12 @@
     "title": "Pusat sehenti anda untuk bertanya soalan kepada pegawai Kerajaan!",
     "reminder": "Anda mesti mencari antara soalan sedia ada sebelum anda dibenarkan bertanya",
     "search": "Cari mengikut kata kunci atau nama agensi (cth. KKM, MOT)",
-    "searchresult":"jumlah carian untuk "
+    "searchresult":"jumlah carian untuk ",
+    "press_enter": "Tekan",
+    "enter_key": "ENTER",
+    "display_matches": "untuk memaparkan semua padanan",
+    "searching": "Sedang mencari...",
+    "no_results": "Tiada hasil dijumpai."
   },
 
   "Mainpage": {

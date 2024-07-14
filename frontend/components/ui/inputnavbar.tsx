@@ -42,7 +42,7 @@ const InputNavbar: React.FC<InputNavbarProps> = ({
   const [isSearching, setIsSearching] = useState(false);
   const [showNoResults, setShowNoResults] = useState(false);
   const router = useRouter();
-  const t = useTranslations('Search')
+  const t = useTranslations('Search');
 
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setSearchQuery(event.target.value);
@@ -110,19 +110,19 @@ const InputNavbar: React.FC<InputNavbarProps> = ({
       {searchQuery.length > 0 && (
         <div className="absolute right-10 bg-transparent flex text-dim-500 items-center">
           <div className="font-normal text-xs" style={{ lineHeight: '18px' }}>
-            Press &nbsp;
+            {t('press_enter')} &nbsp;
           </div>
           <div
             className="font-semibold text-xs "
             style={{ lineHeight: '18px' }}
           >
-            ENTER &nbsp;
+            {t('enter_key')} &nbsp;
           </div>
           <div
             className="font-normal text-xs pr-2"
             style={{ lineHeight: '18px' }}
           >
-            to display all matches
+            {t('display_matches')}
           </div>
           <div className="pr-4 hover:cursor-pointer" onClick={clearSearch}>
             <Close />
@@ -137,11 +137,11 @@ const InputNavbar: React.FC<InputNavbarProps> = ({
           <div className="overflow-y-auto max-h-60 pl-2 pr-3 pt-2">
             {/* Wrapper for scrollbar */}
             {isSearching ? (
-              <div className="px-4 py-2 text-center">Searching...</div>
+              <div className="px-4 py-2 text-center">{t('searching')}</div>
             ) : (
               <>
                 {searchResults.length === 0 && showNoResults && (
-                  <div className="px-4 py-2 text-center">No results found.</div>
+                  <div className="px-4 py-2 text-center">{t('no_results')}</div>
                 )}
                 {searchResults.length > 0 && (
                   <ul>
