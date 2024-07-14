@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useEffect, useState, useCallback } from 'react';
+import { useEffect, useState, useCallback } from 'react';
 import Link from 'next/link';
 import { searchQuestions } from '@/actions/searchServices';
 import { AGENCY_TO_UUID } from '@/lib/agency';
@@ -11,6 +11,7 @@ import RightArrow from '@/icons/rightarrow';
 import QuestionCircle from '@/icons/questioncircle';
 import AskQuestion from '../AskQuestion';
 import { useRouter } from '@/lib/i18n';
+import { useTranslations } from 'next-intl';
 
 interface InputNavbarProps {
   searchQuery: string;
@@ -41,6 +42,7 @@ const InputNavbar: React.FC<InputNavbarProps> = ({
   const [isSearching, setIsSearching] = useState(false);
   const [showNoResults, setShowNoResults] = useState(false);
   const router = useRouter();
+  const t = useTranslations('Search')
 
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setSearchQuery(event.target.value);
@@ -100,7 +102,7 @@ const InputNavbar: React.FC<InputNavbarProps> = ({
     >
       <input
         className="flex-1 border-none outline-none px-2 py-1 bg-inherit w-[740px]"
-        placeholder="Search by keyword or agency name (eg. MOH, MOT)"
+        placeholder={t('search')}
         value={searchQuery}
         onChange={handleInputChange}
         onKeyPress={handleKeyPress}
