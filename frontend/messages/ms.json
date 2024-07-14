@@ -36,6 +36,12 @@
     "relatedtopics": "Topik Berkaitan"
   },
 
+  "Search": {
+    "title": "Pusat sehenti anda untuk bertanya soalan kepada pegawai Kerajaan!",
+    "reminder": "Anda mesti mencari antara soalan sedia ada sebelum anda dibenarkan bertanya",
+    "search": "Cari mengikut kata kunci atau nama agensi (cth. KKM, MOT)"
+  },
+
   "Agency": {
     "agency": "Agensi",
     "MAFS": "Kementerian Pertanian dan Keterjaminan Makanan",

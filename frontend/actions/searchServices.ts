@@ -31,7 +31,7 @@ export async function searchQuestions(query: string) {
   try {
     const result = await client.search({
       index: 'questions',
-      size: 20, // limit to 20 results
+      size: 100, // limit to 100 results
       body: {
         query: {
           bool: {
