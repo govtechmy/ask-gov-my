@@ -18,50 +18,39 @@ const SearchResultPage = async ({
   const trendingAgencies = await getTrendingAgencies();
   return (
     <div className="">
-      <div className="">
-        <div className="sticky top-0 z-10 bg-white border-b-[1px]">
-          <div className="container">
-            <IdentifyWebsite />
-          </div>
-        </div>
-        <div className="bg-white">
-          <div className="container flex justify-center mx-auto bg-black-700">
-            <Header />
-          </div>
-        </div>
+      <IdentifyWebsite></IdentifyWebsite>
+      <Header></Header>
+      <SearchNavbar />
 
-        <SearchNavbar />
-
-        <div className="container mt-10 flex text-out">
-          <div className="max-w-screen-2xl">
-            <div className="font-semibold text-base text-black-700 pb-7 flex">
-              {questions.length}&nbsp;
-              <div>
-                <WordTranslate
-                  translate={'Search'}
-                  keyword={'search_result'}
-                ></WordTranslate>
-              </div>
-              <div>&nbsp;"{query}"</div>
-            </div>
-            <QuestionBox questions={questions} />
-          </div>
-
-          <div className="pl-10 w-[500px]">
-            <div className="font-semibold text-base text-black-700">
+      <div className="container mt-10 flex text-out">
+        <div className="max-w-screen-2xl">
+          <div className="font-semibold text-base text-black-700 pb-7 flex">
+            {questions.length}&nbsp;
+            <div>
               <WordTranslate
-                translate={'Mainpage'}
-                keyword={'trendingA'}
+                translate={'Search'}
+                keyword={'search_result'}
               ></WordTranslate>
             </div>
-            <TrendingAgencies agencies={trendingAgencies} />
+            <div>&nbsp;"{query}"</div>
           </div>
+          <QuestionBox questions={questions} />
         </div>
 
-        <div className="bg-white border-t">
-          <div className="container justify-center mx-auto">
-            <Footer />
+        <div className="pl-10 w-[500px]">
+          <div className="font-semibold text-base text-black-700">
+            <WordTranslate
+              translate={'Mainpage'}
+              keyword={'trendingA'}
+            ></WordTranslate>
           </div>
+          <TrendingAgencies agencies={trendingAgencies} />
+        </div>
+      </div>
+
+      <div className="bg-white border-t">
+        <div className="container justify-center mx-auto">
+          <Footer />
         </div>
       </div>
     </div>

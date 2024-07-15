@@ -70,11 +70,7 @@ const QuestionDetailPage: React.FC<Props> = async ({ params }) => {
     <div className="">
       <div className="">
         <IdentifyWebsite></IdentifyWebsite>
-        <div className="bg-white">
-          <div className="container flex justify-center mx-auto bg-black-700">
-            <Header />
-          </div>
-        </div>
+        <Header></Header>
 
         <div className="container mt-10 flex text-out">
           <div className="max-w-screen-2xl">
