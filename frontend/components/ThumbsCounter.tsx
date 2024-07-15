@@ -5,6 +5,7 @@ import ThumbsDown from '@/icons/thumbsdown';
 import ThumbsUp from '@/icons/thumbsup';
 import { likeQuestion, dislikeQuestion } from '@/actions/questionServices';
 import Cookies from 'js-cookie';
+import { useTranslations } from 'next-intl';
 
 interface ThumbsCounterProps {
   questionId: string;
@@ -20,6 +21,7 @@ const ThumbsCounter: React.FC<ThumbsCounterProps> = ({
   const [feedbackDislike, setFeedbackDislike] = useState(false);
   const [lastVote, setLastVote] = useState<'like' | 'dislike' | null>(null);
   const [isProcessing, setIsProcessing] = useState(false);
+  const t = useTranslations('Questiondetail');
 
   useEffect(() => {
     const savedFeedback = Cookies.get(`feedback_${questionId}`);
@@ -118,9 +120,7 @@ const ThumbsCounter: React.FC<ThumbsCounterProps> = ({
   return (
     <div className="flex items-center px-8 py-8 border-t-[1px] border-outline-200">
       <div>
-        {feedbackLike || feedbackDislike
-          ? 'Thank you for your feedback!'
-          : 'Was this response helpful?'}
+        {feedbackLike || feedbackDislike ? t('feedback') : t('response')}
       </div>
       <div className="flex items-center px-2">
         <div
