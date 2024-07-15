@@ -14,7 +14,11 @@ interface TopicListProps {
   selectedTopicId?: number;
 }
 
-const TopicList: React.FC<TopicListProps> = ({ topics, locale, selectedTopicId }) => {
+const TopicList: React.FC<TopicListProps> = ({
+  topics,
+  locale,
+  selectedTopicId,
+}) => {
   const t = useTranslations('Topics');
   const [currentPath, setCurrentPath] = useState('');
 
@@ -31,20 +35,27 @@ const TopicList: React.FC<TopicListProps> = ({ topics, locale, selectedTopicId }
   };
 
   return (
-    <div className="bg-white shadow-md rounded-lg p-4">
-      <h2 className="text-lg font-semibold mb-4">{t('topic')}</h2>
-      <ul>
-        {topics.map(topic => (
-          <li key={topic.id} className="mb-2">
-            <a
-              href={constructHref(topic.id)}
-              className={`text-blue-500 hover:underline ${selectedTopicId === topic.id ? 'bg-purple-100' : ''}`}
+    <div className="pt-6">
+      <div className="p-4">
+        <ul>
+          <div className="flex h-10 w-[324px] bg-[#F4EFFF] items-center font-normal rounded-lg text-[#702FF9] py-2 px-3 mb-2 hover:cursor-pointer">
+            All topics
+          </div>
+          {topics.map(topic => (
+            <li
+              key={topic.id}
+              className={`items-center h-10 w-[324px] rounded-lg py-2 px-3 mb-2 font-normal ${selectedTopicId === topic.id ? 'bg-[#F4EFFF]' : ''}`}
             >
-              {locale === 'ms' ? topic.title_ms : topic.title}
-            </a>
-          </li>
-        ))}
-      </ul>
+              <a
+                href={constructHref(topic.id)}
+                className={` truncate text-black-800 hover:text-[#702FF9] hover:cursor-pointer`}
+              >
+                {locale === 'ms' ? topic.title_ms : topic.title}
+              </a>
+            </li>
+          ))}
+        </ul>
+      </div>
     </div>
   );
 };
