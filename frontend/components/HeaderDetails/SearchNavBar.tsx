@@ -13,12 +13,12 @@ const SearchNavbar: React.FC = () => {
   const [searchQuery, setSearchQuery] = useState<string>(
     searchparams.get('q') || '',
   );
-  const t = useTranslations("Search")
+  const t = useTranslations('Search');
 
   return (
     <div className="bg-gradient-radial from-[#D4C0FF] to-[#F4EFFF] dark:from-[#4F1FB4] dark:to-[#201636] py-2 h-56 flex flex-col items-center">
       <div className="font-poppins pb-6 pt-10 text-2xl font-semibold text-[#482D7C] dark:text-[#FFFFFF] text-center">
-        {t("title")}
+        {t('title')}
       </div>
       <div className="relative flex justify-center w-full">
         <InputNavbar
@@ -33,7 +33,7 @@ const SearchNavbar: React.FC = () => {
       <div className="flex items-center justify-center mt-4">
         <Info className="text-[#766695]" />
         <div className="px-2 text-center text-sm font-medium text-[#766695]">
-        {t("reminder")}
+          {t('reminder')}
         </div>
       </div>
     </div>
