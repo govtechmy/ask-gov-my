@@ -20,16 +20,16 @@ const TrendingAgencies: React.FC<TrendingAgenciesProps> = ({ agencies }) => {
   const top5Agencies = agencies.slice(0, 10);
 
   return (
-    <div className="pt-4">
+    <div className="pt-6">
       <ul className="flex flex-col justify-between h-full">
         {top5Agencies.map(agency => (
-          <li key={agency.id} className="py-2">
+          <li key={agency.id} className="py-[9px]">
             <Link href={`/${agency.acronym.toLowerCase()}`}>
               <div className="flex items-center">
-                <div className="pr-2">
+                <div className="pr-[10px]">
                   <JataNegaraIcon className="stroke-[#E4E4E7] dark:stroke-[#27272A] w-8 h-8" />
                 </div>
-                <div className="text-base font-normal text-black-800">
+                <div className="text-base font-normal text-black-800 hover:text-[#702FF9] hover:cursor-pointer">
                   {t(agency.acronym)}
                 </div>
               </div>
