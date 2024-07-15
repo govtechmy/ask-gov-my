@@ -11,7 +11,7 @@ import { AGENCY_TO_UUID } from '@/lib/agency';
 import TopicList from '@/components/TopicList';
 import Head from 'next/head';
 import SearchNavbarAgency from '@/components/HeaderDetails/SearchNavBarAgency';
-
+import TopicDropdown from '@/components/TopicDropdown';
 interface Props {
   params: {
     agencyId: string;
@@ -70,7 +70,12 @@ const TopicPage = async ({ params }: Props) => {
                 locale={locale}
                 selectedTopicId={parseInt(topicId)}
                 agencyId={agencyId}
-      
+              />
+              <TopicDropdown
+                topics={topics}
+                locale={locale}
+                selectedTopicId={parseInt(topicId)}
+                agencyId={agencyId}
               />
             </div>
           </div>
