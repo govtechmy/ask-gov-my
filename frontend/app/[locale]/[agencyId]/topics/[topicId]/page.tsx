@@ -10,7 +10,8 @@ import IdentifyWebsite from '@/components/HeaderDetails/IdentifyWebsite';
 import { AGENCY_TO_UUID } from '@/lib/agency';
 import TopicList from '@/components/TopicList';
 import Head from 'next/head';
-
+import SearchNavbarAgency from '@/components/HeaderDetails/SearchNavBarAgency';
+import TopicDropdown from '@/components/TopicDropdown';
 interface Props {
   params: {
     agencyId: string;
@@ -38,8 +39,14 @@ const TopicPage = async ({ params }: Props) => {
       <div className="">
         <IdentifyWebsite></IdentifyWebsite>
         <Header></Header>
-        <SearchNavbar />
-
+        <div className="bg-gradient-radial from-[#D4C0FF] to-[#F4EFFF] dark:from-[#4F1FB4] dark:to-[#201636]">
+          <div className="container">
+            <SearchNavbarAgency
+              agencyAcronym={agencyId}
+              agencyUUID={agencyUUID}
+            />
+          </div>
+        </div>
         <div className="container mt-10 flex text-out">
           <div className="max-w-screen-2xl">
             <div className="font-semibold text-base text-black-700 pb-7 flex">
@@ -61,7 +68,14 @@ const TopicPage = async ({ params }: Props) => {
               <TopicList
                 topics={topics}
                 locale={locale}
-                selectedTopicId={parseInt(topicId, 10)}
+                selectedTopicId={parseInt(topicId)}
+                agencyId={agencyId}
+              />
+              <TopicDropdown
+                topics={topics}
+                locale={locale}
+                selectedTopicId={parseInt(topicId)}
+                agencyId={agencyId}
               />
             </div>
           </div>
