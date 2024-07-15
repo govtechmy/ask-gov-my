@@ -40,7 +40,7 @@ const highlightText = (text: string, query: string) => {
       </span>
     ) : (
       part
-    )
+    ),
   );
 };
 

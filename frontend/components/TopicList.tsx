@@ -39,7 +39,7 @@ const TopicList: React.FC<TopicListProps> = ({
       <div className="p-4">
         <ul>
           <div className="flex h-10 w-[324px] bg-[#F4EFFF] items-center font-normal rounded-lg text-[#702FF9] py-2 px-3 mb-2 hover:cursor-pointer">
-            {t("alltopics")}
+            {t('alltopics')}
           </div>
           {topics.map(topic => (
             <li

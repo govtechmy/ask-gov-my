@@ -16,7 +16,7 @@ const AskQuestion = () => {
   const [isModalOpenSubmit, setIsModalOpenSubmit] = useState(false);
   const [question, setQuestion] = useState('');
   const [email, setEmail] = useState('');
-  const t = useTranslations("Askquestions");
+  const t = useTranslations('Askquestions');
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -66,14 +66,14 @@ const AskQuestion = () => {
             <div className="pr-2">
               <PlusIcon className="stroke-[#FFFFFF] dark:stroke-[#FFFFFF]"></PlusIcon>
             </div>
-            <div onClick={handleModalDisplay}>{t("ask_new_question")}</div>
+            <div onClick={handleModalDisplay}>{t('ask_new_question')}</div>
           </div>
         ) : (
           <div className="h-10 flex items-center text-[#702FF9] font-medium text-base border-[1px] border-[#D4C0FF] dark:border-[#4F1FB4] shadow-button bg-white px-4 py-2 rounded-lg hover:cursor-pointer">
             <div className="pr-2">
               <QuestionCircle />
             </div>
-            <div onClick={handleClick}>{t("cant_find")}</div>
+            <div onClick={handleClick}>{t('cant_find')}</div>
           </div>
         )}
       </div>
@@ -93,15 +93,15 @@ const AskQuestion = () => {
                 <div className="pr-3">
                   <QuestionMarkWithBox></QuestionMarkWithBox>
                 </div>
-                <div>{t("ask_new_question")}</div>
+                <div>{t('ask_new_question')}</div>
               </div>
               <form className="px-[18px]" onSubmit={handleSubmit}>
                 <div className="text-left">
                   <div className="text-base font-medium pb-0 mb-0 text-black-700">
-                    {t("your_question")}
+                    {t('your_question')}
                   </div>
                   <textarea
-                    placeholder={t("type_your_question")}
+                    placeholder={t('type_your_question')}
                     className="mt-[6px] h-[120px] text-left pl-3 pt-2 w-full rounded-lg shadow-sm border-[1px] border-outline-200 focus:border-none focus:outline-none focus:shadow-[0_0_0_1px_#B794FF,0_0_0_4px_#E2D5FE] placeholder:text-black-900 placeholder:font-normal placeholder:text-base"
                     name="question"
                     value={question}
@@ -112,27 +112,27 @@ const AskQuestion = () => {
 
                 <div className="text-left mt-4 mb-5">
                   <div className="text-base font-medium pb-0 mb-0 text-black-700">
-                    {t("your_name")}
+                    {t('your_name')}
                   </div>
                   <input
                     className="h-10 pl-3 w-full rounded-md shadow-sm border-[1px] border-outline-200 focus:border-none focus:outline-none focus:shadow-[0_0_0_1px_#B794FF,0_0_0_4px_#E2D5FE]"
                     // onChange={e => setName(e.target.value)}
                   />
                   <div className="text-sm font-normal pt-[6px] mb-0 text-dim-500">
-                    {t("name_not_displayed")}
+                    {t('name_not_displayed')}
                   </div>
                 </div>
 
                 <div className="text-left">
                   <div className="mb-[4px] text-base font-medium pb-0 text-black-700">
-                    {t("notify_me")}
+                    {t('notify_me')}
                   </div>
                   <div className="flex items-center border-[1px] border-outline-200 shadow-sm rounded-md h-10 w-full">
                     <div className="pl-3 pr-2">
                       <MailLogo></MailLogo>
                     </div>
                     <input
-                      placeholder={t("your_email")}
+                      placeholder={t('your_email')}
                       className="w-full outline-none"
                       name="email"
                       type="email"
@@ -143,7 +143,7 @@ const AskQuestion = () => {
                   </div>
 
                   <div className="text-sm font-normal pt-[6px] mb-6 text-dim-500">
-                    {t("email_updates")}
+                    {t('email_updates')}
                   </div>
 
                   <div className="flex border-[1px] border-[#D4C0FF] shadow-sm rounded-md w-full bg-[#F4EFFF]">
@@ -152,13 +152,9 @@ const AskQuestion = () => {
                     </div>
                     <div className="items-center text-sm text-black-700 py-3 pr-3">
                       <div className="flex ">
-                        <div className="">
-                          {t("response_time")}
-                        </div>
+                        <div className="">{t('response_time')}</div>
                       </div>
-                      <div className="pt-3">
-                        {t("response_public")}
-                      </div>
+                      <div className="pt-3">{t('response_public')}</div>
                     </div>
                   </div>
                 </div>
@@ -169,10 +165,10 @@ const AskQuestion = () => {
                     className="h-10 flex items-center text-white font-medium text-base border-[1px] border-[#702FF9] shadow-button bg-gradient-to-b from-[#B379FF] to-[#702FF9] px-4 py-2 rounded-lg hover:cursor-pointer"
                     onClick={handleSubmit}
                   >
-                    {t("submit")}
+                    {t('submit')}
                   </button>
                   <div className="pt-3 text-dim-500 font-normal text-sm text-center">
-                    {t("terms")}
+                    {t('terms')}
                   </div>
                 </div>
               </form>
@@ -190,10 +186,10 @@ const AskQuestion = () => {
               </div>
               <div className="pb-6 text-left">
                 <div className="text-black-900 font-semibold text-lg">
-                  {t("submission_received")}
+                  {t('submission_received')}
                 </div>
                 <div className="text-black-700 font-normal text-sm">
-                  {t("submission_received_detail")}
+                  {t('submission_received_detail')}
                 </div>
               </div>
               <div
@@ -201,7 +197,7 @@ const AskQuestion = () => {
                 className="bg-white rounded-lg shadow-button h-[44px] w-[352px] border-outline-200 border-[1px] hover:cursor-pointer flex items-center justify-center"
               >
                 <Close></Close>
-                <div className="ml-2">{t("close")}</div>
+                <div className="ml-2">{t('close')}</div>
               </div>
             </div>
           </div>

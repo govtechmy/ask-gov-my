@@ -1,4 +1,16 @@
 {
+  "Masthead": {
+    "official_gov_website": "Portal Rasmi Kerajaan Malaysia",
+    "how_to_identify": "Kenal pasti begini",
+    "official": "Pautan portal rasmi berakhir dengan .gov.my",
+    "not_govmy": "Sekiranya anda melihat pautan selain ",
+    "close_site": ", segera tutupkan halaman itu walaupun ia menyerupai portal rasmi!",
+    "secure": "Portal yang selamat menggunakan HTTPS",
+    "find_lock": "Periksa ikon loker (",
+    "or": ") atau ",
+    "precaution": " di depan pautan. Sekiranya tiada, jangan kongsikan sebarang maklumat sensitif."
+  },
+
   "Footer": {
     "api_docs": "Dokumentasi API",
     "admin_login": "Admin Log Masuk",
@@ -40,8 +52,8 @@
     "title": "Pusat sehenti anda untuk bertanya soalan kepada pegawai Kerajaan!",
     "reminder": "Anda mesti mencari antara soalan sedia ada sebelum anda dibenarkan bertanya",
     "search": "Cari mengikut kata kunci atau nama agensi (cth. KKM, MOT)",
-    "search_agency":"Cari mengikut kata kunci (cth COVID-19, MySejahtera)",
-    "search_result":"jumlah carian untuk ",
+    "search_agency": "Cari mengikut kata kunci (cth COVID-19, MySejahtera)",
+    "search_result": "jumlah carian untuk ",
     "press_enter": "Tekan",
     "enter_key": "ENTER",
     "display_matches": "untuk memaparkan semua padanan",
@@ -53,7 +65,7 @@
     "trendingQ": "Soalan-soalan sohor kini",
     "trendingA": "Agensi-agensi sohor kini"
   },
-  
+
   "Agency": {
     "agency": "Agensi",
     "MAFS": "Kementerian Pertanian dan Keterjaminan Makanan",
