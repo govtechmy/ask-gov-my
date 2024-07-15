@@ -48,7 +48,6 @@ export function AdminPage() {
   return (
     <>
       <div className="flex flex-col min-h-screen">
-        <IdentifyWebsite />
         <div className="bg-white">
           <HeaderAdmin />
         </div>

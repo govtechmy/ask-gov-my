@@ -28,11 +28,7 @@ const AgencyPage = async ({ params, searchParams }: Props) => {
   return (
     <div className="">
       <div className="">
-        <div className="sticky top-0 z-10 bg-white border-b-[1px]">
-          <div className="container">
-            <IdentifyWebsite />
-          </div>
-        </div>
+        <IdentifyWebsite />
         <div className="bg-white">
           <div className="container flex justify-center mx-auto bg-black-700">
             <Header />
