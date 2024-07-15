@@ -21,7 +21,7 @@ const ThumbsCounter: React.FC<ThumbsCounterProps> = ({
   const [feedbackDislike, setFeedbackDislike] = useState(false);
   const [lastVote, setLastVote] = useState<'like' | 'dislike' | null>(null);
   const [isProcessing, setIsProcessing] = useState(false);
-  const t = useTranslations('Questiondetail')
+  const t = useTranslations('Questiondetail');
 
   useEffect(() => {
     const savedFeedback = Cookies.get(`feedback_${questionId}`);
@@ -120,9 +120,7 @@ const ThumbsCounter: React.FC<ThumbsCounterProps> = ({
   return (
     <div className="flex items-center px-8 py-8 border-t-[1px] border-outline-200">
       <div>
-        {feedbackLike || feedbackDislike
-          ? t("feedback")
-          : t("response")}
+        {feedbackLike || feedbackDislike ? t('feedback') : t('response')}
       </div>
       <div className="flex items-center px-2">
         <div
