@@ -29,11 +29,7 @@ const AgencyPage = async ({ params, searchParams }: Props) => {
     <div className="">
       <div className="">
         <IdentifyWebsite />
-        <div className="bg-white">
-          <div className="container flex justify-center mx-auto bg-black-700">
-            <Header />
-          </div>
-        </div>
+        <Header></Header>
 
         <div className="bg-gradient-radial from-[#D4C0FF] to-[#F4EFFF] dark:from-[#4F1FB4] dark:to-[#201636]">
           <div className="container">

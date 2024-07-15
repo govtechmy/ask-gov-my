@@ -23,12 +23,7 @@ const MainPage = async ({
   return (
     <div className="">
       <IdentifyWebsite />
-      <div className="bg-white">
-        <div className="container flex justify-center mx-auto bg-black-700">
-          <Header />
-        </div>
-      </div>
-
+      <Header></Header>
       <SearchNavbar />
 
       <div className="container mt-10 flex text-out">
