@@ -19,6 +19,7 @@ interface InputNavbarProps {
   setSearchResults: React.Dispatch<React.SetStateAction<any[]>>;
   displayAllMatches: boolean;
   setDisplayAllMatches: React.Dispatch<React.SetStateAction<boolean>>;
+  agencyUUID?: string;
 }
 
 const debounce = (func: Function, delay: number) => {
@@ -36,6 +37,7 @@ const InputNavbar: React.FC<InputNavbarProps> = ({
   setSearchResults,
   displayAllMatches,
   setDisplayAllMatches,
+  agencyUUID
 }) => {
   const [isTyping, setIsTyping] = useState(false);
   const [isSearching, setIsSearching] = useState(false);
@@ -101,7 +103,7 @@ const InputNavbar: React.FC<InputNavbarProps> = ({
     >
       <input
         className="flex-1 border-none outline-none px-2 py-1 bg-inherit w-[740px]"
-        placeholder={t('search')}
+        placeholder={t(agencyUUID ? 'search_agency' : 'search')}
         value={searchQuery}
         onChange={handleInputChange}
         onKeyPress={handleKeyPress}
@@ -187,7 +189,7 @@ const InputNavbar: React.FC<InputNavbarProps> = ({
               </>
             )}
           </div>
-          <AskQuestion></AskQuestion>
+          <AskQuestion />
         </div>
       )}
     </div>
