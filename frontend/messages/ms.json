@@ -113,5 +113,14 @@
     "submission_received": "Penerimaan Penghantaran",
     "submission_received_detail": "Soalan anda telah diterima. Kami akan berusaha sedaya upaya untuk menghubungkan anda dengan agensi yang berkaitan.",
     "close": "Tutup"
+  },
+
+  "Questiondetail": {
+    "posted": "Disiarkan",
+    "topics": "Topik-topik",
+    "attachment": "Lampiran Sokongan",
+    "feedback": "Terima kasih atas maklum balas anda!",
+    "response": "Adakah jawapan ini membantu?",
+    "answered": "Dijawab 1 tahun lepas"
   }
 }

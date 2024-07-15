@@ -112,5 +112,14 @@
     "submission_received": "Submission Received",
     "submission_received_detail": "Your question has been received. We'll make every effort to connect you with the relevant agencies.",
     "close": "Close"
+  },
+
+  "Questiondetail": {
+    "posted": "Posted",
+    "topics": "Topics",
+    "attachment": "Supporing Attachment",
+    "feedback": "Thank you for your feedback!",
+    "response": "Was this response helpful?",
+    "answered": "Answered 1 year ago"
   }
 }
