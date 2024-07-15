@@ -19,6 +19,7 @@ interface InputNavbarProps {
   setSearchResults: React.Dispatch<React.SetStateAction<any[]>>;
   displayAllMatches: boolean;
   setDisplayAllMatches: React.Dispatch<React.SetStateAction<boolean>>;
+  agencyUUID?: string;
 }
 
 const debounce = (func: Function, delay: number) => {
@@ -29,6 +30,20 @@ const debounce = (func: Function, delay: number) => {
   };
 };
 
+const highlightText = (text: string, query: string) => {
+  if (!query) return text;
+  const parts = text.split(new RegExp(`(${query})`, 'gi'));
+  return parts.map((part, index) =>
+    part.toLowerCase() === query.toLowerCase() ? (
+      <span key={index} className="text-purple-500">
+        {part}
+      </span>
+    ) : (
+      part
+    ),
+  );
+};
+
 const InputNavbar: React.FC<InputNavbarProps> = ({
   searchQuery,
   setSearchQuery,
@@ -36,6 +51,7 @@ const InputNavbar: React.FC<InputNavbarProps> = ({
   setSearchResults,
   displayAllMatches,
   setDisplayAllMatches,
+  agencyUUID,
 }) => {
   const [isTyping, setIsTyping] = useState(false);
   const [isSearching, setIsSearching] = useState(false);
@@ -101,7 +117,7 @@ const InputNavbar: React.FC<InputNavbarProps> = ({
     >
       <input
         className="flex-1 border-none outline-none px-2 py-1 bg-inherit w-[740px]"
-        placeholder={t('search')}
+        placeholder={t(agencyUUID ? 'search_agency' : 'search')}
         value={searchQuery}
         onChange={handleInputChange}
         onKeyPress={handleKeyPress}
@@ -160,10 +176,10 @@ const InputNavbar: React.FC<InputNavbarProps> = ({
                             href={`/${agencyAcronym?.toLowerCase()}/${result.id}`}
                           >
                             <span className="block font-medium text-sm text-black-700 truncate max-w-[600px]">
-                              {result.question}
+                              {highlightText(result.question, searchQuery)}
                             </span>
                             <span className="mt-1 block font-normal text-sm text-dim-500 truncate max-w-[600px]">
-                              {result.answer}
+                              {highlightText(result.answer, searchQuery)}
                             </span>
                           </Link>
                           <span className="on hover:cursor-pointer">
@@ -187,7 +203,7 @@ const InputNavbar: React.FC<InputNavbarProps> = ({
               </>
             )}
           </div>
-          <AskQuestion></AskQuestion>
+          <AskQuestion />
         </div>
       )}
     </div>
