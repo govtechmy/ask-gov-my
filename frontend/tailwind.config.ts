@@ -31,17 +31,17 @@ const config: Config = {
           600: 'oklch(var(--myds-brand-600))',
           700: 'oklch(var(--myds-brand-700))',
         },
-        'askmygov-brand': {
+        askmygovbrand: {
           600: 'oklch(var(--askmygov-brand-600))',
           700: 'oklch(var(--askmygov-brand-700))',
           300: 'oklch(var(--askmygov-brand-300))',
           200: 'oklch(var(--askmygov-brand-200))',
           50: 'oklch(var(--askmygov-brand-50))',
         },
-        'askmygov-text-brand': {
+        askmygovtextbrand: {
           600: 'oklch(var(--askmygov-text-brand-600))',
         },
-        'text-brand': {
+        textbrand: {
           700: 'oklch(var(--myds-text-brand-700))',
         },
         foreground: 'oklch(var(--myds-black-900))',
