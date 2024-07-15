@@ -2,7 +2,7 @@ import { getQuestionsByAgency } from '@/actions/questionServices';
 import QuestionBox from '@/components/QuestionBox/QuestionBox';
 import { AGENCY_TO_UUID } from '@/lib/agency';
 import Header from '@/components/HeaderDetails/Header';
-import SearchNavbarAgency from '@/components/HeaderDetails/SearchNavBar';
+import SearchNavbarAgency from '@/components/HeaderDetails/SearchNavBarAgency';
 import Footer from '@/components/FooterDetails/Footer';
 import TopicList from '@/components/TopicList';
 import { getTopicByAgency } from '@/actions/questionServices';
@@ -38,7 +38,11 @@ const AgencyPage = async ({ params, searchParams }: Props) => {
           </div>
         </div>
 
-        <SearchNavbarAgency />
+        <div className="bg-gradient-radial from-[#D4C0FF] to-[#F4EFFF] dark:from-[#4F1FB4] dark:to-[#201636]">
+          <div className="container">
+            <SearchNavbarAgency />
+          </div>
+        </div>
 
         <div className="container mt-8 flex text-out">
           <div className="max-w-screen-2xl">
