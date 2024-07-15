@@ -7,15 +7,23 @@ import { useSearchParams } from 'next/navigation';
 import JataNegaraIcon from '@/icons/jatanegaraicon';
 import Link from 'next/link';
 import RightArrow from '@/icons/rightarrow';
+import { useTranslations } from 'next-intl';
 
-const SearchNavbarAgency: React.FC = () => {
+
+interface SearchNavbarAgencyProps {
+  agencyAcronym: string;
+  agencyUUID:string
+}
+
+const SearchNavbarAgency: React.FC<SearchNavbarAgencyProps> = ({ agencyAcronym, agencyUUID }) => {
   const [searchResults, setSearchResults] = useState<any[]>([]);
   const [displayAllMatches, setDisplayAllMatches] = useState<boolean>(false);
   const searchparams = useSearchParams();
   const [searchQuery, setSearchQuery] = useState<string>(
     searchparams.get('q') || '',
   );
-
+  const t = useTranslations("Agency")
+  console.log(agencyAcronym)
   return (
     <div className="py-2 h-56 flex flex-col items-start">
       <div className="flex items-center justify-center h-56">
@@ -28,7 +36,7 @@ const SearchNavbarAgency: React.FC = () => {
               <div>
                 <RightArrow className="stroke-[#A1A1AA]" />
               </div>
-              <div className="font-medium text-black-800 text-sm">MOH</div>
+              <div className="font-medium text-black-800 text-sm">{agencyAcronym.toUpperCase()}</div>
             </div>
           </div>
           <div className="flex items-center pb-6 pt-3 text-2xl text-left">
@@ -36,7 +44,7 @@ const SearchNavbarAgency: React.FC = () => {
               <JataNegaraIcon />
             </div>
             <div className="font-poppins text-black-900 font-semibold text-2xl px-3">
-              Ministry of Health
+            {t(agencyAcronym.toUpperCase())}
             </div>
           </div>
 
@@ -48,6 +56,7 @@ const SearchNavbarAgency: React.FC = () => {
               setSearchResults={setSearchResults}
               displayAllMatches={displayAllMatches}
               setDisplayAllMatches={setDisplayAllMatches}
+              agencyUUID={agencyUUID}
             />
           </div>
         </div>

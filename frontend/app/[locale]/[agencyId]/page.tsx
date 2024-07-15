@@ -7,6 +7,7 @@ import Footer from '@/components/FooterDetails/Footer';
 import TopicList from '@/components/TopicList';
 import { getTopicByAgency } from '@/actions/questionServices';
 import IdentifyWebsite from '@/components/HeaderDetails/IdentifyWebsite';
+import WordTranslate from '@/components/WordTranslate';
 
 interface Props {
   params: {
@@ -40,20 +41,22 @@ const AgencyPage = async ({ params, searchParams }: Props) => {
 
         <div className="bg-gradient-radial from-[#D4C0FF] to-[#F4EFFF] dark:from-[#4F1FB4] dark:to-[#201636]">
           <div className="container">
-            <SearchNavbarAgency />
+            <SearchNavbarAgency agencyAcronym={agencyId} agencyUUID={agencyUUID}/>
           </div>
         </div>
 
         <div className="container mt-8 flex text-out">
           <div className="max-w-screen-2xl">
             <div className="font-semibold text-base text-black-700 pb-6">
-              Trending Questions
+            <WordTranslate translate={"Mainpage"} keyword={"trendingQ"}></WordTranslate>
             </div>
             <QuestionBox questions={questions} />
           </div>
 
           <div className="pl-10 w-[500px]">
-            <div className="font-semibold text-base text-black-700">Topics</div>
+            <div className="font-semibold text-base text-black-700">
+            <WordTranslate translate={"Topics"} keyword={"topic"}></WordTranslate>
+              </div>
             <TopicList topics={topics} locale={locale} />
           </div>
         </div>
