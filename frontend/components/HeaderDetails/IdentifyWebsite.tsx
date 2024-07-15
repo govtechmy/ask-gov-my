@@ -20,7 +20,7 @@ export default function Masthead() {
         'z-[99]',
         open
           ? 'bg-gradient-to-b from-washed-100 from-[84.74%] to-outline-200 to-100%'
-          : 'bg-gradient-to-b from-washed-100 from-[84.74%] to-outline-200 to-100%',
+          : 'bg-washed-100',
       )}
     >
       <div className="container">

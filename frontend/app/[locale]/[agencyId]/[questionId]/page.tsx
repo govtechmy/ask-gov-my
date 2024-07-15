@@ -16,6 +16,7 @@ import { AGENCY_TO_UUID } from '@/lib/agency';
 import { redirect } from 'next/navigation';
 import DateComponent from '@/components/date';
 import Link from 'next/link';
+import IdentifyWebsite from '@/components/HeaderDetails/IdentifyWebsite';
 
 interface Props {
   params: {
@@ -68,9 +69,7 @@ const QuestionDetailPage: React.FC<Props> = async ({ params }) => {
   return (
     <div className="">
       <div className="">
-        <div className="sticky top-0 z-10 bg-white border-b-[1px]">
-          <div className="container"></div>
-        </div>
+        <IdentifyWebsite></IdentifyWebsite>
         <div className="bg-white">
           <div className="container flex justify-center mx-auto bg-black-700">
             <Header />
