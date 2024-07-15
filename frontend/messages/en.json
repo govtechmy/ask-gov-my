@@ -117,10 +117,9 @@
   "Questiondetail": {
     "posted": "Posted",
     "topics": "Topics",
-    "attachment":"Supporing Attachment",
-    "feedback":"Thank you for your feedback!",
-    "response":"Was this response helpful?",
-    "answered":"Answered 1 year ago"
+    "attachment": "Supporing Attachment",
+    "feedback": "Thank you for your feedback!",
+    "response": "Was this response helpful?",
+    "answered": "Answered 1 year ago"
   }
 }
-

@@ -94,7 +94,10 @@ const QuestionDetailPage: React.FC<Props> = async ({ params }) => {
                 </div>
                 <div className="text-black-700 flex text-base font-medium">
                   <div>
-                    <WordTranslate translate={"Questiondetail"} keyword={"posted"}></WordTranslate>
+                    <WordTranslate
+                      translate={'Questiondetail'}
+                      keyword={'posted'}
+                    ></WordTranslate>
                   </div>
                   &nbsp;
                   <DateComponent date={question.date} locale={locale} />
@@ -117,7 +120,10 @@ const QuestionDetailPage: React.FC<Props> = async ({ params }) => {
                           <AgencyName acronym={acronym} />
                         </div>
                         <div className="font-medium text-sm text-dim-500">
-                        <WordTranslate translate={"Questiondetail"} keyword={"answered"}></WordTranslate>
+                          <WordTranslate
+                            translate={'Questiondetail'}
+                            keyword={'answered'}
+                          ></WordTranslate>
                         </div>
                       </div>
                       <div className="flex px-8 pb-5 pt-4 text-justify text-black-700">
@@ -143,7 +149,10 @@ const QuestionDetailPage: React.FC<Props> = async ({ params }) => {
                   </div>
                   <div>
                     <div className="px-8 pb-8 pt-0">
-                    <WordTranslate translate={"Questiondetail"} keyword={"attachment"}></WordTranslate>
+                      <WordTranslate
+                        translate={'Questiondetail'}
+                        keyword={'attachment'}
+                      ></WordTranslate>
                     </div>
                     <div className="px-8 pb-8 pt-0">
                       <div className="flex gap-2">
@@ -189,7 +198,7 @@ const QuestionDetailPage: React.FC<Props> = async ({ params }) => {
                 <div className="font-semibold text-base pt-6">
                   Related questions
                 </div>
-              <div>Question Cards</div>
+                <div>Question Cards</div>
               </div>
             </div>
           </div>
