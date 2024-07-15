@@ -1,4 +1,16 @@
 {
+  "Masthead": {
+    "official_gov_website": "Official Malaysia Government Website",
+    "how_to_identify": "Here's how you know",
+    "official": "Official government websites end with .gov.my",
+    "not_govmy": "If the link does not end with ",
+    "close_site": ", exit the website immediately even if it looks similar.",
+    "secure": "Secure websites use HTTPS",
+    "find_lock": "Look for a lock (",
+    "or": ") or ",
+    "precaution": " as an added precaution. If not present, do not share any sensitive information."
+  },
+
   "Footer": {
     "api_docs": "API Docs",
     "admin_login": "Admin Login",
@@ -39,8 +51,8 @@
     "title": "Your one-stop centre to ask questions to Government officers!",
     "reminder": "You must search among existing questions before you are allowed to ask",
     "search": "Search by keyword or agency name (eg. MOH, MOT)",
-    "search_agency":"Search by keyword (e.g COVID-19, MySejahtera)",
-    "search_result":"search results for ",
+    "search_agency": "Search by keyword (e.g COVID-19, MySejahtera)",
+    "search_result": "search results for ",
     "press_enter": "Press",
     "enter_key": "ENTER",
     "display_matches": "to display all matches",
@@ -82,7 +94,7 @@
     "KKR": "Ministry of Works",
     "KBS": "Ministry of Youth and Sports"
   },
-  
+
   "Askquestions": {
     "ask_new_question": "Ask a new question",
     "cant_find": "I can't find what I am looking for.",

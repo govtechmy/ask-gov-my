@@ -23,8 +23,8 @@ const MainPage = async ({
   return (
     <div className="">
       <div className="">
-        <div className="sticky top-0 z-10 bg-white border-b-[1px]">
-          <div className="container">
+        <div className="sticky top-0 z-10 border-b-[1px] bg-gradient-to-b from-washed-100 from-[84.74%] to-outline-200 to-100%">
+          <div className="container ">
             <IdentifyWebsite />
           </div>
         </div>
@@ -39,15 +39,20 @@ const MainPage = async ({
         <div className="container mt-10 flex text-out">
           <div className="max-w-screen-2xl">
             <div className="font-semibold text-base text-black-700 pb-7">
-              <WordTranslate translate={'Mainpage'} keyword={'trendingQ'}></WordTranslate>
-
+              <WordTranslate
+                translate={'Mainpage'}
+                keyword={'trendingQ'}
+              ></WordTranslate>
             </div>
             <QuestionBox questions={questions} />
           </div>
 
           <div className="pl-10 w-[500px]">
             <div className="font-semibold text-base text-black-700">
-            <WordTranslate translate={'Mainpage'} keyword={'trendingA'}></WordTranslate>
+              <WordTranslate
+                translate={'Mainpage'}
+                keyword={'trendingA'}
+              ></WordTranslate>
             </div>
             <TrendingAgencies agencies={agencies} />
           </div>

@@ -35,9 +35,12 @@ const SearchResultPage = async ({
         <div className="container mt-10 flex text-out">
           <div className="max-w-screen-2xl">
             <div className="font-semibold text-base text-black-700 pb-7 flex">
-                {questions.length}&nbsp;
+              {questions.length}&nbsp;
               <div>
-              <WordTranslate translate={'Search'} keyword={'search_result'}></WordTranslate>
+                <WordTranslate
+                  translate={'Search'}
+                  keyword={'search_result'}
+                ></WordTranslate>
               </div>
               <div>&nbsp;"{query}"</div>
             </div>
@@ -46,7 +49,10 @@ const SearchResultPage = async ({
 
           <div className="pl-10 w-[500px]">
             <div className="font-semibold text-base text-black-700">
-            <WordTranslate translate={'Mainpage'} keyword={'trendingA'}></WordTranslate>
+              <WordTranslate
+                translate={'Mainpage'}
+                keyword={'trendingA'}
+              ></WordTranslate>
             </div>
             <TrendingAgencies agencies={trendingAgencies} />
           </div>
