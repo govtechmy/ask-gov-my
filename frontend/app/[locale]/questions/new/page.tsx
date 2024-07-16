@@ -66,3 +66,5 @@ const SubmitQuestionPage = () => {
 };
 
 export default SubmitQuestionPage;
+
+//page ni not used

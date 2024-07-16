@@ -36,29 +36,34 @@ const TopicList: React.FC<TopicListProps> = ({
       : `${currentPath}/topics/${topicId}`;
   };
 
+  const isBasePath = currentPath === `/${agencyId}`;
+
   return (
-    <div className="pt-6">
-      <div className="p-4">
-        <ul>
+    <div className="max-h-[490px] min-w-[350px] overflow-auto ">
+      <div className="px-4 pb-4 pt-0">
+        <ul className="">
           <li>
             <a href={`/${agencyId}`}>
-              <div className="flex h-10 w-[324px] bg-[#F4EFFF] items-center font-normal rounded-lg text-[#702FF9] py-2 px-3 mb-2 hover:cursor-pointer">
+              <div
+                className={`flex h-10 items-center font-normal rounded-lg  py-2 px-3 mb-2 hover:cursor-pointer 
+                  ${isBasePath ? 'bg-askmygovbrand-50 text-askmygovtextbrand-600' : 'bg-inherit text-black-800'} `}
+              >
                 {t('alltopics')}
               </div>
             </a>
           </li>
           {topics.map(topic => (
-            <li
+            <div
               key={topic.id}
-              className={`items-center h-10 w-[324px] rounded-lg py-2 px-3 mb-2 font-normal ${selectedTopicId === topic.id ? 'bg-[#F4EFFF]' : ''}`}
+              className={`items-center h-10 line-clamp-1 rounded-lg py-2 px-3 mb-2 font-normal ${selectedTopicId === topic.id ? 'bg-askmygovbrand-50 text-askmygovtextbrand-600' : 'text-black-800'}`}
             >
               <a
                 href={constructHref(topic.id)}
-                className={` truncate text-black-800 hover:text-[#702FF9] hover:cursor-pointer`}
+                className={`hover:text-askmygovtextbrand-600 hover:cursor-pointer line-clamp-1`}
               >
-                {locale === 'ms' ? topic.title_ms : topic.title}
+                {locale === 'ms' ? topic.title_ms : topic.title}&nbsp;
               </a>
-            </li>
+            </div>
           ))}
         </ul>
       </div>

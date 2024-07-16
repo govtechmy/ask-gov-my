@@ -50,7 +50,7 @@ const QuestionCard: React.FC<QuestionCardProps> = ({ question }) => {
         <div className="pr-4">
           <IconQuestionSmile />
         </div>
-        <div className="text-base font-medium text-brand-600">
+        <div className="text-base font-medium text-mydstextbrand-600">
           {question.question}
         </div>
       </div>
