@@ -59,7 +59,7 @@ const TopicList: React.FC<TopicListProps> = ({
             >
               <a
                 href={constructHref(topic.id)}
-                className={`hover:text-[#702FF9] hover:cursor-pointer line-clamp-1`}
+                className={`hover:text-askmygovtextbrand-600 hover:cursor-pointer line-clamp-1`}
               >
                 {locale === 'ms' ? topic.title_ms : topic.title}&nbsp;
               </a>

@@ -25,7 +25,7 @@ export default function Masthead() {
     >
       <div className="container">
         <button className="w-full" onClick={() => setOpen(!open)}>
-          <div className="flex flex-wrap items-center gap-1.5 py-2.5 text-sm/4 text-brand-700 max-sm:justify-between sm:py-1">
+          <div className="flex flex-wrap items-center gap-1.5 py-2.5 text-sm/4 text-[#1D4ED8] dark:text-[#588BFB] max-sm:justify-between sm:py-1">
             <div className="flex items-center gap-1.5">
               <TickWithRugged className="size-4 sm:size-5 stroke-[#1D4ED8] dark:stroke-[#588BFB]" />
               <span className="text-black-700">
@@ -44,10 +44,9 @@ export default function Masthead() {
         </button>
         <Collapse isOpen={open}>
           <div className="grid grid-cols-1 gap-4.5 pb-6 pt-4.5 sm:grid-cols-2 sm:gap-6 sm:pb-8 sm:pt-6">
-            <span className="static text-sm text-brand-700 sm:hidden">
+            <span className="static text-sm text-[#1D4ED8] dark:text-[#588BFB] sm:hidden">
               {t('how_to_identify')}
             </span>
-
             <div className="flex gap-3">
               <PutrajayaIcon className="shrink-0 text-dim-500" />
               <div className="space-y-1.5">
