@@ -17,6 +17,7 @@ import { redirect } from 'next/navigation';
 import DateComponent from '@/components/date';
 import Link from 'next/link';
 import IdentifyWebsite from '@/components/HeaderDetails/IdentifyWebsite';
+import WordTranslate from '@/components/WordTranslate';
 
 interface Props {
   params: {
@@ -68,42 +69,48 @@ const QuestionDetailPage: React.FC<Props> = async ({ params }) => {
 
   return (
     <div className="">
-      <div className="">
-        <IdentifyWebsite></IdentifyWebsite>
-        <Header></Header>
+      <IdentifyWebsite></IdentifyWebsite>
+      <Header></Header>
 
-        <div className="container mt-10 flex text-out">
-          <div className="max-w-screen-2xl">
-            <div className="pb-7">
-              <div className="flex items-center gap-1">
-                <Link href={'/'}>
-                  <div className="font-medium text-dim-500 text-sm">Home</div>
-                </Link>
+      <div className="container mt-10 flex text-out">
+        <div className="max-w-screen-2xl">
+          <div className="pb-7">
+            <div className="flex items-center gap-1">
+              <Link href={'/'}>
+                <div className="font-medium text-dim-500 text-sm">Home</div>
+              </Link>
+              <div>
+                <RightArrow />
+              </div>
+              <div className="font-medium text-black-800 text-sm">
+                {acronym}
+              </div>
+            </div>
+
+            <div className="flex items-center gap-3 mt-3">
+              <div>
+                <IconQuestionSmileSolo />
+              </div>
+              <div className="text-black-700 flex text-base font-medium">
                 <div>
-                  <RightArrow />
+                  <WordTranslate
+                    translate={'Questiondetail'}
+                    keyword={'posted'}
+                  ></WordTranslate>
                 </div>
-                <div className="font-medium text-black-800 text-sm">
-                  {acronym}
-                </div>
+                &nbsp;
+                <DateComponent date={question.date} locale={locale} />
               </div>
+            </div>
 
-              <div className="flex items-center gap-3 mt-3">
+            <div className="py-6 text-brand-700 font-medium text-2xl">
+              {question.question}
+            </div>
+
+            <div className="pb-6 max-w-[932px]">
+              <div className="bg-[#FFFFFF] dark:bg-[#1D1D21] border-[1px] border-outline-200 rounded-lg ">
                 <div>
-                  <IconQuestionSmileSolo />
-                </div>
-                <div className="text-black-700 flex text-base font-medium">
-                  <div>Posted</div>
-                  <DateComponent date={question.date} />
-                </div>
-              </div>
-
-              <div className="py-6 text-brand-700 font-medium text-2xl">
-                {question.question}
-              </div>
-
-              <div className="pb-6 max-w-[932px]">
-                <div className="bg-[#FFFFFF] dark:bg-[#1D1D21] border-[1px] border-outline-200 rounded-lg ">
-                  <div>
+                  <div className="">
                     <div className="flex px-8 pt-8 pb-0 items-center">
                       <div className="w-6 h-6">
                         <JataNegaraIcon className="stroke-[#E4E4E7] dark:stroke-[#27272A]" />
@@ -112,7 +119,10 @@ const QuestionDetailPage: React.FC<Props> = async ({ params }) => {
                         <AgencyName acronym={acronym} />
                       </div>
                       <div className="font-medium text-sm text-dim-500">
-                        Answered 1 year ago
+                        <WordTranslate
+                          translate={'Questiondetail'}
+                          keyword={'answered'}
+                        ></WordTranslate>
                       </div>
                     </div>
                     <div className="flex px-8 pb-5 pt-4 text-justify text-black-700">
@@ -137,7 +147,10 @@ const QuestionDetailPage: React.FC<Props> = async ({ params }) => {
                   </div>
                   <div>
                     <div className="px-8 pb-8 pt-0">
-                      Supporting Attachments:
+                      <WordTranslate
+                        translate={'Questiondetail'}
+                        keyword={'attachment'}
+                      ></WordTranslate>
                     </div>
                     <div className="px-8 pb-8 pt-0">
                       <div className="flex gap-2">

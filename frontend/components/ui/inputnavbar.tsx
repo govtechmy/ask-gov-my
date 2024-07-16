@@ -35,7 +35,8 @@ const highlightText = (text: string, query: string) => {
   const parts = text.split(new RegExp(`(${query})`, 'gi'));
   return parts.map((part, index) =>
     part.toLowerCase() === query.toLowerCase() ? (
-      <span key={index} className="text-purple-500">
+      // here code for text color search mix and match
+      <span key={index} className="text-[#702FF9]">
         {part}
       </span>
     ) : (
@@ -58,6 +59,11 @@ const InputNavbar: React.FC<InputNavbarProps> = ({
   const [showNoResults, setShowNoResults] = useState(false);
   const router = useRouter();
   const t = useTranslations('Search');
+  const handleInfoClick = () => {
+    if (searchQuery.trim().length > 0) {
+      router.push(`/searchresults?query=${searchQuery}`);
+    }
+  };
 
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setSearchQuery(event.target.value);
@@ -144,7 +150,10 @@ const InputNavbar: React.FC<InputNavbarProps> = ({
           </div>
         </div>
       )}
-      <div className="flex items-center justify-center w-7 h-7 rounded-full bg-gradient-to-b from-[#B379FF] to-[#702FF9] to-[60.94%]">
+      <div
+        className="flex items-center justify-center w-7 h-7 rounded-full bg-gradient-to-b from-[#B379FF] to-[#702FF9] to-[60.94%] hover:cursor-pointer"
+        onClick={handleInfoClick}
+      >
         <Search className="text-white" />
       </div>
       {searchQuery.length > 0 && (
@@ -170,19 +179,21 @@ const InputNavbar: React.FC<InputNavbarProps> = ({
                       return (
                         <div
                           key={index}
-                          className="flex rounded-md items-center justify-between pr-2 pl-4 py-2 last:border-0 hover:bg-outline-200 h-[60px] w-[780px]"
+                          className="flex rounded-md items-center pr-2 pl-4 py-2 last:border-0 hover:bg-outline-200 max-h-[60px] max-w-[780px]"
                         >
                           <Link
+                            className="grow"
                             href={`/${agencyAcronym?.toLowerCase()}/${result.id}`}
                           >
-                            <span className="block font-medium text-sm text-black-700 truncate max-w-[600px]">
+                            <span className="font-medium text-sm text-black-700 line-clamp-1 ">
                               {highlightText(result.question, searchQuery)}
                             </span>
-                            <span className="mt-1 block font-normal text-sm text-dim-500 truncate max-w-[600px]">
+                            <span className="mt-1 font-normal text-sm text-dim-500 line-clamp-1">
+                              Answer:{' '}
                               {highlightText(result.answer, searchQuery)}
                             </span>
                           </Link>
-                          <span className="on hover:cursor-pointer">
+                          <span className="on hover:cursor-pointer pl-3">
                             <div className="flex">
                               <div className="pr-1.5">
                                 <JataNegaraIcon className="stroke-[#E4E4E7] dark:stroke-[#27272A] h-5 w-5"></JataNegaraIcon>

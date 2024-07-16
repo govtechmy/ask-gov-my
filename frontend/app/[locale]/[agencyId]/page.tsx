@@ -8,6 +8,7 @@ import TopicList from '@/components/TopicList';
 import { getTopicByAgency } from '@/actions/questionServices';
 import IdentifyWebsite from '@/components/HeaderDetails/IdentifyWebsite';
 import WordTranslate from '@/components/WordTranslate';
+import TopicDropdown from '@/components/TopicDropdown';
 
 interface Props {
   params: {
@@ -58,7 +59,12 @@ const AgencyPage = async ({ params, searchParams }: Props) => {
                 keyword={'topic'}
               ></WordTranslate>
             </div>
-            <TopicList topics={topics} locale={locale} />
+            <TopicList topics={topics} locale={locale} agencyId={agencyId} />
+            <TopicDropdown
+              topics={topics}
+              locale={locale}
+              agencyId={agencyId}
+            />
           </div>
         </div>
 
