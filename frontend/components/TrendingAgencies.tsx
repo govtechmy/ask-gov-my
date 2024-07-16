@@ -2,13 +2,14 @@
 import { useTranslations } from 'next-intl';
 import JataNegaraIcon from '@/icons/jatanegaraicon';
 import { Link } from '@/lib/i18n';
+import { error } from 'console';
 
-export interface Agency {
+interface Agency {
   id: number;
   name: string;
-  name_ms: string;
+  name_ms?: string;
   acronym: string;
-  total_likes: number;
+  total_likes?: number;
 }
 
 interface TrendingAgenciesProps {

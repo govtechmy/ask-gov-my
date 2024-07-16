@@ -41,8 +41,8 @@ const config: Config = {
         askmygovtextbrand: {
           600: 'oklch(var(--askmygov-text-brand-600))',
         },
-        textbrand: {
-          700: 'oklch(var(--myds-text-brand-700))',
+        mydstextbrand: {
+          600: 'oklch(var(--myds-text-brand-600))',
         },
         foreground: 'oklch(var(--myds-black-900))',
         background: {

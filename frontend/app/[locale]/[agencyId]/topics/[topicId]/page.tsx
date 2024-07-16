@@ -3,15 +3,15 @@ import {
   getTopicByAgency,
 } from '@/actions/questionServices';
 import QuestionBox from '@/components/QuestionBox/QuestionBox';
-import SearchNavbar from '@/components/HeaderDetails/SearchNavBar';
 import Footer from '@/components/FooterDetails/Footer';
 import Header from '@/components/HeaderDetails/Header';
 import IdentifyWebsite from '@/components/HeaderDetails/IdentifyWebsite';
 import { AGENCY_TO_UUID } from '@/lib/agency';
 import TopicList from '@/components/TopicList';
-import Head from 'next/head';
 import SearchNavbarAgency from '@/components/HeaderDetails/SearchNavBarAgency';
 import TopicDropdown from '@/components/TopicDropdown';
+import WordTranslate from '@/components/WordTranslate';
+
 interface Props {
   params: {
     agencyId: string;
@@ -49,12 +49,13 @@ const TopicPage = async ({ params }: Props) => {
         </div>
         <div className="container mt-10 flex text-out">
           <div className="max-w-screen-2xl">
-            <div className="font-semibold text-base text-black-700 pb-7 flex">
-              <div>
+            <div className="font-medium text-base text-black-700 pb-7 flex items-center">
+              <div className="pr-1">
+                {locale === 'ms' ? 'Paparan ' : 'Showing '}
                 {filteredQuestions.length}{' '}
                 {locale === 'ms' ? 'soalan topik' : 'questions in'} &nbsp;
               </div>
-              <div>
+              <div className="bg-askmygovbrand-50 border-[1px] border-askmygovbrand-200 h-8 items-center flex px-2 rounded-md text-askmygovtextbrand-600">
                 {locale === 'ms'
                   ? selectedTopic?.title_ms
                   : selectedTopic?.title}
@@ -64,19 +65,30 @@ const TopicPage = async ({ params }: Props) => {
           </div>
 
           <div className="pl-10 w-[500px]">
+            <div className="font-semibold text-base text-black-700 pl-6 pb-8">
+              <WordTranslate
+                translate={'Topics'}
+                keyword={'topic'}
+              ></WordTranslate>
+            </div>
             <div className="font-semibold text-base text-black-700">
-              <TopicList
-                topics={topics}
-                locale={locale}
-                selectedTopicId={parseInt(topicId)}
-                agencyId={agencyId}
-              />
-              <TopicDropdown
-                topics={topics}
-                locale={locale}
-                selectedTopicId={parseInt(topicId)}
-                agencyId={agencyId}
-              />
+              <div className="hidden md:block">
+                <TopicList
+                  topics={topics}
+                  locale={locale}
+                  selectedTopicId={parseInt(topicId)}
+                  agencyId={agencyId}
+                />
+              </div>
+
+              <div className="md:invisible">
+                <TopicDropdown
+                  topics={topics}
+                  locale={locale}
+                  selectedTopicId={parseInt(topicId)}
+                  agencyId={agencyId}
+                />
+              </div>
             </div>
           </div>
         </div>

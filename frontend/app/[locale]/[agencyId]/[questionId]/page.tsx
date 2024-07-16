@@ -103,7 +103,7 @@ const QuestionDetailPage: React.FC<Props> = async ({ params }) => {
               </div>
             </div>
 
-            <div className="py-6 text-brand-700 font-medium text-2xl">
+            <div className="py-6 text-[#1D4ED8] dark:text-[#588BFB] font-medium text-2xl">
               {question.question}
             </div>
 
