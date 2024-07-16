@@ -4,18 +4,13 @@
 
 @layer base {
   :root {
-    /* askmygovbrand */
-    --askmygov-brand-600: 66.53% 0.271 297.01; /* #702FF9 */
-    --askmygov-brand-700: 60.92% 0.271 296.12; /* #5B1AE6 */
-    --askmygov-brand-300: 78.42% 0.135 297.08; /* #B794FF */
-    --askmygov-brand-200: 87.62% 0.076 297.11; /* #D4C0FF */
-    --askmygov-brand-50: 97.56% 0.02 297.1; /* #F4EFFF */
-
     /* base */
     --myds-black-900: 21.03% 0.006 285.89; /* #18181B or Zinc 900 */
     --myds-black-800: 27.39% 0.005 286.03; /* #27272A or Zinc 800 */
     --myds-black-700: 37.03% 0.012 285.81; /* #3F3F46 or Zinc 700 */
     --myds-white: 100% 0 0; /* #FFFFFF */
+    --myds-focuswhite-100: 100% 0 0; /* #FFFFFF */
+    --myds-focuswhite-200: 100% 0 0; /* #FFFFFF */
 
     /* gray */
     --myds-dim-500: 55.17% 0.014 285.94; /* #71717A or Zinc 500 */
@@ -24,43 +19,33 @@
     --myds-outline-200: 91.97% 0.004 286.32; /* #E4E4E7 or Zinc 200 */
     --myds-washed-100: 96.74% 0.001 286.38; /* #F4F4F5 or Zinc 100 */
     --myds-background-50: 98.51% 0 0; /* #FAFAFA or Zinc 50 */
+    --myds-background-0: 100% 0 0; /* #FFFFFF */
 
     /* brand */
     --myds-brand-600: 54.61% 0.215 262.88; /* #2563EB */
     --myds-brand-700: 48.82% 0.217 264.38; /* #1D4ED8 */
     --myds-brand-300: 78.27% 0.1095615641250738 265.0682055860161; /* #96B7FF */
     --myds-brand-200: 87.26% 0.06194175757836567 265.95644933587766; /* #C2D5FF */
-    --myds-brand-50: 97.05% 0.014 254.6; /* #EFF6FF */
+    --myds-brand-50: 97% 0.014 268.49; /* #F1F5FF */
     --myds-text-brand-700: 48.82% 0.217 264.38; /* #1D4ED8 */
 
-    /* OLD NEED REWORK */
-    --black-900: 21% 0.006 285.9; /* Zinc 900 */
-    --black-800: 27% 0.005 286; /* Zinc 800 */
-    --black-700: 37% 0.012 285.8; /* Zinc 700 */
-    --brand-600: 53% 0.268 287.9; /* #702FF9 */
-    --brand-700: 49% 0.217 264.4; /* #1D4ED8 */
-    --base-white: 100% 0 0; /* White */
-    --dim-500: 55% 0.014 285.9; /* Zinc 500 */
-    --outline-400: 71% 0.013 286.1; /* Zinc 400 */
-    --outline-300: 87% 0.005 286.3; /* Zinc 300 */
-    --outline-200: 92% 0.004 286.3; /* Zinc 200 */
-    --washed-100: 97% 0.001 286.4; /* Zinc 100 */
-    --background-50: 98.51% 0 0; /* Zinc 50 */
+    /* askmygovbrand */
+    --askmygov-brand-600: 53% 0.268 287.87; /* #702FF9 */
+    --askmygov-brand-700: 47.59% 0.264 284.57; /* #5B1AE6 */
+    --askmygov-brand-300: 74.13% 0.154 297.611; /* #B794FF */
+    --askmygov-brand-200: 84.57% 0.089 299.04; /* #D4C0FF */
+    --askmygov-brand-50: 96.06% 0.022 300.208; /* #F4EFFF */
+    --askmygov-text-brand-600: 53% 0.268 287.87; /* #702FF9 */
   }
 
   .dark {
-    /* askmygovbrand */
-    --askmygov-brand-600: 66.53% 0.271 297.01; /* #702FF9 */
-    --askmygov-brand-700: 60.92% 0.271 296.12; /* #5B1AE6 */
-    --askmygov-brand-300: 44.21% 0.235 295.08; /* #4F20B2 */
-    --askmygov-brand-200: 43.25% 0.234 295.12; /* #4F1FB4 */
-    --askmygov-brand-50: 23.34% 0.082 295.88; /* #201636 */
-
     /* base */
     --myds-black-900: 100% 0 0; /* #FFFFFF */
     --myds-black-800: 96.74% 0.001 286.38; /* #F4F4F5 */
     --myds-black-700: 87.11% 0.005 286.29; /* #D4D4D8 */
     --myds-white: 21.03% 0.006 285.89; /* #18181B */
+    --myds-focuswhite-100: 23.24% 0.008 285.79; /* #1D1D21 */
+    --myds-focuswhite-200: 27.39% 0.005 286.03; /* #27272A */
 
     /* gray */
     --myds-dim-500: 71.18% 0.013 286.07; /* #A1A1AA */
@@ -69,6 +54,7 @@
     --myds-outline-200: 27.39% 0.005 286.03; /* #27272A */
     --myds-washed-100: 23.24% 0.008 285.79; /* #1D1D21 */
     --myds-background-50: 20.15% 0.006 285.86; /* #161619 */
+    --myds-background-0: 100%.00 0 0; /* #FFFFFF */
 
     /* brand */
     --myds-brand-600: 54.61% 0.215 262.88; /* #2563EB */
@@ -78,19 +64,13 @@
     --myds-brand-50: 21.97% 0.06 268.56; /* #0F1836 */
     --myds-text-brand-700: 65.63% 0.175 263.82; /* #588BFB */
 
-    /* OLD NEED REWORK */
-    --brand-600: 66% 0.204 295; /* #9E70FF */
-    --brand-700: 66% 0.175 263.8; /* #588BFB */
-    --black-900: 100% 0 0; /* White */
-    --black-800: 97% 0.001 286.4; /* Zinc 100 */
-    --black-700: 87% 0.005 286.3; /* Zinc 300 */
-    --base-white: 21% 0.006 285.9; /* Zinc 900 */
-    --dim-500: 71% 0.013 286.1; /* Zinc 400 */
-    --outline-400: 44% 0.015 285.8; /* Zinc 600 */
-    --outline-300: 37% 0.012 285.8; /* Zinc 700 */
-    --outline-200: 27% 0.005 286; /* Zinc 800 */
-    --washed-100: 23% 0.008 285.8;
-    --background-50: 20.15% 0.006 285.86;
+    /* askmygovbrand */
+    --askmygov-brand-600: 53% 0.268 287.87; /* #702FF9 */
+    --askmygov-brand-700: 47.59% 0.264 284.57; /* #5B1AE6 */
+    --askmygov-brand-300: 74.13% 0.154 297.611; /* #B794FF */
+    --askmygov-brand-200: 84.57% 0.089 299.041; /* #D4C0FF */
+    --askmygov-brand-50: 23.13% 0.06 295.73; /* #201636 */
+    --askmygov-text-brand-600: 65.93% 0.204 295.04; /* #9E70FF */
   }
 
   html {

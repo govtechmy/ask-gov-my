@@ -25,8 +25,24 @@ const config: Config = {
       },
       colors: {
         brand: {
+          300: 'oklch(var(--myds-brand-300))',
+          200: 'oklch(var(--myds-brand-200))',
+          50: 'oklch(var(--myds-brand-50))',
           600: 'oklch(var(--myds-brand-600))',
           700: 'oklch(var(--myds-brand-700))',
+        },
+        askmygovbrand: {
+          600: 'oklch(var(--askmygov-brand-600))',
+          700: 'oklch(var(--askmygov-brand-700))',
+          300: 'oklch(var(--askmygov-brand-300))',
+          200: 'oklch(var(--askmygov-brand-200))',
+          50: 'oklch(var(--askmygov-brand-50))',
+        },
+        askmygovtextbrand: {
+          600: 'oklch(var(--askmygov-text-brand-600))',
+        },
+        textbrand: {
+          700: 'oklch(var(--myds-text-brand-700))',
         },
         foreground: 'oklch(var(--myds-black-900))',
         background: {

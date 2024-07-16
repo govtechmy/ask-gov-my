@@ -69,80 +69,78 @@ const QuestionDetailPage: React.FC<Props> = async ({ params }) => {
 
   return (
     <div className="">
-      <div className="">
-        <IdentifyWebsite></IdentifyWebsite>
-        <Header></Header>
+      <IdentifyWebsite></IdentifyWebsite>
+      <Header></Header>
 
-        <div className="container mt-10 flex text-out">
-          <div className="max-w-screen-2xl">
-            <div className="pb-7">
-              <div className="flex items-center gap-1">
-                <Link href={'/'}>
-                  <div className="font-medium text-dim-500 text-sm">Home</div>
-                </Link>
+      <div className="container mt-10 flex text-out">
+        <div className="max-w-screen-2xl">
+          <div className="pb-7">
+            <div className="flex items-center gap-1">
+              <Link href={'/'}>
+                <div className="font-medium text-dim-500 text-sm">Home</div>
+              </Link>
+              <div>
+                <RightArrow />
+              </div>
+              <div className="font-medium text-black-800 text-sm">
+                {acronym}
+              </div>
+            </div>
+
+            <div className="flex items-center gap-3 mt-3">
+              <div>
+                <IconQuestionSmileSolo />
+              </div>
+              <div className="text-black-700 flex text-base font-medium">
                 <div>
-                  <RightArrow />
+                  <WordTranslate
+                    translate={'Questiondetail'}
+                    keyword={'posted'}
+                  ></WordTranslate>
                 </div>
-                <div className="font-medium text-black-800 text-sm">
-                  {acronym}
-                </div>
+                &nbsp;
+                <DateComponent date={question.date} locale={locale} />
               </div>
+            </div>
 
-              <div className="flex items-center gap-3 mt-3">
+            <div className="py-6 text-brand-700 font-medium text-2xl">
+              {question.question}
+            </div>
+
+            <div className="pb-6 max-w-[932px]">
+              <div className="bg-[#FFFFFF] dark:bg-[#1D1D21] border-[1px] border-outline-200 rounded-lg ">
                 <div>
-                  <IconQuestionSmileSolo />
-                </div>
-                <div className="text-black-700 flex text-base font-medium">
-                  <div>
-                    <WordTranslate
-                      translate={'Questiondetail'}
-                      keyword={'posted'}
-                    ></WordTranslate>
-                  </div>
-                  &nbsp;
-                  <DateComponent date={question.date} locale={locale} />
-                </div>
-              </div>
-
-              <div className="py-6 text-brand-700 font-medium text-2xl">
-                {question.question}
-              </div>
-
-              <div className="pb-6 max-w-[932px]">
-                <div className="bg-[#FFFFFF] dark:bg-[#1D1D21] border-[1px] border-outline-200 rounded-lg ">
-                  <div>
-                    <div className="">
-                      <div className="flex px-8 pt-8 pb-0 items-center">
-                        <div className="w-6 h-6">
-                          <JataNegaraIcon className="stroke-[#E4E4E7] dark:stroke-[#27272A]" />
-                        </div>
-                        <div className="font-medium text-sm text-black-700 px-2">
-                          <AgencyName acronym={acronym} />
-                        </div>
-                        <div className="font-medium text-sm text-dim-500">
-                          <WordTranslate
-                            translate={'Questiondetail'}
-                            keyword={'answered'}
-                          ></WordTranslate>
-                        </div>
+                  <div className="">
+                    <div className="flex px-8 pt-8 pb-0 items-center">
+                      <div className="w-6 h-6">
+                        <JataNegaraIcon className="stroke-[#E4E4E7] dark:stroke-[#27272A]" />
                       </div>
-                      <div className="flex px-8 pb-5 pt-4 text-justify text-black-700">
-                        {question.answer}
+                      <div className="font-medium text-sm text-black-700 px-2">
+                        <AgencyName acronym={acronym} />
                       </div>
+                      <div className="font-medium text-sm text-dim-500">
+                        <WordTranslate
+                          translate={'Questiondetail'}
+                          keyword={'answered'}
+                        ></WordTranslate>
+                      </div>
+                    </div>
+                    <div className="flex px-8 pb-5 pt-4 text-justify text-black-700">
+                      {question.answer}
+                    </div>
 
-                      <div className="px-8 pb-8 pt-0">
-                        <div className="flex gap-3 items-center border-b-[1px] border-outline-200 pb-[22px]">
-                          <div className=" font-medium text-sm">Topics: </div>
-                          <div className="flex gap-[6px]">
-                            {topicTitles.map((TopicTitles, index) => (
-                              <div
-                                className="flex text-base font-medium text-[#702FF9] dark:text-[#9E70FF] bg-[#F4EFFF] dark:bg-[#201636] border-[1px] border-[#D4C0FF] dark:border-[#4F1FB4] px-2 py-1 rounded-lg"
-                                key={index}
-                              >
-                                {TopicTitles}
-                              </div>
-                            ))}
-                          </div>
+                    <div className="px-8 pb-8 pt-0">
+                      <div className="flex gap-3 items-center border-b-[1px] border-outline-200 pb-[22px]">
+                        <div className=" font-medium text-sm">Topics: </div>
+                        <div className="flex gap-[6px]">
+                          {topicTitles.map((TopicTitles, index) => (
+                            <div
+                              className="flex text-base font-medium text-[#702FF9] dark:text-[#9E70FF] bg-[#F4EFFF] dark:bg-[#201636] border-[1px] border-[#D4C0FF] dark:border-[#4F1FB4] px-2 py-1 rounded-lg"
+                              key={index}
+                            >
+                              {TopicTitles}
+                            </div>
+                          ))}
                         </div>
                       </div>
                     </div>
