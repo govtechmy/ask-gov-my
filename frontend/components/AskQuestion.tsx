@@ -62,7 +62,7 @@ const AskQuestion = () => {
     <div className="items-center px-4 py-2 text-center border-outline-200 h-[60px] w-[788px]">
       <div className="text-sm items-center flex text-primary-500 justify-center h-full">
         {isClicked ? (
-          <div className="h-10 flex items-center text-white font-medium text-base border-[1px] border-[#702FF9] shadow-button bg-gradient-to-b from-[#B379FF] to-[#702FF9] px-4 py-2 rounded-lg hover:cursor-pointer">
+          <div className="h-10 flex items-center text-white-forcewhite font-medium text-base border-[1px] border-[#702FF9] shadow-button bg-gradient-to-b from-[#B379FF] to-[#702FF9] px-4 py-2 rounded-lg hover:cursor-pointer">
             <div className="pr-2">
               <PlusIcon className="stroke-[#FFFFFF] dark:stroke-[#FFFFFF]"></PlusIcon>
             </div>
@@ -86,7 +86,7 @@ const AskQuestion = () => {
                   onClick={closeModal}
                   className="hover:cursor-pointer rounded-lg shadow-button h-8 w-8 flex items-center justify-center border-[1px] border-outline-200"
                 >
-                  <Close />
+                  <Close className="stroke-black-900" />
                 </div>
               </div>
               <div className="text-lg font-semibold pt-[18px] px-[18px] pb-[24px] text-left -mt-8 flex items-center text-black-900">
@@ -142,29 +142,31 @@ const AskQuestion = () => {
                     <div className="items-center text-sm font-normal text-black-700 py-3 pr-3">
                       <div>
                         <div>
-                          We usually respond within{' '}
+                          {t('response_time_p1')}
                           <span className="text-askmygovbrand-600 font-semibold">
-                            3 to 15 working days
+                            {' '}
+                            {t('response_time_p2')}{' '}
                           </span>
-                          , but it may take longer if your question requires
-                          collaboration with other parties.
+                          {t('response_time_p3')}
                         </div>
-                        <div>
-                          Once we've responded, the question and answer{' '}
+
+                        <div className="pt-3">
+                          {t('response_public_p1')}
                           <span className="text-askmygovbrand-600 font-semibold">
-                            may be published publicly on AskMyGov
-                          </span>{' '}
-                          to assist other rakyats.
+                            {' '}
+                            {t('response_public_p2')}{' '}
+                          </span>
+                          {t('response_public_p3')}
                         </div>
                       </div>
                     </div>
                   </div>
                 </div>
 
-                <div className="flex flex-col items-center py-9">
+                <div className="flex flex-col items-center pt-9 pb-[18px]">
                   <button
                     type="submit"
-                    className="h-10 flex items-center font-medium text-base border-[1px] border-[#702FF9] shadow-button bg-gradient-to-b from-[#B379FF] to-[#702FF9] px-4 py-2 rounded-lg hover:cursor-pointer"
+                    className="h-10 flex items-center font-medium text-white-forcewhite text-base border-[1px] border-[#702FF9] shadow-button bg-gradient-to-b from-[#B379FF] to-[#702FF9] px-4 py-2 rounded-lg hover:cursor-pointer"
                     onClick={handleSubmit}
                   >
                     {t('submit')}
