@@ -53,7 +53,7 @@ const AgencyPage = async ({ params, searchParams }: Props) => {
           </div>
 
           <div className="pl-10 w-[500px]">
-            <div className="font-semibold text-base text-black-700">
+            <div className="font-semibold text-base text-black-700 pl-6 pb-7">
               <WordTranslate
                 translate={'Topics'}
                 keyword={'topic'}
