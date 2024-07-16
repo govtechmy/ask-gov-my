@@ -62,7 +62,7 @@ const AskQuestion = () => {
     <div className="items-center px-4 py-2 text-center border-outline-200 h-[60px] w-[788px]">
       <div className="text-sm items-center flex text-primary-500 justify-center h-full">
         {isClicked ? (
-          <div className="h-10 flex items-center text-white font-medium text-base border-[1px] border-[#702FF9] shadow-button bg-gradient-to-b from-[#B379FF] to-[#702FF9] px-4 py-2 rounded-lg hover:cursor-pointer">
+          <div className="h-10 flex items-center text-white-forcewhite font-medium text-base border-[1px] border-[#702FF9] shadow-button bg-gradient-to-b from-[#B379FF] to-[#702FF9] px-4 py-2 rounded-lg hover:cursor-pointer">
             <div className="pr-2">
               <PlusIcon className="stroke-[#FFFFFF] dark:stroke-[#FFFFFF]"></PlusIcon>
             </div>
@@ -79,14 +79,14 @@ const AskQuestion = () => {
       </div>
       {isModalOpen && (
         <div className="fixed inset-0 bg-gray-900 bg-opacity-50 flex items-center justify-center">
-          <div className="bg-white rounded-xl shadow-card h-[750px] w-[600px] border-outline-200 border-[1px]">
+          <div className="bg-white rounded-xl shadow-card max-h-[750px] w-[600px] border-outline-200 border-[1px]">
             <div className="p-[14px]">
               <div className="flex justify-end">
                 <div
                   onClick={closeModal}
                   className="hover:cursor-pointer rounded-lg shadow-button h-8 w-8 flex items-center justify-center border-[1px] border-outline-200"
                 >
-                  <Close />
+                  <Close className="stroke-black-900" />
                 </div>
               </div>
               <div className="text-lg font-semibold pt-[18px] px-[18px] pb-[24px] text-left -mt-8 flex items-center text-black-900">
@@ -110,18 +110,7 @@ const AskQuestion = () => {
                   ></textarea>
                 </div>
 
-                <div className="text-left mt-4 mb-5">
-                  <div className="text-base font-medium pb-0 mb-0 text-black-700">
-                    {t('your_name')}
-                  </div>
-                  <input
-                    className="h-10 pl-3 w-full rounded-md shadow-sm border-[1px] border-outline-200 focus:border-none focus:outline-none focus:shadow-[0_0_0_1px_#B794FF,0_0_0_4px_#E2D5FE]"
-                    // onChange={e => setName(e.target.value)}
-                  />
-                  <div className="text-sm font-normal pt-[6px] mb-0 text-dim-500">
-                    {t('name_not_displayed')}
-                  </div>
-                </div>
+                <div className="mt-4 mb-5"></div>
 
                 <div className="text-left">
                   <div className="mb-[4px] text-base font-medium pb-0 text-black-700">
@@ -146,23 +135,38 @@ const AskQuestion = () => {
                     {t('email_updates')}
                   </div>
 
-                  <div className="flex border-[1px] border-[#D4C0FF] shadow-sm rounded-md w-full bg-[#F4EFFF]">
+                  <div className="flex border-[1px] border-askmygovbrand-200 shadow-sm rounded-md w-full bg-askmygovbrand-50">
                     <div className="pl-3 pt-3 pr-[10px]">
-                      <Info></Info>
+                      <Info className="stroke-askmygovbrand-600"></Info>
                     </div>
-                    <div className="items-center text-sm text-black-700 py-3 pr-3">
-                      <div className="flex ">
-                        <div className="">{t('response_time')}</div>
+                    <div className="items-center text-sm font-normal text-black-700 py-3 pr-3">
+                      <div>
+                        <div>
+                          {t('response_time_p1')}
+                          <span className="text-askmygovbrand-600 font-semibold">
+                            {' '}
+                            {t('response_time_p2')}{' '}
+                          </span>
+                          {t('response_time_p3')}
+                        </div>
+
+                        <div className="pt-3">
+                          {t('response_public_p1')}
+                          <span className="text-askmygovbrand-600 font-semibold">
+                            {' '}
+                            {t('response_public_p2')}{' '}
+                          </span>
+                          {t('response_public_p3')}
+                        </div>
                       </div>
-                      <div className="pt-3">{t('response_public')}</div>
                     </div>
                   </div>
                 </div>
 
-                <div className="flex flex-col items-center pt-9">
+                <div className="flex flex-col items-center pt-9 pb-[18px]">
                   <button
                     type="submit"
-                    className="h-10 flex items-center text-white font-medium text-base border-[1px] border-[#702FF9] shadow-button bg-gradient-to-b from-[#B379FF] to-[#702FF9] px-4 py-2 rounded-lg hover:cursor-pointer"
+                    className="h-10 flex items-center font-medium text-white-forcewhite text-base border-[1px] border-[#702FF9] shadow-button bg-gradient-to-b from-[#B379FF] to-[#702FF9] px-4 py-2 rounded-lg hover:cursor-pointer"
                     onClick={handleSubmit}
                   >
                     {t('submit')}

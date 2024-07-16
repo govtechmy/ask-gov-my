@@ -1,30 +1,33 @@
-export default function Info({ ...props }) {
+export default function Info({
+  className = 'stroke-[#E4E4E7] dark:stroke-[#27272A]',
+  ...props
+}) {
   return (
     <svg
-      width="20"
-      height="20"
-      viewBox="0 0 20 20"
+      width="16"
+      height="16"
+      viewBox="0 0 16 16"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
-      {...props}
     >
       <path
-        d="M10 17.25C14.0041 17.25 17.25 14.0041 17.25 10C17.25 5.99594 14.0041 2.75 10 2.75C5.99594 2.75 2.75 5.99594 2.75 10C2.75 14.0041 5.99594 17.25 10 17.25Z"
-        stroke="currentColor"
-        strokeWidth="1.5"
-        strokeLinecap="round"
-        strokeLinejoin="round"
+        d="M8 15.25C12.0041 15.25 15.25 12.0041 15.25 8C15.25 3.99594 12.0041 0.75 8 0.75C3.99594 0.75 0.75 3.99594 0.75 8C0.75 12.0041 3.99594 15.25 8 15.25Z"
+        stroke="#702FF9"
+        stroke-width="1.5"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        className={className}
       />
       <path
-        d="M10 11V13"
-        stroke="currentColor"
-        strokeWidth="1.5"
-        strokeLinecap="round"
-        strokeLinejoin="round"
+        d="M8 9V11"
+        stroke="#702FF9"
+        stroke-width="1.5"
+        stroke-linecap="round"
+        stroke-linejoin="round"
       />
       <path
-        d="M10 6.25C9.30964 6.25 8.75 6.80964 8.75 7.5C8.75 8.19036 9.30964 8.75 10 8.75C10.6904 8.75 11.25 8.19036 11.25 7.5C11.25 6.80964 10.6904 6.25 10 6.25Z"
-        fill="currentColor"
+        d="M8 4.25C7.30964 4.25 6.75 4.80964 6.75 5.5C6.75 6.19036 7.30964 6.75 8 6.75C8.69036 6.75 9.25 6.19036 9.25 5.5C9.25 4.80964 8.69036 4.25 8 4.25Z"
+        fill="#702FF9"
       />
     </svg>
   );

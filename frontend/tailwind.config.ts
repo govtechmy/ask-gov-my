@@ -66,6 +66,9 @@ const config: Config = {
         },
         white: {
           DEFAULT: 'oklch(var(--myds-white))',
+          forcewhite: 'oklch(var(--myds-forcewhite))',
+          focuswhite100: 'oklch(var(--myds-focuswhite-100))',
+          focuswhite200: 'oklch(var(--myds-focuswhite-200))',
         },
       },
       fontFamily: {
