@@ -52,6 +52,9 @@ const AgencyPage = async ({ params, searchParams }: Props) => {
             <QuestionBox questions={questions} />
           </div>
 
+          {/* make this sticky */}
+          {/* remove when size is large than some px display small one. */}
+          {/* home change language */}
           <div className="pl-10 w-[500px]">
             <div className="font-semibold text-base text-black-700 pl-6 pb-7">
               <WordTranslate
