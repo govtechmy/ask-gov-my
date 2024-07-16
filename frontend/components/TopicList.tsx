@@ -12,14 +12,14 @@ interface TopicListProps {
   topics: Topic[];
   locale: string;
   selectedTopicId?: number;
-  agencyId?: string
+  agencyId?: string;
 }
 
 const TopicList: React.FC<TopicListProps> = ({
   topics,
   locale,
   selectedTopicId,
-  agencyId
+  agencyId,
 }) => {
   const t = useTranslations('Topics');
   const [currentPath, setCurrentPath] = useState('');
@@ -51,7 +51,7 @@ const TopicList: React.FC<TopicListProps> = ({
             <li
               key={topic.id}
               className={`items-center h-10 w-[324px] rounded-lg py-2 px-3 mb-2 font-normal ${selectedTopicId === topic.id ? 'bg-[#F4EFFF]' : ''}`}
-            > 
+            >
               <a
                 href={constructHref(topic.id)}
                 className={` truncate text-black-800 hover:text-[#702FF9] hover:cursor-pointer`}
