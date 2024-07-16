@@ -21,7 +21,7 @@ const TrendingAgencies: React.FC<TrendingAgenciesProps> = ({ agencies }) => {
 
   return (
     <div className="pt-6">
-      <ul className="flex flex-col justify-between h-full">
+      <ul className="flex flex-col justify-between h-full pb-5">
         {top5Agencies.map(agency => (
           <li key={agency.id} className="py-[9px]">
             <Link href={`/${agency.acronym.toLowerCase()}`}>
