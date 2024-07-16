@@ -38,7 +38,7 @@ export interface Agency {
   id: number;
   name: string;
   name_ms?: string;
-  acronym?: string;
+  acronym: string;
   total_likes?: number;
 }
 
@@ -196,7 +196,6 @@ export async function getTrendingAgencies(): Promise<Agency[]> {
     if (!response.ok) {
       throw new Error('Failed to fetch trending agencies');
     }
-
     const data = await response.json();
     return data;
   } catch (error) {

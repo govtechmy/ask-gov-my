@@ -2,13 +2,14 @@
 import { useTranslations } from 'next-intl';
 import JataNegaraIcon from '@/icons/jatanegaraicon';
 import { Link } from '@/lib/i18n';
+import { error } from 'console';
 
 interface Agency {
   id: number;
   name: string;
-  name_ms: string;
+  name_ms?: string;
   acronym: string;
-  total_likes: number;
+  total_likes?: number;
 }
 
 interface TrendingAgenciesProps {
@@ -18,8 +19,6 @@ interface TrendingAgenciesProps {
 const TrendingAgencies: React.FC<TrendingAgenciesProps> = ({ agencies }) => {
   const t = useTranslations('Agency');
   const top5Agencies = agencies.slice(0, 10);
-  console.log(agencies);
-  console.log(typeof agencies);
 
   return (
     <div className="pt-6">
