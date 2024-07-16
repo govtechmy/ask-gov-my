@@ -11,9 +11,9 @@ export default function PlusIcon({
     >
       <path
         d="M10 4V16M16 10H4"
-        stroke-width="2"
-        stroke-linecap="round"
-        stroke-linejoin="round"
+        strokeWidth="2"
+        strokeLinecap="round"
+        strokeLinejoin="round"
         className={className}
       />
     </svg>
