@@ -10,6 +10,7 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@aws-sdk/client-s3": "^3.614.0",
     "@aws-sdk/client-ses": "^3.609.0",
     "@elastic/elasticsearch": "^8.14.0",
     "@next-auth/prisma-adapter": "^1.0.7",
