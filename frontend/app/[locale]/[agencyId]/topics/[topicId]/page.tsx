@@ -72,18 +72,23 @@ const TopicPage = async ({ params }: Props) => {
               ></WordTranslate>
             </div>
             <div className="font-semibold text-base text-black-700">
-              <TopicList
-                topics={topics}
-                locale={locale}
-                selectedTopicId={parseInt(topicId)}
-                agencyId={agencyId}
-              />
-              <TopicDropdown
-                topics={topics}
-                locale={locale}
-                selectedTopicId={parseInt(topicId)}
-                agencyId={agencyId}
-              />
+              <div className="hidden md:block">
+                <TopicList
+                  topics={topics}
+                  locale={locale}
+                  selectedTopicId={parseInt(topicId)}
+                  agencyId={agencyId}
+                />
+              </div>
+
+              <div className="md:invisible">
+                <TopicDropdown
+                  topics={topics}
+                  locale={locale}
+                  selectedTopicId={parseInt(topicId)}
+                  agencyId={agencyId}
+                />
+              </div>
             </div>
           </div>
         </div>
