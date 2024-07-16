@@ -25,7 +25,6 @@ const SearchNavbarAgency: React.FC<SearchNavbarAgencyProps> = ({
     searchparams.get('q') || '',
   );
   const t = useTranslations('Agency');
-  console.log(agencyAcronym);
   return (
     <div className="py-2 h-56 flex flex-col items-start">
       <div className="flex items-center justify-center h-56">
