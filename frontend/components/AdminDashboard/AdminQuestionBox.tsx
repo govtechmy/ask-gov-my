@@ -15,6 +15,10 @@ interface Question {
   answer: string;
   topics: number[];
   email: string;
+  likes: number;
+  dislikes: number;
+  attachment: string[];
+  isopen: boolean;
 }
 
 interface QuestionBoxProps {
