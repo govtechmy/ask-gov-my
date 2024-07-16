@@ -20,7 +20,7 @@ const DropdownMenu: React.FC<DropdownMenuProps> = ({
   topics,
   locale,
   selectedTopicId,
-  agencyId
+  agencyId,
 }) => {
   const t = useTranslations('Topics');
   const router = useRouter();
@@ -31,7 +31,8 @@ const DropdownMenu: React.FC<DropdownMenuProps> = ({
   useEffect(() => {
     if (typeof window !== 'undefined') {
       setCurrentPath(window.location.pathname);
-      const selected = topics.find(topic => topic.id === selectedTopicId) || null;
+      const selected =
+        topics.find(topic => topic.id === selectedTopicId) || null;
       setSelectedTopic(selected);
     }
   }, [selectedTopicId, topics]);
@@ -59,17 +60,23 @@ const DropdownMenu: React.FC<DropdownMenuProps> = ({
   return (
     <div className="relative pt-6">
       <div className="p-4">
-        <div 
+        <div
           className="h-10 w-[324px] bg-white border border-gray-300 rounded-lg flex items-center justify-between px-3 cursor-pointer"
           onClick={toggleDropdown}
         >
           <span className="text-gray-600">{t('topic')}</span>
-          <span className="font-medium text-black-800">{selectedTopic ? (locale === 'ms' ? selectedTopic.title_ms : selectedTopic.title) : t('alltopics')}</span>
+          <span className="font-medium text-black-800">
+            {selectedTopic
+              ? locale === 'ms'
+                ? selectedTopic.title_ms
+                : selectedTopic.title
+              : t('alltopics')}
+          </span>
           <span className="text-black-800">▼</span>
         </div>
         {isOpen && (
           <ul className="absolute w-[324px] bg-white border border-gray-300 rounded-lg mt-1 max-h-60 overflow-y-auto z-10">
-            <li 
+            <li
               className="px-3 py-2 hover:bg-gray-100 cursor-pointer"
               onClick={() => handleSelect(null)}
             >
@@ -81,7 +88,9 @@ const DropdownMenu: React.FC<DropdownMenuProps> = ({
                 className={`px-3 py-2 hover:bg-gray-100 cursor-pointer ${selectedTopicId === topic.id ? 'bg-gray-100' : ''}`}
                 onClick={() => handleSelect(topic)}
               >
-                <span className="truncate">{locale === 'ms' ? topic.title_ms : topic.title}</span>
+                <span className="truncate">
+                  {locale === 'ms' ? topic.title_ms : topic.title}
+                </span>
               </li>
             ))}
           </ul>

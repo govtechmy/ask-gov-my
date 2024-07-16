@@ -59,16 +59,12 @@ const AgencyPage = async ({ params, searchParams }: Props) => {
                 keyword={'topic'}
               ></WordTranslate>
             </div>
-            <TopicList
-                topics={topics}
-                locale={locale}
-                agencyId={agencyId}
-              />
-              <TopicDropdown
-                topics={topics}
-                locale={locale}
-                agencyId={agencyId}
-              />          
+            <TopicList topics={topics} locale={locale} agencyId={agencyId} />
+            <TopicDropdown
+              topics={topics}
+              locale={locale}
+              agencyId={agencyId}
+            />
           </div>
         </div>
 
