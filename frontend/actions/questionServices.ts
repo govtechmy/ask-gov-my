@@ -14,6 +14,8 @@ interface Question {
   email: string;
   likes: number;
   dislikes: number;
+  attachment: string[];
+  isopen: boolean;
 }
 
 interface Topic {
