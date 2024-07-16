@@ -29,7 +29,7 @@ const TrendingAgencies: React.FC<TrendingAgenciesProps> = ({ agencies }) => {
                 <div className="pr-[10px]">
                   <JataNegaraIcon className="stroke-[#E4E4E7] dark:stroke-[#27272A] w-8 h-8" />
                 </div>
-                <div className="text-base font-normal text-black-800 hover:text-[#702FF9] hover:cursor-pointer">
+                <div className="text-base font-normal text-black-800 hover:text-askmygovtextbrand-600 hover:cursor-pointer">
                   {t(agency.acronym)}
                 </div>
               </div>
