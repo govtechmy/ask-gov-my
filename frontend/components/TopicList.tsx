@@ -39,7 +39,7 @@ const TopicList: React.FC<TopicListProps> = ({
   const isBasePath = currentPath === `/${agencyId}`;
 
   return (
-    <div className="max-h-[490px] overflow-auto">
+    <div className="max-h-[490px] min-w-[350px] overflow-auto ">
       <div className="px-4 pb-4 pt-0">
         <ul className="">
           <li>
