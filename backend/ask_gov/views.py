@@ -101,24 +101,32 @@ class SubmitAnswerView(APIView):
         data = request.data.get('data')
         if not data:
             return Response({"detail": "Data is required"}, status=status.HTTP_400_BAD_REQUEST)
+        
         answer = data.get('answer')
         if not answer:
             return Response({"detail": "Answer is required"}, status=status.HTTP_400_BAD_REQUEST)
+        
+        attachments = data.get('attachments', [])
+        
         try:
             question = Question.objects.get(id=question_id)
             question.answer = answer
             question.state = 'completed'
+            question.attachments = attachments
             question.save()
+            
             client.update(
                 index='questions',
                 id=str(question.id),
                 body={
                     "doc": {
                         "answer": answer,
-                        "state": "completed"
+                        "state": "completed",
+                        # "attachments": attachments #because there is not attachment field in ES
                     }
                 }
             )
+            
             return Response({"detail": "Answer submitted successfully"}, status=status.HTTP_200_OK)
         except Question.DoesNotExist:
             return Response({"detail": "Question not found"}, status=status.HTTP_404_NOT_FOUND)
