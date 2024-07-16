@@ -1,4 +1,5 @@
 'use server';
+import { uploadFile } from "./fileServices";
 
 const API_URL = 'http://ask.juwaini.com/api';
 
@@ -13,6 +14,8 @@ interface Question {
   email: string;
   likes: number;
   dislikes: number;
+  attachment: string[];
+  isopen: boolean;
 }
 
 export interface Topic {
@@ -87,23 +90,48 @@ export async function getAllUserQuestions(
 
 export async function submitAnswer(
   questionId: number,
-  data: Question,
+  answer: string,
+  attachments: File[],
 ): Promise<void> {
-  const response = await fetch(
-    `${API_URL}/questions/${questionId}/submit-answer/`,
-    {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ data }),
-    },
-  );
+  try {
+    const attachmentUrls = await Promise.all(
+      attachments.map(async (file) => {
+        try {
+          return await uploadFile(file);
+        } catch (uploadError) {
+          console.error(`Failed to upload file: ${file.name}`, uploadError);
+          throw uploadError;
+        }
+      })
+    );
 
-  if (!response.ok) {
-    throw new Error('Failed to submit answer');
+    const data = {
+      answer,
+      attachment: attachmentUrls,
+    };
+
+    const response = await fetch(
+      `${API_URL}/questions/${questionId}/submit-answer/`,
+      {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(data),
+      },
+    );
+
+    if (!response.ok) {
+      const errorText = await response.text();
+      console.error('Failed to submit answer:', errorText);
+      throw new Error(`Failed to submit answer: ${errorText}`);
+    }
+  } catch (error) {
+    console.error('Error in submitAnswer:', error);
+    throw new Error('Error submitting answer');
   }
 }
+
 
 export async function listUserAgencyTopics(): Promise<Topic[]> {
   const response = await fetch(`${API_URL}/topics/user-agency/`, {
