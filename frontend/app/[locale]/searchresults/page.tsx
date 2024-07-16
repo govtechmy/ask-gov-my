@@ -16,33 +16,32 @@ const SearchResultPage = async ({
   const query = searchParams.query || '';
   const questions = await searchQuestions(query);
   const trendingAgencies = await getTrendingAgencies();
+
   return (
-    <div className="">
-      <IdentifyWebsite></IdentifyWebsite>
-      <Header></Header>
+    <div>
+      <IdentifyWebsite />
+      <Header />
       <SearchNavbar />
 
-      <div className="container mt-10 flex text-out">
+      <div className="container mt-10 flex">
         <div className="max-w-screen-2xl">
           <div className="font-semibold text-base text-black-700 pb-7 flex">
             {questions.length}&nbsp;
             <div>
-              <WordTranslate
-                translate={'Search'}
-                keyword={'search_result'}
-              ></WordTranslate>
+              <WordTranslate translate={'Search'} keyword={'search_result'} />
             </div>
             <div>&nbsp;"{query}"</div>
           </div>
-          <QuestionBox questions={questions} />
+          {questions.length > 0 ? (
+            <QuestionBox questions={questions} />
+          ) : (
+            <div className=" h-[220px] w-[900px]"></div>
+          )}
         </div>
 
         <div className="pl-10 w-[500px]">
           <div className="font-semibold text-base text-black-700">
-            <WordTranslate
-              translate={'Mainpage'}
-              keyword={'trendingA'}
-            ></WordTranslate>
+            <WordTranslate translate={'Mainpage'} keyword={'trendingA'} />
           </div>
           <TrendingAgencies agencies={trendingAgencies} />
         </div>
