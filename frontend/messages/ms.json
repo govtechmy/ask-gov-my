@@ -45,7 +45,10 @@
   "Topics": {
     "topic": "Topik-Topik",
     "alltopics": "Semua Topik",
-    "relatedtopics": "Topik Berkaitan"
+    "relatedtopics": "Topik Berkaitan",
+    "showing": "Memaparkan",
+    "questionsin": "soalan topik",
+    "notfound": "Kami tidak dapat mencari sebarang soalan untuk topik yang dipilih."
   },
 
   "Search": {
@@ -58,7 +61,8 @@
     "enter_key": "ENTER",
     "display_matches": "untuk memaparkan semua padanan",
     "searching": "Sedang mencari...",
-    "no_results": "Tiada hasil dijumpai."
+    "no_results": "Tiada hasil dijumpai.",
+    "answernotfound": "Kami tidak dapat menemukan jawapan untuk pertanyaan anda. Sila gunakan kotak carian sekali lagi."
   },
 
   "Mainpage": {
