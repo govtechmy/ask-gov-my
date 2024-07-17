@@ -5,6 +5,7 @@ import AdminQuestionCard from './AdminQuestionCard';
 import RightArrow from '@/icons/rightarrow';
 import LeftArrow from '@/icons/leftarrow';
 import { useSearchParams } from 'next/navigation';
+import AnswerQuestionCard from './AnswerQuestionCard';
 
 interface Question {
   id: number;
@@ -15,6 +16,10 @@ interface Question {
   answer: string;
   topics: number[];
   email: string;
+  likes: number;
+  dislikes: number;
+  attachment: string[];
+  isopen: boolean;
 }
 
 interface QuestionBoxProps {
