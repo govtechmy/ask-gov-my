@@ -45,8 +45,12 @@
   "Topics": {
     "topic": "Topics",
     "alltopics": "All Topics",
-    "relatedtopics": "Related Topics"
+    "relatedtopics": "Related Topics",
+    "showing": "Showing",
+    "questionsin": "questions in",
+    "notfound": "We couldn't find any questions for selected topics."
   },
+
   "Search": {
     "title": "Your one-stop centre to ask questions to Government officers!",
     "reminder": "You must search among existing questions before you are allowed to ask",
@@ -57,7 +61,8 @@
     "enter_key": "ENTER",
     "display_matches": "to display all matches",
     "searching": "Searching...",
-    "no_results": "No results found."
+    "no_results": "No results found.",
+    "answernotfound": "We couldn't find an answer to your question. Please try asking again using the search bar above."
   },
 
   "Mainpage": {
