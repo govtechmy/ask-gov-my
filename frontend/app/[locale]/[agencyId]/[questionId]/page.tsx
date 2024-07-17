@@ -39,6 +39,8 @@ interface Question {
   email: string;
   likes: number;
   dislikes: number;
+  attachments: string[];
+  isopen: boolean;
 }
 
 const QuestionDetailPage: React.FC<Props> = async ({ params }) => {
@@ -65,6 +67,9 @@ const QuestionDetailPage: React.FC<Props> = async ({ params }) => {
   } catch (error) {
     redirect('/');
   }
+
+  const attachments = question.attachments;
+  console.log(attachments);
   const acronym = agencyAcronym(question.agency);
 
   return (
@@ -152,9 +157,9 @@ const QuestionDetailPage: React.FC<Props> = async ({ params }) => {
                         keyword={'attachment'}
                       ></WordTranslate>
                     </div>
-                    <div className="px-8 pb-8 pt-0">
+                    <div className="px-8 pb-8 pt-0 ">
                       <div className="flex gap-2">
-                        <div className="items-center border-[1px] border-outline-200 bg-white rounded-lg flex w-[200px] h-[54px]">
+                        <div className="items-center border-[1px] border-outline-200 bg-white rounded-lg flex w-[200px] h-[54px] hover:cursor-pointer">
                           <div className="p-2">
                             <Pdf />
                           </div>
@@ -167,7 +172,7 @@ const QuestionDetailPage: React.FC<Props> = async ({ params }) => {
                             </div>
                           </div>
                         </div>
-                        <div className="items-center border-[1px] border-outline-200 bg-white rounded-lg flex w-[200px] h-[54px]">
+                        <div className="items-center border-[1px] border-outline-200 bg-white rounded-lg flex w-[200px] h-[54px] hover:cursor-pointer">
                           <div className="p-2">
                             <Pdf className="stroke-[#18181B] dark:stroke-[#FFFFFF]" />
                           </div>

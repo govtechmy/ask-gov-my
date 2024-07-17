@@ -25,6 +25,8 @@ interface Question {
   email: string;
   likes: number;
   dislikes: number;
+  attachments: string[];
+  isopen: boolean;
 }
 
 export async function searchQuestions(query: string) {

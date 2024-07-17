@@ -15,10 +15,14 @@ interface Question {
   question: string;
   date: string;
   state: string;
-  agency: number | null;
+  agency: number;
   answer: string;
   topics: number[];
   email: string;
+  likes: number;
+  dislikes: number;
+  attachments: string[];
+  isopen: boolean;
 }
 
 export default function DashboardPage() {
