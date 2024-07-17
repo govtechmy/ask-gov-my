@@ -2,7 +2,7 @@
 
 import { useTranslations } from 'next-intl';
 import HeaderDashboard from '@/components/HeaderDetails/HeaderDashboard';
-import AdminNavbar from '@/components/AdminDashboard/AdminNavbar';
+import QuestionNavbar from '@/components/AdminDashboard/QuestionNavbar';
 import { useSession } from 'next-auth/react';
 import { useRouter } from '@/lib/i18n';
 import { useSearchParams } from 'next/navigation';
@@ -80,7 +80,7 @@ export default function DashboardPage() {
     <div className="flex flex-col min-h-screen pt-5">
       <div className="mx-[10%]">
         <HeaderDashboard />
-        <AdminNavbar />
+        <QuestionNavbar />
         <div className="flex-grow flex items-center justify-center py-12">
           <AdminQuestionBox questions={questions} />
         </div>

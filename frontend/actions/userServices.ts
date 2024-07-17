@@ -1,4 +1,5 @@
 'use server';
+import { uploadFile } from './fileServices';
 
 const API_URL = 'http://ask.juwaini.com/api';
 
@@ -89,21 +90,33 @@ export async function getAllUserQuestions(
 
 export async function submitAnswer(
   questionId: number,
-  data: Question,
+  answer: string,
+  attachmentUrls: string[],
 ): Promise<void> {
-  const response = await fetch(
-    `${API_URL}/questions/${questionId}/submit-answer/`,
-    {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
+  try {
+    const response = await fetch(
+      `${API_URL}/questions/${questionId}/submit-answer/`,
+      {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          data: {
+            answer,
+            attachments: attachmentUrls,
+          },
+        }),
       },
-      body: JSON.stringify({ data }),
-    },
-  );
+    );
 
-  if (!response.ok) {
-    throw new Error('Failed to submit answer');
+    if (!response.ok) {
+      const errorData = await response.json();
+      throw new Error(`Failed to submit answer: ${JSON.stringify(errorData)}`);
+    }
+  } catch (error) {
+    console.error('Error in submitAnswer:', error);
+    throw new Error('Error submitting answer');
   }
 }
 

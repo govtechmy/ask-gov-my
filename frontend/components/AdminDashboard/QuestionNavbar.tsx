@@ -12,7 +12,7 @@ import {
 } from '@/components/ui/select';
 import { useSearchParams, useRouter } from 'next/navigation';
 
-const AdminNavbar = () => {
+const QuestionNavbar = () => {
   const searchParams = useSearchParams();
   const router = useRouter();
   const activeTab = searchParams.get('tab') || 'all';
@@ -86,4 +86,4 @@ const AdminNavbar = () => {
   );
 };
 
-export default AdminNavbar;
+export default QuestionNavbar;
