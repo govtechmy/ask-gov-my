@@ -9,6 +9,9 @@ def index_question(sender, instance, **kwargs):
     serializer = QuestionSerializer(instance)
     document = serializer.data
 
+    document.pop('isopen', None)
+    document.pop('attachments', None)
+
     if document['agency'] is None:
         agency_data = {
             "id": "",
