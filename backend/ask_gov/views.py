@@ -229,16 +229,22 @@ class AssignAgencyToQuestionView(APIView):
         serializer = QuestionSerializer(question)
         return Response(serializer.data, status=status.HTTP_200_OK)
 
-
-
-
 class AddAgencyView(APIView):
     def post(self, request):
         name = request.data.get('name')
         name_ms = request.data.get('name_ms')
+        acronym = request.data.get('acronym')
+        logo_url = request.data.get('logo_url')
+
         if not name or not name_ms:
             return Response({"detail": "Both name and name_ms are required"}, status=status.HTTP_400_BAD_REQUEST)
-        agency = Agency.objects.create(name=name, name_ms=name_ms)
+        
+        agency = Agency.objects.create(
+            name=name,
+            name_ms=name_ms,
+            acronym=acronym,
+            logo_url=logo_url 
+        )
         serializer = AgencySerializer(agency)
         return Response(serializer.data, status=status.HTTP_201_CREATED)
 
@@ -255,6 +261,7 @@ class UpdateAgencyView(APIView):
         agency.name = data.get('name', agency.name)
         agency.name_ms = data.get('name_ms', agency.name_ms)
         agency.acronym = data.get('acronym', agency.acronym)
+        agency.logo_url = data.get('logo_url', agency.logo_url)
         agency.save()
 
         questions = Question.objects.filter(agency=agency)
@@ -267,7 +274,7 @@ class UpdateAgencyView(APIView):
                         "agency.id": agency.id,
                         "agency.name": agency.name,
                         "agency.acronym": agency.acronym,
-                        "agency.name_ms": agency.name_ms
+                        "agency.name_ms": agency.name_ms,
                     }
                 }
             )
