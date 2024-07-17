@@ -151,7 +151,27 @@ export async function submitQuestion(data: QuestionSubmission): Promise<void> {
 }
 
 export async function getAgencyList(): Promise<{ id: string; name: string }[]> {
-  return Object.entries(AGENCY_TO_UUID).map(([name, id]) => ({ id, name }));
+  try {
+    const response = await fetch(`${API_URL}/agencies`, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    });
+
+    if (!response.ok) {
+      throw new Error('Failed to fetch agency list');
+    }
+
+    const data = await response.json();
+    return data.map((agency: { id: string; name: string }) => ({
+      id: agency.id,
+      name: agency.name,
+    }));
+  } catch (error) {
+    console.error('Error in getAgencyList:', error);
+    return [];
+  }
 }
 
 export async function likeQuestion(questionId: string): Promise<void> {
