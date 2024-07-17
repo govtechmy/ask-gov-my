@@ -1,5 +1,4 @@
 'use server';
-import { uploadFile } from "./fileServices";
 
 const API_URL = 'http://ask.juwaini.com/api';
 
@@ -167,16 +166,54 @@ export async function assignAgencyToQuestion(
   }
 }
 
-export async function addAgency(name: string, name_ms: string): Promise<void> {
-  const response = await fetch(`${API_URL}/agencies/add/`, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify({ name, name_ms }),
-  });
+export async function addAgency(
+  name: string,
+  name_ms: string,
+  acronym: string,
+  logo_url: string
+): Promise<void> {
+  try {
+    const response = await fetch(`${API_URL}/agencies/add/`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ name, name_ms, acronym, logo_url }),
+    });
 
-  if (!response.ok) {
-    throw new Error('Failed to add agency');
+    if (!response.ok) {
+      const errorData = await response.json();
+      throw new Error(`Failed to add agency: ${JSON.stringify(errorData)}`);
+    }
+  } catch (error) {
+    console.error('Error in addAgency:', error);
+    throw new Error('Error adding agency');
   }
 }
+
+export async function updateAgency(
+  agencyId: number,
+  name: string,
+  name_ms: string,
+  acronym: string,
+  logo_url: string
+): Promise<void> {
+  try {
+    const response = await fetch(`${API_URL}/agencies/${agencyId}/`, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ name, name_ms, acronym, logo_url }),
+    });
+
+    if (!response.ok) {
+      const errorData = await response.json();
+      throw new Error(`Failed to update agency: ${JSON.stringify(errorData)}`);
+    }
+  } catch (error) {
+    console.error('Error in updateAgency:', error);
+    throw new Error('Error updating agency');
+  }
+}
+
