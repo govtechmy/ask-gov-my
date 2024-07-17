@@ -122,7 +122,6 @@ class SubmitAnswerView(APIView):
                     "doc": {
                         "answer": answer,
                         "state": "completed",
-                        # "attachments": attachments #because there is not attachment field in ES
                     }
                 }
             )
@@ -230,16 +229,22 @@ class AssignAgencyToQuestionView(APIView):
         serializer = QuestionSerializer(question)
         return Response(serializer.data, status=status.HTTP_200_OK)
 
-
-
-
 class AddAgencyView(APIView):
     def post(self, request):
         name = request.data.get('name')
         name_ms = request.data.get('name_ms')
+        acronym = request.data.get('acronym')
+        logo_url = request.data.get('logo_url')
+
         if not name or not name_ms:
             return Response({"detail": "Both name and name_ms are required"}, status=status.HTTP_400_BAD_REQUEST)
-        agency = Agency.objects.create(name=name, name_ms=name_ms)
+        
+        agency = Agency.objects.create(
+            name=name,
+            name_ms=name_ms,
+            acronym=acronym,
+            logo_url=logo_url 
+        )
         serializer = AgencySerializer(agency)
         return Response(serializer.data, status=status.HTTP_201_CREATED)
 
@@ -247,4 +252,36 @@ class TrendingAgenciesView(APIView):
     def get(self, request):
         agencies = Agency.objects.annotate(total_likes=Sum('question__likes')).order_by('-total_likes')
         serializer = AgencySerializer(agencies, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+    
+class UpdateAgencyView(APIView):
+    def put(self, request, pk):
+        agency = get_object_or_404(Agency, pk=pk)
+        data = request.data
+        
+        agency.name = data.get('name', agency.name)
+        agency.name_ms = data.get('name_ms', agency.name_ms)
+        agency.acronym = data.get('acronym', agency.acronym)
+        
+        if 'logo_url' in data:
+            agency.logo_url = data['logo_url']
+        
+        agency.save()
+
+        questions = Question.objects.filter(agency=agency)
+        for question in questions:
+            client.update(
+                index='questions',
+                id=str(question.id),
+                body={
+                    "doc": {
+                        "agency.id": agency.id,
+                        "agency.name": agency.name,
+                        "agency.acronym": agency.acronym,
+                        "agency.name_ms": agency.name_ms,
+                    }
+                }
+            )
+
+        serializer = AgencySerializer(agency)
         return Response(serializer.data, status=status.HTTP_200_OK)

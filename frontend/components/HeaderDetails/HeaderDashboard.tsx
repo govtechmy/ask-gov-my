@@ -1,6 +1,7 @@
 'use client';
 import { useState } from 'react';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import ThemeToggle from './Theme';
 import LocaleSwitch from './LocaleSwitch';
 import Asklogo from '@/icons/asklogo';
@@ -14,12 +15,16 @@ import {
 } from '@/components/ui/select';
 
 const HeaderDashboard = () => {
-  const [activeLink, setActiveLink] = useState<'questions' | 'manageagencies'>(
+  const [activeLink, setActiveLink] = useState<'questions' | 'manageagencies' | 'manageusers'>(
     'questions',
   );
+  const router = useRouter();
 
-  const handleSetActiveLink = (link: 'questions' | 'manageagencies') => {
+  const handleSetActiveLink = (link: 'questions' | 'manageagencies' | 'manageusers') => {
     setActiveLink(link);
+    const params = new URLSearchParams(window.location.search);
+    params.set('page', link);
+    router.push(`${window.location.pathname}?${params.toString()}`);
   };
 
   return (
@@ -32,30 +37,42 @@ const HeaderDashboard = () => {
             <div className="bg-[#27272A] text-[#FFFFFF] dark:bg-[#F4F4F5] dark:text-[#18181B] rounded-md font-bold text-xs flex justify-center items-center w-[53px] h-[22px]">
               ADMIN
             </div>
-            <Link href="/admin/dashboard/" passHref>
-              <div
-                className={`rounded-md font-medium text-sm flex justify-center items-center w-[88px] h-8 px-2 ${
-                  activeLink === 'questions'
-                    ? 'text-[#702FF9] bg-[#F4EFFF] dark:text-[#9E70FF] dark:bg-[#201636]'
-                    : 'text-black-700'
-                }`}
-                onClick={() => handleSetActiveLink('questions')}
-              >
+            <div
+              className={`rounded-md font-medium text-sm flex justify-center items-center w-[88px] h-8 px-2 ${
+                activeLink === 'questions'
+                  ? 'text-[#702FF9] bg-[#F4EFFF] dark:text-[#9E70FF] dark:bg-[#201636]'
+                  : 'text-black-700'
+              }`}
+              onClick={() => handleSetActiveLink('questions')}
+            >
+              <Link href="/admin/dashboard/?page=questions">
                 Questions
-              </div>
-            </Link>
-            <Link href="/admin/dashboard/" passHref>
-              <div
-                className={`rounded-md font-medium text-sm flex justify-center items-center w-[145px] h-8 px-1 ${
-                  activeLink === 'manageagencies'
-                    ? 'text-[#702FF9] bg-[#F4EFFF] dark:text-[#9E70FF] dark:bg-[#201636]'
-                    : 'text-black-700'
-                }`}
-                onClick={() => handleSetActiveLink('manageagencies')}
-              >
+              </Link>
+            </div>
+            <div
+              className={`rounded-md font-medium text-sm flex justify-center items-center w-[145px] h-8 px-1 ${
+                activeLink === 'manageagencies'
+                  ? 'text-[#702FF9] bg-[#F4EFFF] dark:text-[#9E70FF] dark:bg-[#201636]'
+                  : 'text-black-700'
+              }`}
+              onClick={() => handleSetActiveLink('manageagencies')}
+            >
+              <Link href="/admin/dashboard/?page=manageagencies">
                 Manage Agencies
-              </div>
-            </Link>
+              </Link>
+            </div>
+            <div
+              className={`rounded-md font-medium text-sm flex justify-center items-center w-[145px] h-8 px-1 ${
+                activeLink === 'manageusers'
+                  ? 'text-[#702FF9] bg-[#F4EFFF] dark:text-[#9E70FF] dark:bg-[#201636]'
+                  : 'text-black-700'
+              }`}
+              onClick={() => handleSetActiveLink('manageusers')}
+            >
+              <Link href="/admin/dashboard/?page=manageusers">
+                Manage Users
+              </Link>
+            </div>
           </div>
 
           <div className="flex gap-3">
