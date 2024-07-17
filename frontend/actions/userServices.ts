@@ -13,7 +13,7 @@ interface Question {
   email: string;
   likes: number;
   dislikes: number;
-  attachment: string[];
+  attachments: string[];
   isopen: boolean;
 }
 
@@ -87,20 +87,27 @@ export async function getAllUserQuestions(
   }
 }
 
-export async function submitAnswer(questionId: number, answer: string, attachmentUrls: string[]): Promise<void> {
+export async function submitAnswer(
+  questionId: number,
+  answer: string,
+  attachmentUrls: string[],
+): Promise<void> {
   try {
-    const response = await fetch(`${API_URL}/questions/${questionId}/submit-answer/`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        data: {
-          answer,
-          attachments: attachmentUrls,
+    const response = await fetch(
+      `${API_URL}/questions/${questionId}/submit-answer/`,
+      {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
         },
-      }),
-    });
+        body: JSON.stringify({
+          data: {
+            answer,
+            attachments: attachmentUrls,
+          },
+        }),
+      },
+    );
 
     if (!response.ok) {
       const errorData = await response.json();
@@ -111,7 +118,6 @@ export async function submitAnswer(questionId: number, answer: string, attachmen
     throw new Error('Error submitting answer');
   }
 }
-
 
 export async function listUserAgencyTopics(): Promise<Topic[]> {
   const response = await fetch(`${API_URL}/topics/user-agency/`, {
