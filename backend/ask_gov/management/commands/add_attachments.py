@@ -19,10 +19,14 @@ class Command(BaseCommand):
         questions = Question.objects.all()
         for question in questions:
             question.attachment = []
+            print(f"Clearing existing attachments for question {question.id}")
 
             num_attachments = random.randint(3, 7)
             attachments = random.sample(self.ATTACHMENTS, num_attachments)
             question.attachments = attachments
             question.save()
+
+            for attachment in attachments:
+                print(f"Adding attachment {attachment} to question {question.id}")
 
         self.stdout.write(self.style.SUCCESS('Successfully added random attachments to all questions'))
