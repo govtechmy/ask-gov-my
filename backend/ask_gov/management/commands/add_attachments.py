@@ -22,7 +22,7 @@ class Command(BaseCommand):
 
             num_attachments = random.randint(3, 7)
             attachments = random.sample(self.ATTACHMENTS, num_attachments)
-            question.attachment = attachments
+            question.attachments = attachments
             question.save()
 
         self.stdout.write(self.style.SUCCESS('Successfully added random attachments to all questions'))
