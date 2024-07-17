@@ -24,7 +24,6 @@ const QuestionNavbar = () => {
   };
 
   useEffect(() => {
-    console.log('Active Tab:', activeTab);
   }, [activeTab]);
 
   return (
