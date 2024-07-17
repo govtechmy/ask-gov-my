@@ -51,9 +51,20 @@ const TopicPage = async ({ params }: Props) => {
           <div className="max-w-screen-2xl">
             <div className="font-medium text-base text-black-700 pb-7 flex items-center">
               <div className="pr-1">
-                {locale === 'ms' ? 'Paparan ' : 'Showing '}
-                {filteredQuestions.length}{' '}
-                {locale === 'ms' ? 'soalan topik' : 'questions in'} &nbsp;
+                <div className="flex">
+                  <WordTranslate
+                    translate={'Topics'}
+                    keyword={'showing'}
+                  ></WordTranslate>
+                  &nbsp;
+                  {filteredQuestions.length}
+                  &nbsp;
+                  <WordTranslate
+                    translate={'Topics'}
+                    keyword={'questionsin'}
+                  ></WordTranslate>
+                  &nbsp;
+                </div>
               </div>
               <div className="bg-askmygovbrand-50 border-[1px] border-askmygovbrand-200 h-8 items-center flex px-2 rounded-md text-askmygovtextbrand-600">
                 {locale === 'ms'
@@ -61,7 +72,18 @@ const TopicPage = async ({ params }: Props) => {
                   : selectedTopic?.title}
               </div>
             </div>
-            <QuestionBox questions={filteredQuestions} />
+            {filteredQuestions.length > 0 ? (
+              <QuestionBox questions={filteredQuestions} />
+            ) : (
+              <div className=" h-[220px] w-[900px]">
+                <div className="text-dim-500">
+                  <WordTranslate
+                    translate={'Topics'}
+                    keyword={'notfound'}
+                  ></WordTranslate>
+                </div>
+              </div>
+            )}
           </div>
 
           <div className="pl-10 w-[500px]">
@@ -71,7 +93,7 @@ const TopicPage = async ({ params }: Props) => {
                 keyword={'topic'}
               ></WordTranslate>
             </div>
-            <div className="font-semibold text-base text-black-700">
+            <div className="font-semibold text-base text-black-700 h-[500px]">
               <div className="hidden md:block">
                 <TopicList
                   topics={topics}
