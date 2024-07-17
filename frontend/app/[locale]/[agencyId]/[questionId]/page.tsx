@@ -73,8 +73,8 @@ const QuestionDetailPage: React.FC<Props> = async ({ params }) => {
       <Header></Header>
 
       <div className="container mt-10 flex text-out">
-        <div className="max-w-screen-2xl">
-          <div className="pb-7">
+        <div className="max-w-screen-2xl flex">
+          <div className="pb-7 w-9/12">
             <div className="flex items-center gap-1">
               <Link href={'/'}>
                 <div className="font-medium text-dim-500 text-sm">Home</div>
@@ -193,26 +193,50 @@ const QuestionDetailPage: React.FC<Props> = async ({ params }) => {
               </div>
 
               <div>
-                <div className="font-semibold text-base pt-6">
+                <div className="font-semibold text-base pt-6 pb-2">
                   Related questions
                 </div>
-                <div>Question Cards</div>
+                <div>
+                  <div>
+                    <div className="flex rounded-md items-center pr-2 pl-4 py-2 last:border-0 hover:bg-outline-200 max-h-[76px] max-w-[780px]">
+                      <Link className="grow" href="./">
+                        <span className="font-medium text-sm text-black-700 line-clamp-1 ">
+                          question
+                        </span>
+                        <span className="mt-1 font-normal text-sm text-dim-500 line-clamp-1">
+                          Answer:
+                        </span>
+                      </Link>
+                      <span className="on hover:cursor-pointer pl-3">
+                        <div className="flex">
+                          <div className="pr-1.5">
+                            <JataNegaraIcon className="stroke-[#E4E4E7] dark:stroke-[#27272A] h-5 w-5"></JataNegaraIcon>
+                          </div>
+                          <div className="font-normal text-sm text-black-800">
+                            KBS
+                          </div>
+                          <div className="px-1">
+                            <RightArrow />
+                          </div>
+                        </div>
+                      </span>
+                    </div>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
 
-          <div className="pl-10 w-[500px]">
-            <div className="font-semibold text-base text-black-700">
-              <RelatedTopics
-                topics={topics}
-                locale={locale}
-                agencyId={agencyId}
-              />
-            </div>
+          <div className="font-semibold text-base text-black-700 pl-10 w-3/12">
+            <RelatedTopics
+              topics={topics}
+              locale={locale}
+              agencyId={agencyId}
+            />
           </div>
         </div>
-        <Footer></Footer>
       </div>
+      <Footer></Footer>
     </div>
   );
 };
