@@ -1,5 +1,202 @@
-export default function ManageAgencies() {
-    return (
-        <p>agencies page</p>
-    )
-}
+import React, { useEffect, useState } from 'react';
+import { getAgencyList } from '@/actions/questionServices';
+import AgencyCard from './AgencyCard';
+import RightArrow from '@/icons/rightarrow';
+import LeftArrow from '@/icons/leftarrow';
+
+const ManageAgencies: React.FC = () => {
+  const [agencies, setAgencies] = useState<{ id: string; name: string; name_ms: string; acronym: string; logo_url: string }[]>([]);
+  const [filteredAgencies, setFilteredAgencies] = useState<
+    { id: string; name: string; name_ms: string; acronym: string; logo_url: string }[]
+  >([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+  const [searchTerm, setSearchTerm] = useState('');
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 12;
+  const totalPages = Math.ceil(filteredAgencies.length / itemsPerPage);
+
+  const fetchAgencies = async () => {
+    try {
+      const agencyList = await getAgencyList();
+      setAgencies(agencyList);
+      setFilteredAgencies(agencyList);
+    } catch (error) {
+      if (error instanceof Error) {
+        setError(error.message);
+      } else {
+        setError('An unknown error occurred');
+      }
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchAgencies();
+  }, []);
+
+  useEffect(() => {
+    const results = agencies.filter(agency =>
+      agency.name.toLowerCase().includes(searchTerm.toLowerCase())
+    );
+    setFilteredAgencies(results);
+    setCurrentPage(1); 
+  }, [searchTerm, agencies]);
+
+  const handlePageChange = (page: number) => {
+    if (page >= 1 && page <= totalPages) {
+      setCurrentPage(page);
+    }
+  };
+
+  const renderPageNumbers = () => {
+    const pageNumbers = [];
+
+    pageNumbers.push(
+      <button
+        key={1}
+        onClick={() => handlePageChange(1)}
+        className={`rounded-lg h-8 w-7 ${currentPage === 1 ? 'bg-[#F4EFFF] text-[#702FF9]' : 'bg-transparent text-black-700'}`}
+      >
+        {1}
+      </button>
+    );
+
+    if (currentPage > 1) {
+      pageNumbers.push(
+        <span key="ellipsis-start" className="px-2 py-2">
+          ...
+        </span>
+      );
+    }
+
+    let startPage, endPage;
+    if (currentPage <= 2) {
+      startPage = 2;
+      endPage = Math.min(4, totalPages - 1);
+    } else if (currentPage >= totalPages - 2) {
+      startPage = Math.max(2, totalPages - 3);
+      endPage = totalPages - 1;
+    } else {
+      startPage = Math.max(2, currentPage - 1);
+      endPage = Math.min(currentPage + 1, totalPages - 1);
+    }
+
+    for (let i = startPage; i <= endPage; i++) {
+      pageNumbers.push(
+        <button
+          key={i}
+          onClick={() => handlePageChange(i)}
+          className={`rounded-lg h-8 w-7 ${i === currentPage ? 'bg-[#F4EFFF] text-[#702FF9]' : 'bg-transparent text-black-700'}`}
+        >
+          {i}
+        </button>
+      );
+    }
+
+    if (currentPage < totalPages - 2) {
+      pageNumbers.push(
+        <span key="ellipsis-end" className="px-2 py-2 rounded-lg">
+          ...
+        </span>
+      );
+    }
+
+    if (totalPages > 1) {
+      pageNumbers.push(
+        <button
+          key={totalPages}
+          onClick={() => handlePageChange(totalPages)}
+          className={`rounded-lg h-8 w-7 ${totalPages === currentPage ? 'bg-[#F4EFFF] text-[#702FF9]' : 'bg-transparent text-black-700'}`}
+        >
+          {totalPages}
+        </button>
+      );
+    }
+
+    return <div className="flex rounded items-center">{pageNumbers}</div>;
+  };
+
+  const startIdx = (currentPage - 1) * itemsPerPage;
+  const endIdx = startIdx + itemsPerPage;
+  const currentAgencies = filteredAgencies.slice(startIdx, endIdx);
+
+  if (loading) {
+    return <p>Loading agencies...</p>;
+  }
+
+  if (error) {
+    return <p>Error: {error}</p>;
+  }
+
+  return (
+    <div className="p-8">
+      <div className="flex justify-between items-center mb-4">
+        <h1 className="text-xl font-semibold">Manage agencies</h1>
+        <button className="bg-purple-600 text-white px-4 py-2 rounded-md">
+          + New agency
+        </button>
+      </div>
+      <div className="flex justify-between items-center mb-4">
+        <input
+          type="text"
+          placeholder="Search by agency or ID"
+          className="w-full p-2 border rounded-md"
+          value={searchTerm}
+          onChange={e => setSearchTerm(e.target.value)}
+        />
+      </div>
+      {filteredAgencies.length === 0 ? (
+        <p className="text-center">
+          We couldn't find the agency. Please try searching again using the search bar above.
+        </p>
+      ) : (
+        <>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+            {currentAgencies.map(agency => (
+              <AgencyCard 
+                key={agency.id} 
+                id={agency.id} 
+                name={agency.name} 
+                name_ms={agency.name_ms} 
+                acronym={agency.acronym} 
+                logo_url={agency.logo_url}
+                onUpdate={fetchAgencies}
+              />
+            ))}
+          </div>
+          <div className="mt-4 rounded-lg flex items-center justify-center pb-7">
+            <button
+              onClick={() => handlePageChange(currentPage - 1)}
+              disabled={currentPage === 1}
+              className={`rounded-lg h-8 w-8 bg-white shadow-button text-black-900 border-[1px] border-[#E4E4E7] ${currentPage === 1 ? ' opacity-30' : 'opacity-100'}`}
+            >
+              <div className="h-8 w-8 rounded-lg flex items-center justify-center">
+                <div className="flex items-center justify-center h-4 w-4">
+                  <LeftArrow />
+                </div>
+              </div>
+            </button>
+
+            <div className="rounded-lg p-3">{renderPageNumbers()}</div>
+
+            <button
+              onClick={() => handlePageChange(currentPage + 1)}
+              disabled={currentPage === totalPages}
+              className={`rounded-lg h-8 w-8 bg-white shadow-button text-black-900 border-[1px] border-[#E4E4E7] ${currentPage === totalPages ? ' opacity-30' : 'opacity-100'}`}
+            >
+              <div className="h-8 w-8 rounded-lg flex items-center justify-center">
+                <div className="flex items-center justify-center h-4 w-4">
+                  <RightArrow />
+                </div>
+              </div>
+            </button>
+          </div>
+        </>
+      )}
+    </div>
+  );
+};
+
+export default ManageAgencies;
