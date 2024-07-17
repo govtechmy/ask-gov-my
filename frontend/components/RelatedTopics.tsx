@@ -22,30 +22,28 @@ const RelatedTopics: React.FC<RelatedTopicsProps> = ({
   const t = useTranslations('Topics');
 
   return (
-    <div className="pt-4">
-      <ul className="flex flex-col justify-between h-full">
-        <li className="py-2">
-          <div className="flex items-center ">
-            <div className="text-base font-normal text-black-800 hover:cursor-pointer hover:text-[#702FF9] dark:hover:text-[#9E70FF] ">
-              <div className="font-semibold text-base text-black-700">
-                {t('relatedtopics')}
-              </div>
-              <Link href={`/${agencyId}`}>{t('alltopics')}</Link>
-            </div>
-          </div>
-        </li>
-        {topics.map(topic => (
-          <li key={topic.id} className="py-2">
-            <div className="flex items-center ">
-              <Link href={`/${agencyId}/topics/${topic.id}`}>
-                <div className="text-base font-normal text-black-800 hover:cursor-pointer hover:text-[#702FF9] dark:hover:text-[#9E70FF] ">
+    <div className="max-h-[540px] min-w-[300px]">
+      <div className="font-semibold text-base text-black-700 pb-6">
+        {t('relatedtopics')}
+      </div>
+
+      <div className="flex py-2 pb-4 items-center h-10 text-base font-normal text-black-800 hover:cursor-pointer hover:text-[#702FF9] dark:hover:text-[#9E70FF]">
+        <Link href={`/${agencyId}`}>{t('alltopics')}</Link>
+      </div>
+
+      {topics.map(topic => (
+        <div key={topic.id} className="py-1 ">
+          <div className="flex items-center">
+            <Link href={`/${agencyId}/topics/${topic.id}`} className="w-full ">
+              <div className="h-10 text-base max-w-[290px] font-normal text-black-800 hover:cursor-pointer hover:text-[#702FF9] dark:hover:text-[#9E70FF] flex items-center overflow-hidden whitespace-nowrap">
+                <span className="truncate">
                   {locale === 'ms' ? topic.title_ms : topic.title}
-                </div>
-              </Link>
-            </div>
-          </li>
-        ))}
-      </ul>
+                </span>
+              </div>
+            </Link>
+          </div>
+        </div>
+      ))}
     </div>
   );
 };
