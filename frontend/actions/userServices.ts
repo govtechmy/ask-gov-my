@@ -88,43 +88,24 @@ export async function getAllUserQuestions(
   }
 }
 
-export async function submitAnswer(
-  questionId: number,
-  answer: string,
-  attachments: File[],
-): Promise<void> {
+export async function submitAnswer(questionId: number, answer: string, attachmentUrls: string[]): Promise<void> {
   try {
-    const attachmentUrls = await Promise.all(
-      attachments.map(async (file) => {
-        try {
-          return await uploadFile(file);
-        } catch (uploadError) {
-          console.error(`Failed to upload file: ${file.name}`, uploadError);
-          throw uploadError;
-        }
-      })
-    );
-
-    const data = {
-      answer,
-      attachment: attachmentUrls,
-    };
-
-    const response = await fetch(
-      `${API_URL}/questions/${questionId}/submit-answer/`,
-      {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(data),
+    const response = await fetch(`${API_URL}/questions/${questionId}/submit-answer/`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
       },
-    );
+      body: JSON.stringify({
+        data: {
+          answer,
+          attachments: attachmentUrls,
+        },
+      }),
+    });
 
     if (!response.ok) {
-      const errorText = await response.text();
-      console.error('Failed to submit answer:', errorText);
-      throw new Error(`Failed to submit answer: ${errorText}`);
+      const errorData = await response.json();
+      throw new Error(`Failed to submit answer: ${JSON.stringify(errorData)}`);
     }
   } catch (error) {
     console.error('Error in submitAnswer:', error);
