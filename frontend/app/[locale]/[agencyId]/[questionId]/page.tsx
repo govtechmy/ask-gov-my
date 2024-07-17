@@ -18,6 +18,7 @@ import DateComponent from '@/components/date';
 import Link from 'next/link';
 import IdentifyWebsite from '@/components/HeaderDetails/IdentifyWebsite';
 import WordTranslate from '@/components/WordTranslate';
+import SupportingAttachment from '@/components/SupportingAttachment';
 
 interface Props {
   params: {
@@ -67,9 +68,7 @@ const QuestionDetailPage: React.FC<Props> = async ({ params }) => {
   } catch (error) {
     redirect('/');
   }
-
   const attachments = question.attachments;
-  console.log(attachments);
   const acronym = agencyAcronym(question.agency);
 
   return (
@@ -158,34 +157,9 @@ const QuestionDetailPage: React.FC<Props> = async ({ params }) => {
                       ></WordTranslate>
                     </div>
                     <div className="px-8 pb-8 pt-0 ">
-                      <div className="flex gap-2">
-                        <div className="items-center border-[1px] border-outline-200 bg-white rounded-lg flex w-[200px] h-[54px] hover:cursor-pointer">
-                          <div className="p-2">
-                            <Pdf />
-                          </div>
-                          <div className="">
-                            <div className="font-normal text-sm text-black-900 truncate w-[140px]">
-                              KKM 2024-06-05 PAPER CONF
-                            </div>
-                            <div className="font-normal text-sm text-dim-500">
-                              1.2MB
-                            </div>
-                          </div>
-                        </div>
-                        <div className="items-center border-[1px] border-outline-200 bg-white rounded-lg flex w-[200px] h-[54px] hover:cursor-pointer">
-                          <div className="p-2">
-                            <Pdf className="stroke-[#18181B] dark:stroke-[#FFFFFF]" />
-                          </div>
-                          <div className="">
-                            <div className="font-normal text-sm text-black-900 truncate w-[140px]">
-                              KKM 2024-06-05 PAPER CONF
-                            </div>
-                            <div className="font-normal text-sm text-dim-500">
-                              1.2MB
-                            </div>
-                          </div>
-                        </div>
-                      </div>
+                      <SupportingAttachment
+                        attachments={attachments}
+                      ></SupportingAttachment>
                     </div>
                   </div>
                   <div>
