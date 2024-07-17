@@ -35,7 +35,12 @@ const SearchResultPage = async ({
           {questions.length > 0 ? (
             <QuestionBox questions={questions} />
           ) : (
-            <div className=" h-[220px] w-[900px]"></div>
+            <div className=" h-[220px] w-[900px] text-dim-500">
+              <WordTranslate
+                translate={'Search'}
+                keyword={'answernotfound'}
+              ></WordTranslate>
+            </div>
           )}
         </div>
 
