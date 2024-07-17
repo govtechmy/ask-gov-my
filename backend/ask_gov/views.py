@@ -258,10 +258,14 @@ class UpdateAgencyView(APIView):
     def put(self, request, pk):
         agency = get_object_or_404(Agency, pk=pk)
         data = request.data
+        
         agency.name = data.get('name', agency.name)
         agency.name_ms = data.get('name_ms', agency.name_ms)
         agency.acronym = data.get('acronym', agency.acronym)
-        agency.logo_url = data.get('logo_url', agency.logo_url)
+        
+        if 'logo_url' in data:
+            agency.logo_url = data['logo_url']
+        
         agency.save()
 
         questions = Question.objects.filter(agency=agency)
