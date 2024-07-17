@@ -99,10 +99,7 @@ export function AdminPage() {
             </div>
           </div>
         </div>
-
-        <div className="bg-white pt-3">
-          <FooterAdmin />
-        </div>
+        <FooterAdmin></FooterAdmin>
       </div>
     </>
   );
