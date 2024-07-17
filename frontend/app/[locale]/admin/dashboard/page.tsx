@@ -21,7 +21,7 @@ interface Question {
   email: string;
   likes: number;
   dislikes: number;
-  attachment: string[];
+  attachments: string[];
   isopen: boolean;
 }
 

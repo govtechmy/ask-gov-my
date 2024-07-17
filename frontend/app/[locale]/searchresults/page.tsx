@@ -52,11 +52,7 @@ const SearchResultPage = async ({
         </div>
       </div>
 
-      <div className="bg-white border-t">
-        <div className="container justify-center mx-auto">
-          <Footer />
-        </div>
-      </div>
+      <Footer></Footer>
     </div>
   );
 };
