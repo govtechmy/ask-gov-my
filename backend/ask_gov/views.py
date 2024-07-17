@@ -122,7 +122,6 @@ class SubmitAnswerView(APIView):
                     "doc": {
                         "answer": answer,
                         "state": "completed",
-                        # "attachments": attachments #because there is not attachment field in ES
                     }
                 }
             )
@@ -247,4 +246,31 @@ class TrendingAgenciesView(APIView):
     def get(self, request):
         agencies = Agency.objects.annotate(total_likes=Sum('question__likes')).order_by('-total_likes')
         serializer = AgencySerializer(agencies, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+    
+class UpdateAgencyView(APIView):
+    def put(self, request, pk):
+        agency = get_object_or_404(Agency, pk=pk)
+        data = request.data
+        agency.name = data.get('name', agency.name)
+        agency.name_ms = data.get('name_ms', agency.name_ms)
+        agency.acronym = data.get('acronym', agency.acronym)
+        agency.save()
+
+        questions = Question.objects.filter(agency=agency)
+        for question in questions:
+            client.update(
+                index='questions',
+                id=str(question.id),
+                body={
+                    "doc": {
+                        "agency.id": agency.id,
+                        "agency.name": agency.name,
+                        "agency.acronym": agency.acronym,
+                        "agency.name_ms": agency.name_ms
+                    }
+                }
+            )
+
+        serializer = AgencySerializer(agency)
         return Response(serializer.data, status=status.HTTP_200_OK)
