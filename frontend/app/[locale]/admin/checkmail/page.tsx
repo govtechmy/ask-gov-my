@@ -5,7 +5,6 @@ import { Button } from '@/components/ui/button';
 import Maillogo from '@/icons/mail';
 import Arrowleft from '@/icons/arrowleft';
 import { useTranslations } from 'next-intl';
-import { useSession } from 'next-auth/react';
 
 export function CheckmailPage({
   params: { locale },
@@ -17,7 +16,7 @@ export function CheckmailPage({
 
   return (
     <div className="flex flex-col min-h-screen">
-      <HeaderAdmin locale={locale} />
+      <HeaderAdmin />
       <div className="flex-grow flex items-center justify-center py-12">
         <div className="flex flex-col items-center justify-center">
           <Maillogo />

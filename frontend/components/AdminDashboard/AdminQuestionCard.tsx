@@ -11,13 +11,13 @@ interface Question {
   question: string;
   date: string;
   state: string;
-  agency: number | null;
+  agency: number;
   answer: string;
   topics: number[];
   email: string;
   likes: number;
   dislikes: number;
-  attachment: string[];
+  attachments: string[];
   isopen: boolean;
 }
 
