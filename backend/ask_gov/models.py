@@ -6,6 +6,7 @@ class Agency(models.Model):
     name = models.CharField(max_length=255)
     name_ms = models.CharField(max_length=255, null=True, blank=True)
     acronym = models.CharField(max_length=50, null=True, blank=True)
+    logo_url = models.URLField(max_length=500, null=True, blank=True)  # New field for the logo URL
 
     def __str__(self):
         return self.name
