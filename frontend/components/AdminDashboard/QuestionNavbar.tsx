@@ -12,7 +12,11 @@ import {
 } from '@/components/ui/select';
 import { useSearchParams, useRouter } from 'next/navigation';
 
-const QuestionNavbar = () => {
+interface QuestionNavbarProps {
+  unassignedCount: number;
+}
+
+const QuestionNavbar: React.FC<QuestionNavbarProps> = ({ unassignedCount }) => {
   const searchParams = useSearchParams();
   const router = useRouter();
   const activeTab = searchParams.get('tab') || 'all';
@@ -39,7 +43,7 @@ const QuestionNavbar = () => {
           className={`font-medium text-sm pb-3 -mb-5 ${activeTab === 'unassigned' ? 'text-black-900 border-b-2 border-[#702FF9] ' : 'text-dim-500'}`}
           onClick={() => setActiveTab('unassigned')}
         >
-          Unassigned <span className="text-[#702FF9]">250</span>
+          Unassigned <span className="text-[#702FF9]">{unassignedCount}</span>
         </button>
         <button
           className={`font-medium text-sm pb-3 -mb-5 ${activeTab === 'assigned' ? 'text-black-900 border-b-2 border-[#702FF9]' : 'text-dim-500'}`}
