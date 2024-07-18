@@ -1,7 +1,7 @@
 'use client';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Link from 'next/link';
-import { useRouter } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import ThemeToggle from './Theme';
 import LocaleSwitch from './LocaleSwitch';
 import Asklogo from '@/icons/asklogo';
@@ -15,10 +15,18 @@ import {
 } from '@/components/ui/select';
 
 const HeaderDashboard = () => {
+  const searchParams = useSearchParams();
+  const router = useRouter();
   const [activeLink, setActiveLink] = useState<'questions' | 'manageagencies' | 'manageusers'>(
     'questions',
   );
-  const router = useRouter();
+
+  useEffect(() => {
+    const currentPage = searchParams.get('page') as 'questions' | 'manageagencies' | 'manageusers';
+    if (currentPage) {
+      setActiveLink(currentPage);
+    }
+  }, [searchParams]);
 
   const handleSetActiveLink = (link: 'questions' | 'manageagencies' | 'manageusers') => {
     setActiveLink(link);
