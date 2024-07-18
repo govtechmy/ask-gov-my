@@ -37,9 +37,10 @@ interface QuestionSubmission {
 export interface Agency {
   id: number;
   name: string;
-  name_ms?: string;
+  name_ms: string;
   acronym: string;
   total_likes?: number;
+  logo_url?:string;
 }
 
 export async function getAllQuestions(
@@ -150,7 +151,7 @@ export async function submitQuestion(data: QuestionSubmission): Promise<void> {
   return response.json();
 }
 
-export async function getAgencyList(): Promise<{ id: string; name: string }[]> {
+export async function getAgencyList(): Promise<Agency[]> {
   try {
     const response = await fetch(`${API_URL}/agencies`, {
       method: 'GET',
@@ -164,9 +165,12 @@ export async function getAgencyList(): Promise<{ id: string; name: string }[]> {
     }
 
     const data = await response.json();
-    return data.map((agency: { id: string; name: string }) => ({
+    return data.map((agency: Agency) => ({
       id: agency.id,
       name: agency.name,
+      name_ms: agency.name_ms,
+      acronym: agency.acronym,
+      logo_url: agency.logo_url
     }));
   } catch (error) {
     console.error('Error in getAgencyList:', error);
