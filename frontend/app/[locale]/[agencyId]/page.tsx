@@ -32,7 +32,7 @@ const AgencyPage = async ({ params, searchParams }: Props) => {
       <div className="">
         <IdentifyWebsite />
         <ContextSearchBar>
-          <HeaderAgency></HeaderAgency>
+          <HeaderAgency agencyAcronym={agencyId}></HeaderAgency>
           <SearchNavbarAgency
             agencyAcronym={agencyId}
             agencyUUID={agencyUUID}

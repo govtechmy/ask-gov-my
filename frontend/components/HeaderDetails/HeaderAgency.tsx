@@ -7,7 +7,11 @@ import React, { useContext } from 'react';
 import { context } from '../ContextSearchBar';
 import InputNavbar from '../ui/inputnavbar';
 
-const HeaderAgency = () => {
+interface HeaderAgencyProps {
+  agencyAcronym: string;
+}
+
+const HeaderAgency: React.FC<HeaderAgencyProps> = ({ agencyAcronym }) => {
   const {
     headerContent,
     searchQuery,
@@ -26,7 +30,12 @@ const HeaderAgency = () => {
             <Link href="/">
               <div className="font-poppins flex h-full gap-2.5 text-lg font-semibold items-center hover:cursor-pointer">
                 <Asklogo />
-                AskMyGov
+                <div className="flex">
+                  Ask
+                  <div className="text-[#702FF9] dark:text-[#9E70FF]">
+                    {agencyAcronym.toUpperCase()}
+                  </div>
+                </div>
               </div>
             </Link>
             <div className="flex items-center justify-center flex-grow">
