@@ -6,12 +6,13 @@ import { getAllUserQuestions } from '@/actions/userServices';
 import AdminQuestionBox from '@/components/AdminDashboard/AdminQuestionBox';
 import QuestionNavbar from '@/components/AdminDashboard/QuestionNavbar';
 import AnswerQuestionCard from './AnswerQuestionCard';
+
 interface Question {
   id: number;
   question: string;
   date: string;
   state: string;
-  agency: number;
+  agency: number | null;
   answer: string;
   topics: number[];
   email: string;
@@ -26,12 +27,14 @@ const ManageQuestions: React.FC = () => {
   const [questions, setQuestions] = useState<Question[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [unassignedCount, setUnassignedCount] = useState(0);
 
   useEffect(() => {
     const fetchQuestions = async () => {
       try {
         const { questions } = await getAllUserQuestions();
         setQuestions(questions);
+        setUnassignedCount(questions.filter(q => q.agency === null).length);
       } catch (error) {
         if (error instanceof Error) {
           console.log(error.message);
@@ -58,7 +61,7 @@ const ManageQuestions: React.FC = () => {
 
   return (
     <div className="flex flex-col flex-grow items-center justify-center py-12">
-      <QuestionNavbar />
+      <QuestionNavbar unassignedCount={unassignedCount} />
       <div className="w-full flex py-12">
         <AdminQuestionBox questions={questions} />
       </div>
