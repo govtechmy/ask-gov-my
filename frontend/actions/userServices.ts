@@ -1,6 +1,9 @@
 'use server';
+import { PrismaClient } from '@prisma/client';
 
 const API_URL = 'http://ask.juwaini.com/api';
+
+const prisma = new PrismaClient();
 
 interface Question {
   id: number;
@@ -223,3 +226,49 @@ export async function updateAgency(
   }
 }
 
+export async function addUser(name: string, email: string, role: 'staff' | 'super_admin', agency: number): Promise<{ success: boolean; message?: string }> {
+  try {
+    await prisma.user.create({
+      data: {
+        name,
+        email,
+        role,
+        agency,
+      },
+    });
+    return { success: true };
+  } catch (error) {
+    console.error('Error adding user:', error);
+    return { success: false, message: 'Failed to add user' };
+  }
+}
+
+export async function editUser(id: string, name: string, email: string, role: 'staff' | 'super_admin', agency: number): Promise<{ success: boolean; message?: string }> {
+  try {
+    await prisma.user.update({
+      where: { id },
+      data: {
+        name,
+        email,
+        role,
+        agency,
+      },
+    });
+    return { success: true };
+  } catch (error) {
+    console.error('Error editing user:', error);
+    return { success: false, message: 'Failed to edit user' };
+  }
+}
+
+export async function deleteUser(id: string): Promise<{ success: boolean; message?: string }> {
+  try {
+    await prisma.user.delete({
+      where: { id },
+    });
+    return { success: true };
+  } catch (error) {
+    console.error('Error deleting user:', error);
+    return { success: false, message: 'Failed to delete user' };
+  }
+}
