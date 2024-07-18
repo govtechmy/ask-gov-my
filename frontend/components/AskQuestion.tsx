@@ -189,7 +189,7 @@ const AskQuestion = () => {
                 <TickCheckCircle className="stroke-[#15803D]"></TickCheckCircle>
               </div>
               <div className="pb-6 text-left">
-                <div className="text-black-900 font-semibold text-lg">
+                <div className="text-black-900 font-semibold text-lg pb-2">
                   {t('submission_received')}
                 </div>
                 <div className="text-black-700 font-normal text-sm">
@@ -200,7 +200,7 @@ const AskQuestion = () => {
                 onClick={closeModalSubmit}
                 className="bg-white rounded-lg shadow-button h-[44px] w-[352px] border-outline-200 border-[1px] hover:cursor-pointer flex items-center justify-center"
               >
-                <Close></Close>
+                <Close className="stroke-black-700"></Close>
                 <div className="ml-2">{t('close')}</div>
               </div>
             </div>
