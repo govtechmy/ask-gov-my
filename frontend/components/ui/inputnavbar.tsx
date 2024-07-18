@@ -14,11 +14,11 @@ import { useTranslations } from 'next-intl';
 
 interface InputNavbarProps {
   searchQuery: string;
-  setSearchQuery: React.Dispatch<React.SetStateAction<string>>;
+  setSearchQuery: (query: string) => void;
   searchResults: any[];
-  setSearchResults: React.Dispatch<React.SetStateAction<any[]>>;
+  setSearchResults: (results: any[]) => void;
   displayAllMatches: boolean;
-  setDisplayAllMatches: React.Dispatch<React.SetStateAction<boolean>>;
+  setDisplayAllMatches: (display: boolean) => void;
   agencyUUID?: string;
 }
 
@@ -36,7 +36,7 @@ const highlightText = (text: string, query: string) => {
   return parts.map((part, index) =>
     part.toLowerCase() === query.toLowerCase() ? (
       // here code for text color search mix and match
-      <span key={index} className="text-[#702FF9]">
+      <span key={index} className="text-[#702FF9] dark:text-[#9E70FF]">
         {part}
       </span>
     ) : (
@@ -119,6 +119,7 @@ const InputNavbar: React.FC<InputNavbarProps> = ({
 
   return (
     <div
+      id="inputnavbar"
       className={`flex items-center border-outline-200 h-11 shadow-button border pl-3 pr-2 py-2 bg-[#FFFFFF] dark:bg-[#1D1D21] w-[800px] relative ${searchQuery.length > 0 ? 'rounded-b-none rounded-t-3xl' : 'rounded-full'}`}
     >
       <input

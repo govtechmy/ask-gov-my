@@ -23,8 +23,7 @@ const QuestionNavbar = () => {
     router.push(`${window.location.pathname}?${params.toString()}`);
   };
 
-  useEffect(() => {
-  }, [activeTab]);
+  useEffect(() => {}, [activeTab]);
 
   return (
     <div className="flex items-center justify-between pt-3 pb-2 border-b border-[#E4E4E7] dark:border-[#27272A]">
