@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useContext, useEffect } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import InputNavbar from '../ui/inputnavbar';
 import JataNegaraIcon from '@/icons/jatanegaraicon';
 import Link from 'next/link';
@@ -27,6 +27,7 @@ const SearchNavbarAgency: React.FC<SearchNavbarAgencyProps> = ({
     displayAllMatches,
     setDisplayAllMatches,
   } = useContext(context);
+  const [showInputNavbar, setShowInputNavbar] = useState(false);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -35,8 +36,10 @@ const SearchNavbarAgency: React.FC<SearchNavbarAgencyProps> = ({
         const rect = searchNavbarTitle.getBoundingClientRect();
         if (rect.bottom <= 0) {
           setHeaderContent('input');
+          setShowInputNavbar(false);
         } else {
           setHeaderContent('');
+          setShowInputNavbar(true);
         }
       }
     };
@@ -75,17 +78,18 @@ const SearchNavbarAgency: React.FC<SearchNavbarAgencyProps> = ({
                 {t(agencyAcronym.toUpperCase())}
               </div>
             </div>
-            ' '
-            <div className=" w-full">
-              <InputNavbar
-                searchQuery={searchQuery}
-                setSearchQuery={setSearchQuery}
-                searchResults={searchResults}
-                setSearchResults={setSearchResults}
-                displayAllMatches={displayAllMatches}
-                setDisplayAllMatches={setDisplayAllMatches}
-                agencyUUID={agencyUUID}
-              />
+            <div className="w-full">
+              {showInputNavbar && (
+                <InputNavbar
+                  searchQuery={searchQuery}
+                  setSearchQuery={setSearchQuery}
+                  searchResults={searchResults}
+                  setSearchResults={setSearchResults}
+                  displayAllMatches={displayAllMatches}
+                  setDisplayAllMatches={setDisplayAllMatches}
+                  agencyUUID={agencyUUID}
+                />
+              )}
             </div>
           </div>
         </div>

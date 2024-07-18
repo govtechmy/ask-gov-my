@@ -18,6 +18,7 @@ const SearchNavbar: React.FC = () => {
     displayAllMatches,
     setDisplayAllMatches,
   } = useContext(context);
+  const [showInputNavbar, setShowInputNavbar] = useState(false);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -26,8 +27,10 @@ const SearchNavbar: React.FC = () => {
         const rect = searchNavbarTitle.getBoundingClientRect();
         if (rect.bottom <= 0) {
           setHeaderContent('input');
+          setShowInputNavbar(false);
         } else {
           setHeaderContent('');
+          setShowInputNavbar(true);
         }
       }
     };
@@ -51,14 +54,16 @@ const SearchNavbar: React.FC = () => {
         {t('title')}
       </div>
       <div className="relative flex justify-center w-full">
-        <InputNavbar
-          searchQuery={searchQuery}
-          setSearchQuery={setSearchQuery}
-          searchResults={searchResults}
-          setSearchResults={setSearchResults}
-          displayAllMatches={displayAllMatches}
-          setDisplayAllMatches={setDisplayAllMatches}
-        />
+        {showInputNavbar && (
+          <InputNavbar
+            searchQuery={searchQuery}
+            setSearchQuery={setSearchQuery}
+            searchResults={searchResults}
+            setSearchResults={setSearchResults}
+            displayAllMatches={displayAllMatches}
+            setDisplayAllMatches={setDisplayAllMatches}
+          />
+        )}
       </div>
       <div className="flex items-center justify-center mt-4">
         <Info className="text-[#766695]" />
