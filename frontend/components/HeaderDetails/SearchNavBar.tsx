@@ -3,7 +3,6 @@
 import { useContext, useEffect, useState } from 'react';
 import Info from '@/icons/info';
 import InputNavbar from '../ui/inputnavbar';
-import { useSearchParams } from 'next/navigation';
 import { useTranslations } from 'next-intl';
 import { context } from '../ContextSearchBar';
 
