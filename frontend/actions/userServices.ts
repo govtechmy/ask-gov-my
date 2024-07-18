@@ -30,6 +30,19 @@ export interface Topic {
     acronym: string;
   };
 }
+
+interface User {
+  id: string;
+  name: string | null;
+  email: string;
+  emailVerified: Date | null;
+  image: string | null;
+  role: 'staff' | 'super_admin';
+  createdAt: Date;
+  updatedAt: Date;
+  agency: number | null;
+}
+
 // get questions by the user agency, to be used only by user.role = staff
 export async function getUserAgencyQuestions(
   agencyId: number,
@@ -270,5 +283,15 @@ export async function deleteUser(id: string): Promise<{ success: boolean; messag
   } catch (error) {
     console.error('Error deleting user:', error);
     return { success: false, message: 'Failed to delete user' };
+  }
+}
+
+export async function getAllUsers(): Promise<{ success: boolean; users?: User[]; message?: string }> {
+  try {
+    const users = await prisma.user.findMany();
+    return { success: true, users };
+  } catch (error) {
+    console.error('Error fetching users:', error);
+    return { success: false, message: 'Failed to fetch users' };
   }
 }
