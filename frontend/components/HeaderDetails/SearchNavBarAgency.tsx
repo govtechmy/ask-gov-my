@@ -27,7 +27,7 @@ const SearchNavbarAgency: React.FC<SearchNavbarAgencyProps> = ({
     displayAllMatches,
     setDisplayAllMatches,
   } = useContext(context);
-  const [showInputNavbar, setShowInputNavbar] = useState(false);
+  const [showInputNavbar, setShowInputNavbar] = useState(true);
 
   useEffect(() => {
     const handleScroll = () => {
