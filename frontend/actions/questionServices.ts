@@ -37,9 +37,10 @@ interface QuestionSubmission {
 export interface Agency {
   id: number;
   name: string;
-  name_ms?: string;
+  name_ms: string;
   acronym: string;
   total_likes?: number;
+  logo_url?:string;
 }
 
 export async function getAllQuestions(
@@ -169,6 +170,7 @@ export async function getAgencyList(): Promise<Agency[]> {
       name: agency.name,
       name_ms: agency.name_ms,
       acronym: agency.acronym,
+      logo_url: agency.logo_url
     }));
   } catch (error) {
     console.error('Error in getAgencyList:', error);
