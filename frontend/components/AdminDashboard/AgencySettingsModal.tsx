@@ -5,13 +5,14 @@ import { useTranslations } from 'next-intl';
 import { uploadFile } from '@/actions/fileServices';
 import { updateAgency } from '@/actions/userServices';
 import Modal from './Modal';
+import JataNegaraIcon from '@/icons/jatanegaraicon';
 
 interface Agency {
   id: number;
   name: string;
   name_ms: string;
   acronym: string;
-  logo_url: string;
+  logo_url?: string;
 }
 
 interface AgencySettingsModalProps {
@@ -25,10 +26,9 @@ const AgencySettingsModal: React.FC<AgencySettingsModalProps> = ({ agency, isOpe
   const [name, setName] = useState(agency.name);
   const [nameMs, setNameMs] = useState(agency.name_ms);
   const [acronym, setAcronym] = useState(agency.acronym);
-  const [logoUrl, setLogoUrl] = useState(agency.logo_url);
+  const [logoUrl, setLogoUrl] = useState(agency.logo_url || '');
   const [success, setSuccess] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
-  console.log(agency.logo_url)
 
   const handleFileChange = async (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files ? event.target.files[0] : null;
@@ -46,9 +46,10 @@ const AgencySettingsModal: React.FC<AgencySettingsModalProps> = ({ agency, isOpe
       }
     }
   };
+
   const handleSubmit = async () => {
     try {
-      await updateAgency(agency.id, name, nameMs, acronym, logoUrl);
+      await updateAgency(agency.id, name, nameMs, acronym, logoUrl || '');
       setSuccess('Agency updated successfully');
       setError(null);
       onClose();
@@ -70,7 +71,13 @@ const AgencySettingsModal: React.FC<AgencySettingsModalProps> = ({ agency, isOpe
         </div>
         <h2 className="text-xl font-semibold mb-4">Agency setting</h2>
         <div className="flex items-center mb-4">
-          <img src={logoUrl || '/default-logo.png'} alt="Agency Logo" className="w-20 h-20 rounded-full mr-4" />
+          {logoUrl ? (
+            <img src={logoUrl} alt="Agency Logo" className="w-20 h-20 rounded-full mr-4" />
+          ) : (
+            <div className="w-20 h-20 rounded-full bg-gray-200 flex items-center justify-center mr-4">
+              <JataNegaraIcon className="w-12 h-12" />
+            </div>
+          )}
           <label className="cursor-pointer">
             <span className="text-sm text-blue-500">Change logo</span>
             <input type="file" className="hidden" accept="image/png, image/jpeg" onChange={handleFileChange} />
