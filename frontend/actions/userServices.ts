@@ -176,7 +176,7 @@ export async function addAgency(
   name: string,
   name_ms: string,
   acronym: string,
-  logo_url: string
+  logo_url: string,
 ): Promise<void> {
   try {
     const response = await fetch(`${API_URL}/agencies/add/`, {
@@ -202,7 +202,7 @@ export async function updateAgency(
   name: string,
   name_ms: string,
   acronym: string,
-  logo_url: string
+  logo_url: string,
 ): Promise<void> {
   try {
     const response = await fetch(`${API_URL}/agencies/${agencyId}/`, {
@@ -222,4 +222,3 @@ export async function updateAgency(
     throw new Error('Error updating agency');
   }
 }
-

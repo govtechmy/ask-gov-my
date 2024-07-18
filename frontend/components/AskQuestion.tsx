@@ -69,7 +69,7 @@ const AskQuestion = () => {
             <div onClick={handleModalDisplay}>{t('ask_new_question')}</div>
           </div>
         ) : (
-          <div className="h-10 flex items-center text-[#702FF9] font-medium text-base border-[1px] border-[#D4C0FF] dark:border-[#4F1FB4] shadow-button bg-white px-4 py-2 rounded-lg hover:cursor-pointer">
+          <div className="h-10 flex items-center text-[#702FF9] dark:text-[#9E70FF] font-medium text-base border-[1px] border-[#D4C0FF] dark:border-[#4F1FB4] shadow-button bg-white px-4 py-2 rounded-lg hover:cursor-pointer">
             <div className="pr-2">
               <QuestionCircle />
             </div>
@@ -189,7 +189,7 @@ const AskQuestion = () => {
                 <TickCheckCircle className="stroke-[#15803D]"></TickCheckCircle>
               </div>
               <div className="pb-6 text-left">
-                <div className="text-black-900 font-semibold text-lg">
+                <div className="text-black-900 font-semibold text-lg pb-2">
                   {t('submission_received')}
                 </div>
                 <div className="text-black-700 font-normal text-sm">
@@ -200,7 +200,7 @@ const AskQuestion = () => {
                 onClick={closeModalSubmit}
                 className="bg-white rounded-lg shadow-button h-[44px] w-[352px] border-outline-200 border-[1px] hover:cursor-pointer flex items-center justify-center"
               >
-                <Close></Close>
+                <Close className="stroke-black-700"></Close>
                 <div className="ml-2">{t('close')}</div>
               </div>
             </div>

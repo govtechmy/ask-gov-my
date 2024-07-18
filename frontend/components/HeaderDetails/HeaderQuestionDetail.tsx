@@ -7,7 +7,7 @@ import React, { useContext } from 'react';
 import { context } from '../ContextSearchBar';
 import InputNavbar from '../ui/inputnavbar';
 
-const Header = () => {
+const HeaderQuestionDetail = () => {
   const {
     headerContent,
     searchQuery,
@@ -30,18 +30,14 @@ const Header = () => {
               </div>
             </Link>
             <div className="flex items-center justify-center flex-grow">
-              {headerContent === 'input' ? (
-                <InputNavbar
-                  searchQuery={searchQuery}
-                  setSearchQuery={setSearchQuery}
-                  searchResults={searchResults}
-                  setSearchResults={setSearchResults}
-                  displayAllMatches={displayAllMatches}
-                  setDisplayAllMatches={setDisplayAllMatches}
-                />
-              ) : (
-                ''
-              )}
+              <InputNavbar
+                searchQuery={searchQuery}
+                setSearchQuery={setSearchQuery}
+                searchResults={searchResults}
+                setSearchResults={setSearchResults}
+                displayAllMatches={displayAllMatches}
+                setDisplayAllMatches={setDisplayAllMatches}
+              />
             </div>
             <div className="p-2"></div>
             <div className="flex gap-3 items-center">
@@ -55,4 +51,4 @@ const Header = () => {
   );
 };
 
-export default Header;
+export default HeaderQuestionDetail;

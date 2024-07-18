@@ -4,13 +4,14 @@ import {
 } from '@/actions/questionServices';
 import QuestionBox from '@/components/QuestionBox/QuestionBox';
 import Footer from '@/components/FooterDetails/Footer';
-import Header from '@/components/HeaderDetails/Header';
 import IdentifyWebsite from '@/components/HeaderDetails/IdentifyWebsite';
 import { AGENCY_TO_UUID } from '@/lib/agency';
 import TopicList from '@/components/TopicList';
 import SearchNavbarAgency from '@/components/HeaderDetails/SearchNavBarAgency';
 import TopicDropdown from '@/components/TopicDropdown';
 import WordTranslate from '@/components/WordTranslate';
+import HeaderAgency from '@/components/HeaderDetails/HeaderAgency';
+import ContextSearchBar from '@/components/ContextSearchBar';
 
 interface Props {
   params: {
@@ -38,15 +39,15 @@ const TopicPage = async ({ params }: Props) => {
     <div className="">
       <div className="">
         <IdentifyWebsite></IdentifyWebsite>
-        <Header></Header>
-        <div className="bg-gradient-radial from-[#D4C0FF] to-[#F4EFFF] dark:from-[#4F1FB4] dark:to-[#201636]">
-          <div className="container">
-            <SearchNavbarAgency
-              agencyAcronym={agencyId}
-              agencyUUID={agencyUUID}
-            />
-          </div>
-        </div>
+
+        <ContextSearchBar>
+          <HeaderAgency agencyAcronym={agencyId}></HeaderAgency>
+          <SearchNavbarAgency
+            agencyAcronym={agencyId}
+            agencyUUID={agencyUUID}
+          />
+        </ContextSearchBar>
+
         <div className="container mt-10 flex text-out">
           <div className="max-w-screen-2xl">
             <div className="font-medium text-base text-black-700 pb-7 flex items-center">
