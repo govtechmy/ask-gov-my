@@ -1,10 +1,11 @@
 'use client';
 
-import { useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import Info from '@/icons/info';
 import InputNavbar from '../ui/inputnavbar';
 import { useSearchParams } from 'next/navigation';
 import { useTranslations } from 'next-intl';
+import { context } from '../ContextSearchBar';
 
 const SearchNavbar: React.FC = () => {
   const [searchResults, setSearchResults] = useState<any[]>([]);
@@ -14,9 +15,33 @@ const SearchNavbar: React.FC = () => {
     searchparams.get('q') || '',
   );
   const t = useTranslations('Search');
+  const { setHeaderMessage } = useContext(context);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      const searchNavbar = document.getElementById('navbar');
+      if (searchNavbar) {
+        const rect = searchNavbar.getBoundingClientRect();
+        if (rect.bottom <= 0) {
+          setHeaderMessage('hello');
+        } else {
+          setHeaderMessage('hai');
+        }
+      }
+    };
+
+    window.addEventListener('scroll', handleScroll);
+
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+    };
+  }, [setHeaderMessage]);
 
   return (
-    <div className="bg-gradient-radial from-[#D4C0FF] to-[#F4EFFF] dark:from-[#4F1FB4] dark:to-[#201636] py-2 h-56 flex flex-col items-center">
+    <div
+      id="navbar"
+      className="bg-gradient-radial from-[#D4C0FF] to-[#F4EFFF] dark:from-[#4F1FB4] dark:to-[#201636] py-2 h-56 flex flex-col items-center"
+    >
       <div className="font-poppins pb-6 pt-10 text-2xl font-semibold text-[#482D7C] dark:text-[#FFFFFF] text-center">
         {t('title')}
       </div>
