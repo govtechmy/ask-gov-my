@@ -33,17 +33,25 @@ const AgencySettingsModal: React.FC<AgencySettingsModalProps> = ({ agency, isOpe
   const handleFileChange = async (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files ? event.target.files[0] : null;
     if (file) {
-      try {
-        const url = await uploadFile(file);
-        setLogoUrl(url);
-      } catch (err) {
-        if (err instanceof Error) {
-          setError(err.message);
-        } else {
-          setError('An unexpected error occurred');
+      const img = new Image();
+      img.src = URL.createObjectURL(file);
+      img.onload = async () => {
+        if (img.width !== 200 || img.height !== 200) {
+          setError('Image must be 200x200 pixels');
+          return;
         }
-        setSuccess(null);
-      }
+        try {
+          const url = await uploadFile(file);
+          setLogoUrl(url);
+        } catch (err) {
+          if (err instanceof Error) {
+            setError(err.message);
+          } else {
+            setError('An unexpected error occurred');
+          }
+          setSuccess(null);
+        }
+      };
     }
   };
 
