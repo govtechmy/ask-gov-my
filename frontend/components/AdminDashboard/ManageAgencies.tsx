@@ -1,21 +1,30 @@
+'use client';
+
 import React, { useEffect, useState } from 'react';
 import { getAgencyList } from '@/actions/questionServices';
 import AgencyCard from './AgencyCard';
+import AddAgencyModal from './AddAgencyModal';
 import RightArrow from '@/icons/rightarrow';
 import LeftArrow from '@/icons/leftarrow';
 
+interface Agency {
+  id: number;
+  name: string;
+  name_ms: string;
+  acronym: string;
+  logo_url?: string;
+}
+
 const ManageAgencies: React.FC = () => {
-  const [agencies, setAgencies] = useState<{ id: string; name: string; name_ms: string; acronym: string; logo_url: string }[]>([]);
-  const [filteredAgencies, setFilteredAgencies] = useState<
-    { id: string; name: string; name_ms: string; acronym: string; logo_url: string }[]
-  >([]);
+  const [agencies, setAgencies] = useState<Agency[]>([]);
+  const [filteredAgencies, setFilteredAgencies] = useState<Agency[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [searchTerm, setSearchTerm] = useState('');
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 12;
   const totalPages = Math.ceil(filteredAgencies.length / itemsPerPage);
-
+  const [isModalOpen, setIsModalOpen] = useState(false);
   const fetchAgencies = async () => {
     try {
       const agencyList = await getAgencyList();
@@ -129,12 +138,14 @@ const ManageAgencies: React.FC = () => {
   if (error) {
     return <p>Error: {error}</p>;
   }
-
   return (
     <div className="p-8">
       <div className="flex justify-between items-center mb-4">
         <h1 className="text-xl font-semibold">Manage agencies</h1>
-        <button className="bg-purple-600 text-white px-4 py-2 rounded-md">
+        <button 
+          className="bg-purple-600 text-white px-4 py-2 rounded-md"
+          onClick={() => setIsModalOpen(true)}
+        >
           + New agency
         </button>
       </div>
@@ -195,6 +206,11 @@ const ManageAgencies: React.FC = () => {
           </div>
         </>
       )}
+      <AddAgencyModal 
+        isOpen={isModalOpen} 
+        onClose={() => setIsModalOpen(false)} 
+        onAdd={fetchAgencies} 
+      />
     </div>
   );
 };
