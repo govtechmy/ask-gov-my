@@ -3,34 +3,25 @@
 import React, { useState } from 'react';
 import { useTranslations } from 'next-intl';
 import { uploadFile } from '@/actions/fileServices';
-import { updateAgency } from '@/actions/userServices';
+import { addAgency } from '@/actions/userServices';
 import Modal from './Modal';
-import JataNegaraIcon from '@/icons/jatanegaraicon';
 
-interface Agency {
-  id: number;
-  name: string;
-  name_ms: string;
-  acronym: string;
-  logo_url?: string;
-}
-
-interface AgencySettingsModalProps {
-  agency: Agency;
+interface AddAgencyModalProps {
   isOpen: boolean;
   onClose: () => void;
+  onAdd: () => void;
 }
 
-const AgencySettingsModal: React.FC<AgencySettingsModalProps> = ({
-  agency,
+const AddAgencyModal: React.FC<AddAgencyModalProps> = ({
   isOpen,
   onClose,
+  onAdd,
 }) => {
   const t = useTranslations('Agency');
-  const [name, setName] = useState(agency.name);
-  const [nameMs, setNameMs] = useState(agency.name_ms);
-  const [acronym, setAcronym] = useState(agency.acronym);
-  const [logoUrl, setLogoUrl] = useState(agency.logo_url || '');
+  const [name, setName] = useState('');
+  const [nameMs, setNameMs] = useState('');
+  const [acronym, setAcronym] = useState('');
+  const [logoUrl, setLogoUrl] = useState<string | null>(null);
   const [success, setSuccess] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
 
@@ -63,9 +54,15 @@ const AgencySettingsModal: React.FC<AgencySettingsModalProps> = ({
 
   const handleSubmit = async () => {
     try {
-      await updateAgency(agency.id, name, nameMs, acronym, logoUrl || '');
-      setSuccess('Agency updated successfully');
+      if (!name || !nameMs || !acronym || !logoUrl) {
+        setError('All fields are required');
+        return;
+      }
+
+      await addAgency(name, nameMs, acronym, logoUrl);
+      setSuccess('Agency added successfully');
       setError(null);
+      onAdd();
       onClose();
     } catch (err) {
       if (err instanceof Error) {
@@ -80,10 +77,7 @@ const AgencySettingsModal: React.FC<AgencySettingsModalProps> = ({
   return (
     <Modal isOpen={isOpen} onClose={onClose}>
       <div>
-        <div className="text-sm text-gray-500 mb-4">
-          Last updated on {new Date().toLocaleDateString()}
-        </div>
-        <h2 className="text-xl font-semibold mb-4">Agency setting</h2>
+        <h2 className="text-xl font-semibold mb-4">Add New Agency</h2>
         <div className="flex items-center mb-4">
           {logoUrl ? (
             <img
@@ -93,11 +87,11 @@ const AgencySettingsModal: React.FC<AgencySettingsModalProps> = ({
             />
           ) : (
             <div className="w-20 h-20 rounded-full bg-gray-200 flex items-center justify-center mr-4">
-              <JataNegaraIcon className="w-12 h-12" />
+              <span className="text-gray-500">Logo</span>
             </div>
           )}
           <label className="cursor-pointer">
-            <span className="text-sm text-blue-500">Change logo</span>
+            <span className="text-sm text-blue-500">Upload logo</span>
             <input
               type="file"
               className="hidden"
@@ -150,7 +144,7 @@ const AgencySettingsModal: React.FC<AgencySettingsModalProps> = ({
             className="rounded bg-blue-500 px-4 py-2 text-white"
             onClick={handleSubmit}
           >
-            Save setting
+            Add Agency
           </button>
         </div>
         {success && <div className="text-green-500 mt-4">{success}</div>}
@@ -160,4 +154,4 @@ const AgencySettingsModal: React.FC<AgencySettingsModalProps> = ({
   );
 };
 
-export default AgencySettingsModal;
+export default AddAgencyModal;

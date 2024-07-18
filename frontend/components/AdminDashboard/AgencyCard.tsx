@@ -9,7 +9,7 @@ interface AgencyCardProps {
   name: string;
   name_ms: string;
   acronym: string;
-  logo_url: string;
+  logo_url?: string;
   onUpdate: () => void;
 }
 
