@@ -5,9 +5,23 @@ import RightArrow from '@/icons/rightarrow';
 import LeftArrow from '@/icons/leftarrow';
 
 const ManageAgencies: React.FC = () => {
-  const [agencies, setAgencies] = useState<{ id: string; name: string; name_ms: string; acronym: string; logo_url: string }[]>([]);
+  const [agencies, setAgencies] = useState<
+    {
+      id: string;
+      name: string;
+      name_ms: string;
+      acronym: string;
+      logo_url: string;
+    }[]
+  >([]);
   const [filteredAgencies, setFilteredAgencies] = useState<
-    { id: string; name: string; name_ms: string; acronym: string; logo_url: string }[]
+    {
+      id: string;
+      name: string;
+      name_ms: string;
+      acronym: string;
+      logo_url: string;
+    }[]
   >([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -38,10 +52,10 @@ const ManageAgencies: React.FC = () => {
 
   useEffect(() => {
     const results = agencies.filter(agency =>
-      agency.name.toLowerCase().includes(searchTerm.toLowerCase())
+      agency.name.toLowerCase().includes(searchTerm.toLowerCase()),
     );
     setFilteredAgencies(results);
-    setCurrentPage(1); 
+    setCurrentPage(1);
   }, [searchTerm, agencies]);
 
   const handlePageChange = (page: number) => {
@@ -60,14 +74,14 @@ const ManageAgencies: React.FC = () => {
         className={`rounded-lg h-8 w-7 ${currentPage === 1 ? 'bg-[#F4EFFF] text-[#702FF9]' : 'bg-transparent text-black-700'}`}
       >
         {1}
-      </button>
+      </button>,
     );
 
     if (currentPage > 1) {
       pageNumbers.push(
         <span key="ellipsis-start" className="px-2 py-2">
           ...
-        </span>
+        </span>,
       );
     }
 
@@ -91,7 +105,7 @@ const ManageAgencies: React.FC = () => {
           className={`rounded-lg h-8 w-7 ${i === currentPage ? 'bg-[#F4EFFF] text-[#702FF9]' : 'bg-transparent text-black-700'}`}
         >
           {i}
-        </button>
+        </button>,
       );
     }
 
@@ -99,7 +113,7 @@ const ManageAgencies: React.FC = () => {
       pageNumbers.push(
         <span key="ellipsis-end" className="px-2 py-2 rounded-lg">
           ...
-        </span>
+        </span>,
       );
     }
 
@@ -111,7 +125,7 @@ const ManageAgencies: React.FC = () => {
           className={`rounded-lg h-8 w-7 ${totalPages === currentPage ? 'bg-[#F4EFFF] text-[#702FF9]' : 'bg-transparent text-black-700'}`}
         >
           {totalPages}
-        </button>
+        </button>,
       );
     }
 
@@ -149,18 +163,19 @@ const ManageAgencies: React.FC = () => {
       </div>
       {filteredAgencies.length === 0 ? (
         <p className="text-center">
-          We couldn't find the agency. Please try searching again using the search bar above.
+          We couldn't find the agency. Please try searching again using the
+          search bar above.
         </p>
       ) : (
         <>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
             {currentAgencies.map(agency => (
-              <AgencyCard 
-                key={agency.id} 
-                id={agency.id} 
-                name={agency.name} 
-                name_ms={agency.name_ms} 
-                acronym={agency.acronym} 
+              <AgencyCard
+                key={agency.id}
+                id={agency.id}
+                name={agency.name}
+                name_ms={agency.name_ms}
+                acronym={agency.acronym}
                 logo_url={agency.logo_url}
                 onUpdate={fetchAgencies}
               />

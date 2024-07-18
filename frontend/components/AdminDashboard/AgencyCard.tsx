@@ -13,7 +13,14 @@ interface AgencyCardProps {
   onUpdate: () => void;
 }
 
-const AgencyCard: React.FC<AgencyCardProps> = ({ id, name, name_ms, acronym, logo_url, onUpdate }) => {
+const AgencyCard: React.FC<AgencyCardProps> = ({
+  id,
+  name,
+  name_ms,
+  acronym,
+  logo_url,
+  onUpdate,
+}) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   const handleLogoClick = () => {
@@ -29,9 +36,17 @@ const AgencyCard: React.FC<AgencyCardProps> = ({ id, name, name_ms, acronym, log
         <div className="flex items-center">
           <div className="w-10 h-10 mr-4">
             {logo_url ? (
-              <img src={logo_url} alt="Agency Logo" className="rounded-full" onClick={handleLogoClick} />
+              <img
+                src={logo_url}
+                alt="Agency Logo"
+                className="rounded-full"
+                onClick={handleLogoClick}
+              />
             ) : (
-              <JataNegaraIcon className="rounded-full" onClick={handleLogoClick} />
+              <JataNegaraIcon
+                className="rounded-full"
+                onClick={handleLogoClick}
+              />
             )}
           </div>
           <div className="text-base font-medium text-black-900">{name}</div>

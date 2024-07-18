@@ -8,24 +8,27 @@ import { useTranslations } from 'next-intl';
 import { context } from '../ContextSearchBar';
 
 const SearchNavbar: React.FC = () => {
-  const [searchResults, setSearchResults] = useState<any[]>([]);
-  const [displayAllMatches, setDisplayAllMatches] = useState<boolean>(false);
-  const searchparams = useSearchParams();
-  const [searchQuery, setSearchQuery] = useState<string>(
-    searchparams.get('q') || '',
-  );
   const t = useTranslations('Search');
-  const { setHeaderMessage } = useContext(context);
+
+  const {
+    setHeaderContent,
+    searchQuery,
+    setSearchQuery,
+    searchResults,
+    setSearchResults,
+    displayAllMatches,
+    setDisplayAllMatches,
+  } = useContext(context);
 
   useEffect(() => {
     const handleScroll = () => {
-      const searchNavbar = document.getElementById('navbar');
-      if (searchNavbar) {
-        const rect = searchNavbar.getBoundingClientRect();
+      const searchNavbarTitle = document.getElementById('search-navbar-title');
+      if (searchNavbarTitle) {
+        const rect = searchNavbarTitle.getBoundingClientRect();
         if (rect.bottom <= 0) {
-          setHeaderMessage('hello');
+          setHeaderContent('input');
         } else {
-          setHeaderMessage('hai');
+          setHeaderContent('');
         }
       }
     };
@@ -35,14 +38,17 @@ const SearchNavbar: React.FC = () => {
     return () => {
       window.removeEventListener('scroll', handleScroll);
     };
-  }, [setHeaderMessage]);
+  }, [setHeaderContent]);
 
   return (
     <div
       id="navbar"
       className="bg-gradient-radial from-[#D4C0FF] to-[#F4EFFF] dark:from-[#4F1FB4] dark:to-[#201636] py-2 h-56 flex flex-col items-center"
     >
-      <div className="font-poppins pb-6 pt-10 text-2xl font-semibold text-[#482D7C] dark:text-[#FFFFFF] text-center">
+      <div
+        id="search-navbar-title"
+        className="font-poppins pb-6 pt-10 text-2xl font-semibold text-[#482D7C] dark:text-[#FFFFFF] text-center"
+      >
         {t('title')}
       </div>
       <div className="relative flex justify-center w-full">

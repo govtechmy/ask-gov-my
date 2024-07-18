@@ -69,7 +69,7 @@ const AskQuestion = () => {
             <div onClick={handleModalDisplay}>{t('ask_new_question')}</div>
           </div>
         ) : (
-          <div className="h-10 flex items-center text-[#702FF9] font-medium text-base border-[1px] border-[#D4C0FF] dark:border-[#4F1FB4] shadow-button bg-white px-4 py-2 rounded-lg hover:cursor-pointer">
+          <div className="h-10 flex items-center text-[#702FF9] dark:text-[#9E70FF] font-medium text-base border-[1px] border-[#D4C0FF] dark:border-[#4F1FB4] shadow-button bg-white px-4 py-2 rounded-lg hover:cursor-pointer">
             <div className="pr-2">
               <QuestionCircle />
             </div>
