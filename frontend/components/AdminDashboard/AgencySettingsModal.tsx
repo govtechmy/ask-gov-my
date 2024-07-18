@@ -28,6 +28,7 @@ const AgencySettingsModal: React.FC<AgencySettingsModalProps> = ({ agency, isOpe
   const [logoUrl, setLogoUrl] = useState(agency.logo_url);
   const [success, setSuccess] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
+  console.log(agency.logo_url)
 
   const handleFileChange = async (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files ? event.target.files[0] : null;
@@ -45,7 +46,6 @@ const AgencySettingsModal: React.FC<AgencySettingsModalProps> = ({ agency, isOpe
       }
     }
   };
-
   const handleSubmit = async () => {
     try {
       await updateAgency(agency.id, name, nameMs, acronym, logoUrl);
