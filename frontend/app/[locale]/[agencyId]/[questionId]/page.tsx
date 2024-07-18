@@ -3,7 +3,6 @@ import {
   getTopicsDetail,
   getTopicByAgency,
 } from '@/actions/questionServices';
-import Header from '@/components/HeaderDetails/Header';
 import Footer from '@/components/FooterDetails/Footer';
 import RelatedTopics from '@/components/RelatedTopics';
 import RightArrow from '@/icons/rightarrow';
@@ -11,7 +10,6 @@ import IconQuestionSmileSolo from '@/icons/iconquestionsmilesolo';
 import ThumbsCounter from '@/components/ThumbsCounter';
 import AgencyName from '@/components/AgencyName';
 import JataNegaraIcon from '@/icons/jatanegaraicon';
-import Pdf from '@/icons/pdf';
 import { AGENCY_TO_UUID } from '@/lib/agency';
 import { redirect } from 'next/navigation';
 import DateComponent from '@/components/date';
@@ -19,6 +17,7 @@ import Link from 'next/link';
 import IdentifyWebsite from '@/components/HeaderDetails/IdentifyWebsite';
 import WordTranslate from '@/components/WordTranslate';
 import SupportingAttachment from '@/components/SupportingAttachment';
+import HeaderQuestionDetail from '@/components/HeaderDetails/HeaderQuestionDetail';
 
 interface Props {
   params: {
@@ -74,7 +73,7 @@ const QuestionDetailPage: React.FC<Props> = async ({ params }) => {
   return (
     <div className="">
       <IdentifyWebsite></IdentifyWebsite>
-      <Header></Header>
+      <HeaderQuestionDetail></HeaderQuestionDetail>
 
       <div className="container mt-10 flex text-out">
         <div className="max-w-screen-2xl flex">
