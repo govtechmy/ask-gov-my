@@ -1,4 +1,5 @@
 import {
+  getAgencyList,
   getQuestionsByAgency,
   getTopicByAgency,
 } from '@/actions/questionServices';
@@ -15,15 +16,15 @@ import ContextSearchBar from '@/components/ContextSearchBar';
 
 interface Props {
   params: {
-    agencyId: string;
+    agencyAcronym: string;
     topicId: string;
     locale: string;
   };
 }
 
 const TopicPage = async ({ params }: Props) => {
-  const { agencyId, topicId, locale } = params;
-  const agencyUUID = AGENCY_TO_UUID[agencyId.toUpperCase()];
+  const { agencyAcronym, topicId, locale } = params;
+  const agencyUUID = AGENCY_TO_UUID[agencyAcronym.toUpperCase()];
 
   const { questions } = await getQuestionsByAgency(agencyUUID);
   const filteredQuestions = questions.filter(question =>
@@ -35,16 +36,38 @@ const TopicPage = async ({ params }: Props) => {
     topic => topic.id === parseInt(topicId, 10),
   );
 
+  const upperCaseAgencyAcronym = agencyAcronym.toUpperCase();
+
+  let agencies: any = [];
+
+  try {
+    agencies = await getAgencyList();
+
+    if (!agencies || agencies.length === 0) {
+      throw new Error('Agency list is empty');
+    }
+  } catch {}
+
+  const currentAgency = agencies.find(
+    (agency: { acronym: string }) => agency.acronym === upperCaseAgencyAcronym,
+  );
+
+  if (currentAgency) {
+  } else {
+    console.log(`Agency with acronym '${agencyAcronym}' not found.`);
+  }
+
   return (
     <div className="">
       <div className="">
         <IdentifyWebsite></IdentifyWebsite>
 
         <ContextSearchBar>
-          <HeaderAgency agencyAcronym={agencyId}></HeaderAgency>
+          <HeaderAgency agencyAcronym={agencyAcronym}></HeaderAgency>
           <SearchNavbarAgency
-            agencyAcronym={agencyId}
+            agencyAcronym={agencyAcronym}
             agencyUUID={agencyUUID}
+            currentAgency={currentAgency}
           />
         </ContextSearchBar>
 
@@ -100,7 +123,7 @@ const TopicPage = async ({ params }: Props) => {
                   topics={topics}
                   locale={locale}
                   selectedTopicId={parseInt(topicId)}
-                  agencyId={agencyId}
+                  agencyAcronym={agencyAcronym}
                 />
               </div>
 
@@ -109,7 +132,7 @@ const TopicPage = async ({ params }: Props) => {
                   topics={topics}
                   locale={locale}
                   selectedTopicId={parseInt(topicId)}
-                  agencyId={agencyId}
+                  agencyAcronym={agencyAcronym}
                 />
               </div>
             </div>
