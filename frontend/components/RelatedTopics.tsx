@@ -11,13 +11,13 @@ interface Topic {
 interface RelatedTopicsProps {
   topics: Topic[];
   locale: string;
-  agencyId: string;
+  agencyAcronym: string;
 }
 
 const RelatedTopics: React.FC<RelatedTopicsProps> = ({
   topics,
   locale,
-  agencyId,
+  agencyAcronym,
 }) => {
   const t = useTranslations('Topics');
 
@@ -28,13 +28,16 @@ const RelatedTopics: React.FC<RelatedTopicsProps> = ({
       </div>
 
       <div className="flex py-2 pb-4 items-center h-10 text-base font-normal text-black-800 hover:cursor-pointer hover:text-[#702FF9] dark:hover:text-[#9E70FF]">
-        <Link href={`/${agencyId}`}>{t('alltopics')}</Link>
+        <Link href={`/${agencyAcronym}`}>{t('alltopics')}</Link>
       </div>
 
       {topics.map(topic => (
         <div key={topic.id} className="py-1 ">
           <div className="flex items-center">
-            <Link href={`/${agencyId}/topics/${topic.id}`} className="w-full ">
+            <Link
+              href={`/${agencyAcronym}/topics/${topic.id}`}
+              className="w-full "
+            >
               <div className="h-10 text-base max-w-[290px] font-normal text-black-800 hover:cursor-pointer hover:text-[#702FF9] dark:hover:text-[#9E70FF] flex items-center overflow-hidden whitespace-nowrap">
                 <span className="truncate">
                   {locale === 'ms' ? topic.title_ms : topic.title}

@@ -21,7 +21,7 @@ import HeaderQuestionDetail from '@/components/HeaderDetails/HeaderQuestionDetai
 
 interface Props {
   params: {
-    agencyId: string;
+    agencyAcronym: string;
     questionId: string;
     locale: string;
   };
@@ -44,10 +44,10 @@ interface Question {
 }
 
 const QuestionDetailPage: React.FC<Props> = async ({ params }) => {
-  const { locale, agencyId, questionId } = params;
-  const agencyUUID = parseInt(AGENCY_TO_UUID[agencyId.toUpperCase()]);
+  const { locale, agencyAcronym, questionId } = params;
+  const agencyUUID = parseInt(AGENCY_TO_UUID[agencyAcronym.toUpperCase()]);
   const topics = await getTopicByAgency(agencyUUID);
-  const agencyAcronym = (id: number): string | undefined => {
+  const agencyAcronymObject = (id: number): string | undefined => {
     return Object.keys(AGENCY_TO_UUID).find(
       key => AGENCY_TO_UUID[key] === id.toString(),
     );
@@ -68,7 +68,7 @@ const QuestionDetailPage: React.FC<Props> = async ({ params }) => {
     redirect('/');
   }
   const attachments = question.attachments;
-  const acronym = agencyAcronym(question.agency);
+  const acronym = agencyAcronymObject(question.agency);
 
   const fetchFileSizes = async (attachments: string[]): Promise<number[]> => {
     const fileSizes: number[] = [];
@@ -247,7 +247,7 @@ const QuestionDetailPage: React.FC<Props> = async ({ params }) => {
             <RelatedTopics
               topics={topics}
               locale={locale}
-              agencyId={agencyId}
+              agencyAcronym={agencyAcronym}
             />
           </div>
         </div>
