@@ -2,33 +2,13 @@
 
 import ImagePngNJpg from '@/icons/imagepngnjpg';
 import Pdf from '@/icons/pdf';
-import { useState, useEffect } from 'react';
 
 interface Props {
   attachments: string[];
+  fileSize: number[];
 }
 
-const SupportingAttachment = ({ attachments }: Props) => {
-  const [fileSizes, setFileSizes] = useState<Record<string, number>>({});
-
-  useEffect(() => {
-    const fetchFileSizes = async () => {
-      const sizes: Record<string, number> = {};
-      for (const attachment of attachments) {
-        try {
-          const response = await fetch(attachment, { method: 'HEAD' });
-          const contentLength = response.headers.get('Content-Length');
-          sizes[attachment] = contentLength ? parseInt(contentLength) : 0;
-        } catch (error) {
-          console.error('Failed to fetch file size', error);
-        }
-      }
-      setFileSizes(sizes);
-    };
-
-    fetchFileSizes();
-  }, [attachments]);
-
+const SupportingAttachment = ({ attachments, fileSize }: Props) => {
   const downloadFile = (url: string, fileName: string) => {
     fetch(url)
       .then(response => response.blob())
@@ -56,8 +36,11 @@ const SupportingAttachment = ({ attachments }: Props) => {
   const formatFileSize = (size: number) => {
     if (size >= 1024 * 1024) {
       return `${(size / (1024 * 1024)).toFixed(2)} MB`;
+    } else if (size >= 1000000) {
+      return `${(size / 1000000).toFixed(2)} MB`;
+    } else {
+      return `${(size / 1000).toFixed(2)} KB`;
     }
-    return `${(size / 1024).toFixed(2)} KB`;
   };
 
   return (
@@ -65,7 +48,7 @@ const SupportingAttachment = ({ attachments }: Props) => {
       {attachments.map((attachment, index) => {
         const fileName = getLastSegment(attachment);
         const fileExtension = getFileExtension(fileName);
-        const fileSize = fileSizes[attachment] || 0;
+        const size = fileSize[index] || 0;
 
         // Determine the icon based on the file type
         let icon;
@@ -94,7 +77,7 @@ const SupportingAttachment = ({ attachments }: Props) => {
                 </div>
               </div>
               <div className="font-normal text-sm text-dim-500">
-                {formatFileSize(fileSize)}
+                {formatFileSize(size)}
               </div>
             </div>
           </div>

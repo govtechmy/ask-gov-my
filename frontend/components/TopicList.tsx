@@ -12,14 +12,14 @@ interface TopicListProps {
   topics: Topic[];
   locale: string;
   selectedTopicId?: number;
-  agencyId?: string;
+  agencyAcronym?: string;
 }
 
 const TopicList: React.FC<TopicListProps> = ({
   topics,
   locale,
   selectedTopicId,
-  agencyId,
+  agencyAcronym,
 }) => {
   const t = useTranslations('Topics');
   const [currentPath, setCurrentPath] = useState('');
@@ -36,14 +36,14 @@ const TopicList: React.FC<TopicListProps> = ({
       : `${currentPath}/topics/${topicId}`;
   };
 
-  const isBasePath = currentPath === `/${agencyId}`;
+  const isBasePath = currentPath === `/${agencyAcronym}`;
 
   return (
     <div className="max-h-[490px] min-w-[350px] overflow-auto ">
       <div className="px-4 pb-4 pt-0">
         <ul className="">
           <li>
-            <a href={`/${agencyId}`}>
+            <a href={`/${agencyAcronym}`}>
               <div
                 className={`flex h-10 items-center font-normal rounded-lg  py-2 px-3 mb-2 hover:cursor-pointer 
                   ${isBasePath ? 'bg-askmygovbrand-50 text-askmygovtextbrand-600' : 'bg-inherit text-black-800'} `}
