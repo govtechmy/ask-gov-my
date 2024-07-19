@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState, useCallback } from 'react';
+import { useEffect, useState, useCallback, useRef } from 'react';
 import Link from 'next/link';
 import { searchQuestions } from '@/actions/searchServices';
 import { AGENCY_TO_UUID } from '@/lib/agency';
@@ -35,7 +35,6 @@ const highlightText = (text: string, query: string) => {
   const parts = text.split(new RegExp(`(${query})`, 'gi'));
   return parts.map((part, index) =>
     part.toLowerCase() === query.toLowerCase() ? (
-      // here code for text color search mix and match
       <span key={index} className="text-[#702FF9] dark:text-[#9E70FF]">
         {part}
       </span>
@@ -57,8 +56,11 @@ const InputNavbar: React.FC<InputNavbarProps> = ({
   const [isTyping, setIsTyping] = useState(false);
   const [isSearching, setIsSearching] = useState(false);
   const [showNoResults, setShowNoResults] = useState(false);
+  const [hiddenDisplay, setHiddendisplay] = useState(true);
   const router = useRouter();
   const t = useTranslations('Search');
+  const inputRef = useRef<HTMLInputElement>(null);
+
   const handleInfoClick = () => {
     if (searchQuery.trim().length > 0) {
       router.push(`/searchresults?query=${searchQuery}`);
@@ -69,12 +71,16 @@ const InputNavbar: React.FC<InputNavbarProps> = ({
     setSearchQuery(event.target.value);
     setIsTyping(true);
     setShowNoResults(false);
+    setHiddendisplay(true);
   };
 
   const handleKeyPress = (event: React.KeyboardEvent<HTMLInputElement>) => {
     if (event.key === 'Enter' && searchQuery.trim().length > 0) {
       setDisplayAllMatches(true);
       router.push(`/searchresults?query=${searchQuery}`);
+      setSearchResults([]);
+      setHiddendisplay(false);
+      inputRef.current?.blur();
     }
   };
 
@@ -120,9 +126,10 @@ const InputNavbar: React.FC<InputNavbarProps> = ({
   return (
     <div
       id="inputnavbar"
-      className={`flex items-center border-outline-200 h-11 shadow-button border pl-3 pr-2 py-2 bg-[#FFFFFF] dark:bg-[#1D1D21] w-[800px] relative ${searchQuery.length > 0 ? 'rounded-b-none rounded-t-3xl' : 'rounded-full'}`}
+      className={`flex items-center border-outline-200 h-11 shadow-button border pl-3 pr-2 py-2 bg-[#FFFFFF] dark:bg-[#1D1D21] w-[800px] relative ${searchQuery.length > 0 && hiddenDisplay ? 'rounded-b-none rounded-t-3xl' : 'rounded-full'}`}
     >
       <input
+        ref={inputRef}
         className="flex-1 border-none outline-none px-2 py-1 bg-inherit w-[740px]"
         placeholder={t(agencyUUID ? 'search_agency' : 'search')}
         value={searchQuery}
@@ -157,7 +164,7 @@ const InputNavbar: React.FC<InputNavbarProps> = ({
       >
         <Search className="text-white" />
       </div>
-      {searchQuery.length > 0 && (
+      {searchQuery.length > 0 && hiddenDisplay && (
         <div className="absolute top-full left-0 border-t-[1px] rounded-b-3xl bg-[#FFFFFF] dark:bg-[#1D1D21] shadow-lg w-full max-h-96 overflow-y-auto">
           <div className="overflow-y-auto max-h-60 pl-2 pr-3 pt-2">
             {/* Wrapper for scrollbar */}
