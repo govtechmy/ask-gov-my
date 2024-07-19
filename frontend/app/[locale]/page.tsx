@@ -10,6 +10,7 @@ import TrendingAgencies from '@/components/TrendingAgencies';
 import IdentifyWebsite from '@/components/HeaderDetails/IdentifyWebsite';
 import WordTranslate from '@/components/WordTranslate';
 import ContextSearchBar from '@/components/ContextSearchBar';
+import AgencyLogoImporter from '@/components/AgencyLogoImporter';
 
 const MainPage = async ({
   searchParams,
@@ -24,6 +25,7 @@ const MainPage = async ({
   return (
     <div>
       <IdentifyWebsite />
+      <AgencyLogoImporter id={48}></AgencyLogoImporter>
 
       <ContextSearchBar>
         <Header />
