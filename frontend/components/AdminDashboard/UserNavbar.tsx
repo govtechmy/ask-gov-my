@@ -1,7 +1,9 @@
 'use client';
-import Calendar from '@/icons/calendar';
-import React, { useEffect } from 'react';
+
+import React, { useState, useEffect } from 'react';
+import { useSearchParams, useRouter } from 'next/navigation';
 import Search from '@/icons/search';
+import AddUserModal from './AddUserModal';
 import { cn } from '@/lib/utils';
 import {
   Select,
@@ -10,12 +12,27 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
-import { useSearchParams, useRouter } from 'next/navigation';
 
-const UserNavbar = () => {
+interface Agency {
+  id: number;
+  name: string;
+  name_ms: string;
+  acronym: string;
+  total_likes?: number;
+  logo_url?:string;
+}
+
+interface UserNavbarProps {
+  setSearchTerm: (term: string) => void;
+  agencies: Agency[];
+  onAddUser: () => void;
+}
+
+const UserNavbar: React.FC<UserNavbarProps> = ({ setSearchTerm, agencies, onAddUser }) => {
   const searchParams = useSearchParams();
   const router = useRouter();
   const activeTab = searchParams.get('tab') || 'all';
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   const setActiveTab = (tab: string) => {
     const params = new URLSearchParams(window.location.search);
@@ -48,35 +65,30 @@ const UserNavbar = () => {
         </button>
       </div>
       <div className="flex space-x-4 items-center">
-        <Select>
-          <SelectTrigger className="w-[120px] h-8 bg-[#FFFFFF] dark:bg-[#18181B]">
-            <SelectValue placeholder="Agency: All" />
-          </SelectTrigger>
-          <SelectContent className="bg-[#FFFFFF] dark:bg-[#18181B] w-[120px]">
-            <SelectItem value="all">Agency: All</SelectItem>
-            <SelectItem value="miti">MITI</SelectItem>
-            <SelectItem value="moh">MOH</SelectItem>
-          </SelectContent>
-        </Select>
-
-        <button className="px-3 border rounded-md h-8 items-center bg-[#FFFFFF] dark:bg-[#18181B]">
-          <div className="flex items-center">
-            <Calendar />
-            <div className="pl-2">Date</div>
-          </div>
-        </button>
-
         <div className="bg-[#FFFFFF] dark:bg-[#18181B] rounded-md flex items-center h-8 w-[260px] border px-3 py-2 text-sm">
           <input
             type="search"
-            placeholder="Search by ID, keywords"
+            placeholder="Search by name or email"
             className={cn(
               'font-normal placeholder:text-dim-500 flex h-11 w-full rounded-md bg-transparent py-3 text-sm pl-2',
             )}
+            onChange={e => setSearchTerm(e.target.value)}
           />
           <Search strokeWidth={1.88} className="stroke-[#FFFFFF]" />
         </div>
+        <button 
+          className="bg-purple-600 text-white px-4 py-2 rounded-md"
+          onClick={() => setIsModalOpen(true)}
+        >
+          + Add User
+        </button>
       </div>
+      <AddUserModal 
+        isOpen={isModalOpen} 
+        onClose={() => setIsModalOpen(false)} 
+        agencies={agencies}
+        onAddUser={onAddUser}
+      />
     </div>
   );
 };
