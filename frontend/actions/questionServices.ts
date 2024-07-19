@@ -34,7 +34,7 @@ interface QuestionSubmission {
   email: string;
 }
 
-export interface Agency {
+interface Agency {
   id: number;
   name: string;
   name_ms: string;
