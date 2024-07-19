@@ -3,7 +3,7 @@ from django.core.management.base import BaseCommand
 from ask_gov.models import Agency, Question
 from ask_gov.serializers import QuestionSerializer
 from ask_gov.elasticsearch_client import client
-
+from ask_gov.embed import get_embeddings
 class Command(BaseCommand):
     help = 'Load questions from a CSV file into the database and index them into Elasticsearch'
 
@@ -45,6 +45,9 @@ class Command(BaseCommand):
                 }
 
                 document['agency'] = agency_data
+
+                # embed question
+                document['vector'] = get_embeddings(question_text)
 
                 client.index(
                     index='questions',
