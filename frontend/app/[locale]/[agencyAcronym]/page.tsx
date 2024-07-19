@@ -1,4 +1,7 @@
-import { getQuestionsByAgency } from '@/actions/questionServices';
+import {
+  getAgencyList,
+  getQuestionsByAgency,
+} from '@/actions/questionServices';
 import QuestionBox from '@/components/QuestionBox/QuestionBox';
 import { AGENCY_TO_UUID } from '@/lib/agency';
 import HeaderAgency from '@/components/HeaderDetails/HeaderAgency';
@@ -13,29 +16,47 @@ import ContextSearchBar from '@/components/ContextSearchBar';
 
 interface Props {
   params: {
-    agencyId: string;
+    agencyAcronym: string;
     locale: string;
-  };
-  searchParams: {
-    page?: string;
   };
 }
 
-const AgencyPage = async ({ params, searchParams }: Props) => {
-  const { agencyId, locale } = params; //agencyId is actually agency acronym
-  const agencyUUID = AGENCY_TO_UUID[agencyId.toUpperCase()];
+const AgencyPage = async ({ params }: Props) => {
+  const { agencyAcronym, locale } = params;
+  const agencyUUID = AGENCY_TO_UUID[agencyAcronym.toUpperCase()];
   const { questions } = await getQuestionsByAgency(agencyUUID);
   const topics = await getTopicByAgency(parseInt(agencyUUID));
+  const upperCaseAgencyAcronym = agencyAcronym.toUpperCase();
+
+  let agencies: any = [];
+
+  try {
+    agencies = await getAgencyList();
+
+    if (!agencies || agencies.length === 0) {
+      throw new Error('Agency list is empty');
+    }
+  } catch {}
+
+  const currentAgency = agencies.find(
+    (agency: { acronym: string }) => agency.acronym === upperCaseAgencyAcronym,
+  );
+
+  if (currentAgency) {
+  } else {
+    console.log(`Agency with acronym '${agencyAcronym}' not found.`);
+  }
 
   return (
     <div className="">
       <div className="">
         <IdentifyWebsite />
         <ContextSearchBar>
-          <HeaderAgency agencyAcronym={agencyId}></HeaderAgency>
+          <HeaderAgency agencyAcronym={agencyAcronym}></HeaderAgency>
           <SearchNavbarAgency
-            agencyAcronym={agencyId}
+            agencyAcronym={agencyAcronym}
             agencyUUID={agencyUUID}
+            currentAgency={currentAgency}
           />
         </ContextSearchBar>
 
@@ -50,9 +71,6 @@ const AgencyPage = async ({ params, searchParams }: Props) => {
             <QuestionBox questions={questions} />
           </div>
 
-          {/* make this sticky */}
-          {/* remove when size is large than some px display small one. */}
-          {/* home change language */}
           <div className="pl-10 w-[500px]">
             <div className="font-semibold text-base text-black-700 pl-6 pb-7">
               <WordTranslate
@@ -62,14 +80,18 @@ const AgencyPage = async ({ params, searchParams }: Props) => {
             </div>
 
             <div className="hidden md:block">
-              <TopicList topics={topics} locale={locale} agencyId={agencyId} />
+              <TopicList
+                topics={topics}
+                locale={locale}
+                agencyAcronym={agencyAcronym}
+              />
             </div>
 
             <div className="md:invisible">
               <TopicDropdown
                 topics={topics}
                 locale={locale}
-                agencyId={agencyId}
+                agencyAcronym={agencyAcronym}
               />
             </div>
           </div>

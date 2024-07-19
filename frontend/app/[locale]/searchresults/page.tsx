@@ -7,6 +7,7 @@ import Header from '@/components/HeaderDetails/Header';
 import TrendingAgencies from '@/components/TrendingAgencies';
 import IdentifyWebsite from '@/components/HeaderDetails/IdentifyWebsite';
 import WordTranslate from '@/components/WordTranslate';
+import ContextSearchBar from '@/components/ContextSearchBar';
 
 const SearchResultPage = async ({
   searchParams,
@@ -20,8 +21,11 @@ const SearchResultPage = async ({
   return (
     <div>
       <IdentifyWebsite />
-      <Header />
-      <SearchNavbar />
+
+      <ContextSearchBar>
+        <Header />
+        <SearchNavbar />
+      </ContextSearchBar>
 
       <div className="container mt-10 flex">
         <div className="max-w-screen-2xl">
