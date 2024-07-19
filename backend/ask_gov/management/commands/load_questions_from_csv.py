@@ -47,7 +47,7 @@ class Command(BaseCommand):
                 document['agency'] = agency_data
 
                 # embed question
-                document['vector'] = get_embeddings(question_text)
+                document['vector'] = get_embedding(question_text)
 
                 client.index(
                     index='questions',
