@@ -7,6 +7,7 @@ import { useRouter } from '@/lib/i18n';
 import { useSearchParams } from 'next/navigation';
 import ManageQuestions from '@/components/AdminDashboard/ManageQuestions';
 import ManageAgencies from '@/components/AdminDashboard/ManageAgencies';
+import ManageUsers from '@/components/AdminDashboard/ManageUsers'
 import { useEffect } from 'react';
 
 export default function DashboardPage() {
@@ -27,10 +28,10 @@ export default function DashboardPage() {
     return <p>LOADING...</p>;
   }
 
-  if (session.status !== 'authenticated') {
-    router.push('/admin');
-    return <p>goodbye</p>;
-  }
+  // if (session.status !== 'authenticated') {
+  //   router.push('/admin');
+  //   return <p>goodbye</p>;
+  // }
 
   return (
     <div className="flex flex-col min-h-screen pt-5">
@@ -38,8 +39,9 @@ export default function DashboardPage() {
         <HeaderDashboard />
         {page === 'questions' && <ManageQuestions />}
         {page === 'manageagencies' && <ManageAgencies />}
-        {/* {page === 'manageusers' && <ManageUsers />} */}
+        {page === 'manageusers' && <ManageUsers />}
       </div>
     </div>
   );
 }
+ 
