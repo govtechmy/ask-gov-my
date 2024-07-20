@@ -6,7 +6,9 @@ const ACCESS_KEY_ID = process.env.NEXT_PUBLIC_FILE_AWS_ACCESS_KEY_ID;
 const SECRET_ACCESS_KEY = process.env.NEXT_PUBLIC_FILE_AWS_SECRET_ACCESS_KEY;
 
 if (!REGION || !BUCKET_NAME || !ACCESS_KEY_ID || !SECRET_ACCESS_KEY) {
-  throw new Error('Missing required environment variables for AWS S3 configuration');
+  throw new Error(
+    'Missing required environment variables for AWS S3 configuration',
+  );
 }
 
 const s3Client = new S3Client({

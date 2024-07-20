@@ -28,7 +28,9 @@ const HeaderDashboard = () => {
     }
   }, [searchParams]);
 
-  const handleSetActiveLink = (link: 'questions' | 'manageagencies' | 'manageusers') => {
+  const handleSetActiveLink = (
+    link: 'questions' | 'manageagencies' | 'manageusers',
+  ) => {
     setActiveLink(link);
     const params = new URLSearchParams(window.location.search);
     params.set('page', link);
@@ -53,9 +55,7 @@ const HeaderDashboard = () => {
               }`}
               onClick={() => handleSetActiveLink('questions')}
             >
-              <Link href="/admin/dashboard/?page=questions">
-                Questions
-              </Link>
+              <Link href="/admin/dashboard/?page=questions">Questions</Link>
             </div>
             <div
               className={`rounded-md font-medium text-sm flex justify-center items-center w-[145px] h-8 px-1 ${
