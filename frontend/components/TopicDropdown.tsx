@@ -13,14 +13,14 @@ interface DropdownMenuProps {
   topics: Topic[];
   locale: string;
   selectedTopicId?: number;
-  agencyId?: string;
+  agencyAcronym?: string;
 }
 
 const DropdownMenu: React.FC<DropdownMenuProps> = ({
   topics,
   locale,
   selectedTopicId,
-  agencyId,
+  agencyAcronym,
 }) => {
   const t = useTranslations('Topics');
   const router = useRouter();
@@ -51,7 +51,7 @@ const DropdownMenu: React.FC<DropdownMenuProps> = ({
     if (topic) {
       router.push(constructHref(topic.id));
     } else {
-      router.push(`/${agencyId}`);
+      router.push(`/${agencyAcronym}`);
     }
     setSelectedTopic(topic);
     setIsOpen(false);

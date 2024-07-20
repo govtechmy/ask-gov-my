@@ -2,20 +2,24 @@
 
 import React, { useContext, useEffect, useState } from 'react';
 import InputNavbar from '../ui/inputnavbar';
-import JataNegaraIcon from '@/icons/jatanegaraicon';
 import Link from 'next/link';
 import RightArrow from '@/icons/rightarrow';
 import { useTranslations } from 'next-intl';
 import { context } from '../ContextSearchBar';
+import AgencyLogoImporter from '../AgencyLogoImporter';
 
 interface SearchNavbarAgencyProps {
   agencyAcronym: string;
   agencyUUID: string;
+  currentAgency: {
+    [key: string]: any;
+  };
 }
 
 const SearchNavbarAgency: React.FC<SearchNavbarAgencyProps> = ({
   agencyAcronym,
   agencyUUID,
+  currentAgency,
 }) => {
   const t = useTranslations('Agency');
   const {
@@ -68,8 +72,10 @@ const SearchNavbarAgency: React.FC<SearchNavbarAgencyProps> = ({
               </div>
             </div>
             <div className="flex items-center pb-6 pt-3 text-2xl text-left">
-              <div className="h-[42px] w-[42px] flex-shrink-0 flex items-center justify-center">
-                <JataNegaraIcon />
+              <div className="flex-shrink-0 flex items-center justify-center">
+                <AgencyLogoImporter
+                  currentAgency={currentAgency}
+                ></AgencyLogoImporter>
               </div>
               <div
                 id="search-navbar-title"

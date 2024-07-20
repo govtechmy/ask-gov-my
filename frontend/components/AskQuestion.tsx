@@ -17,6 +17,7 @@ const AskQuestion = () => {
   const [question, setQuestion] = useState('');
   const [email, setEmail] = useState('');
   const t = useTranslations('Askquestions');
+  const [isFocused, setIsFocused] = useState(false);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -113,12 +114,19 @@ const AskQuestion = () => {
                 <div className="mt-4 mb-5"></div>
 
                 <div className="text-left">
+                  {/* this is email input  */}
                   <div className="mb-[4px] text-base font-medium pb-0 text-black-700">
                     {t('notify_me')}
                   </div>
-                  <div className="flex items-center border-[1px] border-outline-200 shadow-sm rounded-md h-10 w-full">
+                  <div
+                    className={`flex items-center border-[1px] border-outline-200 shadow-sm rounded-md h-10 w-full ${
+                      isFocused
+                        ? 'shadow-[0_0_0_1px_#B794FF,0_0_0_4px_#E2D5FE]'
+                        : ''
+                    }`}
+                  >
                     <div className="pl-3 pr-2">
-                      <MailLogo></MailLogo>
+                      <MailLogo />
                     </div>
                     <input
                       placeholder={t('your_email')}
@@ -127,8 +135,10 @@ const AskQuestion = () => {
                       type="email"
                       value={email}
                       onChange={e => setEmail(e.target.value)}
+                      onFocus={() => setIsFocused(true)}
+                      onBlur={() => setIsFocused(false)}
                       required
-                    ></input>
+                    />
                   </div>
 
                   <div className="text-sm font-normal pt-[6px] mb-6 text-dim-500">
