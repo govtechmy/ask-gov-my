@@ -209,6 +209,38 @@ export async function getAgencyList(): Promise<Agency[]> {
   }
 }
 
+export async function getDynamicAgencyMap(): Promise<Record<string, string>> {
+  try {
+    const response = await fetch(`${API_URL}/agencies`, {
+      method: 'GET',
+      headers: {
+        'Cache-Control': 'no-cache',
+        'Pragma': 'no-cache',
+        'Expires': '0',
+        'Content-Type': 'application/json',
+      },
+    });
+
+    if (!response.ok) {
+      throw new Error('Failed to fetch agency list');
+    }
+
+    const data: Agency[] = await response.json();
+    const agencyMap: Record<string, string> = {};
+
+    data.forEach(agency => {
+      if (agency.acronym) {
+        agencyMap[agency.acronym] = agency.id.toString();
+      }
+    });
+
+    return agencyMap;
+  } catch (error) {
+    console.error('Error in getDynamicAgencyMap:', error);
+    return {};
+  }
+}
+
 export async function likeQuestion(questionId: string): Promise<void> {
   const url = `${API_URL}/questions/${questionId}/like/`;
 
