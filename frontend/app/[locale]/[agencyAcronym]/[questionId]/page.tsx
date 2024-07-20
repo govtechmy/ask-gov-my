@@ -21,7 +21,7 @@ import HeaderQuestionDetail from '@/components/HeaderDetails/HeaderQuestionDetai
 
 interface Props {
   params: {
-    agencyId: string;
+    agencyAcronym: string;
     questionId: string;
     locale: string;
   };
@@ -44,10 +44,10 @@ interface Question {
 }
 
 const QuestionDetailPage: React.FC<Props> = async ({ params }) => {
-  const { locale, agencyId, questionId } = params;
-  const agencyUUID = parseInt(AGENCY_TO_UUID[agencyId.toUpperCase()]);
+  const { locale, agencyAcronym, questionId } = params;
+  const agencyUUID = parseInt(AGENCY_TO_UUID[agencyAcronym.toUpperCase()]);
   const topics = await getTopicByAgency(agencyUUID);
-  const agencyAcronym = (id: number): string | undefined => {
+  const agencyAcronymObject = (id: number): string | undefined => {
     return Object.keys(AGENCY_TO_UUID).find(
       key => AGENCY_TO_UUID[key] === id.toString(),
     );
@@ -68,7 +68,44 @@ const QuestionDetailPage: React.FC<Props> = async ({ params }) => {
     redirect('/');
   }
   const attachments = question.attachments;
-  const acronym = agencyAcronym(question.agency);
+  const acronym = agencyAcronymObject(question.agency);
+
+  const fetchFileSizes = async (attachments: string[]): Promise<number[]> => {
+    const fileSizes: number[] = [];
+
+    try {
+      const fetchPromises = attachments.map(async attachment => {
+        try {
+          const response = await fetch(attachment, { method: 'HEAD' });
+          const contentLength = response.headers.get('Content-Length');
+          const size = contentLength ? parseInt(contentLength) : 0;
+          fileSizes.push(size);
+        } catch (error) {
+          console.error('Failed to fetch file size', error);
+          fileSizes.push(0); // Default size if fetch fails
+        }
+      });
+
+      // Wait for all fetch requests to complete
+      await Promise.all(fetchPromises);
+    } catch (error) {
+      console.error('Error fetching file sizes', error);
+    }
+
+    return fileSizes;
+  };
+
+  let fileSize: Array<any> = [];
+
+  try {
+    fileSize = await fetchFileSizes(attachments);
+
+    if (!fileSize) {
+      throw new Error('FileSize not found');
+    }
+  } catch (error) {
+    console.log('error on filesize', error);
+  }
 
   return (
     <div className="">
@@ -158,6 +195,7 @@ const QuestionDetailPage: React.FC<Props> = async ({ params }) => {
                     <div className="px-8 pb-8 pt-0 ">
                       <SupportingAttachment
                         attachments={attachments}
+                        fileSize={fileSize}
                       ></SupportingAttachment>
                     </div>
                   </div>
@@ -209,7 +247,7 @@ const QuestionDetailPage: React.FC<Props> = async ({ params }) => {
             <RelatedTopics
               topics={topics}
               locale={locale}
-              agencyId={agencyId}
+              agencyAcronym={agencyAcronym}
             />
           </div>
         </div>

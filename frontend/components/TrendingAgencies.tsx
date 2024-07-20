@@ -1,34 +1,38 @@
-'use client';
 import { useTranslations } from 'next-intl';
-import JataNegaraIcon from '@/icons/jatanegaraicon';
 import { Link } from '@/lib/i18n';
-import { error } from 'console';
+import AgencyLogoImporter from './AgencyLogoImporter';
 
-interface Agency {
+interface TrendingAgency {
   id: number;
   name: string;
   name_ms?: string;
   acronym: string;
   total_likes?: number;
+  logo_url?: string;
 }
 
 interface TrendingAgenciesProps {
-  agencies: Agency[];
+  trendingAgencies: TrendingAgency[];
 }
 
-const TrendingAgencies: React.FC<TrendingAgenciesProps> = ({ agencies }) => {
+const TrendingAgencies: React.FC<TrendingAgenciesProps> = ({
+  trendingAgencies,
+}) => {
   const t = useTranslations('Agency');
-  const top5Agencies = agencies.slice(0, 10);
+
+  const top10Agencies = trendingAgencies.slice(0, 10);
 
   return (
     <div className="pt-6">
       <ul className="flex flex-col justify-between h-full pb-5">
-        {top5Agencies.map(agency => (
+        {top10Agencies.map((agency: TrendingAgency) => (
           <li key={agency.id} className="py-[9px]">
             <Link href={`/${agency.acronym.toLowerCase()}`}>
               <div className="flex items-center">
-                <div className="pr-[10px]">
-                  <JataNegaraIcon className="stroke-[#E4E4E7] dark:stroke-[#27272A] w-8 h-8" />
+                <div className="pr-[10px] items-center">
+                  <div className="h-8 w-8 flex">
+                    <AgencyLogoImporter currentAgency={agency} />
+                  </div>
                 </div>
                 <div className="text-base font-normal text-black-800 hover:text-askmygovtextbrand-600 hover:cursor-pointer">
                   {t(agency.acronym)}
