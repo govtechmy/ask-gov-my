@@ -48,7 +48,14 @@ export async function getAllQuestions(
   pageSize: number = 1000,
 ): Promise<{ questions: Question[]; total: number }> {
   try {
-    const response = await fetch(`${API_URL}/questions/`);
+    const response = await fetch(`${API_URL}/questions/`, {
+      method: 'GET',
+      headers: {
+        'Cache-Control': 'no-cache',
+        'Pragma': 'no-cache',
+        'Expires': '0',
+      },
+    });
     if (!response.ok) {
       throw new Error('Failed to fetch questions');
     }
@@ -67,7 +74,14 @@ export async function getAllQuestions(
 }
 
 export async function getAllTopics(): Promise<Topic[]> {
-  const response = await fetch(`${API_URL}/topics/`);
+  const response = await fetch(`${API_URL}/topics/`, {
+    method: 'GET',
+    headers: {
+      'Cache-Control': 'no-cache',
+      'Pragma': 'no-cache',
+      'Expires': '0',
+    },
+  });
 
   if (!response.ok) {
     throw new Error('Failed to fetch topics');
@@ -76,6 +90,7 @@ export async function getAllTopics(): Promise<Topic[]> {
   const data = await response.json();
   return data;
 }
+
 export async function getTopicByAgency(agencyId: number): Promise<Topic[]> {
   const topics = await getAllTopics();
   const filteredTopics = topics.filter(topic => topic.agency.id === agencyId);
@@ -89,7 +104,7 @@ export async function getTopicsDetail(
   const topics = await getAllTopics();
   const topicIdToTitleMap: { [key: number]: string } = {};
 
-  if (locale == 'en') {
+  if (locale === 'en') {
     topics.forEach(topic => {
       topicIdToTitleMap[topic.id] = topic.title;
     });
@@ -99,7 +114,6 @@ export async function getTopicsDetail(
     });
   }
 
-  //topic.title_ms for malay , no ms for en
   return topicIds.map(id => topicIdToTitleMap[id] || 'Unknown Topic');
 }
 
@@ -108,7 +122,14 @@ export async function getQuestionsByAgency(
   page: number = 1,
   pageSize: number = 10,
 ): Promise<{ questions: Question[]; total: number }> {
-  const response = await fetch(`${API_URL}/questions/by-agency/${agencyId}`);
+  const response = await fetch(`${API_URL}/questions/by-agency/${agencyId}`, {
+    method: 'GET',
+    headers: {
+      'Cache-Control': 'no-cache',
+      'Pragma': 'no-cache',
+      'Expires': '0',
+    },
+  });
   if (!response.ok) {
     throw new Error('Failed to fetch questions');
   }
@@ -126,7 +147,14 @@ export async function getQuestionsByAgency(
 export async function getQuestionById(
   questionId: string,
 ): Promise<Question | null> {
-  const response = await fetch(`${API_URL}/questions/${questionId}/`);
+  const response = await fetch(`${API_URL}/questions/${questionId}/`, {
+    method: 'GET',
+    headers: {
+      'Cache-Control': 'no-cache',
+      'Pragma': 'no-cache',
+      'Expires': '0',
+    },
+  });
   if (response.ok) {
     return response.json();
   }
@@ -139,7 +167,7 @@ export async function submitQuestion(data: QuestionSubmission): Promise<void> {
   const response = await fetch(url, {
     method: 'POST',
     headers: {
-      'Content-Type': 'application/json',
+      'Content-Type': 'application/json'
     },
     body: JSON.stringify({ data }),
   });
@@ -156,6 +184,9 @@ export async function getAgencyList(): Promise<Agency[]> {
     const response = await fetch(`${API_URL}/agencies`, {
       method: 'GET',
       headers: {
+        'Cache-Control': 'no-cache',
+        'Pragma': 'no-cache',
+        'Expires': '0',
         'Content-Type': 'application/json',
       },
     });
@@ -185,6 +216,9 @@ export async function likeQuestion(questionId: string): Promise<void> {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
+      'Cache-Control': 'no-cache',
+      'Pragma': 'no-cache',
+      'Expires': '0',
     },
   });
 
@@ -200,6 +234,9 @@ export async function dislikeQuestion(questionId: string): Promise<void> {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
+      'Cache-Control': 'no-cache',
+      'Pragma': 'no-cache',
+      'Expires': '0',
     },
   });
 
@@ -213,6 +250,9 @@ export async function getTrendingAgencies(): Promise<Agency[]> {
     const response = await fetch(`${API_URL}/agencies/trending/`, {
       method: 'GET',
       headers: {
+        'Cache-Control': 'no-cache',
+        'Pragma': 'no-cache',
+        'Expires': '0',
         'Content-Type': 'application/json',
       },
     });
