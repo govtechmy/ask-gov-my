@@ -7,6 +7,8 @@ import { useRouter } from '@/lib/i18n';
 import { useSearchParams } from 'next/navigation';
 import ManageQuestions from '@/components/AdminDashboard/ManageQuestions';
 import ManageAgencies from '@/components/AdminDashboard/ManageAgencies';
+import ManageUsers from '@/components/AdminDashboard/ManageUsers'
+import { useEffect } from 'react';
 
 export default function DashboardPage() {
   const t = useTranslations('Adminlogin');
@@ -37,8 +39,9 @@ export default function DashboardPage() {
         <HeaderDashboard />
         {page === 'questions' && <ManageQuestions />}
         {page === 'manageagencies' && <ManageAgencies />}
-        {/* {page === 'manageusers' && <ManageUsers />} */}
+        {page === 'manageusers' && <ManageUsers />}
       </div>
     </div>
   );
 }
+ 

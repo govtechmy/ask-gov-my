@@ -1,6 +1,9 @@
 'use server';
+import { PrismaClient } from '@prisma/client';
 
 const API_URL = 'http://ask.juwaini.com/api';
+
+const prisma = new PrismaClient();
 
 interface Question {
   id: number;
@@ -27,6 +30,19 @@ export interface Topic {
     acronym: string;
   };
 }
+
+interface User {
+  id: string;
+  name: string | null;
+  email: string;
+  emailVerified: Date | null;
+  image: string | null;
+  role: 'staff' | 'super_admin';
+  createdAt: Date;
+  updatedAt: Date;
+  agency: number | null;
+}
+
 // get questions by the user agency, to be used only by user.role = staff
 export async function getUserAgencyQuestions(
   agencyId: number,
@@ -220,5 +236,62 @@ export async function updateAgency(
   } catch (error) {
     console.error('Error in updateAgency:', error);
     throw new Error('Error updating agency');
+  }
+}
+
+export async function addUser(name: string, email: string, role: 'staff' | 'super_admin', agency: number): Promise<{ success: boolean; message?: string }> {
+  try {
+    await prisma.user.create({
+      data: {
+        name,
+        email,
+        role,
+        agency,
+      },
+    });
+    return { success: true };
+  } catch (error) {
+    console.error('Error adding user:', error);
+    return { success: false, message: 'Failed to add user' };
+  }
+}
+
+export async function editUser(id: string, name: string, email: string, role: 'staff' | 'super_admin', agency: number): Promise<{ success: boolean; message?: string }> {
+  try {
+    await prisma.user.update({
+      where: { id },
+      data: {
+        name,
+        email,
+        role,
+        agency,
+      },
+    });
+    return { success: true };
+  } catch (error) {
+    console.error('Error editing user:', error);
+    return { success: false, message: 'Failed to edit user' };
+  }
+}
+
+export async function deleteUser(id: string): Promise<{ success: boolean; message?: string }> {
+  try {
+    await prisma.user.delete({
+      where: { id },
+    });
+    return { success: true };
+  } catch (error) {
+    console.error('Error deleting user:', error);
+    return { success: false, message: 'Failed to delete user' };
+  }
+}
+
+export async function getAllUsers(): Promise<{ success: boolean; users?: User[]; message?: string }> {
+  try {
+    const users = await prisma.user.findMany();
+    return { success: true, users };
+  } catch (error) {
+    console.error('Error fetching users:', error);
+    return { success: false, message: 'Failed to fetch users' };
   }
 }
