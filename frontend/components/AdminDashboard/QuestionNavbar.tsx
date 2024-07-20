@@ -14,9 +14,10 @@ import { useSearchParams, useRouter } from 'next/navigation';
 
 interface QuestionNavbarProps {
   unassignedCount: number;
+  setSearchTerm: (term: string) => void;
 }
 
-const QuestionNavbar: React.FC<QuestionNavbarProps> = ({ unassignedCount }) => {
+const QuestionNavbar: React.FC<QuestionNavbarProps> = ({ unassignedCount, setSearchTerm }) => {
   const searchParams = useSearchParams();
   const router = useRouter();
   const activeTab = searchParams.get('tab') || 'all';
@@ -80,6 +81,7 @@ const QuestionNavbar: React.FC<QuestionNavbarProps> = ({ unassignedCount }) => {
             className={cn(
               'font-normal placeholder:text-dim-500 flex h-11 w-full rounded-md bg-transparent py-3 text-sm pl-2',
             )}
+            onChange={e => setSearchTerm(e.target.value)}
           />
           <Search strokeWidth={1.88} className="stroke-[#FFFFFF]" />
         </div>

@@ -25,15 +25,18 @@ interface Question {
 const ManageQuestions: React.FC = () => {
   const t = useTranslations('Adminlogin');
   const [questions, setQuestions] = useState<Question[]>([]);
+  const [filteredQuestions, setFilteredQuestions] = useState<Question[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [unassignedCount, setUnassignedCount] = useState(0);
+  const [searchTerm, setSearchTerm] = useState('');
 
   useEffect(() => {
     const fetchQuestions = async () => {
       try {
         const { questions } = await getAllUserQuestions();
         setQuestions(questions);
+        setFilteredQuestions(questions); // Initialize filteredQuestions with all questions
         setUnassignedCount(questions.filter(q => q.agency === null).length);
       } catch (error) {
         if (error instanceof Error) {
@@ -51,6 +54,13 @@ const ManageQuestions: React.FC = () => {
     fetchQuestions();
   }, []);
 
+  useEffect(() => {
+    const filteredQuestions = questions.filter(q =>
+      q.question.toLowerCase().includes(searchTerm.toLowerCase())
+    );
+    setFilteredQuestions(filteredQuestions);
+  }, [searchTerm, questions]);
+
   if (loading) {
     return <p>Loading questions...</p>;
   }
@@ -61,9 +71,9 @@ const ManageQuestions: React.FC = () => {
 
   return (
     <div className="flex flex-col flex-grow items-center justify-center py-12">
-      <QuestionNavbar unassignedCount={unassignedCount} />
+      <QuestionNavbar unassignedCount={unassignedCount} setSearchTerm={setSearchTerm} />
       <div className="w-full flex py-12">
-        <AdminQuestionBox questions={questions} />
+        <AdminQuestionBox questions={filteredQuestions} />
       </div>
     </div>
   );
