@@ -29,11 +29,13 @@ class Question(models.Model):
     BACKLOG = 'backlog'
     COMPLETED = 'completed'
     SPAM = 'spam'
+    DRAFT = 'draft'
     
     STATE_CHOICES = [
         (BACKLOG, 'Backlog'),
         (COMPLETED, 'Completed'),
         (SPAM, 'Spam'),
+        (DRAFT, 'Draft'),
     ]
 
     question = models.TextField()
@@ -46,7 +48,9 @@ class Question(models.Model):
     likes = models.IntegerField(default=0)  
     dislikes = models.IntegerField(default=0)
     attachments = ArrayField(models.URLField(), blank=True, default=list)
-    isopen = models.BooleanField(default=False)
+    admin_isopen = models.BooleanField(default=False)
+    staff_isopen = models.BooleanField(default=False)
+    answeredDate = models.DateTimeField(null=True, blank=True)
 
     def __str__(self):
         return self.question[:50]
