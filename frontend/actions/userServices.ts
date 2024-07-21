@@ -56,6 +56,9 @@ export async function getUserAgencyQuestions(
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
+          'Cache-Control': 'no-cache',
+          'Pragma': 'no-cache',
+          'Expires': '0',
         },
       },
     );
@@ -85,6 +88,9 @@ export async function getAllUserQuestions(
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
+        'Cache-Control': 'no-cache',
+        'Pragma': 'no-cache',
+        'Expires': '0',
       },
     });
 
@@ -140,6 +146,9 @@ export async function listUserAgencyTopics(): Promise<Topic[]> {
     method: 'GET',
     headers: {
       'Content-Type': 'application/json',
+      'Cache-Control': 'no-cache',
+      'Pragma': 'no-cache',
+      'Expires': '0',
     },
   });
 

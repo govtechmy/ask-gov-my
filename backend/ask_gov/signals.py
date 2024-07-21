@@ -11,6 +11,7 @@ def index_question(sender, instance, **kwargs):
 
     document.pop('isopen', None)
     document.pop('attachments', None)
+    document.pop('answeredDate', None)
 
     if document['agency'] is None:
         agency_data = {
