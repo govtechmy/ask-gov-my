@@ -1,4 +1,5 @@
 from django.shortcuts import get_object_or_404
+from django.utils import timezone
 from rest_framework import generics, status
 from .models import Question, Agency, Topic
 from .serializers import QuestionSerializer, AgencySerializer, TopicSerializer
@@ -113,6 +114,7 @@ class SubmitAnswerView(APIView):
             question.answer = answer
             question.state = 'completed'
             question.attachments = attachments
+            question.answeredDate = timezone.now()
             question.save()
             
             client.update(
