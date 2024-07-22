@@ -23,11 +23,6 @@ class Migration(migrations.Migration):
         ),
         migrations.AddField(
             model_name='question',
-            name='attachments',
-            field=django.contrib.postgres.fields.ArrayField(base_field=models.URLField(), blank=True, default=list, size=None),
-        ),
-        migrations.AddField(
-            model_name='question',
             name='staff_isopen',
             field=models.BooleanField(default=False),
         ),
