@@ -10,9 +10,10 @@ def index_question(sender, instance, **kwargs):
     serializer = QuestionSerializer(instance)
     document = serializer.data
 
-    document.pop('isopen', None)
+    document.pop('admin_isopen', None)
+    document.pop('staff_isopen', None)
     document.pop('attachments', None)
-    document.pop('answeredDate', None)
+    document.pop('email', None)
 
     if document['agency'] is None:
         agency_data = {
