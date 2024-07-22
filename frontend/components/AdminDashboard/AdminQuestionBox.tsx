@@ -127,12 +127,12 @@ const AdminQuestionBox: React.FC<QuestionBoxProps> = ({ questions }) => {
   const currentQuestions = filteredQuestions.slice(startIdx, endIdx);
 
   return (
-    <div className="flex flex-col justify-center gap-4">
-      <div className="flex flex-col gap-6">
-        {currentQuestions.map(question => (
-          <AdminQuestionCard key={question.id} question={question} />
-        ))}
-      </div>
+    <div>
+      {currentQuestions.map(question => (
+        <AdminQuestionCard key={question.id} question={question} />
+      ))}
+
+      {/* below is page handler */}
       <div className="mt-4 rounded-lg flex items-center justify-center pb-7">
         <button
           onClick={() => handlePageChange(currentPage - 1)}
