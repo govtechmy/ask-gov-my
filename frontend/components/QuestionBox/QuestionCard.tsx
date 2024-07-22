@@ -4,9 +4,9 @@ import { Link } from '@/lib/i18n';
 import { useTranslations } from 'next-intl';
 import { AGENCY_TO_UUID } from '@/lib/agency';
 import IconQuestionSmile from '@/icons/iconquestionsmile';
-import JataNegaraIcon from '@/icons/jatanegaraicon';
 import DateComponent from '../date';
 import LikeIcon from '@/icons/likeicon';
+import AgencyLogoImporter from '../AgencyLogoImporter';
 
 interface Question {
   id: number;
@@ -27,9 +27,13 @@ interface Question {
 
 interface QuestionCardProps {
   question: Question;
+  trendingAgencies: any[];
 }
 
-const QuestionCard: React.FC<QuestionCardProps> = ({ question }) => {
+const QuestionCard: React.FC<QuestionCardProps> = ({
+  question,
+  trendingAgencies,
+}) => {
   const t = useTranslations('Agency');
 
   const truncateDescription = (description: string, maxWords: number) => {
@@ -45,6 +49,15 @@ const QuestionCard: React.FC<QuestionCardProps> = ({ question }) => {
   const agencyAcronym = Object.keys(AGENCY_TO_UUID).find(
     key => AGENCY_TO_UUID[key] === agencyId.toString(),
   );
+
+  const findTrendingAgency = (acronym: string | undefined, agencies: any[]) => {
+    return agencies.find(agency => agency.acronym === acronym);
+  };
+
+  const trendingAgency = findTrendingAgency(agencyAcronym, trendingAgencies);
+
+  console.log(trendingAgency);
+  console.log(' THIS IS THE NESXT');
 
   return (
     <Link
@@ -64,12 +77,16 @@ const QuestionCard: React.FC<QuestionCardProps> = ({ question }) => {
         <span>
           <div className="flex items-center font-medium text-sm">
             <div className="pr-4">
-              <JataNegaraIcon className="w-6 h-6 stroke-[#E4E4E7] dark:stroke-[#27272A]" />
+              <div className="w-6 h-6 flex">
+                <AgencyLogoImporter
+                  currentAgency={trendingAgency}
+                ></AgencyLogoImporter>
+              </div>
             </div>
             <div className="text-black-800">{t(agencyAcronym)}</div>
             <div className="px-1 text-black-700">({agencyAcronym})</div>
             <div className="font-normal text-sm text-dim-500">
-              <DateComponent date={question.date} />
+              <DateComponent date={question.date} locale={''} />
             </div>
           </div>
         </span>
