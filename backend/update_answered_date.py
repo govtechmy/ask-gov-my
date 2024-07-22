@@ -13,7 +13,7 @@ def update_answered_date():
     for question in questions:
         question.answered_date = question.date
         question.save()
-        print(f"Updated Question ID {question.id} with answeredDate {question.answeredDate}")
+        print(f"Updated Question ID {question.id} with answere_date {question.answered_date}")
 
 if __name__ == "__main__":
     update_answered_date()
