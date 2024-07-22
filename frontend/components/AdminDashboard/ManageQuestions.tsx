@@ -60,9 +60,9 @@ const ManageQuestions: React.FC = () => {
   }
 
   return (
-    <div className="flex flex-col flex-grow items-center justify-center py-12">
+    <div className="items-center justify-center py-6">
       <QuestionNavbar unassignedCount={unassignedCount} />
-      <div className="w-full flex py-12">
+      <div className="w-full flex py-6">
         <AdminQuestionBox questions={questions} />
       </div>
     </div>

@@ -87,11 +87,11 @@ const AdminQuestionCard: React.FC<QuestionCardProps> = ({ question }) => {
   return (
     <>
       <div
-        className="bg-white items-center rounded-md border p-4 shadow-sm flex justify-between cursor-pointer"
+        className="bg-white items-center rounded-md border p-4 shadow-sm flex justify-between cursor-pointer w-full"
         onClick={() => setIsModalOpen(true)}
       >
         <div className="flex items-center">
-          <div className="text-base font-medium text-black-900">
+          <div className="text-sm font-medium text-black-700">
             {truncateText(question.question, 20)}
           </div>
         </div>
