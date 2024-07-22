@@ -11,7 +11,7 @@ from ask_gov.models import Question
 def update_answered_date():
     questions = Question.objects.all()
     for question in questions:
-        question.answeredDate = question.date
+        question.answered_date = question.date
         question.save()
         print(f"Updated Question ID {question.id} with answeredDate {question.answeredDate}")
 
