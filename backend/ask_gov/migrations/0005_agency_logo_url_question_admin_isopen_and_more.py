@@ -12,11 +12,6 @@ class Migration(migrations.Migration):
 
     operations = [
         migrations.AddField(
-            model_name='agency',
-            name='logo_url',
-            field=models.URLField(blank=True, max_length=500, null=True),
-        ),
-        migrations.AddField(
             model_name='question',
             name='admin_isopen',
             field=models.BooleanField(default=False),
