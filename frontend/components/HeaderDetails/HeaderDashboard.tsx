@@ -17,12 +17,15 @@ import {
 const HeaderDashboard = () => {
   const searchParams = useSearchParams();
   const router = useRouter();
-  const [activeLink, setActiveLink] = useState<'questions' | 'manageagencies' | 'manageusers'>(
-    'questions',
-  );
+  const [activeLink, setActiveLink] = useState<
+    'questions' | 'manageagencies' | 'manageusers'
+  >('questions');
 
   useEffect(() => {
-    const currentPage = searchParams.get('page') as 'questions' | 'manageagencies' | 'manageusers';
+    const currentPage = searchParams.get('page') as
+      | 'questions'
+      | 'manageagencies'
+      | 'manageusers';
     if (currentPage) {
       setActiveLink(currentPage);
     }

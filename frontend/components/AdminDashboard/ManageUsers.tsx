@@ -86,9 +86,10 @@ const ManageUsers: React.FC = () => {
       results = users.filter(user => user.role === 'staff');
     }
     if (searchTerm) {
-      results = results.filter(user =>
-        user.name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        user.email.toLowerCase().includes(searchTerm.toLowerCase())
+      results = results.filter(
+        user =>
+          user.name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+          user.email.toLowerCase().includes(searchTerm.toLowerCase()),
       );
     }
     setFilteredUsers(results);
@@ -111,14 +112,14 @@ const ManageUsers: React.FC = () => {
         className={`rounded-lg h-8 w-7 ${currentPage === 1 ? 'bg-[#F4EFFF] text-[#702FF9]' : 'bg-transparent text-black-700'}`}
       >
         {1}
-      </button>
+      </button>,
     );
 
     if (currentPage > 1) {
       pageNumbers.push(
         <span key="ellipsis-start" className="px-2 py-2">
           ...
-        </span>
+        </span>,
       );
     }
 
@@ -142,7 +143,7 @@ const ManageUsers: React.FC = () => {
           className={`rounded-lg h-8 w-7 ${i === currentPage ? 'bg-[#F4EFFF] text-[#702FF9]' : 'bg-transparent text-black-700'}`}
         >
           {i}
-        </button>
+        </button>,
       );
     }
 
@@ -150,7 +151,7 @@ const ManageUsers: React.FC = () => {
       pageNumbers.push(
         <span key="ellipsis-end" className="px-2 py-2 rounded-lg">
           ...
-        </span>
+        </span>,
       );
     }
 
@@ -162,7 +163,7 @@ const ManageUsers: React.FC = () => {
           className={`rounded-lg h-8 w-7 ${totalPages === currentPage ? 'bg-[#F4EFFF] text-[#702FF9]' : 'bg-transparent text-black-700'}`}
         >
           {totalPages}
-        </button>
+        </button>,
       );
     }
 
@@ -183,23 +184,24 @@ const ManageUsers: React.FC = () => {
 
   return (
     <div className="p-8">
-      <UserNavbar setSearchTerm={setSearchTerm} agencies={agencies}/>
+      <UserNavbar setSearchTerm={setSearchTerm} agencies={agencies} />
       <div className="flex justify-between items-center mb-4">
         <h1 className="text-xl font-semibold">Manage Users</h1>
       </div>
       {filteredUsers.length === 0 ? (
         <p className="text-center">
-          We couldn't find any users. Please try searching again using the search bar above.
+          We couldn't find any users. Please try searching again using the
+          search bar above.
         </p>
       ) : (
         <>
           <div className="grid grid-cols-1 gap-4">
             {currentUsers.map(user => (
-              <UserCard 
-                key={user.id} 
-                user={user} 
+              <UserCard
+                key={user.id}
+                user={user}
                 onUpdate={fetchUsers}
-                agencies={agencies} 
+                agencies={agencies}
               />
             ))}
           </div>
