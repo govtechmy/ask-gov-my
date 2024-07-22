@@ -22,9 +22,13 @@ interface Question {
 
 interface QuestionBoxProps {
   questions: Question[];
+  trendingAgencies: any[];
 }
 
-const QuestionBox: React.FC<QuestionBoxProps> = ({ questions }) => {
+const QuestionBox: React.FC<QuestionBoxProps> = ({
+  questions,
+  trendingAgencies,
+}) => {
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 6;
   const totalPages = Math.ceil(questions.length / itemsPerPage);
@@ -120,7 +124,11 @@ const QuestionBox: React.FC<QuestionBoxProps> = ({ questions }) => {
     <div className="flex flex-col justify-center gap-4">
       <div className="flex flex-col gap-6">
         {currentQuestions.map(question => (
-          <QuestionCard key={question.id} question={question} />
+          <QuestionCard
+            key={question.id}
+            question={question}
+            trendingAgencies={trendingAgencies}
+          />
         ))}
       </div>
       <div className="mt-4 rounded-lg flex items-center justify-center pb-7">

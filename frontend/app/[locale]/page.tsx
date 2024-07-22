@@ -35,7 +35,10 @@ const MainPage = async ({
           <div className="font-semibold text-base text-black-700 pb-7">
             <WordTranslate translate="Mainpage" keyword="trendingQ" />
           </div>
-          <QuestionBox questions={questions} />
+          <QuestionBox
+            questions={questions}
+            trendingAgencies={trendingAgencies}
+          />
         </div>
 
         <div className="pl-10 w-[500px]">
