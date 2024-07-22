@@ -7,7 +7,7 @@ import { useRouter } from '@/lib/i18n';
 import { useSearchParams } from 'next/navigation';
 import ManageQuestions from '@/components/AdminDashboard/ManageQuestions';
 import ManageAgencies from '@/components/AdminDashboard/ManageAgencies';
-import ManageUsers from '@/components/AdminDashboard/ManageUsers'
+import ManageUsers from '@/components/AdminDashboard/ManageUsers';
 import { useEffect } from 'react';
 
 export default function DashboardPage() {
@@ -44,4 +44,3 @@ export default function DashboardPage() {
     </div>
   );
 }
- 

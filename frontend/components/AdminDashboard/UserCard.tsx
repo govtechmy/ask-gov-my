@@ -27,7 +27,7 @@ interface UserCardProps {
 const UserCard: React.FC<UserCardProps> = ({ user, onUpdate, agencies }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
 
-  const agency = agencies.find((agency) => agency.id === user.agency);
+  const agency = agencies.find(agency => agency.id === user.agency);
 
   return (
     <>
@@ -40,7 +40,9 @@ const UserCard: React.FC<UserCardProps> = ({ user, onUpdate, agencies }) => {
             {user.name ? user.name[0] : user.email[0]}
           </div>
           <div>
-            <div className="text-base font-medium text-black-900">{user.name}</div>
+            <div className="text-base font-medium text-black-900">
+              {user.name}
+            </div>
             <div className="text-sm text-gray-500">{user.email}</div>
           </div>
         </div>
