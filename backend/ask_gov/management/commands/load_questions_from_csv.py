@@ -35,28 +35,28 @@ class Command(BaseCommand):
                     email="example@example.com"
                 )
 
-                serializer = QuestionSerializer(question)
-                document = serializer.data
+                # serializer = QuestionSerializer(question)
+                # document = serializer.data
 
-                agency_data = {
-                    "id": agency.id,
-                    "name": agency.name,
-                    "acronym": agency.acronym,
-                    "name_ms": agency.name_ms
-                }
+                # agency_data = {
+                #     "id": agency.id,
+                #     "name": agency.name,
+                #     "acronym": agency.acronym,
+                #     "name_ms": agency.name_ms
+                # }
 
-                document['agency'] = agency_data
+                # document['agency'] = agency_data
 
-                question_embedding = get_embeddings(question_text)
-                answer_embedding = get_embeddings(answer_text) if answer_text else []
+                # question_embedding = get_embeddings(question_text)
+                # answer_embedding = get_embeddings(answer_text) if answer_text else []
 
-                document['vector'] = question_embedding + answer_embedding
+                # document['vector'] = question_embedding + answer_embedding
 
-                client.index(
-                    index='questions',
-                    id=str(question.id),
-                    document=document
-                )
+                # client.index(
+                #     index='questions',
+                #     id=str(question.id),
+                #     document=document
+                # )
 
                 self.stdout.write(self.style.SUCCESS(f'Successfully added and indexed question "{question_text}"'))
 
