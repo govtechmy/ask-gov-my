@@ -32,15 +32,17 @@ interface Question {
   id: number;
   question: string;
   date: string;
+  answered_date: string;
   state: string;
   agency: number;
   answer: string;
   topics: number[];
-  email: string;
+  email?: string;
   likes: number;
   dislikes: number;
-  attachments: string[];
-  isopen: boolean;
+  attachments?: string[];
+  admin_isopen?: boolean;
+  staff_isopen?: boolean;
 }
 
 const QuestionDetailPage: React.FC<Props> = async ({ params }) => {
