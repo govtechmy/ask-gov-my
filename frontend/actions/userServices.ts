@@ -1,7 +1,7 @@
 'use server';
 import { PrismaClient } from '@prisma/client';
 
-const API_URL = 'http://ask.juwaini.com/api';
+const API_URL = process.env.API_URL;
 
 const prisma = new PrismaClient();
 
@@ -9,6 +9,7 @@ interface Question {
   id: number;
   question: string;
   date: string;
+  answered_date: string;
   state: string;
   agency: number;
   answer: string;
@@ -17,7 +18,8 @@ interface Question {
   likes: number;
   dislikes: number;
   attachments: string[];
-  isopen: boolean;
+  admin_isopen: boolean;
+  staff_isopen: boolean;
 }
 
 export interface Topic {

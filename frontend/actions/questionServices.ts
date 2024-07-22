@@ -1,5 +1,5 @@
 'use server';
-const API_URL = 'http://ask.juwaini.com/api';
+const API_URL = process.env.API_URL;
 import { AGENCY_TO_UUID } from '@/lib/agency';
 import { localePrefix } from '@/lib/i18n';
 
@@ -7,15 +7,17 @@ interface Question {
   id: number;
   question: string;
   date: string;
+  answered_date: string;
   state: string;
   agency: number;
   answer: string;
   topics: number[];
-  email: string;
+  email?: string;
   likes: number;
   dislikes: number;
-  attachments: string[];
-  isopen: boolean;
+  attachments?: string[];
+  admin_isopen?: boolean;
+  staff_isopen?: boolean;
 }
 
 interface Topic {

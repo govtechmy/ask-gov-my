@@ -1,17 +1,19 @@
 from django.db.models.signals import post_save
 from django.dispatch import receiver
-from .models import Question, Agency
+from .models import Question, Agency, Topic
 from .serializers import QuestionSerializer
 from .elasticsearch_client import client
+from ask_gov.embed import get_embeddings
 
 @receiver(post_save, sender=Question)
 def index_question(sender, instance, **kwargs):
     serializer = QuestionSerializer(instance)
     document = serializer.data
 
-    document.pop('isopen', None)
+    document.pop('admin_isopen', None)
+    document.pop('staff_isopen', None)
     document.pop('attachments', None)
-    document.pop('answeredDate', None)
+    document.pop('email', None)
 
     if document['agency'] is None:
         agency_data = {
@@ -29,8 +31,32 @@ def index_question(sender, instance, **kwargs):
             "acronym": agency.acronym,
             "name_ms": agency.name_ms
         }
-
     document['agency'] = agency_data
+
+    if instance.topics.exists():
+        topics = instance.topics.all()
+        topics_data = [
+            {
+                "id": topic.id,
+                "name": topic.title,
+                "name_ms": topic.title_ms
+            }
+            for topic in topics
+        ]
+    else:
+        topics_data = []
+
+    document['topics'] = topics_data
+
+    question_vector = get_embeddings(instance.question)
+    answer_vector = get_embeddings(instance.answer) if instance.answer else []
+    document['vector'] = question_vector + answer_vector
+
+    client.delete(
+        index='questions',
+        id=str(instance.id),
+        ignore=[404]
+    )
 
     client.index(
         index='questions',

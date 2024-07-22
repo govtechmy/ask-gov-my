@@ -50,7 +50,7 @@ class Question(models.Model):
     attachments = ArrayField(models.URLField(), blank=True, default=list)
     admin_isopen = models.BooleanField(default=False)
     staff_isopen = models.BooleanField(default=False)
-    answeredDate = models.DateTimeField(null=True, blank=True)
+    answered_date = models.DateTimeField(null=True, blank=True)
 
     def __str__(self):
         return self.question[:50]

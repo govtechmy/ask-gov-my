@@ -1,5 +1,5 @@
 from django.core.management.base import BaseCommand
-from ask_gov.models import Question
+from ask_gov.models import Question, Agency, Topic
 from ask_gov.serializers import QuestionSerializer
 from ask_gov.elasticsearch_client import client
 from ask_gov.embed import get_embeddings
@@ -28,9 +28,26 @@ class Command(BaseCommand):
                     "acronym": "",
                     "name_ms": ""
                 }
-
             document['agency'] = agency_data
-            document['vector'] = get_embedding(question.question)
+
+            if question.topics.exists():
+                topics = question.topics.all()
+                topics_data = [
+                    {
+                        "id": topic.id,
+                        "name": topic.title,
+                        "name_ms": topic.title_ms
+                    }
+                    for topic in topics
+                ]
+            else:
+                topics_data = []
+
+            document['topics'] = topics_data
+
+            question_embedding = get_embeddings(question.question)
+            answer_embedding = get_embeddings(question.answer) if question.answer else []
+            document['vector'] = question_embedding + answer_embedding
 
             client.index(
                 index='questions',

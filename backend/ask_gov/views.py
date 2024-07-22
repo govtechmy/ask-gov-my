@@ -114,7 +114,7 @@ class SubmitAnswerView(APIView):
             question.answer = answer
             question.state = 'completed'
             question.attachments = attachments
-            question.answeredDate = timezone.now()
+            question.answered_date = timezone.now()
             question.save()
             
             client.update(
