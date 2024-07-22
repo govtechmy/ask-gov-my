@@ -54,8 +54,8 @@ export async function getAllQuestions(
       method: 'GET',
       headers: {
         'Cache-Control': 'no-cache',
-        'Pragma': 'no-cache',
-        'Expires': '0',
+        Pragma: 'no-cache',
+        Expires: '0',
       },
     });
     if (!response.ok) {
@@ -80,8 +80,8 @@ export async function getAllTopics(): Promise<Topic[]> {
     method: 'GET',
     headers: {
       'Cache-Control': 'no-cache',
-      'Pragma': 'no-cache',
-      'Expires': '0',
+      Pragma: 'no-cache',
+      Expires: '0',
     },
   });
 
@@ -128,8 +128,8 @@ export async function getQuestionsByAgency(
     method: 'GET',
     headers: {
       'Cache-Control': 'no-cache',
-      'Pragma': 'no-cache',
-      'Expires': '0',
+      Pragma: 'no-cache',
+      Expires: '0',
     },
   });
   if (!response.ok) {
@@ -153,8 +153,8 @@ export async function getQuestionById(
     method: 'GET',
     headers: {
       'Cache-Control': 'no-cache',
-      'Pragma': 'no-cache',
-      'Expires': '0',
+      Pragma: 'no-cache',
+      Expires: '0',
     },
   });
   if (response.ok) {
@@ -169,7 +169,7 @@ export async function submitQuestion(data: QuestionSubmission): Promise<void> {
   const response = await fetch(url, {
     method: 'POST',
     headers: {
-      'Content-Type': 'application/json'
+      'Content-Type': 'application/json',
     },
     body: JSON.stringify({ data }),
   });
@@ -187,8 +187,8 @@ export async function getAgencyList(): Promise<Agency[]> {
       method: 'GET',
       headers: {
         'Cache-Control': 'no-cache',
-        'Pragma': 'no-cache',
-        'Expires': '0',
+        Pragma: 'no-cache',
+        Expires: '0',
         'Content-Type': 'application/json',
       },
     });
@@ -217,8 +217,8 @@ export async function getDynamicAgencyMap(): Promise<Record<string, string>> {
       method: 'GET',
       headers: {
         'Cache-Control': 'no-cache',
-        'Pragma': 'no-cache',
-        'Expires': '0',
+        Pragma: 'no-cache',
+        Expires: '0',
         'Content-Type': 'application/json',
       },
     });
@@ -251,8 +251,8 @@ export async function likeQuestion(questionId: string): Promise<void> {
     headers: {
       'Content-Type': 'application/json',
       'Cache-Control': 'no-cache',
-      'Pragma': 'no-cache',
-      'Expires': '0',
+      Pragma: 'no-cache',
+      Expires: '0',
     },
   });
 
@@ -269,8 +269,8 @@ export async function dislikeQuestion(questionId: string): Promise<void> {
     headers: {
       'Content-Type': 'application/json',
       'Cache-Control': 'no-cache',
-      'Pragma': 'no-cache',
-      'Expires': '0',
+      Pragma: 'no-cache',
+      Expires: '0',
     },
   });
 
@@ -285,8 +285,8 @@ export async function getTrendingAgencies(): Promise<Agency[]> {
       method: 'GET',
       headers: {
         'Cache-Control': 'no-cache',
-        'Pragma': 'no-cache',
-        'Expires': '0',
+        Pragma: 'no-cache',
+        Expires: '0',
         'Content-Type': 'application/json',
       },
     });

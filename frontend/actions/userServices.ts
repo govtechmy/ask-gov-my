@@ -59,8 +59,8 @@ export async function getUserAgencyQuestions(
         headers: {
           'Content-Type': 'application/json',
           'Cache-Control': 'no-cache',
-          'Pragma': 'no-cache',
-          'Expires': '0',
+          Pragma: 'no-cache',
+          Expires: '0',
         },
       },
     );
@@ -91,8 +91,8 @@ export async function getAllUserQuestions(
       headers: {
         'Content-Type': 'application/json',
         'Cache-Control': 'no-cache',
-        'Pragma': 'no-cache',
-        'Expires': '0',
+        Pragma: 'no-cache',
+        Expires: '0',
       },
     });
 
@@ -149,8 +149,8 @@ export async function listUserAgencyTopics(): Promise<Topic[]> {
     headers: {
       'Content-Type': 'application/json',
       'Cache-Control': 'no-cache',
-      'Pragma': 'no-cache',
-      'Expires': '0',
+      Pragma: 'no-cache',
+      Expires: '0',
     },
   });
 
@@ -250,7 +250,12 @@ export async function updateAgency(
   }
 }
 
-export async function addUser(name: string, email: string, role: 'staff' | 'super_admin', agency: number): Promise<{ success: boolean; message?: string }> {
+export async function addUser(
+  name: string,
+  email: string,
+  role: 'staff' | 'super_admin',
+  agency: number,
+): Promise<{ success: boolean; message?: string }> {
   try {
     await prisma.user.create({
       data: {
@@ -267,7 +272,13 @@ export async function addUser(name: string, email: string, role: 'staff' | 'supe
   }
 }
 
-export async function editUser(id: string, name: string, email: string, role: 'staff' | 'super_admin', agency: number): Promise<{ success: boolean; message?: string }> {
+export async function editUser(
+  id: string,
+  name: string,
+  email: string,
+  role: 'staff' | 'super_admin',
+  agency: number,
+): Promise<{ success: boolean; message?: string }> {
   try {
     await prisma.user.update({
       where: { id },
@@ -285,7 +296,9 @@ export async function editUser(id: string, name: string, email: string, role: 's
   }
 }
 
-export async function deleteUser(id: string): Promise<{ success: boolean; message?: string }> {
+export async function deleteUser(
+  id: string,
+): Promise<{ success: boolean; message?: string }> {
   try {
     await prisma.user.delete({
       where: { id },
@@ -297,7 +310,11 @@ export async function deleteUser(id: string): Promise<{ success: boolean; messag
   }
 }
 
-export async function getAllUsers(): Promise<{ success: boolean; users?: User[]; message?: string }> {
+export async function getAllUsers(): Promise<{
+  success: boolean;
+  users?: User[];
+  message?: string;
+}> {
   try {
     const users = await prisma.user.findMany();
     return { success: true, users };

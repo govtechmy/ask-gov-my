@@ -19,7 +19,7 @@ interface Agency {
   name_ms: string;
   acronym: string;
   total_likes?: number;
-  logo_url?:string;
+  logo_url?: string;
 }
 
 interface UserNavbarProps {
@@ -28,7 +28,11 @@ interface UserNavbarProps {
   onAddUser: () => void;
 }
 
-const UserNavbar: React.FC<UserNavbarProps> = ({ setSearchTerm, agencies, onAddUser }) => {
+const UserNavbar: React.FC<UserNavbarProps> = ({
+  setSearchTerm,
+  agencies,
+  onAddUser,
+}) => {
   const searchParams = useSearchParams();
   const router = useRouter();
   const activeTab = searchParams.get('tab') || 'all';
@@ -76,16 +80,16 @@ const UserNavbar: React.FC<UserNavbarProps> = ({ setSearchTerm, agencies, onAddU
           />
           <Search strokeWidth={1.88} className="stroke-[#FFFFFF]" />
         </div>
-        <button 
+        <button
           className="bg-purple-600 text-white px-4 py-2 rounded-md"
           onClick={() => setIsModalOpen(true)}
         >
           + Add User
         </button>
       </div>
-      <AddUserModal 
-        isOpen={isModalOpen} 
-        onClose={() => setIsModalOpen(false)} 
+      <AddUserModal
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
         agencies={agencies}
         onAddUser={onAddUser}
       />
