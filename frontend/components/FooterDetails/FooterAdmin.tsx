@@ -24,7 +24,7 @@ const FooterAdmin = () => {
           </p>
         </div>
       </div>
-      <div className="flex items-center py-3 sm:block">
+      <div className="flex items-center py-3">
         <a
           href="#"
           className="text-sm text-black-700 [text-underline-position:from-font] hover:text-black hover:underline dark:hover:text-white"
