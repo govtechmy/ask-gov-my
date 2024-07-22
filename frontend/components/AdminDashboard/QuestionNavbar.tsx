@@ -30,7 +30,7 @@ const QuestionNavbar: React.FC<QuestionNavbarProps> = ({ unassignedCount }) => {
   useEffect(() => {}, [activeTab]);
 
   return (
-    <div className="flex items-center justify-between pt-3 pb-2 border-b border-[#E4E4E7] dark:border-[#27272A]">
+    <div className="flex justify-between items-center pt-3 pb-2 border-b border-[#E4E4E7] dark:border-[#27272A]">
       <div className="flex space-x-8">
         <button
           className={`font-medium text-sm pb-3 -mb-5 ${activeTab === 'all' ? 'text-black-900 border-b-2 border-[#702FF9]' : 'text-dim-500'}`}

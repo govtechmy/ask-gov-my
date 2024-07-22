@@ -34,13 +34,11 @@ export default function DashboardPage() {
   // }
 
   return (
-    <div className="flex flex-col min-h-screen pt-5">
-      <div className="mx-[10%]">
-        <HeaderDashboard />
-        {page === 'questions' && <ManageQuestions />}
-        {page === 'manageagencies' && <ManageAgencies />}
-        {page === 'manageusers' && <ManageUsers />}
-      </div>
+    <div className="">
+      <HeaderDashboard />
+      {page === 'questions' && <ManageQuestions />}
+      {page === 'manageagencies' && <ManageAgencies />}
+      {page === 'manageusers' && <ManageUsers />}
     </div>
   );
 }
