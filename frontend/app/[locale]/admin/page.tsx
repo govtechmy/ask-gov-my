@@ -48,11 +48,10 @@ export function AdminPage() {
   return (
     <>
       <div className="flex flex-col min-h-screen">
-        <div className="bg-white">
-          <HeaderAdmin />
-        </div>
+        <HeaderAdmin />
+
         <div className="flex-grow flex items-center justify-center py-12">
-          <div className="min-w-96">
+          <div className="max-w-[450px]">
             <div className="text-center">
               <div className="text-2xl font-semibold px-5 py-5">{t('h1')}</div>
               <div className="text-base pb-6 text-zinc-700 dark:text-[#D4D4D8]">
@@ -71,6 +70,7 @@ export function AdminPage() {
                 <div className="grid gap-2 pb-4">
                   <div className="text-zinc-500 text-sm">{t('email')}</div>
                   <Input
+                    className="sm:max-w-[339px] w-max-[400px]"
                     id="email"
                     type="email"
                     placeholder="officer@agency.gov.my"
