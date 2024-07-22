@@ -2,7 +2,8 @@ from typing import List
 from langchain_openai import OpenAIEmbeddings
 
 EMBEDDING_MODEL = "text-embedding-3-small"
-embeddings = OpenAIEmbeddings(EMBEDDING_MODEL)
+embeddings = OpenAIEmbeddings(model=EMBEDDING_MODEL
+)
 
 
 def get_embedding(text: str) -> List[float]:
