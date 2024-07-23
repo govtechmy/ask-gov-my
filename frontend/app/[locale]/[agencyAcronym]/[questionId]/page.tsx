@@ -2,6 +2,7 @@ import {
   getQuestionById,
   getTopicsDetail,
   getTopicByAgency,
+  getAgencyList,
 } from '@/actions/questionServices';
 import Footer from '@/components/FooterDetails/Footer';
 import RelatedTopics from '@/components/RelatedTopics';
@@ -18,6 +19,8 @@ import IdentifyWebsite from '@/components/HeaderDetails/IdentifyWebsite';
 import WordTranslate from '@/components/WordTranslate';
 import SupportingAttachment from '@/components/SupportingAttachment';
 import HeaderQuestionDetail from '@/components/HeaderDetails/HeaderQuestionDetail';
+import { Question } from '@/types/types';
+import AgencyLogoImporter from '@/components/AgencyLogoImporter';
 
 interface Props {
   params: {
@@ -26,23 +29,6 @@ interface Props {
     locale: string;
   };
   question?: Question;
-}
-
-interface Question {
-  id: number;
-  question: string;
-  date: string;
-  answered_date: string;
-  state: string;
-  agency: number;
-  answer: string;
-  topics: number[];
-  email?: string;
-  likes: number;
-  dislikes: number;
-  attachments?: string[];
-  admin_isopen?: boolean;
-  staff_isopen?: boolean;
 }
 
 const QuestionDetailPage: React.FC<Props> = async ({ params }) => {
@@ -55,6 +41,7 @@ const QuestionDetailPage: React.FC<Props> = async ({ params }) => {
     );
   };
 
+  //Getting the question
   let question: Question | null = null;
   let topicTitles: Array<any> = [];
 
@@ -69,7 +56,10 @@ const QuestionDetailPage: React.FC<Props> = async ({ params }) => {
   } catch (error) {
     redirect('/');
   }
-  const attachments = question.attachments;
+
+  //Getting the Attachments from question
+  const attachments = question.attachments || [];
+
   const acronym = agencyAcronymObject(question.agency);
 
   const fetchFileSizes = async (attachments: string[]): Promise<number[]> => {
@@ -97,7 +87,7 @@ const QuestionDetailPage: React.FC<Props> = async ({ params }) => {
     return fileSizes;
   };
 
-  let fileSize: Array<any> = [];
+  let fileSize: number[] = [];
 
   try {
     fileSize = await fetchFileSizes(attachments);
@@ -107,6 +97,26 @@ const QuestionDetailPage: React.FC<Props> = async ({ params }) => {
     }
   } catch (error) {
     console.log('error on filesize', error);
+  }
+
+  let agencyList: any = [];
+
+  try {
+    agencyList = await getAgencyList();
+
+    if (!agencyList || agencyList.length === 0) {
+      throw new Error('Agency list is empty');
+    }
+  } catch {}
+
+  const currentAgency = agencyList.find(
+    (agency: { acronym: string }) =>
+      agency.acronym === agencyAcronym.toUpperCase(),
+  );
+
+  if (currentAgency) {
+  } else {
+    console.log(`Agency with acronym '${agencyAcronym}' not found.`);
   }
 
   return (
@@ -119,7 +129,12 @@ const QuestionDetailPage: React.FC<Props> = async ({ params }) => {
           <div className="pb-7 w-9/12">
             <div className="flex items-center gap-1">
               <Link href={'/'}>
-                <div className="font-medium text-dim-500 text-sm">Home</div>
+                <div className="font-medium text-dim-500 text-sm">
+                  <WordTranslate
+                    translate={'Questiondetail'}
+                    keyword={'home'}
+                  ></WordTranslate>
+                </div>
               </Link>
               <div>
                 <RightArrow />
@@ -154,8 +169,10 @@ const QuestionDetailPage: React.FC<Props> = async ({ params }) => {
                 <div>
                   <div className="">
                     <div className="flex px-8 pt-8 pb-0 items-center">
-                      <div className="w-6 h-6">
-                        <JataNegaraIcon className="stroke-[#E4E4E7] dark:stroke-[#27272A]" />
+                      <div className="flex w-6 h-6">
+                        <AgencyLogoImporter
+                          currentAgency={currentAgency}
+                        ></AgencyLogoImporter>
                       </div>
                       <div className="font-medium text-sm text-black-700 px-2">
                         <AgencyName acronym={acronym} />

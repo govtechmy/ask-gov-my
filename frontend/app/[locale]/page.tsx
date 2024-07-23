@@ -21,6 +21,7 @@ const MainPage = async ({
   const pageSize = 1000;
   const { questions } = await getAllQuestions(page, pageSize);
   const trendingAgencies = await getTrendingAgencies();
+  const agencyList = await getAgencyList();
 
   return (
     <div>
@@ -35,10 +36,7 @@ const MainPage = async ({
           <div className="font-semibold text-base text-black-700 pb-7">
             <WordTranslate translate="Mainpage" keyword="trendingQ" />
           </div>
-          <QuestionBox
-            questions={questions}
-            trendingAgencies={trendingAgencies}
-          />
+          <QuestionBox questions={questions} agencyList={agencyList} />
         </div>
 
         <div className="pl-10 w-[500px]">
