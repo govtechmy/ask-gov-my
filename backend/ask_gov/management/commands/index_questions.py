@@ -13,6 +13,11 @@ class Command(BaseCommand):
             serializer = QuestionSerializer(question)
             document = serializer.data
 
+            document.pop('admin_isopen', None)
+            document.pop('staff_isopen', None)
+            document.pop('attachments', None)
+            document.pop('email', None)
+
             agency = question.agency
             if agency:
                 agency_data = {
@@ -45,7 +50,7 @@ class Command(BaseCommand):
 
             document['topics'] = topics_data
 
-            document['vector'] = get_embeddings(question.question)
+            #document['vector'] = get_embeddings(question.question)
 
             client.index(
                 index='questions',
