@@ -28,17 +28,17 @@ const AgencyPage = async ({ params }: Props) => {
   const topics = await getTopicByAgency(parseInt(agencyUUID));
   const upperCaseAgencyAcronym = agencyAcronym.toUpperCase();
 
-  let agencies: any = [];
+  let agencyList: any = [];
 
   try {
-    agencies = await getAgencyList();
+    agencyList = await getAgencyList();
 
-    if (!agencies || agencies.length === 0) {
+    if (!agencyList || agencyList.length === 0) {
       throw new Error('Agency list is empty');
     }
   } catch {}
 
-  const currentAgency = agencies.find(
+  const currentAgency = agencyList.find(
     (agency: { acronym: string }) => agency.acronym === upperCaseAgencyAcronym,
   );
 
@@ -68,7 +68,7 @@ const AgencyPage = async ({ params }: Props) => {
                 keyword={'trendingQ'}
               ></WordTranslate>
             </div>
-            <QuestionBox questions={questions} />
+            <QuestionBox questions={questions} agencyList={agencyList} />
           </div>
 
           <div className="pl-10 w-[500px]">
