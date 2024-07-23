@@ -48,7 +48,7 @@ def index_question(sender, instance, **kwargs):
 
     document['topics'] = topics_data
 
-    document['vector'] = get_embedding(instance.question)
+    #document['vector'] = get_embedding(instance.question)
 
     client.delete(
         index='questions',
