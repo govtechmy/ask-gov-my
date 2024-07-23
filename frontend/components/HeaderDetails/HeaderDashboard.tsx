@@ -8,6 +8,9 @@ import Asklogo from '@/icons/asklogo';
 import User from '@/icons/user';
 import ChevronDown from '@/icons/ChevronDown';
 import { cn } from '@/lib/utils';
+import Gov from '@/icons/gov';
+import UserGroup from '@/icons/usergroup';
+import Logout from '@/icons/logout';
 
 const HeaderDashboard = () => {
   const searchParams = useSearchParams();
@@ -60,24 +63,38 @@ const HeaderDashboard = () => {
           <Link href="/admin/dashboard/?page=questions">Questions</Link>
         </div>
         <div
-          className={`rounded-md font-medium text-sm flex justify-center items-center w-[145px] h-8 px-1 ${
+          className={`rounded-md font-medium text-sm flex justify-center items-center h-8 px-1 ${
             activeLink === 'manageagencies'
               ? 'text-[#702FF9] bg-[#F4EFFF] dark:text-[#9E70FF] dark:bg-[#201636]'
               : 'text-black-700'
           }`}
           onClick={() => handleSetActiveLink('manageagencies')}
         >
-          <Link href="/admin/dashboard/?page=manageagencies">Agencies</Link>
+          <Link href="/admin/dashboard/?page=manageagencies">
+            <div className="flex items-center">
+              <div className="px-2">
+                <Gov className="stroke-current"></Gov>
+              </div>
+              <div className="pr-2">Agencies</div>
+            </div>
+          </Link>
         </div>
         <div
-          className={`rounded-md font-medium text-sm flex justify-center items-center w-[145px] h-8 px-1 ${
+          className={`rounded-md font-medium text-sm flex justify-center items-center h-8 px-1 ${
             activeLink === 'manageusers'
               ? 'text-[#702FF9] bg-[#F4EFFF] dark:text-[#9E70FF] dark:bg-[#201636]'
               : 'text-black-700'
           }`}
           onClick={() => handleSetActiveLink('manageusers')}
         >
-          <Link href="/admin/dashboard/?page=manageusers">Manage Users</Link>
+          <Link href="/admin/dashboard/?page=manageusers">
+            <div className="flex items-center">
+              <div className="px-2">
+                <UserGroup className="stroke-current"></UserGroup>
+              </div>
+              <div className="pr-2">Users</div>
+            </div>
+          </Link>
         </div>
       </div>
 
@@ -104,8 +121,13 @@ const HeaderDashboard = () => {
           </div>
 
           {open && (
-            <div className="py-2 px-3 bg-white rounded-lg">
-              <button className=" hover:bg-gray-200 py-1 px-2">Logout</button>
+            <div className="absolute top-[62px] right-[116px] bg-white rounded-lg border-[1px] border-outline-200 shadow-button">
+              <button className=" hover:cursor-pointer h-[42px] w-[120px] items-center justify-center flex">
+                <div className="pr-2">
+                  <Logout className="stroke-[#DC2626] dark:stroke-[#FF5959]"></Logout>
+                </div>
+                <div> Logout</div>
+              </button>
             </div>
           )}
         </div>
