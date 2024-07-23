@@ -5,24 +5,7 @@ import { useState, useEffect } from 'react';
 import { getAllUserQuestions } from '@/actions/userServices';
 import AdminQuestionBox from '@/components/AdminDashboard/AdminQuestionBox';
 import QuestionNavbar from '@/components/AdminDashboard/QuestionNavbar';
-import AnswerQuestionCard from './AnswerQuestionCard';
-
-interface Question {
-  id: number;
-  question: string;
-  date: string;
-  answered_date: string;
-  state: string;
-  agency: number;
-  answer: string;
-  topics: number[];
-  email?: string;
-  likes: number;
-  dislikes: number;
-  attachments?: string[];
-  admin_isopen?: boolean;
-  staff_isopen?: boolean;
-}
+import { Question } from '@/types/types';
 
 const ManageQuestions: React.FC = () => {
   const t = useTranslations('Adminlogin');
@@ -73,9 +56,12 @@ const ManageQuestions: React.FC = () => {
 
   return (
     <div className="items-center justify-center py-6">
-      <QuestionNavbar unassignedCount={unassignedCount} />
+      <QuestionNavbar
+        unassignedCount={unassignedCount}
+        setSearchTerm={setSearchTerm}
+      />
       <div className="w-full flex py-6">
-        <AdminQuestionBox questions={questions} />
+        <AdminQuestionBox questions={filteredQuestions} />
       </div>
     </div>
   );
