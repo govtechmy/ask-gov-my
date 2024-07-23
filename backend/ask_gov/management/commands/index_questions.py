@@ -45,9 +45,7 @@ class Command(BaseCommand):
 
             document['topics'] = topics_data
 
-            question_embedding = get_embeddings(question.question)
-            answer_embedding = get_embeddings(question.answer) if question.answer else []
-            document['vector'] = question_embedding + answer_embedding
+            document['vector'] = get_embeddings(question.question)
 
             client.index(
                 index='questions',
