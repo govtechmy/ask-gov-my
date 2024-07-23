@@ -3,6 +3,7 @@
 import React, { useState } from 'react';
 import { useTranslations } from 'next-intl';
 import AnswerQuestionModal from './AnswerQuestionModal';
+import { changeStaffIsOpen } from '@/actions/userServices';
 
 interface Question {
   id: number;
@@ -28,6 +29,18 @@ interface QuestionCardProps {
 const AnswerQuestionCard: React.FC<QuestionCardProps> = ({ question }) => {
   const t = useTranslations('Agency');
   const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const handleCardClick = async () => {
+    if (!question.staff_isopen) {
+      try {
+        await changeStaffIsOpen(question.id);
+        setIsModalOpen(true);
+        question.staff_isopen = true;
+      } catch (error) {
+        console.error('Failed to change staff_isopen:', error);
+      }
+    }
+  };
 
   const formatDate = (dateString: string) => {
     const date = new Date(dateString);
@@ -57,12 +70,15 @@ const AnswerQuestionCard: React.FC<QuestionCardProps> = ({ question }) => {
     <>
       <div
         className="bg-white items-center rounded-md border p-4 shadow-sm flex justify-between cursor-pointer"
-        onClick={() => setIsModalOpen(true)}
+        onClick={handleCardClick}
       >
         <div className="flex items-center">
           <div className="text-base font-medium text-black-900">
             {truncateText(question.question, 20)}
           </div>
+          {question.staff_isopen === false && (
+            <div className="text-green-500">New</div>
+          )}
         </div>
         <div className="flex items-center space-x-4">
           <div className="font-normal text-sm text-dim-500">
