@@ -276,6 +276,29 @@ export async function changeStaffIsOpen(questionId: number): Promise<void> {
   }
 }
 
+export async function saveQuestionAsDraft(
+  questionId: number,
+  answer: string,
+  attachmentUrls: string[],
+): Promise<void> {
+  const response = await fetch(`${API_URL}/questions/${questionId}/save-draft/`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+      data: {
+        answer,
+        attachments: attachmentUrls,
+      },
+    }),
+  });
+
+  if (!response.ok) {
+    throw new Error('Failed to save question as draft');
+  }
+}
+
 export async function addUser(
   name: string,
   email: string,
