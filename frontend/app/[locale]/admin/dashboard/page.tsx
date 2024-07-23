@@ -9,6 +9,8 @@ import ManageQuestions from '@/components/AdminDashboard/ManageQuestions';
 import ManageAgencies from '@/components/AdminDashboard/ManageAgencies';
 import ManageUsers from '@/components/AdminDashboard/ManageUsers';
 import { useEffect } from 'react';
+import StaffHeaderDashboard from '@/components/HeaderDetails/StaffHeaderDashboard';
+import StaffManageQuestions from '@/components/AdminDashboard/StaffManageQuestion';
 
 export default function DashboardPage() {
   const t = useTranslations('Adminlogin');
@@ -17,28 +19,35 @@ export default function DashboardPage() {
   const searchParams = useSearchParams();
   const page = searchParams.get('page') || 'questions';
 
-  // If the session is not authenticated, redirect to the login page
-  // useEffect(() => {
-  //   if (session.status !== 'authenticated') {
-  //     router.push('/admin');
-  //   }
-  // }, [session, router]);
+  // hardcoded role for testing purposes
+  const role = 'super_admin'; // change to 'staff' for testing
 
   if (session.status === 'loading') {
     return <p>LOADING...</p>;
   }
 
-  // if (session.status !== 'authenticated') {
-  //   router.push('/admin');
-  //   return <p>goodbye</p>;
-  // }
+  if (session.status !== 'authenticated') {
+    router.push('/admin');
+    return <p>goodbye</p>;
+  }
 
   return (
-    <div className="">
-      <HeaderDashboard />
-      {page === 'questions' && <ManageQuestions />}
-      {page === 'manageagencies' && <ManageAgencies />}
-      {page === 'manageusers' && <ManageUsers />}
+    <div className="flex flex-col min-h-screen pt-5">
+      <div className="mx-[10%]">
+        {role === 'super_admin' ? (
+          <>
+            <HeaderDashboard />
+            {page === 'questions' && <ManageQuestions />}
+            {page === 'manageagencies' && <ManageAgencies />}
+            {page === 'manageusers' && <ManageUsers />}
+          </>
+        ) : (
+          <>
+            <StaffHeaderDashboard />
+            <StaffManageQuestions />
+          </>
+        )}
+      </div>
     </div>
   );
 }
