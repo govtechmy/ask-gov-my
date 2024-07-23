@@ -58,7 +58,7 @@ const ManageQuestions: React.FC = () => {
 
   useEffect(() => {
     const filteredQuestions = questions.filter(q =>
-      q.question.toLowerCase().includes(searchTerm.toLowerCase())
+      q.question.toLowerCase().includes(searchTerm.toLowerCase()),
     );
     setFilteredQuestions(filteredQuestions);
   }, [searchTerm, questions]);

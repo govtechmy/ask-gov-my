@@ -2,6 +2,7 @@ import {
   getQuestionById,
   getTopicsDetail,
   getTopicByAgency,
+  getAgencyList,
 } from '@/actions/questionServices';
 import Footer from '@/components/FooterDetails/Footer';
 import RelatedTopics from '@/components/RelatedTopics';
@@ -19,6 +20,7 @@ import WordTranslate from '@/components/WordTranslate';
 import SupportingAttachment from '@/components/SupportingAttachment';
 import HeaderQuestionDetail from '@/components/HeaderDetails/HeaderQuestionDetail';
 import { Question } from '@/types/types';
+import AgencyLogoImporter from '@/components/AgencyLogoImporter';
 
 interface Props {
   params: {
@@ -39,6 +41,7 @@ const QuestionDetailPage: React.FC<Props> = async ({ params }) => {
     );
   };
 
+  //Getting the question
   let question: Question | null = null;
   let topicTitles: Array<any> = [];
 
@@ -54,6 +57,7 @@ const QuestionDetailPage: React.FC<Props> = async ({ params }) => {
     redirect('/');
   }
 
+  //Getting the Attachments from question
   const attachments = question.attachments || [];
 
   const acronym = agencyAcronymObject(question.agency);
@@ -95,6 +99,26 @@ const QuestionDetailPage: React.FC<Props> = async ({ params }) => {
     console.log('error on filesize', error);
   }
 
+  let agencyList: any = [];
+
+  try {
+    agencyList = await getAgencyList();
+
+    if (!agencyList || agencyList.length === 0) {
+      throw new Error('Agency list is empty');
+    }
+  } catch {}
+
+  const currentAgency = agencyList.find(
+    (agency: { acronym: string }) =>
+      agency.acronym === agencyAcronym.toUpperCase(),
+  );
+
+  if (currentAgency) {
+  } else {
+    console.log(`Agency with acronym '${agencyAcronym}' not found.`);
+  }
+
   return (
     <div className="">
       <IdentifyWebsite></IdentifyWebsite>
@@ -105,7 +129,12 @@ const QuestionDetailPage: React.FC<Props> = async ({ params }) => {
           <div className="pb-7 w-9/12">
             <div className="flex items-center gap-1">
               <Link href={'/'}>
-                <div className="font-medium text-dim-500 text-sm">Home</div>
+                <div className="font-medium text-dim-500 text-sm">
+                  <WordTranslate
+                    translate={'Questiondetail'}
+                    keyword={'home'}
+                  ></WordTranslate>
+                </div>
               </Link>
               <div>
                 <RightArrow />
@@ -140,8 +169,10 @@ const QuestionDetailPage: React.FC<Props> = async ({ params }) => {
                 <div>
                   <div className="">
                     <div className="flex px-8 pt-8 pb-0 items-center">
-                      <div className="w-6 h-6">
-                        <JataNegaraIcon className="stroke-[#E4E4E7] dark:stroke-[#27272A]" />
+                      <div className="flex w-6 h-6">
+                        <AgencyLogoImporter
+                          currentAgency={currentAgency}
+                        ></AgencyLogoImporter>
                       </div>
                       <div className="font-medium text-sm text-black-700 px-2">
                         <AgencyName acronym={acronym} />
