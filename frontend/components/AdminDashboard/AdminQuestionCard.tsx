@@ -5,6 +5,7 @@ import { useTranslations } from 'next-intl';
 import { AGENCY_TO_UUID } from '@/lib/agency';
 import { assignAgencyToQuestion } from '@/actions/userServices';
 import Modal from './Modal';
+import NewUpdateIcon from '@/icons/new';
 
 interface Question {
   id: number;
@@ -79,13 +80,6 @@ const AdminQuestionCard: React.FC<QuestionCardProps> = ({ question }) => {
     );
   };
 
-  const truncateText = (text: string, maxWords: number) => {
-    const words = text.split(' ');
-    return words.length > maxWords
-      ? words.slice(0, maxWords).join(' ') + '...'
-      : text;
-  };
-
   return (
     <>
       <div
@@ -93,13 +87,21 @@ const AdminQuestionCard: React.FC<QuestionCardProps> = ({ question }) => {
         onClick={() => setIsModalOpen(true)}
       >
         <div className="flex items-center">
-          <div className="text-sm font-medium text-black-700 line-clamp-1">
+          <div className="text-sm font-medium text-black-700 line-clamp-2">
             {question.question}
           </div>
         </div>
-        <div className="flex items-center space-x-4">
+
+        <div className="flex items-center space-x-4 pl-2">
+          <div className="">
+            <NewUpdateIcon
+              classNamePath="fill-[#F0FDF4] dark:fill-[#052E16]"
+              classNameCircle="fill-[#15803D] dark:fill-[#16A34A]"
+              classNamePath2="fill-[#15803D] dark:fill-[#16A34A]"
+            ></NewUpdateIcon>
+          </div>
           <select
-            className="border rounded p-1"
+            className="border-[1px] border-outline-200 rounded-lg p-1 shadow-button"
             value={selectedAgency}
             onChange={handleAgencyChange}
           >
@@ -110,7 +112,7 @@ const AdminQuestionCard: React.FC<QuestionCardProps> = ({ question }) => {
               </option>
             ))}
           </select>
-          <div className="font-normal text-sm text-dim-500">
+          <div className="font-normal text-sm text-dim-500 min-w-[160px]">
             {formatDate(question.date)}
           </div>
         </div>

@@ -3,13 +3,6 @@ import Calendar from '@/icons/calendar';
 import React, { useEffect } from 'react';
 import Search from '@/icons/search';
 import { cn } from '@/lib/utils';
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from '@/components/ui/select';
 import { useSearchParams, useRouter } from 'next/navigation';
 
 interface QuestionNavbarProps {
