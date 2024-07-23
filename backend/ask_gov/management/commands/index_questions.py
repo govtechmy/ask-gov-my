@@ -2,7 +2,7 @@ from django.core.management.base import BaseCommand
 from ask_gov.models import Question, Agency, Topic
 from ask_gov.serializers import QuestionSerializer
 from ask_gov.elasticsearch_client import client
-from ask_gov.embed import get_embeddings
+from ask_gov.embed import get_embedding
 
 class Command(BaseCommand):
     help = 'Indexes all questions into Elasticsearch'
@@ -12,6 +12,11 @@ class Command(BaseCommand):
         for question in questions:
             serializer = QuestionSerializer(question)
             document = serializer.data
+
+            document.pop('admin_isopen', None)
+            document.pop('staff_isopen', None)
+            document.pop('attachments', None)
+            document.pop('email', None)
 
             agency = question.agency
             if agency:
@@ -45,9 +50,7 @@ class Command(BaseCommand):
 
             document['topics'] = topics_data
 
-            question_embedding = get_embeddings(question.question)
-            answer_embedding = get_embeddings(question.answer) if question.answer else []
-            document['vector'] = question_embedding + answer_embedding
+            document['vector'] = get_embedding(question.question)
 
             client.index(
                 index='questions',
