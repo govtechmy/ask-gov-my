@@ -31,7 +31,7 @@ interface QuestionBoxProps {
 const AdminQuestionBox: React.FC<QuestionBoxProps> = ({ questions }) => {
   const [currentPage, setCurrentPage] = useState(1);
   const [filteredQuestions, setFilteredQuestions] = useState<Question[]>([]);
-  const itemsPerPage = 6;
+  const itemsPerPage = 10;
   const totalPages = Math.ceil(filteredQuestions.length / itemsPerPage);
 
   const searchParams = useSearchParams();
@@ -129,7 +129,9 @@ const AdminQuestionBox: React.FC<QuestionBoxProps> = ({ questions }) => {
   return (
     <div>
       {currentQuestions.map(question => (
-        <AdminQuestionCard key={question.id} question={question} />
+        <div className="py-1">
+          <AdminQuestionCard key={question.id} question={question} />
+        </div>
       ))}
 
       {/* below is page handler */}

@@ -34,7 +34,7 @@ const QuestionNavbar: React.FC<QuestionNavbarProps> = ({
   useEffect(() => {}, [activeTab]);
 
   return (
-    <div className="flex justify-between items-center pt-3 pb-2 border-b border-[#E4E4E7] dark:border-[#27272A]">
+    <div className="flex justify-between items-center pt-3 pb-[9px] border-b border-[#E4E4E7] dark:border-[#27272A]">
       <div className="flex space-x-8">
         <button
           className={`font-medium text-sm pb-3 -mb-5 ${activeTab === 'all' ? 'text-black-900 border-b-2 border-[#702FF9]' : 'text-dim-500'}`}
@@ -54,22 +54,20 @@ const QuestionNavbar: React.FC<QuestionNavbarProps> = ({
         >
           Assigned
         </button>
+        <button
+          className={`font-medium text-sm pb-3 -mb-5 ${activeTab === 'spam' ? 'text-black-900 border-b-2 border-[#702FF9]' : 'text-dim-500'}`}
+          onClick={() => setActiveTab('spam')}
+        >
+          Spam
+        </button>
       </div>
       <div className="flex space-x-4 items-center">
-        <Select>
-          <SelectTrigger className="w-[120px] h-8 bg-[#FFFFFF] dark:bg-[#18181B]">
-            <SelectValue placeholder="Agency: All" />
-          </SelectTrigger>
-          <SelectContent className="bg-[#FFFFFF] dark:bg-[#18181B] w-[120px]">
-            <SelectItem value="user1" className="">
-              Agency: All
-            </SelectItem>
-            <SelectItem value="user1" className="">
-              MITI
-            </SelectItem>
-          </SelectContent>
-        </Select>
-
+        <div
+          className="border-[1px] border-outline-200 h-8 rounded-md bg-white p-2 items-center flex
+        text-dim-500"
+        >
+          Agency:<div className="text-black-900 px-1">All</div>
+        </div>
         <button className="px-3 border rounded-md h-8 items-center bg-[#FFFFFF] dark:bg-[#18181B]">
           <div className="flex items-center">
             <Calendar />
@@ -86,7 +84,7 @@ const QuestionNavbar: React.FC<QuestionNavbarProps> = ({
             )}
             onChange={e => setSearchTerm(e.target.value)}
           />
-          <Search strokeWidth={1.88} className="stroke-[#FFFFFF]" />
+          <Search strokeWidth={1.88} className="stroke-[#A1A1AA]" />
         </div>
       </div>
     </div>

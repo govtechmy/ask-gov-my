@@ -34,7 +34,7 @@ export default function DashboardPage() {
   // }
 
   return (
-    <div className="">
+    <div>
       <HeaderDashboard />
       {page === 'questions' && <ManageQuestions />}
       {page === 'manageagencies' && <ManageAgencies />}
