@@ -1,9 +1,9 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useTranslations } from 'next-intl';
 import { uploadFile } from '@/actions/fileServices';
-import { submitAnswer } from '@/actions/userServices';
+import { submitAnswer, saveQuestionAsDraft } from '@/actions/userServices';
 import Modal from './Modal';
 
 interface Question {
@@ -35,14 +35,27 @@ const AnswerQuestionModal: React.FC<AnswerQuestionModalProps> = ({
   onClose,
 }) => {
   const t = useTranslations('Agency');
-  const [answer, setAnswer] = useState('');
+  const [answer, setAnswer] = useState(question.answer || '');
   const [attachments, setAttachments] = useState<File[]>([]);
+  const [uploadedAttachments, setUploadedAttachments] = useState<string[]>(question.attachments || []);
   const [success, setSuccess] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
 
+  useEffect(() => {
+    setAnswer(question.answer || '');
+  }, [question.answer]);
+
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const files = event.target.files ? Array.from(event.target.files) : [];
-    setAttachments(files);
+    setAttachments(prev => [...prev, ...files]);
+  };
+
+  const handleRemoveAttachment = (index: number) => {
+    setAttachments(prev => prev.filter((_, i) => i !== index));
+  };
+
+  const handleRemoveUploadedAttachment = (index: number) => {
+    setUploadedAttachments(prev => prev.filter((_, i) => i !== index));
   };
 
   const handleSubmit = async () => {
@@ -53,8 +66,30 @@ const AnswerQuestionModal: React.FC<AnswerQuestionModalProps> = ({
         attachmentUrls.push(url);
       }
 
-      await submitAnswer(question.id, answer, attachmentUrls);
+      await submitAnswer(question.id, answer, [...uploadedAttachments, ...attachmentUrls]);
       setSuccess('Answer submitted successfully');
+      setError(null);
+      onClose();
+    } catch (err) {
+      if (err instanceof Error) {
+        setError(err.message);
+      } else {
+        setError('An unexpected error occurred');
+      }
+      setSuccess(null);
+    }
+  };
+
+  const handleSaveDraft = async () => {
+    try {
+      const attachmentUrls: string[] = [];
+      for (const file of attachments) {
+        const url = await uploadFile(file);
+        attachmentUrls.push(url);
+      }
+
+      await saveQuestionAsDraft(question.id, answer, [...uploadedAttachments, ...attachmentUrls]);
+      setSuccess('Draft saved successfully');
       setError(null);
       onClose();
     } catch (err) {
@@ -93,12 +128,36 @@ const AnswerQuestionModal: React.FC<AnswerQuestionModalProps> = ({
           </p>
           <input type="file" multiple onChange={handleFileChange} />
         </div>
+        <div className="flex flex-wrap gap-2 mb-4">
+          {attachments.map((file, index) => (
+            <div key={index} className="flex items-center p-2 border rounded">
+              <span className="mr-2">{file.name}</span>
+              <button onClick={() => handleRemoveAttachment(index)} className="text-red-500">
+                &times;
+              </button>
+            </div>
+          ))}
+          {uploadedAttachments.map((url, index) => (
+            <div key={index} className="flex items-center p-2 border rounded">
+              <span className="mr-2">{url.split('/').pop()}</span>
+              <button onClick={() => handleRemoveUploadedAttachment(index)} className="text-red-500">
+                &times;
+              </button>
+            </div>
+          ))}
+        </div>
         <div className="mt-4 flex justify-end">
           <button
             className="mr-2 rounded bg-gray-500 px-4 py-2 text-white"
             onClick={onClose}
           >
             Cancel
+          </button>
+          <button
+            className="mr-2 rounded bg-blue-500 px-4 py-2 text-white"
+            onClick={handleSaveDraft}
+          >
+            Save as Draft
           </button>
           <button
             className="rounded bg-blue-500 px-4 py-2 text-white"
