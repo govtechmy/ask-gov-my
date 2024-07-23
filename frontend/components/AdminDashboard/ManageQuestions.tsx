@@ -55,12 +55,12 @@ const ManageQuestions: React.FC = () => {
   }
 
   return (
-    <div className="items-center justify-center py-6">
+    <div className="container">
       <QuestionNavbar
         unassignedCount={unassignedCount}
         setSearchTerm={setSearchTerm}
       />
-      <div className="w-full flex py-6">
+      <div className="pt-6">
         <AdminQuestionBox questions={filteredQuestions} />
       </div>
     </div>

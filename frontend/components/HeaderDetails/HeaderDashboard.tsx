@@ -42,7 +42,7 @@ const HeaderDashboard = () => {
   };
 
   return (
-    <div className="flex justify-between py-6 container">
+    <div className="flex justify-between pt-6 pb-3 container">
       <div className="font-poppins flex h-full gap-2.5 text-lg font-semibold items-center">
         <Asklogo />
         AskGovMY
@@ -67,9 +67,7 @@ const HeaderDashboard = () => {
           }`}
           onClick={() => handleSetActiveLink('manageagencies')}
         >
-          <Link href="/admin/dashboard/?page=manageagencies">
-            Manage Agencies
-          </Link>
+          <Link href="/admin/dashboard/?page=manageagencies">Agencies</Link>
         </div>
         <div
           className={`rounded-md font-medium text-sm flex justify-center items-center w-[145px] h-8 px-1 ${
@@ -83,19 +81,24 @@ const HeaderDashboard = () => {
         </div>
       </div>
 
-      <div className="flex gap-3">
-        <ThemeToggle />
-        <LocaleSwitch />
-        <div className="bg-white border-[1px] border-outline-200 rounded-lg shadow-button">
+      <div className="flex">
+        <div className="items-center flex h-8 w-8">
+          <ThemeToggle />
+        </div>
+        <div className="items-center flex pr-2">
+          <LocaleSwitch />
+        </div>
+
+        <div className="bg-white border-[1px] border-outline-200 rounded-lg shadow-button flex-grow">
           <div className="flex items-center" onClick={toggleOpen}>
-            <div className="pr-1 w-4 h-4">
+            <div className="w-8 h-8 flex items-center justify-center">
               <User />
             </div>
             <div className="pr-1 font-medium">Harris Azmi</div>
             <div className="font-normal text-gray-500">Super Admin</div>
-            <div className="p-1">
+            <div className="px-1 pr-2 text-dim-500">
               <ChevronDown
-                className={`h-4 w-4 transition-transform transform ${open ? 'rotate-180' : ''}`}
+                className={`h-5 w-5 transition-transform transform ${open ? 'rotate-180' : ''}`}
               />
             </div>
           </div>

@@ -93,8 +93,8 @@ const AdminQuestionCard: React.FC<QuestionCardProps> = ({ question }) => {
         onClick={() => setIsModalOpen(true)}
       >
         <div className="flex items-center">
-          <div className="text-sm font-medium text-black-700">
-            {truncateText(question.question, 20)}
+          <div className="text-sm font-medium text-black-700 line-clamp-1">
+            {question.question}
           </div>
         </div>
         <div className="flex items-center space-x-4">
