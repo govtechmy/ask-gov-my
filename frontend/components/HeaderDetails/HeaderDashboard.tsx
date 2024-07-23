@@ -106,7 +106,7 @@ const HeaderDashboard = () => {
           <LocaleSwitch />
         </div>
 
-        <div className="bg-white border-[1px] border-outline-200 rounded-lg shadow-button flex-grow">
+        <div className="bg-white border-[1px] border-outline-200 rounded-lg shadow-button flex-grow relative">
           <div className="flex items-center" onClick={toggleOpen}>
             <div className="w-8 h-8 flex items-center justify-center">
               <User />
@@ -121,12 +121,12 @@ const HeaderDashboard = () => {
           </div>
 
           {open && (
-            <div className="absolute top-[62px] right-[116px] bg-white rounded-lg border-[1px] border-outline-200 shadow-button">
-              <button className=" hover:cursor-pointer h-[42px] w-[120px] items-center justify-center flex">
+            <div className="absolute top-[36px] right-0 bg-white rounded-lg border-[1px] border-outline-200 shadow-button">
+              <button className=" hover:cursor-pointer h-[42px] w-[110px] items-center justify-center flex">
                 <div className="pr-2">
                   <Logout className="stroke-[#DC2626] dark:stroke-[#FF5959]"></Logout>
                 </div>
-                <div> Logout</div>
+                <div>Logout</div>
               </button>
             </div>
           )}
