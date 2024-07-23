@@ -250,6 +250,32 @@ export async function updateAgency(
   }
 }
 
+export async function changeAdminIsOpen(questionId: number): Promise<void> {
+  const response = await fetch(`${API_URL}/questions/${questionId}/admin_isopen/`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+  });
+
+  if (!response.ok) {
+    throw new Error('Failed to change admin_isopen');
+  }
+}
+
+export async function changeStaffIsOpen(questionId: number): Promise<void> {
+  const response = await fetch(`${API_URL}/questions/${questionId}/staff_isopen/`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+  });
+
+  if (!response.ok) {
+    throw new Error('Failed to change staff_isopen');
+  }
+}
+
 export async function addUser(
   name: string,
   email: string,
