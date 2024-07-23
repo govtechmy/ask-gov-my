@@ -18,6 +18,7 @@ import IdentifyWebsite from '@/components/HeaderDetails/IdentifyWebsite';
 import WordTranslate from '@/components/WordTranslate';
 import SupportingAttachment from '@/components/SupportingAttachment';
 import HeaderQuestionDetail from '@/components/HeaderDetails/HeaderQuestionDetail';
+import { Question } from '@/types/types';
 
 interface Props {
   params: {
@@ -26,23 +27,6 @@ interface Props {
     locale: string;
   };
   question?: Question;
-}
-
-interface Question {
-  id: number;
-  question: string;
-  date: string;
-  answered_date: string;
-  state: string;
-  agency: number;
-  answer: string;
-  topics: number[];
-  email?: string;
-  likes: number;
-  dislikes: number;
-  attachments?: string[];
-  admin_isopen?: boolean;
-  staff_isopen?: boolean;
 }
 
 const QuestionDetailPage: React.FC<Props> = async ({ params }) => {
@@ -69,7 +53,9 @@ const QuestionDetailPage: React.FC<Props> = async ({ params }) => {
   } catch (error) {
     redirect('/');
   }
-  const attachments = question.attachments;
+
+  const attachments = question.attachments || [];
+
   const acronym = agencyAcronymObject(question.agency);
 
   const fetchFileSizes = async (attachments: string[]): Promise<number[]> => {
@@ -97,7 +83,7 @@ const QuestionDetailPage: React.FC<Props> = async ({ params }) => {
     return fileSizes;
   };
 
-  let fileSize: Array<any> = [];
+  let fileSize: number[] = [];
 
   try {
     fileSize = await fetchFileSizes(attachments);

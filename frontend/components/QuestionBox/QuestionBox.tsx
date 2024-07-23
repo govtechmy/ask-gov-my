@@ -4,33 +4,14 @@ import React, { useState, useMemo } from 'react';
 import QuestionCard from './QuestionCard';
 import RightArrow from '@/icons/rightarrow';
 import LeftArrow from '@/icons/leftarrow';
-
-interface Question {
-  id: number;
-  question: string;
-  date: string;
-  answered_date: string;
-  state: string;
-  agency: number;
-  answer: string;
-  topics: number[];
-  email?: string;
-  likes: number;
-  dislikes: number;
-  attachments?: string[];
-  admin_isopen?: boolean;
-  staff_isopen?: boolean;
-}
+import { Question } from '@/types/types';
 
 interface QuestionBoxProps {
   questions: Question[];
-  trendingAgencies: any[];
+  agencyList: any[];
 }
 
-const QuestionBox: React.FC<QuestionBoxProps> = ({
-  questions,
-  trendingAgencies,
-}) => {
+const QuestionBox: React.FC<QuestionBoxProps> = ({ questions, agencyList }) => {
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 6;
   const totalPages = Math.ceil(questions.length / itemsPerPage);
@@ -129,7 +110,7 @@ const QuestionBox: React.FC<QuestionBoxProps> = ({
           <QuestionCard
             key={question.id}
             question={question}
-            trendingAgencies={trendingAgencies}
+            agencyList={agencyList}
           />
         ))}
       </div>
