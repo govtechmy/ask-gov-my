@@ -4,6 +4,9 @@ from .models import Question, Agency, Topic
 from .serializers import QuestionSerializer
 from .elasticsearch_client import client
 from ask_gov.embed import get_embedding
+import logging
+
+logger = logging.getLogger(__name__)
 
 @receiver(post_save, sender=Question)
 def index_question(sender, instance, **kwargs):
@@ -47,6 +50,8 @@ def index_question(sender, instance, **kwargs):
         topics_data = []
 
     document['topics'] = topics_data
+
+    logger.debug(f'Indexing document: {document}')
 
     #document['vector'] = get_embedding(instance.question)
 
