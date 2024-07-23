@@ -3,7 +3,10 @@ from django.dispatch import receiver
 from .models import Question, Agency, Topic
 from .serializers import QuestionSerializer
 from .elasticsearch_client import client
-from ask_gov.embed import get_embeddings
+from ask_gov.embed import get_embedding
+import logging
+
+logger = logging.getLogger(__name__)
 
 @receiver(post_save, sender=Question)
 def index_question(sender, instance, **kwargs):
@@ -48,9 +51,9 @@ def index_question(sender, instance, **kwargs):
 
     document['topics'] = topics_data
 
-    question_vector = get_embeddings(instance.question)
-    answer_vector = get_embeddings(instance.answer) if instance.answer else []
-    document['vector'] = question_vector + answer_vector
+    logger.debug(f'Indexing document: {document}')
+
+    #document['vector'] = get_embedding(instance.question)
 
     client.delete(
         index='questions',

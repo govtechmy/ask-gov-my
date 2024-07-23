@@ -287,3 +287,17 @@ class UpdateAgencyView(APIView):
 
         serializer = AgencySerializer(agency)
         return Response(serializer.data, status=status.HTTP_200_OK)
+
+class ChangeAdminIsOpenView(APIView):
+    def post(self, request, question_id):
+        question = get_object_or_404(Question, id=question_id)
+        question.admin_isopen = True
+        question.save()
+        return Response({"detail": "Admin isopen changed to true"}, status=status.HTTP_200_OK)
+
+class ChangeStaffIsOpenView(APIView):
+    def post(self, request, question_id):
+        question = get_object_or_404(Question, id=question_id)
+        question.staff_isopen = True
+        question.save()
+        return Response({"detail": "Staff isopen changed to true"}, status=status.HTTP_200_OK)

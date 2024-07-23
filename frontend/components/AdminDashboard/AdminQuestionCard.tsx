@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react';
 import { useTranslations } from 'next-intl';
 import { AGENCY_TO_UUID } from '@/lib/agency';
-import { assignAgencyToQuestion } from '@/actions/userServices';
+import { assignAgencyToQuestion, changeAdminIsOpen } from '@/actions/userServices';
 import Modal from './Modal';
 
 interface Question {
@@ -62,6 +62,19 @@ const AdminQuestionCard: React.FC<QuestionCardProps> = ({ question }) => {
     }
   };
 
+  const handleCardClick = async () => {
+    if (!question.admin_isopen) {
+      try {
+        setIsModalOpen(true);
+
+        await changeAdminIsOpen(question.id);
+        question.admin_isopen = true;
+      } catch (error) {
+        console.error('Failed to change admin_isopen:', error);
+      }
+    }
+  };
+
   const formatDate = (dateString: string) => {
     const date = new Date(dateString);
     return (
@@ -90,13 +103,17 @@ const AdminQuestionCard: React.FC<QuestionCardProps> = ({ question }) => {
     <>
       <div
         className="bg-white items-center rounded-md border p-4 shadow-sm flex justify-between cursor-pointer w-full"
-        onClick={() => setIsModalOpen(true)}
+        onClick={handleCardClick}
       >
         <div className="flex items-center">
+
           <div className="text-sm font-medium text-black-700">
             {truncateText(question.question, 20)}
           </div>
         </div>
+        {question.admin_isopen === false && (
+            <div className="text-green-500">New</div>
+          )}
         <div className="flex items-center space-x-4">
           <select
             className="border rounded p-1"
