@@ -17,7 +17,10 @@ interface QuestionNavbarProps {
   setSearchTerm: (term: string) => void;
 }
 
-const QuestionNavbar: React.FC<QuestionNavbarProps> = ({ unassignedCount, setSearchTerm }) => {
+const QuestionNavbar: React.FC<QuestionNavbarProps> = ({
+  unassignedCount,
+  setSearchTerm,
+}) => {
   const searchParams = useSearchParams();
   const router = useRouter();
   const activeTab = searchParams.get('tab') || 'all';
