@@ -3,7 +3,7 @@ from .views import (CompletedQuestionListView, QuestionDetailView, AgencyListVie
                     QuestionsByAgencyView, LoginView, UserAgencyQuestionsView, SubmitAnswerView, 
                     UserAgencyTopicsView, AddTopicView, TopicListView, LikeQuestionView, DislikeQuestionView,
                     AssignAgencyToQuestionView, AddAgencyView, AllQuestionListView, TrendingAgenciesView,
-                    UpdateAgencyView, ChangeAdminIsOpenView, ChangeStaffIsOpenView)
+                    UpdateAgencyView, ChangeAdminIsOpenView, ChangeStaffIsOpenView, SaveDraftQuestionView)
 
 urlpatterns = [
     path('questions/', CompletedQuestionListView.as_view(), name='question-list-create'),
@@ -26,4 +26,6 @@ urlpatterns = [
     path('agencies/trending/', TrendingAgenciesView.as_view(), name='trending-agencies'),
     path('questions/<int:question_id>/admin_isopen/', ChangeAdminIsOpenView.as_view(), name='change-admin-isopen'),
     path('questions/<int:question_id>/staff_isopen/', ChangeStaffIsOpenView.as_view(), name='change-staff-isopen'),
+    path('questions/<int:question_id>/save-draft/', SaveDraftQuestionView.as_view(), name='save-draft'),
+
 ]

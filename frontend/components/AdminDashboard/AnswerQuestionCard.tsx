@@ -29,17 +29,18 @@ interface QuestionCardProps {
 const AnswerQuestionCard: React.FC<QuestionCardProps> = ({ question }) => {
   const t = useTranslations('Agency');
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isStaffOpen, setIsStaffOpen] = useState(question.staff_isopen);
 
   const handleCardClick = async () => {
-    if (!question.staff_isopen) {
+    if (!isStaffOpen) {
       try {
         await changeStaffIsOpen(question.id);
-        setIsModalOpen(true);
-        question.staff_isopen = true;
+        setIsStaffOpen(true);
       } catch (error) {
         console.error('Failed to change staff_isopen:', error);
       }
     }
+    setIsModalOpen(true);
   };
 
   const formatDate = (dateString: string) => {
@@ -73,12 +74,12 @@ const AnswerQuestionCard: React.FC<QuestionCardProps> = ({ question }) => {
         onClick={handleCardClick}
       >
         <div className="flex items-center">
+          {!isStaffOpen && (
+            <div className="text-green-500">New</div>
+          )}
           <div className="text-base font-medium text-black-900">
             {truncateText(question.question, 20)}
           </div>
-          {question.staff_isopen === false && (
-            <div className="text-green-500">New</div>
-          )}
         </div>
         <div className="flex items-center space-x-4">
           <div className="font-normal text-sm text-dim-500">
