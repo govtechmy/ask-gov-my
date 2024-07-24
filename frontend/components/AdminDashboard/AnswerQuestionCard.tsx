@@ -74,9 +74,7 @@ const AnswerQuestionCard: React.FC<QuestionCardProps> = ({ question }) => {
         onClick={handleCardClick}
       >
         <div className="flex items-center">
-          {!isStaffOpen && (
-            <div className="text-green-500">New</div>
-          )}
+          {!isStaffOpen && <div className="text-green-500">New</div>}
           <div className="text-base font-medium text-black-900">
             {truncateText(question.question, 20)}
           </div>

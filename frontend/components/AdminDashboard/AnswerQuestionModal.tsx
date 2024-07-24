@@ -37,7 +37,9 @@ const AnswerQuestionModal: React.FC<AnswerQuestionModalProps> = ({
   const t = useTranslations('Agency');
   const [answer, setAnswer] = useState(question.answer || '');
   const [attachments, setAttachments] = useState<File[]>([]);
-  const [uploadedAttachments, setUploadedAttachments] = useState<string[]>(question.attachments || []);
+  const [uploadedAttachments, setUploadedAttachments] = useState<string[]>(
+    question.attachments || [],
+  );
   const [success, setSuccess] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
 
@@ -66,7 +68,10 @@ const AnswerQuestionModal: React.FC<AnswerQuestionModalProps> = ({
         attachmentUrls.push(url);
       }
 
-      await submitAnswer(question.id, answer, [...uploadedAttachments, ...attachmentUrls]);
+      await submitAnswer(question.id, answer, [
+        ...uploadedAttachments,
+        ...attachmentUrls,
+      ]);
       setSuccess('Answer submitted successfully');
       setError(null);
       onClose();
@@ -88,7 +93,10 @@ const AnswerQuestionModal: React.FC<AnswerQuestionModalProps> = ({
         attachmentUrls.push(url);
       }
 
-      await saveQuestionAsDraft(question.id, answer, [...uploadedAttachments, ...attachmentUrls]);
+      await saveQuestionAsDraft(question.id, answer, [
+        ...uploadedAttachments,
+        ...attachmentUrls,
+      ]);
       setSuccess('Draft saved successfully');
       setError(null);
       onClose();
@@ -132,7 +140,10 @@ const AnswerQuestionModal: React.FC<AnswerQuestionModalProps> = ({
           {attachments.map((file, index) => (
             <div key={index} className="flex items-center p-2 border rounded">
               <span className="mr-2">{file.name}</span>
-              <button onClick={() => handleRemoveAttachment(index)} className="text-red-500">
+              <button
+                onClick={() => handleRemoveAttachment(index)}
+                className="text-red-500"
+              >
                 &times;
               </button>
             </div>
@@ -140,7 +151,10 @@ const AnswerQuestionModal: React.FC<AnswerQuestionModalProps> = ({
           {uploadedAttachments.map((url, index) => (
             <div key={index} className="flex items-center p-2 border rounded">
               <span className="mr-2">{url.split('/').pop()}</span>
-              <button onClick={() => handleRemoveUploadedAttachment(index)} className="text-red-500">
+              <button
+                onClick={() => handleRemoveUploadedAttachment(index)}
+                className="text-red-500"
+              >
                 &times;
               </button>
             </div>
