@@ -3,7 +3,7 @@
 import { useTranslations } from 'next-intl';
 import { AGENCY_TO_UUID } from '@/lib/agency';
 
-const AgencyListDropdown = () => {
+const AgencyListDropdownNotUsed = () => {
   const t = useTranslations('Agency');
   const agencylists = Object.entries(AGENCY_TO_UUID).map(([name, id]) => ({
     id,
@@ -24,4 +24,4 @@ const AgencyListDropdown = () => {
   );
 };
 
-export default AgencyListDropdown;
+export default AgencyListDropdownNotUsed;
