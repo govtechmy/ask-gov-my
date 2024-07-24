@@ -28,7 +28,10 @@ const StaffHeaderDashboard = () => {
         <ThemeToggle />
         <LocaleSwitch />
         <div className="bg-white border-[1px] border-outline-200 rounded-lg shadow-button">
-          <div className="flex items-center cursor-pointer" onClick={toggleOpen}>
+          <div
+            className="flex items-center cursor-pointer"
+            onClick={toggleOpen}
+          >
             <div className="pr-1 w-4 h-4">
               <User />
             </div>

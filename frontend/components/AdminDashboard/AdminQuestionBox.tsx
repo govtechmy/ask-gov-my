@@ -6,23 +6,7 @@ import RightArrow from '@/icons/rightarrow';
 import LeftArrow from '@/icons/leftarrow';
 import { useSearchParams } from 'next/navigation';
 import AnswerQuestionCard from './AnswerQuestionCard';
-
-interface Question {
-  id: number;
-  question: string;
-  date: string;
-  answered_date: string;
-  state: string;
-  agency: number;
-  answer: string;
-  topics: number[];
-  email?: string;
-  likes: number;
-  dislikes: number;
-  attachments?: string[];
-  admin_isopen?: boolean;
-  staff_isopen?: boolean;
-}
+import { Question } from '@/types/types';
 
 interface QuestionBoxProps {
   questions: Question[];
@@ -31,7 +15,7 @@ interface QuestionBoxProps {
 const AdminQuestionBox: React.FC<QuestionBoxProps> = ({ questions }) => {
   const [currentPage, setCurrentPage] = useState(1);
   const [filteredQuestions, setFilteredQuestions] = useState<Question[]>([]);
-  const itemsPerPage = 6;
+  const itemsPerPage = 10;
   const totalPages = Math.ceil(filteredQuestions.length / itemsPerPage);
 
   const searchParams = useSearchParams();
@@ -129,7 +113,9 @@ const AdminQuestionBox: React.FC<QuestionBoxProps> = ({ questions }) => {
   return (
     <div>
       {currentQuestions.map(question => (
-        <AdminQuestionCard key={question.id} question={question} />
+        <div className="py-1">
+          <AdminQuestionCard key={question.id} question={question} />
+        </div>
       ))}
 
       {/* below is page handler */}
