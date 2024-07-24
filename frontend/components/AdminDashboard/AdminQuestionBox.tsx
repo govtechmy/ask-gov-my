@@ -7,6 +7,7 @@ import LeftArrow from '@/icons/leftarrow';
 import { useSearchParams } from 'next/navigation';
 import AnswerQuestionCard from './AnswerQuestionCard';
 import { Question } from '@/types/types';
+// import { useactiveQuestionId } from '../activeQuestionIdContext';
 
 interface QuestionBoxProps {
   questions: Question[];
@@ -20,6 +21,7 @@ const AdminQuestionBox: React.FC<QuestionBoxProps> = ({ questions }) => {
 
   const searchParams = useSearchParams();
   const activeTab = searchParams.get('tab') || 'all';
+  const [activeQuestionId, setactiveQuestionId] = useState<number | null>(null);
 
   useEffect(() => {
     let filtered = questions;
@@ -114,7 +116,12 @@ const AdminQuestionBox: React.FC<QuestionBoxProps> = ({ questions }) => {
     <div>
       {currentQuestions.map(question => (
         <div className="py-1">
-          <AdminQuestionCard key={question.id} question={question} />
+          <AdminQuestionCard
+            key={question.id}
+            question={question}
+            activeQuestionId={activeQuestionId}
+            setactiveQuestionId={setactiveQuestionId}
+          />
         </div>
       ))}
 
