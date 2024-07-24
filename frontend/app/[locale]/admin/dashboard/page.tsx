@@ -26,14 +26,14 @@ export default function DashboardPage() {
     return <p>LOADING...</p>;
   }
 
-  if (session.status !== 'authenticated') {
-    router.push('/admin');
-    return <p>goodbye</p>;
-  }
+  // if (session.status !== 'authenticated') {
+  //   router.push('/admin');
+  //   return <p>goodbye</p>;
+  // }
 
   return (
-    <div className="flex flex-col min-h-screen pt-5">
-      <div className="mx-[10%]">
+    <div className="">
+      <div className="">
         {role === 'super_admin' ? (
           <>
             <HeaderDashboard />
