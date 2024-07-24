@@ -319,3 +319,13 @@ class SaveDraftQuestionView(APIView):
             return Response({"detail": "Question saved as draft successfully"}, status=status.HTTP_200_OK)
         except Question.DoesNotExist:
             return Response({"detail": "Question not found"}, status=status.HTTP_404_NOT_FOUND)
+        
+class MarkQuestionAsSpamView(APIView):
+    def post(self, request, question_id):
+        try:
+            question = Question.objects.get(id=question_id)
+            question.state = 'spam'
+            question.save()
+            return Response({"detail": "Question marked as spam successfully"}, status=status.HTTP_200_OK)
+        except Question.DoesNotExist:
+            return Response({"detail": "Question not found"}, status=status.HTTP_404_NOT_FOUND)
