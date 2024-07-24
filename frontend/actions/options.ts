@@ -9,14 +9,15 @@ import LoginLink from './logic-link';
 const prisma = new PrismaClient();
 
 export const authOptions: NextAuthOptions = {
-  providers: [
+  providers: [ //need to add function to check the email inside the db, if exists allow to login
     EmailProvider({
       async sendVerificationRequest({ identifier, url }) {
-        await sendEmail({
-          email: identifier,
-          subject: `Your ${process.env.NEXT_PUBLIC_APP_NAME} Login Link`,
-          react: LoginLink({ url, email: identifier }),
-        });
+        // await sendEmail({
+        //   email: identifier,
+        //   subject: `Your ${process.env.NEXT_PUBLIC_APP_NAME} Login Link`,
+        //   react: LoginLink({ url, email: identifier }),
+        // });
+        console.log(url)
         return;
       },
     }),
@@ -28,6 +29,10 @@ export const authOptions: NextAuthOptions = {
     verifyRequest: '/admin/checkmail', // send users here after they sign in to check their email
     error: '/',
   },
+  session: {
+    strategy: "jwt",
+  },
+
   callbacks: {
     async session({ session, token }) {
       if (token) {
