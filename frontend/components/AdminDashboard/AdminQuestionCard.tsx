@@ -102,7 +102,10 @@ const AdminQuestionCard: React.FC<QuestionCardProps> = ({ question }) => {
   return (
     <>
       <div className="bg-white items-center rounded-md border p-4 shadow-sm flex justify-between cursor-pointer w-full">
-        <div className="flex items-center " onClick={handleCardClick}>
+        <div
+          className="flex items-center "
+          onClick={() => setIsModalOpen(true)}
+        >
           <div className="text-sm font-medium text-black-700 line-clamp-2">
             {question.question}
           </div>

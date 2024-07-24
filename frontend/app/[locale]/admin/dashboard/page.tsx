@@ -8,7 +8,7 @@ import { useSearchParams } from 'next/navigation';
 import ManageQuestions from '@/components/AdminDashboard/ManageQuestions';
 import ManageAgencies from '@/components/AdminDashboard/ManageAgencies';
 import ManageUsers from '@/components/AdminDashboard/ManageUsers';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import StaffHeaderDashboard from '@/components/HeaderDetails/StaffHeaderDashboard';
 import StaffManageQuestions from '@/components/AdminDashboard/StaffManageQuestion';
 
@@ -19,8 +19,8 @@ export default function DashboardPage() {
   const searchParams = useSearchParams();
   const page = searchParams.get('page') || 'questions';
 
-  // hardcoded role for testing purposes
-  const role = 'super_admin'; // change to 'staff' for testing
+  // State to manage the selected role
+  const [role, setRole] = useState<'super_admin' | 'staff'>('super_admin');
 
   if (session.status === 'loading') {
     return <p>LOADING...</p>;
@@ -31,9 +31,23 @@ export default function DashboardPage() {
   //   return <p>goodbye</p>;
   // }
 
+  // Handle role change
+  const handleRoleChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
+    setRole(event.target.value as 'super_admin' | 'staff');
+  };
+
   return (
     <div className="">
       <div className="">
+        <select
+          value={role}
+          onChange={handleRoleChange}
+          className="mb-4 p-2 border rounded"
+        >
+          <option value="super_admin">Super Admin</option>
+          <option value="staff">Staff</option>
+        </select>
+
         {role === 'super_admin' ? (
           <>
             <HeaderDashboard />
