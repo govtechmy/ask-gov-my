@@ -9,7 +9,8 @@ import LoginLink from './logic-link';
 const prisma = new PrismaClient();
 
 export const authOptions: NextAuthOptions = {
-  providers: [ //need to add function to check the email inside the db, if exists allow to login
+  providers: [
+    //need to add function to check the email inside the db, if exists allow to login
     EmailProvider({
       async sendVerificationRequest({ identifier, url }) {
         // await sendEmail({
@@ -17,7 +18,7 @@ export const authOptions: NextAuthOptions = {
         //   subject: `Your ${process.env.NEXT_PUBLIC_APP_NAME} Login Link`,
         //   react: LoginLink({ url, email: identifier }),
         // });
-        console.log(url)
+        console.log(url);
         return;
       },
     }),
@@ -30,7 +31,7 @@ export const authOptions: NextAuthOptions = {
     error: '/',
   },
   session: {
-    strategy: "jwt",
+    strategy: 'jwt',
   },
 
   callbacks: {

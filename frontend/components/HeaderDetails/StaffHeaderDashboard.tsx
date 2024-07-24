@@ -6,8 +6,8 @@ import LocaleSwitch from './LocaleSwitch';
 import Asklogo from '@/icons/asklogo';
 import User from '@/icons/user';
 import ChevronDown from '@/icons/ChevronDown';
-import Logout from '@/icons/logout'; 
-import { signOut } from 'next-auth/react'; 
+import Logout from '@/icons/logout';
+import { signOut } from 'next-auth/react';
 
 const StaffHeaderDashboard = () => {
   const [open, setOpen] = useState(false);
@@ -17,7 +17,7 @@ const StaffHeaderDashboard = () => {
   };
 
   const handleLogout = () => {
-    signOut(); 
+    signOut();
   };
 
   return (
