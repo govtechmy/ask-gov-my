@@ -3,7 +3,8 @@ from .views import (CompletedQuestionListView, QuestionDetailView, AgencyListVie
                     QuestionsByAgencyView, LoginView, UserAgencyQuestionsView, SubmitAnswerView, 
                     UserAgencyTopicsView, AddTopicView, TopicListView, LikeQuestionView, DislikeQuestionView,
                     AssignAgencyToQuestionView, AddAgencyView, AllQuestionListView, TrendingAgenciesView,
-                    UpdateAgencyView, ChangeAdminIsOpenView, ChangeStaffIsOpenView, SaveDraftQuestionView)
+                    UpdateAgencyView, ChangeAdminIsOpenView, ChangeStaffIsOpenView, SaveDraftQuestionView,
+                    MarkQuestionAsSpamView)
 
 urlpatterns = [
     path('questions/', CompletedQuestionListView.as_view(), name='question-list-create'),
@@ -21,11 +22,13 @@ urlpatterns = [
     path('topics/', TopicListView.as_view(), name='topics-list'),
     path('questions/<int:question_id>/like/', LikeQuestionView.as_view(), name='like-question'),
     path('questions/<int:question_id>/dislike/', DislikeQuestionView.as_view(), name='dislike-question'),
-    path('questions/<int:question_id>/agency/', AssignAgencyToQuestionView.as_view(), name='assign-agency-to-question'),  # New endpoint
+    path('questions/<int:question_id>/agency/', AssignAgencyToQuestionView.as_view(), name='assign-agency-to-question'), 
     path('agencies/add/', AddAgencyView.as_view(), name='add-agency'),
     path('agencies/trending/', TrendingAgenciesView.as_view(), name='trending-agencies'),
     path('questions/<int:question_id>/admin_isopen/', ChangeAdminIsOpenView.as_view(), name='change-admin-isopen'),
     path('questions/<int:question_id>/staff_isopen/', ChangeStaffIsOpenView.as_view(), name='change-staff-isopen'),
     path('questions/<int:question_id>/save-draft/', SaveDraftQuestionView.as_view(), name='save-draft'),
+    path('questions/<int:question_id>/mark-spam/', MarkQuestionAsSpamView.as_view(), name='mark-question-spam'),
+
 
 ]
