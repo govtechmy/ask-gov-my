@@ -15,12 +15,19 @@ import LineVerticalForSmile from '@/icons/lineverticalforsmile';
 import PlusCircle from '@/icons/pluscircle';
 import TickCheckCircleInCircle from '@/icons/tickcheckcircleincircle'; // Import the new icon
 import AgencyListDropdown from './AgencyListDropdown';
+import AgencyListDropdownOnCard from './AgencyListDropdownOnCard';
 
 interface QuestionCardProps {
   question: Question;
+  activeQuestionId: number | null;
+  setactiveQuestionId: React.Dispatch<React.SetStateAction<number | null>>;
 }
 
-const AdminQuestionCard: React.FC<QuestionCardProps> = ({ question }) => {
+const AdminQuestionCard: React.FC<QuestionCardProps> = ({
+  question,
+  activeQuestionId,
+  setactiveQuestionId,
+}) => {
   const t = useTranslations('Agency');
   const [selectedAgency, setSelectedAgency] = useState<string>('Unassigned');
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -107,29 +114,39 @@ const AdminQuestionCard: React.FC<QuestionCardProps> = ({ question }) => {
           </div>
         </div>
 
-        {question.admin_isopen === false && (
-          <div className="text-green-500">New</div>
-        )}
         <div className="flex items-center space-x-4 pl-2">
           <div className="">
-            <NewUpdateIcon
-              classNamePath="fill-[#F0FDF4] dark:fill-[#052E16]"
-              classNameCircle="fill-[#15803D] dark:fill-[#16A34A]"
-              classNamePath2="fill-[#15803D] dark:fill-[#16A34A]"
-            ></NewUpdateIcon>
+            {question.admin_isopen === false && (
+              <NewUpdateIcon
+                classNamePath="fill-[#F0FDF4] dark:fill-[#052E16]"
+                classNameCircle="fill-[#15803D] dark:fill-[#16A34A]"
+                classNamePath2="fill-[#15803D] dark:fill-[#16A34A]"
+              />
+            )}
+            {/* {question.admin_isopen === true && (
+              <div className="h-[22px] w-[55px]"></div>
+            )} */}
+            {question.admin_isopen === true && (
+              <NewUpdateIcon
+                classNamePath="fill-[#F0FDF4] dark:fill-[#052E16]"
+                classNameCircle="fill-[#15803D] dark:fill-[#16A34A]"
+                classNamePath2="fill-[#15803D] dark:fill-[#16A34A]"
+              />
+            )}
           </div>
-          <select
-            className="border-[1px] border-outline-200 rounded-lg p-1 shadow-button"
-            value={selectedAgency}
-            onChange={handleAgencyChange}
-          >
-            <option value="Unassigned">Unassigned</option>
-            {Object.keys(AGENCY_TO_UUID).map(agencyAcronym => (
-              <option key={agencyAcronym} value={agencyAcronym}>
-                {agencyAcronym}
-              </option>
-            ))}
-          </select>
+
+          <div className="relative">
+            <AgencyListDropdownOnCard
+              selectedAgency={selectedAgency}
+              setSelectedAgency={setSelectedAgency}
+              AGENCY_TO_UUID={AGENCY_TO_UUID}
+              setSuccessMessage={setSuccessMessage}
+              activeQuestionId={activeQuestionId}
+              setactiveQuestionId={setactiveQuestionId}
+              questionId={question.id}
+            />
+          </div>
+
           <div className="font-normal text-sm text-dim-500 min-w-[160px]">
             {formatDate(question.date)}
           </div>
@@ -195,7 +212,7 @@ const AdminQuestionCard: React.FC<QuestionCardProps> = ({ question }) => {
                     selectedAgency={selectedAgency}
                     setSelectedAgency={setSelectedAgency}
                     AGENCY_TO_UUID={AGENCY_TO_UUID}
-                    setSuccessMessage={setSuccessMessage} // Pass the function as a prop
+                    setSuccessMessage={setSuccessMessage}
                   />
                 </div>
               </div>
