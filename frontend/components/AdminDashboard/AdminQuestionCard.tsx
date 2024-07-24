@@ -1,7 +1,10 @@
 import { useState, useEffect, useRef } from 'react';
 import { useTranslations } from 'next-intl';
 import { AGENCY_TO_UUID } from '@/lib/agency';
-import { assignAgencyToQuestion } from '@/actions/userServices';
+import {
+  assignAgencyToQuestion,
+  changeAdminIsOpen,
+} from '@/actions/userServices';
 import Modal from './Modal';
 import NewUpdateIcon from '@/icons/new';
 import Close from '@/icons/close';
@@ -66,6 +69,19 @@ const AdminQuestionCard: React.FC<QuestionCardProps> = ({ question }) => {
     }
   };
 
+  const handleCardClick = async () => {
+    if (!question.admin_isopen) {
+      try {
+        setIsModalOpen(true);
+
+        await changeAdminIsOpen(question.id);
+        question.admin_isopen = true;
+      } catch (error) {
+        console.error('Failed to change admin_isopen:', error);
+      }
+    }
+  };
+
   const formatDate = (dateString: string) => {
     const date = new Date(dateString);
     return (
@@ -86,15 +102,15 @@ const AdminQuestionCard: React.FC<QuestionCardProps> = ({ question }) => {
   return (
     <>
       <div className="bg-white items-center rounded-md border p-4 shadow-sm flex justify-between cursor-pointer w-full">
-        <div
-          className="flex items-center "
-          onClick={() => setIsModalOpen(true)}
-        >
+        <div className="flex items-center " onClick={handleCardClick}>
           <div className="text-sm font-medium text-black-700 line-clamp-2">
             {question.question}
           </div>
         </div>
 
+        {question.admin_isopen === false && (
+          <div className="text-green-500">New</div>
+        )}
         <div className="flex items-center space-x-4 pl-2">
           <div className="">
             <NewUpdateIcon

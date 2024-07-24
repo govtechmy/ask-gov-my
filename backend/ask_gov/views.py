@@ -287,3 +287,35 @@ class UpdateAgencyView(APIView):
 
         serializer = AgencySerializer(agency)
         return Response(serializer.data, status=status.HTTP_200_OK)
+
+class ChangeAdminIsOpenView(APIView):
+    def post(self, request, question_id):
+        question = get_object_or_404(Question, id=question_id)
+        question.admin_isopen = True
+        question.save()
+        return Response({"detail": "Admin isopen changed to true"}, status=status.HTTP_200_OK)
+
+class ChangeStaffIsOpenView(APIView):
+    def post(self, request, question_id):
+        question = get_object_or_404(Question, id=question_id)
+        question.staff_isopen = True
+        question.save()
+        return Response({"detail": "Staff isopen changed to true"}, status=status.HTTP_200_OK)
+
+class SaveDraftQuestionView(APIView):
+    def post(self, request, question_id):
+        data = request.data.get('data')
+        if not data:
+            return Response({"detail": "Data is required"}, status=status.HTTP_400_BAD_REQUEST)
+        
+        attachments = data.get('attachments', [])
+        
+        try:
+            question = Question.objects.get(id=question_id)
+            question.state = 'draft'
+            question.attachments = attachments
+            question.save()
+            
+            return Response({"detail": "Question saved as draft successfully"}, status=status.HTTP_200_OK)
+        except Question.DoesNotExist:
+            return Response({"detail": "Question not found"}, status=status.HTTP_404_NOT_FOUND)
