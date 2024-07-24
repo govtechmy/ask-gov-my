@@ -6,12 +6,18 @@ import LocaleSwitch from './LocaleSwitch';
 import Asklogo from '@/icons/asklogo';
 import User from '@/icons/user';
 import ChevronDown from '@/icons/ChevronDown';
+import Logout from '@/icons/logout'; 
+import { signOut } from 'next-auth/react'; 
 
 const StaffHeaderDashboard = () => {
   const [open, setOpen] = useState(false);
 
   const toggleOpen = () => {
     setOpen(!open);
+  };
+
+  const handleLogout = () => {
+    signOut(); 
   };
 
   return (
@@ -45,8 +51,16 @@ const StaffHeaderDashboard = () => {
           </div>
 
           {open && (
-            <div className="py-2 px-3 bg-white rounded-lg">
-              <button className="hover:bg-gray-200 py-1 px-2">Logout</button>
+            <div className="absolute top-[36px] right-0 bg-white rounded-lg border-[1px] border-outline-200 shadow-button">
+              <button
+                className="hover:cursor-pointer h-[42px] w-[110px] items-center justify-center flex"
+                onClick={handleLogout}
+              >
+                <div className="pr-2">
+                  <Logout className="stroke-[#DC2626] dark:stroke-[#FF5959]"></Logout>
+                </div>
+                <div>Logout</div>
+              </button>
             </div>
           )}
         </div>
