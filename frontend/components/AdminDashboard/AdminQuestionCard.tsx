@@ -1,27 +1,20 @@
-'use client';
-
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { useTranslations } from 'next-intl';
 import { AGENCY_TO_UUID } from '@/lib/agency';
-import { assignAgencyToQuestion, changeAdminIsOpen } from '@/actions/userServices';
+import {
+  assignAgencyToQuestion,
+  changeAdminIsOpen,
+} from '@/actions/userServices';
 import Modal from './Modal';
-
-interface Question {
-  id: number;
-  question: string;
-  date: string;
-  answered_date: string;
-  state: string;
-  agency: number;
-  answer: string;
-  topics: number[];
-  email?: string;
-  likes: number;
-  dislikes: number;
-  attachments?: string[];
-  admin_isopen?: boolean;
-  staff_isopen?: boolean;
-}
+import NewUpdateIcon from '@/icons/new';
+import Close from '@/icons/close';
+import DateComponent from '../date';
+import { Question } from '@/types/types';
+import IconQuestionSmile2 from '@/icons/iconquestionsmile2';
+import LineVerticalForSmile from '@/icons/lineverticalforsmile';
+import PlusCircle from '@/icons/pluscircle';
+import TickCheckCircleInCircle from '@/icons/tickcheckcircleincircle'; // Import the new icon
+import AgencyListDropdown from './AgencyListDropdown';
 
 interface QuestionCardProps {
   question: Question;
@@ -31,6 +24,9 @@ const AdminQuestionCard: React.FC<QuestionCardProps> = ({ question }) => {
   const t = useTranslations('Agency');
   const [selectedAgency, setSelectedAgency] = useState<string>('Unassigned');
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [successMessage, setSuccessMessage] = useState(''); // New state
+  const questionTextRef = useRef<HTMLDivElement>(null);
+  const [svgHeight, setSvgHeight] = useState<number>(10); // Default height
 
   useEffect(() => {
     if (question.agency !== null) {
@@ -42,6 +38,14 @@ const AdminQuestionCard: React.FC<QuestionCardProps> = ({ question }) => {
       }
     }
   }, [question.agency]);
+
+  useEffect(() => {
+    if (questionTextRef.current) {
+      const textWidth = questionTextRef.current.offsetWidth;
+      const newHeight = textWidth;
+      setSvgHeight(newHeight);
+    }
+  }, [question.question]);
 
   const handleAgencyChange = async (
     e: React.ChangeEvent<HTMLSelectElement>,
@@ -56,6 +60,9 @@ const AdminQuestionCard: React.FC<QuestionCardProps> = ({ question }) => {
     if (newAgencyId !== null) {
       try {
         await assignAgencyToQuestion(question.id, parseInt(newAgencyId));
+        setSuccessMessage(
+          `Successfully assigned to ${newAgencyAcronym}. Their PIC will be able to answer this question.`,
+        ); // Set success message
       } catch (error) {
         console.error('Failed to assign agency to question:', error);
       }
@@ -92,31 +99,31 @@ const AdminQuestionCard: React.FC<QuestionCardProps> = ({ question }) => {
     );
   };
 
-  const truncateText = (text: string, maxWords: number) => {
-    const words = text.split(' ');
-    return words.length > maxWords
-      ? words.slice(0, maxWords).join(' ') + '...'
-      : text;
-  };
-
   return (
     <>
-      <div
-        className="bg-white items-center rounded-md border p-4 shadow-sm flex justify-between cursor-pointer w-full"
-        onClick={handleCardClick}
-      >
-        <div className="flex items-center">
-
-          <div className="text-sm font-medium text-black-700">
-            {truncateText(question.question, 20)}
+      <div className="bg-white items-center rounded-md border p-4 shadow-sm flex justify-between cursor-pointer w-full">
+        <div
+          className="flex items-center "
+          onClick={() => setIsModalOpen(true)}
+        >
+          <div className="text-sm font-medium text-black-700 line-clamp-2">
+            {question.question}
           </div>
         </div>
+
         {question.admin_isopen === false && (
-            <div className="text-green-500">New</div>
-          )}
-        <div className="flex items-center space-x-4">
+          <div className="text-green-500">New</div>
+        )}
+        <div className="flex items-center space-x-4 pl-2">
+          <div className="">
+            <NewUpdateIcon
+              classNamePath="fill-[#F0FDF4] dark:fill-[#052E16]"
+              classNameCircle="fill-[#15803D] dark:fill-[#16A34A]"
+              classNamePath2="fill-[#15803D] dark:fill-[#16A34A]"
+            ></NewUpdateIcon>
+          </div>
           <select
-            className="border rounded p-1"
+            className="border-[1px] border-outline-200 rounded-lg p-1 shadow-button"
             value={selectedAgency}
             onChange={handleAgencyChange}
           >
@@ -127,34 +134,80 @@ const AdminQuestionCard: React.FC<QuestionCardProps> = ({ question }) => {
               </option>
             ))}
           </select>
-          <div className="font-normal text-sm text-dim-500">
+          <div className="font-normal text-sm text-dim-500 min-w-[160px]">
             {formatDate(question.date)}
           </div>
         </div>
       </div>
       <Modal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)}>
-        <div className="text-sm text-gray-500">
-          Question posted on {formatDate(question.date)} &nbsp; | &nbsp; ID:{' '}
-          {question.id}
-        </div>
-        <h2 className="text-xl font-semibold mb-4 mt-2">Question Details</h2>
-        <p className="mb-4">{question.question}</p>
-        <div className="mt-4">
-          <label className="block text-sm font-medium text-gray-700 mb-1">
-            Assign to agency:
-          </label>
-          <select
-            className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-            value={selectedAgency}
-            onChange={handleAgencyChange}
-          >
-            <option value="Unassigned">Unassigned</option>
-            {Object.keys(AGENCY_TO_UUID).map(agencyAcronym => (
-              <option key={agencyAcronym} value={agencyAcronym}>
-                {agencyAcronym}
-              </option>
-            ))}
-          </select>
+        <div className="relative p-6">
+          <div className="absolute top-[14px] right-[14px]">
+            <button
+              onClick={() => setIsModalOpen(false)}
+              className="hover:cursor-pointer rounded-lg shadow-button h-8 w-8 flex items-center justify-center border-[1px] border-outline-200"
+            >
+              <Close className="stroke-black-900" />
+            </button>
+          </div>
+
+          <div className="">
+            <div className="text-sm text-black-700 font-medium flex">
+              <div className="pr-1">Question posted</div>
+              <div className="pr-2">
+                <DateComponent
+                  date={formatDate(question.date)}
+                  locale={''}
+                ></DateComponent>
+              </div>
+              <div className="bg-washed-100 h-[22px] px-2 rounded -full text-xs leading-[18px] items-center flex text-dim-500">
+                ID: {question.id}
+              </div>
+            </div>
+            <div className="flex pt-[9px] ">
+              <div className="pr-3">
+                <div className="flex flex-col items-center">
+                  <IconQuestionSmile2 />
+                  <div className="h-2"></div>
+                  <LineVerticalForSmile height={svgHeight} />
+                </div>
+              </div>
+
+              <div
+                className="text-brand-600 text-base font-medium"
+                ref={questionTextRef}
+              >
+                {question.question}
+              </div>
+            </div>
+
+            <div className="pt-2">
+              <div className="flex">
+                <div className="pr-3">
+                  {successMessage ? (
+                    <TickCheckCircleInCircle></TickCheckCircleInCircle>
+                  ) : (
+                    <PlusCircle />
+                  )}
+                </div>
+
+                <div>
+                  <div className="text-sm text-black-700 font-medium pb-[6px]">
+                    Assign to agency:
+                  </div>
+
+                  <AgencyListDropdown
+                    selectedAgency={selectedAgency}
+                    setSelectedAgency={setSelectedAgency}
+                    AGENCY_TO_UUID={AGENCY_TO_UUID}
+                    setSuccessMessage={setSuccessMessage} // Pass the function as a prop
+                  />
+                </div>
+              </div>
+            </div>
+            {successMessage && (
+              <div className="mt-2 text-green-600">{successMessage}</div>
+            )}
+          </div>
         </div>
       </Modal>
     </>

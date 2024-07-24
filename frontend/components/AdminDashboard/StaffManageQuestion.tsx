@@ -73,7 +73,10 @@ const StaffManageQuestions: React.FC = () => {
 
   return (
     <div className="items-center justify-center py-6">
-      <StaffQuestionNavbar unassignedCount={unassignedCount} setSearchTerm={setSearchTerm} />
+      <StaffQuestionNavbar
+        unassignedCount={unassignedCount}
+        setSearchTerm={setSearchTerm}
+      />
       <div className="w-full flex py-6">
         <StaffQuestionBox questions={filteredQuestions} />
       </div>
