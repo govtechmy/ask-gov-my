@@ -74,13 +74,11 @@ export async function searchQuestions(query: string) {
                 multi_match: {
                   query,
                   fields: [
-                    'question',
                     'agency.name',
                     'agency.acronym',
                     'agency.name_ms',
                     'topics.name',
                     'topics.name_ms',
-                    'answer',
                   ],
                 },
               },
