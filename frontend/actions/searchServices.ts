@@ -1,11 +1,12 @@
 'use server';
 import dotenv from 'dotenv';
 import { Client } from '@elastic/elasticsearch';
-import { AGENCY_TO_UUID } from '@/lib/agency';
+import OpenAI from 'openai';
 dotenv.config();
 
 const elasticsearchURL = process.env.ELASTICSEARCH_URL;
 const elasticsearchApiKey = process.env.ELASTICSEARCH_API_KEY;
+const openaiApiKey = process.env.OPENAI_API_KEY;
 
 const client = new Client({
   node: elasticsearchURL,
@@ -14,15 +15,28 @@ const client = new Client({
   },
 });
 
+const openai = new OpenAI({
+  apiKey: openaiApiKey,
+});
+
 interface Question {
   id: number;
   question: string;
   date: string;
   answered_date: string;
   state: string;
-  agency: number;
+  agency: {
+    id: number;
+    name: string;
+    acronym: string;
+    name_ms: string;
+  };
   answer: string;
-  topics: number[];
+  topics: {
+    id: number;
+    name: string;
+    name_ms: string;
+  }[];
   email?: string;
   likes: number;
   dislikes: number;
@@ -31,8 +45,18 @@ interface Question {
   staff_isopen?: boolean;
 }
 
+async function getEmbedding(text: string): Promise<number[]> {
+  const response = await openai.embeddings.create({
+    model: 'text-embedding-ada-002',
+    input: text,
+  });
+  return response.data[0].embedding;
+}
+
 export async function searchQuestions(query: string) {
   try {
+    const embedding = await getEmbedding(query);
+
     const result = await client.search({
       index: 'questions',
       body: {
@@ -40,19 +64,28 @@ export async function searchQuestions(query: string) {
           bool: {
             must: [
               {
-                query_string: {
-                  query: `*${query}*`,
+                knn: {
+                  field: 'vector',
+                  query_vector: embedding,
+                  num_candidates: 1000, // Number of candidates to consider
+                },
+              },
+              {
+                multi_match: {
+                  query,
                   fields: [
                     'question',
                     'agency.name',
-                    'topics.title',
-                    'answer',
                     'agency.acronym',
+                    'agency.name_ms',
+                    'topics.name',
+                    'topics.name_ms',
+                    'answer',
                   ],
                 },
               },
               {
-                match: {
+                term: {
                   state: 'completed',
                 },
               },
@@ -62,7 +95,9 @@ export async function searchQuestions(query: string) {
       },
     });
 
-    return result.hits.hits.map((hit: any) => hit._source);
+    const filteredQuestions = result.hits.hits.map((hit: any) => hit._source);
+
+    return filteredQuestions;
   } catch (error) {
     console.error('Error searching questions:', error);
     return [];
