@@ -126,7 +126,7 @@ const AdminQuestionCard: React.FC<QuestionCardProps> = ({
           <div className="font-normal text-sm text-dim-500 min-w-[160px] ">
             {formatDate(question.date)}
           </div>
-          <ThreeDottedMarkAsSpam></ThreeDottedMarkAsSpam>
+          <ThreeDottedMarkAsSpam question={question}></ThreeDottedMarkAsSpam>
         </div>
       </div>
 

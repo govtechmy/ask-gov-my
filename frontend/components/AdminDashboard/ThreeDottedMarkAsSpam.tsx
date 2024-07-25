@@ -3,7 +3,7 @@ import ThreeDotted from '@/icons/threedotted';
 import { useState } from 'react';
 import ModalMarkAsSpam from './ModalMarkAsSpam';
 
-const ThreeDottedMarkAsSpam: React.FC = () => {
+const ThreeDottedMarkAsSpam: React.FC = ({question}) => {
   const [isDropdownVisible, setIsDropdownVisible] = useState(false);
   const [isModalMarkAsSpamOpen, setIsModalMarkAsSpamOpen] = useState(false);
 
@@ -47,6 +47,7 @@ const ThreeDottedMarkAsSpam: React.FC = () => {
               Mark As Spam
             </div>
             <ModalMarkAsSpam
+              question={question}
               isOpen={isModalMarkAsSpamOpen}
               onClose={() => setIsModalMarkAsSpamOpen(false)}
             />

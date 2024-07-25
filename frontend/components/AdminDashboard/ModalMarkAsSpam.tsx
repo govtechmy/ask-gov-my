@@ -8,14 +8,17 @@ interface ModalProps {
   onClose: () => void;
 }
 
-const ModalMarkAsSpam: React.FC<ModalProps> = ({ isOpen, onClose }) => {
+const ModalMarkAsSpam: React.FC<ModalProps> = ({ isOpen, onClose, question }) => {
   if (!isOpen) return null;
 
   const [showToast, setShowToast] = useState(false);
   const ToastQuestionMarkAsSpamTrigger = () => {
     setShowToast(true);
   };
-
+async function calltrigger() {
+  await markQuestionAsSpam(question.id)
+  question.state = "spam"
+}
   return (
     <div className="z-10 fixed inset-0 bg-gray-900 flex items-center justify-center bg-opacity-70">
       <div className="bg-white rounded-xl shadow-lg h-[170px] w-[400px]">
@@ -46,7 +49,7 @@ const ModalMarkAsSpam: React.FC<ModalProps> = ({ isOpen, onClose }) => {
             className="w-[133px] h-[44px] bg-[#DC2626] text-white-forcewhite text-base rounded-lg items-center justify-center flex mt-6 "
             //onClick={ToastQuestionMarkAsSpamTrigger}
             //fail
-            // onClick={changequestiontospam}
+            onClick={calltrigger}
           >
             Mark as Spam
           </div>
