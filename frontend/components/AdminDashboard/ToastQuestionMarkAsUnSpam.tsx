@@ -36,7 +36,7 @@ const ToastQuestionMarkAsUnSpam: React.FC<ToastProps> = ({
     if (animationState === 'enter') {
       const timer = setTimeout(() => {
         setAnimationState('exit');
-      }, 1000000); // Time before starting to close
+      }, 2000); // Time before starting to close
       return () => clearTimeout(timer);
     }
   }, [animationState]);
@@ -119,7 +119,7 @@ const ToastQuestionMarkAsUnSpam: React.FC<ToastProps> = ({
             animation: slideOut 0.2s ease-in-out forwards;
           }
           .animate-underlineDecline {
-            animation: underlineDecline 100000s linear forwards;
+            animation: underlineDecline 2s linear forwards;
           }
         `}
       </style>

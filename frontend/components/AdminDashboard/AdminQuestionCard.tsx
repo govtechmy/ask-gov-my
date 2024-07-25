@@ -78,7 +78,6 @@ const AdminQuestionCard: React.FC<QuestionCardProps> = ({
 
   const searchParams = useSearchParams();
   const activeTab = searchParams.get('tab') || 'all';
-  console.log(activeTab);
 
   return (
     <>

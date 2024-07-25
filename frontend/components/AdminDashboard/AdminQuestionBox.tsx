@@ -5,9 +5,7 @@ import AdminQuestionCard from './AdminQuestionCard';
 import RightArrow from '@/icons/rightarrow';
 import LeftArrow from '@/icons/leftarrow';
 import { useSearchParams } from 'next/navigation';
-import AnswerQuestionCard from './AnswerQuestionCard';
 import { Question } from '@/types/types';
-// import { useactiveQuestionId } from '../activeQuestionIdContext';
 
 interface QuestionBoxProps {
   questions: Question[];
@@ -118,7 +116,7 @@ const AdminQuestionBox: React.FC<QuestionBoxProps> = ({ questions }) => {
   return (
     <div>
       {currentQuestions.map(question => (
-        <div className="py-1">
+        <div className="py-1" key={question.id}>
           <AdminQuestionCard
             key={question.id}
             question={question}

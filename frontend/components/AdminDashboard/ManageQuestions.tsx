@@ -81,7 +81,7 @@ const ManageQuestions: React.FC = () => {
         className="test-div cursor-pointer p-4 bg-green-500 text-white text-center mt-4"
         onClick={ToastQuestionMarkAsUnSpamTrigger}
       >
-        Click me to trigger not spam toast
+        Click me to trigger un-spam toast
       </div>
       {showToastSpam && (
         <ToastQuestionMarkAsSpam
