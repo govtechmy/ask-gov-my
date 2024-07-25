@@ -29,7 +29,10 @@ const AdminQuestionBox: React.FC<QuestionBoxProps> = ({ questions }) => {
       filtered = questions.filter(question => question.agency === null);
     } else if (activeTab === 'assigned') {
       filtered = questions.filter(question => question.agency !== null);
+    } else if (activeTab === 'spam') {
+      filtered = questions.filter(question => question.state === 'spam');
     }
+
     setFilteredQuestions(filtered);
     setCurrentPage(1); // reset to first page when tab changes
   }, [questions, activeTab]);
