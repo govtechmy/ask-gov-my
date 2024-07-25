@@ -1,18 +1,24 @@
 import AlarmTriangle from '@/icons/alarmtriangle';
 import ThreeDotted from '@/icons/threedotted';
-import { useState, useRef } from 'react';
+import { useState } from 'react';
+import ModalMarkAsSpam from './ModalMarkAsSpam';
 
 const ThreeDottedMarkAsSpam: React.FC = () => {
   const [isDropdownVisible, setIsDropdownVisible] = useState(false);
-  const dropdownRef = useRef<HTMLDivElement>(null);
+  const [isModalMarkAsSpamOpen, setIsModalMarkAsSpamOpen] = useState(false);
 
   const handleClick = () => {
     setIsDropdownVisible(prevState => !prevState);
   };
 
+  const handleMarkAsSpamClick = () => {
+    setIsModalMarkAsSpamOpen(true);
+    setIsDropdownVisible(false);
+  };
+
   return (
     <div className="relative">
-      <div className="group flex relative" ref={dropdownRef}>
+      <div className="group flex relative">
         <div
           className={`opacity-0 ${isDropdownVisible ? 'opacity-100' : 'group-hover:opacity-100'}
           h-8 w-8 border-[1px] border-outline-200 bg-white rounded-lg shadow-button
@@ -30,7 +36,8 @@ const ThreeDottedMarkAsSpam: React.FC = () => {
           <div
             className="absolute top-[4px] right-[4px] w-[143px] h-[32px] 
             items-center flex justify-center rounded-[4px]
-            bg-washed-100 "
+            bg-washed-100 cursor-pointer"
+            onClick={handleMarkAsSpamClick}
           >
             <div className="pl-2">
               <AlarmTriangle className="stroke-[#DC2626] dark:stroke-[#FF5959]"></AlarmTriangle>
@@ -41,6 +48,10 @@ const ThreeDottedMarkAsSpam: React.FC = () => {
           </div>
         </div>
       )}
+      <ModalMarkAsSpam
+        isOpen={isModalMarkAsSpamOpen}
+        onClose={() => setIsModalMarkAsSpamOpen(false)}
+      />
     </div>
   );
 };
