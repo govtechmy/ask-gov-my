@@ -1,7 +1,5 @@
-import AlarmTriangle from '@/icons/alarmtriangle';
 import ThreeDotted from '@/icons/threedotted';
 import { useState } from 'react';
-import ModalMarkAsSpam from './ModalMarkAsSpam';
 import { Question } from '@/types/types';
 import TickCheckCircle from '@/icons/tickcheckcircle';
 import ModalMarkAsUnSpam from './ModalMarkAsUnSpam';
