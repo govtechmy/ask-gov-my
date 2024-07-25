@@ -1,6 +1,6 @@
 import AlarmTriangle from '@/icons/alarmtriangle';
 import ThreeDotted from '@/icons/threedotted';
-import { useState, useEffect, useRef } from 'react';
+import { useState, useRef } from 'react';
 
 const ThreeDottedMarkAsSpam: React.FC = () => {
   const [isDropdownVisible, setIsDropdownVisible] = useState(false);
@@ -9,27 +9,6 @@ const ThreeDottedMarkAsSpam: React.FC = () => {
   const handleClick = () => {
     setIsDropdownVisible(prevState => !prevState);
   };
-
-  const handleClickOutside = (event: MouseEvent) => {
-    if (
-      dropdownRef.current &&
-      !dropdownRef.current.contains(event.target as Node)
-    ) {
-      setIsDropdownVisible(false);
-    }
-  };
-
-  //   useEffect(() => {
-  //     if (isDropdownVisible) {
-  //       document.addEventListener('mousedown', handleClickOutside);
-  //     } else {
-  //       document.removeEventListener('mousedown', handleClickOutside);
-  //     }
-
-  //     return () => {
-  //       document.removeEventListener('mousedown', handleClickOutside);
-  //     };
-  //   }, [isDropdownVisible]);
 
   return (
     <div className="relative">
