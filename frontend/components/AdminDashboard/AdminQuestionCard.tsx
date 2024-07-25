@@ -11,6 +11,8 @@ import AgencyListDropdownOnCard from './AgencyListDropdownOnCard';
 import ModalQuestionCard from './ModalQuestionCard';
 import ThreeDottedMarkAsSpam from './ThreeDottedMarkAsSpam';
 import SpamUpdateIcon from '@/icons/spam';
+import { useSearchParams } from 'next/navigation';
+import ThreeDottedMarkAsUnSpam from './ThreeDottedMarkAsUnSpam';
 
 interface QuestionCardProps {
   question: Question;
@@ -74,6 +76,10 @@ const AdminQuestionCard: React.FC<QuestionCardProps> = ({
     setIsDropdownVisible(prevState => !prevState);
   };
 
+  const searchParams = useSearchParams();
+  const activeTab = searchParams.get('tab') || 'all';
+  console.log(activeTab);
+
   return (
     <>
       <div className="bg-white items-center rounded-md border p-4 shadow-sm flex justify-between w-full">
@@ -123,7 +129,17 @@ const AdminQuestionCard: React.FC<QuestionCardProps> = ({
           <div className="font-normal text-sm text-dim-500 w-[180px] pl-3 ">
             {formatDate(question.date)}
           </div>
-          <ThreeDottedMarkAsSpam question={question}></ThreeDottedMarkAsSpam>
+          <div>
+            {activeTab === 'spam' ? (
+              <ThreeDottedMarkAsUnSpam
+                question={question}
+              ></ThreeDottedMarkAsUnSpam>
+            ) : (
+              <ThreeDottedMarkAsSpam
+                question={question}
+              ></ThreeDottedMarkAsSpam>
+            )}
+          </div>
         </div>
       </div>
 

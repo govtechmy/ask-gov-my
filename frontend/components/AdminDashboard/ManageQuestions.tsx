@@ -7,6 +7,7 @@ import AdminQuestionBox from '@/components/AdminDashboard/AdminQuestionBox';
 import QuestionNavbar from '@/components/AdminDashboard/QuestionNavbar';
 import { Question } from '@/types/types';
 import ToastQuestionMarkAsSpam from './ToastQuestionMarkAsSpam';
+import ToastQuestionMarkAsUnSpam from './ToastQuestionMarkAsUnSpam'; // Import the new toast component
 
 const ManageQuestions: React.FC = () => {
   const t = useTranslations('Adminlogin');
@@ -16,7 +17,8 @@ const ManageQuestions: React.FC = () => {
   const [error, setError] = useState<string | null>(null);
   const [unassignedCount, setUnassignedCount] = useState(0);
   const [searchTerm, setSearchTerm] = useState('');
-  const [showToast, setShowToast] = useState(false);
+  const [showToastSpam, setShowToastSpam] = useState(false);
+  const [showToastUnSpam, setShowToastUnSpam] = useState(false);
 
   useEffect(() => {
     const fetchQuestions = async () => {
@@ -45,7 +47,11 @@ const ManageQuestions: React.FC = () => {
   }, [searchTerm, questions]); // Runs whenever searchTerm or questions change
 
   const ToastQuestionMarkAsSpamTrigger = () => {
-    setShowToast(true);
+    setShowToastSpam(true);
+  };
+
+  const ToastQuestionMarkAsUnSpamTrigger = () => {
+    setShowToastUnSpam(true);
   };
 
   if (loading) {
@@ -69,13 +75,26 @@ const ManageQuestions: React.FC = () => {
         className="test-div cursor-pointer p-4 bg-blue-500 text-white text-center mt-4"
         onClick={ToastQuestionMarkAsSpamTrigger}
       >
-        Click me to trigger toast
+        Click me to trigger spam toast
       </div>
-      {showToast && (
+      <div
+        className="test-div cursor-pointer p-4 bg-green-500 text-white text-center mt-4"
+        onClick={ToastQuestionMarkAsUnSpamTrigger}
+      >
+        Click me to trigger not spam toast
+      </div>
+      {showToastSpam && (
         <ToastQuestionMarkAsSpam
           message="Question marked as spam"
-          show={showToast}
-          onClose={() => setShowToast(false)}
+          show={showToastSpam}
+          onClose={() => setShowToastSpam(false)}
+        />
+      )}
+      {showToastUnSpam && (
+        <ToastQuestionMarkAsUnSpam
+          message="Question marked as not spam"
+          show={showToastUnSpam}
+          onClose={() => setShowToastUnSpam(false)}
         />
       )}
     </div>
