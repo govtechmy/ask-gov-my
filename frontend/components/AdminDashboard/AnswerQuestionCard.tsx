@@ -32,15 +32,15 @@ const AnswerQuestionCard: React.FC<QuestionCardProps> = ({ question }) => {
   const [isStaffOpen, setIsStaffOpen] = useState(question.staff_isopen);
 
   const handleCardClick = async () => {
-    if (!isStaffOpen) {
+    setIsModalOpen(true);
+    if (!question.admin_isopen) {
       try {
         await changeStaffIsOpen(question.id);
-        setIsStaffOpen(true);
+        question.admin_isopen = true;
       } catch (error) {
-        console.error('Failed to change staff_isopen:', error);
+        console.error('Failed to change admin_isopen:', error);
       }
     }
-    setIsModalOpen(true);
   };
 
   const formatDate = (dateString: string) => {
