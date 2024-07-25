@@ -85,34 +85,31 @@ const AdminQuestionCard: React.FC<QuestionCardProps> = ({
             {question.question}
           </div>
         </div>
-        <div className="flex items-center space-x-4 pl-2">
-          <div className="">
-            {question.admin_isopen === false && (
-              <NewUpdateIcon
-                classNamePath="fill-[#F0FDF4] dark:fill-[#052E16]"
-                classNameCircle="fill-[#15803D] dark:fill-[#16A34A]"
-                classNamePath2="fill-[#15803D] dark:fill-[#16A34A]"
-              />
-            )}
-            {/* {question.admin_isopen === true && (
-              <div className="h-[22px] w-[55px]"></div>
-            )} */}
-            {/* {question.admin_isopen === true && (
-              <SpamUpdateIcon
-                classNamePath="fill-[#FEF2F2] dark:fill-[#2B0707]"
-                classNameCircle="fill-[#DC2626] dark:fill-[#FF5959]"
-                classNamePath2="fill-[#DC2626] dark:fill-[#FF5959]"
-              ></SpamUpdateIcon>
-            )} */}
+        <div className="flex items-center">
+          <div>
             {question.state === 'spam' && (
-              <SpamUpdateIcon
-                classNamePath="fill-[#FEF2F2] dark:fill-[#2B0707]"
-                classNameCircle="fill-[#DC2626] dark:fill-[#FF5959]"
-                classNamePath2="fill-[#DC2626] dark:fill-[#FF5959]"
-              ></SpamUpdateIcon>
+              <div className="w-16 h-8 items-center justify-center flex">
+                <SpamUpdateIcon
+                  classNamePath="fill-[#FEF2F2] dark:fill-[#2B0707]"
+                  classNameCircle="fill-[#DC2626] dark:fill-[#FF5959]"
+                  classNamePath2="fill-[#DC2626] dark:fill-[#FF5959]"
+                ></SpamUpdateIcon>
+              </div>
+            )}
+            {question.admin_isopen === false && question.state !== 'spam' && (
+              <div className="w-16 h-8 items-center justify-center flex">
+                <NewUpdateIcon
+                  classNamePath="fill-[#F0FDF4] dark:fill-[#052E16]"
+                  classNameCircle="fill-[#15803D] dark:fill-[#16A34A]"
+                  classNamePath2="fill-[#15803D] dark:fill-[#16A34A]"
+                />
+              </div>
+            )}
+            {question.admin_isopen === true && question.state !== 'spam' && (
+              <div className="h-[22px] w-[55px]"></div>
             )}
           </div>
-          <div className="relative">
+          <div className="relative pl-3">
             <AgencyListDropdownOnCard
               selectedAgency={selectedAgency}
               setSelectedAgency={setSelectedAgency}
@@ -123,7 +120,7 @@ const AdminQuestionCard: React.FC<QuestionCardProps> = ({
               questionId={question.id}
             />
           </div>
-          <div className="font-normal text-sm text-dim-500 min-w-[160px] ">
+          <div className="font-normal text-sm text-dim-500 w-[180px] pl-3 ">
             {formatDate(question.date)}
           </div>
           <ThreeDottedMarkAsSpam question={question}></ThreeDottedMarkAsSpam>

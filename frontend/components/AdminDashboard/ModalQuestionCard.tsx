@@ -95,7 +95,11 @@ const ModalQuestionCard: React.FC<ModalProps> = ({
         <div className="pt-2">
           <div className="flex">
             <div className="pr-3">
-              {successMessage ? <TickCheckCircleInCircle /> : <PlusCircle />}
+              {successMessage ? (
+                <TickCheckCircleInCircle className="stroke-[#16A34A]" />
+              ) : (
+                <PlusCircle />
+              )}
             </div>
             <div>
               <div className="text-sm text-black-700 font-medium pb-[6px]">
@@ -111,7 +115,9 @@ const ModalQuestionCard: React.FC<ModalProps> = ({
           </div>
         </div>
         {successMessage && (
-          <div className="mt-2 text-green-600">{successMessage}</div>
+          <div className="mt-2 text-[#15803D] dark:text-[#16A34A]">
+            {successMessage}
+          </div>
         )}
       </div>
     </div>
