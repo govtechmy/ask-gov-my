@@ -47,7 +47,7 @@ interface Question {
 
 async function getEmbedding(text: string): Promise<number[]> {
   const response = await openai.embeddings.create({
-    model: 'text-embedding-ada-002',
+    model: 'text-embedding-3-small',
     input: text,
   });
   return response.data[0].embedding;
@@ -62,12 +62,12 @@ export async function searchQuestions(query: string) {
       body: {
         query: {
           bool: {
-            must: [
+            should: [
               {
                 knn: {
                   field: 'vector',
                   query_vector: embedding,
-                  num_candidates: 1000, // Number of candidates to consider
+                  num_candidates: 1000,
                 },
               },
               {
@@ -82,18 +82,15 @@ export async function searchQuestions(query: string) {
                   ],
                 },
               },
-              {
-                term: {
-                  state: 'completed',
-                },
-              },
             ],
           },
         },
       },
     });
 
-    const filteredQuestions = result.hits.hits.map((hit: any) => hit._source);
+    const filteredQuestions = result.hits.hits
+      .map((hit: any) => hit._source)
+      .filter((question: Question) => question.state === 'completed');
 
     return filteredQuestions;
   } catch (error) {
@@ -101,6 +98,7 @@ export async function searchQuestions(query: string) {
     return [];
   }
 }
+
 
 export async function getRelatedQuestions(questionText: string) {
   try {
