@@ -5,20 +5,25 @@ import { PrismaClient } from '@prisma/client';
 import { NextAuthOptions } from 'next-auth';
 import { sendEmail } from './sendMail';
 import LoginLink from './logic-link';
+import { checkUserEmailExists } from './userServices';
 
 const prisma = new PrismaClient();
 
 export const authOptions: NextAuthOptions = {
-  providers: [ //need to add function to check the email inside the db, if exists allow to login
+  providers: [
     EmailProvider({
       async sendVerificationRequest({ identifier, url }) {
-        // await sendEmail({
-        //   email: identifier,
-        //   subject: `Your ${process.env.NEXT_PUBLIC_APP_NAME} Login Link`,
-        //   react: LoginLink({ url, email: identifier }),
-        // });
-        console.log(url)
-        return;
+        const emailExists = await checkUserEmailExists(identifier);
+        if (emailExists) {
+          // await sendEmail({
+          //   email: identifier,
+          //   subject: `Your ${process.env.NEXT_PUBLIC_APP_NAME} Login Link`,
+          //   react: LoginLink({ url, email: identifier }),
+          // });
+          console.log(url)
+        } else {
+          console.error('Email not found in the database.');
+        }
       },
     }),
   ],
@@ -26,13 +31,12 @@ export const authOptions: NextAuthOptions = {
   secret: process.env.NEXTAUTH_SECRET,
   pages: {
     signIn: '/admin',
-    verifyRequest: '/admin/checkmail', // send users here after they sign in to check their email
+    verifyRequest: '/admin/checkmail',
     error: '/',
   },
   session: {
     strategy: "jwt",
   },
-
   callbacks: {
     async session({ session, token }) {
       if (token) {
