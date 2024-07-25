@@ -7,13 +7,12 @@ const ThreeDottedMarkAsSpam: React.FC = () => {
   const [isDropdownVisible, setIsDropdownVisible] = useState(false);
   const [isModalMarkAsSpamOpen, setIsModalMarkAsSpamOpen] = useState(false);
 
-  const handleClick = () => {
+  const handleDropdownClick = () => {
     setIsDropdownVisible(prevState => !prevState);
   };
 
-  const handleMarkAsSpamClick = () => {
+  const handleMarkAsSpamTrigger = () => {
     setIsModalMarkAsSpamOpen(true);
-    setIsDropdownVisible(false);
   };
 
   return (
@@ -23,7 +22,7 @@ const ThreeDottedMarkAsSpam: React.FC = () => {
           className={`opacity-0 ${isDropdownVisible ? 'opacity-100' : 'group-hover:opacity-100'}
           h-8 w-8 border-[1px] border-outline-200 bg-white rounded-lg shadow-button
           items-center justify-center absolute flex top-[-16px] right-[-6px]`}
-          onClick={handleClick}
+          onClick={handleDropdownClick}
         >
           <ThreeDotted className="fill-black-900 stroke-black-700" />
         </div>
@@ -36,22 +35,24 @@ const ThreeDottedMarkAsSpam: React.FC = () => {
           <div
             className="absolute top-[4px] right-[4px] w-[143px] h-[32px] 
             items-center flex justify-center rounded-[4px]
-            bg-washed-100 cursor-pointer"
-            onClick={handleMarkAsSpamClick}
+            bg-washed-100"
           >
             <div className="pl-2">
-              <AlarmTriangle className="stroke-[#DC2626] dark:stroke-[#FF5959]"></AlarmTriangle>
+              <AlarmTriangle className="stroke-[#DC2626] dark:stroke-[#FF5959]" />
             </div>
-            <div className="text-sm font-medium text-[#DC2626] dark:text-[#FF5959] px-2">
+            <div
+              className="text-sm font-medium text-[#DC2626] dark:text-[#FF5959] px-2 cursor-pointer"
+              onClick={handleMarkAsSpamTrigger}
+            >
               Mark As Spam
             </div>
+            <ModalMarkAsSpam
+              isOpen={isModalMarkAsSpamOpen}
+              onClose={() => setIsModalMarkAsSpamOpen(false)}
+            />
           </div>
         </div>
       )}
-      <ModalMarkAsSpam
-        isOpen={isModalMarkAsSpamOpen}
-        onClose={() => setIsModalMarkAsSpamOpen(false)}
-      />
     </div>
   );
 };

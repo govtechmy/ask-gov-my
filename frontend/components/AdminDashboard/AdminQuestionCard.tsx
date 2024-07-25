@@ -10,6 +10,7 @@ import { Question } from '@/types/types';
 import AgencyListDropdownOnCard from './AgencyListDropdownOnCard';
 import ModalQuestionCard from './ModalQuestionCard';
 import ThreeDottedMarkAsSpam from './ThreeDottedMarkAsSpam';
+import SpamUpdateIcon from '@/icons/spam';
 
 interface QuestionCardProps {
   question: Question;
@@ -93,8 +94,15 @@ const AdminQuestionCard: React.FC<QuestionCardProps> = ({
                 classNamePath2="fill-[#15803D] dark:fill-[#16A34A]"
               />
             )}
-            {question.admin_isopen === true && (
+            {/* {question.admin_isopen === true && (
               <div className="h-[22px] w-[55px]"></div>
+            )} */}
+            {question.admin_isopen === true && (
+              <SpamUpdateIcon
+                classNamePath="fill-[#FEF2F2] dark:fill-[#2B0707]"
+                classNameCircle="fill-[#DC2626] dark:fill-[#FF5959]"
+                classNamePath2="fill-[#DC2626] dark:fill-[#FF5959]"
+              ></SpamUpdateIcon>
             )}
           </div>
           <div className="relative">
