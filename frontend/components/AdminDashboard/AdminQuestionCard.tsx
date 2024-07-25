@@ -97,7 +97,14 @@ const AdminQuestionCard: React.FC<QuestionCardProps> = ({
             {/* {question.admin_isopen === true && (
               <div className="h-[22px] w-[55px]"></div>
             )} */}
-            {question.admin_isopen === true && (
+            {/* {question.admin_isopen === true && (
+              <SpamUpdateIcon
+                classNamePath="fill-[#FEF2F2] dark:fill-[#2B0707]"
+                classNameCircle="fill-[#DC2626] dark:fill-[#FF5959]"
+                classNamePath2="fill-[#DC2626] dark:fill-[#FF5959]"
+              ></SpamUpdateIcon>
+            )} */}
+            {question.state === 'spam' && (
               <SpamUpdateIcon
                 classNamePath="fill-[#FEF2F2] dark:fill-[#2B0707]"
                 classNameCircle="fill-[#DC2626] dark:fill-[#FF5959]"

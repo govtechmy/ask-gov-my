@@ -1,6 +1,7 @@
 import Close from '@/icons/close';
 import React, { useState } from 'react';
 import ToastQuestionMarkAsSpam from './ToastQuestionMarkAsSpam';
+import { markQuestionAsSpam } from '@/actions/userServices';
 
 interface ModalProps {
   isOpen: boolean;
@@ -43,7 +44,9 @@ const ModalMarkAsSpam: React.FC<ModalProps> = ({ isOpen, onClose }) => {
           </button>
           <div
             className="w-[133px] h-[44px] bg-[#DC2626] text-white-forcewhite text-base rounded-lg items-center justify-center flex mt-6 "
-            onClick={ToastQuestionMarkAsSpamTrigger}
+            //onClick={ToastQuestionMarkAsSpamTrigger}
+            //fail
+            // onClick={changequestiontospam}
           >
             Mark as Spam
           </div>
