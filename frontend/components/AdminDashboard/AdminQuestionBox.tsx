@@ -29,6 +29,8 @@ const AdminQuestionBox: React.FC<QuestionBoxProps> = ({ questions }) => {
       filtered = questions.filter(question => question.agency !== null);
     } else if (activeTab === 'spam') {
       filtered = questions.filter(question => question.state === 'spam');
+    } else if (activeTab === 'all') {
+      filtered = questions.filter(question => question.state !== 'spam');
     }
 
     setFilteredQuestions(filtered);
