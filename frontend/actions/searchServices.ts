@@ -103,3 +103,13 @@ export async function searchQuestions(query: string) {
     return [];
   }
 }
+
+export async function getRelatedQuestions(questionText: string) {
+  try {
+    const relatedQuestions = await searchQuestions(questionText);
+    return relatedQuestions.slice(0, 4); // Return only the top 4 related questions
+  } catch (error) {
+    console.error('Error fetching related questions:', error);
+    return [];
+  }
+}
