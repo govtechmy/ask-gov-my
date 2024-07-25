@@ -2,23 +2,29 @@ import Close from '@/icons/close';
 import React, { useState } from 'react';
 import ToastQuestionMarkAsSpam from './ToastQuestionMarkAsSpam';
 import { markQuestionAsSpam } from '@/actions/userServices';
+import { Question } from '@/types/types';
 
 interface ModalProps {
   isOpen: boolean;
   onClose: () => void;
+  question: Question;
 }
 
-const ModalMarkAsSpam: React.FC<ModalProps> = ({ isOpen, onClose, question }) => {
+const ModalMarkAsSpam: React.FC<ModalProps> = ({
+  isOpen,
+  onClose,
+  question,
+}) => {
   if (!isOpen) return null;
 
   const [showToast, setShowToast] = useState(false);
   const ToastQuestionMarkAsSpamTrigger = () => {
     setShowToast(true);
   };
-async function calltrigger() {
-  await markQuestionAsSpam(question.id)
-  question.state = "spam"
-}
+  async function calltrigger() {
+    await markQuestionAsSpam(question.id);
+    question.state = 'spam';
+  }
   return (
     <div className="z-10 fixed inset-0 bg-gray-900 flex items-center justify-center bg-opacity-70">
       <div className="bg-white rounded-xl shadow-lg h-[170px] w-[400px]">

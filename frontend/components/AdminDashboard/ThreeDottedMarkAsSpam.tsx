@@ -2,8 +2,13 @@ import AlarmTriangle from '@/icons/alarmtriangle';
 import ThreeDotted from '@/icons/threedotted';
 import { useState } from 'react';
 import ModalMarkAsSpam from './ModalMarkAsSpam';
+import { Question } from '@/types/types';
 
-const ThreeDottedMarkAsSpam: React.FC = ({question}) => {
+interface ThreeProps {
+  question: Question;
+}
+
+const ThreeDottedMarkAsSpam: React.FC<ThreeProps> = ({ question }) => {
   const [isDropdownVisible, setIsDropdownVisible] = useState(false);
   const [isModalMarkAsSpamOpen, setIsModalMarkAsSpamOpen] = useState(false);
 
