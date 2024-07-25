@@ -1,5 +1,6 @@
 import Close from '@/icons/close';
 import Info from '@/icons/info';
+import TickCheckCircle from '@/icons/tickcheckcircle';
 import React, { useEffect, useState } from 'react';
 
 interface ToastProps {
@@ -8,7 +9,7 @@ interface ToastProps {
   onClose: () => void;
 }
 
-const ToastQuestionMarkAsSpam: React.FC<ToastProps> = ({
+const ToastQuestionMarkAsUnSpam: React.FC<ToastProps> = ({
   message,
   show,
   onClose,
@@ -35,7 +36,7 @@ const ToastQuestionMarkAsSpam: React.FC<ToastProps> = ({
     if (animationState === 'enter') {
       const timer = setTimeout(() => {
         setAnimationState('exit');
-      }, 2000); // Time before starting to close
+      }, 1000000); // Time before starting to close
       return () => clearTimeout(timer);
     }
   }, [animationState]);
@@ -54,28 +55,24 @@ const ToastQuestionMarkAsSpam: React.FC<ToastProps> = ({
       {visible && (
         <div
           className={`fixed bottom-6 right-6 bg-white-focuswhite200 
-          text-[#A16207] rounded-lg items-center justify-between shadow-button
+          text-[#A16207] rounded-lg items-center  shadow-button
           transition-opacity duration-300 opacity-100 h-[48px] w-[312px] border-[1px] border-outline-200 overflow-hidden
           ${animationState === 'enter' ? 'animate-slideIn' : 'animate-slideOut'}
           `}
         >
           <div className="relative flex items-center">
-            <div className="absolute top-[43px] left-0 h-[3px] bg-[#CA8A04] animate-underlineDecline"></div>
+            <div className="absolute top-[43px] left-0 h-[3px] bg-[#16A34A] animate-underlineDecline"></div>
 
             <div className="absolute top-0 flex items-center h-[45px] w-[310px] rounded-t-[5px] rounded-b-[5px]">
-              <div className="pl-[19px] pr-[15px]">
-                <Info
-                  className="stroke-[#A16207]"
-                  classNameDot="fill-[#A16207]"
-                  classNameBox="rotate-180"
-                ></Info>
+              <div className="ml-[15px] h-6 w-6 flex items-center justify-center ">
+                <TickCheckCircle className="stroke-[#15803D] dark:stroke-[#16A34A]"></TickCheckCircle>
               </div>
 
-              <div className="px-3 text-sm font-medium w-[216px]">
+              <div className="px-3 text-sm font-medium w-[240px] text-[#15803D] dark:text-[#16A34A]">
                 {message}
               </div>
-              <div className="p-3">
-                <button onClick={onClose} className="ml-auto">
+              <div className="">
+                <button onClick={onClose} className="">
                   <Close className="stroke-dim-500" />
                 </button>
               </div>
@@ -122,7 +119,7 @@ const ToastQuestionMarkAsSpam: React.FC<ToastProps> = ({
             animation: slideOut 0.2s ease-in-out forwards;
           }
           .animate-underlineDecline {
-            animation: underlineDecline 2s linear forwards;
+            animation: underlineDecline 100000s linear forwards;
           }
         `}
       </style>
@@ -130,4 +127,4 @@ const ToastQuestionMarkAsSpam: React.FC<ToastProps> = ({
   );
 };
 
-export default ToastQuestionMarkAsSpam;
+export default ToastQuestionMarkAsUnSpam;

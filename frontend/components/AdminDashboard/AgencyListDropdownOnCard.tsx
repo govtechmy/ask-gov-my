@@ -58,8 +58,6 @@ const AgencyListDropdownOnCard: React.FC<AgencyListDropdownProps> = ({
     agencyAcronym.toLowerCase().includes(searchQuery.toLowerCase()),
   );
 
-  console.log(activeQuestionId);
-
   return (
     <div className="relative">
       {' '}
