@@ -99,7 +99,6 @@ export async function searchQuestions(query: string) {
   }
 }
 
-
 export async function getRelatedQuestions(questionText: string) {
   try {
     const relatedQuestions = await searchQuestions(questionText);

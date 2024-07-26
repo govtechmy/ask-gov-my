@@ -1,21 +1,18 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect } from 'react';
 import { useTranslations } from 'next-intl';
 import { AGENCY_TO_UUID } from '@/lib/agency';
 import {
   assignAgencyToQuestion,
   changeAdminIsOpen,
 } from '@/actions/userServices';
-import Modal from './Modal';
 import NewUpdateIcon from '@/icons/new';
-import Close from '@/icons/close';
-import DateComponent from '../date';
 import { Question } from '@/types/types';
-import IconQuestionSmile2 from '@/icons/iconquestionsmile2';
-import LineVerticalForSmile from '@/icons/lineverticalforsmile';
-import PlusCircle from '@/icons/pluscircle';
-import TickCheckCircleInCircle from '@/icons/tickcheckcircleincircle'; // Import the new icon
-import AgencyListDropdown from './AgencyListDropdown';
 import AgencyListDropdownOnCard from './AgencyListDropdownOnCard';
+import ModalQuestionCard from './ModalQuestionCard';
+import ThreeDottedMarkAsSpam from './ThreeDottedMarkAsSpam';
+import SpamUpdateIcon from '@/icons/spam';
+import { useSearchParams } from 'next/navigation';
+import ThreeDottedMarkAsUnSpam from './ThreeDottedMarkAsUnSpam';
 
 interface QuestionCardProps {
   question: Question;
@@ -31,9 +28,7 @@ const AdminQuestionCard: React.FC<QuestionCardProps> = ({
   const t = useTranslations('Agency');
   const [selectedAgency, setSelectedAgency] = useState<string>('Unassigned');
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [successMessage, setSuccessMessage] = useState(''); // New state
-  const questionTextRef = useRef<HTMLDivElement>(null);
-  const [svgHeight, setSvgHeight] = useState<number>(10); // Default height
+  const [successMessage, setSuccessMessage] = useState('');
 
   useEffect(() => {
     if (question.agency !== null) {
@@ -45,36 +40,6 @@ const AdminQuestionCard: React.FC<QuestionCardProps> = ({
       }
     }
   }, [question.agency]);
-
-  useEffect(() => {
-    if (questionTextRef.current) {
-      const textWidth = questionTextRef.current.offsetWidth;
-      const newHeight = textWidth;
-      setSvgHeight(newHeight);
-    }
-  }, [question.question]);
-
-  const handleAgencyChange = async (
-    e: React.ChangeEvent<HTMLSelectElement>,
-  ) => {
-    const newAgencyAcronym = e.target.value;
-    const newAgencyId =
-      newAgencyAcronym === 'Unassigned'
-        ? null
-        : AGENCY_TO_UUID[newAgencyAcronym];
-    setSelectedAgency(newAgencyAcronym);
-
-    if (newAgencyId !== null) {
-      try {
-        await assignAgencyToQuestion(question.id, parseInt(newAgencyId));
-        setSuccessMessage(
-          `Successfully assigned to ${newAgencyAcronym}. Their PIC will be able to answer this question.`,
-        ); // Set success message
-      } catch (error) {
-        console.error('Failed to assign agency to question:', error);
-      }
-    }
-  };
 
   const handleCardClick = async () => {
     setIsModalOpen(true);
@@ -105,37 +70,51 @@ const AdminQuestionCard: React.FC<QuestionCardProps> = ({
     );
   };
 
+  const [isDropdownVisible, setIsDropdownVisible] = useState(false);
+
+  const handleClick = () => {
+    setIsDropdownVisible(prevState => !prevState);
+  };
+
+  const searchParams = useSearchParams();
+  const activeTab = searchParams.get('tab') || 'all';
+
   return (
     <>
-      <div className="bg-white items-center rounded-md border p-4 shadow-sm flex justify-between cursor-pointer w-full" onClick={() => handleCardClick()}>
-        <div className="flex items-center ">
-          <div className="text-sm font-medium text-black-700 line-clamp-2">
+      <div className="bg-white items-center rounded-md border p-4 shadow-sm flex justify-between w-full">
+        <div className="flex items-center">
+          <div
+            className="text-sm font-medium text-black-700 line-clamp-2 hover:cursor-pointer"
+            onClick={handleCardClick}
+          >
             {question.question}
           </div>
         </div>
-
-        <div className="flex items-center space-x-4 pl-2">
-          <div className="">
-            {question.admin_isopen === false && (
-              <NewUpdateIcon
-                classNamePath="fill-[#F0FDF4] dark:fill-[#052E16]"
-                classNameCircle="fill-[#15803D] dark:fill-[#16A34A]"
-                classNamePath2="fill-[#15803D] dark:fill-[#16A34A]"
-              />
+        <div className="flex items-center">
+          <div>
+            {question.state === 'spam' && (
+              <div className="w-16 h-8 items-center justify-center flex">
+                <SpamUpdateIcon
+                  classNamePath="fill-[#FEF2F2] dark:fill-[#2B0707]"
+                  classNameCircle="fill-[#DC2626] dark:fill-[#FF5959]"
+                  classNamePath2="fill-[#DC2626] dark:fill-[#FF5959]"
+                ></SpamUpdateIcon>
+              </div>
             )}
-            {/* {question.admin_isopen === true && (
+            {question.admin_isopen === false && question.state !== 'spam' && (
+              <div className="w-16 h-8 items-center justify-center flex">
+                <NewUpdateIcon
+                  classNamePath="fill-[#F0FDF4] dark:fill-[#052E16]"
+                  classNameCircle="fill-[#15803D] dark:fill-[#16A34A]"
+                  classNamePath2="fill-[#15803D] dark:fill-[#16A34A]"
+                />
+              </div>
+            )}
+            {question.admin_isopen === true && question.state !== 'spam' && (
               <div className="h-[22px] w-[55px]"></div>
-            )} */}
-            {question.admin_isopen === true && (
-              <NewUpdateIcon
-                classNamePath="fill-[#F0FDF4] dark:fill-[#052E16]"
-                classNameCircle="fill-[#15803D] dark:fill-[#16A34A]"
-                classNamePath2="fill-[#15803D] dark:fill-[#16A34A]"
-              />
             )}
           </div>
-
-          <div className="relative">
+          <div className="relative pl-3">
             <AgencyListDropdownOnCard
               selectedAgency={selectedAgency}
               setSelectedAgency={setSelectedAgency}
@@ -146,83 +125,33 @@ const AdminQuestionCard: React.FC<QuestionCardProps> = ({
               questionId={question.id}
             />
           </div>
-
-          <div className="font-normal text-sm text-dim-500 min-w-[160px]">
+          <div className="font-normal text-sm text-dim-500 w-[180px] pl-3 ">
             {formatDate(question.date)}
           </div>
-        </div>
-      </div>
-      <Modal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)}>
-        <div className="relative p-6">
-          <div className="absolute top-[14px] right-[14px]">
-            <button
-              onClick={() => setIsModalOpen(false)}
-              className="hover:cursor-pointer rounded-lg shadow-button h-8 w-8 flex items-center justify-center border-[1px] border-outline-200"
-            >
-              <Close className="stroke-black-900" />
-            </button>
-          </div>
-
-          <div className="">
-            <div className="text-sm text-black-700 font-medium flex">
-              <div className="pr-1">Question posted</div>
-              <div className="pr-2">
-                <DateComponent
-                  date={formatDate(question.date)}
-                  locale={''}
-                ></DateComponent>
-              </div>
-              <div className="bg-washed-100 h-[22px] px-2 rounded -full text-xs leading-[18px] items-center flex text-dim-500">
-                ID: {question.id}
-              </div>
-            </div>
-            <div className="flex pt-[9px] ">
-              <div className="pr-3">
-                <div className="flex flex-col items-center">
-                  <IconQuestionSmile2 />
-                  <div className="h-2"></div>
-                  <LineVerticalForSmile height={svgHeight} />
-                </div>
-              </div>
-
-              <div
-                className="text-brand-600 text-base font-medium"
-                ref={questionTextRef}
-              >
-                {question.question}
-              </div>
-            </div>
-
-            <div className="pt-2">
-              <div className="flex">
-                <div className="pr-3">
-                  {successMessage ? (
-                    <TickCheckCircleInCircle></TickCheckCircleInCircle>
-                  ) : (
-                    <PlusCircle />
-                  )}
-                </div>
-
-                <div>
-                  <div className="text-sm text-black-700 font-medium pb-[6px]">
-                    Assign to agency:
-                  </div>
-
-                  <AgencyListDropdown
-                    selectedAgency={selectedAgency}
-                    setSelectedAgency={setSelectedAgency}
-                    AGENCY_TO_UUID={AGENCY_TO_UUID}
-                    setSuccessMessage={setSuccessMessage}
-                  />
-                </div>
-              </div>
-            </div>
-            {successMessage && (
-              <div className="mt-2 text-green-600">{successMessage}</div>
+          <div>
+            {activeTab === 'spam' ? (
+              <ThreeDottedMarkAsUnSpam
+                question={question}
+              ></ThreeDottedMarkAsUnSpam>
+            ) : (
+              <ThreeDottedMarkAsSpam
+                question={question}
+              ></ThreeDottedMarkAsSpam>
             )}
           </div>
         </div>
-      </Modal>
+      </div>
+
+      <ModalQuestionCard
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+        question={question}
+        selectedAgency={selectedAgency}
+        setSelectedAgency={setSelectedAgency}
+        AGENCY_TO_UUID={AGENCY_TO_UUID}
+        successMessage={successMessage}
+        setSuccessMessage={setSuccessMessage}
+      />
     </>
   );
 };

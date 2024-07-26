@@ -58,14 +58,10 @@ const AgencyListDropdownOnCard: React.FC<AgencyListDropdownProps> = ({
     agencyAcronym.toLowerCase().includes(searchQuery.toLowerCase()),
   );
 
-  console.log(activeQuestionId);
-
   return (
     <div className="relative">
-      {' '}
-      {/* Ensure this container is relatively positioned */}
       <div
-        className={`bg-background font-medium text-sm text-black-700 h-8 w-[130px] items-center flex border-[1px] border-outline-200 shadow-button px-2 ${
+        className={`hover:cursor-pointer bg-background font-medium text-sm text-black-700 h-8 w-[130px] items-center flex border-[1px] border-outline-200 shadow-button px-2 ${
           isOpen ? ' rounded-full' : 'rounded-lg'
         }`}
         onClick={handleDropdownToggle}

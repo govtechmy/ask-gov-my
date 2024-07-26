@@ -69,6 +69,9 @@ const AgencyListDropdown: React.FC<AgencyListDropdownProps> = ({
                 onClick={() => handleAgencyChange(agencyAcronym)}
               >
                 {agencyAcronym}
+                <div className="text-dim-500 font-medium text-xs leading-[18px] pl-2">
+                  {agencyAcronym}
+                </div>
               </div>
             ))}
           </div>

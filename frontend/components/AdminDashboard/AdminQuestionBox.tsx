@@ -5,9 +5,7 @@ import AdminQuestionCard from './AdminQuestionCard';
 import RightArrow from '@/icons/rightarrow';
 import LeftArrow from '@/icons/leftarrow';
 import { useSearchParams } from 'next/navigation';
-import AnswerQuestionCard from './AnswerQuestionCard';
 import { Question } from '@/types/types';
-// import { useactiveQuestionId } from '../activeQuestionIdContext';
 
 interface QuestionBoxProps {
   questions: Question[];
@@ -26,10 +24,19 @@ const AdminQuestionBox: React.FC<QuestionBoxProps> = ({ questions }) => {
   useEffect(() => {
     let filtered = questions;
     if (activeTab === 'unassigned') {
-      filtered = questions.filter(question => question.agency === null);
+      filtered = questions.filter(
+        question => question.agency === null && question.state !== 'spam',
+      );
     } else if (activeTab === 'assigned') {
-      filtered = questions.filter(question => question.agency !== null);
+      filtered = questions.filter(
+        question => question.agency !== null && question.state !== 'spam',
+      );
+    } else if (activeTab === 'spam') {
+      filtered = questions.filter(question => question.state === 'spam');
+    } else if (activeTab === 'all') {
+      filtered = questions.filter(question => question.state !== 'spam');
     }
+
     setFilteredQuestions(filtered);
     setCurrentPage(1); // reset to first page when tab changes
   }, [questions, activeTab]);
@@ -115,7 +122,7 @@ const AdminQuestionBox: React.FC<QuestionBoxProps> = ({ questions }) => {
   return (
     <div>
       {currentQuestions.map(question => (
-        <div className="py-1">
+        <div className="py-1" key={question.id}>
           <AdminQuestionCard
             key={question.id}
             question={question}
