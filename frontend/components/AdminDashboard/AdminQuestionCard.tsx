@@ -13,6 +13,8 @@ import ThreeDottedMarkAsSpam from './ThreeDottedMarkAsSpam';
 import SpamUpdateIcon from '@/icons/spam';
 import { useSearchParams } from 'next/navigation';
 import ThreeDottedMarkAsUnSpam from './ThreeDottedMarkAsUnSpam';
+import ToastQuestionMarkAsSpam from './ToastQuestionMarkAsSpam';
+import ToastQuestionMarkAsUnSpam from './ToastQuestionMarkAsUnSpam';
 
 interface QuestionCardProps {
   question: Question;
@@ -29,6 +31,8 @@ const AdminQuestionCard: React.FC<QuestionCardProps> = ({
   const [selectedAgency, setSelectedAgency] = useState<string>('Unassigned');
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [successMessage, setSuccessMessage] = useState('');
+  const [showSpamToast, setShowSpamToast] = useState(false);
+  const [showUnSpamToast, setShowUnSpamToast] = useState(false);
 
   useEffect(() => {
     if (question.agency !== null) {
@@ -74,6 +78,14 @@ const AdminQuestionCard: React.FC<QuestionCardProps> = ({
 
   const handleClick = () => {
     setIsDropdownVisible(prevState => !prevState);
+  };
+
+  const handleMarkAsSpamToast = () => {
+    setShowSpamToast(true);
+  };
+
+  const handleUnSpamToast = () => {
+    setShowUnSpamToast(true);
   };
 
   const searchParams = useSearchParams();
@@ -131,10 +143,12 @@ const AdminQuestionCard: React.FC<QuestionCardProps> = ({
           <div>
             {activeTab === 'spam' ? (
               <ThreeDottedMarkAsUnSpam
+                handleUnSpamToast={handleUnSpamToast}
                 question={question}
               ></ThreeDottedMarkAsUnSpam>
             ) : (
               <ThreeDottedMarkAsSpam
+                handleMarkAsSpamToast={handleMarkAsSpamToast}
                 question={question}
               ></ThreeDottedMarkAsSpam>
             )}
@@ -152,6 +166,20 @@ const AdminQuestionCard: React.FC<QuestionCardProps> = ({
         successMessage={successMessage}
         setSuccessMessage={setSuccessMessage}
       />
+      {showSpamToast && (
+        <ToastQuestionMarkAsSpam
+          message="Question marked as spam"
+          show={showSpamToast}
+          onClose={() => setShowSpamToast(false)}
+        />
+      )}
+      {showUnSpamToast && (
+        <ToastQuestionMarkAsUnSpam
+          message="Question marked as not spam"
+          show={showUnSpamToast}
+          onClose={() => setShowUnSpamToast(false)}
+        />
+      )}
     </>
   );
 };

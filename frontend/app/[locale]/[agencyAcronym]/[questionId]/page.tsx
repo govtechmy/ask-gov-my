@@ -22,6 +22,7 @@ import SupportingAttachment from '@/components/SupportingAttachment';
 import HeaderQuestionDetail from '@/components/HeaderDetails/HeaderQuestionDetail';
 import { Question } from '@/types/types';
 import AgencyLogoImporter from '@/components/AgencyLogoImporter';
+import ContextSearchBar from '@/components/ContextSearchBar';
 
 interface Props {
   params: {
@@ -122,8 +123,9 @@ const QuestionDetailPage: React.FC<Props> = async ({ params }) => {
   return (
     <div className="">
       <IdentifyWebsite></IdentifyWebsite>
-      <HeaderQuestionDetail></HeaderQuestionDetail>
-
+      <ContextSearchBar>
+        <HeaderQuestionDetail />
+      </ContextSearchBar>
       <div className="container mt-10 flex text-out">
         <div className="max-w-screen-2xl flex">
           <div className="pb-7 w-9/12">
