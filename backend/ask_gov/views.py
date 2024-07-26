@@ -329,3 +329,13 @@ class MarkQuestionAsSpamView(APIView):
             return Response({"detail": "Question marked as spam successfully"}, status=status.HTTP_200_OK)
         except Question.DoesNotExist:
             return Response({"detail": "Question not found"}, status=status.HTTP_404_NOT_FOUND)
+
+class UnSpamQuestionView(APIView):
+    def post(self, request, question_id):
+        try:
+            question = Question.objects.get(id=question_id)
+            question.state = 'backlog'
+            question.save()
+            return Response({"detail": "Un-Spam question successfully"}, status=status.HTTP_200_OK)
+        except Question.DoesNotExist:
+            return Response({"detail": "Question not found"}, status=status.HTTP_404_NOT_FOUND)
