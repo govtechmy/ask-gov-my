@@ -30,26 +30,20 @@ const AgencyCard: React.FC<AgencyCardProps> = ({
   return (
     <>
       <div
-        className="bg-white items-center rounded-md border p-4 shadow-sm flex justify-between cursor-pointer"
+        className="h-[64px] min-w-[328px] bg-white items-center rounded-md border p-4 shadow-sm flex justify-between cursor-pointer"
         onClick={() => setIsModalOpen(true)}
       >
         <div className="flex items-center">
-          <div className="w-10 h-10 mr-4">
+          <div className="w-8 h-8 mr-4">
             {logo_url ? (
-              <img
-                src={logo_url}
-                alt="Agency Logo"
-                className="rounded-full"
-                onClick={handleLogoClick}
-              />
+              <img src={logo_url} alt="Agency Logo" onClick={handleLogoClick} />
             ) : (
-              <JataNegaraIcon
-                className="rounded-full"
-                onClick={handleLogoClick}
-              />
+              <JataNegaraIcon onClick={handleLogoClick} />
             )}
           </div>
-          <div className="text-base font-medium text-black-900">{name}</div>
+          <div className="text-base font-medium text-black-900 line-clamp-2 w-fit">
+            {name}
+          </div>
         </div>
       </div>
       <AgencySettingsModal
