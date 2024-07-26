@@ -1,7 +1,7 @@
 import Close from '@/icons/close';
 import React, { useState } from 'react';
 import ToastQuestionMarkAsUnSpam from './ToastQuestionMarkAsUnSpam';
-import { markQuestionAsSpam } from '@/actions/userServices';
+import { unSpamQuestion } from '@/actions/userServices';
 import { Question } from '@/types/types';
 
 interface ModalProps {
@@ -24,8 +24,8 @@ const ModalMarkAsUnSpam: React.FC<ModalProps> = ({
   };
   //REPAIR THIS ONE BELOW
   async function calltrigger() {
-    await markQuestionAsSpam(question.id);
-    question.state = 'spam';
+    await unSpamQuestion(question.id);
+    question.state = 'backlog';
   }
   return (
     <div className="z-10 fixed inset-0 bg-gray-900 flex items-center justify-center bg-opacity-70">
