@@ -40,12 +40,12 @@ const MarkAsSpamModal: React.FC<ModalProps> = ({
         <div className="flex">
           <button
             onClick={onClose}
-            className="h-[44px] w-[77px] border-[1px] border-outline-200 shadow-button rounded-lg text-base items-center justify-center flex ml-[154px] mt-6 mr-[12px]"
+            className="h-[44px] w-[77px] border-[1px] border-outline-200 shadow-button rounded-lg text-base items-center justify-center flex ml-[154px] mt-6 mr-[12px] hover:cursor-pointer"
           >
             cancel
           </button>
           <div
-            className="w-[133px] h-[44px] bg-[#DC2626] text-white-forcewhite text-base rounded-lg items-center justify-center flex mt-6 "
+            className="w-[133px] h-[44px] bg-[#DC2626] text-white-forcewhite text-base rounded-lg items-center justify-center flex mt-6 hover:cursor-pointer"
             //onClick={ToastQuestionMarkAsSpamTrigger}
             //fail
             onClick={markAsSpam}
