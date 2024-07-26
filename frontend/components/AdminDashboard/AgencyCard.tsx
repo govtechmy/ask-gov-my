@@ -36,10 +36,7 @@ const AgencyCard: React.FC<AgencyCardProps> = ({
       >
         {/* For Logo Importing Design */}
         <div className="relative h-8 w-8 flex-shrink-0">
-          <div className="absolute h-full w-full rounded-full border-[1px] border-outline-200 bg-transparent"></div>
-          <div className="flex items-center justify-center h-full w-full overflow-hidden rounded-full">
-            <AgencyLogoImporter currentAgency={{}} logo_url={logo_url} />
-          </div>
+          <AgencyLogoImporter currentAgency={{}} logo_url={logo_url} />
         </div>
 
         <div className="pl-2 text-start text-sm font-medium text-black-800 line-clamp-2">
