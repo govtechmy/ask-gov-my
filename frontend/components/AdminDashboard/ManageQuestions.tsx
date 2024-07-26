@@ -63,7 +63,7 @@ const ManageQuestions: React.FC = () => {
   }
 
   return (
-    <div className="container">
+    <div className="container max-w-screen-lg">
       <QuestionNavbar
         unassignedCount={unassignedCount}
         setSearchTerm={setSearchTerm}

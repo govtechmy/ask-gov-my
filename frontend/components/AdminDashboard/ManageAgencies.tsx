@@ -6,6 +6,9 @@ import AgencyCard from './AgencyCard';
 import AddAgencyModal from './AddAgencyModal';
 import RightArrow from '@/icons/rightarrow';
 import LeftArrow from '@/icons/leftarrow';
+import { Search } from 'lucide-react';
+import { cn } from '@/lib/utils';
+import PlusIcon from '@/icons/plusicon';
 
 interface Agency {
   id: number;
@@ -22,9 +25,12 @@ const ManageAgencies: React.FC = () => {
   const [error, setError] = useState<string | null>(null);
   const [searchTerm, setSearchTerm] = useState('');
   const [currentPage, setCurrentPage] = useState(1);
-  const itemsPerPage = 12;
-  const totalPages = Math.ceil(filteredAgencies.length / itemsPerPage);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isFocused, setIsFocused] = useState(false);
+
+  const itemsPerPage = 36;
+  const totalPages = Math.ceil(filteredAgencies.length / itemsPerPage);
+
   const fetchAgencies = async () => {
     try {
       const agencyList = await getAgencyList();
@@ -138,34 +144,54 @@ const ManageAgencies: React.FC = () => {
   if (error) {
     return <p>Error: {error}</p>;
   }
+
   return (
-    <div className="p-8">
-      <div className="flex justify-between items-center mb-4">
+    <div className=" container max-w-screen-lg pt-3 mx-auto">
+      <div className="flex justify-between items-center mb-6">
         <h1 className="text-xl font-semibold">Manage agencies</h1>
-        <button
-          className="bg-purple-600 text-white px-4 py-2 rounded-md"
-          onClick={() => setIsModalOpen(true)}
-        >
-          + New agency
-        </button>
+        <div className="flex">
+          <div
+            className={cn(
+              'bg-[#FFFFFF] dark:bg-[#18181B] rounded-md flex items-center h-8 w-[260px] border px-3 py-2 text-sm',
+              {
+                'shadow-[0_0_0_1px_#B794FF,0_0_0_4px_#E2D5FE]': isFocused,
+              },
+            )}
+          >
+            <input
+              type="search"
+              placeholder="Search by agency or ID"
+              value={searchTerm}
+              className="font-normal placeholder:text-dim-500 flex h-11 w-full rounded-md bg-transparent py-3 text-sm pl-2 focus:outline-none"
+              onFocus={() => setIsFocused(true)}
+              onBlur={() => setIsFocused(false)}
+              onChange={e => setSearchTerm(e.target.value)}
+            />
+            <div className="h-4 w-4 items-center justify-center flex">
+              <Search strokeWidth={1.88} className="stroke-[#A1A1AA]" />
+            </div>
+          </div>
+          <div
+            className="w-[125px] h-8 rounded-md items-center justify-center flex text-white-forcewhite font-medium text-sm ml-2
+            bg-gradient-to-t from-[#702FF9] to-[#B379FF] dark:from-[#702FF9] dark:to-[#B379FF] border-[1px] border-[#702FF9]"
+            onClick={() => setIsModalOpen(true)}
+          >
+            <div className=" h-4 w-4 flex items-center justify-center mr-[6px]">
+              <PlusIcon className="stroke-white-forcewhite"></PlusIcon>
+            </div>
+            <div>New agency</div>
+          </div>
+        </div>
       </div>
-      <div className="flex justify-between items-center mb-4">
-        <input
-          type="text"
-          placeholder="Search by agency or ID"
-          className="w-full p-2 border rounded-md"
-          value={searchTerm}
-          onChange={e => setSearchTerm(e.target.value)}
-        />
-      </div>
+
       {filteredAgencies.length === 0 ? (
-        <p className="text-center">
+        <p className="text-left text-dim-500 font-normal text-base">
           We couldn't find the agency. Please try searching again using the
           search bar above.
         </p>
       ) : (
         <>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-2">
             {currentAgencies.map(agency => (
               <AgencyCard
                 key={agency.id}
