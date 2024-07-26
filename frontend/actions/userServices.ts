@@ -397,3 +397,15 @@ export async function getAllUsers(): Promise<{
     return { success: false, message: 'Failed to fetch users' };
   }
 }
+
+export async function checkUserEmailExists(email: string): Promise<boolean> {
+  try {
+    const user = await prisma.user.findUnique({
+      where: { email },
+    });
+    return !!user;
+  } catch (error) {
+    console.error('Error checking user email:', error);
+    return false;
+  }
+}

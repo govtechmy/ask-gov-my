@@ -1,11 +1,12 @@
 'use server';
 import dotenv from 'dotenv';
 import { Client } from '@elastic/elasticsearch';
-import { AGENCY_TO_UUID } from '@/lib/agency';
+import OpenAI from 'openai';
 dotenv.config();
 
 const elasticsearchURL = process.env.ELASTICSEARCH_URL;
 const elasticsearchApiKey = process.env.ELASTICSEARCH_API_KEY;
+const openaiApiKey = process.env.OPENAI_API_KEY;
 
 const client = new Client({
   node: elasticsearchURL,
@@ -14,15 +15,28 @@ const client = new Client({
   },
 });
 
+const openai = new OpenAI({
+  apiKey: openaiApiKey,
+});
+
 interface Question {
   id: number;
   question: string;
   date: string;
   answered_date: string;
   state: string;
-  agency: number;
+  agency: {
+    id: number;
+    name: string;
+    acronym: string;
+    name_ms: string;
+  };
   answer: string;
-  topics: number[];
+  topics: {
+    id: number;
+    name: string;
+    name_ms: string;
+  }[];
   email?: string;
   likes: number;
   dislikes: number;
@@ -31,29 +45,41 @@ interface Question {
   staff_isopen?: boolean;
 }
 
+async function getEmbedding(text: string): Promise<number[]> {
+  const response = await openai.embeddings.create({
+    model: 'text-embedding-3-small',
+    input: text,
+  });
+  return response.data[0].embedding;
+}
+
 export async function searchQuestions(query: string) {
   try {
+    const embedding = await getEmbedding(query);
+
     const result = await client.search({
       index: 'questions',
       body: {
         query: {
           bool: {
-            must: [
+            should: [
               {
-                query_string: {
-                  query: `*${query}*`,
-                  fields: [
-                    'question',
-                    'agency.name',
-                    'topics.title',
-                    'answer',
-                    'agency.acronym',
-                  ],
+                knn: {
+                  field: 'vector',
+                  query_vector: embedding,
+                  num_candidates: 1000,
                 },
               },
               {
-                match: {
-                  state: 'completed',
+                multi_match: {
+                  query,
+                  fields: [
+                    'agency.name',
+                    'agency.acronym',
+                    'agency.name_ms',
+                    'topics.name',
+                    'topics.name_ms',
+                  ],
                 },
               },
             ],
@@ -62,9 +88,23 @@ export async function searchQuestions(query: string) {
       },
     });
 
-    return result.hits.hits.map((hit: any) => hit._source);
+    const filteredQuestions = result.hits.hits
+      .map((hit: any) => hit._source)
+      .filter((question: Question) => question.state === 'completed');
+
+    return filteredQuestions;
   } catch (error) {
     console.error('Error searching questions:', error);
+    return [];
+  }
+}
+
+export async function getRelatedQuestions(questionText: string) {
+  try {
+    const relatedQuestions = await searchQuestions(questionText);
+    return relatedQuestions.slice(0, 4); // Return only the top 4 related questions
+  } catch (error) {
+    console.error('Error fetching related questions:', error);
     return [];
   }
 }

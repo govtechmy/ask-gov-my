@@ -4,6 +4,7 @@ import {
   getTopicByAgency,
   getAgencyList,
 } from '@/actions/questionServices';
+import { getRelatedQuestions } from '@/actions/searchServices';
 import Footer from '@/components/FooterDetails/Footer';
 import RelatedTopics from '@/components/RelatedTopics';
 import RightArrow from '@/icons/rightarrow';
@@ -41,7 +42,6 @@ const QuestionDetailPage: React.FC<Props> = async ({ params }) => {
     );
   };
 
-  //Getting the question
   let question: Question | null = null;
   let topicTitles: Array<any> = [];
 
@@ -57,7 +57,6 @@ const QuestionDetailPage: React.FC<Props> = async ({ params }) => {
     redirect('/');
   }
 
-  //Getting the Attachments from question
   const attachments = question.attachments || [];
 
   const acronym = agencyAcronymObject(question.agency);
@@ -78,7 +77,6 @@ const QuestionDetailPage: React.FC<Props> = async ({ params }) => {
         }
       });
 
-      // Wait for all fetch requests to complete
       await Promise.all(fetchPromises);
     } catch (error) {
       console.error('Error fetching file sizes', error);
@@ -118,6 +116,8 @@ const QuestionDetailPage: React.FC<Props> = async ({ params }) => {
   } else {
     console.log(`Agency with acronym '${agencyAcronym}' not found.`);
   }
+
+  const relatedQuestions = await getRelatedQuestions(question.question);
 
   return (
     <div className="">
@@ -232,14 +232,20 @@ const QuestionDetailPage: React.FC<Props> = async ({ params }) => {
                   Related questions
                 </div>
                 <div>
-                  <div>
-                    <div className="flex rounded-md items-center pr-2 pl-4 py-2 last:border-0 hover:bg-outline-200 max-h-[76px] max-w-[780px]">
-                      <Link className="grow" href="./">
-                        <span className="font-medium text-sm text-black-700 line-clamp-1 ">
-                          question
+                  {relatedQuestions.map((relatedQuestion, index) => (
+                    <div
+                      key={index}
+                      className="flex rounded-md items-center pr-2 pl-4 py-2 last:border-0 hover:bg-outline-200 max-h-[76px] max-w-[780px]"
+                    >
+                      <Link
+                        className="grow"
+                        href={`/${relatedQuestion.agency.acronym.toLowerCase()}/${relatedQuestion.id}`}
+                      >
+                        <span className="font-medium text-sm text-black-700 line-clamp-1">
+                          {relatedQuestion.question}
                         </span>
                         <span className="mt-1 font-normal text-sm text-dim-500 line-clamp-1">
-                          Answer:
+                          Answer: {relatedQuestion.answer}
                         </span>
                       </Link>
                       <span className="on hover:cursor-pointer pl-3">
@@ -248,7 +254,7 @@ const QuestionDetailPage: React.FC<Props> = async ({ params }) => {
                             <JataNegaraIcon className="stroke-[#E4E4E7] dark:stroke-[#27272A] h-5 w-5"></JataNegaraIcon>
                           </div>
                           <div className="font-normal text-sm text-black-800">
-                            KBS
+                            {agencyAcronymObject(relatedQuestion.agency.id)}
                           </div>
                           <div className="px-1">
                             <RightArrow />
@@ -256,7 +262,7 @@ const QuestionDetailPage: React.FC<Props> = async ({ params }) => {
                         </div>
                       </span>
                     </div>
-                  </div>
+                  ))}
                 </div>
               </div>
             </div>
