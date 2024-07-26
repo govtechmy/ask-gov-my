@@ -5,23 +5,7 @@ import AnswerQuestionCard from './AnswerQuestionCard';
 import RightArrow from '@/icons/rightarrow';
 import LeftArrow from '@/icons/leftarrow';
 import { useSearchParams } from 'next/navigation';
-
-interface Question {
-  id: number;
-  question: string;
-  date: string;
-  answered_date: string;
-  state: string;
-  agency: number;
-  answer: string;
-  topics: number[];
-  email?: string;
-  likes: number;
-  dislikes: number;
-  attachments?: string[];
-  admin_isopen?: boolean;
-  staff_isopen?: boolean;
-}
+import { Question } from '@/types/types';
 
 interface QuestionBoxProps {
   questions: Question[];

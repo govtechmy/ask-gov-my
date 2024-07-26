@@ -11,7 +11,7 @@ import { cn } from '@/lib/utils';
 import Gov from '@/icons/gov';
 import UserGroup from '@/icons/usergroup';
 import Logout from '@/icons/logout';
-import { signOut } from 'next-auth/react'; 
+import { signOut } from 'next-auth/react';
 
 const HeaderDashboard = () => {
   const searchParams = useSearchParams();
@@ -131,7 +131,7 @@ const HeaderDashboard = () => {
             <div className="absolute top-[36px] right-0 bg-white rounded-lg border-[1px] border-outline-200 shadow-button">
               <button
                 className=" hover:cursor-pointer h-[42px] w-[110px] items-center justify-center flex"
-                onClick={handleLogout} 
+                onClick={handleLogout}
               >
                 <div className="pr-2">
                   <Logout className="stroke-[#DC2626] dark:stroke-[#FF5959]"></Logout>

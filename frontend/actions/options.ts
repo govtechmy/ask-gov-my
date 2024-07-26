@@ -20,7 +20,7 @@ export const authOptions: NextAuthOptions = {
           //   subject: `Your ${process.env.NEXT_PUBLIC_APP_NAME} Login Link`,
           //   react: LoginLink({ url, email: identifier }),
           // });
-          console.log(url)
+          console.log(url);
         } else {
           console.error('Email not found in the database.');
         }
@@ -35,7 +35,7 @@ export const authOptions: NextAuthOptions = {
     error: '/',
   },
   session: {
-    strategy: "jwt",
+    strategy: 'jwt',
   },
   callbacks: {
     async session({ session, token }) {

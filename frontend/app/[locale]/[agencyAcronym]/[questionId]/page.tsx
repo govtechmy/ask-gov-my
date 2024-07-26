@@ -251,7 +251,7 @@ const QuestionDetailPage: React.FC<Props> = async ({ params }) => {
                       <span className="on hover:cursor-pointer pl-3">
                         <div className="flex">
                           <div className="pr-1.5">
-                          <JataNegaraIcon className="stroke-[#E4E4E7] dark:stroke-[#27272A] h-5 w-5"></JataNegaraIcon>
+                            <JataNegaraIcon className="stroke-[#E4E4E7] dark:stroke-[#27272A] h-5 w-5"></JataNegaraIcon>
                           </div>
                           <div className="font-normal text-sm text-black-800">
                             {agencyAcronymObject(relatedQuestion.agency.id)}
@@ -283,4 +283,3 @@ const QuestionDetailPage: React.FC<Props> = async ({ params }) => {
 };
 
 export default QuestionDetailPage;
-    
