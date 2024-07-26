@@ -3,6 +3,7 @@
 import React, { useState } from 'react';
 import AgencySettingsModal from './AgencySettingsModal';
 import JataNegaraIcon from '@/icons/jatanegaraicon';
+import AgencyLogoImporter from '../AgencyLogoImporter';
 
 interface AgencyCardProps {
   id: number;
@@ -30,22 +31,22 @@ const AgencyCard: React.FC<AgencyCardProps> = ({
   return (
     <>
       <div
-        className="h-[64px] min-w-[328px] bg-white items-center rounded-md border p-4 shadow-sm flex justify-between cursor-pointer"
+        className="h-[64px] min-w-[328px] bg-white items-center rounded-md border p-4 shadow-sm flex cursor-pointer"
         onClick={() => setIsModalOpen(true)}
       >
-        <div className="flex items-center">
-          <div className="w-8 h-8 mr-4">
-            {logo_url ? (
-              <img src={logo_url} alt="Agency Logo" onClick={handleLogoClick} />
-            ) : (
-              <JataNegaraIcon onClick={handleLogoClick} />
-            )}
-          </div>
-          <div className="text-base font-medium text-black-900 line-clamp-2 w-fit">
-            {name}
+        {/* For Logo Importing Design */}
+        <div className="relative h-8 w-8 flex-shrink-0">
+          <div className="absolute h-full w-full rounded-full border-[1px] border-outline-200 bg-transparent"></div>
+          <div className="flex items-center justify-center h-full w-full overflow-hidden rounded-full">
+            <AgencyLogoImporter currentAgency={{}} logo_url={logo_url} />
           </div>
         </div>
+
+        <div className="pl-2 text-start text-sm font-medium text-black-800 line-clamp-2">
+          {name}
+        </div>
       </div>
+
       <AgencySettingsModal
         agency={{ id, name, name_ms, acronym, logo_url }}
         isOpen={isModalOpen}
