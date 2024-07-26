@@ -24,9 +24,13 @@ const AdminQuestionBox: React.FC<QuestionBoxProps> = ({ questions }) => {
   useEffect(() => {
     let filtered = questions;
     if (activeTab === 'unassigned') {
-      filtered = questions.filter(question => question.agency === null);
+      filtered = questions.filter(
+        question => question.agency === null && question.state !== 'spam',
+      );
     } else if (activeTab === 'assigned') {
-      filtered = questions.filter(question => question.agency !== null);
+      filtered = questions.filter(
+        question => question.agency !== null && question.state !== 'spam',
+      );
     } else if (activeTab === 'spam') {
       filtered = questions.filter(question => question.state === 'spam');
     } else if (activeTab === 'all') {
