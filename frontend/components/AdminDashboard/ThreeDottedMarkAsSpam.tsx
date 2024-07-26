@@ -31,10 +31,10 @@ const ThreeDottedMarkAsSpam: React.FC<ThreeProps> = ({
 
   return (
     <div className="relative">
-      <div className="group flex relative">
+      <div className="flex relative">
         <div
           className={`opacity-0 ${isDropdownVisible ? 'opacity-100' : 'group-hover:opacity-100 group-hover:cursor-pointer'}
-          h-8 w-8 border-[1px] border-outline-200 bg-white rounded-lg shadow-button cursor-pointer
+          h-8 w-8 border-[1px] border-outline-200 bg-white rounded-lg shadow-button curs
           items-center justify-center absolute flex top-[-16px] right-[-6px]`}
           onClick={handleDropdownClick}
         >
