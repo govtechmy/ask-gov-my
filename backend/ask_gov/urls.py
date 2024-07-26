@@ -29,5 +29,5 @@ urlpatterns = [
     path('questions/<int:question_id>/staff_isopen/', ChangeStaffIsOpenView.as_view(), name='change-staff-isopen'),
     path('questions/<int:question_id>/save-draft/', SaveDraftQuestionView.as_view(), name='save-draft'),
     path('questions/<int:question_id>/mark-spam/', MarkQuestionAsSpamView.as_view(), name='mark-question-spam'),
-    path('questions/<int:question_id>/un-spam/', MarkQuestionAsSpamView.as_view(), name='mark-question-spam'),
+    path('questions/<int:question_id>/un-spam/', UnSpamQuestionView.as_view(), name='mark-question-spam'),
 ]
