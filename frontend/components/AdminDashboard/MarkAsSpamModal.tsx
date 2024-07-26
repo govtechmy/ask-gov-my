@@ -3,27 +3,29 @@ import React, { useState } from 'react';
 import ToastQuestionMarkAsSpam from './ToastQuestionMarkAsSpam';
 import { markQuestionAsSpam } from '@/actions/userServices';
 import { Question } from '@/types/types';
+import { on } from 'nodemailer/lib/xoauth2';
 
 interface ModalProps {
   isOpen: boolean;
   onClose: () => void;
   question: Question;
+  handleMarkAsSpamToast: Function
 }
 
-const ModalMarkAsSpam: React.FC<ModalProps> = ({
-  isOpen,
+const MarkAsSpamModal: React.FC<ModalProps> = ({
+  isOpen, 
   onClose,
   question,
+  handleMarkAsSpamToast,
 }) => {
   if (!isOpen) return null;
 
-  const [showToast, setShowToast] = useState(false);
-  const ToastQuestionMarkAsSpamTrigger = () => {
-    setShowToast(true);
-  };
-  async function calltrigger() {
-    await markQuestionAsSpam(question.id);
+
+  async function markAsSpam() {
+    await markQuestionAsSpam(question.id); 
     question.state = 'spam';
+    handleMarkAsSpamToast()
+    onClose()
   }
   return (
     <div className="z-10 fixed inset-0 bg-gray-900 flex items-center justify-center bg-opacity-70">
@@ -47,21 +49,14 @@ const ModalMarkAsSpam: React.FC<ModalProps> = ({
             className="w-[133px] h-[44px] bg-[#DC2626] text-white-forcewhite text-base rounded-lg items-center justify-center flex mt-6 "
             //onClick={ToastQuestionMarkAsSpamTrigger}
             //fail
-            onClick={calltrigger}
+            onClick={markAsSpam}
           >
             Mark as Spam
-          </div>
-          {showToast && (
-            <ToastQuestionMarkAsSpam
-              message="Question marked as spam"
-              show={showToast}
-              onClose={() => setShowToast(false)}
-            />
-          )}
+            </div>
         </div>
       </div>
     </div>
   );
 };
 
-export default ModalMarkAsSpam;
+export default MarkAsSpamModal;

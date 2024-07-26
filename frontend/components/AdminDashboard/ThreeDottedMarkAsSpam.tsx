@@ -1,16 +1,18 @@
 import AlarmTriangle from '@/icons/alarmtriangle';
 import ThreeDotted from '@/icons/threedotted';
 import { useState } from 'react';
-import ModalMarkAsSpam from './ModalMarkAsSpam';
+import MarkAsSpamModal from './MarkAsSpamModal';
 import { Question } from '@/types/types';
 
 interface ThreeProps {
   question: Question;
+  handleMarkAsSpamToast: Function;
 }
-
-const ThreeDottedMarkAsSpam: React.FC<ThreeProps> = ({ question }) => {
+// import the function here as props
+const ThreeDottedMarkAsSpam: React.FC<ThreeProps> = ({ question, handleMarkAsSpamToast }) => {
   const [isDropdownVisible, setIsDropdownVisible] = useState(false);
   const [isModalMarkAsSpamOpen, setIsModalMarkAsSpamOpen] = useState(false);
+  const [isModalUnSpamOpen, setIsModalUnSpamOpen] = useState(false);
 
   const handleDropdownClick = () => {
     setIsDropdownVisible(prevState => !prevState);
@@ -19,6 +21,11 @@ const ThreeDottedMarkAsSpam: React.FC<ThreeProps> = ({ question }) => {
   const handleMarkAsSpamTrigger = () => {
     setIsModalMarkAsSpamOpen(true);
   };
+
+  const handleUnSpamTrigger = () => {
+    setIsModalMarkAsSpamOpen(true);
+  };
+
 
   return (
     <div className="relative">
@@ -51,7 +58,8 @@ const ThreeDottedMarkAsSpam: React.FC<ThreeProps> = ({ question }) => {
             >
               Mark As Spam
             </div>
-            <ModalMarkAsSpam
+            <MarkAsSpamModal
+              handleMarkAsSpamToast={handleMarkAsSpamToast}
               question={question}
               isOpen={isModalMarkAsSpamOpen}
               onClose={() => setIsModalMarkAsSpamOpen(false)}

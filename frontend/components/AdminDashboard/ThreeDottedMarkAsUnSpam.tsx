@@ -2,13 +2,14 @@ import ThreeDotted from '@/icons/threedotted';
 import { useState } from 'react';
 import { Question } from '@/types/types';
 import TickCheckCircle from '@/icons/tickcheckcircle';
-import ModalMarkAsUnSpam from './ModalMarkAsUnSpam';
+import MarkAsUnSpamModal from './MarkAsUnSpamModal';
 
 interface ThreeProps {
   question: Question;
+  handleUnSpamToast: Function;
 }
 
-const ThreeDottedMarkAsUnSpam: React.FC<ThreeProps> = ({ question }) => {
+const ThreeDottedMarkAsUnSpam: React.FC<ThreeProps> = ({ question, handleUnSpamToast }) => {
   const [isDropdownVisible, setIsDropdownVisible] = useState(false);
   const [isModalMarkAsUnSpamOpen, setIsModalMarkAsUnSpamOpen] = useState(false);
 
@@ -48,7 +49,8 @@ const ThreeDottedMarkAsUnSpam: React.FC<ThreeProps> = ({ question }) => {
           >
             Mark as not spam
           </div>
-          <ModalMarkAsUnSpam
+          <MarkAsUnSpamModal
+            handleUnSpamToast={handleUnSpamToast}
             question={question}
             isOpen={isModalMarkAsUnSpamOpen}
             onClose={() => setIsModalMarkAsUnSpamOpen(false)}
