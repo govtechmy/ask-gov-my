@@ -171,7 +171,7 @@ const QuestionDetailPage: React.FC<Props> = async ({ params }) => {
                 <div>
                   <div className="">
                     <div className="flex px-8 pt-8 pb-0 items-center">
-                      <div className="flex w-6 h-6">
+                      <div className="flex w-6 h-6 relative flex-shrink-0">
                         <AgencyLogoImporter
                           currentAgency={currentAgency}
                         ></AgencyLogoImporter>

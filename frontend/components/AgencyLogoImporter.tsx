@@ -19,18 +19,26 @@ const AgencyLogoImporter: React.FC<AgencyLogoImporterProps> = ({
 
   return (
     <>
-      {logoToUse ? (
-        <Image src={logoToUse} width={200} height={200} alt="Agency Logo" />
-      ) : (
-        // <Image
-        //   src="/jata-200-transparent.png"
-        //   width={200}
-        //   height={200}
-        //   alt="JataNegara"
-        // />
-        // above is sample for tranparent testing
-        <Image src="/jata-200.png" width={200} height={200} alt="JataNegara" />
-      )}
+      <div className="absolute h-full w-full rounded-full border-[1px] border-outline-200 bg-transparent"></div>
+      <div className="flex items-center justify-center h-full w-full overflow-hidden rounded-full">
+        {logoToUse ? (
+          <Image src={logoToUse} width={200} height={200} alt="Agency Logo" />
+        ) : (
+          <Image
+            src="/jata-200-transparent.png"
+            width={200}
+            height={200}
+            alt="JataNegara"
+          />
+          // below is sample for tranparent testing
+          // <Image
+          //   src="/jata-200.png"
+          //   width={200}
+          //   height={200}
+          //   alt="JataNegara"
+          // />
+        )}
+      </div>
     </>
   );
 };
