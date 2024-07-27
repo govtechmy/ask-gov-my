@@ -10,7 +10,15 @@ interface AddUserModalProps {
   onClose: () => void;
   agencies: Agency[];
   onAddUser: any;
-  handleAddUserToast: Function;
+}
+
+interface Agency {
+  id: number;
+  name: string;
+  name_ms: string;
+  acronym: string;
+  total_likes?: number;
+  logo_url?: string;
 }
 
 const AddUserModal: React.FC<AddUserModalProps> = ({
@@ -18,7 +26,6 @@ const AddUserModal: React.FC<AddUserModalProps> = ({
   onClose,
   agencies,
   onAddUser,
-  handleAddUserToast,
 }) => {
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
@@ -34,6 +41,7 @@ const AddUserModal: React.FC<AddUserModalProps> = ({
         email,
         role,
         role === 'super_admin' ? null : agency,
+        //this one have to rethink return apa
       );
       if (response.success) {
         handleAddUserToast();
