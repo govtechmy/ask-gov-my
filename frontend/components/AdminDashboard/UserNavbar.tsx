@@ -6,6 +6,8 @@ import Search from '@/icons/search';
 import AddUserModal from './AddUserModal';
 import { cn } from '@/lib/utils';
 import PlusIcon from '@/icons/plusicon';
+import AgencyListDropdownUsers from './AgencyListDropdownUsers';
+import { AGENCY_TO_UUID } from '@/lib/agency';
 
 interface Agency {
   id: number;
@@ -64,7 +66,7 @@ const UserNavbar: React.FC<UserNavbarProps> = ({
         </button>
       </div>
       <div className="flex items-center">
-        <div>Agency</div>
+        <AgencyListDropdownUsers AGENCY_TO_UUID={AGENCY_TO_UUID} />
         <div
           className={cn(
             'bg-[#FFFFFF] dark:bg-[#18181B] rounded-md flex items-center h-8 w-[260px] border px-3 py-2 text-sm',
@@ -87,7 +89,7 @@ const UserNavbar: React.FC<UserNavbarProps> = ({
         </div>
         <div
           className="w-[125px] h-8 rounded-md items-center justify-center flex text-white-forcewhite font-medium text-sm ml-2
-            bg-gradient-to-t from-[#702FF9] to-[#B379FF] dark:from-[#702FF9] dark:to-[#B379FF] border-[1px] border-[#702FF9]"
+            bg-gradient-to-t from-[#702FF9] to-[#B379FF] dark:from-[#702FF9] dark:to-[#B379FF] border-[1px] border-[#702FF9] hover:cursor-pointer"
           onClick={() => setIsModalOpen(true)}
         >
           <div className=" h-4 w-4 flex items-center justify-center mr-[6px]">
