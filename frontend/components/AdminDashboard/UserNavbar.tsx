@@ -88,7 +88,7 @@ const UserNavbar: React.FC<UserNavbarProps> = ({
           </div>
         </div>
         <div
-          className="w-[125px] h-8 rounded-md items-center justify-center flex text-white-forcewhite font-medium text-sm ml-2
+          className="w-[106px] h-8 rounded-md items-center justify-center flex text-white-forcewhite font-medium text-sm ml-2
             bg-gradient-to-t from-[#702FF9] to-[#B379FF] dark:from-[#702FF9] dark:to-[#B379FF] border-[1px] border-[#702FF9] hover:cursor-pointer"
           onClick={() => setIsModalOpen(true)}
         >
