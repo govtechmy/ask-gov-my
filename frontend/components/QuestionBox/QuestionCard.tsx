@@ -49,7 +49,7 @@ const QuestionCard: React.FC<QuestionCardProps> = ({
         <span>
           <div className="flex items-center font-medium text-sm">
             <div className="pr-4">
-              <div className="w-6 h-6 flex">
+              <div className="w-6 h-6 flex relative flex-shrink-0">
                 <AgencyLogoImporter currentAgency={currentAgency} />
               </div>
             </div>

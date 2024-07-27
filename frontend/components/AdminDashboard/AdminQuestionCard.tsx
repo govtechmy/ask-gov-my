@@ -31,8 +31,8 @@ const AdminQuestionCard: React.FC<QuestionCardProps> = ({
   const [selectedAgency, setSelectedAgency] = useState<string>('Unassigned');
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [successMessage, setSuccessMessage] = useState('');
-  const [showSpamToast, setShowSpamToast] = useState(false)
-  const [showUnSpamToast, setShowUnSpamToast] = useState(false)
+  const [showSpamToast, setShowSpamToast] = useState(false);
+  const [showUnSpamToast, setShowUnSpamToast] = useState(false);
 
   useEffect(() => {
     if (question.agency !== null) {
@@ -74,12 +74,6 @@ const AdminQuestionCard: React.FC<QuestionCardProps> = ({
     );
   };
 
-  const [isDropdownVisible, setIsDropdownVisible] = useState(false);
-
-  const handleClick = () => {
-    setIsDropdownVisible(prevState => !prevState);
-  };
-
   const handleMarkAsSpamToast = () => {
     setShowSpamToast(true);
   };
@@ -93,7 +87,7 @@ const AdminQuestionCard: React.FC<QuestionCardProps> = ({
 
   return (
     <>
-      <div className="bg-white items-center rounded-md border p-4 shadow-sm flex justify-between w-full">
+      <div className="bg-white items-center rounded-md border p-4 shadow-sm flex justify-between w-full group">
         <div className="flex items-center">
           <div
             className="text-sm font-medium text-black-700 line-clamp-2 hover:cursor-pointer"
@@ -143,12 +137,12 @@ const AdminQuestionCard: React.FC<QuestionCardProps> = ({
           <div>
             {activeTab === 'spam' ? (
               <ThreeDottedMarkAsUnSpam
-              handleUnSpamToast={handleUnSpamToast}
+                handleUnSpamToast={handleUnSpamToast}
                 question={question}
               ></ThreeDottedMarkAsUnSpam>
             ) : (
-              <ThreeDottedMarkAsSpam 
-              handleMarkAsSpamToast={handleMarkAsSpamToast}
+              <ThreeDottedMarkAsSpam
+                handleMarkAsSpamToast={handleMarkAsSpamToast}
                 question={question}
               ></ThreeDottedMarkAsSpam>
             )}
@@ -166,11 +160,11 @@ const AdminQuestionCard: React.FC<QuestionCardProps> = ({
         successMessage={successMessage}
         setSuccessMessage={setSuccessMessage}
       />
-      {showSpamToast && ( 
+      {showSpamToast && (
         <ToastQuestionMarkAsSpam
-         message="Question marked as spam"
-         show={showSpamToast}
-        onClose={() => setShowSpamToast(false)}
+          message="Question marked as spam"
+          show={showSpamToast}
+          onClose={() => setShowSpamToast(false)}
         />
       )}
       {showUnSpamToast && (
@@ -181,7 +175,6 @@ const AdminQuestionCard: React.FC<QuestionCardProps> = ({
         />
       )}
     </>
-    
   );
 };
 

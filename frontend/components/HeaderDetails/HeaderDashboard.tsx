@@ -50,7 +50,7 @@ const HeaderDashboard = () => {
   };
 
   return (
-    <div className="flex justify-between pt-6 pb-3 container">
+    <div className="flex justify-between pt-6 pb-3 container  max-w-screen-lg mx-auto">
       <div className="font-poppins flex h-full gap-2.5 text-lg font-semibold items-center">
         <Asklogo />
         AskGovMY

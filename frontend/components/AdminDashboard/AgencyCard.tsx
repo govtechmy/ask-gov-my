@@ -2,7 +2,9 @@
 
 import React, { useState } from 'react';
 import AgencySettingsModal from './AgencySettingsModal';
-import JataNegaraIcon from '@/icons/jatanegaraicon';
+import AgencyLogoImporter from '../AgencyLogoImporter';
+import ThreeDotted from '@/icons/threedotted';
+import Gear from '@/icons/gear';
 
 interface AgencyCardProps {
   id: number;
@@ -23,35 +25,29 @@ const AgencyCard: React.FC<AgencyCardProps> = ({
 }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
 
-  const handleLogoClick = () => {
-    setIsModalOpen(true);
-  };
-
   return (
     <>
       <div
-        className="bg-white items-center rounded-md border p-4 shadow-sm flex justify-between cursor-pointer"
+        className="h-[64px] min-w-[328px] bg-white items-center rounded-md border p-4 shadow-sm flex cursor-pointer group relative"
         onClick={() => setIsModalOpen(true)}
       >
-        <div className="flex items-center">
-          <div className="w-10 h-10 mr-4">
-            {logo_url ? (
-              <img
-                src={logo_url}
-                alt="Agency Logo"
-                className="rounded-full"
-                onClick={handleLogoClick}
-              />
-            ) : (
-              <JataNegaraIcon
-                className="rounded-full"
-                onClick={handleLogoClick}
-              />
-            )}
-          </div>
-          <div className="text-base font-medium text-black-900">{name}</div>
+        {/* For Logo Importing Design */}
+        <div className="relative h-8 w-8 flex-shrink-0">
+          <AgencyLogoImporter currentAgency={{}} logo_url={logo_url} />
+        </div>
+
+        <div className="pl-2 text-start text-sm font-medium text-black-800 line-clamp-2">
+          {name}
+        </div>
+
+        <div
+          className={`opacity-0 group-hover:opacity-100 h-8 w-8 border-[1px] border-outline-200 bg-white rounded-lg shadow-button
+          items-center justify-center absolute flex top-[15px] right-[17px]`}
+        >
+          <Gear className="stroke-black-700" />
         </div>
       </div>
+
       <AgencySettingsModal
         agency={{ id, name, name_ms, acronym, logo_url }}
         isOpen={isModalOpen}

@@ -30,7 +30,7 @@ const TrendingAgencies: React.FC<TrendingAgenciesProps> = ({
             <Link href={`/${agency.acronym.toLowerCase()}`}>
               <div className="flex items-center">
                 <div className="pr-[10px] items-center">
-                  <div className="h-8 w-8 flex">
+                  <div className="h-8 w-8 flex relative flex-shrink-0">
                     <AgencyLogoImporter currentAgency={agency} />
                   </div>
                 </div>
