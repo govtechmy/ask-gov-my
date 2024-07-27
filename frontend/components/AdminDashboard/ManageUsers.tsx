@@ -166,7 +166,7 @@ const ManageUsers: React.FC = () => {
   }
 
   return (
-    <div className="container max-w-screen-lg pt-3 mx-auto px-6">
+    <div className="container max-w-screen-lg pt-3 mx-auto">
       <UserNavbar
         setSearchTerm={setSearchTerm}
         agencies={agencies}

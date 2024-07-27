@@ -6,10 +6,15 @@ import Search from '@/icons/search';
 import AddUserModal from './AddUserModal';
 import { cn } from '@/lib/utils';
 import PlusIcon from '@/icons/plusicon';
-import AgencyListDropdownUsers from './AgencyListDropdownUsers';
-import { AGENCY_TO_UUID } from '@/lib/agency';
-import ToastNewUserAdded from './ToastNewUserAdded';
-import { Agency } from '@/types/types';
+
+interface Agency {
+  id: number;
+  name: string;
+  name_ms: string;
+  acronym: string;
+  total_likes?: number;
+  logo_url?: string;
+}
 
 interface UserNavbarProps {
   setSearchTerm: (term: string) => void;
@@ -33,7 +38,6 @@ const UserNavbar: React.FC<UserNavbarProps> = ({
     router.push(`${window.location.pathname}?${params.toString()}`);
   };
   const [isFocused, setIsFocused] = useState(false);
-  const [showAddUserToast, setshowAddUserToast] = useState(false);
 
   useEffect(() => {}, [activeTab]);
 
@@ -64,7 +68,7 @@ const UserNavbar: React.FC<UserNavbarProps> = ({
         </button>
       </div>
       <div className="flex items-center">
-        <AgencyListDropdownUsers AGENCY_TO_UUID={AGENCY_TO_UUID} />
+        <div>Agency</div>
         <div
           className={cn(
             'bg-[#FFFFFF] dark:bg-[#18181B] rounded-md flex items-center h-8 w-[260px] border px-3 py-2 text-sm',
@@ -79,15 +83,21 @@ const UserNavbar: React.FC<UserNavbarProps> = ({
             className="font-normal placeholder:text-dim-500 flex h-11 w-full rounded-md bg-transparent py-3 text-sm pl-2 focus:outline-none"
             onFocus={() => setIsFocused(true)}
             onBlur={() => setIsFocused(false)}
+            className="font-normal placeholder:text-dim-500 flex h-11 w-full rounded-md bg-transparent py-3 text-sm pl-2 focus:outline-none"
+            onFocus={() => setIsFocused(true)}
+            onBlur={() => setIsFocused(false)}
             onChange={e => setSearchTerm(e.target.value)}
           />
           <div className="h-4 w-4 items-center justify-center flex">
             <Search strokeWidth={1.88} className="stroke-[#A1A1AA]" />
           </div>
+          <div className="h-4 w-4 items-center justify-center flex">
+            <Search strokeWidth={1.88} className="stroke-[#A1A1AA]" />
+          </div>
         </div>
         <div
-          className="w-[106px] h-8 rounded-md items-center justify-center flex text-white-forcewhite font-medium text-sm ml-2
-            bg-gradient-to-t from-[#702FF9] to-[#B379FF] dark:from-[#702FF9] dark:to-[#B379FF] border-[1px] border-[#702FF9] hover:cursor-pointer"
+          className="w-[125px] h-8 rounded-md items-center justify-center flex text-white-forcewhite font-medium text-sm ml-2
+            bg-gradient-to-t from-[#702FF9] to-[#B379FF] dark:from-[#702FF9] dark:to-[#B379FF] border-[1px] border-[#702FF9]"
           onClick={() => setIsModalOpen(true)}
         >
           <div className=" h-4 w-4 flex items-center justify-center mr-[6px]">
@@ -95,24 +105,20 @@ const UserNavbar: React.FC<UserNavbarProps> = ({
           </div>
           <div>New user</div>
         </div>
+          <div className=" h-4 w-4 flex items-center justify-center mr-[6px]">
+            <PlusIcon className="stroke-white-forcewhite"></PlusIcon>
+          </div>
+          <div>New user</div>
+        </div>
       </div>
+
 
       <AddUserModal
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(false)}
         agencies={agencies}
         onAddUser={onAddUser}
-        handleAddUserToast={handleAddUserToast}
       />
-      {/* onAddUser is not in props. adding in. recheck coz seems not used tho*/}
-
-      {showAddUserToast && (
-        <ToastNewUserAdded
-          message="New user added successfully!"
-          show={showAddUserToast}
-          onClose={() => setshowAddUserToast(false)}
-        />
-      )}
     </div>
   );
 };
