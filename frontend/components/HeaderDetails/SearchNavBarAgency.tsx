@@ -72,7 +72,7 @@ const SearchNavbarAgency: React.FC<SearchNavbarAgencyProps> = ({
               </div>
             </div>
             <div className="flex items-center pb-6 pt-3 text-2xl text-left">
-              <div className="flex-shrink-0 flex items-center justify-center">
+              <div className="flex-shrink-0 flex items-center justify-center relative h-[42px] w-[42px]">
                 <AgencyLogoImporter
                   currentAgency={currentAgency}
                 ></AgencyLogoImporter>

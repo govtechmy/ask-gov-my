@@ -325,15 +325,12 @@ export async function markQuestionAsSpam(questionId: number): Promise<void> {
 }
 
 export async function unSpamQuestion(questionId: number): Promise<void> {
-  const response = await fetch(
-    `${API_URL}/questions/${questionId}/un-spam/`,
-    {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
+  const response = await fetch(`${API_URL}/questions/${questionId}/un-spam/`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
     },
-  );
+  });
 
   if (!response.ok) {
     throw new Error('Failed to mark question as spam');

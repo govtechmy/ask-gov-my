@@ -98,7 +98,7 @@ const AgencyListDropdownOnCard: React.FC<AgencyListDropdownProps> = ({
               placeholder="Search for agency name"
               value={searchQuery}
               onChange={handleSearchChange}
-              className="absolute h-[40px] w-[295px] top-2 left-2 border-[1px] border-outline-200 shadow-button focus:border-none focus:outline-none focus:shadow-[0_0_0_1px_#B794FF,0_0_0_4px_#E2D5FE] rounded-lg p-2"
+              className="absolute h-[40px] w-[295px] top-2 left-2 border-[1px] border-outline-200  rounded-lg p-2"
             />
           </div>
         </div>
