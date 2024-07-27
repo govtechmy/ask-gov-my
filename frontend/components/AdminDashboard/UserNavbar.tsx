@@ -5,13 +5,7 @@ import { useSearchParams, useRouter } from 'next/navigation';
 import Search from '@/icons/search';
 import AddUserModal from './AddUserModal';
 import { cn } from '@/lib/utils';
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from '@/components/ui/select';
+import PlusIcon from '@/icons/plusicon';
 
 interface Agency {
   id: number;
@@ -43,23 +37,24 @@ const UserNavbar: React.FC<UserNavbarProps> = ({
     params.set('tab', tab);
     router.push(`${window.location.pathname}?${params.toString()}`);
   };
+  const [isFocused, setIsFocused] = useState(false);
 
   useEffect(() => {}, [activeTab]);
 
   return (
-    <div className="flex items-center justify-between pt-3 pb-2 border-b border-[#E4E4E7] dark:border-[#27272A]">
-      <div className="flex space-x-8">
+    <div className="flex items-center justify-between pb-2 border-b border-[#E4E4E7] dark:border-[#27272A]">
+      <div className="flex space-x-5">
         <button
           className={`font-medium text-sm pb-3 -mb-5 ${activeTab === 'all' ? 'text-black-900 border-b-2 border-[#702FF9]' : 'text-dim-500'}`}
           onClick={() => setActiveTab('all')}
         >
-          All Users
+          All
         </button>
         <button
           className={`font-medium text-sm pb-3 -mb-5 ${activeTab === 'superadmin' ? 'text-black-900 border-b-2 border-[#702FF9]' : 'text-dim-500'}`}
           onClick={() => setActiveTab('superadmin')}
         >
-          Super Admins
+          Superadmin
         </button>
         <button
           className={`font-medium text-sm pb-3 -mb-5 ${activeTab === 'staff' ? 'text-black-900 border-b-2 border-[#702FF9]' : 'text-dim-500'}`}
@@ -68,31 +63,47 @@ const UserNavbar: React.FC<UserNavbarProps> = ({
           Staff
         </button>
       </div>
-      <div className="flex space-x-4 items-center">
-        <div className="bg-[#FFFFFF] dark:bg-[#18181B] rounded-md flex items-center h-8 w-[260px] border px-3 py-2 text-sm">
+      <div className="flex items-center">
+        <div>Agency</div>
+        <div
+          className={cn(
+            'bg-[#FFFFFF] dark:bg-[#18181B] rounded-md flex items-center h-8 w-[260px] border px-3 py-2 text-sm',
+            {
+              'shadow-[0_0_0_1px_#B794FF,0_0_0_4px_#E2D5FE]': isFocused,
+            },
+          )}
+        >
           <input
             type="search"
             placeholder="Search by name or email"
-            className={cn(
-              'font-normal placeholder:text-dim-500 flex h-11 w-full rounded-md bg-transparent py-3 text-sm pl-2',
-            )}
+            className="font-normal placeholder:text-dim-500 flex h-11 w-full rounded-md bg-transparent py-3 text-sm pl-2 focus:outline-none"
+            onFocus={() => setIsFocused(true)}
+            onBlur={() => setIsFocused(false)}
             onChange={e => setSearchTerm(e.target.value)}
           />
-          <Search strokeWidth={1.88} className="stroke-[#FFFFFF]" />
+          <div className="h-4 w-4 items-center justify-center flex">
+            <Search strokeWidth={1.88} className="stroke-[#A1A1AA]" />
+          </div>
         </div>
-        <button
-          className="bg-purple-600 text-white px-4 py-2 rounded-md"
+        <div
+          className="w-[125px] h-8 rounded-md items-center justify-center flex text-white-forcewhite font-medium text-sm ml-2
+            bg-gradient-to-t from-[#702FF9] to-[#B379FF] dark:from-[#702FF9] dark:to-[#B379FF] border-[1px] border-[#702FF9]"
           onClick={() => setIsModalOpen(true)}
         >
-          + Add User
-        </button>
+          <div className=" h-4 w-4 flex items-center justify-center mr-[6px]">
+            <PlusIcon className="stroke-white-forcewhite"></PlusIcon>
+          </div>
+          <div>New user</div>
+        </div>
       </div>
+
       <AddUserModal
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(false)}
         agencies={agencies}
         onAddUser={onAddUser}
       />
+      {/* onAddUser is not in props. adding in. recheck coz seems not used tho*/}
     </div>
   );
 };
