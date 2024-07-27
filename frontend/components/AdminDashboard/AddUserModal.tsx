@@ -8,6 +8,7 @@ interface AddUserModalProps {
   isOpen: boolean;
   onClose: () => void;
   agencies: Agency[];
+  onAddUser: any;
 }
 
 interface Agency {
@@ -23,6 +24,7 @@ const AddUserModal: React.FC<AddUserModalProps> = ({
   isOpen,
   onClose,
   agencies,
+  onAddUser,
 }) => {
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
@@ -38,6 +40,7 @@ const AddUserModal: React.FC<AddUserModalProps> = ({
         email,
         role,
         role === 'super_admin' ? null : agency,
+        //this one have to rethink return apa
       );
       if (response.success) {
         setSuccess('User added successfully');
