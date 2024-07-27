@@ -1,4 +1,4 @@
-export default function PlusCircle({ className = '', ...props }) {
+export default function Pencil({ className = '', ...props }) {
   return (
     <svg
       width="20"

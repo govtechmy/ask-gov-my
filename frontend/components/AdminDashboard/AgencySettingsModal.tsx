@@ -97,14 +97,35 @@ const AgencySettingsModal: React.FC<AgencySettingsModalProps> = ({
           </div>
         </div>
         <div>
-          <div className="h-[360px] w-[552px] m-6 FULLINSIDE ">
+          <div className="h-[360px] w-[552px] m-6 ">
             <div className="mb-6">
               {logoUrl ? (
-                <img
-                  src={logoUrl}
-                  alt="Agency Logo"
-                  className="w-[64px] h-[64px] rounded-full"
-                />
+                <div className="relative">
+                  <div className="w-[64px] h-[64px] relative flex-shrink-0">
+                    <div className="absolute h-full w-full rounded-full border-[1px] border-outline-200 bg-transparent"></div>
+                    <div className="flex items-center justify-center h-full w-full overflow-hidden rounded-full">
+                      <ImageNext
+                        src={logoUrl}
+                        width={200}
+                        height={200}
+                        alt="Agency Logo"
+                      />
+                    </div>
+                  </div>
+                  <label className="cursor-pointer">
+                    <div className=" absolute bottom-0 left-[45px] h-5 w-5 rounded-full bg-askmygovbrand-600 items-center justify-center flex">
+                      <div className="h-3 w-3 flex items-center justify-center">
+                        <Pencil className="stroke-white-forcewhite"></Pencil>
+                      </div>
+                    </div>
+                    <input
+                      type="file"
+                      className="hidden"
+                      accept="image/png, image/jpeg"
+                      onChange={handleFileChange}
+                    />
+                  </label>
+                </div>
               ) : (
                 <div className="relative">
                   <div className="w-[64px] h-[64px] relative flex-shrink-0">
