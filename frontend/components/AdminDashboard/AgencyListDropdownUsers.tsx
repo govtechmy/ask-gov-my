@@ -1,5 +1,3 @@
-import ChevronDown from '@/icons/ChevronDown';
-import Search from '@/icons/search';
 import React, { useState, useRef, ChangeEvent, useEffect } from 'react';
 
 interface AgencyListDropdownProps {
@@ -47,15 +45,10 @@ const AgencyListDropdownUsers: React.FC<AgencyListDropdownProps> = ({
   return (
     <div ref={dropdownRef} className="relative">
       <div
-        className="w-[200px] hover:cursor-pointer h-8 mr-2 text-sm font-normal items-center flex border-[1px] border-outline-200 bg-white pl-2 shadow-button rounded-lg cursor-pointer pr-2 justify-between"
+        className="w-[170px] hover:cursor-pointer h-8 mr-2 text-sm font-normal items-center flex border-[1px] border-outline-200 bg-white pl-2 shadow-button rounded-lg cursor-pointer pr-2"
         onClick={handleDropdownToggle}
       >
         {`Agency: ${displayText}`}
-        <ChevronDown
-          className={`h-5 w-5 transition-transform transform ${
-            isOpen ? 'rotate-180' : ''
-          }`}
-        />
       </div>
       {isOpen && (
         <div className="absolute mt-2 w-[320px] h-[220px] rounded-2xl bg-white-forcewhite border-[1px] border-outline-200 z-10">
@@ -82,17 +75,14 @@ const AgencyListDropdownUsers: React.FC<AgencyListDropdownProps> = ({
             ))}
           </div>
 
-          <div className="flex">
+          <div>
             <input
               type="text"
               placeholder="Search for agency name"
               value={searchQuery}
               onChange={handleSearchChange}
-              className="absolute h-[32px] w-[304px] top-2 left-2 border-[1px] border-outline-200 shadow-button focus:border-none focus:outline-none focus:shadow-[0_0_0_1px_#B794FF,0_0_0_4px_#E2D5FE] rounded-lg p-2"
+              className="absolute h-[40px] w-[304px] top-2 left-2 border-[1px] border-outline-200 shadow-button focus:border-none focus:outline-none focus:shadow-[0_0_0_1px_#B794FF,0_0_0_4px_#E2D5FE] rounded-lg p-2"
             />
-            <div className="absolute h-4 w-4 items-center justify-center flex z-20 right-[15px] top-[15px]">
-              <Search strokeWidth={2} className="stroke-[#A1A1AA]" />
-            </div>
           </div>
         </div>
       )}
