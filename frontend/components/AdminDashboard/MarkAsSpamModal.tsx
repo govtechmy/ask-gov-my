@@ -1,9 +1,7 @@
-import Close from '@/icons/close';
-import React, { useState } from 'react';
-import ToastQuestionMarkAsSpam from './ToastQuestionMarkAsSpam';
+import React from 'react';
+
 import { markQuestionAsSpam } from '@/actions/userServices';
 import { Question } from '@/types/types';
-import { on } from 'nodemailer/lib/xoauth2';
 
 interface ModalProps {
   isOpen: boolean;

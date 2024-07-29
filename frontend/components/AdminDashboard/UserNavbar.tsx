@@ -8,6 +8,7 @@ import { cn } from '@/lib/utils';
 import PlusIcon from '@/icons/plusicon';
 import AgencyListDropdownUsers from './AgencyListDropdownUsers';
 import { AGENCY_TO_UUID } from '@/lib/agency';
+import ToastNewUserAdded from './ToastNewUserAdded';
 
 interface Agency {
   id: number;
@@ -40,8 +41,13 @@ const UserNavbar: React.FC<UserNavbarProps> = ({
     router.push(`${window.location.pathname}?${params.toString()}`);
   };
   const [isFocused, setIsFocused] = useState(false);
+  const [showAddUserToast, setshowAddUserToast] = useState(false);
 
   useEffect(() => {}, [activeTab]);
+
+  const handleAddUserToast = () => {
+    setshowAddUserToast(true);
+  };
 
   return (
     <div className="flex items-center justify-between pb-2 border-b border-[#E4E4E7] dark:border-[#27272A]">
@@ -104,8 +110,17 @@ const UserNavbar: React.FC<UserNavbarProps> = ({
         onClose={() => setIsModalOpen(false)}
         agencies={agencies}
         onAddUser={onAddUser}
+        handleAddUserToast={handleAddUserToast}
       />
       {/* onAddUser is not in props. adding in. recheck coz seems not used tho*/}
+
+      {showAddUserToast && (
+        <ToastNewUserAdded
+          message="New user added successfully!"
+          show={showAddUserToast}
+          onClose={() => setshowAddUserToast(false)}
+        />
+      )}
     </div>
   );
 };
