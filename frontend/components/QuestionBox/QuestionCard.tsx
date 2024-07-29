@@ -3,7 +3,6 @@
 import { useSearchParams } from 'next/navigation';
 import { Link } from '@/lib/i18n';
 import { useTranslations } from 'next-intl';
-import { AGENCY_TO_UUID } from '@/lib/agency';
 import IconQuestionSmile from '@/icons/iconquestionsmile';
 import DateComponent from '../date';
 import LikeIcon from '@/icons/likeicon';
@@ -12,12 +11,12 @@ import { Question } from '@/types/types';
 
 interface QuestionCardProps {
   question: Question;
-  agencyList: any[];
+  agencyMap: Record<string, string>;
 }
 
 const QuestionCard: React.FC<QuestionCardProps> = ({
   question,
-  agencyList,
+  agencyMap,
 }) => {
   const t = useTranslations('Agency');
   const searchParams = useSearchParams();
@@ -25,11 +24,15 @@ const QuestionCard: React.FC<QuestionCardProps> = ({
 
   const agencyId = question.agency;
 
-  const agencyAcronym = Object.keys(AGENCY_TO_UUID).find(
-    key => AGENCY_TO_UUID[key] === agencyId.toString(),
+  const agencyAcronym = Object.keys(agencyMap).find(
+    key => agencyMap[key] === agencyId.toString(),
   );
 
-  const currentAgency = agencyList.find(agency => agency.id === agencyId);
+  const currentAgency = {
+    id: agencyId,
+    acronym: agencyAcronym,
+    name: t(agencyAcronym),
+  };
 
   return (
     <Link
@@ -68,7 +71,6 @@ const QuestionCard: React.FC<QuestionCardProps> = ({
       >
         {question.answer}
       </div>
-
       <div className="mt-3 ml-10 flex items-center">
         <div className="mr-2">
           <LikeIcon />

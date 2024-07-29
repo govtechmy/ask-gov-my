@@ -1,6 +1,5 @@
 import { useState, useEffect } from 'react';
 import { useTranslations } from 'next-intl';
-import { AGENCY_TO_UUID } from '@/lib/agency';
 import {
   assignAgencyToQuestion,
   changeAdminIsOpen,
@@ -20,12 +19,14 @@ interface QuestionCardProps {
   question: Question;
   activeQuestionId: number | null;
   setactiveQuestionId: React.Dispatch<React.SetStateAction<number | null>>;
+  agencyMap: Record<string, string>;
 }
 
 const AdminQuestionCard: React.FC<QuestionCardProps> = ({
   question,
   activeQuestionId,
   setactiveQuestionId,
+  agencyMap,
 }) => {
   const t = useTranslations('Agency');
   const [selectedAgency, setSelectedAgency] = useState<string>('Unassigned');
@@ -36,14 +37,14 @@ const AdminQuestionCard: React.FC<QuestionCardProps> = ({
 
   useEffect(() => {
     if (question.agency !== null) {
-      const agencyAcronym = Object.keys(AGENCY_TO_UUID).find(
-        key => AGENCY_TO_UUID[key] === question.agency!.toString(),
+      const agencyAcronym = Object.keys(agencyMap).find(
+        key => agencyMap[key] === question.agency!.toString(),
       );
       if (agencyAcronym) {
         setSelectedAgency(agencyAcronym);
       }
     }
-  }, [question.agency]);
+  }, [question.agency, agencyMap]);
 
   const handleCardClick = async () => {
     setIsModalOpen(true);
@@ -124,7 +125,7 @@ const AdminQuestionCard: React.FC<QuestionCardProps> = ({
             <AgencyListDropdownOnCard
               selectedAgency={selectedAgency}
               setSelectedAgency={setSelectedAgency}
-              AGENCY_TO_UUID={AGENCY_TO_UUID}
+              AGENCY_TO_UUID={agencyMap}
               setSuccessMessage={setSuccessMessage}
               activeQuestionId={activeQuestionId}
               setactiveQuestionId={setactiveQuestionId}
@@ -156,7 +157,7 @@ const AdminQuestionCard: React.FC<QuestionCardProps> = ({
         question={question}
         selectedAgency={selectedAgency}
         setSelectedAgency={setSelectedAgency}
-        AGENCY_TO_UUID={AGENCY_TO_UUID}
+        AGENCY_TO_UUID={agencyMap}
         successMessage={successMessage}
         setSuccessMessage={setSuccessMessage}
       />
