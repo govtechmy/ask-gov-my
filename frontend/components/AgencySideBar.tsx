@@ -4,11 +4,7 @@ import { useState } from 'react';
 import { useRouter } from '@/lib/i18n';
 import { getDynamicAgencyMap } from '@/actions/questionServices';
 import { useTranslations } from 'next-intl';
-
-interface Agency {
-  id: string;
-  name: string;
-}
+import { Agency } from '@/types/types';
 
 interface AgencySidebarProps {
   agencies: Agency[];
