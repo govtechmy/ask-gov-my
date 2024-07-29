@@ -3,6 +3,7 @@
 import React, { useState } from 'react';
 import { addUser } from '@/actions/userServices';
 import DropdownRole from './DropdownRole';
+import { Agency } from '@/types/types';
 
 interface AddUserModalProps {
   isOpen: boolean;
@@ -10,15 +11,6 @@ interface AddUserModalProps {
   agencies: Agency[];
   onAddUser: any;
   handleAddUserToast: Function;
-}
-
-interface Agency {
-  id: number;
-  name: string;
-  name_ms: string;
-  acronym: string;
-  total_likes?: number;
-  logo_url?: string;
 }
 
 const AddUserModal: React.FC<AddUserModalProps> = ({
