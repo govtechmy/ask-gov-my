@@ -8,6 +8,10 @@ const elasticsearchURL = process.env.ELASTICSEARCH_URL;
 const elasticsearchApiKey = process.env.ELASTICSEARCH_API_KEY;
 const openaiApiKey = process.env.OPENAI_API_KEY;
 
+if (!elasticsearchApiKey) {
+  throw new Error('ELASTICSEARCH_API_KEY is not defined');
+}
+
 const client = new Client({
   node: elasticsearchURL,
   auth: {
