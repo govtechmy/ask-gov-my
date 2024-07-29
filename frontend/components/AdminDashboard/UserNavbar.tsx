@@ -9,15 +9,7 @@ import PlusIcon from '@/icons/plusicon';
 import AgencyListDropdownUsers from './AgencyListDropdownUsers';
 import { AGENCY_TO_UUID } from '@/lib/agency';
 import ToastNewUserAdded from './ToastNewUserAdded';
-
-interface Agency {
-  id: number;
-  name: string;
-  name_ms: string;
-  acronym: string;
-  total_likes?: number;
-  logo_url?: string;
-}
+import { Agency } from '@/types/types';
 
 interface UserNavbarProps {
   setSearchTerm: (term: string) => void;

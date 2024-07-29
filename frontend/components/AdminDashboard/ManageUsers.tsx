@@ -8,24 +8,7 @@ import UserNavbar from './UserNavbar';
 import UserCard from './UserCard';
 import RightArrow from '@/icons/rightarrow';
 import LeftArrow from '@/icons/leftarrow';
-
-interface User {
-  id: string;
-  name: string | null;
-  email: string;
-  role: 'staff' | 'super_admin';
-  agency: number | null;
-  createdAt: Date;
-}
-
-interface Agency {
-  id: number;
-  name: string;
-  name_ms: string;
-  acronym: string;
-  total_likes?: number;
-  logo_url?: string;
-}
+import { Agency, User } from '@/types/types';
 
 const ManageUsers: React.FC = () => {
   const [users, setUsers] = useState<User[]>([]);
