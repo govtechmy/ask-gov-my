@@ -3,6 +3,7 @@
 import React, { useState } from 'react';
 import UserSettingsModal from './UserSettingsModal';
 import JataNegaraIcon from '@/icons/jatanegaraicon';
+import ToastNewUserAdded from './ToastNewUserAdded';
 
 interface User {
   id: string;

@@ -9,6 +9,7 @@ interface AddUserModalProps {
   onClose: () => void;
   agencies: Agency[];
   onAddUser: any;
+  handleAddUserToast: Function;
 }
 
 interface Agency {
@@ -25,6 +26,7 @@ const AddUserModal: React.FC<AddUserModalProps> = ({
   onClose,
   agencies,
   onAddUser,
+  handleAddUserToast,
 }) => {
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
@@ -44,6 +46,7 @@ const AddUserModal: React.FC<AddUserModalProps> = ({
       );
       if (response.success) {
         setSuccess('User added successfully');
+        handleAddUserToast();
         setError(null);
         onClose();
       } else {
