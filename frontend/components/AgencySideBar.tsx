@@ -2,7 +2,7 @@
 'use client';
 import { useState } from 'react';
 import { useRouter } from '@/lib/i18n';
-import { AGENCY_TO_UUID } from '@/lib/agency';
+import { getDynamicAgencyMap } from '@/actions/questionServices';
 import { useTranslations } from 'next-intl';
 
 interface Agency {
@@ -18,7 +18,7 @@ interface AgencySidebarProps {
 
 const AgencySidebar: React.FC<AgencySidebarProps> = ({ agencies }) => {
   const t = useTranslations('Agency');
-
+  const AGENCY_TO_UUID = getDynamicAgencyMap()
   const router = useRouter();
   const [searchTerm, setSearchTerm] = useState('');
 

@@ -1,7 +1,5 @@
 'use server';
 const API_URL = process.env.API_URL;
-import { AGENCY_TO_UUID } from '@/lib/agency';
-import { localePrefix } from '@/lib/i18n';
 
 interface Question {
   id: number;

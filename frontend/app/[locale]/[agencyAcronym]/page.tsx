@@ -1,9 +1,9 @@
 import {
   getAgencyList,
   getQuestionsByAgency,
+  getDynamicAgencyMap
 } from '@/actions/questionServices';
 import QuestionBox from '@/components/QuestionBox/QuestionBox';
-import { AGENCY_TO_UUID } from '@/lib/agency';
 import HeaderAgency from '@/components/HeaderDetails/HeaderAgency';
 import SearchNavbarAgency from '@/components/HeaderDetails/SearchNavBarAgency';
 import Footer from '@/components/FooterDetails/Footer';
@@ -23,6 +23,7 @@ interface Props {
 
 const AgencyPage = async ({ params }: Props) => {
   const { agencyAcronym, locale } = params;
+  const AGENCY_TO_UUID = await getDynamicAgencyMap()
   const agencyUUID = AGENCY_TO_UUID[agencyAcronym.toUpperCase()];
   const { questions } = await getQuestionsByAgency(agencyUUID);
   const topics = await getTopicByAgency(parseInt(agencyUUID));

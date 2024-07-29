@@ -1,20 +1,30 @@
 'use client';
 
-import React, { useState, useMemo } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import QuestionCard from './QuestionCard';
 import RightArrow from '@/icons/rightarrow';
 import LeftArrow from '@/icons/leftarrow';
 import { Question } from '@/types/types';
+import { getDynamicAgencyMap } from '@/actions/questionServices';
 
 interface QuestionBoxProps {
   questions: Question[];
-  agencyList: any[];
 }
 
-const QuestionBox: React.FC<QuestionBoxProps> = ({ questions, agencyList }) => {
+const QuestionBox: React.FC<QuestionBoxProps> = ({ questions }) => {
   const [currentPage, setCurrentPage] = useState(1);
+  const [agencyMap, setAgencyMap] = useState<Record<string, string>>({});
   const itemsPerPage = 6;
   const totalPages = Math.ceil(questions.length / itemsPerPage);
+
+  useEffect(() => {
+    const fetchAgencyMap = async () => {
+      const map = await getDynamicAgencyMap();
+      setAgencyMap(map);
+    };
+
+    fetchAgencyMap();
+  }, []);
 
   const sortedQuestions = useMemo(() => {
     return [...questions].sort((a, b) => b.likes - a.likes);
@@ -29,19 +39,19 @@ const QuestionBox: React.FC<QuestionBoxProps> = ({ questions, agencyList }) => {
   const renderPageNumbers = () => {
     const pageNumbers = [];
 
-    // Add first page button
     pageNumbers.push(
       <button
         key={1}
         onClick={() => handlePageChange(1)}
-        className={`rounded-lg h-10 w-10 ${currentPage === 1 ? 'bg-[#F4EFFF] text-[#702FF9] dark:bg-[#201636] dark:text-[#9E70FF]' : 'bg-transparent text-black-700 dark:text-[#D4D4D8]'}`}
+        className={`rounded-lg h-10 w-10 ${
+          currentPage === 1 ? 'bg-[#F4EFFF] text-[#702FF9] dark:bg-[#201636] dark:text-[#9E70FF]' : 'bg-transparent text-black-700 dark:text-[#D4D4D8]'
+        }`}
       >
         {1}
       </button>,
     );
 
     if (currentPage > 1) {
-      // Add ellipsis if more than one page away from the start
       pageNumbers.push(
         <span key="ellipsis-start" className="px-2 py-2">
           ...
@@ -61,13 +71,14 @@ const QuestionBox: React.FC<QuestionBoxProps> = ({ questions, agencyList }) => {
       endPage = Math.min(currentPage + 1, totalPages - 1);
     }
 
-    // Add intermediate page buttons
     for (let i = startPage; i <= endPage; i++) {
       pageNumbers.push(
         <button
           key={i}
           onClick={() => handlePageChange(i)}
-          className={`rounded-lg h-10 w-10 ${i === currentPage ? 'bg-[#F4EFFF] text-[#702FF9] dark:bg-[#201636] dark:text-[#9E70FF]' : 'bg-transparent text-black-700 dark:text-[#D4D4D8]'}`}
+          className={`rounded-lg h-10 w-10 ${
+            i === currentPage ? 'bg-[#F4EFFF] text-[#702FF9] dark:bg-[#201636] dark:text-[#9E70FF]' : 'bg-transparent text-black-700 dark:text-[#D4D4D8]'
+          }`}
         >
           {i}
         </button>,
@@ -75,7 +86,6 @@ const QuestionBox: React.FC<QuestionBoxProps> = ({ questions, agencyList }) => {
     }
 
     if (currentPage < totalPages - 2) {
-      // Add ellipsis if more than one page away from the end
       pageNumbers.push(
         <span key="ellipsis-end" className="px-2 py-2 rounded-lg">
           ...
@@ -83,13 +93,14 @@ const QuestionBox: React.FC<QuestionBoxProps> = ({ questions, agencyList }) => {
       );
     }
 
-    // Add last page button
     if (totalPages > 1) {
       pageNumbers.push(
         <button
           key={totalPages}
           onClick={() => handlePageChange(totalPages)}
-          className={`rounded-lg h-10 w-10 ${totalPages === currentPage ? 'bg-[#F4EFFF] dark:bg-[#201636] text-[#702FF9] dark:text-[#9E70FF]' : 'bg-transparent text-black-700 dark:text-[#D4D4D8]'}`}
+          className={`rounded-lg h-10 w-10 ${
+            totalPages === currentPage ? 'bg-[#F4EFFF] dark:bg-[#201636] text-[#702FF9] dark:text-[#9E70FF]' : 'bg-transparent text-black-700 dark:text-[#D4D4D8]'
+          }`}
         >
           {totalPages}
         </button>,
@@ -110,7 +121,7 @@ const QuestionBox: React.FC<QuestionBoxProps> = ({ questions, agencyList }) => {
           <QuestionCard
             key={question.id}
             question={question}
-            agencyList={agencyList}
+            agencyMap={agencyMap}
           />
         ))}
       </div>
@@ -118,7 +129,9 @@ const QuestionBox: React.FC<QuestionBoxProps> = ({ questions, agencyList }) => {
         <button
           onClick={() => handlePageChange(currentPage - 1)}
           disabled={currentPage === 1}
-          className={`rounded-lg h-10 w-10 bg-[#FFFFFF] dark:bg-[#18181B] shadow-button text-[#FFFFFF] border-[1px] border-[#E4E4E7] dark:border-[#27272A] ${currentPage === 1 ? 'opacity-30' : 'opacity-100'}`}
+          className={`rounded-lg h-10 w-10 bg-[#FFFFFF] dark:bg-[#18181B] shadow-button text-[#FFFFFF] border-[1px] border-[#E4E4E7] dark:border-[#27272A] ${
+            currentPage === 1 ? 'opacity-30' : 'opacity-100'
+          }`}
         >
           <div className="h-10 w-10 rounded-lg flex items-center justify-center">
             <div className="flex items-center justify-center h-5 w-5">
@@ -132,7 +145,9 @@ const QuestionBox: React.FC<QuestionBoxProps> = ({ questions, agencyList }) => {
         <button
           onClick={() => handlePageChange(currentPage + 1)}
           disabled={currentPage === totalPages}
-          className={`rounded-lg h-10 w-10 bg-[#FFFFFF] dark:bg-[#18181B] shadow-button text-[#FFFFFF] border-[1px] border-[#E4E4E7] dark:border-[#27272A] ${currentPage === totalPages ? 'opacity-30' : 'opacity-100'}`}
+          className={`rounded-lg h-10 w-10 bg-[#FFFFFF] dark:bg-[#18181B] shadow-button text-[#FFFFFF] border-[1px] border-[#E4E4E7] dark:border-[#27272A] ${
+            currentPage === totalPages ? 'opacity-30' : 'opacity-100'
+          }`}
         >
           <div className="h-10 w-10 rounded-lg flex items-center justify-center">
             <div className="flex items-center justify-center h-5 w-5">
