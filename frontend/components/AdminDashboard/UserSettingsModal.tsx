@@ -3,20 +3,7 @@
 import React, { useEffect, useState } from 'react';
 import Modal from './Modal';
 import { editUser } from '@/actions/userServices';
-
-interface User {
-  id: string;
-  name: string | null;
-  email: string;
-  role: 'staff' | 'super_admin';
-  agency: number | null;
-}
-
-interface Agency {
-  id: number;
-  name: string;
-  logo_url?: string;
-}
+import { Agency, User } from '@/types/types';
 
 interface UserSettingsModalProps {
   user: User;

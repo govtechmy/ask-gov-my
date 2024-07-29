@@ -1,49 +1,6 @@
 'use server';
 const API_URL = process.env.API_URL;
-import { AGENCY_TO_UUID } from '@/lib/agency';
-import { localePrefix } from '@/lib/i18n';
-
-interface Question {
-  id: number;
-  question: string;
-  date: string;
-  answered_date: string;
-  state: string;
-  agency: number;
-  answer: string;
-  topics: number[];
-  email?: string;
-  likes: number;
-  dislikes: number;
-  attachments?: string[];
-  admin_isopen?: boolean;
-  staff_isopen?: boolean;
-}
-
-interface Topic {
-  title_ms: string;
-  id: number;
-  title: string;
-  agency: {
-    id: number;
-    name: string;
-    acronym: string;
-  };
-}
-
-interface QuestionSubmission {
-  question: string;
-  email: string;
-}
-
-interface Agency {
-  id: number;
-  name: string;
-  name_ms: string;
-  acronym: string;
-  total_likes?: number;
-  logo_url?: string;
-}
+import { Question, Agency, Topic, QuestionSubmission } from '@/types/types';
 
 export async function getAllQuestions(
   page: number = 1,

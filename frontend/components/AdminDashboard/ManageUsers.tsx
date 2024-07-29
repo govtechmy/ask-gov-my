@@ -8,24 +8,7 @@ import UserNavbar from './UserNavbar';
 import UserCard from './UserCard';
 import RightArrow from '@/icons/rightarrow';
 import LeftArrow from '@/icons/leftarrow';
-
-interface User {
-  id: string;
-  name: string | null;
-  email: string;
-  role: 'staff' | 'super_admin';
-  agency: number | null;
-  createdAt: Date;
-}
-
-interface Agency {
-  id: number;
-  name: string;
-  name_ms: string;
-  acronym: string;
-  total_likes?: number;
-  logo_url?: string;
-}
+import { Agency, User } from '@/types/types';
 
 const ManageUsers: React.FC = () => {
   const [users, setUsers] = useState<User[]>([]);
@@ -183,11 +166,16 @@ const ManageUsers: React.FC = () => {
   }
 
   return (
-    <div className="p-8">
-      <UserNavbar setSearchTerm={setSearchTerm} agencies={agencies} />
-      <div className="flex justify-between items-center mb-4">
-        <h1 className="text-xl font-semibold">Manage Users</h1>
-      </div>
+    <div className="container max-w-screen-lg pt-3 mx-auto px-6">
+      <UserNavbar
+        setSearchTerm={setSearchTerm}
+        agencies={agencies}
+        onAddUser={function (): void {
+          throw new Error('Function not implemented.');
+        }}
+      />
+      {/* userNavbar prop didnt pass properly, something leftover, either make it as alternative or needed */}
+      <div className="h-6"></div>
       {filteredUsers.length === 0 ? (
         <p className="text-center">
           We couldn't find any users. Please try searching again using the
@@ -195,7 +183,7 @@ const ManageUsers: React.FC = () => {
         </p>
       ) : (
         <>
-          <div className="grid grid-cols-1 gap-4">
+          <div className="grid grid-cols-1 gap-2">
             {currentUsers.map(user => (
               <UserCard
                 key={user.id}
