@@ -75,21 +75,23 @@ const AddUserModal: React.FC<AddUserModalProps> = ({
             </div>
             <input
               type="text"
-              className="bg-white h-10 w-[552px] border-[1px] border-outline-200 rounded-lg pl-[12px]
+              className="bg-white h-10 w-[552px] border-[1px] border-outline-200 rounded-md pl-4
                 shadow-button focus:border-none focus:outline-none focus:shadow-[0_0_0_1px_#B794FF,0_0_0_4px_#E2D5FE] mb-6
                 text-black-900 font-normal text-base"
               value={name}
+              required
               onChange={e => setName(e.target.value)}
             />
             <div className="text-black-700 text-sm font-medium mb-[6px] w-[552px] h-5">
               Email
             </div>
             <input
-              type="text"
-              className="bg-white h-10 w-[552px] border-[1px] border-outline-200 rounded-lg pl-[12px]
+              type="email"
+              className="bg-white h-10 w-[552px] border-[1px] border-outline-200 rounded-md 
                 shadow-button focus:border-none focus:outline-none focus:shadow-[0_0_0_1px_#B794FF,0_0_0_4px_#E2D5FE] mb-6
-                text-black-900 font-normal text-base"
+                text-black-900 font-normal text-base pl-4"
               value={email}
+              required
               onChange={e => setEmail(e.target.value)}
             />
             <div className="text-black-700 text-sm font-medium mb-[6px] w-[552px] h-5">
@@ -101,7 +103,7 @@ const AddUserModal: React.FC<AddUserModalProps> = ({
         <div>
           <div className="py-6 flex justify-end pr-6 border-t-[1px] border-outline-200">
             <button
-              className="mr-3 h-[44px] w-[77px] border-[1px] border-outline-200 shadow-button rounded-lg 
+              className="mr-3 h-[44px] w-[77px] border-[1px] border-outline-200 shadow-button rounded-md 
               text-base items-center justify-center flex hover:cursor-pointer"
               onClick={onClose}
             >
