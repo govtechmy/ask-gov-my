@@ -8,6 +8,7 @@ import DateComponent from '../date';
 import LikeIcon from '@/icons/likeicon';
 import AgencyLogoImporter from '../AgencyLogoImporter';
 import { Question } from '@/types/types';
+import { QuoteIcon } from 'lucide-react';
 
 interface QuestionCardProps {
   question: Question;
@@ -22,10 +23,10 @@ const QuestionCard: React.FC<QuestionCardProps> = ({
   const searchParams = useSearchParams();
   const locale = searchParams.get('locale') || '';
 
-  const agencyId = question.agency;
+  const agencyId = question.agency && typeof question.agency === 'object' ? question.agency.id : question.agency;
 
   const agencyAcronym = Object.keys(agencyMap).find(
-    key => agencyMap[key] === agencyId.toString(),
+    key => agencyMap[key] === agencyId?.toString(),
   );
 
   const currentAgency = {

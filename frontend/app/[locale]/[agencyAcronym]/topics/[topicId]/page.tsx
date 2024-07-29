@@ -2,7 +2,7 @@ import {
   getAgencyList,
   getQuestionsByAgency,
   getTopicByAgency,
-  getDynamicAgencyMap
+  getDynamicAgencyMap,
 } from '@/actions/questionServices';
 import QuestionBox from '@/components/QuestionBox/QuestionBox';
 import Footer from '@/components/FooterDetails/Footer';
@@ -24,8 +24,8 @@ interface Props {
 
 const TopicPage = async ({ params }: Props) => {
   const { agencyAcronym, topicId, locale } = params;
-  const AGENCY_TO_UUID = await getDynamicAgencyMap()
-  const agencyUUID = AGENCY_TO_UUID[agencyAcronym.toUpperCase()];
+  const agencyMap = await getDynamicAgencyMap();
+  const agencyUUID = agencyMap[agencyAcronym.toUpperCase()];
 
   const { questions } = await getQuestionsByAgency(agencyUUID);
   const filteredQuestions = questions.filter(question =>
@@ -53,8 +53,7 @@ const TopicPage = async ({ params }: Props) => {
     (agency: { acronym: string }) => agency.acronym === upperCaseAgencyAcronym,
   );
 
-  if (currentAgency) {
-  } else {
+  if (!currentAgency) {
     console.log(`Agency with acronym '${agencyAcronym}' not found.`);
   }
 
@@ -98,10 +97,7 @@ const TopicPage = async ({ params }: Props) => {
               </div>
             </div>
             {filteredQuestions.length > 0 ? (
-              <QuestionBox
-                questions={filteredQuestions}
-                agencyList={agencies}
-              />
+              <QuestionBox questions={filteredQuestions} agencyMap={agencyMap} />
             ) : (
               <div className=" h-[220px] w-[900px]">
                 <div className="text-dim-500">

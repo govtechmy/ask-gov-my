@@ -1,31 +1,20 @@
 'use client';
 
-import React, { useState, useEffect, useMemo } from 'react';
+import React, { useState, useMemo } from 'react';
 import QuestionCard from './QuestionCard';
 import RightArrow from '@/icons/rightarrow';
 import LeftArrow from '@/icons/leftarrow';
 import { Question } from '@/types/types';
-import { getDynamicAgencyMap } from '@/actions/questionServices';
 
 interface QuestionBoxProps {
   questions: Question[];
+  agencyMap: Record<string, string>;
 }
 
-const QuestionBox: React.FC<QuestionBoxProps> = ({ questions }) => {
+const QuestionBox: React.FC<QuestionBoxProps> = ({ questions, agencyMap }) => {
   const [currentPage, setCurrentPage] = useState(1);
-  const [agencyMap, setAgencyMap] = useState<Record<string, string>>({});
   const itemsPerPage = 6;
   const totalPages = Math.ceil(questions.length / itemsPerPage);
-
-  useEffect(() => {
-    const fetchAgencyMap = async () => {
-      const map = await getDynamicAgencyMap();
-      setAgencyMap(map);
-    };
-
-    fetchAgencyMap();
-  }, []);
-
   const sortedQuestions = useMemo(() => {
     return [...questions].sort((a, b) => b.likes - a.likes);
   }, [questions]);

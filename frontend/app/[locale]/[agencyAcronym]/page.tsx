@@ -1,14 +1,14 @@
 import {
   getAgencyList,
   getQuestionsByAgency,
-  getDynamicAgencyMap
+  getDynamicAgencyMap,
+  getTopicByAgency,
 } from '@/actions/questionServices';
 import QuestionBox from '@/components/QuestionBox/QuestionBox';
 import HeaderAgency from '@/components/HeaderDetails/HeaderAgency';
 import SearchNavbarAgency from '@/components/HeaderDetails/SearchNavBarAgency';
 import Footer from '@/components/FooterDetails/Footer';
 import TopicList from '@/components/TopicList';
-import { getTopicByAgency } from '@/actions/questionServices';
 import IdentifyWebsite from '@/components/HeaderDetails/IdentifyWebsite';
 import WordTranslate from '@/components/WordTranslate';
 import TopicDropdown from '@/components/TopicDropdown';
@@ -23,8 +23,8 @@ interface Props {
 
 const AgencyPage = async ({ params }: Props) => {
   const { agencyAcronym, locale } = params;
-  const AGENCY_TO_UUID = await getDynamicAgencyMap()
-  const agencyUUID = AGENCY_TO_UUID[agencyAcronym.toUpperCase()];
+  const agencyMap = await getDynamicAgencyMap();
+  const agencyUUID = agencyMap[agencyAcronym.toUpperCase()];
   const { questions } = await getQuestionsByAgency(agencyUUID);
   const topics = await getTopicByAgency(parseInt(agencyUUID));
   const upperCaseAgencyAcronym = agencyAcronym.toUpperCase();
@@ -43,62 +43,53 @@ const AgencyPage = async ({ params }: Props) => {
     (agency: { acronym: string }) => agency.acronym === upperCaseAgencyAcronym,
   );
 
-  if (currentAgency) {
-  } else {
+  if (!currentAgency) {
     console.log(`Agency with acronym '${agencyAcronym}' not found.`);
   }
 
   return (
-    <div className="">
-      <div className="">
-        <IdentifyWebsite />
-        <ContextSearchBar>
-          <HeaderAgency agencyAcronym={agencyAcronym}></HeaderAgency>
-          <SearchNavbarAgency
-            agencyAcronym={agencyAcronym}
-            agencyUUID={agencyUUID}
-            currentAgency={currentAgency}
-          />
-        </ContextSearchBar>
+    <div>
+      <IdentifyWebsite />
+      <ContextSearchBar>
+        <HeaderAgency agencyAcronym={agencyAcronym} />
+        <SearchNavbarAgency
+          agencyAcronym={agencyAcronym}
+          agencyUUID={agencyUUID}
+          currentAgency={currentAgency}
+        />
+      </ContextSearchBar>
 
-        <div className="container mt-8 flex text-out">
-          <div className="max-w-screen-2xl">
-            <div className="font-semibold text-base text-black-700 pb-6">
-              <WordTranslate
-                translate={'Mainpage'}
-                keyword={'trendingQ'}
-              ></WordTranslate>
-            </div>
-            <QuestionBox questions={questions} agencyList={agencyList} />
+      <div className="container mt-8 flex text-out">
+        <div className="max-w-screen-2xl">
+          <div className="font-semibold text-base text-black-700 pb-6">
+            <WordTranslate translate={'Mainpage'} keyword={'trendingQ'} />
+          </div>
+          <QuestionBox questions={questions} agencyMap={agencyMap} />
+        </div>
+
+        <div className="pl-10 w-[500px]">
+          <div className="font-semibold text-base text-black-700 pl-6 pb-7">
+            <WordTranslate translate={'Topics'} keyword={'topic'} />
           </div>
 
-          <div className="pl-10 w-[500px]">
-            <div className="font-semibold text-base text-black-700 pl-6 pb-7">
-              <WordTranslate
-                translate={'Topics'}
-                keyword={'topic'}
-              ></WordTranslate>
-            </div>
+          <div className="hidden md:block">
+            <TopicList
+              topics={topics}
+              locale={locale}
+              agencyAcronym={agencyAcronym}
+            />
+          </div>
 
-            <div className="hidden md:block">
-              <TopicList
-                topics={topics}
-                locale={locale}
-                agencyAcronym={agencyAcronym}
-              />
-            </div>
-
-            <div className="md:invisible">
-              <TopicDropdown
-                topics={topics}
-                locale={locale}
-                agencyAcronym={agencyAcronym}
-              />
-            </div>
+          <div className="md:invisible">
+            <TopicDropdown
+              topics={topics}
+              locale={locale}
+              agencyAcronym={agencyAcronym}
+            />
           </div>
         </div>
-        <Footer></Footer>
       </div>
+      <Footer />
     </div>
   );
 };
