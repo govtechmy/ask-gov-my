@@ -3,7 +3,21 @@
 import React, { useState } from 'react';
 import UserSettingsModal from './UserSettingsModal';
 import JataNegaraIcon from '@/icons/jatanegaraicon';
-import { Agency, User } from '@/types/types';
+import ToastNewUserAdded from './ToastNewUserAdded';
+
+interface User {
+  id: string;
+  name: string | null;
+  email: string;
+  role: 'staff' | 'super_admin';
+  agency: number | null;
+}
+
+interface Agency {
+  id: number;
+  name: string;
+  logo_url?: string;
+}
 
 interface UserCardProps {
   user: User;
