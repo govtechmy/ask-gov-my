@@ -325,7 +325,7 @@ export async function editUser(
   name: string,
   email: string,
   role: 'staff' | 'super_admin',
-  agency: number,
+  agency: number | null,
 ): Promise<{ success: boolean; message?: string }> {
   try {
     await prisma.user.update({
