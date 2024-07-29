@@ -9,14 +9,7 @@ import LeftArrow from '@/icons/leftarrow';
 import { Search } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import PlusIcon from '@/icons/plusicon';
-
-interface Agency {
-  id: number;
-  name: string;
-  name_ms: string;
-  acronym: string;
-  logo_url?: string;
-}
+import { Agency } from '@/types/types';
 
 const ManageAgencies: React.FC = () => {
   const [agencies, setAgencies] = useState<Agency[]>([]);
