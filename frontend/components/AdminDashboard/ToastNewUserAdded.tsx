@@ -8,7 +8,7 @@ interface ToastProps {
   onClose: () => void;
 }
 
-const ToastNewUserAdded: React.FC<ToastProps> = ({
+const ToastQuestionMarkAsUnSpam: React.FC<ToastProps> = ({
   message,
   show,
   onClose,
@@ -126,4 +126,4 @@ const ToastNewUserAdded: React.FC<ToastProps> = ({
   );
 };
 
-export default ToastNewUserAdded;
+export default ToastQuestionMarkAsUnSpam;
