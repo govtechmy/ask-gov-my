@@ -4,11 +4,7 @@ import { useState } from 'react';
 import { useRouter } from '@/lib/i18n';
 import { AGENCY_TO_UUID } from '@/lib/agency';
 import { useTranslations } from 'next-intl';
-
-interface Agency {
-  id: string;
-  name: string;
-}
+import { Agency } from '@/types/types';
 
 interface AgencySidebarProps {
   agencies: Agency[];

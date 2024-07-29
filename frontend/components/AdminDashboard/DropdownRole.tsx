@@ -1,13 +1,8 @@
 import { useState } from 'react';
 import { AGENCY_TO_UUID } from '@/lib/agency';
-import AgencyListDropdownUsers from './AgencyListDropdownUsers';
 import AgencyListDropdownUsersModal from './AgencyListDropdownUsersModal';
 import ChevronDown from '@/icons/ChevronDown';
-
-interface Agency {
-  id: number;
-  name: string;
-}
+import { Agency } from '@/types/types';
 
 interface DropdownRoleProps {
   agencies: Agency[];

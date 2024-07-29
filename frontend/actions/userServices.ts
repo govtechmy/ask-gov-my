@@ -1,49 +1,10 @@
 'use server';
 import { PrismaClient } from '@prisma/client';
+import { Question, User, Topic } from '@/types/types';
 
 const API_URL = process.env.API_URL;
 
 const prisma = new PrismaClient();
-
-interface Question {
-  id: number;
-  question: string;
-  date: string;
-  answered_date: string;
-  state: string;
-  agency: number;
-  answer: string;
-  topics: number[];
-  email: string;
-  likes: number;
-  dislikes: number;
-  attachments: string[];
-  admin_isopen: boolean;
-  staff_isopen: boolean;
-}
-
-export interface Topic {
-  id: number;
-  title: string;
-  title_ms?: string; // can be null
-  agency: {
-    id: number;
-    name: string;
-    acronym: string;
-  };
-}
-
-interface User {
-  id: string;
-  name: string | null;
-  email: string;
-  emailVerified: Date | null;
-  image: string | null;
-  role: 'staff' | 'super_admin';
-  createdAt: Date;
-  updatedAt: Date;
-  agency: number | null;
-}
 
 // get questions by the user agency, to be used only by user.role = staff
 export async function getUserAgencyQuestions(

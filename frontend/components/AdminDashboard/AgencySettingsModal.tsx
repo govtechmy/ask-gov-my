@@ -7,14 +7,7 @@ import { updateAgency } from '@/actions/userServices';
 import ImageNext from 'next/image';
 import Pencil from '@/icons/pencil';
 import Asklogo from '@/icons/asklogo';
-
-interface Agency {
-  id: number;
-  name: string;
-  name_ms: string;
-  acronym: string;
-  logo_url?: string;
-}
+import { Agency } from '@/types/types';
 
 interface AgencySettingsModalProps {
   agency: Agency;
