@@ -47,10 +47,14 @@ const AgencyListDropdownUsers: React.FC<AgencyListDropdownProps> = ({
   return (
     <div ref={dropdownRef} className="relative">
       <div
-        className="w-[200px] hover:cursor-pointer h-8 mr-2 text-sm font-normal items-center flex border-[1px] border-outline-200 bg-white pl-2 shadow-button rounded-lg cursor-pointer pr-2 justify-between"
+        className="w-[200px] hover:cursor-pointer h-8 mr-2 text-sm font-normal items-center flex border-[1px] border-outline-200 bg-white pl-2 shadow-button rounded-lg cursor-pointer justify-between pr-2"
         onClick={handleDropdownToggle}
       >
-        {`Agency: ${displayText}`}
+        <div className="flex">
+          <div className="text-dim-500 "> {`Agency`}</div>
+          <div className="pl-[6px] text-black-900 font-medium">{`${displayText}`}</div>
+        </div>
+
         <ChevronDown
           className={`h-5 w-5 transition-transform transform ${
             isOpen ? 'rotate-180' : ''
