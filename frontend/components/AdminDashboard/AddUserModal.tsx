@@ -42,10 +42,8 @@ const AddUserModal: React.FC<AddUserModalProps> = ({
         email,
         role,
         role === 'super_admin' ? null : agency,
-        // this one have to rethink return apa
       );
       if (response.success) {
-        setSuccess('User added successfully');
         handleAddUserToast();
         setError(null);
         onClose();

@@ -341,7 +341,7 @@ export async function addUser(
   name: string,
   email: string,
   role: 'staff' | 'super_admin',
-  agency: number,
+  agency: number | null,
 ): Promise<{ success: boolean; message?: string }> {
   try {
     await prisma.user.create({
