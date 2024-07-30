@@ -253,6 +253,7 @@ class AddAgencyView(APIView):
 class TrendingAgenciesView(APIView):
     def get(self, request):
         agencies = Agency.objects.annotate(total_likes=Sum('question__likes')).order_by('-total_likes')
+        agencies = agencies.filter(total_likes__isnull=False)
         serializer = AgencySerializer(agencies, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
     
