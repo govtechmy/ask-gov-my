@@ -1,6 +1,5 @@
 export interface Question {
   id: number;
-  // Question id
   topics: number[];
   question: string;
   date: string;
@@ -13,18 +12,23 @@ export interface Question {
   answered_date: string;
   admin_isopen?: boolean;
   staff_isopen?: boolean;
-  agency: number;
-  //   agencyid
+  agency: number | {
+    id: number;
+    name: string;
+    name_ms?: string;
+    acronym: string;
+  };
 }
+
 
 export interface Agency {
   id: number;
   name: string;
   name_ms: string;
   acronym: string;
-  total_likes?: number;
+  total_likes?: number | null;
   logo_url?: string;
-  last_edited: Date;
+  last_edited?: Date;
 }
 
 export interface Topic {

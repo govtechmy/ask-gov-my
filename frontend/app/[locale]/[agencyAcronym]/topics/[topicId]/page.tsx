@@ -13,6 +13,7 @@ import TopicDropdown from '@/components/TopicDropdown';
 import WordTranslate from '@/components/WordTranslate';
 import HeaderAgency from '@/components/HeaderDetails/HeaderAgency';
 import ContextSearchBar from '@/components/ContextSearchBar';
+import { Agency } from '@/types/types';
 
 interface Props {
   params: {
@@ -39,17 +40,17 @@ const TopicPage = async ({ params }: Props) => {
 
   const upperCaseAgencyAcronym = agencyAcronym.toUpperCase();
 
-  let agencies: any = [];
+  let agencyList: any = [];
 
   try {
-    agencies = await getAgencyList();
+    agencyList = await getAgencyList();
 
-    if (!agencies || agencies.length === 0) {
+    if (!agencyList || agencyList.length === 0) {
       throw new Error('Agency list is empty');
     }
   } catch {}
 
-  const currentAgency = agencies.find(
+  const currentAgency = agencyList.find(
     (agency: { acronym: string }) => agency.acronym === upperCaseAgencyAcronym,
   );
 
@@ -97,7 +98,7 @@ const TopicPage = async ({ params }: Props) => {
               </div>
             </div>
             {filteredQuestions.length > 0 ? (
-              <QuestionBox questions={filteredQuestions} agencyMap={agencyMap} />
+              <QuestionBox questions={filteredQuestions} agencyMap={agencyMap} agencyList={agencyList} />
             ) : (
               <div className=" h-[220px] w-[900px]">
                 <div className="text-dim-500">
