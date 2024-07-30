@@ -67,8 +67,8 @@ const AddUserModal: React.FC<AddUserModalProps> = ({
             <input
               type="text"
               className="bg-white h-10 w-[552px] border-[1px] border-outline-200 rounded-md pl-4
-                shadow-button focus:border-none focus:outline-none focus:shadow-[0_0_0_1px_#B794FF,0_0_0_4px_#E2D5FE] mb-6
-                text-black-900 font-normal text-base"
+                shadow-button focus:border-none focus:outline-none focus:shadow-[0_0_0_1px_#B794FF,0_0_0_4px_#DED1FA] mb-6
+                text-black-900 font-normal text-base focus:dark:shadow-[0_0_0_1px_#4F20B2,0_0_0_4px_#281B46]"
               value={name}
               required
               onChange={e => setName(e.target.value)}
@@ -79,8 +79,8 @@ const AddUserModal: React.FC<AddUserModalProps> = ({
             <input
               type="email"
               className="bg-white h-10 w-[552px] border-[1px] border-outline-200 rounded-md 
-                shadow-button focus:border-none focus:outline-none focus:shadow-[0_0_0_1px_#B794FF,0_0_0_4px_#E2D5FE] mb-6
-                text-black-900 font-normal text-base pl-4"
+                shadow-button focus:border-none focus:outline-none focus:shadow-[0_0_0_1px_#B794FF,0_0_0_4px_#DED1FA] mb-6
+                text-black-900 font-normal text-base pl-4 focus:dark:shadow-[0_0_0_1px_#4F20B2,0_0_0_4px_#281B46]"
               value={email}
               required
               onChange={e => setEmail(e.target.value)}
@@ -88,7 +88,7 @@ const AddUserModal: React.FC<AddUserModalProps> = ({
             <div className="text-black-700 text-sm font-medium mb-[6px] w-[552px] h-5">
               Role
             </div>
-            <DropdownRole agencies={agencies} />
+            <DropdownRole agencies={agencies} setRole={setRole} />
           </div>
         </div>
         <div>

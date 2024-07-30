@@ -52,3 +52,5 @@ const MainPage = async ({
 };
 
 export default MainPage;
+
+// color for focus shadow-[0_0_0_1px_#B794FF,0_0_0_4px_#E2D5FE] dark:shadow-[0_0_0_1px_#B794FF,0_0_0_4px_#E2D5FE]

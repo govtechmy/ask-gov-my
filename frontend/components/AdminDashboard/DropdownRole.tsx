@@ -6,9 +6,10 @@ import { Agency } from '@/types/types';
 
 interface DropdownRoleProps {
   agencies: Agency[];
+  setRole: 'staff' | 'super_admin';
 }
 
-const DropdownRole: React.FC<DropdownRoleProps> = ({ agencies }) => {
+const DropdownRole: React.FC<DropdownRoleProps> = ({ agencies, setRole }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [selectedRole, setSelectedRole] = useState<string | null>(null);
 

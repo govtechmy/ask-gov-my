@@ -94,14 +94,14 @@ const UserCard: React.FC<UserCardProps> = ({ user, onUpdate, agencies }) => {
             handleEditUserToast={handleEditUserToast}
           />
         </div>
-        <button onClick={handleDeleteUserToast} className="bg-red-400">
+        {/* <button onClick={handleDeleteUserToast} className="bg-red-400">
           {' '}
           DeleteUserToast
         </button>
         <button onClick={handleEditUserToast} className="bg-red-400">
           {' '}
           EditUserToast
-        </button>
+        </button> */}
         {showDeleteUserToast && (
           <ToastUserDeleted
             message="User sucessfully deleted!"

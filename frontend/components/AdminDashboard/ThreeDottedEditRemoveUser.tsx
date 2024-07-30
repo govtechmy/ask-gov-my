@@ -52,10 +52,10 @@ const ThreeDottedEditRemoveUser: React.FC<ThreeProps> = ({
       {isDropdownVisible && (
         <div className="absolute top-[20px] right-[18px] w-[120px] h-[74px] bg-white-focuswhite100 border-[1px] border-outline-200 shadow-button rounded-lg z-10">
           <div
-            className="h-[32px] w-[110px] flex items-center justify-center hover:bg-washed-100 mx-1 mt-1 rounded"
+            className="h-[32px] w-[110px] flex items-center justify-start hover:bg-washed-100 mx-1 mt-1 rounded"
             onClick={handleIsModalEditUserOpen}
           >
-            <div className="h-5 w-5 items-center  justify-center flex">
+            <div className="h-5 w-5 items-center  justify-center flex ml-[10px]">
               <Pencil className="stroke-black-700"></Pencil>
             </div>
 
@@ -64,10 +64,10 @@ const ThreeDottedEditRemoveUser: React.FC<ThreeProps> = ({
             </div>
           </div>
           <div
-            className="h-[32px] w-[110px] flex items-center justify-center hover:bg-washed-100 mx-1 mb-1 rounded text-[#DC2626]"
+            className="h-[32px] w-[110px] flex items-center justify-start hover:bg-washed-100 mx-1 mb-1 rounded text-[#DC2626]"
             onClick={handleIsModalDeleteUserOpen}
           >
-            <div className="h-5 w-5 items-center  justify-center flex">
+            <div className="h-5 w-5 items-center  justify-center flex ml-[10px]">
               <TrashIcon className="stroke-current"></TrashIcon>
             </div>
 
