@@ -1,7 +1,6 @@
 'use client';
 
 import React, { useEffect, useState } from 'react';
-import Modal from './Modal';
 import { editUser } from '@/actions/userServices';
 import { Agency, User } from '@/types/types';
 
@@ -48,9 +47,11 @@ const UserSettingsModal: React.FC<UserSettingsModalProps> = ({
     }
   };
 
+  if (!isOpen) return null;
+
   return (
-    <Modal isOpen={isOpen} onClose={onClose}>
-      <div>
+    <div className="z-10 fixed inset-0 bg-gray-900 flex items-center justify-center bg-opacity-70">
+      <div className="bg-white rounded-xl shadow-lg w-[700px] p-6">
         <h2 className="text-xl font-semibold mb-4">User Settings</h2>
         <div className="mb-4">
           <label className="block text-sm font-medium text-gray-700 mb-2">
@@ -123,7 +124,7 @@ const UserSettingsModal: React.FC<UserSettingsModalProps> = ({
         {success && <div className="text-green-500 mt-4">{success}</div>}
         {error && <div className="text-red-500 mt-4">{error}</div>}
       </div>
-    </Modal>
+    </div>
   );
 };
 
