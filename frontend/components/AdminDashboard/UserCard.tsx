@@ -5,6 +5,8 @@ import UserSettingsModal from './UserSettingsModal';
 import { Agency, User } from '@/types/types';
 import AgencyLogoImporter from '../AgencyLogoImporter';
 import ImageNext from 'next/image';
+import ThreeDottedEditRemoveUser from './ThreeDottedEditRemoveUser';
+import ToastUserDeleted from './ToastUserDeleted';
 
 interface UserCardProps {
   user: User;
@@ -13,17 +15,17 @@ interface UserCardProps {
 }
 
 const UserCard: React.FC<UserCardProps> = ({ user, onUpdate, agencies }) => {
-  const [isModalOpen, setIsModalOpen] = useState(false);
-
   const agency = agencies.find(agency => agency.id === user.agency);
+  const [showDeleteUserToast, setshowDeleteUserToast] = useState(false);
+
+  function handleDeleteUserToast() {
+    setshowDeleteUserToast(true);
+  }
 
   return (
     <>
-      <div
-        className="h-20  rounded-lg border-[1px] border-outline-200 flex justify-between hover:cursor-pointer w-full bg-white items-center"
-        onClick={() => setIsModalOpen(true)}
-      >
-        <div className="flex pl-[18px]">
+      <div className="h-20  rounded-lg border-[1px] border-outline-200 flex justify-between hover:cursor-pointer w-full bg-white items-center group">
+        <div className="flex pl-[18px] flex-grow">
           <div className="h-12 w-12 rounded-full bg-green-300 border-[1px] border-outline-200 items-center justify-center flex">
             {user.name?.[0] || ''}
             {user.name?.[1] || ''}
@@ -47,7 +49,7 @@ const UserCard: React.FC<UserCardProps> = ({ user, onUpdate, agencies }) => {
               Superadmin
             </div>
           ) : (
-            <div className="flex items-center">
+            <div className="flex items-center pl-2">
               {agency?.logo_url ? (
                 <div className="flex w-8 h-8 relative flex-shrink-0">
                   <AgencyLogoImporter
@@ -68,7 +70,7 @@ const UserCard: React.FC<UserCardProps> = ({ user, onUpdate, agencies }) => {
                   </div>
                 </div>
               )}
-              <div className="text-gray-500 ml-3">{agency?.name}</div>
+              <div className="text-gray-500 ml-3 w-full">{agency?.name}</div>
               <div
                 className="h-7 text-dim-500 bg-washed-100 rounded-full px-2 py-1 items-center- justify-center flex
              text-sm font-medium mr-[18px] ml-3"
@@ -77,33 +79,27 @@ const UserCard: React.FC<UserCardProps> = ({ user, onUpdate, agencies }) => {
               </div>
             </div>
           )}
+          <ThreeDottedEditRemoveUser
+            user={user}
+            onUpdate={onUpdate}
+            agencies={agencies}
+            handleDeleteUserToast={handleDeleteUserToast}
+          />
         </div>
+        <button onClick={handleDeleteUserToast} className="bg-red-400">
+          {' '}
+          HEHEHEHEHEHEHEHE
+        </button>
+        {showDeleteUserToast && (
+          <ToastUserDeleted
+            message="New user added successfully!"
+            show={showDeleteUserToast}
+            onClose={() => setshowDeleteUserToast(false)}
+          />
+        )}
       </div>
-      <UserSettingsModal
-        user={user}
-        isOpen={isModalOpen}
-        onClose={() => {
-          setIsModalOpen(false);
-          onUpdate();
-        }}
-        agencies={agencies}
-      />
     </>
   );
 };
 
 export default UserCard;
-
-{
-  /* <div className="flex items-center">
-<div className="w-12 h-12 mr-4 rounded-full bg-gray-200 flex items-center justify-center text-lg font-medium">
-  {user.name ? user.name[0] : user.email[0]}
-</div>
-<div>
-  <div className="text-base font-medium text-black-900">
-    {user.name}
-  </div>
-  <div className="text-sm text-gray-500">{user.email}</div>
-</div>
-</div> */
-}
