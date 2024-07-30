@@ -90,7 +90,9 @@ const AgencyListDropdownUsers: React.FC<AgencyListDropdownProps> = ({
               placeholder="Search for agency name"
               value={searchQuery}
               onChange={handleSearchChange}
-              className="absolute h-[32px] w-[535px] top-2 left-2 border-[1px] border-outline-200 shadow-button focus:border-none focus:outline-none focus:shadow-[0_0_0_1px_#B794FF,0_0_0_4px_#E2D5FE] rounded-lg p-2"
+              className="absolute h-[32px] w-[535px] top-2 left-2 border-[1px] border-outline-200
+               shadow-button focus:border-none focus:outline-none focus:shadow-[0_0_0_1px_#B794FF,0_0_0_4px_#DED1FA]
+               focus:dark:shadow-[0_0_0_1px_#4F20B2,0_0_0_4px_#281B46]rounded-lg p-2"
             />
             <div className="absolute h-4 w-4 items-center justify-center flex z-20 right-[15px] top-[15px]">
               <Search strokeWidth={2} className="stroke-[#A1A1AA]" />
