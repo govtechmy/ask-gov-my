@@ -2,8 +2,9 @@
 
 import React, { useState } from 'react';
 import UserSettingsModal from './UserSettingsModal';
-import JataNegaraIcon from '@/icons/jatanegaraicon';
 import { Agency, User } from '@/types/types';
+import AgencyLogoImporter from '../AgencyLogoImporter';
+import ImageNext from 'next/image';
 
 interface UserCardProps {
   user: User;
@@ -19,36 +20,61 @@ const UserCard: React.FC<UserCardProps> = ({ user, onUpdate, agencies }) => {
   return (
     <>
       <div
-        className="bg-white items-center rounded-md border p-4 shadow-sm flex justify-between cursor-pointer w-full"
+        className="h-20  rounded-lg border-[1px] border-outline-200 flex justify-between hover:cursor-pointer w-full bg-white items-center"
         onClick={() => setIsModalOpen(true)}
       >
-        <div className="flex items-center">
-          <div className="w-12 h-12 mr-4 rounded-full bg-gray-200 flex items-center justify-center text-lg font-medium">
-            {user.name ? user.name[0] : user.email[0]}
+        <div className="flex pl-[18px]">
+          <div className="h-12 w-12 rounded-full bg-green-300 border-[1px] border-outline-200 items-center justify-center flex">
+            {user.name?.[0] || ''}
+            {user.name?.[1] || ''}
           </div>
-          <div>
-            <div className="text-base font-medium text-black-900">
+          <div className="pl-3">
+            <div className="font-medium text-base text-black-900">
               {user.name}
             </div>
-            <div className="text-sm text-gray-500">{user.email}</div>
+            <div className="font-normal text-base text-dim-500">
+              {user.email}
+            </div>
           </div>
         </div>
+
         <div className="flex items-center">
           {user.role === 'super_admin' ? (
-            <div className="text-blue-500">Superadmin</div>
+            <div
+              className="h-7 text-brand-600 bg-brand-50 rounded-full px-2 py-1 items-center- justify-center flex
+             text-sm font-medium mr-[18px]"
+            >
+              Superadmin
+            </div>
           ) : (
             <div className="flex items-center">
               {agency?.logo_url ? (
-                <img
-                  src={agency.logo_url}
-                  alt="Agency Logo"
-                  className="w-6 h-6 rounded-full mr-2"
-                />
+                <div className="flex w-8 h-8 relative flex-shrink-0">
+                  <AgencyLogoImporter
+                    currentAgency={{}}
+                    logo_url={agency.logo_url}
+                  ></AgencyLogoImporter>
+                </div>
               ) : (
-                <JataNegaraIcon className="w-6 h-6 rounded-full mr-2" />
+                <div className="w-8 h-8 relative flex-shrink-0">
+                  <div className="absolute h-full w-full rounded-full border-[1px] border-outline-200 bg-transparent"></div>
+                  <div className="flex items-center justify-center h-full w-full overflow-hidden rounded-full">
+                    <ImageNext
+                      src="/jata-200-transparent.png"
+                      width={200}
+                      height={200}
+                      alt="JataNegara"
+                    />
+                  </div>
+                </div>
               )}
-              <div className="text-gray-500 mr-2">{agency?.name}</div>
-              <div className="text-gray-500">{user.role}</div>
+              <div className="text-gray-500 ml-3">{agency?.name}</div>
+              <div
+                className="h-7 text-dim-500 bg-washed-100 rounded-full px-2 py-1 items-center- justify-center flex
+             text-sm font-medium mr-[18px] ml-3"
+              >
+                {user.role.charAt(0).toUpperCase() + user.role.slice(1)}
+              </div>
             </div>
           )}
         </div>
@@ -67,3 +93,17 @@ const UserCard: React.FC<UserCardProps> = ({ user, onUpdate, agencies }) => {
 };
 
 export default UserCard;
+
+{
+  /* <div className="flex items-center">
+<div className="w-12 h-12 mr-4 rounded-full bg-gray-200 flex items-center justify-center text-lg font-medium">
+  {user.name ? user.name[0] : user.email[0]}
+</div>
+<div>
+  <div className="text-base font-medium text-black-900">
+    {user.name}
+  </div>
+  <div className="text-sm text-gray-500">{user.email}</div>
+</div>
+</div> */
+}
