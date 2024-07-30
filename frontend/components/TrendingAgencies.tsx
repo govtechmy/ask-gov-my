@@ -19,7 +19,6 @@ const TrendingAgencies: React.FC<TrendingAgenciesProps> = ({
   trendingAgencies,
 }) => {
   const t = useTranslations('Agency');
-
   const top10Agencies = trendingAgencies.slice(0, 10);
 
   return (

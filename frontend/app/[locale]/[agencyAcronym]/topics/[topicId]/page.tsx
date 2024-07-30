@@ -2,11 +2,11 @@ import {
   getAgencyList,
   getQuestionsByAgency,
   getTopicByAgency,
+  getDynamicAgencyMap,
 } from '@/actions/questionServices';
 import QuestionBox from '@/components/QuestionBox/QuestionBox';
 import Footer from '@/components/FooterDetails/Footer';
 import IdentifyWebsite from '@/components/HeaderDetails/IdentifyWebsite';
-import { AGENCY_TO_UUID } from '@/lib/agency';
 import TopicList from '@/components/TopicList';
 import SearchNavbarAgency from '@/components/HeaderDetails/SearchNavBarAgency';
 import TopicDropdown from '@/components/TopicDropdown';
@@ -24,7 +24,8 @@ interface Props {
 
 const TopicPage = async ({ params }: Props) => {
   const { agencyAcronym, topicId, locale } = params;
-  const agencyUUID = AGENCY_TO_UUID[agencyAcronym.toUpperCase()];
+  const agencyMap = await getDynamicAgencyMap();
+  const agencyUUID = agencyMap[agencyAcronym.toUpperCase()];
 
   const { questions } = await getQuestionsByAgency(agencyUUID);
   const filteredQuestions = questions.filter(question =>
@@ -52,8 +53,7 @@ const TopicPage = async ({ params }: Props) => {
     (agency: { acronym: string }) => agency.acronym === upperCaseAgencyAcronym,
   );
 
-  if (currentAgency) {
-  } else {
+  if (!currentAgency) {
     console.log(`Agency with acronym '${agencyAcronym}' not found.`);
   }
 
@@ -99,7 +99,7 @@ const TopicPage = async ({ params }: Props) => {
             {filteredQuestions.length > 0 ? (
               <QuestionBox
                 questions={filteredQuestions}
-                agencyList={agencies}
+                agencyMap={agencyMap}
               />
             ) : (
               <div className=" h-[220px] w-[900px]">

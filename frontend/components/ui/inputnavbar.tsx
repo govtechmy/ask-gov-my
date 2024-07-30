@@ -3,7 +3,6 @@
 import { useEffect, useState, useCallback, useRef } from 'react';
 import Link from 'next/link';
 import { searchQuestions } from '@/actions/searchServices';
-import { AGENCY_TO_UUID } from '@/lib/agency';
 import Search from '@/icons/search';
 import JataNegaraIcon from '@/icons/jatanegaraicon';
 import Close from '@/icons/close';
@@ -11,6 +10,7 @@ import RightArrow from '@/icons/rightarrow';
 import AskQuestion from '../AskQuestion';
 import { useRouter } from '@/lib/i18n';
 import { useTranslations } from 'next-intl';
+import { getDynamicAgencyMap } from '@/actions/questionServices';
 
 interface InputNavbarProps {
   searchQuery: string;
@@ -57,6 +57,7 @@ const InputNavbar: React.FC<InputNavbarProps> = ({
   const [isSearching, setIsSearching] = useState(false);
   const [showNoResults, setShowNoResults] = useState(false);
   const [hiddenDisplay, setHiddendisplay] = useState(true);
+  const [agencyMap, setAgencyMap] = useState<Record<string, string>>({});
   const router = useRouter();
   const t = useTranslations('Search');
   const inputRef = useRef<HTMLInputElement>(null);
@@ -123,6 +124,15 @@ const InputNavbar: React.FC<InputNavbarProps> = ({
     debouncedFetchSearchResults(searchQuery);
   }, [searchQuery, debouncedFetchSearchResults]);
 
+  useEffect(() => {
+    const fetchAgencyMap = async () => {
+      const map = await getDynamicAgencyMap();
+      setAgencyMap(map);
+    };
+
+    fetchAgencyMap();
+  }, []);
+
   return (
     <div
       id="inputnavbar"
@@ -179,9 +189,8 @@ const InputNavbar: React.FC<InputNavbarProps> = ({
                   <ul>
                     {searchResults.slice(0, 20).map((result, index) => {
                       // take 20 result max
-                      const agencyAcronym = Object.keys(AGENCY_TO_UUID).find(
-                        key =>
-                          AGENCY_TO_UUID[key] === result.agency.id.toString(),
+                      const agencyAcronym = Object.keys(agencyMap).find(
+                        key => agencyMap[key] === result.agency.id.toString(),
                       );
 
                       return (
