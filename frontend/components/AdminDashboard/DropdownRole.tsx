@@ -2,16 +2,27 @@ import { useState, Dispatch, SetStateAction } from 'react';
 import { AGENCY_TO_UUID } from '@/lib/agency';
 import AgencyListDropdownUsersModal from './AgencyListDropdownUsersModal';
 import ChevronDown from '@/icons/ChevronDown';
-import { Agency } from '@/types/types';
+import { Agency, User } from '@/types/types';
 
 interface DropdownRoleProps {
   agencies: Agency[];
   setRole: Dispatch<SetStateAction<'staff' | 'super_admin'>>;
+  user?: User; // user is now optional
 }
 
-const DropdownRole: React.FC<DropdownRoleProps> = ({ agencies, setRole }) => {
+const DropdownRole: React.FC<DropdownRoleProps> = ({
+  agencies,
+  setRole,
+  user = { role: 'unassigned', agency: null }, // provide a default value
+}) => {
+  const initialRole =
+    user.role === 'staff' || user.role === 'super_admin'
+      ? user.role
+      : 'unassigned';
   const [isOpen, setIsOpen] = useState(false);
-  const [selectedRole, setSelectedRole] = useState<string | null>(null);
+  const [selectedRole, setSelectedRole] = useState<
+    'staff' | 'super_admin' | 'unassigned'
+  >(initialRole);
 
   const toggleDropdown = () => setIsOpen(!isOpen);
 
@@ -21,6 +32,22 @@ const DropdownRole: React.FC<DropdownRoleProps> = ({ agencies, setRole }) => {
     setIsOpen(false);
   };
 
+  const formatRoleDisplay = (role: 'staff' | 'super_admin' | 'unassigned') => {
+    switch (role) {
+      case 'super_admin':
+        return 'Superadmin';
+      case 'staff':
+        return 'Staff';
+      case 'unassigned':
+        return 'Unassigned';
+      default:
+        return 'Unassigned';
+    }
+  };
+
+  const agencyAcronym =
+    user.agency !== null ? user.agency?.toString() : undefined;
+
   return (
     <div className="mb-4">
       <div className="relative">
@@ -28,20 +55,15 @@ const DropdownRole: React.FC<DropdownRoleProps> = ({ agencies, setRole }) => {
           className="h-10 pl-4 flex justify-between items-center w-full border-[1px] border-outline-200 rounded-md shadow-button bg-white text-sm font-medium text-black-700 cursor-pointer z-0"
           onClick={toggleDropdown}
         >
-          {selectedRole ? selectedRole : 'Unassigned'}
+          {formatRoleDisplay(selectedRole)}
           <div className="pr-2">
             <ChevronDown
-              className={`h-5 w-5 transition-transform transform ${
-                isOpen ? 'rotate-180' : ''
-              }`}
+              className={`h-5 w-5 transition-transform transform ${isOpen ? 'rotate-180' : ''}`}
             />
           </div>
         </div>
         {isOpen && (
-          <div
-            className="origin-top-right absolute right-0 mt-2 w-full rounded-lg shadow-button bg-white border-[1px] border-outline-200
-          text-black-700 text-base font-medium z-50"
-          >
+          <div className="origin-top-right absolute right-0 mt-2 w-full rounded-lg shadow-button bg-white border-[1px] border-outline-200 text-black-700 text-base font-medium z-50">
             <div
               className="py-1"
               role="menu"
@@ -70,7 +92,10 @@ const DropdownRole: React.FC<DropdownRoleProps> = ({ agencies, setRole }) => {
             Agency
           </div>
           <div className="relative">
-            <AgencyListDropdownUsersModal AGENCY_TO_UUID={AGENCY_TO_UUID} />
+            <AgencyListDropdownUsersModal
+              AGENCY_TO_UUID={AGENCY_TO_UUID}
+              initialSelectedAgency={agencyAcronym}
+            />
           </div>
         </>
       )}
