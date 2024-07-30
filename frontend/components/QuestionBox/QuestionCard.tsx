@@ -21,7 +21,6 @@ const QuestionCard: React.FC<QuestionCardProps> = ({
   agencyMap,
   agencyList
 }) => {
-  const t = useTranslations('Agency');
   const searchParams = useSearchParams();
   const locale = searchParams.get('locale') || '';
   const agencyId = typeof question.agency === 'object' ? question.agency.id : question.agency;

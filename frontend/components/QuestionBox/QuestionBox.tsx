@@ -24,7 +24,6 @@ const QuestionBox: React.FC<QuestionBoxProps> = ({ questions, agencyMap, agencyL
       setCurrentPage(page);
     }
   };
-  console.log(questions)
   const renderPageNumbers = () => {
     const pageNumbers = [];
 
