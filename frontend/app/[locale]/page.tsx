@@ -2,6 +2,7 @@ import {
   getAgencyList,
   getAllQuestions,
   getTrendingAgencies,
+  getDynamicAgencyMap,
 } from '@/actions/questionServices';
 import QuestionBox from '@/components/QuestionBox/QuestionBox';
 import SearchNavbar from '@/components/HeaderDetails/SearchNavBar';
@@ -22,6 +23,7 @@ const MainPage = async ({
   const { questions } = await getAllQuestions(page, pageSize);
   const trendingAgencies = await getTrendingAgencies();
   const agencyList = await getAgencyList();
+  const agencyMap = await getDynamicAgencyMap();
 
   return (
     <div>
@@ -36,7 +38,7 @@ const MainPage = async ({
           <div className="font-semibold text-base text-black-700 pb-7">
             <WordTranslate translate="Mainpage" keyword="trendingQ" />
           </div>
-          <QuestionBox questions={questions} agencyList={agencyList} />
+          <QuestionBox questions={questions} agencyMap={agencyMap} />
         </div>
 
         <div className="pl-10 w-[500px]">
