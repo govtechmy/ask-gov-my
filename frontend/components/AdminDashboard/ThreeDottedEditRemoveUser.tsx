@@ -11,6 +11,7 @@ interface ThreeProps {
   onUpdate: () => void;
   agencies: Agency[];
   handleDeleteUserToast: Function;
+  handleEditUserToast: Function;
 }
 
 const ThreeDottedEditRemoveUser: React.FC<ThreeProps> = ({
@@ -18,6 +19,7 @@ const ThreeDottedEditRemoveUser: React.FC<ThreeProps> = ({
   onUpdate,
   agencies,
   handleDeleteUserToast,
+  handleEditUserToast,
 }) => {
   const [isDropdownVisible, setIsDropdownVisible] = useState(false);
 
@@ -83,6 +85,7 @@ const ThreeDottedEditRemoveUser: React.FC<ThreeProps> = ({
           onUpdate();
         }}
         agencies={agencies}
+        handleEditUserToast={handleEditUserToast}
       />
       <MarkAsDeleteModal
         handleDeleteUserToast={handleDeleteUserToast}

@@ -7,6 +7,8 @@ import AgencyLogoImporter from '../AgencyLogoImporter';
 import ImageNext from 'next/image';
 import ThreeDottedEditRemoveUser from './ThreeDottedEditRemoveUser';
 import ToastUserDeleted from './ToastUserDeleted';
+import ToastNewUserAdded from './ToastNewUserAdded';
+import ToastUserEdited from './ToastUserEdited';
 
 interface UserCardProps {
   user: User;
@@ -17,9 +19,14 @@ interface UserCardProps {
 const UserCard: React.FC<UserCardProps> = ({ user, onUpdate, agencies }) => {
   const agency = agencies.find(agency => agency.id === user.agency);
   const [showDeleteUserToast, setshowDeleteUserToast] = useState(false);
+  const [showEditUserToast, setshowEditUserToast] = useState(false);
 
   function handleDeleteUserToast() {
     setshowDeleteUserToast(true);
+  }
+
+  function handleEditUserToast() {
+    setshowEditUserToast(true);
   }
 
   return (
@@ -84,17 +91,29 @@ const UserCard: React.FC<UserCardProps> = ({ user, onUpdate, agencies }) => {
             onUpdate={onUpdate}
             agencies={agencies}
             handleDeleteUserToast={handleDeleteUserToast}
+            handleEditUserToast={handleEditUserToast}
           />
         </div>
         <button onClick={handleDeleteUserToast} className="bg-red-400">
           {' '}
-          HEHEHEHEHEHEHEHE
+          DeleteUserToast
+        </button>
+        <button onClick={handleEditUserToast} className="bg-red-400">
+          {' '}
+          EditUserToast
         </button>
         {showDeleteUserToast && (
           <ToastUserDeleted
-            message="New user added successfully!"
+            message="User sucessfully deleted!"
             show={showDeleteUserToast}
             onClose={() => setshowDeleteUserToast(false)}
+          />
+        )}
+        {showEditUserToast && (
+          <ToastUserEdited
+            message="User sucessfully edited!"
+            show={showEditUserToast}
+            onClose={() => setshowEditUserToast(false)}
           />
         )}
       </div>
