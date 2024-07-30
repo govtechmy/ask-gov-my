@@ -6,6 +6,7 @@ import RightArrow from '@/icons/rightarrow';
 import LeftArrow from '@/icons/leftarrow';
 import { useSearchParams } from 'next/navigation';
 import { Question } from '@/types/types';
+import { getDynamicAgencyMap } from '@/actions/questionServices';
 
 interface QuestionBoxProps {
   questions: Question[];
@@ -14,12 +15,22 @@ interface QuestionBoxProps {
 const AdminQuestionBox: React.FC<QuestionBoxProps> = ({ questions }) => {
   const [currentPage, setCurrentPage] = useState(1);
   const [filteredQuestions, setFilteredQuestions] = useState<Question[]>([]);
+  const [agencyMap, setAgencyMap] = useState<Record<string, string>>({});
   const itemsPerPage = 10;
   const totalPages = Math.ceil(filteredQuestions.length / itemsPerPage);
 
   const searchParams = useSearchParams();
   const activeTab = searchParams.get('tab') || 'all';
   const [activeQuestionId, setactiveQuestionId] = useState<number | null>(null);
+
+  useEffect(() => {
+    const fetchAgencyMap = async () => {
+      const map = await getDynamicAgencyMap();
+      setAgencyMap(map);
+    };
+
+    fetchAgencyMap();
+  }, []);
 
   useEffect(() => {
     let filtered = questions;
@@ -128,6 +139,7 @@ const AdminQuestionBox: React.FC<QuestionBoxProps> = ({ questions }) => {
             question={question}
             activeQuestionId={activeQuestionId}
             setactiveQuestionId={setactiveQuestionId}
+            agencyMap={agencyMap}
           />
         </div>
       ))}

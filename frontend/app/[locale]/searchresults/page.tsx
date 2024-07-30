@@ -1,4 +1,7 @@
-import { getTrendingAgencies } from '@/actions/questionServices';
+import {
+  getTrendingAgencies,
+  getDynamicAgencyMap,
+} from '@/actions/questionServices';
 import { searchQuestions } from '@/actions/searchServices';
 import QuestionBox from '@/components/QuestionBox/QuestionBox';
 import SearchNavbar from '@/components/HeaderDetails/SearchNavBar';
@@ -17,7 +20,8 @@ const SearchResultPage = async ({
   const query = searchParams.query || '';
   const questions = await searchQuestions(query);
   const trendingAgencies = await getTrendingAgencies();
-
+  const agencyMap = await getDynamicAgencyMap();
+  // console.log(trendingAgencies)
   return (
     <div>
       <IdentifyWebsite />
@@ -37,7 +41,7 @@ const SearchResultPage = async ({
             <div>&nbsp;"{query}"</div>
           </div>
           {questions.length > 0 ? (
-            <QuestionBox questions={questions} />
+            <QuestionBox questions={questions} agencyMap={agencyMap} />
           ) : (
             <div className=" h-[220px] w-[900px] text-dim-500">
               <WordTranslate
@@ -52,7 +56,7 @@ const SearchResultPage = async ({
           <div className="font-semibold text-base text-black-700">
             <WordTranslate translate={'Mainpage'} keyword={'trendingA'} />
           </div>
-          <TrendingAgencies agencies={trendingAgencies} />
+          <TrendingAgencies trendingAgencies={trendingAgencies} />
         </div>
       </div>
 
