@@ -4,14 +4,18 @@ import React, { useState, useRef, ChangeEvent, useEffect } from 'react';
 
 interface AgencyListDropdownProps {
   AGENCY_TO_UUID: { [key: string]: string };
+  initialSelectedAgency?: string; // Added prop for initial selected agency
 }
 
 const AgencyListDropdownUsers: React.FC<AgencyListDropdownProps> = ({
   AGENCY_TO_UUID,
+  initialSelectedAgency,
 }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
-  const [selectedAgency, setSelectedAgency] = useState<string | null>(null);
+  const [selectedAgency, setSelectedAgency] = useState<string | null>(
+    initialSelectedAgency || null,
+  );
   const [hoveredAgency, setHoveredAgency] = useState<string | null>(null);
   const dropdownRef = useRef<HTMLDivElement>(null);
 

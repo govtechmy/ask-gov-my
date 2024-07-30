@@ -99,7 +99,7 @@ const UserSettingsModal: React.FC<UserSettingsModalProps> = ({
             <div className="text-black-700 text-sm font-medium mb-[6px] w-[552px] h-5">
               Role
             </div>
-            <DropdownRole agencies={agencies} setRole={setRole} />
+            <DropdownRole agencies={agencies} setRole={setRole} user={user} />
           </div>
         </div>
         <div>
