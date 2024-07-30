@@ -3,6 +3,7 @@ import {
   getTopicsDetail,
   getTopicByAgency,
   getAgencyList,
+  getDynamicAgencyMap
 } from '@/actions/questionServices';
 import { getRelatedQuestions } from '@/actions/searchServices';
 import Footer from '@/components/FooterDetails/Footer';
@@ -12,7 +13,6 @@ import IconQuestionSmileSolo from '@/icons/iconquestionsmilesolo';
 import ThumbsCounter from '@/components/ThumbsCounter';
 import AgencyName from '@/components/AgencyName';
 import JataNegaraIcon from '@/icons/jatanegaraicon';
-import { AGENCY_TO_UUID } from '@/lib/agency';
 import { redirect } from 'next/navigation';
 import DateComponent from '@/components/date';
 import Link from 'next/link';
@@ -35,6 +35,7 @@ interface Props {
 
 const QuestionDetailPage: React.FC<Props> = async ({ params }) => {
   const { locale, agencyAcronym, questionId } = params;
+  const AGENCY_TO_UUID = await getDynamicAgencyMap()
   const agencyUUID = parseInt(AGENCY_TO_UUID[agencyAcronym.toUpperCase()]);
   const topics = await getTopicByAgency(agencyUUID);
   const agencyAcronymObject = (id: number): string | undefined => {
