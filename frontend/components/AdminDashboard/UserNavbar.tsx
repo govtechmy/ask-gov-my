@@ -108,7 +108,7 @@ const UserNavbar: React.FC<UserNavbarProps> = ({
 
       {showAddUserToast && (
         <ToastNewUserAdded
-          message="New user added successfully!"
+          message="New user has been added!"
           show={showAddUserToast}
           onClose={() => setshowAddUserToast(false)}
         />

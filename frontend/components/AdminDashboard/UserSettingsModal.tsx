@@ -9,6 +9,7 @@ interface UserSettingsModalProps {
   isOpen: boolean;
   onClose: () => void;
   agencies: Agency[];
+  handleEditUserToast: Function;
 }
 
 const UserSettingsModal: React.FC<UserSettingsModalProps> = ({
@@ -16,6 +17,7 @@ const UserSettingsModal: React.FC<UserSettingsModalProps> = ({
   isOpen,
   onClose,
   agencies,
+  handleEditUserToast,
 }) => {
   const [name, setName] = useState(user.name || '');
   const [email, setEmail] = useState(user.email);
@@ -34,6 +36,7 @@ const UserSettingsModal: React.FC<UserSettingsModalProps> = ({
   const handleSubmit = async () => {
     try {
       await editUser(user.id, name, email, role, agency);
+      handleEditUserToast();
       setSuccess('User updated successfully');
       setError(null);
       onClose();
