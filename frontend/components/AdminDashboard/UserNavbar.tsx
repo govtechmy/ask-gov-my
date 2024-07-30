@@ -69,7 +69,8 @@ const UserNavbar: React.FC<UserNavbarProps> = ({
           className={cn(
             'bg-[#FFFFFF] dark:bg-[#18181B] rounded-md flex items-center h-8 w-[260px] border px-3 py-2 text-sm',
             {
-              'shadow-[0_0_0_1px_#B794FF,0_0_0_4px_#E2D5FE]': isFocused,
+              'shadow-[0_0_0_1px_#B794FF,0_0_0_4px_#DED1FA] dark:shadow-[0_0_0_1px_#4F20B2,0_0_0_4px_#281B46]':
+                isFocused,
             },
           )}
         >
