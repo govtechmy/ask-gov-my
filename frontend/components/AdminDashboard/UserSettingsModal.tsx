@@ -55,7 +55,7 @@ const UserSettingsModal: React.FC<UserSettingsModalProps> = ({
   if (!isOpen) return null;
 
   return (
-    <div className="z-10 fixed inset-0 bg-gray-900 flex items-center justify-center bg-opacity-70">
+    <div className=" fixed inset-0 bg-gray-900 flex items-center justify-center bg-opacity-70 z-10">
       <div className="bg-white rounded-xl shadow-lg w-[600px]">
         <div className="flex border-b-[1px] border-outline-200 items-center justify-between">
           <div className="text-black-900 font-semibold text-lg leading-[26px] ml-6 mb-[16px] mt-6 mr-3 h-[26px]">
