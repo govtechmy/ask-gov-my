@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, Dispatch, SetStateAction } from 'react';
 import { AGENCY_TO_UUID } from '@/lib/agency';
 import AgencyListDropdownUsersModal from './AgencyListDropdownUsersModal';
 import ChevronDown from '@/icons/ChevronDown';
@@ -6,7 +6,7 @@ import { Agency } from '@/types/types';
 
 interface DropdownRoleProps {
   agencies: Agency[];
-  setRole: 'staff' | 'super_admin';
+  setRole: Dispatch<SetStateAction<'staff' | 'super_admin'>>;
 }
 
 const DropdownRole: React.FC<DropdownRoleProps> = ({ agencies, setRole }) => {
@@ -15,7 +15,8 @@ const DropdownRole: React.FC<DropdownRoleProps> = ({ agencies, setRole }) => {
 
   const toggleDropdown = () => setIsOpen(!isOpen);
 
-  const handleRoleSelect = (role: string) => {
+  const handleRoleSelect = (role: 'staff' | 'super_admin') => {
+    setRole(role);
     setSelectedRole(role);
     setIsOpen(false);
   };
@@ -49,13 +50,13 @@ const DropdownRole: React.FC<DropdownRoleProps> = ({ agencies, setRole }) => {
             >
               <div
                 className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 cursor-pointer"
-                onClick={() => handleRoleSelect('Staff')}
+                onClick={() => handleRoleSelect('staff')}
               >
                 Staff
               </div>
               <div
                 className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 cursor-pointer"
-                onClick={() => handleRoleSelect('Superadmin')}
+                onClick={() => handleRoleSelect('super_admin')}
               >
                 Superadmin
               </div>
@@ -63,7 +64,7 @@ const DropdownRole: React.FC<DropdownRoleProps> = ({ agencies, setRole }) => {
           </div>
         )}
       </div>
-      {selectedRole === 'Staff' && (
+      {selectedRole === 'staff' && (
         <>
           <div className="text-black-700 text-sm font-medium pt-6 mb-[6px]">
             Agency

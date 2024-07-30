@@ -1,13 +1,11 @@
 'use client';
 
 import React, { useState } from 'react';
-import UserSettingsModal from './UserSettingsModal';
 import { Agency, User } from '@/types/types';
 import AgencyLogoImporter from '../AgencyLogoImporter';
 import ImageNext from 'next/image';
 import ThreeDottedEditRemoveUser from './ThreeDottedEditRemoveUser';
 import ToastUserDeleted from './ToastUserDeleted';
-import ToastNewUserAdded from './ToastNewUserAdded';
 import ToastUserEdited from './ToastUserEdited';
 
 interface UserCardProps {
@@ -18,24 +16,19 @@ interface UserCardProps {
 
 const UserCard: React.FC<UserCardProps> = ({ user, onUpdate, agencies }) => {
   const agency = agencies.find(agency => agency.id === user.agency);
-  const [showDeleteUserToast, setshowDeleteUserToast] = useState(false);
-  const [showEditUserToast, setshowEditUserToast] = useState(false);
+  const [showDeleteUserToast, setShowDeleteUserToast] = useState(false);
+  const [showEditUserToast, setShowEditUserToast] = useState(false);
 
-  function handleDeleteUserToast() {
-    setshowDeleteUserToast(true);
-  }
-
-  function handleEditUserToast() {
-    setshowEditUserToast(true);
-  }
+  const handleDeleteUserToast = () => setShowDeleteUserToast(true);
+  const handleEditUserToast = () => setShowEditUserToast(true);
 
   return (
     <>
-      <div className="h-20  rounded-lg border-[1px] border-outline-200 flex justify-between hover:cursor-pointer w-full bg-white items-center group">
+      <div className="h-20 rounded-lg border-[1px] border-outline-200 flex justify-between hover:cursor-pointer w-full bg-white items-center group">
         <div className="flex pl-[18px] flex-grow">
           <div className="h-12 w-12 rounded-full bg-green-300 border-[1px] border-outline-200 items-center justify-center flex">
-            {user.name?.[0] || ''}
-            {user.name?.[1] || ''}
+            {user.name?.charAt(0).toUpperCase() || ''}
+            {user.name?.charAt(1).toUpperCase() || ''}
           </div>
           <div className="pl-3">
             <div className="font-medium text-base text-black-900">
@@ -49,10 +42,7 @@ const UserCard: React.FC<UserCardProps> = ({ user, onUpdate, agencies }) => {
 
         <div className="flex items-center">
           {user.role === 'super_admin' ? (
-            <div
-              className="h-7 text-brand-600 bg-brand-50 rounded-full px-2 py-1 items-center- justify-center flex
-             text-sm font-medium mr-[18px]"
-            >
+            <div className="h-7 text-brand-600 bg-brand-50 rounded-full px-2 py-1 items-center justify-center flex text-sm font-medium mr-[18px]">
               Superadmin
             </div>
           ) : (
@@ -62,7 +52,7 @@ const UserCard: React.FC<UserCardProps> = ({ user, onUpdate, agencies }) => {
                   <AgencyLogoImporter
                     currentAgency={{}}
                     logo_url={agency.logo_url}
-                  ></AgencyLogoImporter>
+                  />
                 </div>
               ) : (
                 <div className="w-8 h-8 relative flex-shrink-0">
@@ -78,10 +68,7 @@ const UserCard: React.FC<UserCardProps> = ({ user, onUpdate, agencies }) => {
                 </div>
               )}
               <div className="text-gray-500 ml-3 w-full">{agency?.name}</div>
-              <div
-                className="h-7 text-dim-500 bg-washed-100 rounded-full px-2 py-1 items-center- justify-center flex
-             text-sm font-medium mr-[18px] ml-3"
-              >
+              <div className="h-7 text-dim-500 bg-washed-100 rounded-full px-2 py-1 items-center justify-center flex text-sm font-medium mr-[18px] ml-3">
                 {user.role.charAt(0).toUpperCase() + user.role.slice(1)}
               </div>
             </div>
@@ -94,26 +81,18 @@ const UserCard: React.FC<UserCardProps> = ({ user, onUpdate, agencies }) => {
             handleEditUserToast={handleEditUserToast}
           />
         </div>
-        {/* <button onClick={handleDeleteUserToast} className="bg-red-400">
-          {' '}
-          DeleteUserToast
-        </button>
-        <button onClick={handleEditUserToast} className="bg-red-400">
-          {' '}
-          EditUserToast
-        </button> */}
         {showDeleteUserToast && (
           <ToastUserDeleted
-            message="User sucessfully deleted!"
+            message="User successfully deleted!"
             show={showDeleteUserToast}
-            onClose={() => setshowDeleteUserToast(false)}
+            onClose={() => setShowDeleteUserToast(false)}
           />
         )}
         {showEditUserToast && (
           <ToastUserEdited
-            message="User sucessfully edited!"
+            message="User successfully edited!"
             show={showEditUserToast}
-            onClose={() => setshowEditUserToast(false)}
+            onClose={() => setShowEditUserToast(false)}
           />
         )}
       </div>
