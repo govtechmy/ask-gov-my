@@ -3,7 +3,7 @@ import {
   getTopicsDetail,
   getTopicByAgency,
   getAgencyList,
-  getDynamicAgencyMap
+  getDynamicAgencyMap,
 } from '@/actions/questionServices';
 import { getRelatedQuestions } from '@/actions/searchServices';
 import Footer from '@/components/FooterDetails/Footer';
@@ -35,7 +35,7 @@ interface Props {
 
 const QuestionDetailPage: React.FC<Props> = async ({ params }) => {
   const { locale, agencyAcronym, questionId } = params;
-  const AGENCY_TO_UUID = await getDynamicAgencyMap()
+  const AGENCY_TO_UUID = await getDynamicAgencyMap();
   const agencyUUID = parseInt(AGENCY_TO_UUID[agencyAcronym.toUpperCase()]);
   const topics = await getTopicByAgency(agencyUUID);
   const agencyAcronymObject = (id: number): string | undefined => {
