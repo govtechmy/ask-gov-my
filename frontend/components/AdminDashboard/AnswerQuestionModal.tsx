@@ -5,23 +5,7 @@ import { useTranslations } from 'next-intl';
 import { uploadFile } from '@/actions/fileServices';
 import { submitAnswer, saveQuestionAsDraft } from '@/actions/userServices';
 import Modal from './Modal';
-
-interface Question {
-  id: number;
-  question: string;
-  date: string;
-  answered_date: string;
-  state: string;
-  agency: number;
-  answer: string;
-  topics: number[];
-  email?: string;
-  likes: number;
-  dislikes: number;
-  attachments?: string[];
-  admin_isopen?: boolean;
-  staff_isopen?: boolean;
-}
+import { Question } from '@/types/types';
 
 interface AnswerQuestionModalProps {
   question: Question;

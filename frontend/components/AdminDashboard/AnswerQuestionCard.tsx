@@ -1,26 +1,11 @@
 'use client';
 
 import React, { useState } from 'react';
-import { useTranslations } from 'next-intl';
 import AnswerQuestionModal from './AnswerQuestionModal';
 import { changeStaffIsOpen } from '@/actions/userServices';
-
-interface Question {
-  id: number;
-  question: string;
-  date: string;
-  answered_date: string;
-  state: string;
-  agency: number;
-  answer: string;
-  topics: number[];
-  email?: string;
-  likes: number;
-  dislikes: number;
-  attachments?: string[];
-  admin_isopen?: boolean;
-  staff_isopen?: boolean;
-}
+import { Question } from '@/types/types';
+import NewUpdateIcon from '@/icons/new';
+import DraftUpdateIcon from '@/icons/draft';
 
 interface QuestionCardProps {
   question: Question;
@@ -59,31 +44,52 @@ const AnswerQuestionCard: React.FC<QuestionCardProps> = ({ question }) => {
     );
   };
 
-  const truncateText = (text: string, maxWords: number) => {
-    const words = text.split(' ');
-    return words.length > maxWords
-      ? words.slice(0, maxWords).join(' ') + '...'
-      : text;
-  };
-
   return (
     <>
       <div
-        className="bg-white items-center rounded-md border p-4 shadow-sm flex justify-between cursor-pointer"
+        className="bg-white items-center rounded-md border p-4 shadow-sm flex justify-between w-full group"
         onClick={handleCardClick}
       >
+        <div className="flex items-center flex-shrink-0 pr-1">
+          {question.staff_isopen === false && question.state !== 'spam' && (
+            <div className="w-16 h-8 items-center justify-center flex">
+              <NewUpdateIcon
+                classNamePath="fill-[#F0FDF4] dark:fill-[#052E16]"
+                classNameCircle="fill-[#15803D] dark:fill-[#16A34A]"
+                classNamePath2="fill-[#15803D] dark:fill-[#16A34A]"
+              />
+            </div>
+          )}
+          {question.staff_isopen === true &&
+            question.state !== 'spam' &&
+            question.state !== 'draft' && (
+              <div className="h-[22px] w-[55px]"></div>
+            )}
+          {question.state === 'draft' && (
+            <div className="w-16 h-8 items-center justify-center flex">
+              <DraftUpdateIcon
+                classNamePath="fill-washed-100"
+                classNameCircle="fill-dim-500"
+                classNamePath2="fill-dim-500"
+              ></DraftUpdateIcon>
+            </div>
+          )}
+        </div>
+
         <div className="flex items-center">
-          {!isStaffOpen && <div className="text-green-500">New</div>}
-          <div className="text-base font-medium text-black-900">
-            {truncateText(question.question, 20)}
+          <div
+            className="text-sm font-medium text-black-700 line-clamp-2 hover:cursor-pointer"
+            onClick={handleCardClick}
+          >
+            {question.question}
           </div>
         </div>
-        <div className="flex items-center space-x-4">
-          <div className="font-normal text-sm text-dim-500">
-            {formatDate(question.date)}
-          </div>
+
+        <div className="font-normal text-sm text-dim-500 w-[180px] pl-3 flex-shrink-0">
+          {formatDate(question.date)}
         </div>
       </div>
+
       <AnswerQuestionModal
         question={question}
         isOpen={isModalOpen}

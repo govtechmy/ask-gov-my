@@ -123,7 +123,7 @@ const QuestionDetailPage: React.FC<Props> = async ({ params }) => {
       <ContextSearchBar>
         <HeaderQuestionDetail />
       </ContextSearchBar>
-      <div className="container mt-10 flex text-out">
+      <div className="container mt-10 flex">
         <div className="max-w-screen-2xl flex">
           <div className="pb-7 w-9/12">
             <div className="flex items-center gap-1">
