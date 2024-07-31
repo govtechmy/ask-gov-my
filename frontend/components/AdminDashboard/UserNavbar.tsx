@@ -7,9 +7,9 @@ import AddUserModal from './AddUserModal';
 import { cn } from '@/lib/utils';
 import PlusIcon from '@/icons/plusicon';
 import AgencyListDropdownUsers from './AgencyListDropdownUsers';
-import { AGENCY_TO_UUID } from '@/lib/agency';
 import ToastNewUserAdded from './ToastNewUserAdded';
 import { Agency } from '@/types/types';
+import { getDynamicAgencyMap } from '@/actions/questionServices';
 
 interface UserNavbarProps {
   setSearchTerm: (term: string) => void;
@@ -41,9 +41,7 @@ const UserNavbar: React.FC<UserNavbarProps> = ({
     setshowAddUserToast(true);
   };
 
-  const handleAddUserToast = () => {
-    setshowAddUserToast(true);
-  };
+  const AGENCY_TO_UUID = getDynamicAgencyMap();
 
   return (
     <div className="flex items-center justify-between pb-2 border-b border-[#E4E4E7] dark:border-[#27272A]">
@@ -83,14 +81,8 @@ const UserNavbar: React.FC<UserNavbarProps> = ({
             className="font-normal placeholder:text-dim-500 flex h-11 w-full rounded-md bg-transparent py-3 text-sm pl-2 focus:outline-none"
             onFocus={() => setIsFocused(true)}
             onBlur={() => setIsFocused(false)}
-            className="font-normal placeholder:text-dim-500 flex h-11 w-full rounded-md bg-transparent py-3 text-sm pl-2 focus:outline-none"
-            onFocus={() => setIsFocused(true)}
-            onBlur={() => setIsFocused(false)}
             onChange={e => setSearchTerm(e.target.value)}
           />
-          <div className="h-4 w-4 items-center justify-center flex">
-            <Search strokeWidth={1.88} className="stroke-[#A1A1AA]" />
-          </div>
           <div className="h-4 w-4 items-center justify-center flex">
             <Search strokeWidth={1.88} className="stroke-[#A1A1AA]" />
           </div>
@@ -105,13 +97,7 @@ const UserNavbar: React.FC<UserNavbarProps> = ({
           </div>
           <div>New user</div>
         </div>
-          <div className=" h-4 w-4 flex items-center justify-center mr-[6px]">
-            <PlusIcon className="stroke-white-forcewhite"></PlusIcon>
-          </div>
-          <div>New user</div>
-        </div>
       </div>
-
 
       <AddUserModal
         isOpen={isModalOpen}
