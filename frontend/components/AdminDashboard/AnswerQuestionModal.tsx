@@ -34,7 +34,6 @@ const AnswerQuestionModal: React.FC<AnswerQuestionModalProps> = ({
   isOpen,
   onClose,
 }) => {
-  const t = useTranslations('Agency');
   const [answer, setAnswer] = useState(question.answer || '');
   const [attachments, setAttachments] = useState<File[]>([]);
   const [uploadedAttachments, setUploadedAttachments] = useState<string[]>(

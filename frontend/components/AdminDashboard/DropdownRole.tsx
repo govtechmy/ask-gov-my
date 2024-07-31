@@ -1,8 +1,9 @@
 import { useState, Dispatch, SetStateAction } from 'react';
-import { AGENCY_TO_UUID } from '@/lib/agency';
 import AgencyListDropdownUsersModal from './AgencyListDropdownUsersModal';
 import ChevronDown from '@/icons/ChevronDown';
-import { Agency, User } from '@/types/types';
+import { Agency } from '@/types/types';
+import { getDynamicAgencyMap } from '@/actions/questionServices';
+import { User } from '@/types/types';
 
 interface DropdownRoleProps {
   agencies: Agency[];
@@ -31,6 +32,8 @@ const DropdownRole: React.FC<DropdownRoleProps> = ({
     setSelectedRole(role);
     setIsOpen(false);
   };
+
+  const AGENCY_TO_UUID = getDynamicAgencyMap();
 
   const formatRoleDisplay = (role: 'staff' | 'super_admin' | 'unassigned') => {
     switch (role) {

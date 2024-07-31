@@ -28,7 +28,6 @@ const AdminQuestionCard: React.FC<QuestionCardProps> = ({
   setactiveQuestionId,
   agencyMap,
 }) => {
-  const t = useTranslations('Agency');
   const [selectedAgency, setSelectedAgency] = useState<string>('Unassigned');
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [successMessage, setSuccessMessage] = useState('');

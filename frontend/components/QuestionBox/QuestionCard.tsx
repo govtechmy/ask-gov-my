@@ -7,33 +7,30 @@ import IconQuestionSmile from '@/icons/iconquestionsmile';
 import DateComponent from '../date';
 import LikeIcon from '@/icons/likeicon';
 import AgencyLogoImporter from '../AgencyLogoImporter';
-import { Question } from '@/types/types';
-import { QuoteIcon } from 'lucide-react';
+import { Agency, Question } from '@/types/types';
+import AgencyName from '../AgencyName';
 
 interface QuestionCardProps {
   question: Question;
   agencyMap: Record<string, string>;
+  agencyList: Agency[];
 }
 
-const QuestionCard: React.FC<QuestionCardProps> = ({ question, agencyMap }) => {
-  const t = useTranslations('Agency');
+const QuestionCard: React.FC<QuestionCardProps> = ({
+  question,
+  agencyMap,
+  agencyList,
+}) => {
   const searchParams = useSearchParams();
   const locale = searchParams.get('locale') || '';
-
   const agencyId =
-    question.agency && typeof question.agency === 'object'
-      ? question.agency.id
-      : question.agency;
+    typeof question.agency === 'object' ? question.agency.id : question.agency;
 
   const agencyAcronym = Object.keys(agencyMap).find(
     key => agencyMap[key] === agencyId?.toString(),
   );
 
-  const currentAgency = {
-    id: agencyId,
-    acronym: agencyAcronym,
-    name: t(agencyAcronym),
-  };
+  const currentAgency = agencyList.find(agency => agency.id === agencyId);
 
   return (
     <Link
@@ -54,12 +51,14 @@ const QuestionCard: React.FC<QuestionCardProps> = ({ question, agencyMap }) => {
           <div className="flex items-center font-medium text-sm">
             <div className="pr-4">
               <div className="w-6 h-6 flex relative flex-shrink-0">
-                <AgencyLogoImporter currentAgency={currentAgency} />
+                {currentAgency && (
+                  <AgencyLogoImporter currentAgency={currentAgency} />
+                )}
               </div>
             </div>
-            <div className="text-black-800">{t(agencyAcronym)}</div>
-            <div className="px-1 text-black-700">({agencyAcronym})</div>
+            {currentAgency && <AgencyName agency={currentAgency} />}
             <div className="font-normal text-sm text-dim-500">
+              &nbsp;
               <DateComponent date={question.date} locale={locale} />
             </div>
           </div>

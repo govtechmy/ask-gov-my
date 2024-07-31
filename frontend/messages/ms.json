@@ -70,38 +70,6 @@
     "trendingA": "Agensi-agensi sohor kini"
   },
 
-  "Agency": {
-    "agency": "Agensi",
-    "MAFS": "Kementerian Pertanian dan Keterjaminan Makanan",
-    "KOMUNIKASI": "Kementerian Komunikasi",
-    "MINDEF": "Kementerian Pertahanan",
-    "KPDN": "Kementerian Perdagangan Dalam Negeri dan Kos Sara Hidup ",
-    "EKONOMI": "Kementerian Ekonomi",
-    "MOE": "Kementerian Pendidikan",
-    "PETRA": "Kementerian Peralihan Tenaga Dan Transformasi Air ",
-    "MEDC": "Kementerian Pembangunan Usahawan",
-    "MOF": "Kementerian Kewangan",
-    "MFA": "Kementerian Luar Negeri Malaysia",
-    "MOH": "Kementerian Kesihatan",
-    "MOHE": "Kementerian Pendidikan Tinggi ",
-    "KDN": "Kementerian Dalam Negeri",
-    "KPKT": "Kementerian Perumahan Dan Kerajaan Tempatan",
-    "MOHR": "Kementerian Sumber Manusia",
-    "MITI": "Kementerian Pelaburan, Perdagangan dan Industri",
-    "KPN": "Kementerian Perpaduan Negara",
-    "NRES": "Kementerian Sumber Asli Dan Kelestarian Alam",
-    "MPIC": "Kementerian Perladangan dan Komoditi",
-    "KKDW": "Kementerian Kemajuan Desa dan Wilayah",
-    "MOSTI": "Kementerian Sains, Teknologi dan Inovasi",
-    "MOTAC": "Kementerian Pelancongan, Seni dan Budaya",
-    "MOT": "Kementerian Pengangkutan",
-    "KPWKM": "Kementerian Pembangunan Wanita, Keluarga dan Masyarakat",
-    "KKR": "Kementerian Kerja Raya",
-    "KBS": "Kementerian Belia Dan Sukan",
-    "PARTY": "Entertainment Ministry Middle Earth",
-    "PETRA1": "Ministry of Energy Transition and Water Transformation"
-  },
-
   "Askquestions": {
     "ask_new_question": "Tanya soalan baru",
     "cant_find": "Saya tidak dapat mencari apa yang saya cari.",
