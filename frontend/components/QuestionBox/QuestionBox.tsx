@@ -9,10 +9,14 @@ import { Question, Agency } from '@/types/types';
 interface QuestionBoxProps {
   questions: Question[];
   agencyMap: Record<string, string>;
-  agencyList: Agency[]
+  agencyList: Agency[];
 }
 
-const QuestionBox: React.FC<QuestionBoxProps> = ({ questions, agencyMap, agencyList }) => {
+const QuestionBox: React.FC<QuestionBoxProps> = ({
+  questions,
+  agencyMap,
+  agencyList,
+}) => {
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 6;
   const totalPages = Math.ceil(questions.length / itemsPerPage);

@@ -103,7 +103,9 @@ const AskQuestion = () => {
                   </div>
                   <textarea
                     placeholder={t('type_your_question')}
-                    className="mt-[6px] h-[120px] text-left pl-3 pt-2 w-full rounded-lg shadow-sm border-[1px] border-outline-200 focus:border-none focus:outline-none focus:shadow-[0_0_0_1px_#B794FF,0_0_0_4px_#E2D5FE] placeholder:text-black-900 placeholder:font-normal placeholder:text-base"
+                    className="mt-[6px] h-[120px] text-left pl-3 pt-2 w-full rounded-lg shadow-sm border-[1px] border-outline-200
+                     focus:border-none focus:outline-none focus:shadow-[0_0_0_1px_#B794FF,0_0_0_4px_#DED1FA] focus:dark:shadow-[0_0_0_1px_#4F20B2,0_0_0_4px_#281B46]
+                     placeholder:text-black-900 placeholder:font-normal placeholder:text-base"
                     name="question"
                     value={question}
                     onChange={e => setQuestion(e.target.value)}
@@ -121,7 +123,7 @@ const AskQuestion = () => {
                   <div
                     className={`flex items-center border-[1px] border-outline-200 shadow-sm rounded-md h-10 w-full ${
                       isFocused
-                        ? 'shadow-[0_0_0_1px_#B794FF,0_0_0_4px_#E2D5FE]'
+                        ? 'shadow-[0_0_0_1px_#B794FF,0_0_0_4px_#DED1FA] dark:shadow-[0_0_0_1px_#4F20B2,0_0_0_4px_#281B46]'
                         : ''
                     }`}
                   >

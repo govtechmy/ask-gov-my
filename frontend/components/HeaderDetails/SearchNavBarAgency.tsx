@@ -48,7 +48,7 @@ const SearchNavbarAgency: React.FC<SearchNavbarAgencyProps> = ({
     };
 
     window.addEventListener('scroll', handleScroll);
-    console.log(currentAgency)
+    console.log(currentAgency);
     return () => {
       window.removeEventListener('scroll', handleScroll);
     };
@@ -81,7 +81,7 @@ const SearchNavbarAgency: React.FC<SearchNavbarAgencyProps> = ({
                 className="font-poppins text-black-900 font-semibold text-2xl px-3"
               >
                 <AgencyName agency={currentAgency} />
-                </div>
+              </div>
             </div>
             <div className="w-full">
               {showInputNavbar && (

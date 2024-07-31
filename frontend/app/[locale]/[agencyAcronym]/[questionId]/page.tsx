@@ -114,7 +114,7 @@ const QuestionDetailPage: React.FC<Props> = async ({ params }) => {
       agency.acronym === agencyAcronym.toUpperCase(),
   );
 
-  console.log(currentAgency)
+  console.log(currentAgency);
   const relatedQuestions = await getRelatedQuestions(question.question);
 
   return (
