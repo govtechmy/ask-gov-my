@@ -1,21 +1,20 @@
 'use client';
-
-import { useTranslations } from 'next-intl';
+import { useParams } from 'next/navigation';
+import { Agency } from "@/types/types";
 
 interface AgencyNameProps {
-  acronym: string | undefined;
+  agency: Agency;
 }
 
-const AgencyName: React.FC<AgencyNameProps> = ({ acronym }) => {
-  const t = useTranslations('Agency');
-
-  if (!acronym) {
-    return null;
-  }
+const AgencyName: React.FC<AgencyNameProps> = ({ agency }) => {
+  const params = useParams();
+  const locale = params.locale;
+  
+  const displayName = locale === 'ms' ? agency.name_ms : agency.name;
 
   return (
     <p>
-      {t(acronym)} ({acronym}){' '}
+      {displayName} ({agency.acronym})
     </p>
   );
 };

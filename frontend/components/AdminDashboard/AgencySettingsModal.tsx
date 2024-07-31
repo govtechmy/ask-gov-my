@@ -20,7 +20,6 @@ const AgencySettingsModal: React.FC<AgencySettingsModalProps> = ({
   isOpen,
   onClose,
 }) => {
-  const t = useTranslations('Agency');
   const [name, setName] = useState(agency.name);
   const [nameMs, setNameMs] = useState(agency.name_ms);
   const [acronym, setAcronym] = useState(agency.acronym);

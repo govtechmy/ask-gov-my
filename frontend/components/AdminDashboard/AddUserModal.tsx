@@ -51,6 +51,8 @@ const AddUserModal: React.FC<AddUserModalProps> = ({
 
   if (!isOpen) return null;
 
+  if (!isOpen) return null;
+
   return (
     <div className="z-10 fixed inset-0 bg-gray-900 flex items-center justify-center bg-opacity-70">
       <div className="bg-white rounded-xl shadow-lg w-[600px]">

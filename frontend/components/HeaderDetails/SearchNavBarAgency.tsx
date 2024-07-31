@@ -7,13 +7,13 @@ import RightArrow from '@/icons/rightarrow';
 import { useTranslations } from 'next-intl';
 import { context } from '../ContextSearchBar';
 import AgencyLogoImporter from '../AgencyLogoImporter';
+import { Agency } from '@/types/types';
+import AgencyName from '../AgencyName';
 
 interface SearchNavbarAgencyProps {
   agencyAcronym: string;
   agencyUUID: string;
-  currentAgency: {
-    [key: string]: any;
-  };
+  currentAgency: Agency;
 }
 
 const SearchNavbarAgency: React.FC<SearchNavbarAgencyProps> = ({
@@ -21,7 +21,6 @@ const SearchNavbarAgency: React.FC<SearchNavbarAgencyProps> = ({
   agencyUUID,
   currentAgency,
 }) => {
-  const t = useTranslations('Agency');
   const {
     setHeaderContent,
     searchQuery,
@@ -49,7 +48,7 @@ const SearchNavbarAgency: React.FC<SearchNavbarAgencyProps> = ({
     };
 
     window.addEventListener('scroll', handleScroll);
-
+    console.log(currentAgency)
     return () => {
       window.removeEventListener('scroll', handleScroll);
     };
@@ -81,8 +80,8 @@ const SearchNavbarAgency: React.FC<SearchNavbarAgencyProps> = ({
                 id="search-navbar-title"
                 className="font-poppins text-black-900 font-semibold text-2xl px-3"
               >
-                {t(agencyAcronym.toUpperCase())}
-              </div>
+                <AgencyName agency={currentAgency} />
+                </div>
             </div>
             <div className="w-full">
               {showInputNavbar && (
