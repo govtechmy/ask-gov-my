@@ -1,30 +1,26 @@
-import { useTranslations } from 'next-intl';
+'use client'
+import { useParams } from 'next/navigation';
 import { Link } from '@/lib/i18n';
 import AgencyLogoImporter from './AgencyLogoImporter';
+import { Agency } from '@/types/types';
 
-interface TrendingAgency {
-  id: number;
-  name: string;
-  name_ms?: string;
-  acronym: string;
-  total_likes?: number;
-  logo_url?: string;
-}
 
 interface TrendingAgenciesProps {
-  trendingAgencies: TrendingAgency[];
+  trendingAgencies: Agency[];
 }
 
 const TrendingAgencies: React.FC<TrendingAgenciesProps> = ({
   trendingAgencies,
 }) => {
-  const t = useTranslations('Agency');
+  const params = useParams();
+  const locale = params.locale;
+
   const top10Agencies = trendingAgencies.slice(0, 10);
 
   return (
     <div className="pt-6">
       <ul className="flex flex-col justify-between h-full pb-5">
-        {top10Agencies.map((agency: TrendingAgency) => (
+        {top10Agencies.map((agency: Agency) => (
           <li key={agency.id} className="py-[9px]">
             <Link href={`/${agency.acronym.toLowerCase()}`}>
               <div className="flex items-center">
@@ -34,7 +30,7 @@ const TrendingAgencies: React.FC<TrendingAgenciesProps> = ({
                   </div>
                 </div>
                 <div className="text-base font-normal text-black-800 hover:text-askmygovtextbrand-600 hover:cursor-pointer">
-                  {t(agency.acronym)}
+                  {locale === 'ms' ? agency.name_ms : agency.name}
                 </div>
               </div>
             </Link>
