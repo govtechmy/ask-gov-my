@@ -24,9 +24,8 @@ const AgencyListDropdownUsers: React.FC<AgencyListDropdownProps> = ({
 
   const handleAgencyChange = (agencyId: number, agencyAcronym: string) => {
     setSelectedAgency(agencyId === 0 ? null : agencyAcronym);
-    if (agencyId != 0) {
-      console.log(agencyId)
-      setAgency(agencyId)
+    if (agencyId !== 0) {
+      setAgency(agencyId);
     }
     setIsOpen(false);
   };
@@ -43,6 +42,11 @@ const AgencyListDropdownUsers: React.FC<AgencyListDropdownProps> = ({
     setHoveredAgency(null);
   };
 
+  const filteredAgencies = agencies.filter(agency =>
+    agency.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+    agency.acronym.toLowerCase().includes(searchQuery.toLowerCase()) ||
+    agency.name_ms.toLowerCase().includes(searchQuery.toLowerCase())
+  );
 
   const displayText = isOpen
     ? hoveredAgency || selectedAgency || 'Unassigned'
@@ -57,9 +61,7 @@ const AgencyListDropdownUsers: React.FC<AgencyListDropdownProps> = ({
         {` ${displayText}`}
         <div className="pr-2">
           <ChevronDown
-            className={`h-5 w-5 transition-transform transform ${
-              isOpen ? 'rotate-180' : ''
-            }`}
+            className={`h-5 w-5 transition-transform transform ${isOpen ? 'rotate-180' : ''}`}
           />
         </div>
       </div>
@@ -72,7 +74,7 @@ const AgencyListDropdownUsers: React.FC<AgencyListDropdownProps> = ({
             >
               Unassigned
             </div>
-            {agencies.map(agency => ( 
+            {filteredAgencies.map(agency => (
               <div
                 key={agency.id}
                 className="pl-2 h-8 hover:bg-washed-100 cursor-pointer items-center flex rounded-md text-sm"
@@ -96,7 +98,7 @@ const AgencyListDropdownUsers: React.FC<AgencyListDropdownProps> = ({
               onChange={handleSearchChange}
               className="absolute h-[32px] w-[535px] top-2 left-2 border-[1px] border-outline-200
                shadow-button focus:border-none focus:outline-none focus:shadow-[0_0_0_1px_#B794FF,0_0_0_4px_#DED1FA]
-               focus:dark:shadow-[0_0_0_1px_#4F20B2,0_0_0_4px_#281B46]rounded-lg p-2"
+               focus:dark:shadow-[0_0_0_1px_#4F20B2,0_0_0_4px_#281B46] rounded-lg p-2"
             />
             <div className="absolute h-4 w-4 items-center justify-center flex z-20 right-[15px] top-[15px]">
               <Search strokeWidth={2} className="stroke-[#A1A1AA]" />
