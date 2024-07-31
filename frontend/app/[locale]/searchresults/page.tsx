@@ -1,4 +1,7 @@
-import { getTrendingAgencies, getDynamicAgencyMap } from '@/actions/questionServices';
+import {
+  getTrendingAgencies,
+  getDynamicAgencyMap,
+} from '@/actions/questionServices';
 import { searchQuestions } from '@/actions/searchServices';
 import QuestionBox from '@/components/QuestionBox/QuestionBox';
 import SearchNavbar from '@/components/HeaderDetails/SearchNavBar';
