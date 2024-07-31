@@ -6,8 +6,9 @@ import { User } from '@/types/types';
 
 interface DropdownRoleProps {
   agencies: Agency[];
-  setRole: Dispatch<SetStateAction<'staff' | 'super_admin'>>;
+  setRole: Dispatch<SetStateAction<'staff' | 'super_admin'| 'unassigned'>>;
   setAgency: Dispatch<SetStateAction<number | null>>;
+  roleEmpty: boolean;
   user?: User; // user is now optional
 }
 
@@ -15,6 +16,7 @@ const DropdownRole: React.FC<DropdownRoleProps> = ({
   agencies,
   setRole,
   setAgency,
+  roleEmpty,
   user = { role: 'unassigned', agency: null }, // provide a default value
 }) => {
   const initialRole =
@@ -34,7 +36,6 @@ const DropdownRole: React.FC<DropdownRoleProps> = ({
     setIsOpen(false);
   };
 
-
   const formatRoleDisplay = (role: 'staff' | 'super_admin' | 'unassigned') => {
     switch (role) {
       case 'super_admin':
@@ -47,7 +48,6 @@ const DropdownRole: React.FC<DropdownRoleProps> = ({
         return 'Unassigned';
     }
   };
-
 
   return (
     <div className="mb-4">
@@ -99,6 +99,9 @@ const DropdownRole: React.FC<DropdownRoleProps> = ({
             />
           </div>
         </>
+      )}
+      {roleEmpty && selectedRole === 'unassigned' && (
+        <div className="text-red-500 text-sm mt-2">Please select a role</div>
       )}
     </div>
   );
