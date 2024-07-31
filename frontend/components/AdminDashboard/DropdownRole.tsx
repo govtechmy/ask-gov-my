@@ -1,8 +1,8 @@
 import { useState } from 'react';
-import { AGENCY_TO_UUID } from '@/lib/agency';
 import AgencyListDropdownUsersModal from './AgencyListDropdownUsersModal';
 import ChevronDown from '@/icons/ChevronDown';
 import { Agency } from '@/types/types';
+import { getDynamicAgencyMap } from '@/actions/questionServices';
 
 interface DropdownRoleProps {
   agencies: Agency[];
@@ -18,6 +18,8 @@ const DropdownRole: React.FC<DropdownRoleProps> = ({ agencies }) => {
     setSelectedRole(role);
     setIsOpen(false);
   };
+
+  const AGENCY_TO_UUID = getDynamicAgencyMap();
 
   return (
     <div className="mb-4">

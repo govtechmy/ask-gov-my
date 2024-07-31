@@ -3,7 +3,7 @@ import Search from '@/icons/search';
 import React, { useState, useRef, ChangeEvent, useEffect } from 'react';
 
 interface AgencyListDropdownProps {
-  AGENCY_TO_UUID: { [key: string]: string };
+  AGENCY_TO_UUID: Promise<Record<string, string>>;
 }
 
 const AgencyListDropdownUsers: React.FC<AgencyListDropdownProps> = ({
