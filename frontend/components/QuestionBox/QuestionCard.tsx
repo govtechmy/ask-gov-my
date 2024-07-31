@@ -13,17 +13,18 @@ import AgencyName from '../AgencyName';
 interface QuestionCardProps {
   question: Question;
   agencyMap: Record<string, string>;
-  agencyList: Agency[]
+  agencyList: Agency[];
 }
 
 const QuestionCard: React.FC<QuestionCardProps> = ({
   question,
   agencyMap,
-  agencyList
+  agencyList,
 }) => {
   const searchParams = useSearchParams();
   const locale = searchParams.get('locale') || '';
-  const agencyId = typeof question.agency === 'object' ? question.agency.id : question.agency;
+  const agencyId =
+    typeof question.agency === 'object' ? question.agency.id : question.agency;
 
   const agencyAcronym = Object.keys(agencyMap).find(
     key => agencyMap[key] === agencyId?.toString(),
@@ -50,12 +51,14 @@ const QuestionCard: React.FC<QuestionCardProps> = ({
           <div className="flex items-center font-medium text-sm">
             <div className="pr-4">
               <div className="w-6 h-6 flex relative flex-shrink-0">
-                {currentAgency && <AgencyLogoImporter currentAgency={currentAgency} />}
+                {currentAgency && (
+                  <AgencyLogoImporter currentAgency={currentAgency} />
+                )}
               </div>
             </div>
             {currentAgency && <AgencyName agency={currentAgency} />}
             <div className="font-normal text-sm text-dim-500">
-            &nbsp;
+              &nbsp;
               <DateComponent date={question.date} locale={locale} />
             </div>
           </div>

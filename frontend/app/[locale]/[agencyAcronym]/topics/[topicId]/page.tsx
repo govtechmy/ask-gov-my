@@ -98,7 +98,11 @@ const TopicPage = async ({ params }: Props) => {
               </div>
             </div>
             {filteredQuestions.length > 0 ? (
-              <QuestionBox questions={filteredQuestions} agencyMap={agencyMap} agencyList={agencyList} />
+              <QuestionBox
+                questions={filteredQuestions}
+                agencyMap={agencyMap}
+                agencyList={agencyList}
+              />
             ) : (
               <div className=" h-[220px] w-[900px]">
                 <div className="text-dim-500">

@@ -4,7 +4,7 @@ import { useTranslations } from 'next-intl';
 import { getDynamicAgencyMap } from '@/actions/questionServices';
 
 const AgencyListDropdownNotUsed = () => {
-  const AGENCY_TO_UUID = getDynamicAgencyMap()
+  const AGENCY_TO_UUID = getDynamicAgencyMap();
   const agencylists = Object.entries(AGENCY_TO_UUID).map(([name, id]) => ({
     id,
     name,

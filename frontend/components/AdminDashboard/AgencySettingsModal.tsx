@@ -159,7 +159,8 @@ const AgencySettingsModal: React.FC<AgencySettingsModalProps> = ({
               <input
                 type="text"
                 className="bg-white h-10 w-[552px] border-[1px] border-outline-200 rounded-lg pl-[12px]
-                shadow-button focus:border-none focus:outline-none focus:shadow-[0_0_0_1px_#B794FF,0_0_0_4px_#E2D5FE] mb-6
+                shadow-button focus:border-none focus:outline-none focus:shadow-[0_0_0_1px_#B794FF,0_0_0_4px_#DED1FA] mb-6
+                focus:dark:shadow-[0_0_0_1px_#4F20B2,0_0_0_4px_#281B46]
                 text-black-900 font-normal text-base"
                 value={name}
                 onChange={e => setName(e.target.value)}
@@ -171,7 +172,8 @@ const AgencySettingsModal: React.FC<AgencySettingsModalProps> = ({
               <input
                 type="text"
                 className="bg-white h-10 w-[552px] border-[1px] border-outline-200 rounded-lg pl-[12px]
-                shadow-button focus:border-none focus:outline-none focus:shadow-[0_0_0_1px_#B794FF,0_0_0_4px_#E2D5FE] mb-6
+                shadow-button focus:border-none focus:outline-none focus:shadow-[0_0_0_1px_#B794FF,0_0_0_4px_#DED1FA] mb-6
+                focus:dark:shadow-[0_0_0_1px_#4F20B2,0_0_0_4px_#281B46]
                 text-black-900 font-normal text-base"
                 value={nameMs}
                 onChange={e => setNameMs(e.target.value)}
@@ -185,7 +187,8 @@ const AgencySettingsModal: React.FC<AgencySettingsModalProps> = ({
                   <input
                     type="text"
                     className="bg-white h-10 w-[264px] border-[1px] border-outline-200 rounded-lg pl-[12px]
-                    shadow-button focus:border-none focus:outline-none focus:shadow-[0_0_0_1px_#B794FF,0_0_0_4px_#E2D5FE] mb-6
+                    shadow-button focus:border-none focus:outline-none focus:shadow-[0_0_0_1px_#B794FF,0_0_0_4px_#DED1FA] mb-6
+                    focus:dark:shadow-[0_0_0_1px_#4F20B2,0_0_0_4px_#281B46]
                     text-black-900 font-normal text-base"
                     value={acronym}
                     onChange={e => setAcronym(e.target.value)}

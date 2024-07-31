@@ -38,7 +38,11 @@ const MainPage = async ({
           <div className="font-semibold text-base text-black-700 pb-7">
             <WordTranslate translate="Mainpage" keyword="trendingQ" />
           </div>
-          <QuestionBox questions={questions} agencyMap={agencyMap} agencyList={agencyList} />
+          <QuestionBox
+            questions={questions}
+            agencyMap={agencyMap}
+            agencyList={agencyList}
+          />
         </div>
 
         <div className="pl-10 w-[500px]">
@@ -54,3 +58,5 @@ const MainPage = async ({
 };
 
 export default MainPage;
+
+// color for focus shadow-[0_0_0_1px_#B794FF,0_0_0_4px_#E2D5FE] dark:shadow-[0_0_0_1px_#B794FF,0_0_0_4px_#E2D5FE]

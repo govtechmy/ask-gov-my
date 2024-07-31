@@ -13,7 +13,8 @@ interface AgencySidebarProps {
 //important update on agency
 
 const AgencySidebar: React.FC<AgencySidebarProps> = ({ agencies }) => {
-  const AGENCY_TO_UUID = getDynamicAgencyMap()
+  const t = useTranslations('Agency');
+  const AGENCY_TO_UUID = getDynamicAgencyMap();
   const router = useRouter();
   const [searchTerm, setSearchTerm] = useState('');
 
