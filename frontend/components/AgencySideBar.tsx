@@ -14,7 +14,7 @@ interface AgencySidebarProps {
 
 const AgencySidebar: React.FC<AgencySidebarProps> = ({ agencies }) => {
   const t = useTranslations('Agency');
-  const AGENCY_TO_UUID = getDynamicAgencyMap()
+  const AGENCY_TO_UUID = getDynamicAgencyMap();
   const router = useRouter();
   const [searchTerm, setSearchTerm] = useState('');
 

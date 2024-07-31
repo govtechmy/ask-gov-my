@@ -15,15 +15,15 @@ interface QuestionCardProps {
   agencyMap: Record<string, string>;
 }
 
-const QuestionCard: React.FC<QuestionCardProps> = ({
-  question,
-  agencyMap,
-}) => {
+const QuestionCard: React.FC<QuestionCardProps> = ({ question, agencyMap }) => {
   const t = useTranslations('Agency');
   const searchParams = useSearchParams();
   const locale = searchParams.get('locale') || '';
 
-  const agencyId = question.agency && typeof question.agency === 'object' ? question.agency.id : question.agency;
+  const agencyId =
+    question.agency && typeof question.agency === 'object'
+      ? question.agency.id
+      : question.agency;
 
   const agencyAcronym = Object.keys(agencyMap).find(
     key => agencyMap[key] === agencyId?.toString(),
