@@ -27,7 +27,6 @@ interface QuestionCardProps {
 }
 
 const AnswerQuestionCard: React.FC<QuestionCardProps> = ({ question }) => {
-  const t = useTranslations('Agency');
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isStaffOpen, setIsStaffOpen] = useState(question.staff_isopen);
 

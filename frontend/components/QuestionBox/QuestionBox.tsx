@@ -4,27 +4,30 @@ import React, { useState, useMemo } from 'react';
 import QuestionCard from './QuestionCard';
 import RightArrow from '@/icons/rightarrow';
 import LeftArrow from '@/icons/leftarrow';
-import { Question } from '@/types/types';
+import { Question, Agency } from '@/types/types';
 
 interface QuestionBoxProps {
   questions: Question[];
   agencyMap: Record<string, string>;
+  agencyList: Agency[];
 }
 
-const QuestionBox: React.FC<QuestionBoxProps> = ({ questions, agencyMap }) => {
+const QuestionBox: React.FC<QuestionBoxProps> = ({
+  questions,
+  agencyMap,
+  agencyList,
+}) => {
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 6;
   const totalPages = Math.ceil(questions.length / itemsPerPage);
   const sortedQuestions = useMemo(() => {
     return [...questions].sort((a, b) => b.likes - a.likes);
   }, [questions]);
-
   const handlePageChange = (page: number) => {
     if (page >= 1 && page <= totalPages) {
       setCurrentPage(page);
     }
   };
-
   const renderPageNumbers = () => {
     const pageNumbers = [];
 
@@ -117,6 +120,7 @@ const QuestionBox: React.FC<QuestionBoxProps> = ({ questions, agencyMap }) => {
             key={question.id}
             question={question}
             agencyMap={agencyMap}
+            agencyList={agencyList}
           />
         ))}
       </div>

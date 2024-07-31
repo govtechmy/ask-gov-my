@@ -1,6 +1,7 @@
 import {
   getTrendingAgencies,
   getDynamicAgencyMap,
+  getAgencyList,
 } from '@/actions/questionServices';
 import { searchQuestions } from '@/actions/searchServices';
 import QuestionBox from '@/components/QuestionBox/QuestionBox';
@@ -21,7 +22,7 @@ const SearchResultPage = async ({
   const questions = await searchQuestions(query);
   const trendingAgencies = await getTrendingAgencies();
   const agencyMap = await getDynamicAgencyMap();
-  // console.log(trendingAgencies)
+  const agencyList = await getAgencyList();
   return (
     <div>
       <IdentifyWebsite />
@@ -41,7 +42,11 @@ const SearchResultPage = async ({
             <div>&nbsp;"{query}"</div>
           </div>
           {questions.length > 0 ? (
-            <QuestionBox questions={questions} agencyMap={agencyMap} />
+            <QuestionBox
+              questions={questions}
+              agencyMap={agencyMap}
+              agencyList={agencyList}
+            />
           ) : (
             <div className=" h-[220px] w-[900px] text-dim-500">
               <WordTranslate

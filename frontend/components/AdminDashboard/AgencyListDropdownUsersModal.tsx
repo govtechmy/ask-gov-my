@@ -1,9 +1,9 @@
 import ChevronDown from '@/icons/ChevronDown';
 import Search from '@/icons/search';
-import React, { useState, useRef, ChangeEvent, useEffect } from 'react';
+import React, { useState, useRef, ChangeEvent } from 'react';
 
 interface AgencyListDropdownProps {
-  AGENCY_TO_UUID: { [key: string]: string };
+  AGENCY_TO_UUID: Promise<Record<string, string>>;
   initialSelectedAgency?: string; // Added prop for initial selected agency
 }
 

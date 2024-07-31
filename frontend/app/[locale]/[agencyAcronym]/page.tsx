@@ -64,7 +64,11 @@ const AgencyPage = async ({ params }: Props) => {
           <div className="font-semibold text-base text-black-700 pb-6">
             <WordTranslate translate={'Mainpage'} keyword={'trendingQ'} />
           </div>
-          <QuestionBox questions={questions} agencyMap={agencyMap} />
+          <QuestionBox
+            questions={questions}
+            agencyMap={agencyMap}
+            agencyList={agencyList}
+          />
         </div>
 
         <div className="pl-10 w-[500px]">

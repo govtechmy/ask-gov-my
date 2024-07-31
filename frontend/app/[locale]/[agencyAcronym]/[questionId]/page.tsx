@@ -114,11 +114,7 @@ const QuestionDetailPage: React.FC<Props> = async ({ params }) => {
       agency.acronym === agencyAcronym.toUpperCase(),
   );
 
-  if (currentAgency) {
-  } else {
-    console.log(`Agency with acronym '${agencyAcronym}' not found.`);
-  }
-
+  console.log(currentAgency);
   const relatedQuestions = await getRelatedQuestions(question.question);
 
   return (
@@ -178,7 +174,7 @@ const QuestionDetailPage: React.FC<Props> = async ({ params }) => {
                         ></AgencyLogoImporter>
                       </div>
                       <div className="font-medium text-sm text-black-700 px-2">
-                        <AgencyName acronym={acronym} />
+                        <AgencyName agency={currentAgency} />
                       </div>
                       <div className="font-medium text-sm text-dim-500">
                         <WordTranslate
