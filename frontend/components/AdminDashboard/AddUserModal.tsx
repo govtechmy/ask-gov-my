@@ -22,10 +22,36 @@ const AddUserModal: React.FC<AddUserModalProps> = ({
 }) => {
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
-  const [role, setRole] = useState<'staff' | 'super_admin'>('staff');
+  const [role, setRole] = useState<'staff' | 'super_admin' | 'unassigned'>('unassigned');
   const [agency, setAgency] = useState<number | null>(null);
   const [success, setSuccess] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
+  const [nameError, setNameError] = useState<string | null>(null);
+  const [emailError, setEmailError] = useState<string | null>(null);
+  const [roleEmpty, setRoleEmpty] = useState<boolean>(false);
+
+  const nameRegex = /^[a-zA-Z\s]+$/;
+  const emailRegex = /^[a-zA-Z0-9._%+-]+@gov\.my$/;
+
+  const handleNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value;
+    setName(value);
+    if (!nameRegex.test(value)) {
+      setNameError('Name cannot contain special symbols or numbers');
+    } else {
+      setNameError(null);
+    }
+  };
+
+  const handleEmailChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value;
+    setEmail(value);
+    if (!emailRegex.test(value)) {
+      setEmailError('Email must end with @gov.my');
+    } else {
+      setEmailError(null);
+    }
+  };
 
   const generateHexColor = (name: string): string => {
     let hash = 0;
@@ -41,6 +67,14 @@ const AddUserModal: React.FC<AddUserModalProps> = ({
   };
 
   const handleSubmit = async () => {
+    if (nameError || emailError) {
+      setError('Please fix the errors before submitting');
+      return;
+    }
+    if (role === 'unassigned') {
+      setRoleEmpty(true);
+      return;
+    }
     try {
       const userColor = generateHexColor(name);
       const response = await addUser(
@@ -75,35 +109,37 @@ const AddUserModal: React.FC<AddUserModalProps> = ({
           </div>
         </div>
         <div>
-          <div className=" m-6 ">
+          <div className="m-6">
             <div className="text-black-700 text-sm font-medium mb-[6px] w-[552px] h-5">
               Full name
             </div>
             <input
               type="text"
               className="bg-white h-10 w-[552px] border-[1px] border-outline-200 rounded-md pl-4
-                shadow-button focus:border-none focus:outline-none focus:shadow-[0_0_0_1px_#B794FF,0_0_0_4px_#DED1FA] mb-6
+                shadow-button focus:border-none focus:outline-none focus:shadow-[0_0_0_1px_#B794FF,0_0_0_4px_#DED1FA] mb-1
                 text-black-900 font-normal text-base focus:dark:shadow-[0_0_0_1px_#4F20B2,0_0_0_4px_#281B46]"
               value={name}
               required
-              onChange={e => setName(e.target.value)}
+              onChange={handleNameChange}
             />
+            {nameError && <div className="text-red-500 text-sm mb-4">{nameError}</div>}
             <div className="text-black-700 text-sm font-medium mb-[6px] w-[552px] h-5">
               Email
             </div>
             <input
               type="email"
               className="bg-white h-10 w-[552px] border-[1px] border-outline-200 rounded-md 
-                shadow-button focus:border-none focus:outline-none focus:shadow-[0_0_0_1px_#B794FF,0_0_0_4px_#DED1FA] mb-6
+                shadow-button focus:border-none focus:outline-none focus:shadow-[0_0_0_1px_#B794FF,0_0_0_4px_#DED1FA] mb-1
                 text-black-900 font-normal text-base pl-4 focus:dark:shadow-[0_0_0_1px_#4F20B2,0_0_0_4px_#281B46]"
               value={email}
               required
-              onChange={e => setEmail(e.target.value)}
+              onChange={handleEmailChange}
             />
+            {emailError && <div className="text-red-500 text-sm mb-4">{emailError}</div>}
             <div className="text-black-700 text-sm font-medium mb-[6px] w-[552px] h-5">
               Role
             </div>
-            <DropdownRole agencies={agencies} setRole={setRole} setAgency={setAgency} />
+            <DropdownRole agencies={agencies} setRole={setRole} setAgency={setAgency} roleEmpty={roleEmpty} />
           </div>
         </div>
         <div>
