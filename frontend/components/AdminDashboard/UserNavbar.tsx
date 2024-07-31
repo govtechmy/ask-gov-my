@@ -7,9 +7,9 @@ import AddUserModal from './AddUserModal';
 import { cn } from '@/lib/utils';
 import PlusIcon from '@/icons/plusicon';
 import AgencyListDropdownUsers from './AgencyListDropdownUsers';
-import { AGENCY_TO_UUID } from '@/lib/agency';
 import ToastNewUserAdded from './ToastNewUserAdded';
 import { Agency } from '@/types/types';
+import { getDynamicAgencyMap } from '@/actions/questionServices';
 
 interface UserNavbarProps {
   setSearchTerm: (term: string) => void;
@@ -40,6 +40,8 @@ const UserNavbar: React.FC<UserNavbarProps> = ({
   const handleAddUserToast = () => {
     setshowAddUserToast(true);
   };
+
+  const AGENCY_TO_UUID = getDynamicAgencyMap();
 
   return (
     <div className="flex items-center justify-between pb-2 border-b border-[#E4E4E7] dark:border-[#27272A]">
