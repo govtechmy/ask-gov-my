@@ -27,13 +27,28 @@ const AddUserModal: React.FC<AddUserModalProps> = ({
   const [success, setSuccess] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
 
+  const generateHexColor = (name: string): string => {
+    let hash = 0;
+    for (let i = 0; i < name.length; i++) {
+      hash = name.charCodeAt(i) + ((hash << 5) - hash);
+    }
+    let color = '#';
+    for (let i = 0; i < 3; i++) {
+      const value = (hash >> (i * 8)) & 0xFF;
+      color += ('00' + value.toString(16)).substr(-2);
+    }
+    return color;
+  };
+
   const handleSubmit = async () => {
     try {
+      const userColor = generateHexColor(name);
       const response = await addUser(
         name,
         email,
         role,
         role === 'super_admin' ? null : agency,
+        userColor
       );
       if (response.success) {
         handleAddUserToast();
@@ -48,8 +63,6 @@ const AddUserModal: React.FC<AddUserModalProps> = ({
       setSuccess(null);
     }
   };
-
-  if (!isOpen) return null;
 
   if (!isOpen) return null;
 
@@ -90,7 +103,7 @@ const AddUserModal: React.FC<AddUserModalProps> = ({
             <div className="text-black-700 text-sm font-medium mb-[6px] w-[552px] h-5">
               Role
             </div>
-            <DropdownRole agencies={agencies} setRole={setRole} />
+            <DropdownRole agencies={agencies} setRole={setRole} setAgency={setAgency} />
           </div>
         </div>
         <div>
