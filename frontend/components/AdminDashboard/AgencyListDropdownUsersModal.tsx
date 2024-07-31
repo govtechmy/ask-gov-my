@@ -1,21 +1,20 @@
 import ChevronDown from '@/icons/ChevronDown';
 import Search from '@/icons/search';
-import React, { useState, useRef, ChangeEvent } from 'react';
+import React, { useState, useRef, ChangeEvent, Dispatch, SetStateAction } from 'react';
+import { Agency } from '@/types/types';
 
 interface AgencyListDropdownProps {
-  AGENCY_TO_UUID: Promise<Record<string, string>>;
-  initialSelectedAgency?: string; // Added prop for initial selected agency
+  agencies: Agency[];
+  setAgency: Dispatch<SetStateAction<number | null>>;
 }
 
 const AgencyListDropdownUsers: React.FC<AgencyListDropdownProps> = ({
-  AGENCY_TO_UUID,
-  initialSelectedAgency,
+  agencies,
+  setAgency
 }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
-  const [selectedAgency, setSelectedAgency] = useState<string | null>(
-    initialSelectedAgency || null,
-  );
+  const [selectedAgency, setSelectedAgency] = useState<string | null>(null);
   const [hoveredAgency, setHoveredAgency] = useState<string | null>(null);
   const dropdownRef = useRef<HTMLDivElement>(null);
 
@@ -23,8 +22,12 @@ const AgencyListDropdownUsers: React.FC<AgencyListDropdownProps> = ({
     setIsOpen(!isOpen);
   };
 
-  const handleAgencyChange = (agencyAcronym: string) => {
-    setSelectedAgency(agencyAcronym === 'Unassigned' ? null : agencyAcronym);
+  const handleAgencyChange = (agencyId: number, agencyAcronym: string) => {
+    setSelectedAgency(agencyId === 0 ? null : agencyAcronym);
+    if (agencyId != 0) {
+      console.log(agencyId)
+      setAgency(agencyId)
+    }
     setIsOpen(false);
   };
 
@@ -40,9 +43,6 @@ const AgencyListDropdownUsers: React.FC<AgencyListDropdownProps> = ({
     setHoveredAgency(null);
   };
 
-  const filteredAgencies = Object.keys(AGENCY_TO_UUID).filter(agencyAcronym =>
-    agencyAcronym.toLowerCase().includes(searchQuery.toLowerCase()),
-  );
 
   const displayText = isOpen
     ? hoveredAgency || selectedAgency || 'Unassigned'
@@ -68,21 +68,21 @@ const AgencyListDropdownUsers: React.FC<AgencyListDropdownProps> = ({
           <div className="absolute left-2 overflow-auto mt-[52px] max-h-[160px] bg-white-forcewhite max-w-[535px] rounded-md">
             <div
               className="h-8 w-[535px] pl-2 hover:bg-washed-100 cursor-pointer items-center flex rounded-md text-sm"
-              onClick={() => handleAgencyChange('Unassigned')}
+              onClick={() => handleAgencyChange(0, 'Unassigned')}
             >
               Unassigned
             </div>
-            {filteredAgencies.map(agencyAcronym => (
+            {agencies.map(agency => ( 
               <div
-                key={agencyAcronym}
+                key={agency.id}
                 className="pl-2 h-8 hover:bg-washed-100 cursor-pointer items-center flex rounded-md text-sm"
-                onClick={() => handleAgencyChange(agencyAcronym)}
-                onMouseEnter={() => handleMouseEnter(agencyAcronym)}
+                onClick={() => handleAgencyChange(agency.id, agency.acronym)}
+                onMouseEnter={() => handleMouseEnter(agency.acronym)}
                 onMouseLeave={handleMouseLeave}
               >
-                {agencyAcronym}
+                {agency.acronym}
                 <div className="text-dim-500 font-medium text-xs leading-[18px] pl-2 rounded-md">
-                  {agencyAcronym}
+                  {agency.name}
                 </div>
               </div>
             ))}
