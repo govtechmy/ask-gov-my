@@ -1,4 +1,4 @@
-export default function Gov({ className = '', ...props }) {
+export default function IconQuestionSmile2({ className = '', ...props }) {
   return (
     <svg
       width="24"

@@ -6,7 +6,7 @@ import { User } from '@/types/types';
 
 interface DropdownRoleProps {
   agencies: Agency[];
-  setRole: Dispatch<SetStateAction<'staff' | 'super_admin'| 'unassigned'>>;
+  setRole: Dispatch<SetStateAction<'staff' | 'super_admin' | 'unassigned'>>;
   setAgency: Dispatch<SetStateAction<number | null>>;
   roleEmpty: boolean;
   user?: User; // user is now optional

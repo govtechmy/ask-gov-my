@@ -23,11 +23,19 @@ const StaffQuestionBox: React.FC<QuestionBoxProps> = ({ questions }) => {
   useEffect(() => {
     let filtered = questions;
     if (activeTab === 'unanswered') {
-      filtered = questions.filter(question => question.answer === null);
+      filtered = questions.filter(
+        question => question.answer === null && question.state !== 'spam',
+      );
     } else if (activeTab === 'answered') {
-      filtered = questions.filter(question => question.answer !== null);
+      filtered = questions.filter(
+        question => question.answer !== null && question.state !== 'spam',
+      );
     } else if (activeTab === 'draft') {
       filtered = questions.filter(question => question.state === 'draft');
+    } else if (activeTab === 'all') {
+      filtered = questions.filter(
+        question => question.state === 'draft' || question.state !== 'spam',
+      );
     }
     setFilteredQuestions(filtered);
     setCurrentPage(1); // reset to first page when tab changes
@@ -114,7 +122,9 @@ const StaffQuestionBox: React.FC<QuestionBoxProps> = ({ questions }) => {
   return (
     <div>
       {currentQuestions.map(question => (
-        <AnswerQuestionCard key={question.id} question={question} />
+        <div className="py-1">
+          <AnswerQuestionCard key={question.id} question={question} />
+        </div>
       ))}
 
       {/* below is page handler */}
