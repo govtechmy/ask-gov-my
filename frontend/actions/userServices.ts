@@ -303,6 +303,7 @@ export async function addUser(
   email: string,
   role: 'staff' | 'super_admin',
   agency: number | null,
+  userProfileColour: string,
 ): Promise<{ success: boolean; message?: string }> {
   try {
     await prisma.user.create({
@@ -311,6 +312,7 @@ export async function addUser(
         email,
         role,
         agency,
+        userProfileColour,
       },
     });
     return { success: true };

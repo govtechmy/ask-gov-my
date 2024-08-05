@@ -2,18 +2,21 @@ import { useState, Dispatch, SetStateAction } from 'react';
 import AgencyListDropdownUsersModal from './AgencyListDropdownUsersModal';
 import ChevronDown from '@/icons/ChevronDown';
 import { Agency } from '@/types/types';
-import { getDynamicAgencyMap } from '@/actions/questionServices';
 import { User } from '@/types/types';
 
 interface DropdownRoleProps {
   agencies: Agency[];
-  setRole: Dispatch<SetStateAction<'staff' | 'super_admin'>>;
+  setRole: Dispatch<SetStateAction<'staff' | 'super_admin' | 'unassigned'>>;
+  setAgency: Dispatch<SetStateAction<number | null>>;
+  roleEmpty: boolean;
   user?: User; // user is now optional
 }
 
 const DropdownRole: React.FC<DropdownRoleProps> = ({
   agencies,
   setRole,
+  setAgency,
+  roleEmpty,
   user = { role: 'unassigned', agency: null }, // provide a default value
 }) => {
   const initialRole =
@@ -33,8 +36,6 @@ const DropdownRole: React.FC<DropdownRoleProps> = ({
     setIsOpen(false);
   };
 
-  const AGENCY_TO_UUID = getDynamicAgencyMap();
-
   const formatRoleDisplay = (role: 'staff' | 'super_admin' | 'unassigned') => {
     switch (role) {
       case 'super_admin':
@@ -47,9 +48,6 @@ const DropdownRole: React.FC<DropdownRoleProps> = ({
         return 'Unassigned';
     }
   };
-
-  const agencyAcronym =
-    user.agency !== null ? user.agency?.toString() : undefined;
 
   return (
     <div className="mb-4">
@@ -96,11 +94,14 @@ const DropdownRole: React.FC<DropdownRoleProps> = ({
           </div>
           <div className="relative">
             <AgencyListDropdownUsersModal
-              AGENCY_TO_UUID={AGENCY_TO_UUID}
-              initialSelectedAgency={agencyAcronym}
+              agencies={agencies}
+              setAgency={setAgency}
             />
           </div>
         </>
+      )}
+      {roleEmpty && selectedRole === 'unassigned' && (
+        <div className="text-red-500 text-sm mt-2">Please select a role</div>
       )}
     </div>
   );
