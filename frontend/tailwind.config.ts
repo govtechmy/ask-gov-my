@@ -1,5 +1,6 @@
 import type { Config } from 'tailwindcss';
 import tailwindcssAnimate from 'tailwindcss-animate';
+import colors from 'tailwindcss/colors';
 
 const config: Config = {
   content: [
@@ -38,13 +39,24 @@ const config: Config = {
           200: 'oklch(var(--askmygov-brand-200))',
           50: 'oklch(var(--askmygov-brand-50))',
         },
+        danger: {
+          600: colors.red[600],
+          700: colors.red[700],
+          300: 'oklch(var(--danger-300))',
+          200: 'oklch(var(--danger-200))',
+          100: 'oklch(var(--danger-200))',
+          50: 'oklch(var(--danger-50))',
+        },
         askmygovtextbrand: {
           600: 'oklch(var(--askmygov-text-brand-600))',
         },
         mydstextbrand: {
           600: 'oklch(var(--myds-text-brand-600))',
         },
-        foreground: 'oklch(var(--myds-black-900))',
+        foreground: {
+          DEFAULT: 'oklch(var(--myds-black-900))',
+          danger: 'oklch(var(--text-danger-600))',
+        },
         background: {
           DEFAULT: 'oklch(var(--myds-background-50))',
         },
