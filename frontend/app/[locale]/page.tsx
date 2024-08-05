@@ -33,7 +33,7 @@ const MainPage = async ({
         <SearchNavbar />
       </ContextSearchBar>
 
-      <div className="container mt-10 flex text-out">
+      <div className="container mt-10 flex">
         <div className="max-w-screen-2xl">
           <div className="font-semibold text-base text-black-700 pb-7">
             <WordTranslate translate="Mainpage" keyword="trendingQ" />

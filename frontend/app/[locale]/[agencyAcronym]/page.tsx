@@ -59,7 +59,7 @@ const AgencyPage = async ({ params }: Props) => {
         />
       </ContextSearchBar>
 
-      <div className="container mt-8 flex text-out">
+      <div className="container mt-8 flex">
         <div className="max-w-screen-2xl">
           <div className="font-semibold text-base text-black-700 pb-6">
             <WordTranslate translate={'Mainpage'} keyword={'trendingQ'} />

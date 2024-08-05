@@ -65,3 +65,5 @@ export default function DashboardPage() {
     </div>
   );
 }
+
+//helper to check for role

@@ -46,6 +46,7 @@ export const authOptions: NextAuthOptions = {
         session.accessToken = token.accessToken as string;
       }
       return session;
+      //remove session
     },
     async jwt({ token, user, account }) {
       if (user) {
