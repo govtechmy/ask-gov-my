@@ -3,23 +3,40 @@ import { Slot } from '@radix-ui/react-slot';
 import { cva, type VariantProps } from 'class-variance-authority';
 import { ButtonHTMLAttributes, forwardRef } from 'react';
 
-const buttonVariants = cva('', {
-  variants: {
-    variant: {
-      default: 'bg-gradient-to-t ',
-      secondary: '',
-      tertiary: '',
+const buttonVariants = cva(
+  'inline-flex select-none items-center justify-center gap-1.5 rounded-lg whitespace-nowrap text-start font-medium active:translate-y-[0.5px] disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-30',
+  {
+    variants: {
+      variant: {
+        primary:
+          'from-[#B379FF] to-askmygovbrand-600 border border-askmygovbrand-600 bg-gradient-to-b text-white-forcewhite hover:from-[-37.5%] hover:to-[59.38%] shadow-button',
+        secondary:
+          'border border-outline-200 hover:border-outline-300 bg-white focus:border-outline-200 focus:ring focus:ring-offset-0 focus:ring-outline-400/20 shadow-button',
+        'secondary-myds':
+          'border border-brand-200 hover:border-brand-300 bg-white hover:bg-brand-50 text-mydstextbrand-600 focus:border-brand-200 focus:ring focus:ring-offset-0 focus:ring-brand-600/20 shadow-button',
+        'secondary-askmygov':
+          'border border-askmygovbrand-200 hover:border-askmygovbrand-300 bg-white hover:bg-askmygovbrand-50 text-askmygovtextbrand-600 focus:border-brand-200 focus:ring focus:ring-offset-0 focus:ring-brand-600/20 shadow-button',
+        tertiary:
+          'hover:bg-washed-100 focus:ring focus:ring-offset-0 focus:ring-outline-400/20',
+        'tertiary-colour':
+          'hover:bg-brand-50 text-foreground-primary focus:ring focus:ring-offset-0 focus:ring-brand-600/20',
+        'danger-primary':
+          'border border-danger-600 bg-danger-600 hover:bg-danger-700 hover:border-danger-700 text-white focus:border-danger-600 focus:ring focus:ring-offset-0 focus:ring-danger-600/20 shadow-button disabled:bg-danger-300 disabled-border-danger-300',
+      },
+      size: {
+        default: '',
+        sm: 'px-2.5 py-1.5 text-sm',
+        md: 'px-3 py-2',
+        lg: 'px-3 py-2.5',
+        icon: 'p-2',
+      },
     },
-    size: {
-      default: '',
-      icon: '',
+    defaultVariants: {
+      variant: 'secondary',
+      size: 'md',
     },
   },
-  defaultVariants: {
-    variant: 'default',
-    size: 'default',
-  },
-});
+);
 
 export interface ButtonProps
   extends ButtonHTMLAttributes<HTMLButtonElement>,
