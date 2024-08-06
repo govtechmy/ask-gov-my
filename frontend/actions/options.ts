@@ -116,7 +116,7 @@ export const authOptions: NextAuthOptions = {
       },
     }),
   ],
-  adapter: DjangoAdapter(),
+  adapter: DjangoAdapter(), 
   secret: process.env.NEXTAUTH_SECRET,
   pages: {
     signIn: '/admin',
@@ -124,19 +124,14 @@ export const authOptions: NextAuthOptions = {
     error: '/',
   },
   session: {
-    strategy: 'jwt',
+    strategy: 'database', 
   },
   callbacks: {
-    async jwt({ token, user, account }) {
+    async session({ session, user }) {
       if (user) {
-        token.id = user.id;
-        token.role = user.role;
-        token.agency = user.agency;
+        session.user = user;
       }
-      if (account) {
-        token.accessToken = account.access_token;
-      }
-      return token;
+      return session;
     },
     async redirect({ url, baseUrl }) {
       if (url.startsWith(baseUrl)) return url;
@@ -145,5 +140,4 @@ export const authOptions: NextAuthOptions = {
     },
   },
 };
-
 export default NextAuth(authOptions);
