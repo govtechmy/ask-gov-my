@@ -1,8 +1,18 @@
+from .serializers import (
+    QuestionSerializer, AgencySerializer, 
+    TopicSerializer,UserSerializer, 
+    AccountSerializer, SessionSerializer, 
+    VerificationTokenSerializer)
+from django_next_auth_adapter.views import (
+    NextAuthUserViewSet,
+    NextAuthAccountViewSet,
+    NextAuthSessionViewSet,
+    NextAuthVerificationRequestViewSet
+)
 from django.shortcuts import get_object_or_404
 from django.utils import timezone
 from rest_framework import generics, status
-from .models import Question, Agency, Topic
-from .serializers import QuestionSerializer, AgencySerializer, TopicSerializer
+from .models import Question, Agency, Topic, User, Account, Session, VerificationToken
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from django.contrib.auth import get_user_model
@@ -11,7 +21,6 @@ from .elasticsearch_client import client
 import logging
 
 logger = logging.getLogger(__name__)
-User = get_user_model()
 
 class CompletedQuestionListView(generics.ListCreateAPIView):
     queryset = Question.objects.filter(state='completed')
@@ -316,3 +325,19 @@ class UnSpamQuestionView(APIView):
             return Response({"detail": "Un-Spam question successfully"}, status=status.HTTP_200_OK)
         except Question.DoesNotExist:
             return Response({"detail": "Question not found"}, status=status.HTTP_404_NOT_FOUND)
+        
+class UserViewSet(NextAuthUserViewSet):
+    queryset = User.objects.all()
+    serializer_class = UserSerializer
+
+class AccountViewSet(NextAuthAccountViewSet):
+    queryset = Account.objects.all()
+    serializer_class = AccountSerializer
+
+class SessionViewSet(NextAuthSessionViewSet):
+    queryset = Session.objects.all()
+    serializer_class = SessionSerializer
+
+class VerificationTokenViewSet(NextAuthVerificationRequestViewSet):
+    queryset = VerificationToken.objects.all()
+    serializer_class = VerificationTokenSerializer
