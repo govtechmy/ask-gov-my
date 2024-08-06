@@ -26,14 +26,14 @@ const config: Config = {
       },
       colors: {
         brand: {
-          300: 'oklch(var(--myds-brand-300))',
-          200: 'oklch(var(--myds-brand-200))',
-          50: 'oklch(var(--myds-brand-50))',
-          600: 'oklch(var(--myds-brand-600))',
-          700: 'oklch(var(--myds-brand-700))',
+          300: 'oklch(var(--myds-brand-300)/<alpha-value>)',
+          200: 'oklch(var(--myds-brand-200)/<alpha-value>)',
+          50: 'oklch(var(--myds-brand-50)/<alpha-value>)',
+          600: 'oklch(var(--myds-brand-600)/<alpha-value>)',
+          700: 'oklch(var(--myds-brand-700)/<alpha-value>)',
         },
         askmygovbrand: {
-          600: 'oklch(var(--askmygov-brand-600))',
+          600: 'oklch(var(--askmygov-brand-600)/<alpha-value>)',
           700: 'oklch(var(--askmygov-brand-700))',
           300: 'oklch(var(--askmygov-brand-300))',
           200: 'oklch(var(--askmygov-brand-200))',
@@ -42,10 +42,10 @@ const config: Config = {
         danger: {
           600: colors.red[600],
           700: colors.red[700],
-          300: 'oklch(var(--danger-300))',
-          200: 'oklch(var(--danger-200))',
-          100: 'oklch(var(--danger-200))',
-          50: 'oklch(var(--danger-50))',
+          300: 'oklch(var(--danger-300)/<alpha-value>)',
+          200: 'oklch(var(--danger-200)/<alpha-value>)',
+          100: 'oklch(var(--danger-200)/<alpha-value>)',
+          50: 'oklch(var(--danger-50)/<alpha-value>)',
         },
         askmygovtextbrand: {
           600: 'oklch(var(--askmygov-text-brand-600))',
@@ -64,9 +64,9 @@ const config: Config = {
           100: 'oklch(var(--myds-washed-100))',
         },
         outline: {
-          200: 'oklch(var(--myds-outline-200))',
-          300: 'oklch(var(--myds-outline-300))',
-          400: 'oklch(var(--myds-outline-400))',
+          200: 'oklch(var(--myds-outline-200)/<alpha-value>)',
+          300: 'oklch(var(--myds-outline-300)/<alpha-value>)',
+          400: 'oklch(var(--myds-outline-400)/<alpha-value>)',
         },
         dim: {
           500: 'oklch(var(--myds-dim-500))',
