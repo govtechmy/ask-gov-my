@@ -1,10 +1,20 @@
-from django.urls import path
-from .views import (CompletedQuestionListView, QuestionDetailView, AgencyListView, SubmitQuestionView, 
-                    QuestionsByAgencyView, UserAgencyQuestionsView, SubmitAnswerView, 
-                    UserAgencyTopicsView, AddTopicView, TopicListView, LikeQuestionView, DislikeQuestionView,
-                    AssignAgencyToQuestionView, AddAgencyView, AllQuestionListView, TrendingAgenciesView,
-                    UpdateAgencyView, ChangeAdminIsOpenView, ChangeStaffIsOpenView, SaveDraftQuestionView,
-                    MarkQuestionAsSpamView, UnSpamQuestionView)
+from django.urls import path, include
+from rest_framework.routers import DefaultRouter
+from .views import (
+    CompletedQuestionListView, QuestionDetailView, AgencyListView, SubmitQuestionView, 
+    QuestionsByAgencyView, UserAgencyQuestionsView, SubmitAnswerView, 
+    UserAgencyTopicsView, AddTopicView, TopicListView, LikeQuestionView, DislikeQuestionView,
+    AssignAgencyToQuestionView, AddAgencyView, AllQuestionListView, TrendingAgenciesView,
+    UpdateAgencyView, ChangeAdminIsOpenView, ChangeStaffIsOpenView, SaveDraftQuestionView,
+    MarkQuestionAsSpamView, UnSpamQuestionView,
+    UserViewSet, AccountViewSet, SessionViewSet, VerificationTokenViewSet  # Import your viewsets
+)
+# router for dynamic URL 
+router = DefaultRouter()
+router.register(r'user', UserViewSet, basename='user')
+router.register(r'account', AccountViewSet, basename='account')
+router.register(r'session', SessionViewSet, basename='session')
+router.register(r'verification', VerificationTokenViewSet, basename='verification')
 
 urlpatterns = [
     path('questions/', CompletedQuestionListView.as_view(), name='question-list-create'),
@@ -29,4 +39,7 @@ urlpatterns = [
     path('questions/<int:question_id>/save-draft/', SaveDraftQuestionView.as_view(), name='save-draft'),
     path('questions/<int:question_id>/mark-spam/', MarkQuestionAsSpamView.as_view(), name='mark-question-spam'),
     path('questions/<int:question_id>/un-spam/', UnSpamQuestionView.as_view(), name='mark-question-spam'),
+
+    path('api/auth/', include(router.urls)), # dynamic URLs
+
 ]
