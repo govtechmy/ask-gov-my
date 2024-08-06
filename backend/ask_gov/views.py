@@ -5,10 +5,8 @@ from .models import Question, Agency, Topic
 from .serializers import QuestionSerializer, AgencySerializer, TopicSerializer
 from rest_framework.response import Response
 from rest_framework.views import APIView
-from rest_framework.permissions import AllowAny
 from django.contrib.auth import get_user_model
 from django.db.models import Sum
-from rest_framework_simplejwt.tokens import RefreshToken
 from .elasticsearch_client import client
 import logging
 
@@ -67,28 +65,6 @@ class QuestionsByAgencyView(APIView):
         serializer = QuestionSerializer(questions, many=True)
         return Response(serializer.data)
 
-def get_tokens_for_user(user):
-    refresh = RefreshToken.for_user(user)
-    return {
-        'refresh': str(refresh),
-        'access': str(refresh.access_token),
-    }
-
-class LoginView(APIView):
-    permission_classes = (AllowAny,)
-
-    def post(self, request, *args, **kwargs):
-        logger.debug('LoginView POST request received')
-        username = request.data.get("username")
-        password = request.data.get("password")
-        logger.debug(f'Username: {username}, Password: {password}')
-        user = User.objects.filter(username=username).first()
-        if user is None or not user.check_password(password):
-            logger.debug('Invalid credentials')
-            return Response({"detail": "Invalid credentials"}, status=status.HTTP_401_UNAUTHORIZED)
-        tokens = get_tokens_for_user(user)
-        logger.debug('Login successful')
-        return Response(tokens, status=status.HTTP_200_OK)
 
 class UserAgencyQuestionsView(APIView):
     def get(self, request, agency_id):

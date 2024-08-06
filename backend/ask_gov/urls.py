@@ -1,6 +1,6 @@
 from django.urls import path
 from .views import (CompletedQuestionListView, QuestionDetailView, AgencyListView, SubmitQuestionView, 
-                    QuestionsByAgencyView, LoginView, UserAgencyQuestionsView, SubmitAnswerView, 
+                    QuestionsByAgencyView, UserAgencyQuestionsView, SubmitAnswerView, 
                     UserAgencyTopicsView, AddTopicView, TopicListView, LikeQuestionView, DislikeQuestionView,
                     AssignAgencyToQuestionView, AddAgencyView, AllQuestionListView, TrendingAgenciesView,
                     UpdateAgencyView, ChangeAdminIsOpenView, ChangeStaffIsOpenView, SaveDraftQuestionView,
@@ -14,7 +14,6 @@ urlpatterns = [
     path('agencies/<int:pk>/', UpdateAgencyView.as_view(), name='update-agency'),
     path('submit-question/', SubmitQuestionView.as_view(), name='submit-question'),
     path('questions/by-agency/<int:agency_id>/', QuestionsByAgencyView.as_view(), name='questions-by-agency'),
-    path('login/', LoginView.as_view(), name='login'),
     path('questions/user-agency/', UserAgencyQuestionsView.as_view(), name='user-agency-questions'),
     path('questions/<int:question_id>/submit-answer/', SubmitAnswerView.as_view(), name='submit-answer'),
     path('topics/user-agency/<int:agency_id>/', UserAgencyTopicsView.as_view(), name='user-agency-topics'),
