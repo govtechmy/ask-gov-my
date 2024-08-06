@@ -210,7 +210,7 @@ const QuestionDetailPage: React.FC<Props> = async ({ params }) => {
                         keyword={'attachment'}
                       ></WordTranslate>
                     </div>
-                    <div className="px-8 pb-8 pt-0 ">
+                    <div className="mx-8 mb-8 ">
                       <SupportingAttachment
                         attachments={attachments}
                         fileSize={fileSize}

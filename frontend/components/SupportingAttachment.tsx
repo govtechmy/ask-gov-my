@@ -2,6 +2,7 @@
 
 import ImagePngNJpg from '@/icons/imagepngnjpg';
 import Pdf from '@/icons/pdf';
+import { Button } from './ui/button';
 
 interface Props {
   attachments: string[];
@@ -44,7 +45,7 @@ const SupportingAttachment = ({ attachments, fileSize }: Props) => {
   };
 
   return (
-    <div className="flex flex-wrap gap-2 overflow-auto">
+    <div className="flex flex-wrap gap-2">
       {attachments.map((attachment, index) => {
         const fileName = getLastSegment(attachment);
         const fileExtension = getFileExtension(fileName);
@@ -61,12 +62,14 @@ const SupportingAttachment = ({ attachments, fileSize }: Props) => {
         }
 
         return (
-          <div
+          <Button
             key={index}
-            className="flex-shrink-0 w-[200px] h-[54px] bg-white border border-outline-200 rounded-lg flex items-center hover:cursor-pointer"
+            variant={'secondary'}
+            size={'md'}
+            className="w-[200px] h-[54px]"
             onClick={() => downloadFile(attachment, fileName)}
           >
-            <div className="p-2">{icon}</div>
+            <div>{icon}</div>
             <div className="flex-1">
               <div className="flex">
                 <div className="font-normal text-sm text-black-900 truncate w-[110px]">
@@ -80,7 +83,7 @@ const SupportingAttachment = ({ attachments, fileSize }: Props) => {
                 {formatFileSize(size)}
               </div>
             </div>
-          </div>
+          </Button>
         );
       })}
     </div>

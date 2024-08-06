@@ -5,6 +5,8 @@ import TrashIcon from '@/icons/trashicon';
 import UserSettingsModal from './UserSettingsModal';
 import { User, Agency } from '@/types/types';
 import MarkAsDeleteModal from './MarkAsDeleteModal';
+import { Button } from '../ui/button';
+import { cn } from '@/lib/utils';
 
 interface ThreeProps {
   user: User;
@@ -38,16 +40,19 @@ const ThreeDottedEditRemoveUser: React.FC<ThreeProps> = ({
   }
 
   return (
-    <div className="relative bg-red-700">
+    <div className="relative">
       <div className="flex relative">
-        <div
-          className={`opacity-0 ${isDropdownVisible ? 'opacity-100' : 'group-hover:opacity-100'}
-          h-8 w-8 border-[1px] border-outline-200 bg-white rounded-lg shadow-button
-          items-center justify-center absolute flex top-[-16px] right-[18px]`}
+        <Button
+          className={cn('top-[-16px] right-[18px]', {
+            'opacity-100': isDropdownVisible,
+            'group-hover:opacity-100': !isDropdownVisible,
+          })}
+          variant={'icon-threedot'}
+          size={'icon'}
           onClick={handleDropdownClick}
         >
           <ThreeDotted className="fill-black-900 stroke-black-700" />
-        </div>
+        </Button>
       </div>
       {isDropdownVisible && (
         <div className="absolute top-[20px] right-[18px] w-[120px] h-[74px] bg-white-focuswhite100 border-[1px] border-outline-200 shadow-button rounded-lg z-10">

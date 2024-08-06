@@ -59,6 +59,7 @@ const StaffHeaderDashboard = () => {
             </div>
 
             {open && (
+              //design following dropdown, not button
               <div className="absolute top-[36px] right-0 bg-white rounded-lg border-[1px] border-outline-200 shadow-button">
                 <button
                   className=" hover:cursor-pointer h-[42px] w-[110px] items-center justify-center flex"
