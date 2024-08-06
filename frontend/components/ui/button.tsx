@@ -15,7 +15,8 @@ const buttonVariants = cva(
         'secondary-myds':
           'border border-brand-200 hover:border-brand-300 bg-white hover:bg-brand-50 text-mydstextbrand-600 focus:border-brand-200 focus:ring focus:ring-offset-0 focus:ring-brand-600/20 shadow-button',
         'secondary-askmygov':
-          'border border-askmygovbrand-200 hover:border-askmygovbrand-300 bg-white hover:bg-askmygovbrand-50 text-askmygovtextbrand-600 focus:border-brand-200 focus:ring focus:ring-offset-0 focus:ring-brand-600/20 shadow-button',
+          'border border-askmygovbrand-200 hover:border-askmygovbrand-300 bg-white hover:bg-askmygovbrand-50 text-askmygovtextbrand-600 focus:border-askmygovbrand-200 focus:ring focus:ring-offset-0 focus:ring-askmygovbrand-600/20 shadow-button',
+        //removed focus 'border border-askmygovbrand-200 hover:border-askmygovbrand-300 bg-white hover:bg-askmygovbrand-50 text-askmygovtextbrand-600 focus:border-brand-200 focus:ring focus:ring-offset-0 focus:ring-brand-600/20 shadow-button',
         tertiary:
           'hover:bg-washed-100 focus:ring focus:ring-offset-0 focus:ring-outline-400/20',
         'tertiary-colour':
@@ -26,8 +27,8 @@ const buttonVariants = cva(
       size: {
         default: '',
         sm: 'px-2.5 py-1.5 text-sm',
-        md: 'px-3 py-2',
-        lg: 'px-3 py-2.5',
+        md: 'px-3 py-2 text-base',
+        lg: 'px-3 py-2.5 text-base',
         icon: 'p-2',
       },
     },
