@@ -1,3 +1,5 @@
+import { StatusCodes } from 'http-status-codes';
+
 const default_option: RequestInit = {
     headers: { "Content-Type": "application/json" },
     cache: "no-store",
@@ -26,7 +28,7 @@ const default_option: RequestInit = {
         .catch((error) => reject(error));
     });
 
-    export const get = async <T>(
+  export const get = async <T>(
   path: string,
   payload?: Record<string, any>,
   option: RequestInit = default_option
@@ -38,7 +40,7 @@ const default_option: RequestInit = {
     })
       .then((response) => {
         if (!response.ok) {
-          if (response.status === HttpStatusCode.NO_CONTENT_204) return null;
+          if (response.status === StatusCodes.NO_CONTENT) return null;
           else throw new Error("Network response was not ok");
         }
         // Check if the response body is null
