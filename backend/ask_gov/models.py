@@ -1,6 +1,13 @@
 from django.db import models
-from django.contrib.auth.models import AbstractUser
+from django.contrib.auth.models import AbstractBaseUser, BaseUserManager, PermissionsMixin
 from django.contrib.postgres.fields import ArrayField
+from django_next_auth_adapter.models import (
+    NextAuthUser, 
+    NextAuthSession, 
+    NextAuthAccount, 
+    NextAuthVerificationRequest
+)
+import uuid
 
 class Agency(models.Model):
     name = models.CharField(max_length=255)
@@ -50,3 +57,81 @@ class Question(models.Model):
 
     def __str__(self):
         return self.question[:50]
+    
+class UserRole(models.TextChoices):
+    STAFF = 'staff', 'Staff'
+    SUPER_ADMIN = 'super_admin', 'Super Admin'
+
+class UserManager(BaseUserManager): #to handle user creation in django admin site
+    def create_user(self, email, password=None, **extra_fields):
+        if not email:
+            raise ValueError('The Email field must be set')
+        email = self.normalize_email(email)
+        user = self.model(email=email, **extra_fields)
+        user.set_password(password)
+        user.save(using=self._db)
+        return user
+
+    def create_superuser(self, email, password=None, **extra_fields):
+        extra_fields.setdefault('role', UserRole.SUPER_ADMIN)
+        return self.create_user(email, password, **extra_fields)
+
+class User(NextAuthUser, AbstractBaseUser, PermissionsMixin):
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    name = models.CharField(max_length=255, null=True, blank=True)
+    email = models.EmailField(unique=True)
+    email_verified = models.DateTimeField(null=True, blank=True)
+    image = models.URLField(null=True, blank=True)
+    role = models.CharField(max_length=20, choices=UserRole.choices, default=UserRole.STAFF)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+    agency = models.IntegerField(null=True, blank=True)
+    user_profile_colour = models.CharField(max_length=50, null=True, blank=True)
+
+    objects = UserManager()
+
+    USERNAME_FIELD = 'email'
+    REQUIRED_FIELDS = []
+
+    def __str__(self):
+        return self.email
+
+class Account(NextAuthAccount):
+    id = models.CharField(max_length=100, primary_key=True, default=uuid.uuid4, editable=False)
+    user = models.ForeignKey(User, related_name='accounts', on_delete=models.CASCADE)
+    type = models.CharField(max_length=50)
+    provider = models.CharField(max_length=50)
+    provider_account_id = models.CharField(max_length=100)
+    refresh_token = models.CharField(max_length=255, null=True, blank=True)
+    access_token = models.CharField(max_length=255, null=True, blank=True)
+    expires_at = models.IntegerField(null=True, blank=True)
+    token_type = models.CharField(max_length=50, null=True, blank=True)
+    scope = models.CharField(max_length=255, null=True, blank=True)
+    id_token = models.CharField(max_length=255, null=True, blank=True)
+    session_state = models.CharField(max_length=255, null=True, blank=True)
+
+    class Meta:
+        unique_together = ('provider', 'provider_account_id')
+
+    def __str__(self):
+        return f'{self.provider} account for {self.user.email}'
+
+class Session(NextAuthSession):
+    id = models.CharField(max_length=100, primary_key=True, default=uuid.uuid4, editable=False)
+    session_token = models.CharField(max_length=255, unique=True)
+    user = models.ForeignKey(User, related_name='sessions', on_delete=models.CASCADE)
+    expires = models.DateTimeField()
+
+    def __str__(self):
+        return f'Session for {self.user.email}'
+
+class VerificationToken(NextAuthVerificationRequest):
+    identifier = models.CharField(max_length=255)
+    token = models.CharField(max_length=255, unique=True)
+    expires = models.DateTimeField()
+
+    class Meta:
+        unique_together = ('identifier', 'token')
+
+    def __str__(self):
+        return f'Verification token for {self.identifier}'
