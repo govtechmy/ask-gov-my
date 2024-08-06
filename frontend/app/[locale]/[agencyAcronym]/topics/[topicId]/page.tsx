@@ -13,7 +13,6 @@ import TopicDropdown from '@/components/TopicDropdown';
 import WordTranslate from '@/components/WordTranslate';
 import HeaderAgency from '@/components/HeaderDetails/HeaderAgency';
 import ContextSearchBar from '@/components/ContextSearchBar';
-import { Agency } from '@/types/types';
 
 interface Props {
   params: {
