@@ -174,14 +174,11 @@ const AskQuestion = () => {
                 </div>
 
                 <div className="flex flex-col items-center pt-9 pb-[18px]">
-                  {/* <button
+                  <Button
                     type="submit"
-                    className="h-10 flex items-center font-medium text-white-forcewhite text-base border-[1px] border-[#702FF9] shadow-button bg-gradient-to-b from-[#B379FF] to-[#702FF9] px-4 py-2 rounded-lg hover:cursor-pointer"
-                   
+                    onClick={handleSubmit}
+                    variant={'primary'}
                   >
-                    {t('submit')}
-                  </button> */}
-                  <Button onClick={handleSubmit} variant={'primary'}>
                     {t('submit')}
                   </Button>
                   <div className="pt-3 text-dim-500 font-normal text-sm text-center">
@@ -209,13 +206,16 @@ const AskQuestion = () => {
                   {t('submission_received_detail')}
                 </div>
               </div>
-              <div
+
+              <Button
+                className="w-full text-black-700"
+                variant={'secondary'}
+                size={'lg'}
                 onClick={closeModalSubmit}
-                className="bg-white rounded-lg shadow-button h-[44px] w-[352px] border-outline-200 border-[1px] hover:cursor-pointer flex items-center justify-center"
               >
                 <Close className="stroke-black-700"></Close>
-                <div className="ml-2">{t('close')}</div>
-              </div>
+                {t('close')}
+              </Button>
             </div>
           </div>
         </div>
