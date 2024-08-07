@@ -59,3 +59,30 @@ const default_option: RequestInit = {
         reject(error);
       });
   });
+
+  export const put = async <T>(
+    path: string,
+    payload: Record<string, any>,
+    option: RequestInit = default_option
+  ) =>
+    new Promise<T | null>(async (resolve, reject) => {
+      fetch(path, {
+        method: "PUT",
+        body: JSON.stringify(payload),
+        ...option,
+      })
+        .then((response) => {
+          if (!response.ok) {
+            if (response.status === StatusCodes.NO_CONTENT) return null;
+            else throw new Error("Network response was not ok");
+          }
+          if (response.body === null) {
+            resolve(null);
+          }
+          resolve(response.json() as T);
+        })
+        .catch((error) => {
+          console.log(error);
+          reject(error);
+        });
+    });
