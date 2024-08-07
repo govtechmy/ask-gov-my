@@ -6,7 +6,8 @@ from .views import (
     AssignAgencyToQuestionView, AddAgencyView, AllQuestionListView, TrendingAgenciesView,
     UpdateAgencyView, ChangeAdminIsOpenView, ChangeStaffIsOpenView, SaveDraftQuestionView,
     MarkQuestionAsSpamView, UnSpamQuestionView, UserView, SessionView, AccountView, 
-    VerificationTokenView 
+    VerificationTokenView, AddUserView, EditUserView, DeleteUserView, GetAllUsersView, 
+    CheckUserEmailExistsView 
 )
 
 urlpatterns = [
@@ -36,5 +37,9 @@ urlpatterns = [
     path('api/auth/session', SessionView.as_view(), name='session'),
     path('api/auth/account', AccountView.as_view(), name='account'),
     path('api/auth/verification', VerificationTokenView.as_view(), name='verification'),
-
+    path('api/admin/user', AddUserView.as_view(), name='add_user'),
+    path('api/admin/user/<int:id>', EditUserView.as_view(), name='edit_user'),
+    path('api/admin/user/<int:id>', DeleteUserView.as_view(), name='delete_user'),
+    path('api/admin/users', GetAllUsersView.as_view(), name='get_all_users'),
+    path('api/admin/check-email', CheckUserEmailExistsView.as_view(), name='check_email_exists'),
 ]
