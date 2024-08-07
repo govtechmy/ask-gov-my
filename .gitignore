@@ -40,6 +40,7 @@ next-env.d.ts
 .idea
 
 # python/django related
+venv
 .venv/
 myenv/
 __pycache__
