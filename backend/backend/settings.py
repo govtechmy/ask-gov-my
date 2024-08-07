@@ -45,15 +45,14 @@ INSTALLED_APPS = [
     "rest_framework",
     "rest_framework_simplejwt",
     "corsheaders",
-    "django_extensions",
-    "django_next_auth_adapter"
+    'django_extensions',
 ]
 
 
 MIDDLEWARE = [
     "corsheaders.middleware.CorsMiddleware",
     "django.middleware.security.SecurityMiddleware",
-    "django.contrib.sessions.middleware.SessionMiddleware", 
+    "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.common.CommonMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
     "django.contrib.auth.middleware.AuthenticationMiddleware",
@@ -64,17 +63,6 @@ MIDDLEWARE = [
 CORS_ALLOW_ALL_ORIGINS = True
 
 ROOT_URLCONF = "backend.urls"
-
-NEXT_AUTH_ADAPTER = {
-    'SECRET': os.getenv("DJANGO_SECRET_KEY"),
-    'SESSION_COOKIE_NAME': 'next-auth.session-token',
-    'SESSION_COOKIE_HTTPONLY': True,
-    'SESSION_COOKIE_SECURE': True,
-    'CSRF_COOKIE_SECURE': True,
-    'USE_JWT': False,  
-    'SESSION_ENGINE': 'django.contrib.sessions.backends.db',
-    'AUTHENTICATION_BACKENDS': ['django.contrib.auth.backends.ModelBackend'],
-}
 
 TEMPLATES = [
     {
@@ -136,10 +124,9 @@ AUTH_PASSWORD_VALIDATORS = [
 
 REST_FRAMEWORK = {
     "DEFAULT_AUTHENTICATION_CLASSES": (
-        "rest_framework.authentication.SessionAuthentication",
+        "rest_framework_simplejwt.authentication.JWTAuthentication",
     ),
 }
-
 
 
 # Internationalization
