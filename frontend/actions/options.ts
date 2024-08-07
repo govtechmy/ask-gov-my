@@ -1,7 +1,7 @@
 import NextAuth from 'next-auth';
 import EmailProvider from 'next-auth/providers/email';
 import { NextAuthOptions } from 'next-auth';
-import { get, post } from '@/lib/api';
+import { get, post, put } from '@/lib/api';
 import type {
   Adapter,
   AdapterUser,
@@ -18,7 +18,7 @@ const DjangoAdapter = (): Adapter => {
     },
 
     async useVerificationToken({ identifier, token }) {
-      return await post(`${API_URL}/api/auth/verification`, { identifier, token });
+      return await put(`${API_URL}/api/auth/verification`, { identifier, token });
     },
 
     async createUser(user: Omit<AdapterUser, "id">): Promise<AdapterUser> {
@@ -42,7 +42,7 @@ const DjangoAdapter = (): Adapter => {
     },
 
     async updateUser(user: Partial<AdapterUser> & Pick<AdapterUser, "id">): Promise<AdapterUser> {
-      const updatedUser = await post<AdapterUser>(`${API_URL}/api/auth/user`, user);
+      const updatedUser = await put<AdapterUser>(`${API_URL}/api/auth/user`, user);
       if (!updatedUser) {
         throw new Error('Failed to update user');
       }
@@ -65,7 +65,8 @@ const DjangoAdapter = (): Adapter => {
       if (!session_and_user) return null;
       return {
         session: {
-          ...session_and_user.session,
+          userId: session_and_user.session.userId,
+          sessionToken: session_and_user.session.sessionToken,
           expires: new Date(session_and_user.session.expires),
         },
         user: session_and_user.user,
@@ -85,7 +86,7 @@ const DjangoAdapter = (): Adapter => {
     },
 
     async updateSession(session: Partial<AdapterSession> & Pick<AdapterSession, "sessionToken">): Promise<AdapterSession | null> {
-      const updatedSession = await post<AdapterSession>(`${API_URL}/api/auth/session`, session);
+      const updatedSession = await put<AdapterSession>(`${API_URL}/api/auth/session`, session);
       if (!updatedSession || !updatedSession.sessionToken || !updatedSession.userId || !updatedSession.expires) {
         throw new Error('Failed to update session or invalid response from API');
       }
@@ -105,6 +106,7 @@ const DjangoAdapter = (): Adapter => {
     },
   };
 };
+
 
 export const authOptions: NextAuthOptions = {
   providers: [
