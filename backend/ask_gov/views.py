@@ -326,18 +326,141 @@ class UnSpamQuestionView(APIView):
         except Question.DoesNotExist:
             return Response({"detail": "Question not found"}, status=status.HTTP_404_NOT_FOUND)
         
-class UserViewSet(NextAuthUserViewSet):
-    queryset = User.objects.all()
-    serializer_class = UserSerializer
+class UserView(APIView):
+    def post(self, request):
+        data = request.data
+        user = User.objects.create_user(
+            username=data['email'],
+            email=data['email'],
+            password=data.get('password', None),
+        )
+        return Response({
+            'id': user.id,
+            'email': user.email,
+            'email_verified': user.email_verified
+        }, status=status.HTTP_201_CREATED)
 
-class AccountViewSet(NextAuthAccountViewSet):
-    queryset = Account.objects.all()
-    serializer_class = AccountSerializer
+    def get(self, request):
+        user_id = request.GET.get('id')
+        email = request.GET.get('email')
+        if user_id:
+            user = get_object_or_404(User, id=user_id)
+        elif email:
+            user = get_object_or_404(User, email=email)
+        else:
+            return Response({'detail': 'Invalid parameters'}, status=status.HTTP_400_BAD_REQUEST)
 
-class SessionViewSet(NextAuthSessionViewSet):
-    queryset = Session.objects.all()
-    serializer_class = SessionSerializer
+        return Response({
+            'id': user.id,
+            'email': user.email,
+            'email_verified': user.email_verified
+        })
 
-class VerificationTokenViewSet(NextAuthVerificationRequestViewSet):
-    queryset = VerificationToken.objects.all()
-    serializer_class = VerificationTokenSerializer
+    def put(self, request):
+        data = request.data
+        user = get_object_or_404(User, id=data['id'])
+        user.email = data.get('email', user.email)
+        user.email_verified = data.get('email_verified', user.email_verified)
+        user.save()
+        return Response({
+            'id': user.id,
+            'email': user.email,
+            'email_verified': user.email_verified
+        })
+
+class SessionView(APIView):
+    def post(self, request):
+        data = request.data
+        user = get_object_or_404(User, id=data['userId'])
+        session = Session.objects.create(
+            user=user,
+            session_token=data['sessionToken'],
+            expires=data['expires']
+        )
+        return Response({
+            'userId': session.user.id,
+            'sessionToken': session.session_token,
+            'expires': session.expires
+        }, status=status.HTTP_201_CREATED)
+
+    def get(self, request):
+        session_token = request.GET.get('sessionToken')
+        session = get_object_or_404(Session, session_token=session_token)
+        return Response({
+            'session': {
+                'userId': session.user.id,
+                'sessionToken': session.session_token,
+                'expires': session.expires
+            },
+            'user': {
+                'id': session.user.id,
+                'email': session.user.email,
+                'email_verified': session.user.email_verified
+            }
+        })
+
+    def put(self, request):
+        data = request.data
+        session = get_object_or_404(Session, session_token=data['sessionToken'])
+        session.expires = data.get('expires', session.expires)
+        session.save()
+        return Response({
+            'userId': session.user.id,
+            'sessionToken': session.session_token,
+            'expires': session.expires
+        })
+
+    def delete(self, request):
+        session_token = request.data.get('sessionToken')
+        session = get_object_or_404(Session, session_token=session_token)
+        session.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
+
+class AccountView(APIView):
+    def post(self, request):
+        data = request.data
+        user = get_object_or_404(User, id=data['user'])
+        account = Account.objects.create(
+            user=user,
+            provider=data['provider'],
+            provider_account_id=data['providerAccountId'],
+            access_token=data.get('access_token', None),
+            refresh_token=data.get('refresh_token', None),
+            expires_at=data.get('expires_at', None)
+        )
+        return Response({
+            'userId': account.user.id,
+            'provider': account.provider,
+            'providerAccountId': account.provider_account_id
+        }, status=status.HTTP_201_CREATED)
+
+    def delete(self, request):
+        data = request.data
+        account = get_object_or_404(Account, user_id=data['user'], provider=data['provider'], provider_account_id=data['providerAccountId'])
+        account.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
+
+class VerificationTokenView(APIView):
+    def post(self, request):
+        data = request.data
+        token = VerificationToken.objects.create(
+            identifier=data['identifier'],
+            token=data['token'],
+            expires=data['expires']
+        )
+        return Response({
+            'identifier': token.identifier,
+            'token': token.token,
+            'expires': token.expires
+        }, status=status.HTTP_201_CREATED)
+
+    def put(self, request):
+        data = request.data
+        token = get_object_or_404(VerificationToken, identifier=data['identifier'], token=data['token'])
+        if token.expires < timezone.now():
+            return Response({'detail': 'Token expired'}, status=status.HTTP_400_BAD_REQUEST)
+        token.delete()
+        return Response({
+            'identifier': token.identifier,
+            'token': token.token
+        }, status=status.HTTP_200_OK)
