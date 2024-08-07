@@ -464,3 +464,52 @@ class VerificationTokenView(APIView):
             'identifier': token.identifier,
             'token': token.token
         }, status=status.HTTP_200_OK)
+    
+class AddUserView(APIView):
+    def post(self, request):
+        data = request.data
+        user = User.objects.create_user(
+            username=data['email'],
+            email=data['email'],
+            role=data['role'],
+            agency=data['agency'],
+            user_profile_colour=data['userProfileColour']
+        )
+        user.save()
+        return Response({'message': 'User added successfully'}, status=status.HTTP_201_CREATED)
+
+class EditUserView(APIView):
+    def put(self, request, id):
+        data = request.data
+        user = get_object_or_404(User, id=id)
+        user.name = data['name']
+        user.email = data['email']
+        user.role = data['role']
+        user.agency = data['agency']
+        user.save()
+        return Response({'message': 'User updated successfully'}, status=status.HTTP_200_OK)
+
+class DeleteUserView(APIView):
+    def delete(self, request, id):
+        user = get_object_or_404(User, id=id)
+        user.delete()
+        return Response({'message': 'User deleted successfully'}, status=status.HTTP_204_NO_CONTENT)
+
+class GetAllUsersView(APIView):
+    def get(self, request):
+        users = User.objects.all()
+        users_data = [{
+            'id': user.id,
+            'name': user.username,
+            'email': user.email,
+            'role': user.role,
+            'agency': user.agency,
+            'user_profile_colour': user.user_profile_colour,
+        } for user in users]
+        return Response(users_data, status=status.HTTP_200_OK)
+
+class CheckUserEmailExistsView(APIView):
+    def get(self, request):
+        email = request.GET.get('email')
+        exists = User.objects.filter(email=email).exists()
+        return Response(exists, status=status.HTTP_200_OK)
