@@ -36,3 +36,8 @@ class TestAskGov(TestCase):
         url = reverse('question-detail', kwargs={'pk': question.id})
         response = self.client.get(url)
         self.assertEqual(response.status_code, 200)
+
+    def test_get_all_users(self):
+        url = reverse('get_all_users')
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, 200)
