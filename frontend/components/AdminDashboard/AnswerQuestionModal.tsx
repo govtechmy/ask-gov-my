@@ -12,6 +12,7 @@ import LineVerticalForSmile from '@/icons/lineverticalforsmile';
 import AgencyLogoImporter from '../AgencyLogoImporter';
 import UploadIcon from '@/icons/upload';
 import SupportingAttachmentUpload from './SupportingAttachmentUpload';
+import Tiptap from '../Tiptap';
 
 interface AnswerQuestionModalProps {
   question: Question;
@@ -182,7 +183,7 @@ const AnswerQuestionModal: React.FC<AnswerQuestionModalProps> = ({
               </div>
               <div className="pl-3 flex flex-col flex-grow">
                 <div className="w-[616px] h-[300px] border-[1px] border-outline-200 rounded-lg shadow-button">
-                  BIG WORK!
+                  <Tiptap />
                 </div>
                 <div className="w-[616px] border-[1px] border-outline-200 rounded-lg my-3 items-center flex-shrink-0 shadow-button">
                   <div className="h-[68px] w-full m-4 items-center flex">
