@@ -11,7 +11,8 @@ import DateComponent from '../date';
 import LineVerticalForSmile from '@/icons/lineverticalforsmile';
 import AgencyLogoImporter from '../AgencyLogoImporter';
 import UploadIcon from '@/icons/upload';
-import SupportingAttachmentUpload from './SupportingAttachmentUpload';
+import AttachmentDownload from './AttachmentDownload';
+import AttachmentUpload from './AttachmentUpload';
 
 interface AnswerQuestionModalProps {
   question: Question;
@@ -184,9 +185,9 @@ const AnswerQuestionModal: React.FC<AnswerQuestionModalProps> = ({
                 <div className="w-[616px] h-[300px] border-[1px] border-outline-200 rounded-lg shadow-button">
                   BIG WORK!
                 </div>
-                <div className="w-[616px] border-[1px] border-outline-200 rounded-lg my-3 items-center flex-shrink-0 shadow-button">
-                  <div className="h-[68px] w-full m-4 items-center flex">
-                    <div className="text-dim-500 w-[431px] h-[68px] text-sm flex-shrink-0 ">
+                <div className="w-[616px] border-[1px] border-outline-200 rounded-lg my-3 shadow-button">
+                  <div className="w-full ml-4 mt-4 items-center flex">
+                    <div className="text-dim-500 w-[431px] text-sm ">
                       <div className="h-6 text-black-700 text-base font-medium">
                         Supporting attachments
                       </div>
@@ -195,7 +196,7 @@ const AnswerQuestionModal: React.FC<AnswerQuestionModalProps> = ({
                     </div>
                     <div
                       className="h-10 w-[141px] border-[1px] border-outline-200 rounded-lg items-center justify-between 
-            flex px-3 shadow-button ml-3 cursor-pointer"
+                      flex px-3 shadow-button ml-3 cursor-pointer"
                       onClick={() =>
                         document.getElementById('hidden-file-input')?.click()
                       }
@@ -211,15 +212,38 @@ const AnswerQuestionModal: React.FC<AnswerQuestionModalProps> = ({
                       />
                     </div>
                   </div>
+                  <div>
+                    {attachments.length > 0 && (
+                      <div className="m-4">
+                        <AttachmentUpload
+                          attachments={attachments}
+                          handleRemoveAttachment={handleRemoveAttachment}
+                        ></AttachmentUpload>
+                      </div>
+                    )}
 
-                  <SupportingAttachmentUpload
-                    attachments={attachments}
-                    uploadedAttachments={uploadedAttachments}
-                    handleRemoveAttachment={handleRemoveAttachment}
-                    handleRemoveUploadedAttachment={
-                      handleRemoveUploadedAttachment
-                    }
-                  ></SupportingAttachmentUpload>
+                    {uploadedAttachments.length > 0 && (
+                      <>
+                        <div className="border-b-[1px] border-outline-200 m-4"></div>
+                        <div className="text-sm text-dim-500 font-normal ml-4 mt-4">
+                          Previously Uploaded
+                        </div>
+                      </>
+                    )}
+                    {uploadedAttachments.length > 0 && (
+                      <div className="m-4">
+                        <AttachmentDownload
+                          uploadedAttachments={uploadedAttachments}
+                          handleRemoveUploadedAttachment={
+                            handleRemoveUploadedAttachment
+                          }
+                        ></AttachmentDownload>
+                      </div>
+                    )}
+                    {uploadedAttachments.length == 0 && (
+                      <div className="m-4"></div>
+                    )}
+                  </div>
                 </div>
                 <div className="w-[616px] h-[86px]">
                   <div className="text-black-700 text-base font-medium mb-[6px]">
