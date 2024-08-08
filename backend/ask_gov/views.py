@@ -488,7 +488,7 @@ class AddUserView(APIView):
     def post(self, request):
         data = request.data
         user = User.objects.create_user(
-            name=data['name'],
+            username=data['name'],
             email=data['email'],
             role=data['role'],
             agency=data['agency'],
