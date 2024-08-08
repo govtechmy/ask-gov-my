@@ -19,7 +19,7 @@ from django.template.context_processors import static
 from django.urls import path, include
 from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
 
-from backend.backend import settings
+from django.conf import settings
 
 urlpatterns = [
                   path('admin/', admin.site.urls),
