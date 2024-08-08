@@ -355,7 +355,7 @@ export async function deleteUser(
   id: string,
 ): Promise<{ success: boolean; message?: string }> {
   try {
-    const response = await fetch(`${API_URL}/admin/user/${id}/delete`, {
+    const response = await fetch(`${API_URL}/admin/user/${id}`, {
       method: 'DELETE',
       headers: {
         'Content-Type': 'application/json',

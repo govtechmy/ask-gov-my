@@ -39,6 +39,7 @@ const default_option: RequestInit = {
       ...option,
     })
       .then((response) => {
+        console.log(response);
         if (!response.ok) {
           if (response.status === StatusCodes.NO_CONTENT) return null;
           else throw new Error("Network response was not ok");
