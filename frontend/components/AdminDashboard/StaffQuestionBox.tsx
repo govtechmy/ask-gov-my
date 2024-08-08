@@ -54,11 +54,10 @@ const StaffQuestionBox: React.FC<QuestionBoxProps> = ({ questions }) => {
   return (
     <div>
       {currentQuestions.map(question => (
-        <div className="py-1">
-          <AnswerQuestionCard key={question.id} question={question} />
+        <div key={question.id} className="py-1">
+          <AnswerQuestionCard question={question} />
         </div>
       ))}
-
       <Pagination
         currentPage={currentPage}
         totalPages={totalPages}
