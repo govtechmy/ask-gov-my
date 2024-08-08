@@ -11,6 +11,8 @@ import ListItem from '@tiptap/extension-list-item';
 import History from '@tiptap/extension-history';
 import Link from '@tiptap/extension-link';
 import { useCallback } from 'react';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from './ui/select';
+import Heading, { Level } from '@tiptap/extension-heading';
 
 
 
@@ -54,9 +56,47 @@ const MenuBar = ({ editor }: { editor: Editor | null }) => {
             .run()
     }, [editor])
 
+    type headingType = "1" | "2" | "3" | "4" | "5" | "6" | "paragraph";
+
+    const setHeading = (headingLevel: headingType) => {
+        if (headingLevel === 'paragraph') {
+            editor.chain().focus().setParagraph().run();
+        } else {
+            const level = Number(headingLevel) as Level;
+            editor.chain().focus().toggleHeading({ level: level }).run();
+        }
+    };
+
+    const currentLevel: headingType =
+        editor.isActive('heading', { level: 1 }) ? "1" :
+            editor.isActive('heading', { level: 2 }) ? "2" :
+                editor.isActive('heading', { level: 3 }) ? "3" :
+                    editor.isActive('heading', { level: 4 }) ? "4" :
+                        editor.isActive('heading', { level: 5 }) ? "5" :
+                            editor.isActive('heading', { level: 6 }) ? "6" :
+                                'paragraph';
+
 
     return (
         <div role="toolbar" className="flex flex-wrap gap-x-2 px-3 py-2">
+            <Select
+                onValueChange={(value: any) => setHeading(value)}
+                value={currentLevel}
+                defaultValue='paragraph'
+            >
+                <SelectTrigger className="w-[180px] mb-2">
+                    <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
+                    <SelectItem value="1">Heading 1</SelectItem>
+                    <SelectItem value="2">Heading 2</SelectItem>
+                    <SelectItem value="3">Heading 3</SelectItem>
+                    <SelectItem value="4">Heading 4</SelectItem>
+                    <SelectItem value="5">Heading 5</SelectItem>
+                    <SelectItem value="6">Heading 6</SelectItem>
+                    <SelectItem value="paragraph">Paragraph</SelectItem>
+                </SelectContent>
+            </Select>
             <button
                 onClick={() => (editor.chain().focus().toggleBold().run())}
                 disabled={!editor.can().chain().focus().toggleBold().run()}
@@ -202,7 +242,7 @@ const MenuBar = ({ editor }: { editor: Editor | null }) => {
 
 export default () => {
     const editor = useEditor({
-        extensions: [StarterKit, BulletList, Underline, ListItem, Link.configure({
+        extensions: [StarterKit, Heading, BulletList, Underline, ListItem, Link.configure({
             openOnClick: true,
             autolink: true,
             defaultProtocol: 'https',
