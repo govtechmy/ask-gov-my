@@ -23,6 +23,7 @@
     "@react-email/components": "^0.0.21",
     "@react-email/render": "^0.0.16",
     "@tiptap/extension-bullet-list": "^2.5.8",
+    "@tiptap/extension-heading": "^2.5.9",
     "@tiptap/extension-history": "^2.5.9",
     "@tiptap/extension-link": "^2.5.9",
     "@tiptap/extension-list-item": "^2.5.8",
