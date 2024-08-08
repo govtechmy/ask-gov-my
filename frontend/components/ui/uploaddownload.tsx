@@ -9,7 +9,7 @@ const divVariants = cva(
     variants: {
       type: {
         uploadDownload:
-          'p-2 px-3 border border-outline-200 hover:border-outline-300 bg-white focus:border-outline-200 focus:ring focus:ring-offset-0 focus:ring-outline-400/20 shadow-button h-[54px] w-[200px]',
+          'p-2 px-3 border border-outline-200 hover:border-outline-300 bg-white focus:border-outline-200 focus:ring focus:ring-offset-0 focus:ring-outline-400/20 shadow-button h-[54px] w-[195px]',
       },
     },
     defaultVariants: {

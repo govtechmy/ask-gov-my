@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { useSearchParams, useRouter } from 'next/navigation';
 import Search from '@/icons/search';
 import AddUserModal from './AddUserModal';
@@ -24,43 +24,72 @@ const UserNavbar: React.FC<UserNavbarProps> = ({
 }) => {
   const searchParams = useSearchParams();
   const router = useRouter();
-  const activeTab = searchParams.get('tab') || 'all';
+  const [activeTab, setActiveTabState] = useState(
+    searchParams.get('tab') || 'all',
+  );
   const [isModalOpen, setIsModalOpen] = useState(false);
-
-  const setActiveTab = (tab: string) => {
-    const params = new URLSearchParams(window.location.search);
-    params.set('tab', tab);
-    router.push(`${window.location.pathname}?${params.toString()}`);
-  };
   const [isFocused, setIsFocused] = useState(false);
-  const [showAddUserToast, setshowAddUserToast] = useState(false);
-
-  useEffect(() => {}, [activeTab]);
-
-  const handleAddUserToast = () => {
-    setshowAddUserToast(true);
-  };
+  const [showAddUserToast, setShowAddUserToast] = useState(false);
 
   const AGENCY_TO_UUID = getDynamicAgencyMap();
+
+  const setActiveTab = useCallback(
+    (tab: string) => {
+      const params = new URLSearchParams(window.location.search);
+      params.set('tab', tab);
+      router.push(`${window.location.pathname}?${params.toString()}`);
+      setActiveTabState(tab);
+    },
+    [router],
+  );
+
+  useEffect(() => {
+    const currentTab = searchParams.get('tab') || 'all';
+    if (currentTab !== activeTab) {
+      setActiveTabState(currentTab);
+    }
+  }, [searchParams, activeTab]);
+
+  const handleAddUserToast = () => {
+    setShowAddUserToast(true);
+  };
 
   return (
     <div className="flex items-center justify-between pb-2 border-b border-[#E4E4E7] dark:border-[#27272A]">
       <div className="flex space-x-5">
         <button
-          className={`font-medium text-sm pb-3 -mb-5 ${activeTab === 'all' ? 'text-black-900 border-b-2 border-[#702FF9]' : 'text-dim-500'}`}
-          onClick={() => setActiveTab('all')}
+          className={`font-medium text-sm pb-3 -mb-5 ${
+            activeTab === 'all'
+              ? 'text-black-900 border-b-2 border-[#702FF9]'
+              : 'text-dim-500'
+          }`}
+          onClick={() => {
+            if (activeTab !== 'all') setActiveTab('all');
+          }}
         >
           All
         </button>
         <button
-          className={`font-medium text-sm pb-3 -mb-5 ${activeTab === 'superadmin' ? 'text-black-900 border-b-2 border-[#702FF9]' : 'text-dim-500'}`}
-          onClick={() => setActiveTab('superadmin')}
+          className={`font-medium text-sm pb-3 -mb-5 ${
+            activeTab === 'superadmin'
+              ? 'text-black-900 border-b-2 border-[#702FF9]'
+              : 'text-dim-500'
+          }`}
+          onClick={() => {
+            if (activeTab !== 'superadmin') setActiveTab('superadmin');
+          }}
         >
           Superadmin
         </button>
         <button
-          className={`font-medium text-sm pb-3 -mb-5 ${activeTab === 'staff' ? 'text-black-900 border-b-2 border-[#702FF9]' : 'text-dim-500'}`}
-          onClick={() => setActiveTab('staff')}
+          className={`font-medium text-sm pb-3 -mb-5 ${
+            activeTab === 'staff'
+              ? 'text-black-900 border-b-2 border-[#702FF9]'
+              : 'text-dim-500'
+          }`}
+          onClick={() => {
+            if (activeTab !== 'staff') setActiveTab('staff');
+          }}
         >
           Staff
         </button>
@@ -107,13 +136,12 @@ const UserNavbar: React.FC<UserNavbarProps> = ({
         onAddUser={onAddUser}
         handleAddUserToast={handleAddUserToast}
       />
-      {/* onAddUser is not in props. adding in. recheck coz seems not used tho*/}
 
       {showAddUserToast && (
         <ToastNewUserAdded
           message="New user has been added!"
           show={showAddUserToast}
-          onClose={() => setshowAddUserToast(false)}
+          onClose={() => setShowAddUserToast(false)}
         />
       )}
     </div>

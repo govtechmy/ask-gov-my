@@ -13,6 +13,7 @@ import AgencyLogoImporter from '../AgencyLogoImporter';
 import UploadIcon from '@/icons/upload';
 import AttachmentDownload from './AttachmentDownload';
 import AttachmentUpload from './AttachmentUpload';
+import { fetchFileSizes, formatDate } from '@/actions/utils';
 
 interface AnswerQuestionModalProps {
   question: Question;
@@ -32,10 +33,27 @@ const AnswerQuestionModal: React.FC<AnswerQuestionModalProps> = ({
   );
   const [success, setSuccess] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
+  const [fileSizes, setFileSizes] = useState<number[]>([]);
 
   useEffect(() => {
     setAnswer(question.answer || '');
   }, [question.answer]);
+
+  useEffect(() => {
+    if (isOpen) {
+      const fetchSizes = async () => {
+        try {
+          if (question.attachments) {
+            const sizes = await fetchFileSizes(question.attachments);
+            setFileSizes(sizes.map(Number)); // Update state with file sizes
+          }
+        } catch (error) {
+          console.log('error on fileSize', error);
+        }
+      };
+      fetchSizes();
+    }
+  }, [question.attachments, isOpen]);
 
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const files = event.target.files ? Array.from(event.target.files) : [];
@@ -100,23 +118,6 @@ const AnswerQuestionModal: React.FC<AnswerQuestionModalProps> = ({
     }
   };
 
-  const formatDate = (dateString: string) => {
-    const date = new Date(dateString);
-    return (
-      date.toLocaleDateString('en-GB', {
-        day: '2-digit',
-        month: 'long',
-        year: 'numeric',
-      }) +
-      ', ' +
-      date.toLocaleTimeString('en-GB', {
-        hour: '2-digit',
-        minute: '2-digit',
-        hour12: true,
-      })
-    );
-  };
-
   const [svgHeight, setSvgHeight] = useState<number>(15);
   const questionTextRef = useRef<HTMLDivElement>(null);
 
@@ -128,7 +129,7 @@ const AnswerQuestionModal: React.FC<AnswerQuestionModalProps> = ({
 
   return (
     <div className="z-10 fixed inset-0 bg-gray-900 flex items-center justify-center bg-opacity-70">
-      <div className="bg-white rounded-xl shadow-lg w-[700px] h-[700px] relative p-6 flex flex-col">
+      <div className="bg-white rounded-xl shadow-lg w-[720px] h-[700px] relative p-6 flex flex-col">
         <button
           onClick={onClose}
           className="absolute top-[14px] right-[14px] hover:cursor-pointer rounded-lg shadow-button h-8 w-8 flex items-center justify-center border-[1px] border-outline-200"
@@ -182,10 +183,10 @@ const AnswerQuestionModal: React.FC<AnswerQuestionModalProps> = ({
                 </div>
               </div>
               <div className="pl-3 flex flex-col flex-grow">
-                <div className="w-[616px] h-[300px] border-[1px] border-outline-200 rounded-lg shadow-button">
+                <div className="w-[636px] h-[300px] border-[1px] border-outline-200 rounded-lg shadow-button">
                   BIG WORK!
                 </div>
-                <div className="w-[616px] border-[1px] border-outline-200 rounded-lg my-3 shadow-button">
+                <div className="w-[636px] border-[1px] border-outline-200 rounded-lg my-3 shadow-button">
                   <div className="w-full ml-4 mt-4 items-center flex">
                     <div className="text-dim-500 w-[431px] text-sm ">
                       <div className="h-6 text-black-700 text-base font-medium">
@@ -237,6 +238,7 @@ const AnswerQuestionModal: React.FC<AnswerQuestionModalProps> = ({
                           handleRemoveUploadedAttachment={
                             handleRemoveUploadedAttachment
                           }
+                          fileSizes={fileSizes}
                         ></AttachmentDownload>
                       </div>
                     )}
