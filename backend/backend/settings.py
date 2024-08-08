@@ -146,3 +146,5 @@ STATIC_ROOT = BASE_DIR / "static"
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 AUTH_USER_MODEL = "ask_gov.User"
+
+CSRF_TRUSTED_ORIGINS = ['*']  # FIXME
