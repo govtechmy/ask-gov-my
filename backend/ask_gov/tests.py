@@ -2,7 +2,7 @@ from django.test import TestCase
 from django.urls import reverse
 
 from faker import Faker
-from ask_gov.models import User, Question
+from ask_gov.models import User, Question, Agency
 
 fake = Faker()
 
@@ -13,10 +13,12 @@ def create_accounts():
 
 class TestAskGov(TestCase):
     def setUp(self):
+        self.agency = Agency.objects.create()
         user_email = fake.email()
         superuser_email = fake.email()
-        User.objects.create_user(username= user_email.split('@')[0], email=user_email, password='test786')
-        User.objects.create_superuser(username= superuser_email.split('@')[0], email=superuser_email, password='test5579')
+        User.objects.create_user(username=user_email.split('@')[0], email=user_email, password='test786')
+        User.objects.create_superuser(username=superuser_email.split('@')[0], email=superuser_email,
+                                      password='test5579')
 
     def test_setup_working(self):
         self.assertEqual(User.objects.count(), 2)
@@ -37,7 +39,26 @@ class TestAskGov(TestCase):
         response = self.client.get(url)
         self.assertEqual(response.status_code, 200)
 
-    def test_get_all_users(self):
+    def test_all_users_method(self):
         url = reverse('get_all_users')
         response = self.client.get(url)
         self.assertEqual(response.status_code, 200)
+
+        self.assertEqual(User.objects.count(), 2)
+        url = reverse('add_user')
+        email = fake.email()
+        data = {'email': email,
+                'role': 'staff',
+                'agency': self.agency.pk,
+                'userProfileColour': 'red'}
+        response = self.client.post(url, data=data)
+        self.assertEqual(response.status_code, 201)
+        self.assertEqual(User.objects.count(), 3)
+
+        url = reverse('get_all_users')
+        user = User.objects.get(email=email)
+        url = reverse('delete_user', kwargs={'id': str(user.pk)})
+        response = self.client.delete(url)
+        self.assertEqual(response.status_code, 204)
+        self.assertEqual(User.objects.count(), 2)
+
