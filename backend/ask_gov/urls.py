@@ -39,7 +39,7 @@ urlpatterns = [
     path('auth/verification', VerificationTokenView.as_view(), name='verification'),
     path('admin/user', AddUserView.as_view(), name='add_user'),
     path('admin/user/<int:id>', EditUserView.as_view(), name='edit_user'),
-    path('admin/user/<int:id>/delete', DeleteUserView.as_view(), name='delete_user'),
+    path('admin/user/<uuid:id>', DeleteUserView.as_view(), name='delete_user'),
     path('admin/users', GetAllUsersView.as_view(), name='get_all_users'),
     path('admin/check-email', CheckUserEmailExistsView.as_view(), name='check_email_exists'),
 ]
