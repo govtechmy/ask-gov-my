@@ -306,14 +306,13 @@ export async function addUser(
   userProfileColour: string,
 ): Promise<{ success: boolean; message?: string }> {
   try {
-    const response = await fetch(`${API_URL}/api/admin/user`, {
+    const response = await fetch(`${API_URL}/admin/user`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({ name, email, role, agency, userProfileColour }),
     });
-
     if (!response.ok) {
       throw new Error('Failed to add user');
     }
@@ -333,7 +332,7 @@ export async function editUser(
   agency: number | null,
 ): Promise<{ success: boolean; message?: string }> {
   try {
-    const response = await fetch(`${API_URL}/api/admin/user/${id}`, {
+    const response = await fetch(`${API_URL}/admin/user/${id}`, {
       method: 'PUT',
       headers: {
         'Content-Type': 'application/json',
@@ -356,7 +355,7 @@ export async function deleteUser(
   id: string,
 ): Promise<{ success: boolean; message?: string }> {
   try {
-    const response = await fetch(`${API_URL}/api/admin/user/${id}`, {
+    const response = await fetch(`${API_URL}/admin/user/${id}/delete`, {
       method: 'DELETE',
       headers: {
         'Content-Type': 'application/json',
@@ -380,7 +379,7 @@ export async function getAllUsers(): Promise<{
   message?: string;
 }> {
   try {
-    const response = await fetch(`${API_URL}/api/admin/users`, {
+    const response = await fetch(`${API_URL}/admin/users`, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
@@ -401,7 +400,7 @@ export async function getAllUsers(): Promise<{
 
 export async function checkUserEmailExists(email: string): Promise<boolean> {
   try {
-    const response = await fetch(`${API_URL}/api/admin/check-email?email=${encodeURIComponent(email)}`, {
+    const response = await fetch(`${API_URL}/admin/check-email?email=${encodeURIComponent(email)}`, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
