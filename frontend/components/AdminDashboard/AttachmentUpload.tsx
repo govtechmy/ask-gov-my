@@ -1,7 +1,7 @@
 import React from 'react';
 import Close from '@/icons/close';
 import { Button } from '../ui/button';
-import { StyledUploadDownload } from '../ui/uploaddownload';
+import { StyledDisplay } from '../ui/display';
 import GetFileIcon from './GetFileIcon'; // Import the factorized component
 
 interface AttachmentUploadProps {
@@ -16,7 +16,7 @@ const AttachmentUpload: React.FC<AttachmentUploadProps> = ({
   return (
     <div className="flex flex-wrap gap-2">
       {attachments.map((file, index) => (
-        <StyledUploadDownload
+        <StyledDisplay
           type={'uploadDownload'}
           key={index}
           className="w-[188px]"
@@ -39,7 +39,7 @@ const AttachmentUpload: React.FC<AttachmentUploadProps> = ({
           >
             <Close className="stroke-danger-600" />
           </Button>
-        </StyledUploadDownload>
+        </StyledDisplay>
       ))}
     </div>
   );
