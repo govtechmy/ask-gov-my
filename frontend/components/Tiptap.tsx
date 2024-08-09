@@ -13,6 +13,7 @@ import Link from '@tiptap/extension-link';
 import { useCallback } from 'react';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from './ui/select';
 import Heading, { Level } from '@tiptap/extension-heading';
+import { Separator } from './ui/separator';
 
 
 
@@ -22,15 +23,11 @@ const MenuBar = ({ editor }: { editor: Editor | null }) => {
     }
 
     const style = {
-        active: "bg-blue-100 dark:bg-slate-700",
+        active: "bg-washed-100 dark:bg-slate-700",
         button: cn(
             buttonVariants({ size: null }),
-            "group relative size-7 bg-inherit active:bg-blue-100 dark:active:bg-slate-700",
-            "text-zinc-500 active:text-slate-700 dark:active:text-blue-100"
-        ),
-        icon_active: "text-slate-700 dark:text-blue-100",
-        icon_inactive: "text-zinc-500",
-        inactive: "hover:bg-bg-hover",
+            "h-8 w-8 rounded-lg flex items-center justify-center",
+        )
     };
 
     const setLink = useCallback(() => {
@@ -78,23 +75,23 @@ const MenuBar = ({ editor }: { editor: Editor | null }) => {
 
 
     return (
-        <div role="toolbar" className="flex flex-wrap gap-x-2 px-3 py-2">
+        <div role="toolbar" className="flex items-center flex-wrap gap-x-2 px-3 py-2 h-12">
             <Select
                 onValueChange={(value: any) => setHeading(value)}
                 value={currentLevel}
                 defaultValue='paragraph'
             >
-                <SelectTrigger className="w-[180px] mb-2">
+                <SelectTrigger className="w-[150px] h-8 focus:ring-brand-600/20">
                     <SelectValue />
                 </SelectTrigger>
-                <SelectContent>
-                    <SelectItem value="1">Heading 1</SelectItem>
-                    <SelectItem value="2">Heading 2</SelectItem>
-                    <SelectItem value="3">Heading 3</SelectItem>
-                    <SelectItem value="4">Heading 4</SelectItem>
-                    <SelectItem value="5">Heading 5</SelectItem>
-                    <SelectItem value="6">Heading 6</SelectItem>
-                    <SelectItem value="paragraph">Paragraph</SelectItem>
+                <SelectContent className="bg-white">
+                    <SelectItem hasCheck={false} className="font-normal text-base" value="paragraph">Paragraph</SelectItem>
+                    <SelectItem hasCheck={false} className='font-semibold text-3xl leading-[38px]' value="1">Heading 1</SelectItem>
+                    <SelectItem hasCheck={false} className='font-semibold text-2xl'value="2">Heading 2</SelectItem>
+                    <SelectItem hasCheck={false} className='font-semibold text-xl leading-[30px]' value="3">Heading 3</SelectItem>
+                    <SelectItem hasCheck={false} className='font-semibold text-lg leading-[26px]' value="4">Heading 4</SelectItem>
+                    <SelectItem hasCheck={false} className='font-semibold text-base' value="5">Heading 5</SelectItem>
+                    <SelectItem hasCheck={false} className='font-semibold text-sm' value="6">Heading 6</SelectItem>
                 </SelectContent>
             </Select>
             <button
@@ -102,128 +99,79 @@ const MenuBar = ({ editor }: { editor: Editor | null }) => {
                 disabled={!editor.can().chain().focus().toggleBold().run()}
                 className={cn(
                     style.button,
-                    editor.isActive("bold") ? style.active : style.inactive
+                    editor.isActive("bold") && style.active
                 )}
             >
-                <BoldIcon
-                    className={cn(
-                        "size-5",
-                        editor.isActive("bold") ? style.icon_active : style.icon_inactive
-                    )}
-                />
+                <BoldIcon/>
             </button>
             <button
                 onClick={() => (editor.chain().focus().toggleItalic().run())}
                 disabled={!editor.can().chain().focus().toggleItalic().run()}
                 className={cn(
                     style.button,
-                    editor.isActive("italic") ? style.active : style.inactive
+                    editor.isActive("italic") && style.active
                 )}
             >
-                <ItalicIcon
-                    className={cn(
-                        "size-5",
-                        editor.isActive("italic") ? style.icon_active : style.icon_inactive
-                    )}
-                />
+                <ItalicIcon/>
             </button>
             <button
                 onClick={() => (editor.chain().focus().toggleUnderline().run())}
                 disabled={!editor.can().chain().focus().toggleUnderline().run()}
                 className={cn(
                     style.button,
-                    editor.isActive("underline") ? style.active : style.inactive
+                    editor.isActive("underline") && style.active
                 )}
             >
-                <UnderlineIcon
-                    className={cn(
-                        "size-5",
-                        editor.isActive("underline") ? style.icon_active : style.icon_inactive
-                    )}
-                />
+                <UnderlineIcon/>
             </button>
             <button
                 onClick={() => (editor.chain().focus().toggleStrike().run())}
                 disabled={!editor.can().chain().focus().toggleStrike().run()}
                 className={cn(
                     style.button,
-                    editor.isActive("strike") ? style.active : style.inactive
+                    editor.isActive("strike") && style.active 
                 )}
             >
-                <StrikethroughIcon
-                    className={cn(
-                        "size-5",
-                        editor.isActive("strike") ? style.icon_active : style.icon_inactive
-                    )}
-                />
+                <StrikethroughIcon/>
             </button>
+            <Separator orientation='vertical' className='h-4.5 w-[1px] bg-outline-300' />
             <button
                 onClick={() => (editor.chain().focus().toggleOrderedList().run())}
                 disabled={!editor.can().chain().focus().toggleOrderedList().run()}
                 className={cn(
                     style.button,
-                    editor.isActive("orderedList") ? style.active : style.inactive
+                    editor.isActive("orderedList") && style.active
                 )}
             >
-                <OrderedListIcon
-                    className={cn(
-                        "size-5",
-                        editor.isActive("orderedList") ? style.icon_active : style.icon_inactive
-                    )}
-                />
+                <OrderedListIcon/>
             </button>
             <button
                 onClick={() => editor.chain().focus().toggleBulletList().run()}
                 disabled={!editor.can().chain().focus().toggleBulletList().run()}
                 className={cn(
                     style.button,
-                    editor.isActive("bulletList") ? style.active : style.inactive
+                    editor.isActive("bulletList") && style.active
                 )}
             >
-                <BulletedListIcon
-                    className={cn(
-                        "size-5",
-                        editor.isActive("bulletList") ? style.icon_active : style.icon_inactive
-                    )}
-                />
+                <BulletedListIcon/>
             </button>
-            <button
-                onClick={() => editor.chain().focus().toggleBulletList().run()}
-                disabled={!editor.can().chain().focus().toggleBulletList().run()}
-                className={cn(
-                    style.button,
-                    editor.isActive("bulletList") ? style.active : style.inactive
-                )}
-            >
-                <BulletedListIcon
-                    className={cn(
-                        "size-5",
-                        editor.isActive("bulletList") ? style.icon_active : style.icon_inactive
-                    )}
-                />
-            </button>
+            <Separator orientation='vertical' className='h-4.5 w-[1px] bg-outline-300' />
             <button
                 onClick={setLink}
                 className={cn(
                     style.button,
-                    editor.isActive("link") ? style.active : style.inactive
+                    editor.isActive("link") && style.active
                 )}
             >
-                <LinkIcon
-                    className={cn(
-                        "size-5",
-                        editor.isActive("link") ? style.icon_active : style.icon_inactive
-                    )}
-                />
+                <LinkIcon/>
             </button>
-            <div>
+            <div className='flex h-7'>
                 <button
                     onClick={() => editor.chain().focus().undo().run()}
                     disabled={!editor.can().undo()}
                     className={style.button}
                 >
                     <UndoIcon
-                        className={"size-5"}
                     />
                 </button>
                 <button
@@ -232,7 +180,6 @@ const MenuBar = ({ editor }: { editor: Editor | null }) => {
                     className={style.button}
                 >
                     <RedoIcon
-                        className={"size-5"}
                     />
                 </button>
             </div>
