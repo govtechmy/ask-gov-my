@@ -5,8 +5,8 @@ import uuid
 
 
 class Agency(models.Model):
-    name = models.CharField(max_length=255)
-    name_ms = models.CharField(max_length=255, null=True, blank=True)
+    name = models.CharField()
+    name_ms = models.CharField(null=True, blank=True)
     acronym = models.CharField(max_length=50, null=True, blank=True)
     logo_url = models.URLField(max_length=500, null=True, blank=True)
     last_edited = models.DateTimeField(auto_now=True)
@@ -16,8 +16,8 @@ class Agency(models.Model):
 
 
 class Topic(models.Model):
-    title = models.CharField(max_length=255)
-    title_ms = models.CharField(max_length=255, null=True, blank=True)
+    title = models.CharField()
+    title_ms = models.CharField(null=True, blank=True)
     agency = models.ForeignKey(Agency, on_delete=models.CASCADE)
 
     def __str__(self):
@@ -62,11 +62,11 @@ class UserRole(models.TextChoices):
 
 class User(AbstractUser):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-    name = models.CharField(max_length=255, null=True, blank=True)
+    name = models.CharField(null=True, blank=True)
     email = models.EmailField(unique=True)
     email_verified = models.DateTimeField(null=True, blank=True)
     image = models.URLField(null=True, blank=True)
-    role = models.CharField(max_length=20, choices=UserRole.choices, default=UserRole.STAFF)
+    role = models.CharField(choices=UserRole.choices, default=UserRole.STAFF)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     agency = models.IntegerField(null=True, blank=True)
@@ -81,20 +81,20 @@ class User(AbstractUser):
 
 class Session(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
-    session_token = models.CharField(max_length=255, unique=True)
+    session_token = models.CharField(unique=True)
     expires = models.DateTimeField()
 
 
 class Account(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
-    provider = models.CharField(max_length=255)
-    provider_account_id = models.CharField(max_length=255)
-    access_token = models.CharField(max_length=255, null=True, blank=True)
-    refresh_token = models.CharField(max_length=255, null=True, blank=True)
+    provider = models.CharField()
+    provider_account_id = models.CharField()
+    access_token = models.CharField(null=True, blank=True)
+    refresh_token = models.CharField(null=True, blank=True)
     expires_at = models.DateTimeField(null=True, blank=True)
 
 
 class VerificationToken(models.Model):
-    identifier = models.CharField(max_length=255)
-    token = models.CharField(max_length=255)
+    identifier = models.CharField()
+    token = models.CharField()
     expires = models.DateTimeField()
