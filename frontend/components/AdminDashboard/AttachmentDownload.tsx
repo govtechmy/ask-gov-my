@@ -2,7 +2,7 @@
 import React from 'react';
 import Close from '@/icons/close';
 import { Button } from '../ui/button';
-import { StyledUploadDownload } from '../ui/uploaddownload';
+import { StyledDisplay } from '../ui/display';
 import GetFileIcon from './GetFileIcon';
 import { downloadFile, getLastSegment, formatFileSize } from '@/actions/utils';
 
@@ -24,7 +24,7 @@ const AttachmentDownload: React.FC<AttachmentDownloadProps> = ({
         const size = fileSizes[index];
 
         return (
-          <StyledUploadDownload
+          <StyledDisplay
             type="uploadDownload"
             key={index}
             onClick={() => downloadFile(url, fileName)}
@@ -58,7 +58,7 @@ const AttachmentDownload: React.FC<AttachmentDownloadProps> = ({
                 </div>
               </Button>
             )}
-          </StyledUploadDownload>
+          </StyledDisplay>
         );
       })}
     </div>

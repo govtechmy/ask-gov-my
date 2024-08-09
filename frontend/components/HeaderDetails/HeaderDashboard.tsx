@@ -1,5 +1,5 @@
 'use client';
-import { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { useRouter, useSearchParams } from 'next/navigation';
 import ThemeToggle from './Theme';
@@ -13,99 +13,76 @@ import UserGroup from '@/icons/usergroup';
 import Logout from '@/icons/logout';
 import { signOut } from 'next-auth/react';
 import { Button, buttonVariants } from '../ui/button';
-import QuestionMarkWithBox from '@/icons/questionmarkwithbox';
 import QuestionCircle from '@/icons/questioncircle';
 
-const HeaderDashboard = () => {
+type NavLinkType = 'questions' | 'manageagencies' | 'manageusers';
+
+interface NavLinkProps {
+  href: NavLinkType;
+  icon: React.ComponentType<React.SVGProps<SVGSVGElement>>;
+  label: string;
+}
+
+const HeaderDashboard: React.FC = () => {
   const searchParams = useSearchParams();
   const router = useRouter();
-  const [activeLink, setActiveLink] = useState<
-    'questions' | 'manageagencies' | 'manageusers'
-  >('questions');
+  const [activeLink, setActiveLink] = useState<NavLinkType>('questions');
+  const [open, setOpen] = useState(false);
 
   useEffect(() => {
-    const currentPage = searchParams.get('page') as
-      | 'questions'
-      | 'manageagencies'
-      | 'manageusers';
+    const currentPage = searchParams.get('page') as NavLinkType;
     if (currentPage) {
       setActiveLink(currentPage);
     }
   }, [searchParams]);
 
-  const handleSetActiveLink = (
-    link: 'questions' | 'manageagencies' | 'manageusers',
-  ) => {
+  const handleSetActiveLink = (link: NavLinkType) => {
     setActiveLink(link);
     const params = new URLSearchParams(window.location.search);
     params.set('page', link);
     router.push(`${window.location.pathname}?${params.toString()}`);
   };
 
-  const [open, setOpen] = useState(false);
+  const toggleOpen = () => setOpen(!open);
 
-  const toggleOpen = () => {
-    setOpen(!open);
-  };
+  const handleLogout = () => signOut();
 
-  const handleLogout = () => {
-    signOut(); // Call signOut to logout the user
-  };
+  const navLinks: NavLinkProps[] = [
+    { href: 'questions', icon: QuestionCircle, label: 'Questions' },
+    { href: 'manageagencies', icon: Gov, label: 'Agencies' },
+    { href: 'manageusers', icon: UserGroup, label: 'Users' },
+  ];
+
+  const NavLink: React.FC<NavLinkProps> = ({ href, icon: Icon, label }) => (
+    <Link
+      className={cn(
+        buttonVariants({ variant: 'tertiary-askmygov', size: 'sm' }),
+        {
+          'text-[#702FF9] bg-[#F4EFFF] dark:text-[#9E70FF] dark:bg-[#201636]':
+            activeLink === href,
+          'text-black-700': activeLink !== href,
+        },
+      )}
+      href={`/admin/dashboard/?page=${href}`}
+      onClick={() => handleSetActiveLink(href)}
+    >
+      <Icon className="stroke-current" />
+      {label}
+    </Link>
+  );
 
   return (
-    <div className="container  max-w-screen-lg mx-auto px-6">
-      <div className="flex justify-between pt-6 pb-3  ">
+    <div className="container max-w-screen-lg mx-auto px-6">
+      <div className="flex justify-between pt-6 pb-3">
         <div className="font-poppins flex h-full gap-2.5 text-lg font-semibold items-center">
           <Asklogo />
           AskGovMY
           <div className="bg-[#27272A] text-[#FFFFFF] dark:bg-[#F4F4F5] dark:text-[#18181B] rounded-md font-bold text-xs flex justify-center items-center w-[53px] h-[22px]">
             ADMIN
           </div>
-          <Link
-            className={cn(
-              buttonVariants({ variant: 'tertiary-askmygov', size: 'sm' }),
-              {
-                'text-[#702FF9] bg-[#F4EFFF] dark:text-[#9E70FF] dark:bg-[#201636]':
-                  activeLink === 'questions',
-                'text-black-700': activeLink !== 'questions',
-              },
-            )}
-            href="/admin/dashboard/?page=questions"
-            onClick={() => handleSetActiveLink('questions')}
-          >
-            <QuestionCircle></QuestionCircle>
-            Questions
-          </Link>
-          <Link
-            className={cn(
-              buttonVariants({ variant: 'tertiary-askmygov', size: 'sm' }),
-              {
-                'text-[#702FF9] bg-[#F4EFFF] dark:text-[#9E70FF] dark:bg-[#201636]':
-                  activeLink === 'manageagencies',
-                'text-black-700': activeLink !== 'manageagencies',
-              },
-            )}
-            href="/admin/dashboard/?page=manageagencies"
-            onClick={() => handleSetActiveLink('manageagencies')}
-          >
-            <Gov className="stroke-current"></Gov>
-            Agencies
-          </Link>
-          <Link
-            className={cn(
-              buttonVariants({ variant: 'tertiary-askmygov', size: 'sm' }),
-              {
-                'text-[#702FF9] bg-[#F4EFFF] dark:text-[#9E70FF] dark:bg-[#201636]':
-                  activeLink === 'manageusers',
-                'text-black-700': activeLink !== 'manageusers',
-              },
-            )}
-            href="/admin/dashboard/?page=manageusers"
-            onClick={() => handleSetActiveLink('manageusers')}
-          >
-            <UserGroup className="stroke-current" />
-            Users
-          </Link>
+          {navLinks.map(link => (
+            <NavLink key={link.href} {...link} />
+          ))}
         </div>
 
         <div className="flex">
@@ -133,14 +110,13 @@ const HeaderDashboard = () => {
             </div>
 
             {open && (
-              //design following dropdown, not button
               <div className="absolute top-[36px] right-0 bg-white rounded-lg border-[1px] border-outline-200 shadow-button">
                 <button
-                  className=" hover:cursor-pointer h-[42px] w-[110px] items-center justify-center flex"
+                  className="hover:cursor-pointer h-[42px] w-[110px] items-center justify-center flex"
                   onClick={handleLogout}
                 >
                   <div className="pr-2">
-                    <Logout className="stroke-[#DC2626] dark:stroke-[#FF5959]"></Logout>
+                    <Logout className="stroke-[#DC2626] dark:stroke-[#FF5959]" />
                   </div>
                   <div>Logout</div>
                 </button>

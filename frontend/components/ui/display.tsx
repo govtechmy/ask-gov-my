@@ -24,7 +24,7 @@ export interface DivProps
   asChild?: boolean;
 }
 
-const StyledUploadDownload = forwardRef<HTMLDivElement, DivProps>(
+const StyledDisplay = forwardRef<HTMLDivElement, DivProps>(
   ({ className, type, asChild = false, ...props }, ref) => {
     const Comp = asChild ? Slot : 'div';
     return (
@@ -36,6 +36,6 @@ const StyledUploadDownload = forwardRef<HTMLDivElement, DivProps>(
     );
   },
 );
-StyledUploadDownload.displayName = 'StyledUploadDownload';
+StyledDisplay.displayName = 'StyledDisplay';
 
-export { StyledUploadDownload, divVariants };
+export { StyledDisplay, divVariants };
