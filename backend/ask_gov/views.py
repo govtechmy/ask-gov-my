@@ -352,7 +352,7 @@ class UserView(APIView):
         return Response({
             'id': user.id,
             'email': user.email,
-            'email_verified': user.email_verified
+            'emailVerified': user.email_verified
         }, status=status.HTTP_201_CREATED)
 
     def get(self, request):
@@ -368,29 +368,29 @@ class UserView(APIView):
         return Response({
             'id': user.id,
             'email': user.email,
-            'email_verified': user.email_verified
+            'emailVerified': user.email_verified
         })
 
     def put(self, request):
         data = request.data
         user = get_object_or_404(User, id=data['id'])
         user.email = data.get('email', user.email)
-        user.email_verified = data.get('email_verified', user.email_verified)
+        user.email_verified = data.get('emailVerified', user.email_verified)
         user.save()
         return Response({
             'id': user.id,
             'email': user.email,
-            'email_verified': user.email_verified
+            'emailVerified': user.email_verified 
         })
 
 
 class SessionView(APIView):
     def post(self, request):
         data = request.data
-        user = get_object_or_404(User, id=data['userId'])
+        user = get_object_or_404(User, id=data['userId'])  
         session = Session.objects.create(
             user=user,
-            session_token=data['sessionToken'],
+            session_token=data['sessionToken'], 
             expires=data['expires']
         )
         return Response({
@@ -411,13 +411,13 @@ class SessionView(APIView):
             'user': {
                 'id': session.user.id,
                 'email': session.user.email,
-                'email_verified': session.user.email_verified
+                'emailVerified': session.user.email_verified 
             }
         })
 
     def put(self, request):
         data = request.data
-        session = get_object_or_404(Session, session_token=data['sessionToken'])
+        session = get_object_or_404(Session, session_token=data['sessionToken']) 
         session.expires = data.get('expires', session.expires)
         session.save()
         return Response({
@@ -436,28 +436,27 @@ class SessionView(APIView):
 class AccountView(APIView):
     def post(self, request):
         data = request.data
-        user = get_object_or_404(User, id=data['user'])
+        user = get_object_or_404(User, id=data['userId']) 
         account = Account.objects.create(
             user=user,
             provider=data['provider'],
-            provider_account_id=data['providerAccountId'],
-            access_token=data.get('access_token', None),
-            refresh_token=data.get('refresh_token', None),
-            expires_at=data.get('expires_at', None)
+            provider_account_id=data['providerAccountId'], 
+            access_token=data.get('accessToken', None),
+            refresh_token=data.get('refreshToken', None),
+            expires_at=data.get('expiresAt', None)
         )
         return Response({
-            'userId': account.user.id,
+            'userId': account.user.id, 
             'provider': account.provider,
-            'providerAccountId': account.provider_account_id
+            'providerAccountId': account.provider_account_id 
         }, status=status.HTTP_201_CREATED)
 
     def delete(self, request):
         data = request.data
-        account = get_object_or_404(Account, user_id=data['user'], provider=data['provider'],
+        account = get_object_or_404(Account, user_id=data['userId'], provider=data['provider'],
                                     provider_account_id=data['providerAccountId'])
         account.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
-
 
 class VerificationTokenView(APIView):
     def post(self, request):
@@ -483,6 +482,7 @@ class VerificationTokenView(APIView):
             'identifier': token.identifier,
             'token': token.token
         }, status=status.HTTP_200_OK)
+
     
 class AddUserView(APIView):
     def post(self, request):
