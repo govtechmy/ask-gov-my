@@ -194,7 +194,8 @@ export default () => {
             autolink: true,
             defaultProtocol: 'https',
         })],
-        content: `<ul>
+        content: 
+        `<ul>
           <li>A list item</li>
           <li>And another one</li>
         </ul>`,
@@ -203,7 +204,7 @@ export default () => {
 
 
     return (
-        <div className="flex flex-col divide-y rounded-lg border border-border">
+        <div className="flex flex-col divide-y rounded-lg w-[616px] h-[300px] border-[1px] shadow-button">
             <MenuBar editor={editor} />
             <EditorContent editor={editor} />
         </div>

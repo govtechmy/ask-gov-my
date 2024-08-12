@@ -1,0 +1,90 @@
+div.tiptap.ProseMirror {
+    padding: 0.5rem 0.75rem;
+    height: 16rem;
+    font-size: 14px;
+    line-height: 20px;
+  
+    > * + * {
+      margin-top: 0.75em;
+    }
+  
+    ul,
+    ol {
+      padding: 0 1rem;
+    }
+  
+    ul {
+      @apply list-inside list-disc;
+    }
+  
+    ol {
+      @apply list-inside list-decimal;
+    }
+  
+    li > p {
+      display: inline;
+    }
+  
+    h1,
+    h2 {
+      font-weight: 600;
+    }
+  
+    h1 {
+      font-size: 1.25rem;
+      line-height: 1.75rem;
+    }
+  
+    h2 {
+      font-size: 1rem;
+      line-height: 1.5rem;
+    }
+  
+    code {
+      background: hsl(240, 4%, 46%, 0.1);
+      border-radius: 0.2rem;
+      padding: 0.2rem 0.4rem;
+      color: inherit;
+    }
+  
+    pre {
+      background: hsl(240 3.7% 15.88%);
+      color: hsl(0 0% 100%);
+      font-family: "Roboto Mono", monospace;
+      padding: 0.5rem 0.75rem;
+      border-radius: 0.5rem;
+  
+      code {
+        color: inherit;
+        padding: 0;
+        background: none;
+        font-size: 0.8rem;
+      }
+    }
+  
+    pre::spelling-error,
+    code::spelling-error {
+      text-decoration: none;
+    }
+  
+    img {
+      max-width: 100%;
+      height: auto;
+    }
+  
+    blockquote {
+      padding-left: 1rem;
+      border-left: 2px solid rgba(#0d0d0d, 0.1);
+    }
+  
+    hr {
+      border: none;
+      border-top: 2px solid rgba(#0d0d0d, 0.1);
+      margin: 2rem 0;
+    }
+  }
+  
+  div.tiptap.ProseMirror:focus-visible {
+    outline-color: oklch(var(--myds-brand-600)/10);
+  }
+  
