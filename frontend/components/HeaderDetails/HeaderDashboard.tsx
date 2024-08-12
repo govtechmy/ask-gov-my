@@ -14,6 +14,7 @@ import Logout from '@/icons/logout';
 import { signOut } from 'next-auth/react';
 import { Button, buttonVariants } from '../ui/button';
 import QuestionCircle from '@/icons/questioncircle';
+import { StyledDisplay } from '../ui/display';
 
 type NavLinkType = 'questions' | 'manageagencies' | 'manageusers';
 
@@ -77,9 +78,7 @@ const HeaderDashboard: React.FC = () => {
         <div className="font-poppins flex h-full gap-2.5 text-lg font-semibold items-center">
           <Asklogo />
           AskGovMY
-          <div className="bg-[#27272A] text-[#FFFFFF] dark:bg-[#F4F4F5] dark:text-[#18181B] rounded-md font-bold text-xs flex justify-center items-center w-[53px] h-[22px]">
-            ADMIN
-          </div>
+          <StyledDisplay type={'nameHeader'}>ADMIN</StyledDisplay>
           {navLinks.map(link => (
             <NavLink key={link.href} {...link} />
           ))}
