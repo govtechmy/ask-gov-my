@@ -28,6 +28,8 @@ const buttonVariants = cva(
           'border border-outline-200 hover:border-outline-300 bg-white focus:border-outline-200 focus:ring focus:ring-offset-0 focus:ring-outline-400/20 shadow-button',
         'cancel-box-red':
           'h-8 w-8 rounded-lg items-center justify-center flex hover:bg-[#FEF2F2] hover:dark:bg-[#2B0707]',
+        'tertiary-dropdown':
+          'hover:bg-washed-100 focus:ring-0 focus:ring-offset-0 rounded-[4px] h-8 justify-start text-sm',
       },
       size: {
         default: '',
