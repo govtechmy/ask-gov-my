@@ -1,3 +1,4 @@
+
 from .serializers import (
     QuestionSerializer, AgencySerializer,
     TopicSerializer, UserSerializer,
@@ -12,7 +13,7 @@ from rest_framework.views import APIView
 from django.contrib.auth import get_user_model
 from django.db.models import Sum
 from .elasticsearch_client import client
-import logging
+import logging, re
 
 logger = logging.getLogger(__name__)
 
@@ -97,28 +98,30 @@ class SubmitAnswerView(APIView):
 
         try:
             question = Question.objects.get(id=question_id)
+
+            answer_preview = self.strip_tags(answer)
+
             question.answer = answer
+            question.answer_preview = answer_preview
             question.state = 'completed'
             question.attachments = attachments
             question.answered_date = timezone.now()
             question.save()
-
-            client.update(
-                index='questions',
-                id=str(question.id),
-                body={
-                    "doc": {
-                        "answer": answer,
-                        "state": "completed",
-                    }
-                }
-            )
 
             return Response({"detail": "Answer submitted successfully"}, status=status.HTTP_200_OK)
         except Question.DoesNotExist:
             return Response({"detail": "Question not found"}, status=status.HTTP_404_NOT_FOUND)
         except Exception as e:
             return Response({"detail": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+    @staticmethod
+    def strip_tags(html):
+        spaced_html = re.sub(r'>\s*<', '> <', html)
+        tag_re = re.compile(r'<[^>]+>')
+        text = tag_re.sub('', spaced_html)
+        text = re.sub(r'\s+', ' ', text).strip()
+        
+        return text
 
 
 class UserAgencyTopicsView(APIView):
