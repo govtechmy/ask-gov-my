@@ -17,6 +17,7 @@ import ToastQuestionMarkAsUnSpam from './ToastQuestionMarkAsUnSpam';
 import ThreeDottedAction from './ThreeDottedAction';
 import AlarmTriangle from '@/icons/alarmtriangle';
 import TickCheckCircle from '@/icons/tickcheckcircle';
+import { formatDate } from '@/actions/utils';
 
 interface QuestionCardProps {
   question: Question;
@@ -58,23 +59,6 @@ const AdminQuestionCard: React.FC<QuestionCardProps> = ({
         console.error('Failed to change admin_isopen:', error);
       }
     }
-  };
-
-  const formatDate = (dateString: string) => {
-    const date = new Date(dateString);
-    return (
-      date.toLocaleDateString('en-GB', {
-        day: '2-digit',
-        month: 'long',
-        year: 'numeric',
-      }) +
-      ', ' +
-      date.toLocaleTimeString('en-GB', {
-        hour: '2-digit',
-        minute: '2-digit',
-        hour12: true,
-      })
-    );
   };
 
   const handleMarkAsSpamToast = () => {

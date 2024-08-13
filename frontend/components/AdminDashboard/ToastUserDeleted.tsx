@@ -50,7 +50,7 @@ const ToastUserDeleted: React.FC<ToastProps> = ({ message, show, onClose }) => {
       {visible && (
         <div
           className={`fixed bottom-6 right-6 bg-white-focuswhite200 
-          text-[#A16207] rounded-lg items-center  shadow-button
+          text-[#15803D] rounded-lg items-center  shadow-button
           transition-opacity duration-300 opacity-100 h-[48px] w-[312px] border-[1px] border-outline-200 overflow-hidden
           ${animationState === 'enter' ? 'animate-slideIn' : 'animate-slideOut'}
           `}
