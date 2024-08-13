@@ -32,6 +32,8 @@ const AnswerQuestionModal: React.FC<AnswerQuestionModalProps> = ({
   );
   const [success, setSuccess] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
+  
+
 
   useEffect(() => {
     setAnswer(question.answer || '');
@@ -126,6 +128,9 @@ const AnswerQuestionModal: React.FC<AnswerQuestionModalProps> = ({
 
   if (!isOpen) return null;
 
+
+  console.log(editorText);
+
   return (
     <div className="z-10 fixed inset-0 bg-gray-900 flex items-center justify-center bg-opacity-70">
       <div className="bg-white rounded-xl shadow-lg w-[700px] h-[700px] relative p-6 flex flex-col">
@@ -160,13 +165,6 @@ const AnswerQuestionModal: React.FC<AnswerQuestionModalProps> = ({
                 ref={questionTextRef}
               >
                 {question.question}
-                {/* Your sample text herea sdas sadasdsadads das dsda a dasda ads
-                adsasd addas asddas ads dasads sada dasads ads a sdsaddas asd
-                dsa sdadassadsa ddsdsa dasdas dasads adsasdads dsa dasadsasd
-                asddas asd adsasd d asasd sadd asasd adsdsda d as dasads ads
-                asddsa dasdsads sadsdadsadsa sad dsasdaddsa d sadasd sasad sa
-                dsad dsa ads dsa dasdsa adssad ads ads s adas ads ads asd as
-                dads a sdads ads das da sads ads das ad sa dsdas ad sads */}
               </div>
             </div>
           </div>
@@ -182,8 +180,10 @@ const AnswerQuestionModal: React.FC<AnswerQuestionModalProps> = ({
                 </div>
               </div>
               <div className="pl-3 flex flex-col flex-grow">
-                  <Tiptap />
-                  {/* String serialiser pass semula, function to serialise, unset answer  */}
+                  <Tiptap 
+                    editorText = {answer}
+                    setEditorText = {setAnswer}
+                  />
                 <div className="w-[616px] border-[1px] border-outline-200 rounded-lg my-3 items-center flex-shrink-0 shadow-button">
                   <div className="h-[68px] w-full m-4 items-center flex">
                     <div className="text-dim-500 w-[431px] h-[68px] text-sm flex-shrink-0 ">
