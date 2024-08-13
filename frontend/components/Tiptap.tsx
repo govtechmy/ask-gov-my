@@ -205,7 +205,7 @@ export default ({
 
 
     return (
-        <div className="flex flex-col divide-y rounded-lg w-[616px] h-[300px] border-[1px] shadow-button">
+        <div className="flex flex-col divide-y rounded-lg w-[616px] h-[300px] border-[1px] shadow-button overflow-y-auto">
             <MenuBar editor={editor} />
             <EditorContent editor={editor} />
         </div>

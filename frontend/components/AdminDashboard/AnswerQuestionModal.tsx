@@ -128,9 +128,6 @@ const AnswerQuestionModal: React.FC<AnswerQuestionModalProps> = ({
 
   if (!isOpen) return null;
 
-
-  console.log(editorText);
-
   return (
     <div className="z-10 fixed inset-0 bg-gray-900 flex items-center justify-center bg-opacity-70">
       <div className="bg-white rounded-xl shadow-lg w-[700px] h-[700px] relative p-6 flex flex-col">
