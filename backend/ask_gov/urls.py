@@ -1,13 +1,13 @@
 from django.urls import path, include
 from .views import (
-    CompletedQuestionListView, QuestionDetailView, AgencyListView, SubmitQuestionView, 
-    QuestionsByAgencyView, UserAgencyQuestionsView, SubmitAnswerView, 
+    CompletedQuestionListView, QuestionDetailView, AgencyListView, SubmitQuestionView,
+    QuestionsByAgencyView, UserAgencyQuestionsView, SubmitAnswerView,
     UserAgencyTopicsView, AddTopicView, TopicListView, LikeQuestionView, DislikeQuestionView,
     AssignAgencyToQuestionView, AddAgencyView, AllQuestionListView, TrendingAgenciesView,
     UpdateAgencyView, ChangeAdminIsOpenView, ChangeStaffIsOpenView, SaveDraftQuestionView,
-    MarkQuestionAsSpamView, UnSpamQuestionView, UserView, SessionView, AccountView, 
-    VerificationTokenView, AddUserView, EditUserView, DeleteUserView, GetAllUsersView, 
-    CheckUserEmailExistsView 
+    MarkQuestionAsSpamView, UnSpamQuestionView, UserView, SessionView, AccountView,
+    VerificationTokenView, AddUserView, GetAllUsersView,
+    CheckUserEmailExistsView, EditDeleteUserView
 )
 
 urlpatterns = [
@@ -38,8 +38,8 @@ urlpatterns = [
     path('auth/account', AccountView.as_view(), name='account'),
     path('auth/verification', VerificationTokenView.as_view(), name='verification'),
     path('admin/user', AddUserView.as_view(), name='add_user'),
-    path('admin/user/<uuid:id>', EditUserView.as_view(), name='edit_user'),
-    path('admin/user/<uuid:id>', DeleteUserView.as_view(), name='delete_user'),
+    path('admin/user/<uuid:id>', EditDeleteUserView.as_view(), name='edit_delete_user'),
+    # path('admin/user/<uuid:id>', DeleteUserView.as_view(), name='delete_user'),
     path('admin/users', GetAllUsersView.as_view(), name='get_all_users'),
     path('admin/check-email', CheckUserEmailExistsView.as_view(), name='check_email_exists'),
 ]
