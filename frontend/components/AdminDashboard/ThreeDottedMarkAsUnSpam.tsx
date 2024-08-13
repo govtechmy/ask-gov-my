@@ -2,9 +2,23 @@ import ThreeDotted from '@/icons/threedotted';
 import { useState } from 'react';
 import { Question } from '@/types/types';
 import TickCheckCircle from '@/icons/tickcheckcircle';
-import MarkAsUnSpamModal from './MarkAsUnSpamModal';
 import { Button } from '../ui/button';
 import { cn } from '@/lib/utils';
+import {
+  Dialog,
+  DialogTrigger,
+  DialogContent,
+  DialogHeader,
+  DialogFooter,
+  DialogDescription,
+  DialogTitle,
+} from '../ui/dialog';
+import { unSpamQuestion } from '@/actions/userServices';
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from '@/components/ui/popover';
 
 interface ThreeProps {
   question: Question;
@@ -22,50 +36,61 @@ const ThreeDottedMarkAsUnSpam: React.FC<ThreeProps> = ({
     setIsDropdownVisible(prevState => !prevState);
   };
 
-  const handleMarkAsUnSpamTrigger = () => {
-    setIsModalMarkAsUnSpamOpen(true);
-  };
+  async function MarkQuestionAsBacklog() {
+    await unSpamQuestion(question.id);
+    question.state = 'backlog';
+    handleUnSpamToast();
+    setIsModalMarkAsUnSpamOpen(false);
+  }
 
   return (
-    <div className="relative">
-      <div className="flex relative">
+    <Popover>
+      <PopoverTrigger asChild className="size-9">
         <Button
-          className={cn('top-[-16px] right-[-6px]', {
-            'opacity-100': isDropdownVisible,
-            'group-hover:opacity-100': !isDropdownVisible,
-          })}
+          className={cn('top-[-16px] right-[-6px]')}
           variant={'icon-threedot'}
           size={'icon'}
           onClick={handleDropdownClick}
         >
-          <ThreeDotted className="fill-black-900 stroke-black-700" />
+          <ThreeDotted />
         </Button>
-      </div>
-      {isDropdownVisible && (
-        <div
-          className="absolute top-[20px] right-[-6px] w-[177px] h-[42px]
-         bg-white-focuswhite100 border-[1px] border-outline-200 shadow-button rounded-lg items-center justify-center flex"
+      </PopoverTrigger>
+      <PopoverContent>
+        <Dialog
+          open={isModalMarkAsUnSpamOpen}
+          onOpenChange={setIsModalMarkAsUnSpamOpen}
         >
-          <div className="pl-2">
-            <div className="h-5 w-5 items-center  justify-center flex">
-              <TickCheckCircle className="stroke-black-700"></TickCheckCircle>
-            </div>
-          </div>
-          <div
-            className="text-sm font-medium text-black-700 px-2 cursor-pointer"
-            onClick={handleMarkAsUnSpamTrigger}
-          >
-            Mark as not spam
-          </div>
-          <MarkAsUnSpamModal
-            handleUnSpamToast={handleUnSpamToast}
-            question={question}
-            isOpen={isModalMarkAsUnSpamOpen}
-            onClose={() => setIsModalMarkAsUnSpamOpen(false)}
-          />
-        </div>
-      )}
-    </div>
+          <DialogTrigger asChild>
+            <Button variant={'tertiary'}>
+              <TickCheckCircle className="text-black-700 size-5" />
+              Mark as not spam
+            </Button>
+          </DialogTrigger>
+
+          <DialogContent className="w-[400px]">
+            <DialogHeader>
+              <DialogTitle>Mark question as not spam?</DialogTitle>
+
+              <DialogDescription>
+                Are you sure to mark this question as not spam?
+              </DialogDescription>
+            </DialogHeader>
+
+            <DialogFooter className="flex justify-end items-center space-x-3">
+              <Button
+                variant={'secondary'}
+                onClick={() => setIsModalMarkAsUnSpamOpen(false)}
+              >
+                Cancel
+              </Button>
+              <Button variant={'primary'} onClick={MarkQuestionAsBacklog}>
+                Mark as Not Spam
+              </Button>
+            </DialogFooter>
+          </DialogContent>
+        </Dialog>
+      </PopoverContent>
+    </Popover>
   );
 };
 

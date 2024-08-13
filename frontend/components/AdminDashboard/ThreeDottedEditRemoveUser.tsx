@@ -51,7 +51,7 @@ const ThreeDottedEditRemoveUser: React.FC<ThreeProps> = ({
           size={'icon'}
           onClick={handleDropdownClick}
         >
-          <ThreeDotted className="fill-black-900 stroke-black-700" />
+          <ThreeDotted />
         </Button>
       </div>
       {isDropdownVisible && (

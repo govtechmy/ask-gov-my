@@ -12,7 +12,7 @@ import Gov from '@/icons/gov';
 import UserGroup from '@/icons/usergroup';
 import Logout from '@/icons/logout';
 import { signOut } from 'next-auth/react';
-import { Button, buttonVariants } from '../ui/button';
+import { buttonVariants } from '../ui/button';
 import QuestionCircle from '@/icons/questioncircle';
 import { StyledDisplay } from '../ui/display';
 
@@ -45,7 +45,6 @@ const HeaderDashboard: React.FC = () => {
   };
 
   const toggleOpen = () => setOpen(!open);
-
   const handleLogout = () => signOut();
 
   const navLinks: NavLinkProps[] = [
@@ -78,19 +77,15 @@ const HeaderDashboard: React.FC = () => {
         <div className="font-poppins flex h-full gap-2.5 text-lg font-semibold items-center">
           <Asklogo />
           AskGovMY
-          <StyledDisplay type={'nameHeader'}>ADMIN</StyledDisplay>
+          <StyledDisplay variant={'nameHeader'}>ADMIN</StyledDisplay>
           {navLinks.map(link => (
             <NavLink key={link.href} {...link} />
           ))}
         </div>
 
-        <div className="flex">
-          <div className="items-center flex h-8 w-8">
-            <ThemeToggle />
-          </div>
-          <div className="items-center flex pr-2">
-            <LocaleSwitch />
-          </div>
+        <div className="flex gap-2">
+          <ThemeToggle />
+          <LocaleSwitch />
 
           <div className="bg-white border-[1px] border-outline-200 rounded-lg shadow-button flex-grow relative">
             <div className="flex items-center" onClick={toggleOpen}>

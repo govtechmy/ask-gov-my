@@ -25,7 +25,7 @@ const buttonVariants = cva(
         'danger-primary':
           'border border-danger-600 bg-danger-600 hover:bg-danger-700 hover:border-danger-700 text-white focus:border-danger-600 focus:ring focus:ring-offset-0 focus:ring-danger-600/20 shadow-button disabled:bg-danger-300 disabled-border-danger-300',
         'icon-threedot':
-          'border border-outline-200 hover:border-outline-300 bg-white focus:border-outline-200 focus:ring focus:ring-offset-0 focus:ring-outline-400/20 shadow-button opacity-0 absolute',
+          'border border-outline-200 hover:border-outline-300 bg-white focus:border-outline-200 focus:ring focus:ring-offset-0 focus:ring-outline-400/20 shadow-button',
         'cancel-box-red':
           'h-8 w-8 rounded-lg items-center justify-center flex hover:bg-[#FEF2F2] hover:dark:bg-[#2B0707]',
       },

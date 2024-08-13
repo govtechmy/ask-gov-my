@@ -3,7 +3,6 @@
 import React, { useState } from 'react';
 import AgencySettingsModal from './AgencySettingsModal';
 import AgencyLogoImporter from '../AgencyLogoImporter';
-import ThreeDotted from '@/icons/threedotted';
 import Gear from '@/icons/gear';
 
 interface AgencyCardProps {
