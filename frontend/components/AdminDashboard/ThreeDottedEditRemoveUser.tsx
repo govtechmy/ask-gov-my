@@ -109,6 +109,7 @@ const ThreeDottedEditRemoveUser: React.FC<ThreeProps> = ({
           <ThreeDotted />
         </Button>
       </PopoverTrigger>
+
       <PopoverContent>
         <Dialog
           open={isModalEditUserOpen}
@@ -121,7 +122,7 @@ const ThreeDottedEditRemoveUser: React.FC<ThreeProps> = ({
             </Button>
           </DialogTrigger>
 
-          <DialogContent hideCloseButton className="w-[600px] p-0">
+          <DialogContent hideCloseButton className="w-[600px] p-0 gap-0">
             <DialogHeader>
               <DialogTitle className="p-6 pb-4">
                 User setting
@@ -165,7 +166,7 @@ const ThreeDottedEditRemoveUser: React.FC<ThreeProps> = ({
                 </div>
               </DialogDescription>
             </DialogHeader>
-            <DialogFooter className="pb-6 flex justify-end pr-6">
+            <DialogFooter className="p-6 flex justify-end">
               <Button
                 variant={'secondary'}
                 onClick={() => setIsModalEditUserOpen(false)}
