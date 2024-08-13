@@ -20,7 +20,9 @@ export interface Question {
         name_ms?: string;
         acronym: string;
       };
+  answer_preview: string;
 }
+
 
 export interface Agency {
   id: number;
