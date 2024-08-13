@@ -502,6 +502,11 @@ class AddUserView(APIView):
 
 
 class EditDeleteUserView(APIView):
+    def get(self, request, id):
+        user = get_object_or_404(User, id=id)
+        serializer = UserSerializer(user)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
     def put(self, request, id):
         data = request.data
         user = get_object_or_404(User, id=id)
