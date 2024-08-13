@@ -1,18 +1,16 @@
 'use client'
 
 import { cn } from '@/lib/utils';
-import { useEditor, EditorContent, Editor } from '@tiptap/react'
+import { useEditor, EditorContent, Editor, JSONContent } from '@tiptap/react'
 import StarterKit from '@tiptap/starter-kit'
 import { buttonVariants } from './ui/button'
 import { BoldIcon, BulletedListIcon, ItalicIcon, LinkIcon, OrderedListIcon, RedoIcon, StrikethroughIcon, UnderlineIcon, UndoIcon } from '@/icons/editor';
-import BulletList from '@tiptap/extension-bullet-list';
 import Underline from '@tiptap/extension-underline';
-import ListItem from '@tiptap/extension-list-item';
 import History from '@tiptap/extension-history';
 import Link from '@tiptap/extension-link';
 import { useCallback } from 'react';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from './ui/select';
-import Heading, { Level } from '@tiptap/extension-heading';
+import { Level } from '@tiptap/extension-heading';
 import { Separator } from './ui/separator';
 
 
@@ -187,18 +185,21 @@ const MenuBar = ({ editor }: { editor: Editor | null }) => {
     );
 };
 
-export default () => {
+export default ({
+    editorText,
+    setEditorText,
+  }: {
+    editorText: any;
+    setEditorText: (content: string) => void;
+  }) => {
     const editor = useEditor({
-        extensions: [StarterKit, Heading, BulletList, Underline, ListItem, Link.configure({
+        extensions: [StarterKit, Underline, Link.configure({
             openOnClick: true,
             autolink: true,
             defaultProtocol: 'https',
         })],
-        content: 
-        `<ul>
-          <li>A list item</li>
-          <li>And another one</li>
-        </ul>`,
+        content: editorText,
+        onUpdate: ({ editor }) => setEditorText(editor.getHTML()),
     });
 
 
