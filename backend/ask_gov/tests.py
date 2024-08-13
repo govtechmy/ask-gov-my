@@ -79,6 +79,10 @@ class TestAskGov(APITestCase):
         user.save()
 
         url = reverse('edit_delete_user', kwargs={'id': str(user.pk)})
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, 200)
+
+        url = reverse('edit_delete_user', kwargs={'id': str(user.pk)})
         response = self.client.put(url, data={'name': unique_name, 'email': unique_email,
                                               'role': 'staff',
                                               'agency': self.agency.pk, 'userProfileColour': 'black'})
