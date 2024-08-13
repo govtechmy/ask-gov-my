@@ -1,5 +1,4 @@
 import Close from '@/icons/close';
-import Info from '@/icons/info';
 import TickCheckCircle from '@/icons/tickcheckcircle';
 import React, { useEffect, useState } from 'react';
 
@@ -55,7 +54,7 @@ const ToastQuestionMarkAsUnSpam: React.FC<ToastProps> = ({
       {visible && (
         <div
           className={`fixed bottom-6 right-6 bg-white-focuswhite200 
-          text-[#A16207] rounded-lg items-center  shadow-button
+          text-[#16A34A] rounded-lg items-center  shadow-button
           transition-opacity duration-300 opacity-100 h-[48px] w-[312px] border-[1px] border-outline-200 overflow-hidden
           ${animationState === 'enter' ? 'animate-slideIn' : 'animate-slideOut'}
           `}
@@ -65,7 +64,7 @@ const ToastQuestionMarkAsUnSpam: React.FC<ToastProps> = ({
 
             <div className="absolute top-0 flex items-center h-[45px] w-[310px] rounded-t-[5px] rounded-b-[5px]">
               <div className="ml-[15px] h-6 w-6 flex items-center justify-center ">
-                <TickCheckCircle className="stroke-[#15803D] dark:stroke-[#16A34A]"></TickCheckCircle>
+                <TickCheckCircle></TickCheckCircle>
               </div>
 
               <div className="px-3 text-sm font-medium w-[240px] text-[#15803D] dark:text-[#16A34A]">

@@ -21,7 +21,7 @@ const DialogOverlay = React.forwardRef<
   <DialogPrimitive.Overlay
     ref={ref}
     className={cn(
-      'data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 fixed inset-0 z-50 bg-black/80',
+      'data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 fixed inset-0 z-50 bg-gray-900 bg-opacity-70',
       className,
     )}
     {...props}
@@ -59,7 +59,7 @@ const DialogHeader = ({
 }: React.HTMLAttributes<HTMLDivElement>) => (
   <div
     className={cn(
-      'flex flex-col space-y-1.5 text-center sm:text-left',
+      'flex flex-col space-y-2 text-center sm:text-left',
       className,
     )}
     {...props}
@@ -87,10 +87,7 @@ const DialogTitle = React.forwardRef<
 >(({ className, ...props }, ref) => (
   <DialogPrimitive.Title
     ref={ref}
-    className={cn(
-      'text-lg font-semibold leading-none tracking-tight',
-      className,
-    )}
+    className={cn('text-lg font-semibold', className)}
     {...props}
   />
 ));
@@ -102,7 +99,7 @@ const DialogDescription = React.forwardRef<
 >(({ className, ...props }, ref) => (
   <DialogPrimitive.Description
     ref={ref}
-    className={cn('text-foreground text-sm', className)}
+    className={cn('text-sm text-black-700', className)}
     {...props}
   />
 ));
