@@ -136,7 +136,7 @@ export const authOptions: NextAuthOptions = {
       return session;
     },
     async redirect({ url, baseUrl }) {
-      if (url.startsWith(baseUrl)) return urcll;
+      if (url.startsWith(baseUrl)) return url;
       if (url.startsWith('/admin/dashboard')) return baseUrl + url;
       return baseUrl;
     },
