@@ -42,6 +42,7 @@ class Question(models.Model):
     state = models.CharField(max_length=10, choices=STATE_CHOICES, default=BACKLOG)
     agency = models.ForeignKey(Agency, on_delete=models.CASCADE, null=True, blank=True)
     answer = models.TextField(null=True, blank=True)
+    answer_preview = models.CharField(null=True, blank=True)
     topics = models.ManyToManyField(Topic, blank=True)
     email = models.EmailField()
     likes = models.IntegerField(default=0)
