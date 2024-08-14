@@ -23,6 +23,11 @@ import HeaderQuestionDetail from '@/components/HeaderDetails/HeaderQuestionDetai
 import { Question } from '@/types/types';
 import AgencyLogoImporter from '@/components/AgencyLogoImporter';
 import ContextSearchBar from '@/components/ContextSearchBar';
+import StarterKit from '@tiptap/starter-kit';
+import Underline from '@tiptap/extension-underline';
+import {Link as TipTapLink} from '@tiptap/extension-link';
+import { useEditor, EditorContent, Editor, JSONContent } from '@tiptap/react'
+import ReadOnlyTipTap from '@/components/ReadOnlyTipTap';
 
 interface Props {
   params: {
@@ -49,7 +54,7 @@ const QuestionDetailPage: React.FC<Props> = async ({ params }) => {
 
   try {
     question = await getQuestionById(questionId);
-
+    console.log('question in page', question);
     if (!question) {
       throw new Error('Question not found');
     }
@@ -107,7 +112,7 @@ const QuestionDetailPage: React.FC<Props> = async ({ params }) => {
     if (!agencyList || agencyList.length === 0) {
       throw new Error('Agency list is empty');
     }
-  } catch {}
+  } catch { }
 
   const currentAgency = agencyList.find(
     (agency: { acronym: string }) =>
@@ -183,8 +188,8 @@ const QuestionDetailPage: React.FC<Props> = async ({ params }) => {
                         ></WordTranslate>
                       </div>
                     </div>
-                    <div className="flex px-8 pb-5 pt-4 text-justify text-black-700">
-                      {question.answer}
+                    <div className="flex px-8 pb-5 pt-4 text-justify text-black-700 flex-col">
+                      <ReadOnlyTipTap editorText={question.answer} />
                     </div>
 
                     <div className="px-8 pb-8 pt-0">
