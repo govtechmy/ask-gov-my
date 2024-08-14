@@ -150,16 +150,14 @@ const ThreeDottedEditRemoveUser: React.FC<ThreeProps> = ({
                       onChange={e => setEmail(e.target.value)}
                     />
                   </div>
-                  <div className="space-y-2">
-                    <Label htmlFor="role">Role</Label>
-                    <DropdownRole
-                      agencies={agencies}
-                      setRole={setRole}
-                      setAgency={setAgency}
-                      roleEmpty={false}
-                      user={user}
-                    />
-                  </div>
+
+                  <DropdownRole
+                    agencies={agencies}
+                    setRole={setRole}
+                    setAgency={setAgency}
+                    roleEmpty={false}
+                    user={user}
+                  />
                 </div>
               </DialogDescription>
             </DialogHeader>
@@ -173,9 +171,6 @@ const ThreeDottedEditRemoveUser: React.FC<ThreeProps> = ({
               <Button variant={'primary'} onClick={handleSubmit}>
                 Save
               </Button>
-
-              {success && <div className="text-green-500 mt-4">{success}</div>}
-              {error && <div className="text-red-500 mt-4">{error}</div>}
             </DialogFooter>
           </DialogContent>
         </Dialog>
@@ -193,7 +188,7 @@ const ThreeDottedEditRemoveUser: React.FC<ThreeProps> = ({
             </DialogTrigger>
           </DialogTrigger>
 
-          <DialogContent className="w-[400px]">
+          <DialogContent hideCloseButton className="w-[400px]">
             <DialogHeader>
               <DialogTitle>Delete User?</DialogTitle>
               <DialogDescription>
