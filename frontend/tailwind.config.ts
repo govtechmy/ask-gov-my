@@ -1,5 +1,6 @@
 import type { Config } from 'tailwindcss';
 import tailwindcssAnimate from 'tailwindcss-animate';
+import colors from 'tailwindcss/colors';
 
 const config: Config = {
   content: [
@@ -25,18 +26,26 @@ const config: Config = {
       },
       colors: {
         brand: {
-          300: 'oklch(var(--myds-brand-300))',
-          200: 'oklch(var(--myds-brand-200))',
-          50: 'oklch(var(--myds-brand-50))',
-          600: 'oklch(var(--myds-brand-600))',
-          700: 'oklch(var(--myds-brand-700))',
+          300: 'oklch(var(--myds-brand-300)/<alpha-value>)',
+          200: 'oklch(var(--myds-brand-200)/<alpha-value>)',
+          50: 'oklch(var(--myds-brand-50)/<alpha-value>)',
+          600: 'oklch(var(--myds-brand-600)/<alpha-value>)',
+          700: 'oklch(var(--myds-brand-700)/<alpha-value>)',
         },
         askmygovbrand: {
-          600: 'oklch(var(--askmygov-brand-600))',
+          600: 'oklch(var(--askmygov-brand-600)/<alpha-value>)',
           700: 'oklch(var(--askmygov-brand-700))',
           300: 'oklch(var(--askmygov-brand-300))',
           200: 'oklch(var(--askmygov-brand-200))',
           50: 'oklch(var(--askmygov-brand-50))',
+        },
+        danger: {
+          600: colors.red[600],
+          700: colors.red[700],
+          300: 'oklch(var(--danger-300)/<alpha-value>)',
+          200: 'oklch(var(--danger-200)/<alpha-value>)',
+          100: 'oklch(var(--danger-200)/<alpha-value>)',
+          50: 'oklch(var(--danger-50)/<alpha-value>)',
         },
         askmygovtextbrand: {
           600: 'oklch(var(--askmygov-text-brand-600))',
@@ -44,7 +53,10 @@ const config: Config = {
         mydstextbrand: {
           600: 'oklch(var(--myds-text-brand-600))',
         },
-        foreground: 'oklch(var(--myds-black-900))',
+        foreground: {
+          DEFAULT: 'oklch(var(--myds-black-900))',
+          danger: 'oklch(var(--text-danger-600))',
+        },
         background: {
           DEFAULT: 'oklch(var(--myds-background-50))',
         },
@@ -52,9 +64,9 @@ const config: Config = {
           100: 'oklch(var(--myds-washed-100))',
         },
         outline: {
-          200: 'oklch(var(--myds-outline-200))',
-          300: 'oklch(var(--myds-outline-300))',
-          400: 'oklch(var(--myds-outline-400))',
+          200: 'oklch(var(--myds-outline-200)/<alpha-value>)',
+          300: 'oklch(var(--myds-outline-300)/<alpha-value>)',
+          400: 'oklch(var(--myds-outline-400)/<alpha-value>)',
         },
         dim: {
           500: 'oklch(var(--myds-dim-500))',
@@ -73,6 +85,18 @@ const config: Config = {
       },
       fontFamily: {
         poppins: ['var(--font-poppins)'],
+      },
+      fontSize: {
+        xs: ['12px', '18px'],
+        sm: ['14px', '20px'],
+        base: ['16px', '24px'],
+        lg: ['18px', '26px'],
+        xl: ['20px', '30px'],
+        hxs: ['24px', '32px'],
+        hsm: ['30px', '38px'],
+        hmd: ['36px', '44px'],
+        hlg: ['48px', '60px'],
+        hxl: ['60px', '72px'],
       },
       spacing: {
         4.5: '18px',

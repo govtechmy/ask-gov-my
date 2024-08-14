@@ -3,17 +3,21 @@ import { useTranslations } from 'next-intl';
 import {
   assignAgencyToQuestion,
   changeAdminIsOpen,
+  markQuestionAsSpam,
+  unSpamQuestion,
 } from '@/actions/userServices';
 import NewUpdateIcon from '@/icons/new';
 import { Question } from '@/types/types';
 import AgencyListDropdownOnCard from './AgencyListDropdownOnCard';
 import ModalQuestionCard from './ModalQuestionCard';
-import ThreeDottedMarkAsSpam from './ThreeDottedMarkAsSpam';
 import SpamUpdateIcon from '@/icons/spam';
 import { useSearchParams } from 'next/navigation';
-import ThreeDottedMarkAsUnSpam from './ThreeDottedMarkAsUnSpam';
 import ToastQuestionMarkAsSpam from './ToastQuestionMarkAsSpam';
 import ToastQuestionMarkAsUnSpam from './ToastQuestionMarkAsUnSpam';
+import ThreeDottedAction from './ThreeDottedAction';
+import AlarmTriangle from '@/icons/alarmtriangle';
+import TickCheckCircle from '@/icons/tickcheckcircle';
+import { formatDate } from '@/actions/utils';
 
 interface QuestionCardProps {
   question: Question;
@@ -55,23 +59,6 @@ const AdminQuestionCard: React.FC<QuestionCardProps> = ({
         console.error('Failed to change admin_isopen:', error);
       }
     }
-  };
-
-  const formatDate = (dateString: string) => {
-    const date = new Date(dateString);
-    return (
-      date.toLocaleDateString('en-GB', {
-        day: '2-digit',
-        month: 'long',
-        year: 'numeric',
-      }) +
-      ', ' +
-      date.toLocaleTimeString('en-GB', {
-        hour: '2-digit',
-        minute: '2-digit',
-        hour12: true,
-      })
-    );
   };
 
   const handleMarkAsSpamToast = () => {
@@ -136,15 +123,33 @@ const AdminQuestionCard: React.FC<QuestionCardProps> = ({
           </div>
           <div>
             {activeTab === 'spam' ? (
-              <ThreeDottedMarkAsUnSpam
-                handleUnSpamToast={handleUnSpamToast}
+              // For Mark as Not Spam
+              <ThreeDottedAction
                 question={question}
-              ></ThreeDottedMarkAsUnSpam>
+                handleActionToast={handleUnSpamToast}
+                actionFunction={unSpamQuestion}
+                actionText="Mark as not spam"
+                actionIcon={<TickCheckCircle />}
+                dialogTitle="Mark question as not spam?"
+                dialogDescription="Are you sure to mark this question as not spam?"
+                confirmButtonText="Mark as Not Spam"
+                confirmButtonVariant="primary"
+                newState="backlog"
+              />
             ) : (
-              <ThreeDottedMarkAsSpam
-                handleMarkAsSpamToast={handleMarkAsSpamToast}
+              // For Mark as Spam
+              <ThreeDottedAction
                 question={question}
-              ></ThreeDottedMarkAsSpam>
+                handleActionToast={handleMarkAsSpamToast}
+                actionFunction={markQuestionAsSpam}
+                actionText="Mark As Spam"
+                actionIcon={<AlarmTriangle />}
+                dialogTitle="Mark question as spam?"
+                dialogDescription="Are you sure to mark this question as spam?"
+                confirmButtonText="Mark as Spam"
+                confirmButtonVariant="danger-primary"
+                newState="spam"
+              />
             )}
           </div>
         </div>

@@ -1,6 +1,12 @@
 import ChevronDown from '@/icons/ChevronDown';
 import Search from '@/icons/search';
-import React, { useState, useRef, ChangeEvent, Dispatch, SetStateAction } from 'react';
+import React, {
+  useState,
+  useRef,
+  ChangeEvent,
+  Dispatch,
+  SetStateAction,
+} from 'react';
 import { Agency } from '@/types/types';
 
 interface AgencyListDropdownProps {
@@ -10,7 +16,7 @@ interface AgencyListDropdownProps {
 
 const AgencyListDropdownUsers: React.FC<AgencyListDropdownProps> = ({
   agencies,
-  setAgency
+  setAgency,
 }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
@@ -42,10 +48,11 @@ const AgencyListDropdownUsers: React.FC<AgencyListDropdownProps> = ({
     setHoveredAgency(null);
   };
 
-  const filteredAgencies = agencies.filter(agency =>
-    agency.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-    agency.acronym.toLowerCase().includes(searchQuery.toLowerCase()) ||
-    agency.name_ms.toLowerCase().includes(searchQuery.toLowerCase())
+  const filteredAgencies = agencies.filter(
+    agency =>
+      agency.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      agency.acronym.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      agency.name_ms.toLowerCase().includes(searchQuery.toLowerCase()),
   );
 
   const displayText = isOpen

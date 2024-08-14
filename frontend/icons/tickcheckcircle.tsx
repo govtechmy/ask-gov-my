@@ -1,24 +1,23 @@
 export default function TickCheckCircle({
-  className = 'stroke-[#15803D]',
+  className = 'text-[#15803d]',
   ...props
 }) {
   return (
     <svg
-      width="42"
-      height="42"
-      viewBox="0 0 42 42"
+      width="20"
+      height="20"
+      viewBox="0 0 20 20"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
       className={className}
       {...props}
     >
       <path
-        d="M14.6999 23.55L17.0655 26.2745C17.9731 27.3199 19.6264 27.2162 20.3964 26.0656L27.2999 15.75M36.2249 21C36.2249 29.4086 29.4084 36.225 20.9999 36.225C12.5914 36.225 5.7749 29.4086 5.7749 21C5.7749 12.5915 12.5914 5.77502 20.9999 5.77502C29.4084 5.77502 36.2249 12.5915 36.2249 21Z"
-        stroke="#15803D"
-        strokeWidth="3.15"
+        d="M7 11.2143L8.12645 12.5116C8.55869 13.0095 9.34594 12.9601 9.71261 12.4122L13 7.5M17.25 10C17.25 14.0041 14.0041 17.25 10 17.25C5.99594 17.25 2.75 14.0041 2.75 10C2.75 5.99594 5.99594 2.75 10 2.75C14.0041 2.75 17.25 5.99594 17.25 10Z"
+        stroke="currentColor"
+        strokeWidth="1.5"
         strokeLinecap="round"
         strokeLinejoin="round"
-        className={className}
       />
     </svg>
   );
