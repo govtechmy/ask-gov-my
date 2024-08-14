@@ -4,9 +4,9 @@ import React, { useState, useEffect } from 'react';
 import AdminQuestionCard from './AdminQuestionCard';
 import { useSearchParams } from 'next/navigation';
 import { Question } from '@/types/types';
-import { getDynamicAgencyMap } from '@/actions/questionServices';
+import { getDynamicAgencyMap, getAgencyList } from '@/actions/questionServices';
 import Pagination from '../Pagnination';
-
+import { Agency } from '@/types/types';
 interface QuestionBoxProps {
   questions: Question[];
 }
@@ -16,6 +16,7 @@ const AdminQuestionBox: React.FC<QuestionBoxProps> = ({ questions }) => {
   const [filteredQuestions, setFilteredQuestions] = useState<Question[]>([]);
   const [paginatedQuestions, setPaginatedQuestions] = useState<Question[]>([]);
   const [agencyMap, setAgencyMap] = useState<Record<string, string>>({});
+  const [agencies, setAgencies] = useState<Agency[]>([])
   const itemsPerPage = 10;
   const totalPages = Math.ceil(filteredQuestions.length / itemsPerPage);
 
@@ -24,12 +25,12 @@ const AdminQuestionBox: React.FC<QuestionBoxProps> = ({ questions }) => {
   const [activeQuestionId, setactiveQuestionId] = useState<number | null>(null);
 
   useEffect(() => {
-    const fetchAgencyMap = async () => {
-      const map = await getDynamicAgencyMap();
-      setAgencyMap(map);
+    const fetchAgencies = async () => {
+      const agencyList = await getAgencyList();
+      setAgencies(agencyList);
     };
 
-    fetchAgencyMap();
+    fetchAgencies();
   }, []);
 
   useEffect(() => {
@@ -68,6 +69,7 @@ const AdminQuestionBox: React.FC<QuestionBoxProps> = ({ questions }) => {
             activeQuestionId={activeQuestionId}
             setactiveQuestionId={setactiveQuestionId}
             agencyMap={agencyMap}
+            agencies={agencies}
           />
         </div>
       ))}
