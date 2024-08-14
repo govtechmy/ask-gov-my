@@ -1,4 +1,5 @@
 'use client';
+
 import ThreeDotted from '@/icons/threedotted';
 import { useEffect, useState } from 'react';
 import Pencil from '@/icons/pencil';
@@ -29,8 +30,8 @@ interface ThreeProps {
   user: User;
   onUpdate: () => void;
   agencies: Agency[];
-  handleDeleteUserToast: Function;
-  handleEditUserToast: Function;
+  handleDeleteUserToast: () => void;
+  handleEditUserToast: () => void;
 }
 
 const ThreeDottedEditRemoveUser: React.FC<ThreeProps> = ({
@@ -41,31 +42,25 @@ const ThreeDottedEditRemoveUser: React.FC<ThreeProps> = ({
   handleEditUserToast,
 }) => {
   const [isDropdownVisible, setIsDropdownVisible] = useState(false);
+  const [isModalEditUserOpen, setIsModalEditUserOpen] = useState(false);
+  const [isModalDeleteUserOpen, setIsModalDeleteUserOpen] = useState(false);
+  const [name, setName] = useState(user.name || '');
+  const [email, setEmail] = useState(user.email);
+  const [role, setRole] = useState<'staff' | 'super_admin'>(
+    user.role as 'staff' | 'super_admin',
+  );
+  const [agency, setAgency] = useState<number | null>(user.agency);
+  const [success, setSuccess] = useState<string | null>(null);
+  const [error, setError] = useState<string | null>(null);
 
   const handleDropdownClick = () => {
     setIsDropdownVisible(prevState => !prevState);
   };
 
-  const [isModalEditUserOpen, setIsModalEditUserOpen] = useState(false);
-  const [isModalDeleteUserOpen, setIsModalDeleteUserOpen] = useState(false);
-  const [name, setName] = useState(user.name || '');
-  const [email, setEmail] = useState(user.email);
-  const [role, setRole] = useState(user.role);
-  const [agency, setAgency] = useState<number | null>(user.agency);
-  const [success, setSuccess] = useState<string | null>(null);
-  const [error, setError] = useState<string | null>(null);
-
-  function handleIsModalEditUserOpen() {
-    setIsModalEditUserOpen(true);
-  }
-  function handleIsModalDeleteUserOpen() {
-    setIsModalDeleteUserOpen(true);
-  }
-
   useEffect(() => {
     setName(user.name || '');
     setEmail(user.email);
-    setRole(user.role);
+    setRole(user.role as 'staff' | 'super_admin');
     setAgency(user.agency);
   }, [user]);
 
@@ -160,6 +155,8 @@ const ThreeDottedEditRemoveUser: React.FC<ThreeProps> = ({
                     <DropdownRole
                       agencies={agencies}
                       setRole={setRole}
+                      setAgency={setAgency}
+                      roleEmpty={false}
                       user={user}
                     />
                   </div>
