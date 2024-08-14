@@ -1,8 +1,8 @@
-from django.test import TestCase
 from django.urls import reverse
-
 from faker import Faker
-from ask_gov.models import User, Question, Agency
+from rest_framework.test import APITestCase
+
+from .models import User, Question, Agency
 
 fake = Faker()
 
@@ -11,7 +11,7 @@ def create_accounts():
     pass
 
 
-class TestAskGov(TestCase):
+class TestAskGov(APITestCase):
     def setUp(self):
         self.agency = Agency.objects.create()
         user_email = fake.email()
@@ -39,6 +39,17 @@ class TestAskGov(TestCase):
         response = self.client.get(url)
         self.assertEqual(response.status_code, 200)
 
+    def test_questions(self):
+        url = reverse('question-list-create')
+        response = self.client.get(url)
+        # print(response)
+        # print(response.json())
+
+        url = reverse('all-user-questions')
+        response = self.client.get(url)
+        # print(response)
+        # print(response.json())
+
     def test_all_users_method(self):
         url = reverse('get_all_users')
         response = self.client.get(url)
@@ -46,19 +57,41 @@ class TestAskGov(TestCase):
 
         self.assertEqual(User.objects.count(), 2)
         url = reverse('add_user')
-        email = fake.email()
-        data = {'email': email,
-                'role': 'staff',
-                'agency': self.agency.pk,
-                'userProfileColour': 'red'}
+        unique_email = fake.email()
+        unique_name = fake.name()
+        data = {
+            'name': unique_name, 'email': unique_email,
+            'role': 'staff',
+            'agency': self.agency.pk,
+            'userProfileColour': 'red'}
         response = self.client.post(url, data=data)
         self.assertEqual(response.status_code, 201)
         self.assertEqual(User.objects.count(), 3)
 
         url = reverse('get_all_users')
-        user = User.objects.get(email=email)
-        url = reverse('delete_user', kwargs={'id': str(user.pk)})
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, 200)
+        user_list = response.json()
+        self.assertEqual(len(user_list), 3)
+
+        user = User.objects.get(email=unique_email)
+        user.name = unique_name
+        user.save()
+
+        url = reverse('edit_delete_user', kwargs={'id': str(user.pk)})
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, 200)
+
+        url = reverse('edit_delete_user', kwargs={'id': str(user.pk)})
+        response = self.client.put(url, data={'name': unique_name, 'email': unique_email,
+                                              'role': 'staff',
+                                              'agency': self.agency.pk, 'userProfileColour': 'black'})
+        self.assertEqual(response.status_code, 200)
+        self.assertNotEqual(User.objects.get(email=unique_email).user_profile_colour, 'red')
+        self.assertEqual(User.objects.get(email=unique_email).user_profile_colour, 'black')
+
+        self.assertEqual(User.objects.count(), 3)
+        url = reverse('edit_delete_user', kwargs={'id': str(user.pk)})
         response = self.client.delete(url)
         self.assertEqual(response.status_code, 204)
         self.assertEqual(User.objects.count(), 2)
-

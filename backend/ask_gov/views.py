@@ -1,4 +1,3 @@
-
 from .serializers import (
     QuestionSerializer, AgencySerializer,
     TopicSerializer, UserSerializer,
@@ -120,7 +119,7 @@ class SubmitAnswerView(APIView):
         tag_re = re.compile(r'<[^>]+>')
         text = tag_re.sub('', spaced_html)
         text = re.sub(r'\s+', ' ', text).strip()
-        
+
         return text
 
 
@@ -383,17 +382,17 @@ class UserView(APIView):
         return Response({
             'id': user.id,
             'email': user.email,
-            'emailVerified': user.email_verified 
+            'emailVerified': user.email_verified
         })
 
 
 class SessionView(APIView):
     def post(self, request):
         data = request.data
-        user = get_object_or_404(User, id=data['userId'])  
+        user = get_object_or_404(User, id=data['userId'])
         session = Session.objects.create(
             user=user,
-            session_token=data['sessionToken'], 
+            session_token=data['sessionToken'],
             expires=data['expires']
         )
         return Response({
@@ -414,13 +413,13 @@ class SessionView(APIView):
             'user': {
                 'id': session.user.id,
                 'email': session.user.email,
-                'emailVerified': session.user.email_verified 
+                'emailVerified': session.user.email_verified
             }
         })
 
     def put(self, request):
         data = request.data
-        session = get_object_or_404(Session, session_token=data['sessionToken']) 
+        session = get_object_or_404(Session, session_token=data['sessionToken'])
         session.expires = data.get('expires', session.expires)
         session.save()
         return Response({
@@ -439,19 +438,19 @@ class SessionView(APIView):
 class AccountView(APIView):
     def post(self, request):
         data = request.data
-        user = get_object_or_404(User, id=data['userId']) 
+        user = get_object_or_404(User, id=data['userId'])
         account = Account.objects.create(
             user=user,
             provider=data['provider'],
-            provider_account_id=data['providerAccountId'], 
+            provider_account_id=data['providerAccountId'],
             access_token=data.get('accessToken', None),
             refresh_token=data.get('refreshToken', None),
             expires_at=data.get('expiresAt', None)
         )
         return Response({
-            'userId': account.user.id, 
+            'userId': account.user.id,
             'provider': account.provider,
-            'providerAccountId': account.provider_account_id 
+            'providerAccountId': account.provider_account_id
         }, status=status.HTTP_201_CREATED)
 
     def delete(self, request):
@@ -460,6 +459,7 @@ class AccountView(APIView):
                                     provider_account_id=data['providerAccountId'])
         account.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
+
 
 class VerificationTokenView(APIView):
     def post(self, request):
@@ -486,7 +486,7 @@ class VerificationTokenView(APIView):
             'token': token.token
         }, status=status.HTTP_200_OK)
 
-    
+
 class AddUserView(APIView):
     def post(self, request):
         data = request.data
@@ -500,22 +500,29 @@ class AddUserView(APIView):
         user.save()
         return Response({'message': 'User added successfully'}, status=status.HTTP_201_CREATED)
 
-class EditUserView(APIView):
+
+class EditDeleteUserView(APIView):
+    def get(self, request, id):
+        user = get_object_or_404(User, id=id)
+        serializer = UserSerializer(user)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
     def put(self, request, id):
         data = request.data
         user = get_object_or_404(User, id=id)
-        user.username = data['name']
+        user.name = data['name']
         user.email = data['email']
         user.role = data['role']
         user.agency = data['agency']
+        user.user_profile_colour = data['userProfileColour']
         user.save()
         return Response({'message': 'User updated successfully'}, status=status.HTTP_200_OK)
 
-class DeleteUserView(APIView):
     def delete(self, request, id):
         user = get_object_or_404(User, id=id)
         user.delete()
         return Response({'message': 'User deleted successfully'}, status=status.HTTP_204_NO_CONTENT)
+
 
 class GetAllUsersView(APIView):
     def get(self, request):
@@ -529,6 +536,7 @@ class GetAllUsersView(APIView):
             'user_profile_colour': user.user_profile_colour,
         } for user in users]
         return Response(users_data, status=status.HTTP_200_OK)
+
 
 class CheckUserEmailExistsView(APIView):
     def get(self, request):
