@@ -514,7 +514,6 @@ class EditDeleteUserView(APIView):
         user.email = data['email']
         user.role = data['role']
         user.agency = data['agency']
-        user.user_profile_colour = data['userProfileColour']
         user.save()
         return Response({'message': 'User updated successfully'}, status=status.HTTP_200_OK)
 
