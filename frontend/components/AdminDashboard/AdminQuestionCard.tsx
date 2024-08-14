@@ -18,12 +18,14 @@ import ThreeDottedAction from './ThreeDottedAction';
 import AlarmTriangle from '@/icons/alarmtriangle';
 import TickCheckCircle from '@/icons/tickcheckcircle';
 import { formatDate } from '@/actions/utils';
+import { Agency } from '@/types/types';
 
 interface QuestionCardProps {
   question: Question;
   activeQuestionId: number | null;
   setactiveQuestionId: React.Dispatch<React.SetStateAction<number | null>>;
   agencyMap: Record<string, string>;
+  agencies: Agency[]
 }
 
 const AdminQuestionCard: React.FC<QuestionCardProps> = ({
@@ -31,6 +33,7 @@ const AdminQuestionCard: React.FC<QuestionCardProps> = ({
   activeQuestionId,
   setactiveQuestionId,
   agencyMap,
+  agencies
 }) => {
   const [selectedAgency, setSelectedAgency] = useState<string>('Unassigned');
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -40,14 +43,14 @@ const AdminQuestionCard: React.FC<QuestionCardProps> = ({
 
   useEffect(() => {
     if (question.agency !== null) {
-      const agencyAcronym = Object.keys(agencyMap).find(
-        key => agencyMap[key] === question.agency!.toString(),
+      const matchedAgency = agencies.find(
+        agency => agency.id === question.agency
       );
-      if (agencyAcronym) {
-        setSelectedAgency(agencyAcronym);
+      if (matchedAgency) {
+        setSelectedAgency(matchedAgency.acronym);
       }
     }
-  }, [question.agency, agencyMap]);
+  }, [question.agency, agencies]);
 
   const handleCardClick = async () => {
     setIsModalOpen(true);
@@ -111,11 +114,11 @@ const AdminQuestionCard: React.FC<QuestionCardProps> = ({
             <AgencyListDropdownOnCard
               selectedAgency={selectedAgency}
               setSelectedAgency={setSelectedAgency}
-              AGENCY_TO_UUID={agencyMap}
               setSuccessMessage={setSuccessMessage}
               activeQuestionId={activeQuestionId}
               setactiveQuestionId={setactiveQuestionId}
               questionId={question.id}
+              agencies={agencies}
             />
           </div>
           <div className="font-normal text-sm text-dim-500 w-[180px] pl-3 ">
