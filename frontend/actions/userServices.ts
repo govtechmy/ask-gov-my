@@ -312,17 +312,7 @@ export async function addUser(
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({ name, email, role, agency, userProfileColour }),
-    const response = await fetch(`${API_URL}/admin/user`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ name, email, role, agency, userProfileColour }),
-    });
-    if (!response.ok) {
-      throw new Error('Failed to add user');
-    }
-
+    })
     if (!response.ok) {
       throw new Error('Failed to add user');
     }
@@ -332,7 +322,7 @@ export async function addUser(
     console.error('Error adding user:', error);
     return { success: false, message: 'Failed to add user' };
   }
-}
+  }
 
 export async function editUser(
   id: string,
@@ -410,19 +400,10 @@ export async function getAllUsers(): Promise<{
 
 export async function checkUserEmailExists(email: string): Promise<boolean> {
   try {
-    const response = await fetch(`${API_URL}/admin/check-email?email=${encodeURIComponent(email)}`, {
-      method: 'GET',
-      headers: {
-        'Content-Type': 'application/json',
-      },
+    const user = await prisma.user.findUnique({
+      where: { email },
     });
-
-    if (!response.ok) {
-      throw new Error('Failed to check email');
-    }
-
-    const exists = await response.json();
-    return exists;
+    return !!user;
   } catch (error) {
     console.error('Error checking user email:', error);
     return false;
