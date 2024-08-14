@@ -1,31 +1,36 @@
-import NextAuth from 'next-auth';
-import EmailProvider from 'next-auth/providers/email';
-import { NextAuthOptions } from 'next-auth';
 import { get, post, put } from '@/lib/api';
+import { NextAuthOptions } from 'next-auth';
 import type {
   Adapter,
   AdapterUser,
-  VerificationToken,
   AdapterSession,
-  AdapterAccount
-} from "@auth/core/adapters";
+  VerificationToken,
+} from 'next-auth/adapters';
+import EmailProvider from 'next-auth/providers/email';
+
 const API_URL = process.env.API_URL;
 
 const DjangoAdapter = (): Adapter => {
   return {
-    async createVerificationToken(verificationToken: VerificationToken) {
+    async createVerificationToken(verificationToken) {
       return await post(`${API_URL}/auth/verification`, verificationToken);
     },
 
     async useVerificationToken({ identifier, token }) {
-      return await put(`${API_URL}/auth/verification`, { identifier, token });
+      const verificationToken = await put<VerificationToken>(
+        `${API_URL}/auth/verification`,
+        { identifier, token },
+      );
+      if (!verificationToken) return null;
+      return <VerificationToken>{
+        ...verificationToken,
+        expires: new Date(verificationToken.expires),
+      };
     },
 
-    async createUser(user: Omit<AdapterUser, "id">): Promise<AdapterUser> {
+    async createUser(user) {
       const createdUser = await post<AdapterUser>(`${API_URL}/auth/user`, user);
-      if (!createdUser) {
-        throw new Error('Failed to create user');
-      }
+      if (!createdUser) throw new Error('Failed to create user');
       return createdUser;
     },
 
@@ -41,7 +46,7 @@ const DjangoAdapter = (): Adapter => {
       return await get(`${API_URL}/auth/user`, { providerAccountId, provider });
     },
 
-    async updateUser(user: Partial<AdapterUser> & Pick<AdapterUser, "id">): Promise<AdapterUser> {
+    async updateUser(user) {
       const updatedUser = await put<AdapterUser>(`${API_URL}/auth/user`, user);
       if (!updatedUser) {
         throw new Error('Failed to update user');
@@ -49,19 +54,15 @@ const DjangoAdapter = (): Adapter => {
       return updatedUser;
     },
 
-    async linkAccount(account: AdapterAccount): Promise<AdapterAccount> {
-      const linkedAccount = await post<AdapterAccount>(`${API_URL}/auth/account`, account);
-      if (!linkedAccount) {
-        throw new Error('Failed to link account');
-      }
-      return linkedAccount;
+    async linkAccount(account) {
+      await post(`${API_URL}/auth/account`, account);
     },
 
     async getSessionAndUser(sessionToken) {
-      const session_and_user = await get<{ session: AdapterSession; user: AdapterUser; } | null>(
-        `${API_URL}/auth/session`, 
-        { sessionToken }
-      );
+      const session_and_user = await get<{
+        session: AdapterSession;
+        user: AdapterUser;
+      }>(`${API_URL}/auth/session`, { sessionToken });
       if (!session_and_user) return null;
       return {
         session: {
@@ -73,8 +74,12 @@ const DjangoAdapter = (): Adapter => {
       };
     },
 
-    async createSession({ sessionToken, userId, expires }): Promise<AdapterSession> {
-      const session = await post<AdapterSession>(`${API_URL}/auth/session`, { sessionToken, userId, expires });
+    async createSession({ sessionToken, userId, expires }) {
+      const session = await post<AdapterSession>(`${API_URL}/auth/session`, {
+        sessionToken,
+        userId,
+        expires,
+      });
       if (!session) {
         throw new Error('Failed to create session');
       }
@@ -85,10 +90,20 @@ const DjangoAdapter = (): Adapter => {
       };
     },
 
-    async updateSession(session: Partial<AdapterSession> & Pick<AdapterSession, "sessionToken">): Promise<AdapterSession | null> {
-      const updatedSession = await put<AdapterSession>(`${API_URL}/auth/session`, session);
-      if (!updatedSession || !updatedSession.sessionToken || !updatedSession.userId || !updatedSession.expires) {
-        throw new Error('Failed to update session or invalid response from API');
+    async updateSession(session) {
+      const updatedSession = await put<AdapterSession>(
+        `${API_URL}/auth/session`,
+        session,
+      );
+      if (
+        !updatedSession ||
+        !updatedSession.sessionToken ||
+        !updatedSession.userId ||
+        !updatedSession.expires
+      ) {
+        throw new Error(
+          'Failed to update session or invalid response from API',
+        );
       }
       return {
         userId: updatedSession.userId,
@@ -96,7 +111,7 @@ const DjangoAdapter = (): Adapter => {
         expires: new Date(updatedSession.expires),
       };
     },
-    
+
     async deleteSession(sessionToken) {
       await post(`${API_URL}/auth/session`, { sessionToken });
     },
@@ -106,7 +121,6 @@ const DjangoAdapter = (): Adapter => {
     },
   };
 };
-
 
 export const authOptions: NextAuthOptions = {
   providers: [
@@ -118,7 +132,7 @@ export const authOptions: NextAuthOptions = {
       },
     }),
   ],
-  adapter: DjangoAdapter(), 
+  adapter: DjangoAdapter(),
   secret: process.env.NEXTAUTH_SECRET,
   pages: {
     signIn: '/admin',
@@ -126,7 +140,7 @@ export const authOptions: NextAuthOptions = {
     error: '/',
   },
   session: {
-    strategy: 'database', 
+    strategy: 'database',
   },
   callbacks: {
     async session({ session, user }) {
@@ -143,4 +157,3 @@ export const authOptions: NextAuthOptions = {
     },
   },
 };
-export default NextAuth(authOptions);
