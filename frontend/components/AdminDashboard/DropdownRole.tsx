@@ -1,15 +1,16 @@
-import { useState, Dispatch, SetStateAction } from 'react';
+import React, { useState, Dispatch, SetStateAction } from 'react';
 import AgencyListDropdownUsersModal from './AgencyListDropdownUsersModal';
 import ChevronDown from '@/icons/ChevronDown';
-import { Agency } from '@/types/types';
-import { User } from '@/types/types';
+import { Agency, User } from '@/types/types';
+
+type Role = 'staff' | 'super_admin' | 'unassigned';
 
 interface DropdownRoleProps {
   agencies: Agency[];
-  setRole: Dispatch<SetStateAction<'staff' | 'super_admin' | 'unassigned'>>;
+  setRole: Dispatch<SetStateAction<Exclude<Role, 'unassigned'>>>;
   setAgency: Dispatch<SetStateAction<number | null>>;
   roleEmpty: boolean;
-  user?: User; // user is now optional
+  user?: Partial<User>;
 }
 
 const DropdownRole: React.FC<DropdownRoleProps> = ({
@@ -17,26 +18,24 @@ const DropdownRole: React.FC<DropdownRoleProps> = ({
   setRole,
   setAgency,
   roleEmpty,
-  user = { role: 'unassigned', agency: null }, // provide a default value
+  user = { role: 'unassigned' as const, agency: null },
 }) => {
-  const initialRole =
+  const initialRole: Role =
     user.role === 'staff' || user.role === 'super_admin'
       ? user.role
       : 'unassigned';
   const [isOpen, setIsOpen] = useState(false);
-  const [selectedRole, setSelectedRole] = useState<
-    'staff' | 'super_admin' | 'unassigned'
-  >(initialRole);
+  const [selectedRole, setSelectedRole] = useState<Role>(initialRole);
 
   const toggleDropdown = () => setIsOpen(!isOpen);
 
-  const handleRoleSelect = (role: 'staff' | 'super_admin') => {
+  const handleRoleSelect = (role: Exclude<Role, 'unassigned'>) => {
     setRole(role);
     setSelectedRole(role);
     setIsOpen(false);
   };
 
-  const formatRoleDisplay = (role: 'staff' | 'super_admin' | 'unassigned') => {
+  const formatRoleDisplay = (role: Role): string => {
     switch (role) {
       case 'super_admin':
         return 'Superadmin';
