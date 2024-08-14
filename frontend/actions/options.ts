@@ -134,6 +134,7 @@ export const authOptions: NextAuthOptions = {
         session.user = user;
       }
       return session;
+      //remove session
     },
     async redirect({ url, baseUrl }) {
       if (url.startsWith(baseUrl)) return url;

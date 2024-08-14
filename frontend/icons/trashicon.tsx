@@ -9,7 +9,7 @@ export default function TrashIcon({ className = '', ...props }) {
     >
       <path
         d="M4.75 5.75L5.59115 15.4233C5.68102 16.4568 6.54622 17.25 7.58363 17.25H12.4164C13.4538 17.25 14.319 16.4568 14.4088 15.4233L15.25 5.75M7.75 5.5V4.75C7.75 3.64543 8.6454 2.75 9.75 2.75H10.25C11.3546 2.75 12.25 3.64543 12.25 4.75V5.5M3 5.75H17M8.5 8.5V14.5M11.5 8.5V14.5"
-        stroke="#DC2626"
+        stroke="currentColor"
         strokeWidth="1.5"
         strokeLinecap="round"
         strokeLinejoin="round"

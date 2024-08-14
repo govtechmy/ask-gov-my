@@ -73,6 +73,7 @@ const UserCard: React.FC<UserCardProps> = ({ user, onUpdate, agencies }) => {
               </div>
             </div>
           )}
+
           <ThreeDottedEditRemoveUser
             user={user}
             onUpdate={onUpdate}

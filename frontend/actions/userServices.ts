@@ -312,7 +312,17 @@ export async function addUser(
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({ name, email, role, agency, userProfileColour }),
+    const response = await fetch(`${API_URL}/admin/user`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ name, email, role, agency, userProfileColour }),
     });
+    if (!response.ok) {
+      throw new Error('Failed to add user');
+    }
+
     if (!response.ok) {
       throw new Error('Failed to add user');
     }

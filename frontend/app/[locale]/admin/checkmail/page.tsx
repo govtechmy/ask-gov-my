@@ -1,10 +1,14 @@
+'use client';
 import Link from 'next/link';
 import HeaderAdmin from '@/components/HeaderDetails/HeaderAdmin';
 import FooterAdmin from '@/components/FooterDetails/FooterAdmin';
-import { Button } from '@/components/ui/button';
+import { buttonVariants } from '@/components/ui/button';
 import Maillogo from '@/icons/mail';
 import Arrowleft from '@/icons/arrowleft';
 import { useTranslations } from 'next-intl';
+import MailLogo from '@/icons/maillogo';
+import { useState, useEffect } from 'react';
+import { cn } from '@/lib/utils';
 
 export function CheckmailPage({
   params: { locale },
@@ -13,6 +17,26 @@ export function CheckmailPage({
 }) {
   const t = useTranslations('Checkmail');
   // const { data: session } = useSession();
+  const [isDisabled, setIsDisabled] = useState(true); // Initially set to true
+  const [countdown, setCountdown] = useState(60); // Countdown timer in 60 seconds edit here later
+
+  useEffect(() => {
+    if (isDisabled && countdown > 0) {
+      const timer = setInterval(() => {
+        setCountdown(prev => prev - 1);
+      }, 1000);
+
+      return () => clearInterval(timer);
+    } else if (countdown === 0) {
+      setIsDisabled(false);
+    }
+  }, [isDisabled, countdown]);
+
+  const handleClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
+    if (isDisabled) {
+      e.preventDefault();
+    }
+  };
 
   return (
     <div className="flex flex-col min-h-screen">
@@ -34,23 +58,29 @@ export function CheckmailPage({
             </div>
           </div>
 
-          <Link href="/admin">
-            <Button
-              className="
-              flex justify-center items-center py-2 rounded-md
-              from-[#FFF] to-[#FFF]  dark:from-[#18181B] dark:to-[#18181B] 
-              border-[1px] border-[#E4E4E7] dark:border-[#27272A]
-              hover:cursor-pointer
-              "
+          <div className="flex gap-3">
+            <Link
+              className={buttonVariants({ variant: 'tertiary', size: 'md' })}
+              href="/admin"
             >
-              <div className="px-3">
-                <Arrowleft />
-              </div>
-              <div className="pr-3 font-medium text-base ">
-                {t('backclick')}
-              </div>
-            </Button>
-          </Link>
+              <Arrowleft />
+              {t('backclick')}
+            </Link>
+
+            {/* new implementation for resending the magic email */}
+            <Link
+              className={cn(
+                buttonVariants({ variant: 'secondary', size: 'md' }),
+                isDisabled ? 'opacity-40 cursor-not-allowed' : '',
+              )}
+              href={isDisabled ? '#' : '/admin'}
+              onClick={handleClick}
+              aria-disabled={isDisabled}
+            >
+              <MailLogo />
+              {isDisabled ? `Resend in ${countdown}s` : 'Resend magic link'}
+            </Link>
+          </div>
         </div>
       </div>
       <FooterAdmin />

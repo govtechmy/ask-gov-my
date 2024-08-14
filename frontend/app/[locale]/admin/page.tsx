@@ -4,10 +4,9 @@ import { signIn } from 'next-auth/react';
 import Link from 'next/link';
 import HeaderAdmin from '@/components/HeaderDetails/HeaderAdmin';
 import FooterAdmin from '@/components/FooterDetails/FooterAdmin';
-import { Button } from '@/components/ui/button';
+import { Button, buttonVariants } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { useTranslations } from 'next-intl';
-import IdentifyWebsite from '@/components/HeaderDetails/IdentifyWebsite';
 import Google from '@/icons/google';
 
 export function AdminPage() {
@@ -81,30 +80,25 @@ export function AdminPage() {
                   />
                 </div>
 
-                <Button
-                  type="submit"
-                  className="text-base font-medium text-white-forcewhite rounded-md py-2 from-[#702FF9] to-[#B379FF] dark:from-[#702FF9] dark:to-[#B379FF] border-[1px] border-[#702FF9]"
-                >
-                  {t('1stbutton')}
-                </Button>
+                <Button variant={'primary'}> {t('1stbutton')}</Button>
 
                 <div className="text-center font-normal text-zinc-500 text-sm">
                   {t('or')}
                 </div>
 
-                <div className="flex justify-center py-2 rounded-md bg-white dark:from-[#18181B] dark:to-[#18181B] border-[1px] border-outline-200 shadow-button">
-                  <Google></Google>
-                  <div className="px-2 font-medium text-base  ">
-                    {t('2ndbutton')}
-                  </div>
-                </div>
+                <Button variant={'secondary'}>
+                  <Google></Google> {t('2ndbutton')}
+                </Button>
               </div>
             </form>
 
-            <div className="mt-4 text-center pt-4">
+            <div className="text-center pt-2">
               <Link
+                className={buttonVariants({
+                  variant: 'tertiary-colour',
+                  size: 'sm',
+                })}
                 href="/forgot-password"
-                className="ml-auto font-normal text-[#2563EB] inline-block text-sm"
               >
                 {t('forgotpass')}
               </Link>

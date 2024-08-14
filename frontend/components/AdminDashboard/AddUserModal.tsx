@@ -22,7 +22,9 @@ const AddUserModal: React.FC<AddUserModalProps> = ({
 }) => {
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
-  const [role, setRole] = useState<'staff' | 'super_admin' | 'unassigned'>('unassigned');
+  const [role, setRole] = useState<'staff' | 'super_admin' | 'unassigned'>(
+    'unassigned',
+  );
   const [agency, setAgency] = useState<number | null>(null);
   const [success, setSuccess] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
@@ -60,7 +62,7 @@ const AddUserModal: React.FC<AddUserModalProps> = ({
     }
     let color = '#';
     for (let i = 0; i < 3; i++) {
-      const value = (hash >> (i * 8)) & 0xFF;
+      const value = (hash >> (i * 8)) & 0xff;
       color += ('00' + value.toString(16)).substr(-2);
     }
     return color;
@@ -82,7 +84,7 @@ const AddUserModal: React.FC<AddUserModalProps> = ({
         email,
         role,
         role === 'super_admin' ? null : agency,
-        userColor
+        userColor,
       );
       if (response.success) {
         handleAddUserToast();
@@ -122,7 +124,9 @@ const AddUserModal: React.FC<AddUserModalProps> = ({
               required
               onChange={handleNameChange}
             />
-            {nameError && <div className="text-red-500 text-sm mb-4">{nameError}</div>}
+            {nameError && (
+              <div className="text-red-500 text-sm mb-4">{nameError}</div>
+            )}
             <div className="text-black-700 text-sm font-medium mb-[6px] w-[552px] h-5">
               Email
             </div>
@@ -135,11 +139,18 @@ const AddUserModal: React.FC<AddUserModalProps> = ({
               required
               onChange={handleEmailChange}
             />
-            {emailError && <div className="text-red-500 text-sm mb-4">{emailError}</div>}
+            {emailError && (
+              <div className="text-red-500 text-sm mb-4">{emailError}</div>
+            )}
             <div className="text-black-700 text-sm font-medium mb-[6px] w-[552px] h-5">
               Role
             </div>
-            <DropdownRole agencies={agencies} setRole={setRole} setAgency={setAgency} roleEmpty={roleEmpty} />
+            <DropdownRole
+              agencies={agencies}
+              setRole={setRole}
+              setAgency={setAgency}
+              roleEmpty={roleEmpty}
+            />
           </div>
         </div>
         <div>
