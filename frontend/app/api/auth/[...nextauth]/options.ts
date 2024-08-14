@@ -1,134 +1,36 @@
-import { get, post, put } from '@/lib/api';
 import { NextAuthOptions } from 'next-auth';
-import type {
-  Adapter,
-  AdapterUser,
-  AdapterSession,
-  VerificationToken,
-} from 'next-auth/adapters';
 import EmailProvider from 'next-auth/providers/email';
-
-const API_URL = process.env.API_URL;
-
-const DjangoAdapter = (): Adapter => {
-  return {
-    async createVerificationToken(verificationToken) {
-      return await post(`${API_URL}/auth/verification`, verificationToken);
-    },
-
-    async useVerificationToken({ identifier, token }) {
-      const verificationToken = await put<VerificationToken>(
-        `${API_URL}/auth/verification`,
-        { identifier, token },
-      );
-      if (!verificationToken) return null;
-      return <VerificationToken>{
-        ...verificationToken,
-        expires: new Date(verificationToken.expires),
-      };
-    },
-
-    async createUser(user) {
-      const createdUser = await post<AdapterUser>(`${API_URL}/auth/user`, user);
-      if (!createdUser) throw new Error('Failed to create user');
-      return createdUser;
-    },
-
-    async getUser(id) {
-      return await get(`${API_URL}/auth/user`, { id });
-    },
-
-    async getUserByEmail(email) {
-      return await get(`${API_URL}/auth/user`, { email });
-    },
-
-    async getUserByAccount({ providerAccountId, provider }) {
-      return await get(`${API_URL}/auth/user`, { providerAccountId, provider });
-    },
-
-    async updateUser(user) {
-      const updatedUser = await put<AdapterUser>(`${API_URL}/auth/user`, user);
-      if (!updatedUser) {
-        throw new Error('Failed to update user');
-      }
-      return updatedUser;
-    },
-
-    async linkAccount(account) {
-      await post(`${API_URL}/auth/account`, account);
-    },
-
-    async getSessionAndUser(sessionToken) {
-      const session_and_user = await get<{
-        session: AdapterSession;
-        user: AdapterUser;
-      }>(`${API_URL}/auth/session`, { sessionToken });
-      if (!session_and_user) return null;
-      return {
-        session: {
-          userId: session_and_user.session.userId,
-          sessionToken: session_and_user.session.sessionToken,
-          expires: new Date(session_and_user.session.expires),
-        },
-        user: session_and_user.user,
-      };
-    },
-
-    async createSession({ sessionToken, userId, expires }) {
-      const session = await post<AdapterSession>(`${API_URL}/auth/session`, {
-        sessionToken,
-        userId,
-        expires,
-      });
-      if (!session) {
-        throw new Error('Failed to create session');
-      }
-      return {
-        userId: session.userId,
-        sessionToken: session.sessionToken,
-        expires: new Date(session.expires),
-      };
-    },
-
-    async updateSession(session) {
-      const updatedSession = await put<AdapterSession>(
-        `${API_URL}/auth/session`,
-        session,
-      );
-      if (
-        !updatedSession ||
-        !updatedSession.sessionToken ||
-        !updatedSession.userId ||
-        !updatedSession.expires
-      ) {
-        throw new Error(
-          'Failed to update session or invalid response from API',
-        );
-      }
-      return {
-        userId: updatedSession.userId,
-        sessionToken: updatedSession.sessionToken,
-        expires: new Date(updatedSession.expires),
-      };
-    },
-
-    async deleteSession(sessionToken) {
-      await post(`${API_URL}/auth/session`, { sessionToken });
-    },
-
-    async unlinkAccount(partialAccount) {
-      await post(`${API_URL}/auth/account`, partialAccount);
-    },
-  };
-};
+import { createTransport } from 'nodemailer';
+import { DjangoAdapter } from './adapter';
+import email_html from './email_html';
 
 export const authOptions: NextAuthOptions = {
   providers: [
     EmailProvider({
-      async sendVerificationRequest({ identifier, url }) {
+      async sendVerificationRequest({ identifier, provider, url }) {
         //create function to send the magic link to django
         //django will send the magic link to the users
         console.log(`Magic link URL: ${url}`);
+        // NOTE: You are not required to use `nodemailer`
+        const transport = createTransport({
+          host: process.env.EMAIL_HOST,
+          port: process.env.EMAIL_PORT,
+          auth: {
+            user: process.env.EMAIL_AUTH_USER,
+            pass: process.env.EMAIL_AUTH_PASS,
+          },
+        });
+        const result = await transport.sendMail({
+          to: identifier,
+          from: provider.from,
+          subject: 'Log masuk ke AskMyGov',
+          text: `Sign in to AskMyGov\n${url}\n\n`,
+          html: email_html({ url, host: 'AskMyGov' }),
+        });
+        const failed = result.rejected.concat(result.pending).filter(Boolean);
+        if (failed.length) {
+          throw new Error(`Email(s) (${failed.join(', ')}) could not be sent`);
+        }
       },
     }),
   ],
@@ -141,19 +43,5 @@ export const authOptions: NextAuthOptions = {
   },
   session: {
     strategy: 'database',
-  },
-  callbacks: {
-    async session({ session, user }) {
-      if (user) {
-        session.user = user;
-      }
-      return session;
-      //remove session
-    },
-    async redirect({ url, baseUrl }) {
-      if (url.startsWith(baseUrl)) return url;
-      if (url.startsWith('/admin/dashboard')) return baseUrl + url;
-      return baseUrl;
-    },
   },
 };
