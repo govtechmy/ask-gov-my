@@ -7,7 +7,7 @@ import email_html from './email_html';
 export const authOptions: NextAuthOptions = {
   providers: [
     EmailProvider({
-      async sendVerificationRequest({ identifier, provider, url }) {
+      async sendVerificationRequest({ identifier, url }) {
         //create function to send the magic link to django
         //django will send the magic link to the users
         console.log(`Magic link URL: ${url}`);
@@ -22,7 +22,7 @@ export const authOptions: NextAuthOptions = {
         });
         const result = await transport.sendMail({
           to: identifier,
-          from: provider.from,
+          from: process.env.EMAIL_FROM,
           subject: 'Log masuk ke AskMyGov',
           text: `Sign in to AskMyGov\n${url}\n\n`,
           html: email_html({ url, host: 'AskMyGov' }),
