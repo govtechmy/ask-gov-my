@@ -2,7 +2,7 @@
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { useRouter, useSearchParams } from 'next/navigation';
-import ThemeToggle from './Theme';
+import ThemeToggle from './theme';
 import LocaleSwitch from './LocaleSwitch';
 import Asklogo from '@/icons/asklogo';
 import User from '@/icons/user';

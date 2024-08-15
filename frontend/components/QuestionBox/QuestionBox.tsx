@@ -2,7 +2,7 @@
 
 import React, { useState, useMemo } from 'react';
 import QuestionCard from './QuestionCard';
-import Pagination from '../Pagnination';
+import Pagination from '../ui/pagnination';
 import { Question, Agency } from '@/types/types';
 
 interface QuestionBoxProps {

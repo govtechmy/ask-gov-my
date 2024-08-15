@@ -90,11 +90,12 @@ const QuestionDetailPage: React.FC<Props> = async ({ params }) => {
   const relatedQuestions = await getRelatedQuestions(question.question);
 
   return (
-    <div className="">
+    <div>
       <IdentifyWebsite />
       <ContextSearchBar>
         <HeaderQuestionDetail />
       </ContextSearchBar>
+
       <div className="container mt-10 flex">
         <div className="max-w-screen-2xl flex">
           <div className="pb-7 w-9/12">
