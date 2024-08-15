@@ -5,8 +5,10 @@ declare namespace NodeJS {
     AUTH_TOKEN: string;
     REVALIDATE_TOKEN: string;
 
-    PLANE_API_KEY: string;
-    PLANE_WORKSPACE_ID: string;
-    PLANE_WEBHOOK_KEY: string;
+    EMAIL_FROM: string;
+    EMAIL_HOST: string;
+    EMAIL_PORT: number;
+    EMAIL_AUTH_USER: string;
+    EMAIL_AUTH_PASS: string;
   }
 }
