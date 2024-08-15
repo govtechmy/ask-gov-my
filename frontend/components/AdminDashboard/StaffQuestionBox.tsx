@@ -4,7 +4,7 @@ import React, { useState, useEffect } from 'react';
 import AnswerQuestionCard from './AnswerQuestionCard';
 import { useSearchParams } from 'next/navigation';
 import { Question } from '@/types/types';
-import Pagination from '../Pagnination';
+import Pagination from '../ui/pagnination';
 
 interface QuestionBoxProps {
   questions: Question[];
