@@ -7,9 +7,10 @@ import AddUserModal from './AddUserModal';
 import { cn } from '@/lib/utils';
 import PlusIcon from '@/icons/plusicon';
 import AgencyListDropdownUsers from './AgencyListDropdownUsers';
-import ToastNewUserAdded from './ToastNewUserAdded';
 import { Agency } from '@/types/types';
 import { getDynamicAgencyMap } from '@/actions/questionServices';
+import Toast from './Toast';
+import TickCheckCircle from '@/icons/tickcheckcircle';
 
 interface UserNavbarProps {
   setSearchTerm: (term: string) => void;
@@ -138,8 +139,11 @@ const UserNavbar: React.FC<UserNavbarProps> = ({
       />
 
       {showAddUserToast && (
-        <ToastNewUserAdded
+        <Toast
           message="New user has been added!"
+          icon={<TickCheckCircle />}
+          underlineColor="bg-[#16A34A]"
+          messageColor="text-[#15803D] dark:text-[#16A34A]"
           show={showAddUserToast}
           onClose={() => setShowAddUserToast(false)}
         />
