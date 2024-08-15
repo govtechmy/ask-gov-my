@@ -509,7 +509,6 @@ class EditDeleteUserView(APIView):
 
     def put(self, request, id):
         data = request.data
-        print(data)
         user = get_object_or_404(User, id=id)
         user.username = data['name']
         user.email = data['email']
