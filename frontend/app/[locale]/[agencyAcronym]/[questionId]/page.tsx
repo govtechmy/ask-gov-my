@@ -14,7 +14,7 @@ import ThumbsCounter from '@/components/ThumbsCounter';
 import AgencyName from '@/components/AgencyName';
 import JataNegaraIcon from '@/icons/jatanegaraicon';
 import { redirect } from 'next/navigation';
-import DateComponent from '@/components/date';
+import DateComponent from '@/components/Date';
 import Link from 'next/link';
 import IdentifyWebsite from '@/components/HeaderDetails/IdentifyWebsite';
 import WordTranslate from '@/components/WordTranslate';

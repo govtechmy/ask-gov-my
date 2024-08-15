@@ -7,7 +7,7 @@ import { submitAnswer, saveQuestionAsDraft } from '@/actions/userServices';
 import { Question } from '@/types/types';
 import Close from '@/icons/close';
 import IconQuestionSmile2 from '@/icons/iconquestionsmile2';
-import DateComponent from '../date';
+import DateComponent from '../Date';
 import LineVerticalForSmile from '@/icons/lineverticalforsmile';
 import AgencyLogoImporter from '../AgencyLogoImporter';
 import UploadIcon from '@/icons/upload';
