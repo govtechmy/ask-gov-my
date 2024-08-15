@@ -7,7 +7,7 @@ import { getAgencyList } from '@/actions/questionServices';
 import UserNavbar from './UserNavbar';
 import UserCard from './UserCard';
 import { Agency, User } from '@/types/types';
-import Pagination from '../Pagnination';
+import Pagination from '../ui/pagnination';
 
 const ManageUsers: React.FC = () => {
   const [users, setUsers] = useState<User[]>([]);
