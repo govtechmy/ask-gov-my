@@ -16,7 +16,7 @@ const AdminQuestionBox: React.FC<QuestionBoxProps> = ({ questions }) => {
   const [filteredQuestions, setFilteredQuestions] = useState<Question[]>([]);
   const [paginatedQuestions, setPaginatedQuestions] = useState<Question[]>([]);
   const [agencyMap, setAgencyMap] = useState<Record<string, string>>({});
-  const [agencies, setAgencies] = useState<Agency[]>([])
+  const [agencies, setAgencies] = useState<Agency[]>([]);
   const itemsPerPage = 10;
   const totalPages = Math.ceil(filteredQuestions.length / itemsPerPage);
 
