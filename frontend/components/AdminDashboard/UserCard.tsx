@@ -5,8 +5,8 @@ import { Agency, User } from '@/types/types';
 import AgencyLogoImporter from '../AgencyLogoImporter';
 import ImageNext from 'next/image';
 import ThreeDottedEditRemoveUser from './ThreeDottedEditRemoveUser';
-import ToastUserDeleted from './ToastUserDeleted';
-import ToastUserEdited from './ToastUserEdited';
+import Toast from '../ui/toast';
+import TickCheckCircle from '@/icons/tickcheckcircle';
 
 interface UserCardProps {
   user: User;
@@ -83,15 +83,21 @@ const UserCard: React.FC<UserCardProps> = ({ user, onUpdate, agencies }) => {
           />
         </div>
         {showDeleteUserToast && (
-          <ToastUserDeleted
+          <Toast
             message="User successfully deleted!"
+            icon={<TickCheckCircle />}
+            underlineColor="bg-[#16A34A]"
+            messageColor="text-[#15803D] dark:text-[#16A34A]"
             show={showDeleteUserToast}
             onClose={() => setShowDeleteUserToast(false)}
           />
         )}
         {showEditUserToast && (
-          <ToastUserEdited
-            message="User successfully edited!"
+          <Toast
+            message="User sucessfully edited!"
+            icon={<TickCheckCircle />}
+            underlineColor="bg-[#16A34A]"
+            messageColor="text-[#15803D] dark:text-[#16A34A]"
             show={showEditUserToast}
             onClose={() => setShowEditUserToast(false)}
           />

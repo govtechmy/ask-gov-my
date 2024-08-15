@@ -312,7 +312,7 @@ export async function addUser(
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({ name, email, role, agency, userProfileColour }),
-    })
+    });
     if (!response.ok) {
       throw new Error('Failed to add user');
     }
@@ -322,7 +322,7 @@ export async function addUser(
     console.error('Error adding user:', error);
     return { success: false, message: 'Failed to add user' };
   }
-  }
+}
 
 export async function editUser(
   id: string,

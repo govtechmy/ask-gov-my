@@ -12,20 +12,19 @@ import AgencyListDropdownOnCard from './AgencyListDropdownOnCard';
 import ModalQuestionCard from './ModalQuestionCard';
 import SpamUpdateIcon from '@/icons/spam';
 import { useSearchParams } from 'next/navigation';
-import ToastQuestionMarkAsSpam from './ToastQuestionMarkAsSpam';
-import ToastQuestionMarkAsUnSpam from './ToastQuestionMarkAsUnSpam';
 import ThreeDottedAction from './ThreeDottedAction';
 import AlarmTriangle from '@/icons/alarmtriangle';
 import TickCheckCircle from '@/icons/tickcheckcircle';
 import { formatDate } from '@/actions/utils';
 import { Agency } from '@/types/types';
+import Toast from '../ui/toast';
 
 interface QuestionCardProps {
   question: Question;
   activeQuestionId: number | null;
   setactiveQuestionId: React.Dispatch<React.SetStateAction<number | null>>;
   agencyMap: Record<string, string>;
-  agencies: Agency[]
+  agencies: Agency[];
 }
 
 const AdminQuestionCard: React.FC<QuestionCardProps> = ({
@@ -33,7 +32,7 @@ const AdminQuestionCard: React.FC<QuestionCardProps> = ({
   activeQuestionId,
   setactiveQuestionId,
   agencyMap,
-  agencies
+  agencies,
 }) => {
   const [selectedAgency, setSelectedAgency] = useState<string>('Unassigned');
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -44,7 +43,7 @@ const AdminQuestionCard: React.FC<QuestionCardProps> = ({
   useEffect(() => {
     if (question.agency !== null) {
       const matchedAgency = agencies.find(
-        agency => agency.id === question.agency
+        agency => agency.id === question.agency,
       );
       if (matchedAgency) {
         setSelectedAgency(matchedAgency.acronym);
@@ -169,15 +168,21 @@ const AdminQuestionCard: React.FC<QuestionCardProps> = ({
         setSuccessMessage={setSuccessMessage}
       />
       {showSpamToast && (
-        <ToastQuestionMarkAsSpam
+        <Toast
           message="Question marked as spam"
+          icon={<TickCheckCircle />}
+          underlineColor="bg-[#16A34A]"
+          messageColor="text-[#15803D] dark:text-[#16A34A]"
           show={showSpamToast}
           onClose={() => setShowSpamToast(false)}
         />
       )}
       {showUnSpamToast && (
-        <ToastQuestionMarkAsUnSpam
+        <Toast
           message="Question marked as not spam"
+          icon={<TickCheckCircle />}
+          underlineColor="bg-[#16A34A]"
+          messageColor="text-[#15803D] dark:text-[#16A34A]"
           show={showUnSpamToast}
           onClose={() => setShowUnSpamToast(false)}
         />

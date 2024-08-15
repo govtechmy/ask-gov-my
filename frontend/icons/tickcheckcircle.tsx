@@ -1,7 +1,4 @@
-export default function TickCheckCircle({
-  className = 'text-[#15803d]',
-  ...props
-}) {
+export default function TickCheckCircle({ className = '', ...props }) {
   return (
     <svg
       width="20"
