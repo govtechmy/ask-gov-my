@@ -23,7 +23,6 @@ export interface Question {
   answer_preview: string;
 }
 
-
 export interface Agency {
   id: number;
   name: string;
