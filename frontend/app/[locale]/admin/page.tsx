@@ -3,11 +3,11 @@ import { useState } from 'react';
 import { signIn } from 'next-auth/react';
 import Link from 'next/link';
 import HeaderAdmin from '@/components/HeaderDetails/HeaderAdmin';
-import FooterAdmin from '@/components/FooterDetails/FooterAdmin';
 import { Button, buttonVariants } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { useTranslations } from 'next-intl';
 import Google from '@/icons/google';
+import Footer from '@/components/FooterDetails/Footer';
 
 export function AdminPage() {
   const t = useTranslations('Adminlogin');
@@ -46,7 +46,7 @@ export function AdminPage() {
   };
 
   return (
-    <div>
+    <div className="flex flex-col min-h-screen">
       <HeaderAdmin />
       <div className="flex-grow flex items-center justify-center py-12">
         <div className="max-w-[450px]">
@@ -103,7 +103,7 @@ export function AdminPage() {
           </div>
         </div>
       </div>
-      <FooterAdmin></FooterAdmin>
+      <Footer adminpage={true} />
     </div>
   );
 }
