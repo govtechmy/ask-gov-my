@@ -12,12 +12,11 @@ import AgencyListDropdownOnCard from './AgencyListDropdownOnCard';
 import ModalQuestionCard from './ModalQuestionCard';
 import SpamUpdateIcon from '@/icons/spam';
 import { useSearchParams } from 'next/navigation';
-import ToastQuestionMarkAsSpam from './ToastQuestionMarkAsSpam';
-import ToastQuestionMarkAsUnSpam from './ToastQuestionMarkAsUnSpam';
 import ThreeDottedAction from './ThreeDottedAction';
 import AlarmTriangle from '@/icons/alarmtriangle';
 import TickCheckCircle from '@/icons/tickcheckcircle';
 import { formatDate } from '@/actions/utils';
+import Toast from '../ui/toast';
 
 interface QuestionCardProps {
   question: Question;
@@ -166,15 +165,21 @@ const AdminQuestionCard: React.FC<QuestionCardProps> = ({
         setSuccessMessage={setSuccessMessage}
       />
       {showSpamToast && (
-        <ToastQuestionMarkAsSpam
+        <Toast
           message="Question marked as spam"
+          icon={<TickCheckCircle />}
+          underlineColor="bg-[#16A34A]"
+          messageColor="text-[#15803D] dark:text-[#16A34A]"
           show={showSpamToast}
           onClose={() => setShowSpamToast(false)}
         />
       )}
       {showUnSpamToast && (
-        <ToastQuestionMarkAsUnSpam
+        <Toast
           message="Question marked as not spam"
+          icon={<TickCheckCircle />}
+          underlineColor="bg-[#16A34A]"
+          messageColor="text-[#15803D] dark:text-[#16A34A]"
           show={showUnSpamToast}
           onClose={() => setShowUnSpamToast(false)}
         />
