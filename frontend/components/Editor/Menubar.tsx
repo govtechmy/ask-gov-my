@@ -1,20 +1,12 @@
-'use client'
-
-import { cn } from '@/lib/utils';
-import { useEditor, EditorContent, Editor} from '@tiptap/react'
-import StarterKit from '@tiptap/starter-kit'
-import { buttonVariants } from './ui/button'
+import { cn } from "@/lib/utils";
+import { Level } from "@tiptap/extension-heading/src/heading";
+import { Editor } from "@tiptap/react";
+import { useCallback } from "react";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../ui/select";
 import { BoldIcon, BulletedListIcon, ItalicIcon, LinkIcon, OrderedListIcon, RedoIcon, StrikethroughIcon, UnderlineIcon, UndoIcon } from '@/icons/editor';
-import Underline from '@tiptap/extension-underline';
-import Link from '@tiptap/extension-link';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from './ui/select';
-import { Level } from '@tiptap/extension-heading/src/heading';
-import { Separator } from './ui/separator';
-import { useCallback } from 'react';
+import { Separator } from "../ui/separator";
 
-
-
-const MenuBar = ({ editor }: { editor: Editor | null }) => {
+export default ({ editor }: { editor: Editor | null }) => {
     if (!editor) {
         return null;
     }
@@ -22,7 +14,6 @@ const MenuBar = ({ editor }: { editor: Editor | null }) => {
     const style = {
         active: "bg-washed-100 dark:bg-slate-700",
         button: cn(
-            buttonVariants({ size: null }),
             "h-8 w-8 rounded-lg flex items-center justify-center",
         )
     };
@@ -183,34 +174,3 @@ const MenuBar = ({ editor }: { editor: Editor | null }) => {
         </div>
     );
 };
-
-export default ({
-    editorText,
-    setEditorText,
-    className
-  }: {
-    editorText: any;
-    setEditorText: (content: string) => void;
-    className: string
-  }) => {
-    const editor = useEditor({
-        extensions: [StarterKit, Underline, Link.configure({
-            openOnClick: true,
-            autolink: true,
-            defaultProtocol: 'https',
-        })],
-        content: editorText,
-        onUpdate: ({ editor }) => setEditorText(editor.getHTML()),
-    });
-
-
-
-    return (
-        <div className = {className}>
-            <MenuBar editor={editor} />
-            <EditorContent editor={editor} />
-        </div>
-    );
-};
-
-

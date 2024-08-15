@@ -23,11 +23,7 @@ import HeaderQuestionDetail from '@/components/HeaderDetails/HeaderQuestionDetai
 import { Question } from '@/types/types';
 import AgencyLogoImporter from '@/components/AgencyLogoImporter';
 import ContextSearchBar from '@/components/ContextSearchBar';
-import StarterKit from '@tiptap/starter-kit';
-import Underline from '@tiptap/extension-underline';
-import {Link as TipTapLink} from '@tiptap/extension-link';
-import { useEditor, EditorContent, Editor, JSONContent } from '@tiptap/react'
-import ReadOnlyTipTap from '@/components/ReadOnlyTipTap';
+import TipTap from '@/components/Editor/TipTap';
 
 interface Props {
   params: {
@@ -189,7 +185,10 @@ const QuestionDetailPage: React.FC<Props> = async ({ params }) => {
                       </div>
                     </div>
                     <div className="flex px-8 pb-5 pt-4 text-justify text-black-700 flex-col">
-                      <ReadOnlyTipTap editorText={question.answer} />
+                      <TipTap 
+                        editorText={question.answer} 
+                        className= "w-full flex-1"
+                      />
                     </div>
 
                     <div className="px-8 pb-8 pt-0">

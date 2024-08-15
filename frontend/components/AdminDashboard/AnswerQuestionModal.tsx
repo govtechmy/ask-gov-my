@@ -1,7 +1,5 @@
 'use client';
 
-import React, { useState, useEffect, useRef } from 'react';
-import { useTranslations } from 'next-intl';
 import { uploadFile } from '@/actions/fileServices';
 import { submitAnswer, saveQuestionAsDraft } from '@/actions/userServices';
 import { Question } from '@/types/types';
@@ -12,7 +10,8 @@ import LineVerticalForSmile from '@/icons/lineverticalforsmile';
 import AgencyLogoImporter from '../AgencyLogoImporter';
 import UploadIcon from '@/icons/upload';
 import SupportingAttachmentUpload from './SupportingAttachmentUpload';
-import Tiptap from '../Tiptap';
+import React, { useEffect, useRef, useState } from 'react';
+import TipTap from '../Editor/TipTap';
 
 interface AnswerQuestionModalProps {
   question: Question;
@@ -20,11 +19,11 @@ interface AnswerQuestionModalProps {
   onClose: () => void;
 }
 
-const AnswerQuestionModal: React.FC<AnswerQuestionModalProps> = ({
+const AnswerQuestionModal = ({
   question,
   isOpen,
   onClose,
-}) => {
+}:AnswerQuestionModalProps) => {
   const [answer, setAnswer] = useState(question.answer || '');
   const [attachments, setAttachments] = useState<File[]>([]);
   const [uploadedAttachments, setUploadedAttachments] = useState<string[]>(
@@ -41,15 +40,15 @@ const AnswerQuestionModal: React.FC<AnswerQuestionModalProps> = ({
 
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const files = event.target.files ? Array.from(event.target.files) : [];
-    setAttachments(prev => [...prev, ...files]);
+    setAttachments((prev:File[]) => [...prev, ...files]);
   };
 
   const handleRemoveAttachment = (index: number) => {
-    setAttachments(prev => prev.filter((_, i) => i !== index));
+    setAttachments((prev:File[]) => prev.filter((_, i) => i !== index));
   };
 
   const handleRemoveUploadedAttachment = (index: number) => {
-    setUploadedAttachments(prev => prev.filter((_, i) => i !== index));
+    setUploadedAttachments((prev:string[]) => prev.filter((_, i) => i !== index));
   };
 
   const handleSubmit = async () => {
@@ -177,9 +176,10 @@ const AnswerQuestionModal: React.FC<AnswerQuestionModalProps> = ({
                 </div>
               </div>
               <div className="pl-3 flex flex-col flex-grow">
-                  <Tiptap 
-                    editorText = {answer}
-                    setEditorText = {setAnswer}
+                  <TipTap
+                     editorText = {answer}
+                     setEditorText = {setAnswer}
+                     className = "flex flex-col divide-y rounded-lg w-[616px] h-[300px] border-[1px] shadow-button overflow-y-auto"
                   />
                 <div className="w-[616px] border-[1px] border-outline-200 rounded-lg my-3 items-center flex-shrink-0 shadow-button">
                   <div className="h-[68px] w-full m-4 items-center flex">
