@@ -9,7 +9,7 @@ import PlusIcon from '@/icons/plusicon';
 import AgencyListDropdownUsers from './AgencyListDropdownUsers';
 import { Agency } from '@/types/types';
 import { getDynamicAgencyMap } from '@/actions/questionServices';
-import Toast from './Toast';
+import Toast from '../ui/toast';
 import TickCheckCircle from '@/icons/tickcheckcircle';
 
 interface UserNavbarProps {
