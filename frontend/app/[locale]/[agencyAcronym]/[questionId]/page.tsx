@@ -188,6 +188,8 @@ const QuestionDetailPage: React.FC<Props> = async ({ params }) => {
                       <TipTap 
                         editorText={question.answer} 
                         className= "w-full flex-1"
+                        isEditable = {false}
+                        hasMenuBar = {false}
                       />
                     </div>
 
