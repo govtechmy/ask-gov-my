@@ -9,7 +9,7 @@ interface AgencyListDropdownProps {
   activeQuestionId: number | null;
   setactiveQuestionId: React.Dispatch<React.SetStateAction<number | null>>;
   questionId: number;
-  agencies : Agency[]
+  agencies: Agency[];
 }
 
 const AgencyListDropdownOnCard: React.FC<AgencyListDropdownProps> = ({
@@ -19,7 +19,7 @@ const AgencyListDropdownOnCard: React.FC<AgencyListDropdownProps> = ({
   activeQuestionId,
   setactiveQuestionId,
   questionId,
-  agencies
+  agencies,
 }) => {
   // const [isOpen, setIsOpen] = useState(questionId === activeQuestionId);
   const [searchQuery, setSearchQuery] = useState('');
@@ -39,9 +39,9 @@ const AgencyListDropdownOnCard: React.FC<AgencyListDropdownProps> = ({
     setSuccessMessage('');
   };
 
-  const handleAgencyChange = (agencyId:number, agencyAcronym: string) => {
+  const handleAgencyChange = (agencyId: number, agencyAcronym: string) => {
     setSelectedAgency(agencyAcronym);
-    assignAgencyToQuestion(questionId, agencyId)
+    assignAgencyToQuestion(questionId, agencyId);
     // setIsOpen(false);
     setactiveQuestionId(null); // Ensure that dropdown is closed
     if (agencyAcronym !== 'Unassigned') {
@@ -61,9 +61,9 @@ const AgencyListDropdownOnCard: React.FC<AgencyListDropdownProps> = ({
     agency =>
       agency.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
       agency.acronym.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      (agency.name_ms && agency.name_ms.toLowerCase().includes(searchQuery.toLowerCase()))
+      (agency.name_ms &&
+        agency.name_ms.toLowerCase().includes(searchQuery.toLowerCase())),
   );
-
 
   return (
     <div className="relative">
@@ -80,7 +80,7 @@ const AgencyListDropdownOnCard: React.FC<AgencyListDropdownProps> = ({
           <div className="absolute top-10 right-2 mt-3 overflow-auto max-h-[160px] bg-white-forcewhite w-[295px]">
             <div
               className="text-black-900 font-medium text-sm h-8  pl-3 hover:bg-washed-100 cursor-pointer items-center flex"
-              onClick={() => handleAgencyChange(0,'Unassigned')}
+              onClick={() => handleAgencyChange(0, 'Unassigned')}
             >
               Unassigned
             </div>
