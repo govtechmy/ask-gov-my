@@ -5,7 +5,7 @@ import {
   getDynamicAgencyMap,
 } from '@/actions/questionServices';
 import QuestionBox from '@/components/QuestionBox/QuestionBox';
-import Footer from '@/components/FooterDetails/Footer';
+import Footer from '@/components/Footer';
 import IdentifyWebsite from '@/components/HeaderDetails/IdentifyWebsite';
 import TopicList from '@/components/TopicList';
 import SearchNavbarAgency from '@/components/HeaderDetails/SearchNavBarAgency';
@@ -139,7 +139,7 @@ const TopicPage = async ({ params }: Props) => {
           </div>
         </div>
       </div>
-      <Footer></Footer>
+      <Footer />
     </div>
   );
 };

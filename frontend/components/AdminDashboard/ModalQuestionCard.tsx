@@ -1,6 +1,6 @@
 import React from 'react';
 import Close from '@/icons/close';
-import DateComponent from '../date';
+import DateComponent from '../Date';
 import IconQuestionSmile2 from '@/icons/iconquestionsmile2';
 import LineVerticalForSmile from '@/icons/lineverticalforsmile';
 import PlusCircle from '@/icons/pluscircle';

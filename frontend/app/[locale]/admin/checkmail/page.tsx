@@ -1,7 +1,7 @@
 'use client';
 import Link from 'next/link';
 import HeaderAdmin from '@/components/HeaderDetails/HeaderAdmin';
-import FooterAdmin from '@/components/FooterDetails/FooterAdmin';
+import Footer from '@/components/Footer';
 import { buttonVariants } from '@/components/ui/button';
 import Maillogo from '@/icons/mail';
 import Arrowleft from '@/icons/arrowleft';
@@ -83,7 +83,7 @@ export function CheckmailPage({
           </div>
         </div>
       </div>
-      <FooterAdmin />
+      <Footer adminpage={true} />
     </div>
   );
 }

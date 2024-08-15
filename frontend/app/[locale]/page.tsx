@@ -6,7 +6,7 @@ import {
 } from '@/actions/questionServices';
 import QuestionBox from '@/components/QuestionBox/QuestionBox';
 import SearchNavbar from '@/components/HeaderDetails/SearchNavBar';
-import Footer from '@/components/FooterDetails/Footer';
+import Footer from '@/components/Footer';
 import Header from '@/components/HeaderDetails/Header';
 import TrendingAgencies from '@/components/TrendingAgencies';
 import IdentifyWebsite from '@/components/HeaderDetails/IdentifyWebsite';

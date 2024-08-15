@@ -7,7 +7,7 @@ import {
 import QuestionBox from '@/components/QuestionBox/QuestionBox';
 import HeaderAgency from '@/components/HeaderDetails/HeaderAgency';
 import SearchNavbarAgency from '@/components/HeaderDetails/SearchNavBarAgency';
-import Footer from '@/components/FooterDetails/Footer';
+import Footer from '@/components/Footer';
 import TopicList from '@/components/TopicList';
 import IdentifyWebsite from '@/components/HeaderDetails/IdentifyWebsite';
 import WordTranslate from '@/components/WordTranslate';
