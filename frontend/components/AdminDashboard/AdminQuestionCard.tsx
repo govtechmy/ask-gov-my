@@ -16,7 +16,7 @@ import ThreeDottedAction from './ThreeDottedAction';
 import AlarmTriangle from '@/icons/alarmtriangle';
 import TickCheckCircle from '@/icons/tickcheckcircle';
 import { formatDate } from '@/actions/utils';
-import Toast from './Toast';
+import Toast from '../ui/toast';
 
 interface QuestionCardProps {
   question: Question;
