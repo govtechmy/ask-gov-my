@@ -14,10 +14,10 @@ def create_accounts():
 class TestAskGov(APITestCase):
     def setUp(self):
         self.agency = Agency.objects.create()
-        user_email = fake.email()
-        superuser_email = fake.email()
-        User.objects.create_user(username=user_email.split('@')[0], email=user_email, password='test786')
-        User.objects.create_superuser(username=superuser_email.split('@')[0], email=superuser_email,
+        self.user_email = fake.email()
+        self.superuser_email = fake.email()
+        User.objects.create_user(username=self.user_email.split('@')[0], email=self.user_email, password='test786')
+        User.objects.create_superuser(username=self.superuser_email.split('@')[0], email=self.superuser_email,
                                       password='test5579')
 
     def test_setup_working(self):
@@ -95,3 +95,16 @@ class TestAskGov(APITestCase):
         response = self.client.delete(url)
         self.assertEqual(response.status_code, 204)
         self.assertEqual(User.objects.count(), 2)
+
+    def test_api_auth_user(self):
+        user_email = self.user_email
+        url = reverse('user')
+        response = self.client.get(url, data={'email': user_email})
+        self.assertEqual(response.status_code, 200)
+
+        user = User.objects.get(email=self.user_email)
+        user_id = str(user.pk)
+        response = self.client.get(url, data={'id': user_id})
+        self.assertEqual(response.status_code, 200)
+
+        url = reverse('user')
