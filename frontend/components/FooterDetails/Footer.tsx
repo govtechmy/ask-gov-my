@@ -1,42 +1,87 @@
 import Image from 'next/image';
 import { useTranslations } from 'next-intl';
 
-const Footer = () => {
+interface FooterProps {
+  adminpage?: boolean;
+}
+
+const Footer: React.FC<FooterProps> = ({ adminpage = false }) => {
   const t = useTranslations('Footer');
+  const currentYear = new Date().getFullYear();
+
+  const Logo: React.FC<{ size: number }> = ({ size }) => (
+    <Image
+      src="/jata_logo.png"
+      width={size}
+      height={size}
+      alt="Logo Jata Negara"
+    />
+  );
+
+  const Copyright: React.FC = () => (
+    <p className="text-xs text-zinc-500 font-normal">
+      © {currentYear} {t('gov_mys')}
+    </p>
+  );
+
+  const Links: React.FC = () => (
+    <>
+      <a
+        href="#"
+        className="text-sm text-black-700 hover:text-black hover:underline"
+      >
+        {adminpage ? t('Home') : t('api_docs')}
+      </a>
+      <a
+        href={adminpage ? '#' : '/admin'}
+        className="text-sm text-black-700 hover:text-black hover:underline pl-5 sm:pl-0"
+      >
+        {adminpage ? t('api_docs') : t('admin_login')}
+      </a>
+    </>
+  );
+
+  if (adminpage) {
+    return (
+      <div className="justify-between px-8 py-6 bg-white border-[1px] border-outline-200 sm:py-3 sm:flex">
+        <div className="flex items-center">
+          <div className="h-[30px] w-[30px]">
+            <Logo size={96} />
+          </div>
+          <div className="sm:flex items-center">
+            <p className="font-poppins whitespace-nowrap font-semibold text-sm pl-[10px]">
+              {t('gov_mys')}
+            </p>
+            <span className="px-2 hidden sm:block">
+              <Copyright />
+            </span>
+          </div>
+        </div>
+        <div className="flex items-center py-3 gap-4.5">
+          <Links />
+        </div>
+        <div className="md:hidden pt-3">
+          <Copyright />
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="bg-white border-t">
       <div className="container justify-center mx-auto">
         <div className="gap-4.5 flex flex-col justify-between sm:flex-row px-6 pb-16 pt-12 lg:px-8">
           <div className="flex items-center gap-x-2.5">
-            <Image
-              src="/jata_logo.png"
-              width={48}
-              height={36}
-              alt="Logo Jata Negara"
-            />
+            <Logo size={48} />
             <div>
               <p className="font-poppins whitespace-nowrap font-semibold">
                 {t('gov_mys')}
               </p>
-              <p className="text-xs text-zinc-500">
-                © {new Date().getFullYear()} {t('gov_mys')}
-              </p>
+              <Copyright />
             </div>
           </div>
           <div className="gap-4.5 flex flex-col sm:flex-row">
-            <a
-              href="#"
-              className="text-sm text-zinc-500 [text-underline-position:from-font] hover:text-black hover:underline dark:hover:text-white"
-            >
-              {t('api_docs')}
-            </a>
-            <a
-              href="/admin"
-              className="text-sm text-zinc-500 [text-underline-position:from-font] hover:text-black hover:underline dark:hover:text-white"
-            >
-              {t('admin_login')}
-            </a>
+            <Links />
           </div>
         </div>
       </div>
