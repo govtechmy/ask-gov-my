@@ -511,7 +511,7 @@ class EditDeleteUserView(APIView):
         data = request.data
         print(data)
         user = get_object_or_404(User, id=id)
-        user.name = data['name']
+        user.username = data['name']
         user.email = data['email']
         user.role = data['role']
         user.agency = data['agency']
