@@ -50,7 +50,6 @@ const QuestionDetailPage: React.FC<Props> = async ({ params }) => {
 
   try {
     question = await getQuestionById(questionId);
-    console.log('question in page', question);
     if (!question) {
       throw new Error('Question not found');
     }
