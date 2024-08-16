@@ -58,28 +58,45 @@ export function CheckmailPage({
             </div>
           </div>
 
-          <div className="flex gap-3">
-            <Link
-              className={buttonVariants({ variant: 'tertiary', size: 'md' })}
-              href="/admin"
-            >
-              <Arrowleft />
-              {t('backclick')}
-            </Link>
+          <div className="sm:flex gap-3 w-full">
+            <div className="hidden sm:block">
+              <Link
+                className={buttonVariants({ variant: 'tertiary', size: 'md' })}
+                href="/admin"
+              >
+                <Arrowleft />
+                {t('backclick')}
+              </Link>
+            </div>
+            <div>
+              {/* new implementation for resending the magic email */}
+              <Link
+                className={cn(
+                  buttonVariants({ variant: 'secondary', size: 'md' }),
+                  'w-full',
+                  isDisabled ? 'opacity-40 cursor-not-allowed' : '',
+                )}
+                href={isDisabled ? '#' : '/admin'}
+                onClick={handleClick}
+                aria-disabled={isDisabled}
+              >
+                <MailLogo />
+                {isDisabled ? `Resend in ${countdown}s` : 'Resend magic link'}
+              </Link>
+            </div>
 
-            {/* new implementation for resending the magic email */}
-            <Link
-              className={cn(
-                buttonVariants({ variant: 'secondary', size: 'md' }),
-                isDisabled ? 'opacity-40 cursor-not-allowed' : '',
-              )}
-              href={isDisabled ? '#' : '/admin'}
-              onClick={handleClick}
-              aria-disabled={isDisabled}
-            >
-              <MailLogo />
-              {isDisabled ? `Resend in ${countdown}s` : 'Resend magic link'}
-            </Link>
+            <div className="sm:hidden mt-3">
+              <Link
+                className={cn(
+                  buttonVariants({ variant: 'tertiary', size: 'md' }),
+                  'w-full',
+                )}
+                href="/admin"
+              >
+                <Arrowleft />
+                {t('backclick')}
+              </Link>
+            </div>
           </div>
         </div>
       </div>
