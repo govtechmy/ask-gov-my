@@ -1,10 +1,10 @@
 import { cn } from "@/lib/utils";
-import { Level } from "@tiptap/extension-heading/src/heading";
 import { Editor } from "@tiptap/react";
 import { useCallback } from "react";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../ui/select";
 import { BoldIcon, BulletedListIcon, ItalicIcon, LinkIcon, OrderedListIcon, RedoIcon, StrikethroughIcon, UnderlineIcon, UndoIcon } from '@/icons/editor';
 import { Separator } from "../ui/separator";
+import { Level } from "@tiptap/extension-heading";
 
 export default ({ editor }: { editor: Editor | null }) => {
     if (!editor) {
