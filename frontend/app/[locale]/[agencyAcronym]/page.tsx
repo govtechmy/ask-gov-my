@@ -5,7 +5,6 @@ import {
   getTopicByAgency,
 } from '@/actions/questionServices';
 import QuestionBox from '@/components/QuestionBox/QuestionBox';
-import SearchNavbarAgency from '@/components/HeaderDetails/SearchNavBarAgency';
 import Footer from '@/components/Footer';
 import TopicList from '@/components/TopicList';
 import IdentifyWebsite from '@/components/HeaderDetails/IdentifyWebsite';
@@ -13,6 +12,7 @@ import WordTranslate from '@/components/WordTranslate';
 import TopicDropdown from '@/components/TopicDropdown';
 import ContextSearchBar from '@/components/ContextSearchBar';
 import BaseHeader from '@/components/HeaderDetails/BaseHeader';
+import SearchNavbar from '@/components/HeaderDetails/SearchNavbar';
 
 interface Props {
   params: {
@@ -52,11 +52,13 @@ const AgencyPage = async ({ params }: Props) => {
       <IdentifyWebsite />
       <ContextSearchBar>
         <BaseHeader agencyAcronym={agencyAcronym}></BaseHeader>
-        <SearchNavbarAgency
-          agencyAcronym={agencyAcronym}
-          agencyUUID={agencyUUID}
-          currentAgency={currentAgency}
-        />
+        <SearchNavbar
+          agency={{
+            acronym: agencyAcronym,
+            uuid: agencyUUID,
+            details: currentAgency,
+          }}
+        ></SearchNavbar>
       </ContextSearchBar>
 
       <div className="container mt-8 flex">
