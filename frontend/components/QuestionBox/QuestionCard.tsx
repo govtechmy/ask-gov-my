@@ -4,11 +4,11 @@ import { useSearchParams } from 'next/navigation';
 import { Link } from '@/lib/i18n';
 import { useTranslations } from 'next-intl';
 import IconQuestionSmile from '@/icons/iconquestionsmile';
-import DateComponent from '../Date';
+import DateComponent from '../common/Date';
 import LikeIcon from '@/icons/likeicon';
-import AgencyLogoImporter from '../AgencyLogoImporter';
+import AgencyLogoImporter from '../common/AgencyLogoImporter';
 import { Agency, Question } from '@/types/types';
-import AgencyName from '../AgencyName';
+import AgencyName from '../common/AgencyName';
 
 interface QuestionCardProps {
   question: Question;

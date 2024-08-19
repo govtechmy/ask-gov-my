@@ -2,14 +2,14 @@
 
 import React, { useContext, useEffect, useState } from 'react';
 import Info from '@/icons/info';
-import InputNavbar from '../ui/inputnavbar';
+import InputNavbar from '@/components/ui/inputnavbar';
 import { useTranslations } from 'next-intl';
-import { context } from '../ContextSearchBar';
+import { context } from '@/components/context/ContextSearchBar';
 import Link from 'next/link';
 import RightArrow from '@/icons/rightarrow';
-import AgencyLogoImporter from '../AgencyLogoImporter';
 import { Agency } from '@/types/types';
 import AgencyName from '../AgencyName';
+import AgencyLogoImporter from '../AgencyLogoImporter';
 
 interface SearchNavbarProps {
   agency?: {

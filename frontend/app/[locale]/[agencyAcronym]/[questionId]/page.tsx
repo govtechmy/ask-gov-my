@@ -6,24 +6,24 @@ import {
   getDynamicAgencyMap,
 } from '@/actions/questionServices';
 import { getRelatedQuestions } from '@/actions/searchServices';
-import Footer from '@/components/Footer';
-import RelatedTopics from '@/components/RelatedTopics';
+import Footer from '@/components/common/Footer';
+import RelatedTopics from '@/components/common/RelatedTopics';
 import RightArrow from '@/icons/rightarrow';
 import IconQuestionSmileSolo from '@/icons/iconquestionsmilesolo';
-import ThumbsCounter from '@/components/ThumbsCounter';
-import AgencyName from '@/components/AgencyName';
+import ThumbsCounter from '@/components/QuestionDetailPage/ThumbsCounter';
+import AgencyName from '@/components/common/AgencyName';
 import JataNegaraIcon from '@/icons/jatanegaraicon';
 import { redirect } from 'next/navigation';
-import DateComponent from '@/components/Date';
+import DateComponent from '@/components/common/Date';
 import Link from 'next/link';
-import IdentifyWebsite from '@/components/HeaderDetails/IdentifyWebsite';
-import WordTranslate from '@/components/WordTranslate';
+import IdentifyWebsite from '@/components/common/IdentifyWebsite';
+import WordTranslate from '@/components/common/WordTranslate';
 import { Question } from '@/types/types';
-import AgencyLogoImporter from '@/components/AgencyLogoImporter';
-import ContextSearchBar from '@/components/ContextSearchBar';
+import AgencyLogoImporter from '@/components/common/AgencyLogoImporter';
+import ContextSearchBar from '@/components/context/ContextSearchBar';
 import { fetchFileSizes } from '@/actions/utils';
 import AttachmentDownload from '@/components/AdminDashboard/AttachmentDownload';
-import BaseHeader from '@/components/HeaderDetails/BaseHeader';
+import BaseHeader from '@/components/common/HeaderDetails/BaseHeader';
 
 interface Props {
   params: {

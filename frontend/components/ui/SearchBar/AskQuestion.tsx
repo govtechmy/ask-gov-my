@@ -9,7 +9,7 @@ import Info from '@/icons/info';
 import TickCheckCircle from '@/icons/tickcheckcircle';
 import { submitQuestion } from '@/actions/questionServices';
 import { useTranslations } from 'next-intl';
-import { Button } from './ui/button';
+import { Button } from '../button';
 
 const AskQuestion = () => {
   const [isClicked, setIsClicked] = useState(false);

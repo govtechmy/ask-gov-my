@@ -7,7 +7,7 @@ import Search from '@/icons/search';
 import JataNegaraIcon from '@/icons/jatanegaraicon';
 import Close from '@/icons/close';
 import RightArrow from '@/icons/rightarrow';
-import AskQuestion from '../AskQuestion';
+import AskQuestion from './SearchBar/AskQuestion';
 import { useRouter } from '@/lib/i18n';
 import { useTranslations } from 'next-intl';
 import { getDynamicAgencyMap } from '@/actions/questionServices';

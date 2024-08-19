@@ -2,7 +2,7 @@
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { useRouter, useSearchParams } from 'next/navigation';
-import ThemeToggle from './theme';
+import ThemeToggle from '../theme';
 import LocaleSwitch from './LocaleSwitch';
 import Asklogo from '@/icons/asklogo';
 import User from '@/icons/user';
@@ -12,9 +12,9 @@ import Gov from '@/icons/gov';
 import UserGroup from '@/icons/usergroup';
 import Logout from '@/icons/logout';
 import { signOut } from 'next-auth/react';
-import { buttonVariants } from '../ui/button';
+import { buttonVariants } from '@/components/ui/button';
 import QuestionCircle from '@/icons/questioncircle';
-import { StyledDisplay } from '../ui/display';
+import { StyledDisplay } from '@/components/ui/display';
 
 type NavLinkType = 'questions' | 'manageagencies' | 'manageusers';
 

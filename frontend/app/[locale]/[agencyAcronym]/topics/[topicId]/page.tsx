@@ -5,14 +5,14 @@ import {
   getDynamicAgencyMap,
 } from '@/actions/questionServices';
 import QuestionBox from '@/components/QuestionBox/QuestionBox';
-import Footer from '@/components/Footer';
-import IdentifyWebsite from '@/components/HeaderDetails/IdentifyWebsite';
-import TopicList from '@/components/TopicList';
-import TopicDropdown from '@/components/TopicDropdown';
-import WordTranslate from '@/components/WordTranslate';
-import ContextSearchBar from '@/components/ContextSearchBar';
-import BaseHeader from '@/components/HeaderDetails/BaseHeader';
-import SearchNavbar from '@/components/HeaderDetails/SearchNavbar';
+import Footer from '@/components/common/Footer';
+import IdentifyWebsite from '@/components/common/IdentifyWebsite';
+import TopicList from '@/components/common/TopicList';
+import TopicDropdown from '@/components/common/TopicDropdown';
+import WordTranslate from '@/components/common/WordTranslate';
+import ContextSearchBar from '@/components/context/ContextSearchBar';
+import BaseHeader from '@/components/common/HeaderDetails/BaseHeader';
+import SearchNavbar from '@/components/common/HeaderDetails/SearchNavbar';
 
 interface Props {
   params: {

@@ -1,6 +1,6 @@
 'use client';
 import Link from 'next/link';
-import Footer from '@/components/Footer';
+import Footer from '@/components/common/Footer';
 import { buttonVariants } from '@/components/ui/button';
 import Maillogo from '@/icons/mail';
 import Arrowleft from '@/icons/arrowleft';
@@ -8,7 +8,7 @@ import { useTranslations } from 'next-intl';
 import MailLogo from '@/icons/maillogo';
 import { useState, useEffect } from 'react';
 import { cn } from '@/lib/utils';
-import BaseHeader from '@/components/HeaderDetails/BaseHeader';
+import BaseHeader from '@/components/common/HeaderDetails/BaseHeader';
 
 export function CheckmailPage({
   params: { locale },
