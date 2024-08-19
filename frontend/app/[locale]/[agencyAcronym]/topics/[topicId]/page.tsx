@@ -13,7 +13,6 @@ import TopicDropdown from '@/components/TopicDropdown';
 import WordTranslate from '@/components/WordTranslate';
 import HeaderAgency from '@/components/HeaderDetails/HeaderAgency';
 import ContextSearchBar from '@/components/ContextSearchBar';
-import { Agency } from '@/types/types';
 
 interface Props {
   params: {
@@ -59,92 +58,88 @@ const TopicPage = async ({ params }: Props) => {
   }
 
   return (
-    <div className="">
-      <div className="">
-        <IdentifyWebsite></IdentifyWebsite>
+    <div>
+      <IdentifyWebsite></IdentifyWebsite>
 
-        <ContextSearchBar>
-          <HeaderAgency agencyAcronym={agencyAcronym}></HeaderAgency>
-          <SearchNavbarAgency
-            agencyAcronym={agencyAcronym}
-            agencyUUID={agencyUUID}
-            currentAgency={currentAgency}
-          />
-        </ContextSearchBar>
+      <ContextSearchBar>
+        <HeaderAgency agencyAcronym={agencyAcronym}></HeaderAgency>
+        <SearchNavbarAgency
+          agencyAcronym={agencyAcronym}
+          agencyUUID={agencyUUID}
+          currentAgency={currentAgency}
+        />
+      </ContextSearchBar>
 
-        <div className="container mt-10 flex text-out">
-          <div className="max-w-screen-2xl">
-            <div className="font-medium text-base text-black-700 pb-7 flex items-center">
-              <div className="pr-1">
-                <div className="flex">
-                  <WordTranslate
-                    translate={'Topics'}
-                    keyword={'showing'}
-                  ></WordTranslate>
-                  &nbsp;
-                  {filteredQuestions.length}
-                  &nbsp;
-                  <WordTranslate
-                    translate={'Topics'}
-                    keyword={'questionsin'}
-                  ></WordTranslate>
-                  &nbsp;
-                </div>
-              </div>
-              <div className="bg-askmygovbrand-50 border-[1px] border-askmygovbrand-200 h-8 items-center flex px-2 rounded-md text-askmygovtextbrand-600">
-                {locale === 'ms'
-                  ? selectedTopic?.title_ms
-                  : selectedTopic?.title}
+      <div className="container mt-10 flex text-out">
+        <div className="max-w-screen-2xl">
+          <div className="font-medium text-base text-black-700 pb-7 flex items-center">
+            <div className="pr-1">
+              <div className="flex">
+                <WordTranslate
+                  translate={'Topics'}
+                  keyword={'showing'}
+                ></WordTranslate>
+                &nbsp;
+                {filteredQuestions.length}
+                &nbsp;
+                <WordTranslate
+                  translate={'Topics'}
+                  keyword={'questionsin'}
+                ></WordTranslate>
+                &nbsp;
               </div>
             </div>
-            {filteredQuestions.length > 0 ? (
-              <QuestionBox
-                questions={filteredQuestions}
-                agencyMap={agencyMap}
-                agencyList={agencyList}
-              />
-            ) : (
-              <div className=" h-[220px] w-[900px]">
-                <div className="text-dim-500">
-                  <WordTranslate
-                    translate={'Topics'}
-                    keyword={'notfound'}
-                  ></WordTranslate>
-                </div>
-              </div>
-            )}
+            <div className="bg-askmygovbrand-50 border-[1px] border-askmygovbrand-200 h-8 items-center flex px-2 rounded-md text-askmygovtextbrand-600">
+              {locale === 'ms' ? selectedTopic?.title_ms : selectedTopic?.title}
+            </div>
           </div>
-
-          <div className="pl-10 w-[500px]">
-            <div className="font-semibold text-base text-black-700 pl-6 pb-8">
-              <WordTranslate
-                translate={'Topics'}
-                keyword={'topic'}
-              ></WordTranslate>
+          {filteredQuestions.length > 0 ? (
+            <QuestionBox
+              questions={filteredQuestions}
+              agencyMap={agencyMap}
+              agencyList={agencyList}
+            />
+          ) : (
+            <div className=" h-[220px] w-[900px]">
+              <div className="text-dim-500">
+                <WordTranslate
+                  translate={'Topics'}
+                  keyword={'notfound'}
+                ></WordTranslate>
+              </div>
             </div>
-            <div className="font-semibold text-base text-black-700 h-[500px]">
-              <div className="hidden md:block">
-                <TopicList
-                  topics={topics}
-                  locale={locale}
-                  selectedTopicId={parseInt(topicId)}
-                  agencyAcronym={agencyAcronym}
-                />
-              </div>
+          )}
+        </div>
 
-              <div className="md:invisible">
-                <TopicDropdown
-                  topics={topics}
-                  locale={locale}
-                  selectedTopicId={parseInt(topicId)}
-                  agencyAcronym={agencyAcronym}
-                />
-              </div>
+        <div className="pl-10 w-[500px]">
+          <div className="font-semibold text-base text-black-700 pl-6 pb-8">
+            <WordTranslate
+              translate={'Topics'}
+              keyword={'topic'}
+            ></WordTranslate>
+          </div>
+          <div className="font-semibold text-base text-black-700 h-[500px]">
+            <div className="hidden md:block">
+              <TopicList
+                topics={topics}
+                locale={locale}
+                selectedTopicId={parseInt(topicId)}
+                agencyAcronym={agencyAcronym}
+              />
+            </div>
+
+            <div className="md:invisible">
+              <TopicDropdown
+                topics={topics}
+                locale={locale}
+                selectedTopicId={parseInt(topicId)}
+                agencyAcronym={agencyAcronym}
+              />
             </div>
           </div>
         </div>
-        <Footer></Footer>
       </div>
+      <Footer></Footer>
     </div>
   );
 };

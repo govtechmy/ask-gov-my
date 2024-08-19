@@ -3,23 +3,28 @@ import { useTranslations } from 'next-intl';
 import {
   assignAgencyToQuestion,
   changeAdminIsOpen,
+  markQuestionAsSpam,
+  unSpamQuestion,
 } from '@/actions/userServices';
 import NewUpdateIcon from '@/icons/new';
 import { Question } from '@/types/types';
 import AgencyListDropdownOnCard from './AgencyListDropdownOnCard';
 import ModalQuestionCard from './ModalQuestionCard';
-import ThreeDottedMarkAsSpam from './ThreeDottedMarkAsSpam';
 import SpamUpdateIcon from '@/icons/spam';
 import { useSearchParams } from 'next/navigation';
-import ThreeDottedMarkAsUnSpam from './ThreeDottedMarkAsUnSpam';
-import ToastQuestionMarkAsSpam from './ToastQuestionMarkAsSpam';
-import ToastQuestionMarkAsUnSpam from './ToastQuestionMarkAsUnSpam';
+import ThreeDottedAction from './ThreeDottedAction';
+import AlarmTriangle from '@/icons/alarmtriangle';
+import TickCheckCircle from '@/icons/tickcheckcircle';
+import { formatDate } from '@/actions/utils';
+import { Agency } from '@/types/types';
+import Toast from '../ui/toast';
 
 interface QuestionCardProps {
   question: Question;
   activeQuestionId: number | null;
   setactiveQuestionId: React.Dispatch<React.SetStateAction<number | null>>;
   agencyMap: Record<string, string>;
+  agencies: Agency[];
 }
 
 const AdminQuestionCard: React.FC<QuestionCardProps> = ({
@@ -27,6 +32,7 @@ const AdminQuestionCard: React.FC<QuestionCardProps> = ({
   activeQuestionId,
   setactiveQuestionId,
   agencyMap,
+  agencies,
 }) => {
   const [selectedAgency, setSelectedAgency] = useState<string>('Unassigned');
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -36,14 +42,14 @@ const AdminQuestionCard: React.FC<QuestionCardProps> = ({
 
   useEffect(() => {
     if (question.agency !== null) {
-      const agencyAcronym = Object.keys(agencyMap).find(
-        key => agencyMap[key] === question.agency!.toString(),
+      const matchedAgency = agencies.find(
+        agency => agency.id === question.agency,
       );
-      if (agencyAcronym) {
-        setSelectedAgency(agencyAcronym);
+      if (matchedAgency) {
+        setSelectedAgency(matchedAgency.acronym);
       }
     }
-  }, [question.agency, agencyMap]);
+  }, [question.agency, agencies]);
 
   const handleCardClick = async () => {
     setIsModalOpen(true);
@@ -55,23 +61,6 @@ const AdminQuestionCard: React.FC<QuestionCardProps> = ({
         console.error('Failed to change admin_isopen:', error);
       }
     }
-  };
-
-  const formatDate = (dateString: string) => {
-    const date = new Date(dateString);
-    return (
-      date.toLocaleDateString('en-GB', {
-        day: '2-digit',
-        month: 'long',
-        year: 'numeric',
-      }) +
-      ', ' +
-      date.toLocaleTimeString('en-GB', {
-        hour: '2-digit',
-        minute: '2-digit',
-        hour12: true,
-      })
-    );
   };
 
   const handleMarkAsSpamToast = () => {
@@ -124,11 +113,11 @@ const AdminQuestionCard: React.FC<QuestionCardProps> = ({
             <AgencyListDropdownOnCard
               selectedAgency={selectedAgency}
               setSelectedAgency={setSelectedAgency}
-              AGENCY_TO_UUID={agencyMap}
               setSuccessMessage={setSuccessMessage}
               activeQuestionId={activeQuestionId}
               setactiveQuestionId={setactiveQuestionId}
               questionId={question.id}
+              agencies={agencies}
             />
           </div>
           <div className="font-normal text-sm text-dim-500 w-[180px] pl-3 ">
@@ -136,15 +125,33 @@ const AdminQuestionCard: React.FC<QuestionCardProps> = ({
           </div>
           <div>
             {activeTab === 'spam' ? (
-              <ThreeDottedMarkAsUnSpam
-                handleUnSpamToast={handleUnSpamToast}
+              // For Mark as Not Spam
+              <ThreeDottedAction
                 question={question}
-              ></ThreeDottedMarkAsUnSpam>
+                handleActionToast={handleUnSpamToast}
+                actionFunction={unSpamQuestion}
+                actionText="Mark as not spam"
+                actionIcon={<TickCheckCircle />}
+                dialogTitle="Mark question as not spam?"
+                dialogDescription="Are you sure to mark this question as not spam?"
+                confirmButtonText="Mark as Not Spam"
+                confirmButtonVariant="primary"
+                newState="backlog"
+              />
             ) : (
-              <ThreeDottedMarkAsSpam
-                handleMarkAsSpamToast={handleMarkAsSpamToast}
+              // For Mark as Spam
+              <ThreeDottedAction
                 question={question}
-              ></ThreeDottedMarkAsSpam>
+                handleActionToast={handleMarkAsSpamToast}
+                actionFunction={markQuestionAsSpam}
+                actionText="Mark As Spam"
+                actionIcon={<AlarmTriangle />}
+                dialogTitle="Mark question as spam?"
+                dialogDescription="Are you sure to mark this question as spam?"
+                confirmButtonText="Mark as Spam"
+                confirmButtonVariant="danger-primary"
+                newState="spam"
+              />
             )}
           </div>
         </div>
@@ -159,17 +166,24 @@ const AdminQuestionCard: React.FC<QuestionCardProps> = ({
         AGENCY_TO_UUID={agencyMap}
         successMessage={successMessage}
         setSuccessMessage={setSuccessMessage}
+        agencies={agencies}
       />
       {showSpamToast && (
-        <ToastQuestionMarkAsSpam
+        <Toast
           message="Question marked as spam"
+          icon={<TickCheckCircle />}
+          underlineColor="bg-[#16A34A]"
+          messageColor="text-[#15803D] dark:text-[#16A34A]"
           show={showSpamToast}
           onClose={() => setShowSpamToast(false)}
         />
       )}
       {showUnSpamToast && (
-        <ToastQuestionMarkAsUnSpam
+        <Toast
           message="Question marked as not spam"
+          icon={<TickCheckCircle />}
+          underlineColor="bg-[#16A34A]"
+          messageColor="text-[#15803D] dark:text-[#16A34A]"
           show={showUnSpamToast}
           onClose={() => setShowUnSpamToast(false)}
         />

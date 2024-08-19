@@ -1,23 +1,25 @@
 import React, { useState, ChangeEvent } from 'react';
+import { Agency } from '@/types/types';
+import { assignAgencyToQuestion } from '@/actions/userServices';
 
 interface AgencyListDropdownProps {
   selectedAgency: string;
   setSelectedAgency: (agencyAcronym: string) => void;
-  AGENCY_TO_UUID: { [key: string]: string };
   setSuccessMessage: (message: string) => void;
   activeQuestionId: number | null;
   setactiveQuestionId: React.Dispatch<React.SetStateAction<number | null>>;
   questionId: number;
+  agencies: Agency[];
 }
 
 const AgencyListDropdownOnCard: React.FC<AgencyListDropdownProps> = ({
   selectedAgency,
   setSelectedAgency,
-  AGENCY_TO_UUID,
   setSuccessMessage,
   activeQuestionId,
   setactiveQuestionId,
   questionId,
+  agencies,
 }) => {
   // const [isOpen, setIsOpen] = useState(questionId === activeQuestionId);
   const [searchQuery, setSearchQuery] = useState('');
@@ -37,8 +39,9 @@ const AgencyListDropdownOnCard: React.FC<AgencyListDropdownProps> = ({
     setSuccessMessage('');
   };
 
-  const handleAgencyChange = (agencyAcronym: string) => {
+  const handleAgencyChange = (agencyId: number, agencyAcronym: string) => {
     setSelectedAgency(agencyAcronym);
+    assignAgencyToQuestion(questionId, agencyId);
     // setIsOpen(false);
     setactiveQuestionId(null); // Ensure that dropdown is closed
     if (agencyAcronym !== 'Unassigned') {
@@ -54,8 +57,12 @@ const AgencyListDropdownOnCard: React.FC<AgencyListDropdownProps> = ({
     setSearchQuery(event.target.value);
   };
 
-  const filteredAgencies = Object.keys(AGENCY_TO_UUID).filter(agencyAcronym =>
-    agencyAcronym.toLowerCase().includes(searchQuery.toLowerCase()),
+  const filteredAgencies = agencies.filter(
+    agency =>
+      agency.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      agency.acronym.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      (agency.name_ms &&
+        agency.name_ms.toLowerCase().includes(searchQuery.toLowerCase())),
   );
 
   return (
@@ -73,20 +80,20 @@ const AgencyListDropdownOnCard: React.FC<AgencyListDropdownProps> = ({
           <div className="absolute top-10 right-2 mt-3 overflow-auto max-h-[160px] bg-white-forcewhite w-[295px]">
             <div
               className="text-black-900 font-medium text-sm h-8  pl-3 hover:bg-washed-100 cursor-pointer items-center flex"
-              onClick={() => handleAgencyChange('Unassigned')}
+              onClick={() => handleAgencyChange(0, 'Unassigned')}
             >
               Unassigned
             </div>
 
-            {filteredAgencies.map(agencyAcronym => (
+            {filteredAgencies.map(agency => (
               <div
-                key={agencyAcronym}
+                key={agency.id}
                 className="text-black-900 font-medium text-sm pl-3 h-8 hover:bg-washed-100 cursor-pointer items-center flex"
-                onClick={() => handleAgencyChange(agencyAcronym)}
+                onClick={() => handleAgencyChange(agency.id, agency.acronym)}
               >
-                {agencyAcronym}
+                {agency.acronym}
                 <div className="text-dim-500 font-medium text-xs leading-[18px] pl-2">
-                  {agencyAcronym}
+                  {agency.name}
                 </div>
               </div>
             ))}

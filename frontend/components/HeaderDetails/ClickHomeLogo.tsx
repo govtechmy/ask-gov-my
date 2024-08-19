@@ -1,4 +1,4 @@
-import ThemeToggle from './Theme';
+import ThemeToggle from './theme';
 import LocaleSwitch from './LocaleSwitch';
 import { Link } from '@/lib/i18n';
 import Asklogo from '@/icons/asklogo';
