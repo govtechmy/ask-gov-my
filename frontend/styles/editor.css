@@ -4,12 +4,12 @@ div.tiptap.ProseMirror {
     line-height: 20px;
   
     > * + * {
-      margin-top: 0.75em;
+      @apply m-3
     }
   
     ul,
     ol {
-      padding: 0 1rem;
+      @apply py-0 px-4
     }
   
     ul {
@@ -53,6 +53,7 @@ div.tiptap.ProseMirror {
     }
 
     a {
+      text-underline-position: 'from-font';
       @apply underline text-brand-600 cursor-pointer
     }
   }

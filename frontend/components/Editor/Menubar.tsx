@@ -80,7 +80,7 @@ export default ({ editor }: { editor: Editor | null }) => {
   return (
     <div
       role="toolbar"
-      className="flex items-center flex-wrap gap-x-2 px-3 py-2 h-12 sticky top-0 z-10 bg-white"
+      className="flex items-center flex-wrap gap-x-2 px-3 py-2 h-12 sticky top-0 z-10 bg-white justify-between"
     >
       <Select
         onValueChange={(value: any) => setHeading(value)}
@@ -207,7 +207,7 @@ export default ({ editor }: { editor: Editor | null }) => {
       >
         <LinkIcon />
       </button>
-      <div className="flex h-7">
+      <div className="flex h-7 items-center justify-center">
         <button
           onClick={() => editor.chain().focus().undo().run()}
           disabled={!editor.can().undo()}
