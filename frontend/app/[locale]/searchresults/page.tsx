@@ -5,13 +5,13 @@ import {
 } from '@/actions/questionServices';
 import { searchQuestions } from '@/actions/searchServices';
 import QuestionBox from '@/components/QuestionBox/QuestionBox';
-import SearchNavbar from '@/components/HeaderDetails/SearchNavBar';
 import Footer from '@/components/Footer';
 import TrendingAgencies from '@/components/TrendingAgencies';
 import IdentifyWebsite from '@/components/HeaderDetails/IdentifyWebsite';
 import WordTranslate from '@/components/WordTranslate';
 import ContextSearchBar from '@/components/ContextSearchBar';
 import BaseHeader from '@/components/HeaderDetails/BaseHeader';
+import SearchNavbar from '@/components/HeaderDetails/SearchNavbar';
 
 const SearchResultPage = async ({
   searchParams,
@@ -28,7 +28,7 @@ const SearchResultPage = async ({
       <IdentifyWebsite />
       <ContextSearchBar>
         <BaseHeader></BaseHeader>
-        <SearchNavbar />
+        <SearchNavbar></SearchNavbar>
       </ContextSearchBar>
 
       <div className="container mt-10 flex">
