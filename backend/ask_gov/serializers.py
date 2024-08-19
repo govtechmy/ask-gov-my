@@ -1,6 +1,6 @@
 from rest_framework import serializers
 from django.contrib.auth import get_user_model
-from .models import Agency, Question, Topic
+from .models import Agency, Question, Topic, User, Account, Session, VerificationToken
 
 User = get_user_model()
 
@@ -10,14 +10,6 @@ class AgencySerializer(serializers.ModelSerializer):
     class Meta:
         model = Agency
         fields = ['id', 'name', 'name_ms', 'acronym', 'total_likes', 'logo_url', 'last_edited']
-
-class UserSerializer(serializers.ModelSerializer):
-    agency = AgencySerializer()
-
-    class Meta:
-        model = User
-        fields = ['id', 'username', 'email', 'agency']
-
 
 class TopicSerializer(serializers.ModelSerializer):
     agency = AgencySerializer()
@@ -42,3 +34,22 @@ class QuestionSerializer(serializers.ModelSerializer):
         
         return question
     
+class UserSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = '__all__'
+
+class AccountSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Account
+        fields = '__all__'
+
+class SessionSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Session
+        fields = '__all__'
+
+class VerificationTokenSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = VerificationToken
+        fields = '__all__'

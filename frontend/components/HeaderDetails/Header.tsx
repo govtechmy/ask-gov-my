@@ -1,5 +1,5 @@
 'use client';
-import ThemeToggle from './Theme';
+import ThemeToggle from './theme';
 import LocaleSwitch from './LocaleSwitch';
 import Asklogo from '@/icons/asklogo';
 import Link from 'next/link';

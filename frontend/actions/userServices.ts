@@ -306,15 +306,17 @@ export async function addUser(
   userProfileColour: string,
 ): Promise<{ success: boolean; message?: string }> {
   try {
-    await prisma.user.create({
-      data: {
-        name,
-        email,
-        role,
-        agency,
-        userProfileColour,
+    const response = await fetch(`${API_URL}/admin/user`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
       },
+      body: JSON.stringify({ name, email, role, agency, userProfileColour }),
     });
+    if (!response.ok) {
+      throw new Error('Failed to add user');
+    }
+
     return { success: true };
   } catch (error) {
     console.error('Error adding user:', error);
@@ -330,15 +332,18 @@ export async function editUser(
   agency: number | null,
 ): Promise<{ success: boolean; message?: string }> {
   try {
-    await prisma.user.update({
-      where: { id },
-      data: {
-        name,
-        email,
-        role,
-        agency,
+    const response = await fetch(`${API_URL}/admin/user/${id}`, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
       },
+      body: JSON.stringify({ name, email, role, agency }),
     });
+
+    if (!response.ok) {
+      throw new Error('Failed to edit user');
+    }
+
     return { success: true };
   } catch (error) {
     console.error('Error editing user:', error);
@@ -350,9 +355,17 @@ export async function deleteUser(
   id: string,
 ): Promise<{ success: boolean; message?: string }> {
   try {
-    await prisma.user.delete({
-      where: { id },
+    const response = await fetch(`${API_URL}/admin/user/${id}`, {
+      method: 'DELETE',
+      headers: {
+        'Content-Type': 'application/json',
+      },
     });
+
+    if (!response.ok) {
+      throw new Error('Failed to delete user');
+    }
+
     return { success: true };
   } catch (error) {
     console.error('Error deleting user:', error);
@@ -366,7 +379,18 @@ export async function getAllUsers(): Promise<{
   message?: string;
 }> {
   try {
-    const users = await prisma.user.findMany();
+    const response = await fetch(`${API_URL}/admin/users`, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    });
+
+    if (!response.ok) {
+      throw new Error('Failed to fetch users');
+    }
+
+    const users = await response.json();
     return { success: true, users };
   } catch (error) {
     console.error('Error fetching users:', error);

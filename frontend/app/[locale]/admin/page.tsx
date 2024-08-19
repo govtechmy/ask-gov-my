@@ -4,10 +4,9 @@ import { signIn } from 'next-auth/react';
 import Link from 'next/link';
 import HeaderAdmin from '@/components/HeaderDetails/HeaderAdmin';
 import FooterAdmin from '@/components/FooterDetails/FooterAdmin';
-import { Button } from '@/components/ui/button';
+import { Button, buttonVariants } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { useTranslations } from 'next-intl';
-import IdentifyWebsite from '@/components/HeaderDetails/IdentifyWebsite';
 import Google from '@/icons/google';
 
 export function AdminPage() {
@@ -47,73 +46,65 @@ export function AdminPage() {
   };
 
   return (
-    <>
-      <div className="flex flex-col min-h-screen">
-        <HeaderAdmin />
-
-        <div className="flex-grow flex items-center justify-center py-12">
-          <div className="max-w-[450px]">
-            <div className="text-center">
-              <div className="text-2xl font-semibold px-5 py-5">{t('h1')}</div>
-              <div className="text-base pb-6 text-zinc-700 dark:text-[#D4D4D8]">
-                {t('para1')}
-              </div>
+    <div>
+      <HeaderAdmin />
+      <div className="flex-grow flex items-center justify-center py-12">
+        <div className="max-w-[450px]">
+          <div className="text-center">
+            <div className="text-2xl font-semibold px-5 py-5">{t('h1')}</div>
+            <div className="text-base pb-6 text-zinc-700 dark:text-[#D4D4D8]">
+              {t('para1')}
             </div>
-            {/* {alertSuccess == true ? <div>
+          </div>
+          {/* {alertSuccess == true ? <div>
             <div className="p-4 mb-4 text-sm text-blue-800 rounded-lg bg-blue-50 dark:bg-gray-800 dark:text-blue-400" role="alert">
   <span className="font-medium">Info alert!</span> Change a few things up and try submitting again.
 </div>
 
           </div> : <div></div>} */}
 
-            <form onSubmit={handleSignIn}>
-              <div className="grid gap-4">
-                <div className="grid gap-2 pb-4">
-                  <div className="text-zinc-500 text-sm">{t('email')}</div>
-                  <Input
-                    className="sm:max-w-[339px] w-max-[400px] bg-white shadow-button"
-                    id="email"
-                    type="email"
-                    placeholder="officer@agency.gov.my"
-                    required
-                    value={email}
-                    onChange={e => setEmail(e.target.value)}
-                  />
-                </div>
-
-                <Button
-                  type="submit"
-                  className="text-base font-medium text-white-forcewhite rounded-md py-2 from-[#702FF9] to-[#B379FF] dark:from-[#702FF9] dark:to-[#B379FF] border-[1px] border-[#702FF9]"
-                >
-                  {t('1stbutton')}
-                </Button>
-
-                <div className="text-center font-normal text-zinc-500 text-sm">
-                  {t('or')}
-                </div>
-
-                <div className="flex justify-center py-2 rounded-md bg-white dark:from-[#18181B] dark:to-[#18181B] border-[1px] border-outline-200 shadow-button">
-                  <Google></Google>
-                  <div className="px-2 font-medium text-base  ">
-                    {t('2ndbutton')}
-                  </div>
-                </div>
+          <form onSubmit={handleSignIn}>
+            <div className="grid gap-4">
+              <div className="grid gap-2 pb-4">
+                <div className="text-zinc-500 text-sm">{t('email')}</div>
+                <Input
+                  className="sm:max-w-[339px] w-max-[400px] bg-white shadow-button"
+                  id="email"
+                  type="email"
+                  placeholder="officer@agency.gov.my"
+                  required
+                  value={email}
+                  onChange={e => setEmail(e.target.value)}
+                />
               </div>
-            </form>
 
-            <div className="mt-4 text-center pt-4">
-              <Link
-                href="/forgot-password"
-                className="ml-auto font-normal text-[#2563EB] inline-block text-sm"
-              >
-                {t('forgotpass')}
-              </Link>
+              <Button variant={'primary'}> {t('1stbutton')}</Button>
+
+              <div className="text-center font-normal text-zinc-500 text-sm">
+                {t('or')}
+              </div>
+
+              <Button variant={'secondary'}>
+                <Google></Google> {t('2ndbutton')}
+              </Button>
             </div>
+          </form>
+
+          <div className="text-center pt-2">
+            <Link
+              className={buttonVariants({
+                variant: 'tertiary-colour',
+                size: 'sm',
+              })}
+              href="/forgot-password"
+            >
+              {t('forgotpass')}
+            </Link>
           </div>
         </div>
-        <FooterAdmin></FooterAdmin>
       </div>
-    </>
+      <FooterAdmin></FooterAdmin>
+    </div>
   );
 }
 

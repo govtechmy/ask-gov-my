@@ -1,4 +1,7 @@
-export default function ThreeDotted({ className = '', ...props }) {
+export default function ThreeDotted({
+  className = 'fill-black-900 stroke-black-700',
+  ...props
+}) {
   return (
     <svg
       width="16"
