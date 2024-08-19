@@ -1,0 +1,93 @@
+'use client';
+import React, { useContext, ReactNode } from 'react';
+import Link from 'next/link';
+import ThemeToggle from './theme';
+import LocaleSwitch from './LocaleSwitch';
+import Asklogo from '@/icons/asklogo';
+import { StyledDisplay } from '../ui/display';
+import { context } from '../ContextSearchBar';
+import InputNavbar from '../ui/inputnavbar';
+
+interface HeaderProps {
+  isAdmin?: boolean;
+  alwaysShowInput?: boolean;
+  LeftComponent?: ReactNode;
+  CenterComponent?: ReactNode;
+  RightComponent?: ReactNode;
+  agencyAcronym?: string;
+}
+
+const BaseHeader: React.FC<HeaderProps> = ({
+  isAdmin = false,
+  alwaysShowInput = false,
+  LeftComponent,
+  CenterComponent,
+  RightComponent,
+  agencyAcronym,
+}) => {
+  const {
+    headerContent,
+    searchQuery,
+    setSearchQuery,
+    searchResults,
+    setSearchResults,
+    displayAllMatches,
+    setDisplayAllMatches,
+  } = useContext<any>(context);
+
+  const DefaultLeft: React.FC = () => (
+    <Link href={agencyAcronym ? `/${agencyAcronym}` : '/'}>
+      <div className="font-poppins flex h-full gap-2.5 text-lg font-semibold items-center hover:cursor-pointer">
+        <Asklogo />
+        <div className="flex">
+          Ask
+          {agencyAcronym ? (
+            <div className="text-[#702FF9] dark:text-[#9E70FF]">
+              {agencyAcronym.toUpperCase()}
+            </div>
+          ) : (
+            <div className="hidden sm:block">MyGov</div>
+          )}
+        </div>
+        {isAdmin && <StyledDisplay variant={'nameHeader'}>ADMIN</StyledDisplay>}
+      </div>
+    </Link>
+  );
+
+  const DefaultCenter: React.FC = () =>
+    (alwaysShowInput || headerContent === 'input') && (
+      <InputNavbar
+        searchQuery={searchQuery}
+        setSearchQuery={setSearchQuery}
+        searchResults={searchResults}
+        setSearchResults={setSearchResults}
+        displayAllMatches={displayAllMatches}
+        setDisplayAllMatches={setDisplayAllMatches}
+      />
+    );
+
+  const DefaultRight: React.FC = () => (
+    <div className="flex gap-3 items-center">
+      <ThemeToggle />
+      <LocaleSwitch />
+    </div>
+  );
+
+  return (
+    <div id="header" className={`sticky top-0 z-50 ${isAdmin ? '' : 'w-full'}`}>
+      <div
+        className={`w-full bg-white ${isAdmin ? 'border-[1px] border-outline-200' : 'p-2 border-[1px] border-outline-200 h-16'} flex items-center`}
+      >
+        <div className={`${isAdmin ? 'p-2' : 'container'} flex w-full`}>
+          <div className="flex justify-between w-full items-center">
+            {LeftComponent || <DefaultLeft />}
+            {CenterComponent || <DefaultCenter />}
+            {RightComponent || <DefaultRight />}
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default BaseHeader;

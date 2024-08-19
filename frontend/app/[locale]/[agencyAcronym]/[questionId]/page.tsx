@@ -6,7 +6,7 @@ import {
   getDynamicAgencyMap,
 } from '@/actions/questionServices';
 import { getRelatedQuestions } from '@/actions/searchServices';
-import Footer from '@/components/FooterDetails/Footer';
+import Footer from '@/components/Footer';
 import RelatedTopics from '@/components/RelatedTopics';
 import RightArrow from '@/icons/rightarrow';
 import IconQuestionSmileSolo from '@/icons/iconquestionsmilesolo';
@@ -18,12 +18,12 @@ import DateComponent from '@/components/Date';
 import Link from 'next/link';
 import IdentifyWebsite from '@/components/HeaderDetails/IdentifyWebsite';
 import WordTranslate from '@/components/WordTranslate';
-import HeaderQuestionDetail from '@/components/HeaderDetails/HeaderQuestionDetail';
 import { Question } from '@/types/types';
 import AgencyLogoImporter from '@/components/AgencyLogoImporter';
 import ContextSearchBar from '@/components/ContextSearchBar';
 import { fetchFileSizes } from '@/actions/utils';
 import AttachmentDownload from '@/components/AdminDashboard/AttachmentDownload';
+import BaseHeader from '@/components/HeaderDetails/BaseHeader';
 
 interface Props {
   params: {
@@ -93,7 +93,7 @@ const QuestionDetailPage: React.FC<Props> = async ({ params }) => {
     <div>
       <IdentifyWebsite />
       <ContextSearchBar>
-        <HeaderQuestionDetail />
+        <BaseHeader alwaysShowInput={true}></BaseHeader>
       </ContextSearchBar>
 
       <div className="container mt-10 flex">
