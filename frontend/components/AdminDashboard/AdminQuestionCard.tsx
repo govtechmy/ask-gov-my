@@ -166,6 +166,7 @@ const AdminQuestionCard: React.FC<QuestionCardProps> = ({
         AGENCY_TO_UUID={agencyMap}
         successMessage={successMessage}
         setSuccessMessage={setSuccessMessage}
+        agencies={agencies}
       />
       {showSpamToast && (
         <Toast
