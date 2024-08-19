@@ -5,14 +5,14 @@ import {
   getTopicByAgency,
 } from '@/actions/questionServices';
 import QuestionBox from '@/components/QuestionBox/QuestionBox';
-import Footer from '@/components/Footer';
-import TopicList from '@/components/TopicList';
-import IdentifyWebsite from '@/components/HeaderDetails/IdentifyWebsite';
-import WordTranslate from '@/components/WordTranslate';
-import TopicDropdown from '@/components/TopicDropdown';
-import ContextSearchBar from '@/components/ContextSearchBar';
-import BaseHeader from '@/components/HeaderDetails/BaseHeader';
-import SearchNavbar from '@/components/HeaderDetails/SearchNavbar';
+import Footer from '@/components/common/Footer';
+import TopicList from '@/components/common/TopicList';
+import IdentifyWebsite from '@/components/common/IdentifyWebsite';
+import WordTranslate from '@/components/common/WordTranslate';
+import TopicDropdown from '@/components/common/TopicDropdown';
+import ContextSearchBar from '@/components/context/ContextSearchBar';
+import BaseHeader from '@/components/common/HeaderDetails/BaseHeader';
+import SearchNavbar from '@/components/common/HeaderDetails/SearchNavbar';
 
 interface Props {
   params: {

@@ -1,12 +1,12 @@
 'use client';
 import React, { useContext, ReactNode } from 'react';
 import Link from 'next/link';
-import ThemeToggle from './theme';
+import ThemeToggle from '../theme';
 import LocaleSwitch from './LocaleSwitch';
 import Asklogo from '@/icons/asklogo';
-import { StyledDisplay } from '../ui/display';
-import { context } from '../ContextSearchBar';
-import InputNavbar from '../ui/inputnavbar';
+import { context } from '@/components/context/ContextSearchBar';
+import InputNavbar from '@/components/ui/inputnavbar';
+import { StyledDisplay } from '@/components/ui/display';
 
 interface HeaderProps {
   isAdmin?: boolean;

@@ -2,7 +2,7 @@
 
 import React, { useState } from 'react';
 import AgencySettingsModal from './AgencySettingsModal';
-import AgencyLogoImporter from '../AgencyLogoImporter';
+import AgencyLogoImporter from '../common/AgencyLogoImporter';
 import Gear from '@/icons/gear';
 
 interface AgencyCardProps {
