@@ -23,7 +23,7 @@ const AnswerQuestionModal = ({
   question,
   isOpen,
   onClose,
-}:AnswerQuestionModalProps) => {
+}: AnswerQuestionModalProps) => {
   const [answer, setAnswer] = useState(question.answer || '');
   const [attachments, setAttachments] = useState<File[]>([]);
   const [uploadedAttachments, setUploadedAttachments] = useState<string[]>(
@@ -31,8 +31,6 @@ const AnswerQuestionModal = ({
   );
   const [success, setSuccess] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
-  
-
 
   useEffect(() => {
     setAnswer(question.answer || '');
@@ -40,15 +38,17 @@ const AnswerQuestionModal = ({
 
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const files = event.target.files ? Array.from(event.target.files) : [];
-    setAttachments((prev:File[]) => [...prev, ...files]);
+    setAttachments((prev: File[]) => [...prev, ...files]);
   };
 
   const handleRemoveAttachment = (index: number) => {
-    setAttachments((prev:File[]) => prev.filter((_, i) => i !== index));
+    setAttachments((prev: File[]) => prev.filter((_, i) => i !== index));
   };
 
   const handleRemoveUploadedAttachment = (index: number) => {
-    setUploadedAttachments((prev:string[]) => prev.filter((_, i) => i !== index));
+    setUploadedAttachments((prev: string[]) =>
+      prev.filter((_, i) => i !== index),
+    );
   };
 
   const handleSubmit = async () => {
@@ -176,11 +176,11 @@ const AnswerQuestionModal = ({
                 </div>
               </div>
               <div className="pl-3 flex flex-col flex-grow">
-                  <TipTap
-                     editorText = {answer}
-                     setEditorText = {setAnswer}
-                     className = "flex flex-col divide-y rounded-lg w-[616px] h-[300px] border-[1px] shadow-button overflow-y-auto"
-                  />
+                <TipTap
+                  editorText={answer}
+                  setEditorText={setAnswer}
+                  className="flex flex-col divide-y rounded-lg w-[616px] h-[300px] border-[1px] shadow-button overflow-y-auto relative"
+                />
                 <div className="w-[616px] border-[1px] border-outline-200 rounded-lg my-3 items-center flex-shrink-0 shadow-button">
                   <div className="h-[68px] w-full m-4 items-center flex">
                     <div className="text-dim-500 w-[431px] h-[68px] text-sm flex-shrink-0 ">
