@@ -107,7 +107,7 @@ const QuestionDetailPage: React.FC<Props> = async ({ params }) => {
     if (!agencyList || agencyList.length === 0) {
       throw new Error('Agency list is empty');
     }
-  } catch { }
+  } catch {}
 
   const currentAgency = agencyList.find(
     (agency: { acronym: string }) =>
@@ -184,11 +184,11 @@ const QuestionDetailPage: React.FC<Props> = async ({ params }) => {
                       </div>
                     </div>
                     <div className="flex px-8 pb-5 pt-4 text-justify text-black-700 flex-col">
-                      <TipTap 
-                        editorText={question.answer} 
-                        className= "w-full flex-1"
-                        isEditable = {false}
-                        hasMenuBar = {false}
+                      <TipTap
+                        editorText={question.answer}
+                        className="w-full flex-1"
+                        isEditable={false}
+                        hasMenuBar={false}
                       />
                     </div>
 

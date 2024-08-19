@@ -1,48 +1,49 @@
-'use client'
+'use client';
 
-import Underline from "@tiptap/extension-underline";
-import { EditorContent, useEditor, UseEditorOptions } from "@tiptap/react";
-import StarterKit from "@tiptap/starter-kit";
+import Underline from '@tiptap/extension-underline';
+import { EditorContent, useEditor, UseEditorOptions } from '@tiptap/react';
+import StarterKit from '@tiptap/starter-kit';
 import Link from '@tiptap/extension-link';
-import Menubar from "./menubar";
+import Menubar from './Menubar';
 
 export default ({
-    isEditable = true,
-    hasMenuBar = true,
-    editorText,
-    setEditorText,
-    className
-  }: {
-    isEditable?: boolean;
-    hasMenuBar?: boolean;
-    editorText: any;
-    setEditorText?: (content: string) => void;
-    className: string
-  }) => {
+  isEditable = true,
+  hasMenuBar = true,
+  editorText,
+  setEditorText,
+  className,
+}: {
+  isEditable?: boolean;
+  hasMenuBar?: boolean;
+  editorText: any;
+  setEditorText?: (content: string) => void;
+  className: string;
+}) => {
+  const editorProps: Partial<UseEditorOptions> = {
+    // editor props for both editable and view only editors
+    extensions: [
+      StarterKit,
+      Underline,
+      Link.configure({
+        openOnClick: true,
+        autolink: true,
+        defaultProtocol: 'https',
+      }),
+    ],
+    content: editorText,
+    editable: isEditable,
+    immediatelyRender: false,
+  };
 
-    const editorProps: Partial <UseEditorOptions> = {
-        // editor props for both editable and view only editors
-        extensions: [StarterKit, Underline, Link.configure({
-            openOnClick: true,
-            autolink: true,
-            defaultProtocol: 'https',
-        })],
-        content: editorText,
-        editable: isEditable
-    };
+  if (isEditable && setEditorText) {
+    editorProps.onUpdate = ({ editor }) => setEditorText(editor.getHTML());
+  }
 
-    if (isEditable && setEditorText){
-        editorProps.onUpdate = ({ editor }) => setEditorText(editor.getHTML());
-    } else {
-        // when the editor is only viewable
-        editorProps.immediatelyRender = false;
-    }
-
-    const editor = useEditor(editorProps);
-    return (
-        <div className = {className}>
-            {hasMenuBar && <Menubar editor={editor} />}
-            <EditorContent editor={editor} />
-        </div>
-    );
+  const editor = useEditor(editorProps);
+  return (
+    <div className={className}>
+      {hasMenuBar && <Menubar editor={editor} />}
+      <EditorContent editor={editor} />
+    </div>
+  );
 };
