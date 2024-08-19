@@ -2,12 +2,12 @@
 import { useState } from 'react';
 import { signIn } from 'next-auth/react';
 import Link from 'next/link';
-import HeaderAdmin from '@/components/HeaderDetails/HeaderAdmin';
 import { Button, buttonVariants } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { useTranslations } from 'next-intl';
 import Google from '@/icons/google';
 import Footer from '@/components/Footer';
+import BaseHeader from '@/components/HeaderDetails/BaseHeader';
 
 export function AdminPage() {
   const t = useTranslations('Adminlogin');
@@ -47,7 +47,7 @@ export function AdminPage() {
 
   return (
     <div className="flex flex-col min-h-screen">
-      <HeaderAdmin />
+      <BaseHeader isAdmin={true}></BaseHeader>
       <div className="flex-grow flex items-center justify-center py-12">
         <div className="max-w-[450px]">
           <div className="text-center">

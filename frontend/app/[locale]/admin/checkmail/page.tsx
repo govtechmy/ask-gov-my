@@ -1,6 +1,5 @@
 'use client';
 import Link from 'next/link';
-import HeaderAdmin from '@/components/HeaderDetails/HeaderAdmin';
 import Footer from '@/components/Footer';
 import { buttonVariants } from '@/components/ui/button';
 import Maillogo from '@/icons/mail';
@@ -9,6 +8,7 @@ import { useTranslations } from 'next-intl';
 import MailLogo from '@/icons/maillogo';
 import { useState, useEffect } from 'react';
 import { cn } from '@/lib/utils';
+import BaseHeader from '@/components/HeaderDetails/BaseHeader';
 
 export function CheckmailPage({
   params: { locale },
@@ -40,7 +40,7 @@ export function CheckmailPage({
 
   return (
     <div className="flex flex-col min-h-screen">
-      <HeaderAdmin />
+      <BaseHeader isAdmin={true}></BaseHeader>
       <div className="flex-grow flex items-center justify-center py-12">
         <div className="flex flex-col items-center justify-center">
           <Maillogo />

@@ -11,8 +11,8 @@ import TopicList from '@/components/TopicList';
 import SearchNavbarAgency from '@/components/HeaderDetails/SearchNavBarAgency';
 import TopicDropdown from '@/components/TopicDropdown';
 import WordTranslate from '@/components/WordTranslate';
-import HeaderAgency from '@/components/HeaderDetails/HeaderAgency';
 import ContextSearchBar from '@/components/ContextSearchBar';
+import BaseHeader from '@/components/HeaderDetails/BaseHeader';
 
 interface Props {
   params: {
@@ -62,7 +62,7 @@ const TopicPage = async ({ params }: Props) => {
       <IdentifyWebsite></IdentifyWebsite>
 
       <ContextSearchBar>
-        <HeaderAgency agencyAcronym={agencyAcronym}></HeaderAgency>
+        <BaseHeader agencyAcronym={agencyAcronym}></BaseHeader>
         <SearchNavbarAgency
           agencyAcronym={agencyAcronym}
           agencyUUID={agencyUUID}

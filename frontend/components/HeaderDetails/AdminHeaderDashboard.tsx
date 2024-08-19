@@ -24,7 +24,7 @@ interface NavLinkProps {
   label: string;
 }
 
-const HeaderDashboard: React.FC = () => {
+const AdminHeaderDashboard: React.FC = () => {
   const searchParams = useSearchParams();
   const router = useRouter();
   const [activeLink, setActiveLink] = useState<NavLinkType>('questions');
@@ -123,4 +123,4 @@ const HeaderDashboard: React.FC = () => {
   );
 };
 
-export default HeaderDashboard;
+export default AdminHeaderDashboard;

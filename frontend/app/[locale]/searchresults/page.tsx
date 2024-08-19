@@ -7,11 +7,11 @@ import { searchQuestions } from '@/actions/searchServices';
 import QuestionBox from '@/components/QuestionBox/QuestionBox';
 import SearchNavbar from '@/components/HeaderDetails/SearchNavBar';
 import Footer from '@/components/Footer';
-import Header from '@/components/HeaderDetails/Header';
 import TrendingAgencies from '@/components/TrendingAgencies';
 import IdentifyWebsite from '@/components/HeaderDetails/IdentifyWebsite';
 import WordTranslate from '@/components/WordTranslate';
 import ContextSearchBar from '@/components/ContextSearchBar';
+import BaseHeader from '@/components/HeaderDetails/BaseHeader';
 
 const SearchResultPage = async ({
   searchParams,
@@ -26,9 +26,8 @@ const SearchResultPage = async ({
   return (
     <div>
       <IdentifyWebsite />
-
       <ContextSearchBar>
-        <Header />
+        <BaseHeader></BaseHeader>
         <SearchNavbar />
       </ContextSearchBar>
 

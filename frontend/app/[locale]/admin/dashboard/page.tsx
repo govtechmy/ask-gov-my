@@ -1,7 +1,6 @@
 'use client';
 
 import { useTranslations } from 'next-intl';
-import HeaderDashboard from '@/components/HeaderDetails/HeaderDashboard';
 import { useSession } from 'next-auth/react';
 import { useRouter } from '@/lib/i18n';
 import { useSearchParams } from 'next/navigation';
@@ -11,6 +10,7 @@ import ManageUsers from '@/components/AdminDashboard/ManageUsers';
 import { useState } from 'react';
 import StaffHeaderDashboard from '@/components/HeaderDetails/StaffHeaderDashboard';
 import StaffManageQuestions from '@/components/AdminDashboard/StaffManageQuestion';
+import AdminHeaderDashboard from '@/components/HeaderDetails/AdminHeaderDashboard';
 
 export default function DashboardPage() {
   const t = useTranslations('Adminlogin');
@@ -50,7 +50,7 @@ export default function DashboardPage() {
 
         {role === 'super_admin' ? (
           <>
-            <HeaderDashboard />
+            <AdminHeaderDashboard />
             {page === 'questions' && <ManageQuestions />}
             {page === 'manageagencies' && <ManageAgencies />}
             {page === 'manageusers' && <ManageUsers />}
