@@ -5,7 +5,7 @@ import ThemeToggle from '../theme';
 import LocaleSwitch from './LocaleSwitch';
 import Asklogo from '@/icons/asklogo';
 import { context } from '@/components/context/ContextSearchBar';
-import InputNavbar from '@/components/ui/inputnavbar';
+import InputNavbar from '../SearchNavbar/inputnavbar';
 import { StyledDisplay } from '@/components/ui/display';
 
 interface HeaderProps {

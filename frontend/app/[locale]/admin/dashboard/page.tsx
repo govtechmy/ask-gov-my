@@ -8,9 +8,9 @@ import ManageQuestions from '@/components/AdminDashboard/ManageQuestions';
 import ManageAgencies from '@/components/AdminDashboard/ManageAgencies';
 import ManageUsers from '@/components/AdminDashboard/ManageUsers';
 import { useState } from 'react';
-import StaffHeaderDashboard from '@/components/common/HeaderDetails/StaffHeaderDashboard';
+import StaffHeaderDashboard from '@/components/common/Header/StaffHeaderDashboard';
 import StaffManageQuestions from '@/components/AdminDashboard/StaffManageQuestion';
-import AdminHeaderDashboard from '@/components/common/HeaderDetails/AdminHeaderDashboard';
+import AdminHeaderDashboard from '@/components/common/Header/AdminHeaderDashboard';
 
 export default function DashboardPage() {
   const t = useTranslations('Adminlogin');

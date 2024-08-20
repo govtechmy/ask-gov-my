@@ -7,7 +7,7 @@ import {
 } from '@/actions/questionServices';
 import { getRelatedQuestions } from '@/actions/searchServices';
 import Footer from '@/components/common/Footer';
-import RelatedTopics from '@/components/common/RelatedTopics';
+import RelatedTopics from '@/components/QuestionDetailPage/RelatedTopics';
 import RightArrow from '@/icons/rightarrow';
 import IconQuestionSmileSolo from '@/icons/iconquestionsmilesolo';
 import ThumbsCounter from '@/components/QuestionDetailPage/ThumbsCounter';
@@ -16,14 +16,14 @@ import JataNegaraIcon from '@/icons/jatanegaraicon';
 import { redirect } from 'next/navigation';
 import DateComponent from '@/components/common/Date';
 import Link from 'next/link';
-import IdentifyWebsite from '@/components/common/IdentifyWebsite';
 import WordTranslate from '@/components/common/WordTranslate';
 import { Question } from '@/types/types';
 import AgencyLogoImporter from '@/components/common/AgencyLogoImporter';
 import ContextSearchBar from '@/components/context/ContextSearchBar';
 import { fetchFileSizes } from '@/actions/utils';
 import AttachmentDownload from '@/components/AdminDashboard/AttachmentDownload';
-import BaseHeader from '@/components/common/HeaderDetails/BaseHeader';
+import BaseHeader from '@/components/common/Header/BaseHeader';
+import Masthead from '@/components/common/Header/Masthead';
 
 interface Props {
   params: {
@@ -62,7 +62,6 @@ const QuestionDetailPage: React.FC<Props> = async ({ params }) => {
   }
 
   const attachments = question.attachments || [];
-  const acronym = agencyAcronymObject(question.agency);
 
   let fileSize: number[] = [];
 
@@ -91,7 +90,7 @@ const QuestionDetailPage: React.FC<Props> = async ({ params }) => {
 
   return (
     <div>
-      <IdentifyWebsite />
+      <Masthead />
       <ContextSearchBar>
         <BaseHeader alwaysShowInput={true}></BaseHeader>
       </ContextSearchBar>
@@ -112,7 +111,7 @@ const QuestionDetailPage: React.FC<Props> = async ({ params }) => {
                 <RightArrow />
               </div>
               <div className="font-medium text-black-800 text-sm">
-                {acronym}
+                {currentAgency.acronym}
               </div>
             </div>
 
@@ -164,7 +163,7 @@ const QuestionDetailPage: React.FC<Props> = async ({ params }) => {
                         <div className="flex gap-[6px]">
                           {topicTitles.map((TopicTitles, index) => (
                             <div
-                              className="flex text-base font-medium text-[#702FF9] dark:text-[#9E70FF] bg-[#F4EFFF] dark:bg-[#201636] border-[1px] border-[#D4C0FF] dark:border-[#4F1FB4] px-2 py-1 rounded-lg"
+                              className="flex text-base font-medium text-[#702FF 9] dark:text-[#9E70FF] bg-[#F4EFFF] dark:bg-[#201636] border-[1px] border-[#D4C0FF] dark:border-[#4F1FB4] px-2 py-1 rounded-lg"
                               key={index}
                             >
                               {TopicTitles}

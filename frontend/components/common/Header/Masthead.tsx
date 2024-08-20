@@ -1,6 +1,6 @@
 'use client';
 
-import Collapse from '../ui/collapse';
+import Collapse from '@/components/ui/collapse';
 import TickWithRugged from '@/icons/tickwithrugged';
 import ChevronDown from '@/icons/ChevronDown';
 import PutrajayaIcon from '@/icons/putrajaya';
