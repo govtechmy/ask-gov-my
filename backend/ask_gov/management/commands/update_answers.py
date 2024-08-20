@@ -1,5 +1,5 @@
 from django.core.management.base import BaseCommand
-from questions.models import Question
+from ask_gov.models import Question
 
 class Command(BaseCommand):
     help = 'Updates the answer and answer_preview fields for all questions'
