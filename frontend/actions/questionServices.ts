@@ -109,7 +109,7 @@ export async function getQuestionById(
   const response = await fetch(`${API_URL}/questions/${questionId}/`, {
     method: 'GET',
     cache: 'no-store',
-    next: { revalidate: 0 }
+    next: { revalidate: 0 },
   });
   if (response.ok) {
     return response.json();
