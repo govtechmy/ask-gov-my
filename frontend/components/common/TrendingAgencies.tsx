@@ -1,7 +1,7 @@
 'use client';
 import { useParams } from 'next/navigation';
 import { Link } from '@/lib/i18n';
-import AgencyLogoImporter from '../common/AgencyLogoImporter';
+import AgencyLogoImporter from './AgencyLogoImporter';
 import { Agency } from '@/types/types';
 
 interface TrendingAgenciesProps {

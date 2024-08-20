@@ -10,7 +10,7 @@ import ManageUsers from '@/components/AdminDashboard/ManageUsers';
 import { useState } from 'react';
 import StaffHeaderDashboard from '@/components/common/HeaderDetails/StaffHeaderDashboard';
 import StaffManageQuestions from '@/components/AdminDashboard/StaffManageQuestion';
-import AdminHeaderDashboard from '@/components/common/HeaderDetails/AdminHeaderDashboard';
+import AdminHeaderDashboard from '@/components/common/Header/AdminHeaderDashboard';
 
 export default function DashboardPage() {
   const t = useTranslations('Adminlogin');
