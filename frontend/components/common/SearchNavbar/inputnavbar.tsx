@@ -73,6 +73,7 @@ const InputNavbar: React.FC<InputNavbarProps> = ({
     setIsTyping(true);
     setShowNoResults(false);
     setHiddendisplay(true);
+    debouncedFetchSearchResults(event.target.value);
   };
 
   const handleKeyPress = (event: React.KeyboardEvent<HTMLInputElement>) => {
@@ -112,9 +113,9 @@ const InputNavbar: React.FC<InputNavbarProps> = ({
     setShowNoResults(false); // reset no results message on clear
   };
 
-  useEffect(() => {
-    debouncedFetchSearchResults(searchQuery);
-  }, [searchQuery, debouncedFetchSearchResults]);
+  // useEffect(() => {
+  //   debouncedFetchSearchResults(searchQuery);
+  // }, [searchQuery, debouncedFetchSearchResults]);
 
   useEffect(() => {
     const fetchAgencyMap = async () => {
