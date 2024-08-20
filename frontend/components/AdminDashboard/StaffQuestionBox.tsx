@@ -54,7 +54,7 @@ const StaffQuestionBox: React.FC<QuestionBoxProps> = ({ questions }) => {
   return (
     <div>
       {currentQuestions.map(question => (
-        <div key={question.id} className="py-1">
+        <div className="py-1" key={question.id}>
           <AnswerQuestionCard question={question} />
         </div>
       ))}

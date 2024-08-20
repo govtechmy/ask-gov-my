@@ -1,0 +1,63 @@
+div.tiptap.ProseMirror {
+  padding: 0.5rem 0.75rem;
+  font-size: 14px;
+  line-height: 20px;
+
+  > * + * {
+    @apply m-3;
+  }
+
+  ul,
+  ol {
+    @apply py-0 px-4;
+  }
+
+  ul {
+    @apply list-inside list-disc;
+  }
+
+  ol {
+    @apply list-inside list-decimal;
+  }
+
+  li > p {
+    display: inline;
+  }
+
+  h1 {
+    @apply text-3xl leading-9.5 font-semibold;
+  }
+
+  h2 {
+    @apply text-2xl leading-8 font-semibold;
+  }
+
+  h3 {
+    @apply text-xl leading-7.5 font-semibold;
+  }
+
+  h4 {
+    @apply text-lg leading-6.5 font-semibold;
+  }
+
+  h5 {
+    @apply text-base leading-6 font-semibold;
+  }
+
+  h6 {
+    @apply text-sm leading-5 font-semibold;
+  }
+
+  p {
+    @apply text-base leading-7 font-normal;
+  }
+
+  a {
+    text-underline-position: 'from-font';
+    @apply underline text-brand-600 cursor-pointer;
+  }
+}
+
+div.tiptap.ProseMirror:focus-visible {
+  outline-color: oklch(var(--myds-brand-600) / 10);
+}

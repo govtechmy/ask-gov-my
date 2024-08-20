@@ -43,7 +43,6 @@ const AnswerQuestionCard: React.FC<QuestionCardProps> = ({ question }) => {
       })
     );
   };
-
   return (
     <>
       <div
