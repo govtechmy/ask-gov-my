@@ -22,6 +22,7 @@ import AgencyLogoImporter from '@/components/common/AgencyLogoImporter';
 import ContextSearchBar from '@/components/context/ContextSearchBar';
 import { fetchFileSizes } from '@/actions/utils';
 import AttachmentDownload from '@/components/AdminDashboard/AttachmentDownload';
+import TipTap from '@/components/Editor/TipTap';
 import BaseHeader from '@/components/common/Header/BaseHeader';
 import Masthead from '@/components/common/Header/Masthead';
 
@@ -51,7 +52,6 @@ const QuestionDetailPage: React.FC<Props> = async ({ params }) => {
 
   try {
     question = await getQuestionById(questionId);
-
     if (!question) {
       throw new Error('Question not found');
     }
@@ -153,8 +153,13 @@ const QuestionDetailPage: React.FC<Props> = async ({ params }) => {
                         />
                       </div>
                     </div>
-                    <div className="flex px-8 pb-5 pt-4 text-justify text-black-700">
-                      {question.answer}
+                    <div className="flex px-8 pb-5 pt-4 text-justify text-black-700 flex-col">
+                      <TipTap
+                        editorText={question.answer}
+                        className="w-full flex-1"
+                        isEditable={false}
+                        hasMenuBar={false}
+                      />
                     </div>
 
                     <div className="px-8 pb-8 pt-0">

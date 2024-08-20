@@ -1,7 +1,5 @@
 'use client';
 
-import React, { useState, useEffect, useRef } from 'react';
-import { useTranslations } from 'next-intl';
 import { uploadFile } from '@/actions/fileServices';
 import { submitAnswer, saveQuestionAsDraft } from '@/actions/userServices';
 import { Question } from '@/types/types';
@@ -13,6 +11,8 @@ import AgencyLogoImporter from '../common/AgencyLogoImporter';
 import UploadIcon from '@/icons/upload';
 import AttachmentDownload from './AttachmentDownload';
 import AttachmentUpload from './AttachmentUpload';
+import React, { useEffect, useRef, useState } from 'react';
+import TipTap from '../Editor/TipTap';
 import { fetchFileSizes, formatDate } from '@/actions/utils';
 
 interface AnswerQuestionModalProps {
@@ -21,11 +21,11 @@ interface AnswerQuestionModalProps {
   onClose: () => void;
 }
 
-const AnswerQuestionModal: React.FC<AnswerQuestionModalProps> = ({
+const AnswerQuestionModal = ({
   question,
   isOpen,
   onClose,
-}) => {
+}: AnswerQuestionModalProps) => {
   const [answer, setAnswer] = useState(question.answer || '');
   const [attachments, setAttachments] = useState<File[]>([]);
   const [uploadedAttachments, setUploadedAttachments] = useState<string[]>(
@@ -57,15 +57,17 @@ const AnswerQuestionModal: React.FC<AnswerQuestionModalProps> = ({
 
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const files = event.target.files ? Array.from(event.target.files) : [];
-    setAttachments(prev => [...prev, ...files]);
+    setAttachments((prev: File[]) => [...prev, ...files]);
   };
 
   const handleRemoveAttachment = (index: number) => {
-    setAttachments(prev => prev.filter((_, i) => i !== index));
+    setAttachments((prev: File[]) => prev.filter((_, i) => i !== index));
   };
 
   const handleRemoveUploadedAttachment = (index: number) => {
-    setUploadedAttachments(prev => prev.filter((_, i) => i !== index));
+    setUploadedAttachments((prev: string[]) =>
+      prev.filter((_, i) => i !== index),
+    );
   };
 
   const handleSubmit = async () => {
@@ -161,13 +163,6 @@ const AnswerQuestionModal: React.FC<AnswerQuestionModalProps> = ({
                 ref={questionTextRef}
               >
                 {question.question}
-                {/* Your sample text herea sdas sadasdsadads das dsda a dasda ads
-                adsasd addas asddas ads dasads sada dasads ads a sdsaddas asd
-                dsa sdadassadsa ddsdsa dasdas dasads adsasdads dsa dasadsasd
-                asddas asd adsasd d asasd sadd asasd adsdsda d as dasads ads
-                asddsa dasdsads sadsdadsadsa sad dsasdaddsa d sadasd sasad sa
-                dsad dsa ads dsa dasdsa adssad ads ads s adas ads ads asd as
-                dads a sdads ads das da sads ads das ad sa dsdas ad sads */}
               </div>
             </div>
           </div>
@@ -183,12 +178,14 @@ const AnswerQuestionModal: React.FC<AnswerQuestionModalProps> = ({
                 </div>
               </div>
               <div className="pl-3 flex flex-col flex-grow">
-                <div className="w-[636px] h-[300px] border-[1px] border-outline-200 rounded-lg shadow-button">
-                  BIG WORK!
-                </div>
-                <div className="w-[636px] border-[1px] border-outline-200 rounded-lg my-3 shadow-button">
-                  <div className="w-full ml-4 mt-4 items-center flex">
-                    <div className="text-dim-500 w-[431px] text-sm ">
+                <TipTap
+                  editorText={answer}
+                  setEditorText={setAnswer}
+                  className="flex flex-col divide-y rounded-lg w-[616px] h-[300px] border-[1px] shadow-button overflow-y-auto relative"
+                />
+                <div className="w-[616px] border-[1px] border-outline-200 rounded-lg my-3 items-center flex-shrink-0 shadow-button">
+                  <div className="h-[68px] w-full m-4 items-center flex">
+                    <div className="text-dim-500 w-[431px] h-[68px] text-sm flex-shrink-0 ">
                       <div className="h-6 text-black-700 text-base font-medium">
                         Supporting attachments
                       </div>
