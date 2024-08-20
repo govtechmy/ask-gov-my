@@ -7,7 +7,7 @@ import { Input } from '@/components/ui/input';
 import { useTranslations } from 'next-intl';
 import Google from '@/icons/google';
 import Footer from '@/components/common/Footer';
-import BaseHeader from '@/components/common/HeaderDetails/BaseHeader';
+import BaseHeader from '@/components/common/Header/BaseHeader';
 
 export function AdminPage() {
   const t = useTranslations('Adminlogin');

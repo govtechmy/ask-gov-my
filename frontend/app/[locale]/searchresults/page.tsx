@@ -4,14 +4,14 @@ import {
   getAgencyList,
 } from '@/actions/questionServices';
 import { searchQuestions } from '@/actions/searchServices';
-import QuestionBox from '@/components/QuestionBox/QuestionBox';
+import QuestionBox from '@/components/common/QuestionBox/QuestionBox';
 import Footer from '@/components/common/Footer';
-import TrendingAgencies from '@/components/Home/TrendingAgencies';
-import IdentifyWebsite from '@/components/common/IdentifyWebsite';
+import TrendingAgencies from '@/components/common/TrendingAgencies';
 import WordTranslate from '@/components/common/WordTranslate';
 import ContextSearchBar from '@/components/context/ContextSearchBar';
-import BaseHeader from '@/components/common/HeaderDetails/BaseHeader';
-import SearchNavbar from '@/components/common/HeaderDetails/SearchNavbar';
+import BaseHeader from '@/components/common/Header/BaseHeader';
+import SearchNavbar from '@/components/common/SearchNavbar/SearchNavbar';
+import Masthead from '@/components/common/Header/Masthead';
 
 const SearchResultPage = async ({
   searchParams,
@@ -25,7 +25,7 @@ const SearchResultPage = async ({
   const agencyList = await getAgencyList();
   return (
     <div>
-      <IdentifyWebsite />
+      <Masthead />
       <ContextSearchBar>
         <BaseHeader></BaseHeader>
         <SearchNavbar></SearchNavbar>

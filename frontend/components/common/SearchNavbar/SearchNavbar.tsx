@@ -2,7 +2,7 @@
 
 import React, { useContext, useEffect, useState } from 'react';
 import Info from '@/icons/info';
-import InputNavbar from '@/components/ui/inputnavbar';
+import InputNavbar from './inputnavbar';
 import { useTranslations } from 'next-intl';
 import { context } from '@/components/context/ContextSearchBar';
 import Link from 'next/link';

@@ -4,15 +4,15 @@ import {
   getTopicByAgency,
   getDynamicAgencyMap,
 } from '@/actions/questionServices';
-import QuestionBox from '@/components/QuestionBox/QuestionBox';
+import QuestionBox from '@/components/common/QuestionBox/QuestionBox';
 import Footer from '@/components/common/Footer';
-import IdentifyWebsite from '@/components/common/IdentifyWebsite';
 import TopicList from '@/components/common/TopicList';
 import TopicDropdown from '@/components/common/TopicDropdown';
 import WordTranslate from '@/components/common/WordTranslate';
 import ContextSearchBar from '@/components/context/ContextSearchBar';
-import BaseHeader from '@/components/common/HeaderDetails/BaseHeader';
-import SearchNavbar from '@/components/common/HeaderDetails/SearchNavbar';
+import BaseHeader from '@/components/common/Header/BaseHeader';
+import SearchNavbar from '@/components/common/SearchNavbar/SearchNavbar';
+import Masthead from '@/components/common/Header/Masthead';
 
 interface Props {
   params: {
@@ -59,8 +59,7 @@ const TopicPage = async ({ params }: Props) => {
 
   return (
     <div>
-      <IdentifyWebsite></IdentifyWebsite>
-
+      <Masthead />
       <ContextSearchBar>
         <BaseHeader agencyAcronym={agencyAcronym}></BaseHeader>
         <SearchNavbar
