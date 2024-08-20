@@ -12,11 +12,15 @@ class Command(BaseCommand):
         for question in questions:
             serializer = QuestionSerializer(question)
             document = serializer.data
+            
+            document['answer'] = question.answer_preview
 
             document.pop('admin_isopen', None)
             document.pop('staff_isopen', None)
             document.pop('attachments', None)
             document.pop('email', None)
+            document.pop('answer_preview', None)
+
 
             agency = question.agency
             if agency:
