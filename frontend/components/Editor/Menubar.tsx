@@ -91,53 +91,34 @@ export default ({ editor }: { editor: Editor | null }) => {
           <SelectValue />
         </SelectTrigger>
         <SelectContent className="bg-white">
-          <SelectItem
-            hasCheck={false}
-            className="font-normal text-base"
-            value="paragraph"
-          >
+          <SelectItem className="font-normal text-base" value="paragraph">
             Paragraph
           </SelectItem>
           <SelectItem
-            hasCheck={false}
             className="font-semibold text-3xl leading-[38px]"
             value="1"
           >
             Heading 1
           </SelectItem>
-          <SelectItem
-            hasCheck={false}
-            className="font-semibold text-2xl"
-            value="2"
-          >
+          <SelectItem className="font-semibold text-2xl" value="2">
             Heading 2
           </SelectItem>
           <SelectItem
-            hasCheck={false}
             className="font-semibold text-xl leading-[30px]"
             value="3"
           >
             Heading 3
           </SelectItem>
           <SelectItem
-            hasCheck={false}
             className="font-semibold text-lg leading-[26px]"
             value="4"
           >
             Heading 4
           </SelectItem>
-          <SelectItem
-            hasCheck={false}
-            className="font-semibold text-base"
-            value="5"
-          >
+          <SelectItem className="font-semibold text-base" value="5">
             Heading 5
           </SelectItem>
-          <SelectItem
-            hasCheck={false}
-            className="font-semibold text-sm"
-            value="6"
-          >
+          <SelectItem className="font-semibold text-sm" value="6">
             Heading 6
           </SelectItem>
         </SelectContent>
