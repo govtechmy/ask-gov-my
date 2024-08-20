@@ -1,17 +1,23 @@
 import React, { useState, useRef, ChangeEvent } from 'react';
+import { Agency } from '@/types/types';
+import { assignAgencyToQuestion } from '@/actions/userServices';
 
 interface AgencyListDropdownProps {
   selectedAgency: string;
   setSelectedAgency: (agencyAcronym: string) => void;
   AGENCY_TO_UUID: { [key: string]: string };
-  setSuccessMessage: (message: string) => void; // New prop
+  setSuccessMessage: (message: string) => void;
+  agencies: Agency[];
+  questionId: number;
 }
 
 const AgencyListDropdown: React.FC<AgencyListDropdownProps> = ({
   selectedAgency,
   setSelectedAgency,
   AGENCY_TO_UUID,
-  setSuccessMessage, // New prop
+  setSuccessMessage,
+  agencies,
+  questionId,
 }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
@@ -22,8 +28,9 @@ const AgencyListDropdown: React.FC<AgencyListDropdownProps> = ({
     setSuccessMessage(''); // Clear the success message when the dropdown is opened
   };
 
-  const handleAgencyChange = (agencyAcronym: string) => {
+  const handleAgencyChange = (agencyId: number, agencyAcronym: string) => {
     setSelectedAgency(agencyAcronym);
+    assignAgencyToQuestion(questionId, agencyId);
     setIsOpen(false);
     if (agencyAcronym !== 'Unassigned') {
       setSuccessMessage(
@@ -38,8 +45,12 @@ const AgencyListDropdown: React.FC<AgencyListDropdownProps> = ({
     setSearchQuery(event.target.value);
   };
 
-  const filteredAgencies = Object.keys(AGENCY_TO_UUID).filter(agencyAcronym =>
-    agencyAcronym.toLowerCase().includes(searchQuery.toLowerCase()),
+  const filteredAgencies = agencies.filter(
+    agency =>
+      agency.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      agency.acronym.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      (agency.name_ms &&
+        agency.name_ms.toLowerCase().includes(searchQuery.toLowerCase())),
   );
 
   return (
@@ -57,20 +68,20 @@ const AgencyListDropdown: React.FC<AgencyListDropdownProps> = ({
           <div className="absolute top-0 right-[5px] overflow-auto max-h-[160px] bg-white-forcewhite max-w-[600px] mt-[52px]">
             <div
               className="h-8 w-[600px] pl-2 hover:bg-washed-100 cursor-pointer items-center flex"
-              onClick={() => handleAgencyChange('Unassigned')}
+              onClick={() => handleAgencyChange(0, 'Unassigned')}
             >
               Unassigned
             </div>
 
-            {filteredAgencies.map(agencyAcronym => (
+            {filteredAgencies.map(agency => (
               <div
-                key={agencyAcronym}
-                className="pl-2 h-8 hover:bg-washed-100 cursor-pointer items-center flex"
-                onClick={() => handleAgencyChange(agencyAcronym)}
+                key={agency.id}
+                className="text-black-900 font-medium text-sm pl-3 h-8 hover:bg-washed-100 cursor-pointer items-center flex"
+                onClick={() => handleAgencyChange(agency.id, agency.acronym)}
               >
-                {agencyAcronym}
+                {agency.acronym}
                 <div className="text-dim-500 font-medium text-xs leading-[18px] pl-2">
-                  {agencyAcronym}
+                  {agency.name}
                 </div>
               </div>
             ))}

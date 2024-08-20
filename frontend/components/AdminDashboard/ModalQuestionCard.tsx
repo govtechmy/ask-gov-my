@@ -6,16 +6,18 @@ import LineVerticalForSmile from '@/icons/lineverticalforsmile';
 import PlusCircle from '@/icons/pluscircle';
 import TickCheckCircleInCircle from '@/icons/tickcheckcircleincircle';
 import AgencyListDropdown from './AgencyListDropdown';
+import { Agency, Question } from '@/types/types';
 
 interface ModalProps {
   isOpen: boolean;
   onClose: () => void;
-  question: any;
+  question: Question;
   selectedAgency: string;
   setSelectedAgency: React.Dispatch<React.SetStateAction<string>>;
   AGENCY_TO_UUID: Record<string, string>;
   successMessage: string;
   setSuccessMessage: React.Dispatch<React.SetStateAction<string>>;
+  agencies: Agency[];
 }
 
 const ModalQuestionCard: React.FC<ModalProps> = ({
@@ -27,6 +29,7 @@ const ModalQuestionCard: React.FC<ModalProps> = ({
   AGENCY_TO_UUID,
   successMessage,
   setSuccessMessage,
+  agencies,
 }) => {
   const questionTextRef = React.useRef<HTMLDivElement>(null);
   const [svgHeight, setSvgHeight] = React.useState<number>(10);
@@ -110,6 +113,8 @@ const ModalQuestionCard: React.FC<ModalProps> = ({
                 setSelectedAgency={setSelectedAgency}
                 AGENCY_TO_UUID={AGENCY_TO_UUID}
                 setSuccessMessage={setSuccessMessage}
+                agencies={agencies}
+                questionId={question.id}
               />
             </div>
           </div>
