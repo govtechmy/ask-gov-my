@@ -69,7 +69,7 @@ const QuestionCard: React.FC<QuestionCardProps> = ({
         className="mt-2 ml-10 font-normal text-black-700 text-justify line-clamp-2 max-w-[900px]"
         style={{ fontSize: '14px', lineHeight: '22px' }}
       >
-        {question.answer}
+        {question.answer_preview}
       </div>
       <div className="mt-3 ml-10 flex items-center">
         <div className="mr-2">
