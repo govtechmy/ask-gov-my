@@ -1,6 +1,7 @@
-import ThemeToggle from './Theme';
+import ThemeToggle from './theme';
 import LocaleSwitch from './LocaleSwitch';
 import Asklogo from '@/icons/asklogo';
+import { StyledDisplay } from '../ui/display';
 
 const HeaderAdmin = () => {
   return (
@@ -10,9 +11,7 @@ const HeaderAdmin = () => {
           <div className="font-poppins flex h-full gap-2.5 text-lg font-semibold items-center">
             <Asklogo />
             <div className="hidden sm:block">AskMyGov</div>
-            <div className="bg-[#27272A] dark:bg-[#F4F4F5] dark:text-[#18181B] text-[#FFFFFF] rounded-md font-bold text-xs flex justify-center items-center w-[53px] h-[22px]">
-              ADMIN
-            </div>
+            <StyledDisplay variant={'nameHeader'}>ADMIN</StyledDisplay>
           </div>
           <div className="flex gap-3">
             <ThemeToggle />

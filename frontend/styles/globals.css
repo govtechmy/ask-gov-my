@@ -39,6 +39,13 @@
     --askmygov-brand-200: 84.57% 0.089 299.04; /* #D4C0FF */
     --askmygov-brand-50: 96.06% 0.022 300.208; /* #F4EFFF */
     --askmygov-text-brand-600: 53% 0.268 287.87; /* #702FF9 */
+
+    /* danger */
+    --myds-danger-300: 80.77% 0.103 19.57; /* #FCA5A5 or Red 300 */
+    --myds-danger-200: 88.45% 0.059 18.33; /* #FECACA or Red 200 */
+    --myds-danger-100: 93.56% 0.031 17.72; /* #FEE2E2 or Red 100 */
+    --myds-danger-50: 97.05% 0.013 17.38; /* #FEF2F2 or Red 50 */
+    --text-danger-600: 57.71% 0.215 27.33; /* #DC2626 */
   }
 
   .dark {
@@ -75,6 +82,13 @@
     --askmygov-brand-200: 41.56% 0.21 287.9; /* #4f1fb4 */
     --askmygov-brand-50: 23.13% 0.06 295.73; /* #201636 */
     --askmygov-text-brand-600: 65.93% 0.204 295.04; /* #9E70FF */
+
+    /* danger */
+    --myds-danger-300: 44.37% 0.161 26.9; /* #991B1B or Red 800 */
+    --myds-danger-200: 39.58% 0.133 25.72; /* #7F1D1D or Red 900 */
+    --myds-danger-100: 25.75% 0.089 26.04; /* #450A0A or Red 950 */
+    --myds-danger-50: 19.68% 0.06 24.53; /* #2B0707 */
+    --text-danger-600: 68.71% 0.202 24.13; /* #FF5959 */
   }
 
   html {

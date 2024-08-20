@@ -1,12 +1,7 @@
 'use client';
 import { useTranslations } from 'next-intl';
 import Link from 'next/link';
-
-interface Topic {
-  id: number;
-  title: string;
-  title_ms?: string;
-}
+import { Topic } from '@/types/types';
 
 interface RelatedTopicsProps {
   topics: Topic[];

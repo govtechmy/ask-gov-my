@@ -9,6 +9,7 @@ import Info from '@/icons/info';
 import TickCheckCircle from '@/icons/tickcheckcircle';
 import { submitQuestion } from '@/actions/questionServices';
 import { useTranslations } from 'next-intl';
+import { Button } from './ui/button';
 
 const AskQuestion = () => {
   const [isClicked, setIsClicked] = useState(false);
@@ -63,19 +64,15 @@ const AskQuestion = () => {
     <div className="items-center px-4 py-2 text-center border-outline-200 h-[60px] w-[788px]">
       <div className="text-sm items-center flex text-primary-500 justify-center h-full">
         {isClicked ? (
-          <div className="h-10 flex items-center text-white-forcewhite font-medium text-base border-[1px] border-[#702FF9] shadow-button bg-gradient-to-b from-[#B379FF] to-[#702FF9] px-4 py-2 rounded-lg hover:cursor-pointer">
-            <div className="pr-2">
-              <PlusIcon className="stroke-[#FFFFFF] dark:stroke-[#FFFFFF]"></PlusIcon>
-            </div>
-            <div onClick={handleModalDisplay}>{t('ask_new_question')}</div>
-          </div>
+          <Button variant={'primary'} size={'md'} onClick={handleModalDisplay}>
+            <PlusIcon className="stroke-[#FFFFFF] dark:stroke-[#FFFFFF]"></PlusIcon>
+            {t('ask_new_question')}
+          </Button>
         ) : (
-          <div className="h-10 flex items-center text-[#702FF9] dark:text-[#9E70FF] font-medium text-base border-[1px] border-[#D4C0FF] dark:border-[#4F1FB4] shadow-button bg-white px-4 py-2 rounded-lg hover:cursor-pointer">
-            <div className="pr-2">
-              <QuestionCircle />
-            </div>
-            <div onClick={handleClick}>{t('cant_find')}</div>
-          </div>
+          <Button variant={'secondary-askmygov'} onClick={handleClick}>
+            <QuestionCircle />
+            {t('cant_find')}
+          </Button>
         )}
       </div>
       {isModalOpen && (
@@ -96,6 +93,7 @@ const AskQuestion = () => {
                 </div>
                 <div>{t('ask_new_question')}</div>
               </div>
+
               <form className="px-[18px]" onSubmit={handleSubmit}>
                 <div className="text-left">
                   <div className="text-base font-medium pb-0 mb-0 text-black-700">
@@ -176,13 +174,13 @@ const AskQuestion = () => {
                 </div>
 
                 <div className="flex flex-col items-center pt-9 pb-[18px]">
-                  <button
+                  <Button
                     type="submit"
-                    className="h-10 flex items-center font-medium text-white-forcewhite text-base border-[1px] border-[#702FF9] shadow-button bg-gradient-to-b from-[#B379FF] to-[#702FF9] px-4 py-2 rounded-lg hover:cursor-pointer"
                     onClick={handleSubmit}
+                    variant={'primary'}
                   >
                     {t('submit')}
-                  </button>
+                  </Button>
                   <div className="pt-3 text-dim-500 font-normal text-sm text-center">
                     {t('terms')}
                   </div>
@@ -208,13 +206,16 @@ const AskQuestion = () => {
                   {t('submission_received_detail')}
                 </div>
               </div>
-              <div
+
+              <Button
+                className="w-full text-black-700"
+                variant={'secondary'}
+                size={'lg'}
                 onClick={closeModalSubmit}
-                className="bg-white rounded-lg shadow-button h-[44px] w-[352px] border-outline-200 border-[1px] hover:cursor-pointer flex items-center justify-center"
               >
                 <Close className="stroke-black-700"></Close>
-                <div className="ml-2">{t('close')}</div>
-              </div>
+                {t('close')}
+              </Button>
             </div>
           </div>
         </div>
