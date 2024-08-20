@@ -7,6 +7,7 @@ import { locales } from '@/lib/i18n';
 import { cn } from '@/lib/utils';
 import { ThemeProvider } from 'next-themes';
 import Providers from './providers/providers';
+import { Suspense } from 'react';
 
 const inter = Inter({ subsets: ['latin'] });
 const poppins = Poppins({
@@ -42,7 +43,10 @@ export default async function RootLayout({
       <body className={cn(inter.className, poppins.variable)}>
         <ThemeProvider attribute="class">
           <NextIntlClientProvider messages={messages}>
-            <Providers>{children}</Providers>
+            {/* TODO */}
+            <Suspense>
+              <Providers>{children}</Providers>s
+            </Suspense>
           </NextIntlClientProvider>
         </ThemeProvider>
       </body>

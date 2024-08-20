@@ -47,8 +47,16 @@ const AgencyCard: React.FC<AgencyCardProps> = ({
         </div>
       </div>
 
+      {/* TODO fix this last edited*/}
       <AgencySettingsModal
-        agency={{ id, name, name_ms, acronym, logo_url }}
+        agency={{
+          id,
+          name,
+          name_ms,
+          acronym,
+          logo_url,
+          last_edited: new Date(),
+        }}
         isOpen={isModalOpen}
         onClose={() => {
           setIsModalOpen(false);
