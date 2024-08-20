@@ -101,6 +101,11 @@ const config: Config = {
       spacing: {
         4.5: '18px',
       },
+      lineHeight: {
+        9.5: '38px',
+        7.5: '30px',
+        6.5: '26px',
+      }
     },
   },
   plugins: [tailwindcssAnimate],
