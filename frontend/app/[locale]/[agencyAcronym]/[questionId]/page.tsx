@@ -25,6 +25,7 @@ import AttachmentDownload from '@/components/AdminDashboard/AttachmentDownload';
 import TipTap from '@/components/Editor/TipTap';
 import BaseHeader from '@/components/common/Header/BaseHeader';
 import Masthead from '@/components/common/Header/Masthead';
+import { StyledDisplay } from '@/components/ui/display';
 
 interface Props {
   params: {
@@ -167,12 +168,9 @@ const QuestionDetailPage: React.FC<Props> = async ({ params }) => {
                         <div className=" font-medium text-sm">Topics: </div>
                         <div className="flex gap-[6px]">
                           {topicTitles.map((TopicTitles, index) => (
-                            <div
-                              className="flex text-base font-medium text-[#702FF 9] dark:text-[#9E70FF] bg-[#F4EFFF] dark:bg-[#201636] border-[1px] border-[#D4C0FF] dark:border-[#4F1FB4] px-2 py-1 rounded-lg"
-                              key={index}
-                            >
+                            <StyledDisplay key={index} variant={'Topics'}>
                               {TopicTitles}
-                            </div>
+                            </StyledDisplay>
                           ))}
                         </div>
                       </div>
