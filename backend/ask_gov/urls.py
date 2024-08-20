@@ -1,10 +1,14 @@
-from django.urls import path
-from .views import (CompletedQuestionListView, QuestionDetailView, AgencyListView, SubmitQuestionView, 
-                    QuestionsByAgencyView, LoginView, UserAgencyQuestionsView, SubmitAnswerView, 
-                    UserAgencyTopicsView, AddTopicView, TopicListView, LikeQuestionView, DislikeQuestionView,
-                    AssignAgencyToQuestionView, AddAgencyView, AllQuestionListView, TrendingAgenciesView,
-                    UpdateAgencyView, ChangeAdminIsOpenView, ChangeStaffIsOpenView, SaveDraftQuestionView,
-                    MarkQuestionAsSpamView, UnSpamQuestionView)
+from django.urls import path, include
+from .views import (
+    CompletedQuestionListView, QuestionDetailView, AgencyListView, SubmitQuestionView,
+    QuestionsByAgencyView, UserAgencyQuestionsView, SubmitAnswerView,
+    UserAgencyTopicsView, AddTopicView, TopicListView, LikeQuestionView, DislikeQuestionView,
+    AssignAgencyToQuestionView, AddAgencyView, AllQuestionListView, TrendingAgenciesView,
+    UpdateAgencyView, ChangeAdminIsOpenView, ChangeStaffIsOpenView, SaveDraftQuestionView,
+    MarkQuestionAsSpamView, UnSpamQuestionView, UserView, SessionView, AccountView,
+    VerificationTokenView, AddUserView, GetAllUsersView,
+    CheckUserEmailExistsView, EditDeleteUserView
+)
 
 urlpatterns = [
     path('questions/', CompletedQuestionListView.as_view(), name='question-list-create'),
@@ -14,7 +18,6 @@ urlpatterns = [
     path('agencies/<int:pk>/', UpdateAgencyView.as_view(), name='update-agency'),
     path('submit-question/', SubmitQuestionView.as_view(), name='submit-question'),
     path('questions/by-agency/<int:agency_id>/', QuestionsByAgencyView.as_view(), name='questions-by-agency'),
-    path('login/', LoginView.as_view(), name='login'),
     path('questions/user-agency/', UserAgencyQuestionsView.as_view(), name='user-agency-questions'),
     path('questions/<int:question_id>/submit-answer/', SubmitAnswerView.as_view(), name='submit-answer'),
     path('topics/user-agency/<int:agency_id>/', UserAgencyTopicsView.as_view(), name='user-agency-topics'),
@@ -30,4 +33,13 @@ urlpatterns = [
     path('questions/<int:question_id>/save-draft/', SaveDraftQuestionView.as_view(), name='save-draft'),
     path('questions/<int:question_id>/mark-spam/', MarkQuestionAsSpamView.as_view(), name='mark-question-spam'),
     path('questions/<int:question_id>/un-spam/', UnSpamQuestionView.as_view(), name='mark-question-spam'),
+    path('auth/user', UserView.as_view(), name='user'),
+    path('auth/session', SessionView.as_view(), name='session'),
+    path('auth/account', AccountView.as_view(), name='account'),
+    path('auth/verification', VerificationTokenView.as_view(), name='verification'),
+    path('admin/user', AddUserView.as_view(), name='add_user'),
+    path('admin/user/<uuid:id>', EditDeleteUserView.as_view(), name='edit_delete_user'),
+    # path('admin/user/<uuid:id>', DeleteUserView.as_view(), name='delete_user'),
+    path('admin/users', GetAllUsersView.as_view(), name='get_all_users'),
+    path('admin/check-email', CheckUserEmailExistsView.as_view(), name='check_email_exists'),
 ]

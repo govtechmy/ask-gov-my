@@ -18,11 +18,12 @@ import DateComponent from '@/components/date';
 import Link from 'next/link';
 import IdentifyWebsite from '@/components/HeaderDetails/IdentifyWebsite';
 import WordTranslate from '@/components/WordTranslate';
-import SupportingAttachment from '@/components/SupportingAttachment';
 import HeaderQuestionDetail from '@/components/HeaderDetails/HeaderQuestionDetail';
 import { Question } from '@/types/types';
 import AgencyLogoImporter from '@/components/AgencyLogoImporter';
 import ContextSearchBar from '@/components/ContextSearchBar';
+import { fetchFileSizes } from '@/actions/utils';
+import AttachmentDownload from '@/components/AdminDashboard/AttachmentDownload';
 import TipTap from '@/components/Editor/TipTap';
 
 interface Props {
@@ -39,6 +40,7 @@ const QuestionDetailPage: React.FC<Props> = async ({ params }) => {
   const AGENCY_TO_UUID = await getDynamicAgencyMap();
   const agencyUUID = parseInt(AGENCY_TO_UUID[agencyAcronym.toUpperCase()]);
   const topics = await getTopicByAgency(agencyUUID);
+
   const agencyAcronymObject = (id: number): string | undefined => {
     return Object.keys(AGENCY_TO_UUID).find(
       key => AGENCY_TO_UUID[key] === id.toString(),
@@ -60,43 +62,14 @@ const QuestionDetailPage: React.FC<Props> = async ({ params }) => {
   }
 
   const attachments = question.attachments || [];
-
   const acronym = agencyAcronymObject(question.agency);
-
-  const fetchFileSizes = async (attachments: string[]): Promise<number[]> => {
-    const fileSizes: number[] = [];
-
-    try {
-      const fetchPromises = attachments.map(async attachment => {
-        try {
-          const response = await fetch(attachment, { method: 'HEAD' });
-          const contentLength = response.headers.get('Content-Length');
-          const size = contentLength ? parseInt(contentLength) : 0;
-          fileSizes.push(size);
-        } catch (error) {
-          console.error('Failed to fetch file size', error);
-          fileSizes.push(0); // Default size if fetch fails
-        }
-      });
-
-      await Promise.all(fetchPromises);
-    } catch (error) {
-      console.error('Error fetching file sizes', error);
-    }
-
-    return fileSizes;
-  };
 
   let fileSize: number[] = [];
 
   try {
     fileSize = await fetchFileSizes(attachments);
-
-    if (!fileSize) {
-      throw new Error('FileSize not found');
-    }
   } catch (error) {
-    console.log('error on filesize', error);
+    console.log('error on fileSize', error);
   }
 
   let agencyList: any = [];
@@ -114,15 +87,15 @@ const QuestionDetailPage: React.FC<Props> = async ({ params }) => {
       agency.acronym === agencyAcronym.toUpperCase(),
   );
 
-  console.log(currentAgency);
   const relatedQuestions = await getRelatedQuestions(question.question);
 
   return (
-    <div className="">
-      <IdentifyWebsite></IdentifyWebsite>
+    <div>
+      <IdentifyWebsite />
       <ContextSearchBar>
         <HeaderQuestionDetail />
       </ContextSearchBar>
+
       <div className="container mt-10 flex">
         <div className="max-w-screen-2xl flex">
           <div className="pb-7 w-9/12">
@@ -132,7 +105,7 @@ const QuestionDetailPage: React.FC<Props> = async ({ params }) => {
                   <WordTranslate
                     translate={'Questiondetail'}
                     keyword={'home'}
-                  ></WordTranslate>
+                  />
                 </div>
               </Link>
               <div>
@@ -152,7 +125,7 @@ const QuestionDetailPage: React.FC<Props> = async ({ params }) => {
                   <WordTranslate
                     translate={'Questiondetail'}
                     keyword={'posted'}
-                  ></WordTranslate>
+                  />
                 </div>
                 &nbsp;
                 <DateComponent date={question.date} locale={locale} />
@@ -169,9 +142,7 @@ const QuestionDetailPage: React.FC<Props> = async ({ params }) => {
                   <div className="">
                     <div className="flex px-8 pt-8 pb-0 items-center">
                       <div className="flex w-6 h-6 relative flex-shrink-0">
-                        <AgencyLogoImporter
-                          currentAgency={currentAgency}
-                        ></AgencyLogoImporter>
+                        <AgencyLogoImporter currentAgency={currentAgency} />
                       </div>
                       <div className="font-medium text-sm text-black-700 px-2">
                         <AgencyName agency={currentAgency} />
@@ -180,7 +151,7 @@ const QuestionDetailPage: React.FC<Props> = async ({ params }) => {
                         <WordTranslate
                           translate={'Questiondetail'}
                           keyword={'answered'}
-                        ></WordTranslate>
+                        />
                       </div>
                     </div>
                     <div className="flex px-8 pb-5 pt-4 text-justify text-black-700 flex-col">
@@ -213,13 +184,13 @@ const QuestionDetailPage: React.FC<Props> = async ({ params }) => {
                       <WordTranslate
                         translate={'Questiondetail'}
                         keyword={'attachment'}
-                      ></WordTranslate>
+                      />
                     </div>
-                    <div className="px-8 pb-8 pt-0 ">
-                      <SupportingAttachment
-                        attachments={attachments}
-                        fileSize={fileSize}
-                      ></SupportingAttachment>
+                    <div className="mx-8 mb-8 ">
+                      <AttachmentDownload
+                        uploadedAttachments={attachments}
+                        fileSizes={fileSize}
+                      ></AttachmentDownload>
                     </div>
                   </div>
                   <div>
@@ -255,7 +226,7 @@ const QuestionDetailPage: React.FC<Props> = async ({ params }) => {
                       <span className="on hover:cursor-pointer pl-3">
                         <div className="flex">
                           <div className="pr-1.5">
-                            <JataNegaraIcon className="stroke-[#E4E4E7] dark:stroke-[#27272A] h-5 w-5"></JataNegaraIcon>
+                            <JataNegaraIcon className="stroke-[#E4E4E7] dark:stroke-[#27272A] h-5 w-5" />
                           </div>
                           <div className="font-normal text-sm text-black-800">
                             {agencyAcronymObject(relatedQuestion.agency.id)}
@@ -281,7 +252,7 @@ const QuestionDetailPage: React.FC<Props> = async ({ params }) => {
           </div>
         </div>
       </div>
-      <Footer></Footer>
+      <Footer />
     </div>
   );
 };

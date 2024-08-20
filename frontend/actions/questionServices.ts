@@ -120,19 +120,41 @@ export async function getQuestionById(
 export async function submitQuestion(data: QuestionSubmission): Promise<void> {
   const url = `${API_URL}/submit-question/`;
 
-  const response = await fetch(url, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify({ data }),
-  });
+  try {
+    const response = await fetch(url, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ data }),
+    });
 
-  if (!response.ok) {
-    throw new Error('Failed to submit question');
+    if (!response.ok) {
+      let errorMessage = `Failed to submit question. Status: ${response.status}`;
+
+      // error message from response body
+      try {
+        const errorData = await response.json();
+        if (errorData && errorData.message) {
+          errorMessage += ` - ${errorData.message}`;
+        }
+      } catch (e) {
+        // ignore JSON parsing errors and keep the original error message
+      }
+
+      throw new Error(errorMessage);
+    }
+
+    // return response data
+    const responseData = await response.json();
+    return responseData;
+  } catch (error) {
+    if (error instanceof Error) {
+      throw new Error(`Network error: ${error.message}`);
+    } else {
+      throw new Error('An unknown error occurred');
+    }
   }
-
-  return response.json();
 }
 
 export async function getAgencyList(): Promise<Agency[]> {

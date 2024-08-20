@@ -1,15 +1,21 @@
-import { useState, Dispatch, SetStateAction } from 'react';
+import React from 'react';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select';
+import { Label } from '@/components/ui/label';
 import AgencyListDropdownUsersModal from './AgencyListDropdownUsersModal';
-import ChevronDown from '@/icons/ChevronDown';
-import { Agency } from '@/types/types';
-import { User } from '@/types/types';
+import { Agency, User } from '@/types/types';
 
 interface DropdownRoleProps {
   agencies: Agency[];
-  setRole: Dispatch<SetStateAction<'staff' | 'super_admin' | 'unassigned'>>;
-  setAgency: Dispatch<SetStateAction<number | null>>;
+  setRole: (role: 'staff' | 'super_admin') => void;
+  setAgency: React.Dispatch<React.SetStateAction<number | null>>;
   roleEmpty: boolean;
-  user?: User; // user is now optional
+  user?: User;
 }
 
 const DropdownRole: React.FC<DropdownRoleProps> = ({
@@ -17,91 +23,55 @@ const DropdownRole: React.FC<DropdownRoleProps> = ({
   setRole,
   setAgency,
   roleEmpty,
-  user = { role: 'unassigned', agency: null }, // provide a default value
+  user = { role: 'unassigned', agency: null },
 }) => {
   const initialRole =
     user.role === 'staff' || user.role === 'super_admin'
       ? user.role
       : 'unassigned';
-  const [isOpen, setIsOpen] = useState(false);
-  const [selectedRole, setSelectedRole] = useState<
+  const [selectedRole, setSelectedRole] = React.useState<
     'staff' | 'super_admin' | 'unassigned'
   >(initialRole);
 
-  const toggleDropdown = () => setIsOpen(!isOpen);
-
-  const handleRoleSelect = (role: 'staff' | 'super_admin') => {
-    setRole(role);
+  const handleRoleChange = (value: string) => {
+    const role = value as 'staff' | 'super_admin';
     setSelectedRole(role);
-    setIsOpen(false);
+    setRole(role);
   };
 
-  const formatRoleDisplay = (role: 'staff' | 'super_admin' | 'unassigned') => {
-    switch (role) {
-      case 'super_admin':
-        return 'Superadmin';
-      case 'staff':
-        return 'Staff';
-      case 'unassigned':
-        return 'Unassigned';
-      default:
-        return 'Unassigned';
-    }
-  };
+  const userAgency = user.agency;
 
   return (
-    <div className="mb-4">
-      <div className="relative">
-        <div
-          className="h-10 pl-4 flex justify-between items-center w-full border-[1px] border-outline-200 rounded-md shadow-button bg-white text-sm font-medium text-black-700 cursor-pointer z-0"
-          onClick={toggleDropdown}
-        >
-          {formatRoleDisplay(selectedRole)}
-          <div className="pr-2">
-            <ChevronDown
-              className={`h-5 w-5 transition-transform transform ${isOpen ? 'rotate-180' : ''}`}
-            />
-          </div>
-        </div>
-        {isOpen && (
-          <div className="origin-top-right absolute right-0 mt-2 w-full rounded-lg shadow-button bg-white border-[1px] border-outline-200 text-black-700 text-base font-medium z-50">
-            <div
-              className="py-1"
-              role="menu"
-              aria-orientation="vertical"
-              aria-labelledby="options-menu"
-            >
-              <div
-                className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 cursor-pointer"
-                onClick={() => handleRoleSelect('staff')}
-              >
-                Staff
-              </div>
-              <div
-                className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 cursor-pointer"
-                onClick={() => handleRoleSelect('super_admin')}
-              >
-                Superadmin
-              </div>
-            </div>
-          </div>
+    <div className="space-y-4">
+      <div className="space-y-2">
+        <Label htmlFor="role-select">Role</Label>
+        <Select onValueChange={handleRoleChange} value={selectedRole}>
+          <SelectTrigger id="role-select">
+            <SelectValue placeholder="Select a role" />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem showCheckIcon={false} value="staff">
+              Staff
+            </SelectItem>
+            <SelectItem showCheckIcon={false} value="super_admin">
+              Superadmin
+            </SelectItem>
+          </SelectContent>
+        </Select>
+        {roleEmpty && selectedRole === 'unassigned' && (
+          <p className="text-red-500 text-sm mt-2">Please select a role</p>
         )}
       </div>
+
       {selectedRole === 'staff' && (
-        <>
-          <div className="text-black-700 text-sm font-medium pt-6 mb-[6px]">
-            Agency
-          </div>
-          <div className="relative">
-            <AgencyListDropdownUsersModal
-              agencies={agencies}
-              setAgency={setAgency}
-            />
-          </div>
-        </>
-      )}
-      {roleEmpty && selectedRole === 'unassigned' && (
-        <div className="text-red-500 text-sm mt-2">Please select a role</div>
+        <div className="space-y-2">
+          <Label htmlFor="agency-select">Agency</Label>
+          <AgencyListDropdownUsersModal
+            agencies={agencies}
+            setAgency={setAgency}
+            userAgency={userAgency}
+          />
+        </div>
       )}
     </div>
   );

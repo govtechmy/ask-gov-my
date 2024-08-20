@@ -9,9 +9,11 @@ import DateComponent from '../date';
 import LineVerticalForSmile from '@/icons/lineverticalforsmile';
 import AgencyLogoImporter from '../AgencyLogoImporter';
 import UploadIcon from '@/icons/upload';
-import SupportingAttachmentUpload from './SupportingAttachmentUpload';
+import AttachmentDownload from './AttachmentDownload';
+import AttachmentUpload from './AttachmentUpload';
 import React, { useEffect, useRef, useState } from 'react';
 import TipTap from '../Editor/TipTap';
+import { fetchFileSizes, formatDate } from '@/actions/utils';
 
 interface AnswerQuestionModalProps {
   question: Question;
@@ -31,10 +33,27 @@ const AnswerQuestionModal = ({
   );
   const [success, setSuccess] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
+  const [fileSizes, setFileSizes] = useState<number[]>([]);
 
   useEffect(() => {
     setAnswer(question.answer || '');
   }, [question.answer]);
+
+  useEffect(() => {
+    if (isOpen) {
+      const fetchSizes = async () => {
+        try {
+          if (question.attachments) {
+            const sizes = await fetchFileSizes(question.attachments);
+            setFileSizes(sizes.map(Number)); // Update state with file sizes
+          }
+        } catch (error) {
+          console.log('error on fileSize', error);
+        }
+      };
+      fetchSizes();
+    }
+  }, [question.attachments, isOpen]);
 
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const files = event.target.files ? Array.from(event.target.files) : [];
@@ -101,23 +120,6 @@ const AnswerQuestionModal = ({
     }
   };
 
-  const formatDate = (dateString: string) => {
-    const date = new Date(dateString);
-    return (
-      date.toLocaleDateString('en-GB', {
-        day: '2-digit',
-        month: 'long',
-        year: 'numeric',
-      }) +
-      ', ' +
-      date.toLocaleTimeString('en-GB', {
-        hour: '2-digit',
-        minute: '2-digit',
-        hour12: true,
-      })
-    );
-  };
-
   const [svgHeight, setSvgHeight] = useState<number>(15);
   const questionTextRef = useRef<HTMLDivElement>(null);
 
@@ -129,7 +131,7 @@ const AnswerQuestionModal = ({
 
   return (
     <div className="z-10 fixed inset-0 bg-gray-900 flex items-center justify-center bg-opacity-70">
-      <div className="bg-white rounded-xl shadow-lg w-[700px] h-[700px] relative p-6 flex flex-col">
+      <div className="bg-white rounded-xl shadow-lg w-[720px] h-[700px] relative p-6 flex flex-col">
         <button
           onClick={onClose}
           className="absolute top-[14px] right-[14px] hover:cursor-pointer rounded-lg shadow-button h-8 w-8 flex items-center justify-center border-[1px] border-outline-200"
@@ -192,7 +194,7 @@ const AnswerQuestionModal = ({
                     </div>
                     <div
                       className="h-10 w-[141px] border-[1px] border-outline-200 rounded-lg items-center justify-between 
-            flex px-3 shadow-button ml-3 cursor-pointer"
+                      flex px-3 shadow-button ml-3 cursor-pointer"
                       onClick={() =>
                         document.getElementById('hidden-file-input')?.click()
                       }
@@ -208,15 +210,39 @@ const AnswerQuestionModal = ({
                       />
                     </div>
                   </div>
+                  <div>
+                    {attachments.length > 0 && (
+                      <div className="m-4">
+                        <AttachmentUpload
+                          attachments={attachments}
+                          handleRemoveAttachment={handleRemoveAttachment}
+                        ></AttachmentUpload>
+                      </div>
+                    )}
 
-                  <SupportingAttachmentUpload
-                    attachments={attachments}
-                    uploadedAttachments={uploadedAttachments}
-                    handleRemoveAttachment={handleRemoveAttachment}
-                    handleRemoveUploadedAttachment={
-                      handleRemoveUploadedAttachment
-                    }
-                  ></SupportingAttachmentUpload>
+                    {uploadedAttachments.length > 0 && (
+                      <>
+                        <div className="border-b-[1px] border-outline-200 m-4"></div>
+                        <div className="text-sm text-dim-500 font-normal ml-4 mt-4">
+                          Previously Uploaded
+                        </div>
+                      </>
+                    )}
+                    {uploadedAttachments.length > 0 && (
+                      <div className="m-4">
+                        <AttachmentDownload
+                          uploadedAttachments={uploadedAttachments}
+                          handleRemoveUploadedAttachment={
+                            handleRemoveUploadedAttachment
+                          }
+                          fileSizes={fileSizes}
+                        ></AttachmentDownload>
+                      </div>
+                    )}
+                    {uploadedAttachments.length == 0 && (
+                      <div className="m-4"></div>
+                    )}
+                  </div>
                 </div>
                 <div className="w-[616px] h-[86px]">
                   <div className="text-black-700 text-base font-medium mb-[6px]">
