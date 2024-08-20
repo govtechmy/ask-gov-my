@@ -8,7 +8,7 @@ import { useTranslations } from 'next-intl';
 import MailLogo from '@/icons/maillogo';
 import { useState, useEffect } from 'react';
 import { cn } from '@/lib/utils';
-import BaseHeader from '@/components/common/HeaderDetails/BaseHeader';
+import BaseHeader from '@/components/common/Header/BaseHeader';
 
 export function CheckmailPage({
   params: { locale },
