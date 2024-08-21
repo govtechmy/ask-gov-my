@@ -1,9 +1,9 @@
 import { PutObjectCommand, S3Client } from '@aws-sdk/client-s3';
 
-const REGION = process.env.NEXT_PUBLIC_AWS_REGION;
-const BUCKET_NAME = process.env.NEXT_PUBLIC_FILE_AWS_BUCKET_NAME;
-const ACCESS_KEY_ID = process.env.NEXT_PUBLIC_FILE_AWS_ACCESS_KEY_ID;
-const SECRET_ACCESS_KEY = process.env.NEXT_PUBLIC_FILE_AWS_SECRET_ACCESS_KEY;
+const REGION = process.env.AWS_REGION;
+const BUCKET_NAME = process.env.FILE_AWS_BUCKET_NAME;
+const ACCESS_KEY_ID = process.env.FILE_AWS_ACCESS_KEY_ID;
+const SECRET_ACCESS_KEY = process.env.FILE_AWS_SECRET_ACCESS_KEY;
 
 if (!REGION || !BUCKET_NAME || !ACCESS_KEY_ID || !SECRET_ACCESS_KEY) {
   throw new Error(
