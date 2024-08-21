@@ -1,23 +1,24 @@
-import { PutObjectCommand, S3Client } from '@aws-sdk/client-s3';
+import { PutObjectCommand, S3, S3Client } from '@aws-sdk/client-s3';
 
 const REGION = process.env.AWS_REGION;
 const BUCKET_NAME = process.env.FILE_AWS_BUCKET_NAME;
 const ACCESS_KEY_ID = process.env.FILE_AWS_ACCESS_KEY_ID;
 const SECRET_ACCESS_KEY = process.env.FILE_AWS_SECRET_ACCESS_KEY;
 
-if (!REGION || !BUCKET_NAME || !ACCESS_KEY_ID || !SECRET_ACCESS_KEY) {
-  throw new Error(
-    'Missing required environment variables for AWS S3 configuration',
-  );
-}
+let s3Client: S3Client | null = null;
 
-const s3Client = new S3Client({
-  region: REGION,
-  credentials: {
-    accessKeyId: ACCESS_KEY_ID!,
-    secretAccessKey: SECRET_ACCESS_KEY!,
-  },
-});
+function s3(): S3Client {
+  if (!s3Client) {
+    s3Client = new S3Client({
+      region: REGION,
+      credentials: {
+        accessKeyId: ACCESS_KEY_ID!,
+        secretAccessKey: SECRET_ACCESS_KEY!,
+      },
+    });
+  }
+  return s3Client;
+}
 
 export async function uploadFile(file: File): Promise<string> {
   const allowedTypes = ['image/png', 'image/jpeg', 'application/pdf'];
@@ -35,7 +36,7 @@ export async function uploadFile(file: File): Promise<string> {
 
   try {
     const command = new PutObjectCommand(params);
-    await s3Client.send(command);
+    await s3().send(command);
     console.log(`File uploaded successfully: ${params.Key}`);
     return `https://${BUCKET_NAME}.s3.${REGION}.amazonaws.com/${params.Key}`;
   } catch (error) {
