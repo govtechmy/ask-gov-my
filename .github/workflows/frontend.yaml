@@ -4,7 +4,7 @@ env:
 on:
   push:
     branches:
-      - staging
+      - feat/dockerizeFE
     paths-ignore:
       - backend/**
   workflow_dispatch:
