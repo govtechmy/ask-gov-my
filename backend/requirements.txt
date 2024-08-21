@@ -12,6 +12,7 @@ Django==5.0
 django-allauth==64.0.0
 django-cors-headers==4.4.0
 django-environ==0.11.2
+django-extensions==3.2.3
 django-heroku==0.3.1
 djangorestframework==3.15.2
 djangorestframework-simplejwt==5.3.1
@@ -29,6 +30,7 @@ jsonpointer==3.0.0
 langchain-core==0.2.22
 langchain-openai==0.1.17
 langsmith==0.1.93
+load-dotenv==0.1.0
 openai==1.36.1
 orjson==3.10.6
 packaging==23.2
@@ -38,6 +40,7 @@ pydantic==2.8.2
 pydantic_core==2.20.1
 PyJWT==2.8.0
 python-dateutil==2.8.2
+python-dotenv==1.0.1
 PyYAML==6.0.1
 regex==2024.5.15
 requests==2.32.3
