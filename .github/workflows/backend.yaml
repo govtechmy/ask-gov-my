@@ -1,10 +1,9 @@
 name: Deploy backend-askgov
 env:
   IMAGE: askgov-backend
-on:
-  push:
     branches:
-      - feat/dockerizeBE
+      - staging
+      - main
     paths-ignore:
       - frontend/**
   workflow_dispatch:
