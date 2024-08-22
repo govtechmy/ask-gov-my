@@ -1,5 +1,6 @@
 'use client';
 
+import { usePathname } from 'next/navigation';
 import Collapse from '@/components/ui/collapse';
 import TickWithRugged from '@/icons/tickwithrugged';
 import ChevronDown from '@/icons/ChevronDown';
@@ -11,8 +12,14 @@ import { useTranslations } from 'next-intl';
 import { useState } from 'react';
 
 export default function Masthead() {
+  const pathname = usePathname();
   const t = useTranslations('Masthead');
   const [open, setOpen] = useState(false);
+
+  // Return null if pathname includes '/admin'
+  if (pathname.includes('/admin')) {
+    return null;
+  }
 
   return (
     <div
