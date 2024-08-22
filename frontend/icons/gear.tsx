@@ -7,7 +7,7 @@ export default function Gear({ className = '', ...props }) {
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
     >
-      <g clip-path="url(#clip0_20393_25049)">
+      <g clipPath="url(#clip0_20393_25049)">
         <path
           d="M10.4 8.28301C10.4 9.60849 9.32548 10.683 8 10.683C6.67452 10.683 5.6 9.60849 5.6 8.28301C5.6 6.95752 6.67452 5.88301 8 5.88301C9.32548 5.88301 10.4 6.95752 10.4 8.28301Z"
           stroke="#3F3F46"
