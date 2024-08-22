@@ -1,7 +1,7 @@
 'use client';
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
-import { useRouter, useSearchParams } from 'next/navigation';
+import { usePathname } from 'next/navigation';
 import ThemeToggle from './theme';
 import LocaleSwitch from './LocaleSwitch';
 import Asklogo from '@/icons/asklogo';
@@ -15,6 +15,7 @@ import { signOut } from 'next-auth/react';
 import { buttonVariants } from '../ui/button';
 import QuestionCircle from '@/icons/questioncircle';
 import { StyledDisplay } from '../ui/display';
+import path from 'path';
 
 type NavLinkType = 'questions' | 'manageagencies' | 'manageusers';
 
@@ -25,8 +26,6 @@ interface NavLinkProps {
 }
 
 const HeaderDashboard: React.FC = () => {
-  const searchParams = useSearchParams();
-  const router = useRouter();
   const [activeLink, setActiveLink] = useState<NavLinkType>('questions');
   const [open, setOpen] = useState(false);
 
@@ -39,14 +38,16 @@ const HeaderDashboard: React.FC = () => {
     { href: '/admin/dashboard/user', icon: UserGroup, label: 'Users' },
   ];
 
+  const pathName = usePathname();
+
   const NavLink: React.FC<NavLinkProps> = ({ href, icon: Icon, label }) => (
     <Link
       className={cn(
         buttonVariants({ variant: 'tertiary-askmygov', size: 'sm' }),
         {
           'text-[#702FF9] bg-[#F4EFFF] dark:text-[#9E70FF] dark:bg-[#201636]':
-            activeLink === href,
-          'text-black-700': activeLink !== href,
+            pathName === href,
+          'text-black-700': pathName !== href,
         },
       )}
       href={href}
