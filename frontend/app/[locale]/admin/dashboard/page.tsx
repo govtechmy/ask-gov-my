@@ -1,13 +1,8 @@
 'use client';
 
 import { useTranslations } from 'next-intl';
-import HeaderDashboard from '@/components/HeaderDetails/HeaderDashboard';
 import { useSession } from 'next-auth/react';
-import { useRouter } from '@/lib/i18n';
-import { useSearchParams } from 'next/navigation';
 import ManageQuestions from '@/components/AdminDashboard/ManageQuestions';
-import ManageAgencies from '@/components/AdminDashboard/ManageAgencies';
-import ManageUsers from '@/components/AdminDashboard/ManageUsers';
 import { useState } from 'react';
 import StaffHeaderDashboard from '@/components/HeaderDetails/StaffHeaderDashboard';
 import StaffManageQuestions from '@/components/AdminDashboard/StaffManageQuestion';
@@ -15,9 +10,6 @@ import StaffManageQuestions from '@/components/AdminDashboard/StaffManageQuestio
 export default function DashboardPage() {
   const t = useTranslations('Adminlogin');
   const session = useSession();
-  const router = useRouter();
-  const searchParams = useSearchParams();
-  const page = searchParams.get('page') || 'questions';
 
   // State to manage the selected role
   const [role, setRole] = useState<'super_admin' | 'staff'>('super_admin');
@@ -50,10 +42,7 @@ export default function DashboardPage() {
 
         {role === 'super_admin' ? (
           <>
-            <HeaderDashboard />
-            {page === 'questions' && <ManageQuestions />}
-            {page === 'manageagencies' && <ManageAgencies />}
-            {page === 'manageusers' && <ManageUsers />}
+            <ManageQuestions />
           </>
         ) : (
           <>
