@@ -19,7 +19,7 @@ import { StyledDisplay } from '../ui/display';
 type NavLinkType = 'questions' | 'manageagencies' | 'manageusers';
 
 interface NavLinkProps {
-  href: NavLinkType;
+  href: string;
   icon: React.ComponentType<React.SVGProps<SVGSVGElement>>;
   label: string;
 }
@@ -30,27 +30,13 @@ const HeaderDashboard: React.FC = () => {
   const [activeLink, setActiveLink] = useState<NavLinkType>('questions');
   const [open, setOpen] = useState(false);
 
-  useEffect(() => {
-    const currentPage = searchParams.get('page') as NavLinkType;
-    if (currentPage) {
-      setActiveLink(currentPage);
-    }
-  }, [searchParams]);
-
-  const handleSetActiveLink = (link: NavLinkType) => {
-    setActiveLink(link);
-    const params = new URLSearchParams(window.location.search);
-    params.set('page', link);
-    router.push(`${window.location.pathname}?${params.toString()}`);
-  };
-
   const toggleOpen = () => setOpen(!open);
   const handleLogout = () => signOut();
 
   const navLinks: NavLinkProps[] = [
-    { href: 'questions', icon: QuestionCircle, label: 'Questions' },
-    { href: 'manageagencies', icon: Gov, label: 'Agencies' },
-    { href: 'manageusers', icon: UserGroup, label: 'Users' },
+    { href: '/admin/dashboard', icon: QuestionCircle, label: 'Questions' },
+    { href: '/admin/dashboard/agency', icon: Gov, label: 'Agencies' },
+    { href: '/admin/dashboard/user', icon: UserGroup, label: 'Users' },
   ];
 
   const NavLink: React.FC<NavLinkProps> = ({ href, icon: Icon, label }) => (
@@ -63,8 +49,7 @@ const HeaderDashboard: React.FC = () => {
           'text-black-700': activeLink !== href,
         },
       )}
-      href={`/admin/dashboard/?page=${href}`}
-      onClick={() => handleSetActiveLink(href)}
+      href={href}
     >
       <Icon className="stroke-current" />
       {label}
