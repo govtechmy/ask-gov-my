@@ -1,10 +1,7 @@
 'use client';
 
 import { useTranslations } from 'next-intl';
-import HeaderDashboard from '@/components/HeaderDetails/HeaderDashboard';
 import { useSession } from 'next-auth/react';
-import { useRouter } from '@/lib/i18n';
-import { useSearchParams } from 'next/navigation';
 import ManageQuestions from '@/components/AdminDashboard/ManageQuestions';
 import { useState } from 'react';
 import StaffHeaderDashboard from '@/components/HeaderDetails/StaffHeaderDashboard';

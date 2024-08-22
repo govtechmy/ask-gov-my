@@ -17,8 +17,6 @@ import QuestionCircle from '@/icons/questioncircle';
 import { StyledDisplay } from '../ui/display';
 import path from 'path';
 
-type NavLinkType = 'questions' | 'manageagencies' | 'manageusers';
-
 interface NavLinkProps {
   href: string;
   icon: React.ComponentType<React.SVGProps<SVGSVGElement>>;
@@ -26,7 +24,6 @@ interface NavLinkProps {
 }
 
 const HeaderDashboard: React.FC = () => {
-  const [activeLink, setActiveLink] = useState<NavLinkType>('questions');
   const [open, setOpen] = useState(false);
 
   const toggleOpen = () => setOpen(!open);
