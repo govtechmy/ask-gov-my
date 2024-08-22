@@ -1,4 +1,4 @@
-FROM python:3.11-alpine
+FROM python:3-alpine
 
 # PYTHONDONTWRITEBYTECODE=1 disable .pyc written into disc
 # PYTHONUNBUFFERED=1 force print
