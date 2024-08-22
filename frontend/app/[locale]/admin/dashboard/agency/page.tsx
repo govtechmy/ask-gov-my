@@ -2,13 +2,13 @@
 
 import React, { useEffect, useState } from 'react';
 import { getAgencyList } from '@/actions/questionServices';
-import AgencyCard from './AgencyCard';
-import AddAgencyModal from './AddAgencyModal';
 import { Search } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import PlusIcon from '@/icons/plusicon';
 import { Agency } from '@/types/types';
-import Pagination from '../ui/pagnination';
+import AgencyCard from '@/components/AdminDashboard/AgencyCard';
+import Pagination from '@/components/ui/pagination';
+import AddAgencyModal from '@/components/AdminDashboard/AddAgencyModal';
 
 const ManageAgencies: React.FC = () => {
   const [agencies, setAgencies] = useState<Agency[]>([]);
