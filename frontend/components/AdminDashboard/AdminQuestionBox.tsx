@@ -5,7 +5,7 @@ import AdminQuestionCard from './AdminQuestionCard';
 import { useSearchParams } from 'next/navigation';
 import { Question } from '@/types/types';
 import { getDynamicAgencyMap, getAgencyList } from '@/actions/questionServices';
-import Pagination from '../ui/pagnination';
+import Pagination from '../ui/pagination';
 import { Agency } from '@/types/types';
 interface QuestionBoxProps {
   questions: Question[];

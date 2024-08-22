@@ -8,7 +8,7 @@ import { Search } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import PlusIcon from '@/icons/plusicon';
 import { Agency } from '@/types/types';
-import Pagination from '../ui/pagnination';
+import Pagination from '../ui/pagination';
 
 const ManageAgencies: React.FC = () => {
   const [agencies, setAgencies] = useState<Agency[]>([]);
