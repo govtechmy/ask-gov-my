@@ -1,21 +1,13 @@
-import { PutObjectCommand, S3, S3Client } from '@aws-sdk/client-s3';
+import { PutObjectCommand, S3Client } from '@aws-sdk/client-s3';
 
 const REGION = process.env.AWS_REGION;
 const BUCKET_NAME = process.env.FILE_AWS_BUCKET_NAME;
-const ACCESS_KEY_ID = process.env.FILE_AWS_ACCESS_KEY_ID;
-const SECRET_ACCESS_KEY = process.env.FILE_AWS_SECRET_ACCESS_KEY;
 
 let s3Client: S3Client | null = null;
 
 function s3(): S3Client {
   if (!s3Client) {
-    s3Client = new S3Client({
-      region: REGION,
-      credentials: {
-        accessKeyId: ACCESS_KEY_ID!,
-        secretAccessKey: SECRET_ACCESS_KEY!,
-      },
-    });
+    s3Client = new S3Client({});
   }
   return s3Client;
 }
