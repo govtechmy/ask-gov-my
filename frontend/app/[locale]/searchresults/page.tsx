@@ -4,14 +4,14 @@ import {
   getAgencyList,
 } from '@/actions/questionServices';
 import { searchQuestions } from '@/actions/searchServices';
-import QuestionBox from '@/components/QuestionBox/QuestionBox';
-import SearchNavbar from '@/components/HeaderDetails/SearchNavBar';
-import Footer from '@/components/FooterDetails/Footer';
-import Header from '@/components/HeaderDetails/Header';
-import TrendingAgencies from '@/components/TrendingAgencies';
-import IdentifyWebsite from '@/components/HeaderDetails/IdentifyWebsite';
-import WordTranslate from '@/components/WordTranslate';
-import ContextSearchBar from '@/components/ContextSearchBar';
+import QuestionBox from '@/components/common/QuestionBox/QuestionBox';
+import Footer from '@/components/common/Footer';
+import TrendingAgencies from '@/components/common/TrendingAgencies';
+import WordTranslate from '@/components/common/WordTranslate';
+import ContextSearchBar from '@/components/context/ContextSearchBar';
+import BaseHeader from '@/components/common/Header/BaseHeader';
+import SearchNavbar from '@/components/common/SearchNavbar/SearchNavbar';
+import Masthead from '@/components/common/Header/Masthead';
 
 const SearchResultPage = async ({
   searchParams,
@@ -25,11 +25,9 @@ const SearchResultPage = async ({
   const agencyList = await getAgencyList();
   return (
     <div>
-      <IdentifyWebsite />
-
       <ContextSearchBar>
-        <Header />
-        <SearchNavbar />
+        <BaseHeader></BaseHeader>
+        <SearchNavbar></SearchNavbar>
       </ContextSearchBar>
 
       <div className="container mt-10 flex">
@@ -65,7 +63,7 @@ const SearchResultPage = async ({
         </div>
       </div>
 
-      <Footer></Footer>
+      <Footer />
     </div>
   );
 };

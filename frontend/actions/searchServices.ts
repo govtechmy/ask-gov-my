@@ -5,23 +5,33 @@ import OpenAI from 'openai';
 dotenv.config();
 
 const elasticsearchURL = process.env.ELASTICSEARCH_URL;
-const elasticsearchApiKey = process.env.ELASTICSEARCH_API_KEY;
+const elasticsearchApiKey = process.env.ELASTICSEARCH_API_KEY as string;
 const openaiApiKey = process.env.OPENAI_API_KEY;
 
-if (!elasticsearchApiKey) {
-  throw new Error('ELASTICSEARCH_API_KEY is not defined');
+let client: Client | null = null;
+
+function clientf(): Client {
+  if (!client) {
+    client = new Client({
+      node: elasticsearchURL,
+      auth: {
+        apiKey: elasticsearchApiKey,
+      },
+    });
+  }
+  return client;
 }
 
-const client = new Client({
-  node: elasticsearchURL,
-  auth: {
-    apiKey: elasticsearchApiKey,
-  },
-});
+let openai: OpenAI | null = null;
 
-const openai = new OpenAI({
-  apiKey: openaiApiKey,
-});
+function openaif(): OpenAI {
+  if (!openai) {
+    openai = new OpenAI({
+      apiKey: openaiApiKey,
+    });
+  }
+  return openai;
+}
 
 interface Question {
   id: number;
@@ -50,7 +60,7 @@ interface Question {
 }
 
 async function getEmbedding(text: string): Promise<number[]> {
-  const response = await openai.embeddings.create({
+  const response = await openaif().embeddings.create({
     model: 'text-embedding-3-small',
     input: text,
   });
@@ -61,7 +71,7 @@ export async function searchQuestions(query: string) {
   try {
     const embedding = await getEmbedding(query);
 
-    const result = await client.search({
+    const result = await clientf().search({
       index: 'questions',
       body: {
         query: {

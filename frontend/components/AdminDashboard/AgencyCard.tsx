@@ -2,7 +2,7 @@
 
 import React, { useState } from 'react';
 import AgencySettingsModal from './AgencySettingsModal';
-import AgencyLogoImporter from '../AgencyLogoImporter';
+import AgencyLogoImporter from '../common/AgencyLogoImporter';
 import Gear from '@/icons/gear';
 
 interface AgencyCardProps {
@@ -47,8 +47,16 @@ const AgencyCard: React.FC<AgencyCardProps> = ({
         </div>
       </div>
 
+      {/* TODO fix this last edited*/}
       <AgencySettingsModal
-        agency={{ id, name, name_ms, acronym, logo_url }}
+        agency={{
+          id,
+          name,
+          name_ms,
+          acronym,
+          logo_url,
+          last_edited: new Date(),
+        }}
         isOpen={isModalOpen}
         onClose={() => {
           setIsModalOpen(false);

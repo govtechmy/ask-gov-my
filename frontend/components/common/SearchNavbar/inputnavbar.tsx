@@ -7,7 +7,7 @@ import Search from '@/icons/search';
 import JataNegaraIcon from '@/icons/jatanegaraicon';
 import Close from '@/icons/close';
 import RightArrow from '@/icons/rightarrow';
-import AskQuestion from '../AskQuestion';
+import AskQuestion from './AskQuestion';
 import { useRouter } from '@/lib/i18n';
 import { useTranslations } from 'next-intl';
 import { getDynamicAgencyMap } from '@/actions/questionServices';
@@ -73,6 +73,7 @@ const InputNavbar: React.FC<InputNavbarProps> = ({
     setIsTyping(true);
     setShowNoResults(false);
     setHiddendisplay(true);
+    debouncedFetchSearchResults(event.target.value);
   };
 
   const handleKeyPress = (event: React.KeyboardEvent<HTMLInputElement>) => {
@@ -83,14 +84,6 @@ const InputNavbar: React.FC<InputNavbarProps> = ({
       setHiddendisplay(false);
       inputRef.current?.blur();
     }
-  };
-
-  const truncateText = (text: string, maxWords: number) => {
-    const words = text.split(' ');
-    if (words.length > maxWords) {
-      return words.slice(0, maxWords).join(' ') + '...';
-    }
-    return text;
   };
 
   const fetchSearchResults = async (query: string) => {
@@ -120,9 +113,9 @@ const InputNavbar: React.FC<InputNavbarProps> = ({
     setShowNoResults(false); // reset no results message on clear
   };
 
-  useEffect(() => {
-    debouncedFetchSearchResults(searchQuery);
-  }, [searchQuery, debouncedFetchSearchResults]);
+  // useEffect(() => {
+  //   debouncedFetchSearchResults(searchQuery);
+  // }, [searchQuery, debouncedFetchSearchResults]);
 
   useEffect(() => {
     const fetchAgencyMap = async () => {

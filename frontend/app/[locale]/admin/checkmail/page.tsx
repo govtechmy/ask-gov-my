@@ -1,7 +1,6 @@
 'use client';
 import Link from 'next/link';
-import HeaderAdmin from '@/components/HeaderDetails/HeaderAdmin';
-import FooterAdmin from '@/components/FooterDetails/FooterAdmin';
+import Footer from '@/components/common/Footer';
 import { buttonVariants } from '@/components/ui/button';
 import Maillogo from '@/icons/mail';
 import Arrowleft from '@/icons/arrowleft';
@@ -9,6 +8,7 @@ import { useTranslations } from 'next-intl';
 import MailLogo from '@/icons/maillogo';
 import { useState, useEffect } from 'react';
 import { cn } from '@/lib/utils';
+import BaseHeader from '@/components/common/Header/BaseHeader';
 
 export function CheckmailPage({
   params: { locale },
@@ -40,7 +40,7 @@ export function CheckmailPage({
 
   return (
     <div className="flex flex-col min-h-screen">
-      <HeaderAdmin />
+      <BaseHeader isAdmin={true}></BaseHeader>
       <div className="flex-grow flex items-center justify-center py-12">
         <div className="flex flex-col items-center justify-center">
           <Maillogo />
@@ -58,32 +58,49 @@ export function CheckmailPage({
             </div>
           </div>
 
-          <div className="flex gap-3">
-            <Link
-              className={buttonVariants({ variant: 'tertiary', size: 'md' })}
-              href="/admin"
-            >
-              <Arrowleft />
-              {t('backclick')}
-            </Link>
+          <div className="sm:flex gap-3 w-full">
+            <div className="hidden sm:block">
+              <Link
+                className={buttonVariants({ variant: 'tertiary', size: 'md' })}
+                href="/admin"
+              >
+                <Arrowleft />
+                {t('backclick')}
+              </Link>
+            </div>
+            <div>
+              {/* new implementation for resending the magic email */}
+              <Link
+                className={cn(
+                  buttonVariants({ variant: 'secondary', size: 'md' }),
+                  'w-full',
+                  isDisabled ? 'opacity-40 cursor-not-allowed' : '',
+                )}
+                href={isDisabled ? '#' : '/admin'}
+                onClick={handleClick}
+                aria-disabled={isDisabled}
+              >
+                <MailLogo />
+                {isDisabled ? `Resend in ${countdown}s` : 'Resend magic link'}
+              </Link>
+            </div>
 
-            {/* new implementation for resending the magic email */}
-            <Link
-              className={cn(
-                buttonVariants({ variant: 'secondary', size: 'md' }),
-                isDisabled ? 'opacity-40 cursor-not-allowed' : '',
-              )}
-              href={isDisabled ? '#' : '/admin'}
-              onClick={handleClick}
-              aria-disabled={isDisabled}
-            >
-              <MailLogo />
-              {isDisabled ? `Resend in ${countdown}s` : 'Resend magic link'}
-            </Link>
+            <div className="sm:hidden mt-3">
+              <Link
+                className={cn(
+                  buttonVariants({ variant: 'tertiary', size: 'md' }),
+                  'w-full',
+                )}
+                href="/admin"
+              >
+                <Arrowleft />
+                {t('backclick')}
+              </Link>
+            </div>
           </div>
         </div>
       </div>
-      <FooterAdmin />
+      <Footer adminpage={true} />
     </div>
   );
 }

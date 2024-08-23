@@ -2,9 +2,8 @@
 
 import { useSearchParams } from 'next/navigation';
 import { Link } from '@/lib/i18n';
-import { useTranslations } from 'next-intl';
 import IconQuestionSmile from '@/icons/iconquestionsmile';
-import DateComponent from '../date';
+import DateComponent from '../Date';
 import LikeIcon from '@/icons/likeicon';
 import AgencyLogoImporter from '../AgencyLogoImporter';
 import { Agency, Question } from '@/types/types';

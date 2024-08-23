@@ -17,15 +17,15 @@ const AttachmentUpload: React.FC<AttachmentUploadProps> = ({
     <div className="flex flex-wrap gap-2">
       {attachments.map((file, index) => (
         <StyledDisplay
-          type={'uploadDownload'}
+          variant={'uploadDownload'}
           key={index}
-          className="w-[188px]"
+          className="w-[195px]"
         >
           <div className="flex-shrink-0">
             <GetFileIcon fileName={file.name} />
           </div>
-          <div className="">
-            <div className="text-black-900 text-sm font-normal truncate w-[95px]">
+          <div>
+            <div className="text-black-900 text-sm font-normal truncate w-[94px]">
               {file.name}
             </div>
             <div className="text-dim-500 font-normal text-sm">size 1.2mb</div>
