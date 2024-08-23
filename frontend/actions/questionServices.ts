@@ -108,7 +108,6 @@ export async function getQuestionById(
 ): Promise<Question | null> {
   const response = await fetch(`${API_URL}/questions/${questionId}/`, {
     method: 'GET',
-    cache: 'no-store',
     next: { revalidate: 0 },
   });
   if (response.ok) {

@@ -8,6 +8,7 @@ import { cn } from '@/lib/utils';
 import { ThemeProvider } from 'next-themes';
 import Providers from './providers/providers';
 import Masthead from '@/components/common/Header/Masthead';
+import { Suspense } from 'react';
 
 const inter = Inter({ subsets: ['latin'] });
 const poppins = Poppins({
@@ -43,10 +44,13 @@ export default async function RootLayout({
       <body className={cn(inter.className, poppins.variable)}>
         <ThemeProvider attribute="class">
           <NextIntlClientProvider messages={messages}>
-            <Providers>
-              <Masthead></Masthead>
-              {children}
-            </Providers>
+            {/* TODO */}
+            <Suspense>
+              <Providers>
+                <Masthead></Masthead>
+                {children}
+              </Providers>
+            </Suspense>
           </NextIntlClientProvider>
         </ThemeProvider>
       </body>
