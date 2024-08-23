@@ -1,8 +1,8 @@
 'use client';
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
-import { useRouter, useSearchParams } from 'next/navigation';
-import ThemeToggle from '../theme';
+import { usePathname } from 'next/navigation';
+import ThemeToggle from './theme';
 import LocaleSwitch from './LocaleSwitch';
 import Asklogo from '@/icons/asklogo';
 import User from '@/icons/user';
@@ -14,44 +14,28 @@ import Logout from '@/icons/logout';
 import { signOut } from 'next-auth/react';
 import { buttonVariants } from '@/components/ui/button';
 import QuestionCircle from '@/icons/questioncircle';
-import { StyledDisplay } from '@/components/ui/display';
-
-type NavLinkType = 'questions' | 'manageagencies' | 'manageusers';
+import { StyledDisplay } from '../ui/display';
+import path from 'path';
 
 interface NavLinkProps {
-  href: NavLinkType;
+  href: string;
   icon: React.ComponentType<React.SVGProps<SVGSVGElement>>;
   label: string;
 }
 
-const AdminHeaderDashboard: React.FC = () => {
-  const searchParams = useSearchParams();
-  const router = useRouter();
-  const [activeLink, setActiveLink] = useState<NavLinkType>('questions');
+const HeaderDashboard: React.FC = () => {
   const [open, setOpen] = useState(false);
-
-  useEffect(() => {
-    const currentPage = searchParams.get('page') as NavLinkType;
-    if (currentPage) {
-      setActiveLink(currentPage);
-    }
-  }, [searchParams]);
-
-  const handleSetActiveLink = (link: NavLinkType) => {
-    setActiveLink(link);
-    const params = new URLSearchParams(window.location.search);
-    params.set('page', link);
-    router.push(`${window.location.pathname}?${params.toString()}`);
-  };
 
   const toggleOpen = () => setOpen(!open);
   const handleLogout = () => signOut();
 
   const navLinks: NavLinkProps[] = [
-    { href: 'questions', icon: QuestionCircle, label: 'Questions' },
-    { href: 'manageagencies', icon: Gov, label: 'Agencies' },
-    { href: 'manageusers', icon: UserGroup, label: 'Users' },
+    { href: '/admin/dashboard', icon: QuestionCircle, label: 'Questions' },
+    { href: '/admin/dashboard/agency', icon: Gov, label: 'Agencies' },
+    { href: '/admin/dashboard/user', icon: UserGroup, label: 'Users' },
   ];
+
+  const pathName = usePathname();
 
   const NavLink: React.FC<NavLinkProps> = ({ href, icon: Icon, label }) => (
     <Link
@@ -59,12 +43,11 @@ const AdminHeaderDashboard: React.FC = () => {
         buttonVariants({ variant: 'tertiary-askmygov', size: 'sm' }),
         {
           'text-[#702FF9] bg-[#F4EFFF] dark:text-[#9E70FF] dark:bg-[#201636]':
-            activeLink === href,
-          'text-black-700': activeLink !== href,
+            pathName === href,
+          'text-black-700': pathName !== href,
         },
       )}
-      href={`/admin/dashboard/?page=${href}`}
-      onClick={() => handleSetActiveLink(href)}
+      href={href}
     >
       <Icon className="stroke-current" />
       {label}
