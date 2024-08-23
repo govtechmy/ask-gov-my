@@ -13,7 +13,6 @@ const ManageQuestions: React.FC = () => {
   const [filteredQuestions, setFilteredQuestions] = useState<Question[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const [unassignedCount, setUnassignedCount] = useState(0);
   const [searchTerm, setSearchTerm] = useState('');
 
   useEffect(() => {
@@ -22,7 +21,6 @@ const ManageQuestions: React.FC = () => {
         const { questions } = await getAllUserQuestions();
         setQuestions(questions);
         setFilteredQuestions(questions); // Initialize filteredQuestions with all questions
-        setUnassignedCount(questions.filter(q => q.agency === null).length);
       } catch (error) {
         setError(
           error instanceof Error ? error.message : 'An unknown error occurred',
@@ -53,7 +51,7 @@ const ManageQuestions: React.FC = () => {
   return (
     <div className="container max-w-screen-lg mx-auto justify-between px-6">
       <QuestionNavbar
-        unassignedCount={unassignedCount}
+        unassignedCount={questions.filter(q => q.agency === null).length}
         setSearchTerm={setSearchTerm}
       />
       <div className="pt-6">

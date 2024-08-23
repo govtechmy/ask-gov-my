@@ -4,10 +4,10 @@ import React, { useEffect, useState } from 'react';
 import { useSearchParams } from 'next/navigation';
 import { getAllUsers } from '@/actions/userServices';
 import { getAgencyList } from '@/actions/questionServices';
-import UserNavbar from './UserNavbar';
-import UserCard from './UserCard';
 import { Agency, User } from '@/types/types';
-import Pagination from '../ui/pagnination';
+import UserNavbar from '@/components/AdminDashboard/UserNavbar';
+import UserCard from '@/components/AdminDashboard/UserCard';
+import Pagination from '@/components/ui/pagination';
 
 const ManageUsers: React.FC = () => {
   const [users, setUsers] = useState<User[]>([]);
