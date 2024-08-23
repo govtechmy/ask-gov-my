@@ -2,10 +2,7 @@
 const API_URL = process.env.API_URL;
 import { Question, Agency, Topic, QuestionSubmission } from '@/types/types';
 
-export async function getAllQuestions(
-  page: number = 1,
-  pageSize: number = 1000,
-): Promise<{ questions: Question[]; total: number }> {
+export async function getAllQuestions(): Promise<{ questions: Question[] }> {
   try {
     const response = await fetch(`${API_URL}/questions/`, {
       method: 'GET',
@@ -21,14 +18,10 @@ export async function getAllQuestions(
 
     const data = await response.json();
 
-    const start = (page - 1) * pageSize;
-    const end = start + pageSize;
-    const paginatedQuestions = data.slice(start, end);
-
-    return { questions: paginatedQuestions, total: data.length };
+    return { questions: data };
   } catch (error) {
     console.error('Error in getAllQuestions:', error);
-    return { questions: [], total: 0 };
+    return { questions: [] };
   }
 }
 
@@ -78,9 +71,7 @@ export async function getTopicsDetail(
 
 export async function getQuestionsByAgency(
   agencyId: string,
-  page: number = 1,
-  pageSize: number = 10,
-): Promise<{ questions: Question[]; total: number }> {
+): Promise<{ questions: Question[] }> {
   const response = await fetch(`${API_URL}/questions/by-agency/${agencyId}`, {
     method: 'GET',
     headers: {
@@ -94,13 +85,8 @@ export async function getQuestionsByAgency(
   }
 
   const data = await response.json();
-  const Questions: Question[] = data;
 
-  const start = (page - 1) * pageSize;
-  const end = start + pageSize;
-  const paginatedQuestions = Questions.slice(start, end);
-
-  return { questions: paginatedQuestions, total: data.count };
+  return { questions: data };
 }
 
 export async function getQuestionById(
