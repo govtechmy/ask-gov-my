@@ -2,7 +2,7 @@
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import ThemeToggle from './theme';
+import ThemeToggle from '../theme';
 import LocaleSwitch from './LocaleSwitch';
 import Asklogo from '@/icons/asklogo';
 import User from '@/icons/user';
@@ -14,8 +14,7 @@ import Logout from '@/icons/logout';
 import { signOut } from 'next-auth/react';
 import { buttonVariants } from '@/components/ui/button';
 import QuestionCircle from '@/icons/questioncircle';
-import { StyledDisplay } from '../ui/display';
-import path from 'path';
+import { StyledDisplay } from '@/components/ui/display';
 
 interface NavLinkProps {
   href: string;
@@ -23,7 +22,7 @@ interface NavLinkProps {
   label: string;
 }
 
-const HeaderDashboard: React.FC = () => {
+const AdminHeaderDashboard: React.FC = () => {
   const [open, setOpen] = useState(false);
 
   const toggleOpen = () => setOpen(!open);

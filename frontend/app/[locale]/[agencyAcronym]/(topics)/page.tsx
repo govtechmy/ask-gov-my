@@ -49,17 +49,6 @@ const AgencyPage = async ({ params }: Props) => {
 
   return (
     <div>
-      <ContextSearchBar>
-        <BaseHeader agencyAcronym={agencyAcronym}></BaseHeader>
-        <SearchNavbar
-          agency={{
-            acronym: agencyAcronym,
-            uuid: agencyUUID,
-            details: currentAgency,
-          }}
-        ></SearchNavbar>
-      </ContextSearchBar>
-
       <div className="container mt-8 flex">
         <div className="max-w-screen-2xl">
           <div className="font-semibold text-base text-black-700 pb-6">

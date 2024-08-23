@@ -46,8 +46,7 @@ export function AdminPage() {
   };
 
   return (
-    <div className="flex flex-col min-h-screen">
-      <BaseHeader isAdmin={true}></BaseHeader>
+    <>
       <div className="flex-grow flex items-center justify-center py-12">
         <div className="max-w-[450px]">
           <div className="text-center">
@@ -104,7 +103,7 @@ export function AdminPage() {
         </div>
       </div>
       <Footer adminpage={true} />
-    </div>
+    </>
   );
 }
 
