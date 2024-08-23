@@ -18,9 +18,7 @@ const MainPage = async ({
 }: {
   searchParams: { page?: string };
 }) => {
-  const page = parseInt(searchParams.page || '1', 10);
-  const pageSize = 1000;
-  const { questions } = await getAllQuestions(page, pageSize);
+  const { questions } = await getAllQuestions();
   const trendingAgencies = await getTrendingAgencies();
   const agencyList = await getAgencyList();
   const agencyMap = await getDynamicAgencyMap();
