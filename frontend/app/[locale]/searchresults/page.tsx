@@ -25,7 +25,6 @@ const SearchResultPage = async ({
   const agencyList = await getAgencyList();
   return (
     <div>
-      <Masthead />
       <ContextSearchBar>
         <BaseHeader></BaseHeader>
         <SearchNavbar></SearchNavbar>

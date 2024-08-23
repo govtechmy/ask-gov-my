@@ -27,7 +27,6 @@ const MainPage = async ({
 
   return (
     <div>
-      <Masthead />
       <ContextSearchBar>
         <BaseHeader></BaseHeader>
         <SearchNavbar></SearchNavbar>

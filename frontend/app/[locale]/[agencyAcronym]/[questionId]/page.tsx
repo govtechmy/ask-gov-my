@@ -91,7 +91,6 @@ const QuestionDetailPage: React.FC<Props> = async ({ params }) => {
 
   return (
     <div>
-      <Masthead />
       <ContextSearchBar>
         <BaseHeader alwaysShowInput={true}></BaseHeader>
       </ContextSearchBar>
