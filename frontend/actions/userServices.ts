@@ -1,10 +1,7 @@
 'use server';
-import { PrismaClient } from '@prisma/client';
 import { Question, User, Topic } from '@/types/types';
 
 const API_URL = process.env.API_URL;
-
-const prisma = new PrismaClient();
 
 // get questions by the user agency, to be used only by user.role = staff
 export async function getUserAgencyQuestions(
@@ -395,17 +392,5 @@ export async function getAllUsers(): Promise<{
   } catch (error) {
     console.error('Error fetching users:', error);
     return { success: false, message: 'Failed to fetch users' };
-  }
-}
-
-export async function checkUserEmailExists(email: string): Promise<boolean> {
-  try {
-    const user = await prisma.user.findUnique({
-      where: { email },
-    });
-    return !!user;
-  } catch (error) {
-    console.error('Error checking user email:', error);
-    return false;
   }
 }

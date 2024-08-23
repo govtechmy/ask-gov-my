@@ -4,14 +4,14 @@ import {
   getTrendingAgencies,
   getDynamicAgencyMap,
 } from '@/actions/questionServices';
-import QuestionBox from '@/components/QuestionBox/QuestionBox';
-import SearchNavbar from '@/components/HeaderDetails/SearchNavBar';
-import Footer from '@/components/FooterDetails/Footer';
-import Header from '@/components/HeaderDetails/Header';
-import TrendingAgencies from '@/components/TrendingAgencies';
-import IdentifyWebsite from '@/components/HeaderDetails/IdentifyWebsite';
-import WordTranslate from '@/components/WordTranslate';
-import ContextSearchBar from '@/components/ContextSearchBar';
+import QuestionBox from '@/components/common/QuestionBox/QuestionBox';
+import Footer from '@/components/common/Footer';
+import TrendingAgencies from '@/components/common/TrendingAgencies';
+import Masthead from '@/components/common/Header/Masthead';
+import WordTranslate from '@/components/common/WordTranslate';
+import ContextSearchBar from '@/components/context/ContextSearchBar';
+import BaseHeader from '@/components/common/Header/BaseHeader';
+import SearchNavbar from '@/components/common/SearchNavbar/SearchNavbar';
 
 const MainPage = async ({
   searchParams,
@@ -27,10 +27,9 @@ const MainPage = async ({
 
   return (
     <div>
-      <IdentifyWebsite />
       <ContextSearchBar>
-        <Header />
-        <SearchNavbar />
+        <BaseHeader></BaseHeader>
+        <SearchNavbar></SearchNavbar>
       </ContextSearchBar>
 
       <div className="container mt-10 flex">

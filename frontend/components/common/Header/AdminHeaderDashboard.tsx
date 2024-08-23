@@ -12,7 +12,7 @@ import Gov from '@/icons/gov';
 import UserGroup from '@/icons/usergroup';
 import Logout from '@/icons/logout';
 import { signOut } from 'next-auth/react';
-import { buttonVariants } from '../ui/button';
+import { buttonVariants } from '@/components/ui/button';
 import QuestionCircle from '@/icons/questioncircle';
 import { StyledDisplay } from '../ui/display';
 import path from 'path';
@@ -106,4 +106,4 @@ const HeaderDashboard: React.FC = () => {
   );
 };
 
-export default HeaderDashboard;
+export default AdminHeaderDashboard;

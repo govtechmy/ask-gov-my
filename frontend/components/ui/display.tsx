@@ -7,7 +7,7 @@ const divVariants = cva('', {
   variants: {
     variant: {
       uploadDownload:
-        'p-2 px-3 border border-outline-200 hover:border-outline-300 bg-white focus:border-outline-200 focus:ring focus:ring-offset-0 focus:ring-outline-400/20 shadow-button h-[54px] w-[195px]',
+        'p-2 px-3 border border-outline-200 hover:border-outline-300 bg-white rounded-lg flex items-center gap-1.5 justify-between` focus:border-outline-200 focus:ring focus:ring-offset-0 focus:ring-outline-400/20 shadow-button h-[54px] w-[195px]',
       nameHeader:
         'bg-black-800 text-white rounded-md font-bold text-xs flex justify-center items-center w-[53px] h-[22px]',
       modal: '',
@@ -16,6 +16,8 @@ const divVariants = cva('', {
       'modal-display': 'bg-white rounded-xl shadow-lg',
       'modal-header': 'text-black-900 text-lg font-semibold leading-[26px]',
       'modal-body': 'text-black-700 text-sm font-normal',
+      Topics:
+        'flex text-base font-medium text-askmygovbrand-600 bg-askmygovbrand-50 border-[1px] border-askmygovbrand-200 px-2 py-1 rounded-lg',
     },
   },
   defaultVariants: {
