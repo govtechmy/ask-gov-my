@@ -39,8 +39,7 @@ export function CheckmailPage({
   };
 
   return (
-    <div className="flex flex-col min-h-screen">
-      <BaseHeader isAdmin={true}></BaseHeader>
+    <>
       <div className="flex-grow flex items-center justify-center py-12">
         <div className="flex flex-col items-center justify-center">
           <Maillogo />
@@ -101,7 +100,7 @@ export function CheckmailPage({
         </div>
       </div>
       <Footer adminpage={true} />
-    </div>
+    </>
   );
 }
 

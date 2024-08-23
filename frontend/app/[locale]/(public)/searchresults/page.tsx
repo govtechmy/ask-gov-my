@@ -8,10 +8,6 @@ import QuestionBox from '@/components/common/QuestionBox/QuestionBox';
 import Footer from '@/components/common/Footer';
 import TrendingAgencies from '@/components/common/TrendingAgencies';
 import WordTranslate from '@/components/common/WordTranslate';
-import ContextSearchBar from '@/components/context/ContextSearchBar';
-import BaseHeader from '@/components/common/Header/BaseHeader';
-import SearchNavbar from '@/components/common/SearchNavbar/SearchNavbar';
-import Masthead from '@/components/common/Header/Masthead';
 
 const SearchResultPage = async ({
   searchParams,
@@ -25,11 +21,6 @@ const SearchResultPage = async ({
   const agencyList = await getAgencyList();
   return (
     <div>
-      <ContextSearchBar>
-        <BaseHeader></BaseHeader>
-        <SearchNavbar></SearchNavbar>
-      </ContextSearchBar>
-
       <div className="container mt-10 flex">
         <div className="max-w-screen-2xl">
           <div className="font-semibold text-base text-black-700 pb-7 flex">
