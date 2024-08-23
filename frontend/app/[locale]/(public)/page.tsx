@@ -7,11 +7,7 @@ import {
 import QuestionBox from '@/components/common/QuestionBox/QuestionBox';
 import Footer from '@/components/common/Footer';
 import TrendingAgencies from '@/components/common/TrendingAgencies';
-import Masthead from '@/components/common/Header/Masthead';
 import WordTranslate from '@/components/common/WordTranslate';
-import ContextSearchBar from '@/components/context/ContextSearchBar';
-import BaseHeader from '@/components/common/Header/BaseHeader';
-import SearchNavbar from '@/components/common/SearchNavbar/SearchNavbar';
 
 const MainPage = async ({
   searchParams,
@@ -27,11 +23,6 @@ const MainPage = async ({
 
   return (
     <div>
-      <ContextSearchBar>
-        <BaseHeader></BaseHeader>
-        <SearchNavbar></SearchNavbar>
-      </ContextSearchBar>
-
       <div className="container mt-10 flex">
         <div className="max-w-screen-2xl">
           <div className="font-semibold text-base text-black-700 pb-7">

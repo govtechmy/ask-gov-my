@@ -59,17 +59,6 @@ const TopicPage = async ({ params }: Props) => {
 
   return (
     <div>
-      <ContextSearchBar>
-        <BaseHeader agencyAcronym={agencyAcronym}></BaseHeader>
-        <SearchNavbar
-          agency={{
-            acronym: agencyAcronym,
-            uuid: agencyUUID,
-            details: currentAgency,
-          }}
-        ></SearchNavbar>
-      </ContextSearchBar>
-
       <div className="container mt-10 flex text-out">
         <div className="max-w-screen-2xl">
           <div className="font-medium text-base text-black-700 pb-7 flex items-center">
