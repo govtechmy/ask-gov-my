@@ -49,7 +49,6 @@ const AgencyPage = async ({ params }: Props) => {
 
   return (
     <div>
-      <Masthead />
       <ContextSearchBar>
         <BaseHeader agencyAcronym={agencyAcronym}></BaseHeader>
         <SearchNavbar
