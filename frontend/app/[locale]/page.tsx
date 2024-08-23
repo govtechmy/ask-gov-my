@@ -13,11 +13,7 @@ import IdentifyWebsite from '@/components/HeaderDetails/IdentifyWebsite';
 import WordTranslate from '@/components/WordTranslate';
 import ContextSearchBar from '@/components/ContextSearchBar';
 
-const MainPage = async ({
-  searchParams,
-}: {
-  searchParams: { page?: string };
-}) => {
+const MainPage = async () => {
   const { questions } = await getAllQuestions();
   const trendingAgencies = await getTrendingAgencies();
   const agencyList = await getAgencyList();
