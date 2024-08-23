@@ -1,6 +1,8 @@
 name: Deploy backend-askgov
 env:
   IMAGE: askgov-backend
+on:
+  push:
     branches:
       - staging
       - main
