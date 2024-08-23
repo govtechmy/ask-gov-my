@@ -20,9 +20,6 @@ const QuestionBox: React.FC<QuestionBoxProps> = ({
   const [paginatedQuestions, setPaginatedQuestions] = useState<Question[]>([]);
   const itemsPerPage = 6;
   const totalPages = Math.ceil(questions.length / itemsPerPage);
-  const sortedQuestions = useMemo(() => {
-    return [...questions].sort((a, b) => b.likes - a.likes);
-  }, [questions]);
 
   const handlePageChange = (page: number) => {
     if (page >= 1 && page <= totalPages) {
@@ -49,7 +46,7 @@ const QuestionBox: React.FC<QuestionBoxProps> = ({
         itemsPerPage={itemsPerPage}
         totalItems={questions.length}
         setPaginatedItems={setPaginatedQuestions}
-        items={sortedQuestions}
+        items={questions}
       />
     </div>
   );
