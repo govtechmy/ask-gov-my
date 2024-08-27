@@ -136,6 +136,53 @@ export async function getQuestionsByAgency(
   }
 }
 
+export async function getQuestionsByTopicAndAgency(
+  agencyUUID: string,
+  topicId: string,
+  page: number = 1,
+  pageSize: number = 6,
+): Promise<{
+  questions: Question[];
+  totalItems: number;
+  totalPages: number;
+  currentPage: number;
+}> {
+  try {
+    const response = await fetch(
+      `${API_URL}/questions/by-agency/${agencyUUID}/topics/${topicId}/?page=${page}&page_size=${pageSize}`,
+      {
+        method: 'GET',
+        headers: {
+          'Cache-Control': 'no-cache',
+          Pragma: 'no-cache',
+          Expires: '0',
+        },
+      },
+    );
+
+    if (!response.ok) {
+      throw new Error('Failed to fetch questions');
+    }
+
+    const data = await response.json();
+
+    return {
+      questions: data.results,
+      totalItems: data.count,
+      totalPages: Math.ceil(data.count / pageSize),
+      currentPage: page,
+    };
+  } catch (error) {
+    console.error('Error fetching questions:', error);
+    return {
+      questions: [],
+      totalItems: 0,
+      totalPages: 0,
+      currentPage: 1,
+    };
+  }
+}
+
 export async function getQuestionById(
   questionId: string,
 ): Promise<Question | null> {
