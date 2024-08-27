@@ -5,7 +5,8 @@ from .serializers import (
     VerificationTokenSerializer)
 from django.shortcuts import get_object_or_404
 from django.utils import timezone
-from rest_framework import generics, status
+from rest_framework.pagination import PageNumberPagination
+from rest_framework import generics, status, pagination
 from .models import Question, Agency, Topic, User, Account, Session, VerificationToken
 from rest_framework.response import Response
 from rest_framework.views import APIView
@@ -17,9 +18,17 @@ import logging, re
 logger = logging.getLogger(__name__)
 
 
+class CustomPagination(PageNumberPagination):
+    page_size = 6
+    page_size_query_param = 'page_size'
+    max_page_size = 100
+
 class CompletedQuestionListView(generics.ListCreateAPIView):
-    queryset = Question.objects.filter(state='completed')
     serializer_class = QuestionSerializer
+    pagination_class = CustomPagination
+
+    def get_queryset(self):
+        return Question.objects.filter(state='completed').order_by('-likes', 'id')
 
 
 class AllQuestionListView(generics.ListCreateAPIView):
