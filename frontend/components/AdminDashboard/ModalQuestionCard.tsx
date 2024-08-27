@@ -5,8 +5,9 @@ import IconQuestionSmile2 from '@/icons/iconquestionsmile2';
 import LineVerticalForSmile from '@/icons/lineverticalforsmile';
 import PlusCircle from '@/icons/pluscircle';
 import TickCheckCircleInCircle from '@/icons/tickcheckcircleincircle';
-import AgencyListDropdown from './AgencyListDropdown';
 import { Agency, Question } from '@/types/types';
+import { formatDate } from '@/actions/utils';
+import AgencyListDropdownRefactored from './AgencyListsDropdownRefactored';
 
 interface ModalProps {
   isOpen: boolean;
@@ -42,23 +43,6 @@ const ModalQuestionCard: React.FC<ModalProps> = ({
   }, [question.question]);
 
   if (!isOpen) return null;
-
-  const formatDate = (dateString: string) => {
-    const date = new Date(dateString);
-    return (
-      date.toLocaleDateString('en-GB', {
-        day: '2-digit',
-        month: 'long',
-        year: 'numeric',
-      }) +
-      ', ' +
-      date.toLocaleTimeString('en-GB', {
-        hour: '2-digit',
-        minute: '2-digit',
-        hour12: true,
-      })
-    );
-  };
 
   return (
     <div className="z-10 fixed inset-0 bg-gray-900 flex items-center justify-center bg-opacity-70">
@@ -108,14 +92,14 @@ const ModalQuestionCard: React.FC<ModalProps> = ({
               <div className="text-sm text-black-700 font-medium pb-[6px]">
                 Assign to agency:
               </div>
-              <AgencyListDropdown
+              <AgencyListDropdownRefactored
                 selectedAgency={selectedAgency}
                 setSelectedAgency={setSelectedAgency}
-                AGENCY_TO_UUID={AGENCY_TO_UUID}
                 setSuccessMessage={setSuccessMessage}
                 agencies={agencies}
                 questionId={question.id}
-              />
+                version={'modal'}
+              ></AgencyListDropdownRefactored>
             </div>
           </div>
         </div>

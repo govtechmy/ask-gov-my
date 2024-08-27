@@ -1,5 +1,4 @@
 import { useState, useEffect } from 'react';
-import { useTranslations } from 'next-intl';
 import {
   assignAgencyToQuestion,
   changeAdminIsOpen,
@@ -8,7 +7,6 @@ import {
 } from '@/actions/userServices';
 import NewUpdateIcon from '@/icons/new';
 import { Question } from '@/types/types';
-import AgencyListDropdownOnCard from './AgencyListDropdownOnCard';
 import ModalQuestionCard from './ModalQuestionCard';
 import SpamUpdateIcon from '@/icons/spam';
 import { useSearchParams } from 'next/navigation';
@@ -18,6 +16,7 @@ import TickCheckCircle from '@/icons/tickcheckcircle';
 import { formatDate } from '@/actions/utils';
 import { Agency } from '@/types/types';
 import Toast from '../ui/toast';
+import AgencyListDropdownRefactored from './AgencyListsDropdownRefactored';
 
 interface QuestionCardProps {
   question: Question;
@@ -39,6 +38,7 @@ const AdminQuestionCard: React.FC<QuestionCardProps> = ({
   const [successMessage, setSuccessMessage] = useState('');
   const [showSpamToast, setShowSpamToast] = useState(false);
   const [showUnSpamToast, setShowUnSpamToast] = useState(false);
+  const [open, setOpen] = useState(false);
 
   useEffect(() => {
     if (question.agency !== null) {
@@ -110,7 +110,7 @@ const AdminQuestionCard: React.FC<QuestionCardProps> = ({
             )}
           </div>
           <div className="relative pl-3">
-            <AgencyListDropdownOnCard
+            <AgencyListDropdownRefactored
               selectedAgency={selectedAgency}
               setSelectedAgency={setSelectedAgency}
               setSuccessMessage={setSuccessMessage}
@@ -118,8 +118,10 @@ const AdminQuestionCard: React.FC<QuestionCardProps> = ({
               setactiveQuestionId={setactiveQuestionId}
               questionId={question.id}
               agencies={agencies}
-            />
+              version={'card'}
+            ></AgencyListDropdownRefactored>
           </div>
+
           <div className="font-normal text-sm text-dim-500 w-[180px] pl-3 ">
             {formatDate(question.date)}
           </div>
