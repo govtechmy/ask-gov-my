@@ -14,7 +14,8 @@ import WordTranslate from '@/components/WordTranslate';
 import ContextSearchBar from '@/components/ContextSearchBar';
 
 const MainPage = async () => {
-  const { questions } = await getAllQuestions();
+  const { questions, totalItems, totalPages, currentPage } =
+    await getAllQuestions();
   const trendingAgencies = await getTrendingAgencies();
   const agencyList = await getAgencyList();
   const agencyMap = await getDynamicAgencyMap();
@@ -36,6 +37,10 @@ const MainPage = async () => {
             questions={questions}
             agencyMap={agencyMap}
             agencyList={agencyList}
+            totalItems={totalItems}
+            totalPages={totalPages}
+            currentPage={currentPage}
+            importFunction={getAllQuestions}
           />
         </div>
 
