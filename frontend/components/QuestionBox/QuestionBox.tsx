@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import QuestionCard from './QuestionCard';
 import Pagination from '../ui/pagination';
 import { Question, Agency } from '@/types/types';
@@ -14,6 +14,7 @@ interface QuestionBoxProps {
   currentPage: number;
   importFunction: Function;
   value?: number | string;
+  secondValue?: string;
 }
 
 const QuestionBox: React.FC<QuestionBoxProps> = ({
@@ -25,6 +26,7 @@ const QuestionBox: React.FC<QuestionBoxProps> = ({
   currentPage: initialCurrentPage,
   importFunction,
   value,
+  secondValue,
 }) => {
   const [questions, setQuestions] = useState<Question[]>(initialQuestions);
   const [currentPage, setCurrentPage] = useState(initialCurrentPage);
@@ -38,9 +40,11 @@ const QuestionBox: React.FC<QuestionBoxProps> = ({
         questions: newQuestions,
         totalItems: newTotalItems,
         totalPages: newTotalPages,
-      } = value
-        ? await importFunction(value, page, itemsPerPage)
-        : await importFunction(page, itemsPerPage);
+      } = secondValue
+        ? await importFunction(value, secondValue, page, itemsPerPage)
+        : value
+          ? await importFunction(value, page, itemsPerPage)
+          : await importFunction(page, itemsPerPage);
       setQuestions(newQuestions);
       setCurrentPage(page);
       setTotalItems(newTotalItems);
