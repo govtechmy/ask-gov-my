@@ -13,6 +13,7 @@ interface QuestionBoxProps {
   totalPages: number;
   currentPage: number;
   importFunction: Function;
+  UUID?: number;
 }
 
 const QuestionBox: React.FC<QuestionBoxProps> = ({
@@ -23,6 +24,7 @@ const QuestionBox: React.FC<QuestionBoxProps> = ({
   totalPages: initialTotalPages,
   currentPage: initialCurrentPage,
   importFunction,
+  UUID,
 }) => {
   const [questions, setQuestions] = useState<Question[]>(initialQuestions);
   const [currentPage, setCurrentPage] = useState(initialCurrentPage);
@@ -36,7 +38,9 @@ const QuestionBox: React.FC<QuestionBoxProps> = ({
         questions: newQuestions,
         totalItems: newTotalItems,
         totalPages: newTotalPages,
-      } = await importFunction(page, itemsPerPage);
+      } = UUID
+        ? await importFunction(UUID, page, itemsPerPage)
+        : await importFunction(page, itemsPerPage);
       setQuestions(newQuestions);
       setCurrentPage(page);
       setTotalItems(newTotalItems);
