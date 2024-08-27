@@ -1,4 +1,4 @@
-import HeaderDashboard from '@/components/HeaderDetails/HeaderDashboard';
+import AdminHeaderDashboard from '@/components/common/Header/AdminHeaderDashboard';
 
 export default function DashboardLayout({
   children,
@@ -7,7 +7,7 @@ export default function DashboardLayout({
 }) {
   return (
     <>
-      <HeaderDashboard />
+      <AdminHeaderDashboard></AdminHeaderDashboard>
       {children}
     </>
   );
