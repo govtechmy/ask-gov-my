@@ -7,10 +7,20 @@ export function register() {
   const elasticsearchApiKey = process.env.ELASTICSEARCH_API_KEY as string;
   const openaiApiKey = process.env.OPENAI_API_KEY;
 
-  if (!REGION || !BUCKET_NAME || !ACCESS_KEY_ID || !SECRET_ACCESS_KEY) {
-    throw new Error(
-      'Missing required environment variables for AWS S3 configuration',
-    );
+  if (!REGION) {
+    throw new Error('Missing required environment variable: REGION');
+  }
+
+  if (!BUCKET_NAME) {
+    throw new Error('Missing required environment variable: BUCKET_NAME');
+  }
+
+  if (!ACCESS_KEY_ID) {
+    throw new Error('Missing required environment variable: ACCESS_KEY_ID');
+  }
+
+  if (!SECRET_ACCESS_KEY) {
+    throw new Error('Missing required environment variable: SECRET_ACCESS_KEY');
   }
 
   if (!elasticsearchApiKey || !elasticsearchURL || !openaiApiKey) {
