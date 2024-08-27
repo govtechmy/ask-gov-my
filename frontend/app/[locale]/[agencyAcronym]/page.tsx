@@ -73,7 +73,7 @@ const AgencyPage = async ({ params }: Props) => {
             totalPages={totalPages}
             currentPage={currentPage}
             importFunction={getQuestionsByAgency}
-            UUID={currentAgency.id}
+            value={currentAgency.id}
           />
         </div>
 
