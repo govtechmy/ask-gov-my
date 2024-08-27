@@ -10,8 +10,6 @@ interface PaginationProps {
   onPageChange: (page: number) => void;
   itemsPerPage: number;
   totalItems: number;
-  setPaginatedItems: (items: any[]) => void;
-  items: any[];
 }
 
 const Pagination: React.FC<PaginationProps> = ({
@@ -20,16 +18,7 @@ const Pagination: React.FC<PaginationProps> = ({
   onPageChange,
   itemsPerPage,
   totalItems,
-  setPaginatedItems,
-  items,
 }) => {
-  React.useEffect(() => {
-    const startIdx = (currentPage - 1) * itemsPerPage;
-    const endIdx = startIdx + itemsPerPage;
-    const currentItems = items.slice(startIdx, endIdx);
-    setPaginatedItems(currentItems);
-  }, [currentPage, items]);
-
   const renderPageNumbers = () => {
     const pageNumbers = [];
     pageNumbers.push(

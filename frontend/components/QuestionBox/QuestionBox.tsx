@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useMemo } from 'react';
+import React, { useState, useEffect } from 'react';
 import QuestionCard from './QuestionCard';
 import Pagination from '../ui/pagination';
 import { Question, Agency } from '@/types/types';
@@ -9,28 +9,45 @@ interface QuestionBoxProps {
   questions: Question[];
   agencyMap: Record<string, string>;
   agencyList: Agency[];
+  totalItems: number;
+  totalPages: number;
+  currentPage: number;
+  importFunction: Function;
 }
 
 const QuestionBox: React.FC<QuestionBoxProps> = ({
-  questions,
+  questions: initialQuestions,
   agencyMap,
   agencyList,
+  totalItems: initialTotalItems,
+  totalPages: initialTotalPages,
+  currentPage: initialCurrentPage,
+  importFunction,
 }) => {
-  const [currentPage, setCurrentPage] = useState(1);
-  const [paginatedQuestions, setPaginatedQuestions] = useState<Question[]>([]);
+  const [questions, setQuestions] = useState<Question[]>(initialQuestions);
+  const [currentPage, setCurrentPage] = useState(initialCurrentPage);
+  const [totalItems, setTotalItems] = useState(initialTotalItems);
+  const [totalPages, setTotalPages] = useState(initialTotalPages);
   const itemsPerPage = 6;
-  const totalPages = Math.ceil(questions.length / itemsPerPage);
 
-  const handlePageChange = (page: number) => {
+  const handlePageChange = async (page: number) => {
     if (page >= 1 && page <= totalPages) {
+      const {
+        questions: newQuestions,
+        totalItems: newTotalItems,
+        totalPages: newTotalPages,
+      } = await importFunction(page, itemsPerPage);
+      setQuestions(newQuestions);
       setCurrentPage(page);
+      setTotalItems(newTotalItems);
+      setTotalPages(newTotalPages);
     }
   };
 
   return (
     <div className="flex flex-col justify-center gap-4">
       <div className="flex flex-col gap-6">
-        {paginatedQuestions.map(question => (
+        {questions.map(question => (
           <QuestionCard
             key={question.id}
             question={question}
@@ -44,9 +61,7 @@ const QuestionBox: React.FC<QuestionBoxProps> = ({
         totalPages={totalPages}
         onPageChange={handlePageChange}
         itemsPerPage={itemsPerPage}
-        totalItems={questions.length}
-        setPaginatedItems={setPaginatedQuestions}
-        items={questions}
+        totalItems={totalItems}
       />
     </div>
   );
