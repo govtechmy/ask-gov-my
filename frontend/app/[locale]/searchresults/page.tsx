@@ -3,7 +3,7 @@ import {
   getDynamicAgencyMap,
   getAgencyList,
 } from '@/actions/questionServices';
-import { searchQuestions } from '@/actions/searchServices';
+import { searchQuestionsWithPagination } from '@/actions/searchServices';
 import QuestionBox from '@/components/QuestionBox/QuestionBox';
 import SearchNavbar from '@/components/HeaderDetails/SearchNavBar';
 import Footer from '@/components/FooterDetails/Footer';
@@ -19,10 +19,13 @@ const SearchResultPage = async ({
   searchParams: { query?: string };
 }) => {
   const query = searchParams.query || '';
-  const questions = await searchQuestions(query);
+
+  const { questions, totalItems, totalPages, currentPage } =
+    await searchQuestionsWithPagination(query);
   const trendingAgencies = await getTrendingAgencies();
   const agencyMap = await getDynamicAgencyMap();
   const agencyList = await getAgencyList();
+
   return (
     <div>
       <IdentifyWebsite />
@@ -35,7 +38,7 @@ const SearchResultPage = async ({
       <div className="container mt-10 flex">
         <div className="max-w-screen-2xl">
           <div className="font-semibold text-base text-black-700 pb-7 flex">
-            {questions.length}&nbsp;
+            {totalItems}&nbsp;
             <div>
               <WordTranslate translate={'Search'} keyword={'search_result'} />
             </div>
@@ -46,9 +49,14 @@ const SearchResultPage = async ({
               questions={questions}
               agencyMap={agencyMap}
               agencyList={agencyList}
+              totalItems={totalItems}
+              totalPages={totalPages}
+              currentPage={currentPage}
+              importFunction={searchQuestionsWithPagination}
+              value={query}
             />
           ) : (
-            <div className=" h-[220px] w-[900px] text-dim-500">
+            <div className="h-[220px] w-[900px] text-dim-500">
               <WordTranslate
                 translate={'Search'}
                 keyword={'answernotfound'}
