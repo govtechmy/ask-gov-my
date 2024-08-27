@@ -25,7 +25,7 @@ const AttachmentDownload: React.FC<AttachmentDownloadProps> = ({
 
         return (
           <StyledDisplay
-            type="uploadDownload"
+            variant={'uploadDownload'}
             key={index}
             onClick={() => downloadFile(url, fileName)}
           >
@@ -35,7 +35,7 @@ const AttachmentDownload: React.FC<AttachmentDownloadProps> = ({
             <div>
               <div
                 className={`text-black-900 text-sm font-normal truncate ${
-                  handleRemoveUploadedAttachment ? 'w-[110px]' : 'w-[138px]'
+                  handleRemoveUploadedAttachment ? 'w-[94px]' : 'w-[138px]'
                 }`}
               >
                 {fileName}
@@ -51,7 +51,6 @@ const AttachmentDownload: React.FC<AttachmentDownloadProps> = ({
                   e.stopPropagation();
                   handleRemoveUploadedAttachment(index);
                 }}
-                className="ml-auto"
               >
                 <div className="flex-shrink-0">
                   <Close className="stroke-danger-600" />

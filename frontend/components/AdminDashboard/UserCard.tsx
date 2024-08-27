@@ -2,7 +2,7 @@
 
 import React, { useState } from 'react';
 import { Agency, User } from '@/types/types';
-import AgencyLogoImporter from '../AgencyLogoImporter';
+import AgencyLogoImporter from '../common/AgencyLogoImporter';
 import ImageNext from 'next/image';
 import ThreeDottedEditRemoveUser from './ThreeDottedEditRemoveUser';
 import Toast from '../ui/toast';

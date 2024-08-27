@@ -4,8 +4,9 @@ import { useTranslations } from 'next-intl';
 import { useSession } from 'next-auth/react';
 import ManageQuestions from '@/components/AdminDashboard/ManageQuestions';
 import { useState } from 'react';
-import StaffHeaderDashboard from '@/components/HeaderDetails/StaffHeaderDashboard';
+import StaffHeaderDashboard from '@/components/common/Header/StaffHeaderDashboard';
 import StaffManageQuestions from '@/components/AdminDashboard/StaffManageQuestion';
+import AdminHeaderDashboard from '@/components/common/Header/AdminHeaderDashboard';
 
 export default function DashboardPage() {
   const t = useTranslations('Adminlogin');
