@@ -2,26 +2,47 @@
 const API_URL = process.env.API_URL;
 import { Question, Agency, Topic, QuestionSubmission } from '@/types/types';
 
-export async function getAllQuestions(): Promise<{ questions: Question[] }> {
+export async function getAllQuestions(
+  page: number = 1,
+  pageSize: number = 6,
+): Promise<{
+  questions: Question[];
+  totalItems: number;
+  totalPages: number;
+  currentPage: number;
+}> {
   try {
-    const response = await fetch(`${API_URL}/questions/`, {
-      method: 'GET',
-      headers: {
-        'Cache-Control': 'no-cache',
-        Pragma: 'no-cache',
-        Expires: '0',
+    const response = await fetch(
+      `${API_URL}/questions/?page=${page}&page_size=${pageSize}`,
+      {
+        method: 'GET',
+        headers: {
+          'Cache-Control': 'no-cache',
+          Pragma: 'no-cache',
+          Expires: '0',
+        },
       },
-    });
+    );
     if (!response.ok) {
       throw new Error('Failed to fetch questions');
     }
 
     const data = await response.json();
 
-    return { questions: data };
+    return {
+      questions: data.results,
+      totalItems: data.count,
+      totalPages: Math.ceil(data.count / pageSize),
+      currentPage: page,
+    };
   } catch (error) {
     console.error('Error in getAllQuestions:', error);
-    return { questions: [] };
+    return {
+      questions: [],
+      totalItems: 0,
+      totalPages: 0,
+      currentPage: 1,
+    };
   }
 }
 
