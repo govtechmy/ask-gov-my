@@ -7,7 +7,7 @@ from .views import (
     UpdateAgencyView, ChangeAdminIsOpenView, ChangeStaffIsOpenView, SaveDraftQuestionView,
     MarkQuestionAsSpamView, UnSpamQuestionView, UserView, SessionView, AccountView,
     VerificationTokenView, AddUserView, GetAllUsersView,
-    CheckUserEmailExistsView, EditDeleteUserView
+    CheckUserEmailExistsView, EditDeleteUserView, QuestionsByTopicAndAgencyView
 )
 
 urlpatterns = [
@@ -18,6 +18,7 @@ urlpatterns = [
     path('agencies/<int:pk>/', UpdateAgencyView.as_view(), name='update-agency'),
     path('submit-question/', SubmitQuestionView.as_view(), name='submit-question'),
     path('questions/by-agency/<int:agency_id>/', QuestionsByAgencyView.as_view(), name='questions-by-agency'),
+    path('questions/by-agency/<int:agency_id>/topics/<int:topic_id>/', QuestionsByTopicAndAgencyView.as_view(), name='questions_by_topic_and_agency'),
     path('questions/user-agency/', UserAgencyQuestionsView.as_view(), name='user-agency-questions'),
     path('questions/<int:question_id>/submit-answer/', SubmitAnswerView.as_view(), name='submit-answer'),
     path('topics/user-agency/<int:agency_id>/', UserAgencyTopicsView.as_view(), name='user-agency-topics'),
