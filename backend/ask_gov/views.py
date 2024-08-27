@@ -90,7 +90,22 @@ class QuestionsByAgencyView(APIView):
         
         return paginator.get_paginated_response(serializer.data)
 
+class QuestionsByTopicAndAgencyView(APIView):
+    pagination_class = CustomPagination
 
+    def get(self, request, agency_id, topic_id):
+        agency = get_object_or_404(Agency, pk=agency_id)
+        topic = get_object_or_404(Topic, pk=topic_id)
+        
+        questions = Question.objects.filter(agency=agency, topics=topic, state='completed').order_by('-likes', 'id')
+        
+        paginator = self.pagination_class()
+        paginated_questions = paginator.paginate_queryset(questions, request)
+        
+        serializer = QuestionSerializer(paginated_questions, many=True)
+        
+        return paginator.get_paginated_response(serializer.data)
+    
 class UserAgencyQuestionsView(APIView):
     def get(self, request, agency_id):
         agency = get_object_or_404(Agency, id=agency_id)
