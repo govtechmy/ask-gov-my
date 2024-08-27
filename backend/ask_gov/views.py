@@ -77,11 +77,18 @@ class SubmitQuestionView(APIView):
 
 
 class QuestionsByAgencyView(APIView):
+    pagination_class = CustomPagination
+
     def get(self, request, agency_id):
         agency = get_object_or_404(Agency, pk=agency_id)
-        questions = Question.objects.filter(agency=agency, state='completed')
-        serializer = QuestionSerializer(questions, many=True)
-        return Response(serializer.data)
+        questions = Question.objects.filter(agency=agency, state='completed').order_by('-likes', 'id')
+        
+        paginator = self.pagination_class()
+        paginated_questions = paginator.paginate_queryset(questions, request)
+        
+        serializer = QuestionSerializer(paginated_questions, many=True)
+        
+        return paginator.get_paginated_response(serializer.data)
 
 
 class UserAgencyQuestionsView(APIView):
