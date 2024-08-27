@@ -1,6 +1,6 @@
 import {
   getAgencyList,
-  getQuestionsByAgency,
+  getQuestionsByTopicAndAgency,
   getTopicByAgency,
   getDynamicAgencyMap,
 } from '@/actions/questionServices';
@@ -27,10 +27,8 @@ const TopicPage = async ({ params }: Props) => {
   const agencyMap = await getDynamicAgencyMap();
   const agencyUUID = agencyMap[agencyAcronym.toUpperCase()];
 
-  const { questions } = await getQuestionsByAgency(agencyUUID);
-  const filteredQuestions = questions.filter(question =>
-    question.topics.includes(parseInt(topicId, 10)),
-  );
+  const { questions, totalItems, totalPages, currentPage } =
+    await getQuestionsByTopicAndAgency(agencyUUID, topicId);
 
   const topics = await getTopicByAgency(parseInt(agencyUUID, 10));
   const selectedTopic = topics.find(
@@ -80,7 +78,7 @@ const TopicPage = async ({ params }: Props) => {
                   keyword={'showing'}
                 ></WordTranslate>
                 &nbsp;
-                {filteredQuestions.length}
+                {totalItems}
                 &nbsp;
                 <WordTranslate
                   translate={'Topics'}
@@ -93,11 +91,17 @@ const TopicPage = async ({ params }: Props) => {
               {locale === 'ms' ? selectedTopic?.title_ms : selectedTopic?.title}
             </div>
           </div>
-          {filteredQuestions.length > 0 ? (
+          {questions.length > 0 ? (
             <QuestionBox
-              questions={filteredQuestions}
+              questions={questions}
               agencyMap={agencyMap}
               agencyList={agencyList}
+              totalItems={totalItems}
+              totalPages={totalPages}
+              currentPage={currentPage}
+              importFunction={getQuestionsByTopicAndAgency}
+              value={agencyUUID}
+              secondValue={topicId}
             />
           ) : (
             <div className=" h-[220px] w-[900px]">
