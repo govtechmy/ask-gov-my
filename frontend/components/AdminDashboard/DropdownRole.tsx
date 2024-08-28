@@ -7,8 +7,8 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 import { Label } from '@/components/ui/label';
-import AgencyListDropdownUsersModal from './AgencyListDropdownUsersModal';
 import { Agency, User } from '@/types/types';
+import AgencyListDropdownRefactored from './AgencyListsDropdownRefactored';
 
 interface DropdownRoleProps {
   agencies: Agency[];
@@ -66,10 +66,11 @@ const DropdownRole: React.FC<DropdownRoleProps> = ({
       {selectedRole === 'staff' && (
         <div className="space-y-2">
           <Label htmlFor="agency-select">Agency</Label>
-          <AgencyListDropdownUsersModal
+          <AgencyListDropdownRefactored
             agencies={agencies}
             setAgency={setAgency}
             userAgency={userAgency}
+            version="usermodal"
           />
         </div>
       )}
