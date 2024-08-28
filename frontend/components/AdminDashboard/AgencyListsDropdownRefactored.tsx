@@ -1,21 +1,14 @@
-import React, { useState } from 'react';
+import React, { useState, useMemo } from 'react';
 import { Agency } from '@/types/types';
 import { assignAgencyToQuestion } from '@/actions/userServices';
 import { ScrollArea } from '@/components/ui/scroll-area';
-import {
-  Command,
-  CommandEmpty,
-  CommandGroup,
-  CommandInput,
-  CommandItem,
-  CommandList,
-} from '@/components/ui/command';
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
 } from '@/components/ui/popover';
 import ChevronDown from '@/icons/ChevronDown';
+import { Input } from '../ui/input';
 
 interface AgencyListDropdownProps {
   selectedAgency: string;
@@ -24,30 +17,32 @@ interface AgencyListDropdownProps {
   agencies: Agency[];
   questionId: number;
   version: 'modal' | 'card';
-  activeQuestionId?: number | null;
-  setactiveQuestionId?: React.Dispatch<React.SetStateAction<number | null>>;
 }
 
-const AgencyListDropdownRefactored: React.FC<AgencyListDropdownProps> = ({
+const AgencyListDropdownEnhanced: React.FC<AgencyListDropdownProps> = ({
   selectedAgency,
   setSelectedAgency,
   setSuccessMessage,
   agencies,
   questionId,
   version,
-  activeQuestionId,
-  setactiveQuestionId,
 }) => {
   const [isOpen, setIsOpen] = useState(false);
+  const [searchQuery, setSearchQuery] = useState('');
+
+  const filteredAgencies = useMemo(() => {
+    const lowercasedQuery = searchQuery.toLowerCase();
+    return agencies.filter(
+      agency =>
+        agency.acronym.toLowerCase().includes(lowercasedQuery) ||
+        agency.name.toLowerCase().includes(lowercasedQuery),
+    );
+  }, [agencies, searchQuery]);
 
   const handleAgencyChange = (agencyId: number, agencyAcronym: string) => {
     setSelectedAgency(agencyAcronym);
     assignAgencyToQuestion(questionId, agencyId);
-    if (version === 'modal') {
-      setIsOpen(false);
-    } else if (version === 'card' && setactiveQuestionId) {
-      setactiveQuestionId(null);
-    }
+    setIsOpen(false);
     if (agencyAcronym !== 'Unassigned') {
       setSuccessMessage(
         `Successfully assigned to ${agencyAcronym}. Their PIC will be able to answer this question.`,
@@ -55,26 +50,11 @@ const AgencyListDropdownRefactored: React.FC<AgencyListDropdownProps> = ({
     } else {
       setSuccessMessage('');
     }
+    setSearchQuery('');
   };
-
-  const handleDropdownToggle = () => {
-    if (version === 'modal') {
-      setIsOpen(!isOpen);
-    } else if (version === 'card' && setactiveQuestionId) {
-      if (questionId === activeQuestionId) {
-        setactiveQuestionId(null);
-      } else {
-        setactiveQuestionId(questionId);
-      }
-    }
-    setSuccessMessage('');
-  };
-
-  const isDropdownOpen =
-    version === 'modal' ? isOpen : questionId === activeQuestionId;
 
   return (
-    <Popover open={isDropdownOpen} onOpenChange={handleDropdownToggle}>
+    <Popover open={isOpen} onOpenChange={setIsOpen}>
       <PopoverTrigger asChild>
         <div
           className={`
@@ -86,54 +66,54 @@ const AgencyListDropdownRefactored: React.FC<AgencyListDropdownProps> = ({
             }
           `}
         >
-          <div className="pr-2 truncate">
-            {(!isDropdownOpen || version === 'modal') && selectedAgency}
-          </div>
+          <div className="pr-2 truncate">{selectedAgency}</div>
           <ChevronDown />
         </div>
       </PopoverTrigger>
       <PopoverContent
         className={`p-0 rounded-[14px] top-[-48px] relative 
-        ${version === 'modal' ? 'md:max-w-[616px]  w-[616px]' : 'md:min-w-[320px] w-[320px]'}`}
+        ${version === 'modal' ? 'md:max-w-[616px] w-[616px]' : 'md:min-w-[320px] w-[320px]'}`}
         align="start"
       >
-        <Command className="w-full">
-          <CommandInput
+        <div className="p-2">
+          <Input
+            type="text"
+            value={searchQuery}
+            onChange={e => setSearchQuery(e.target.value)}
             placeholder="Search for agency name"
-            className={`${version === 'card' ? 'h-8' : 'h-10'}`}
+            className={`w-full p-2 border border-gray-300 rounded-md ${version === 'card' ? 'h-8' : 'h-10'}`}
           />
-          <CommandList>
-            <CommandEmpty>No agency found.</CommandEmpty>
-            <CommandGroup>
-              <ScrollArea className="h-[160px] w-full pr-2 scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-transparent hover:scrollbar-thumb-gray-400">
-                <div className="pr-1">
-                  <CommandItem
-                    onSelect={() => handleAgencyChange(0, 'Unassigned')}
-                  >
-                    Unassigned
-                  </CommandItem>
-                  {agencies.map(agency => (
-                    <CommandItem
-                      key={agency.id}
-                      onSelect={() =>
-                        handleAgencyChange(agency.id, agency.acronym)
-                      }
-                      className="flex flex-row items-center py-2"
-                    >
-                      <div className="font-medium mr-2">{agency.acronym}</div>
-                      <div className="text-dim-500 text-xs truncate w-0 flex-1">
-                        {agency.name}
-                      </div>
-                    </CommandItem>
-                  ))}
+        </div>
+        <div className="p-2 pt-0">
+          <ScrollArea className="h-[160px] w-full pr-1 pt-0">
+            <div className="pr-2">
+              <div
+                onClick={() => handleAgencyChange(0, 'Unassigned')}
+                className="font-medium p-2 hover:bg-washed-100 cursor-pointer rounded-md text-sm h-8 items-center flex"
+              >
+                Unassigned
+              </div>
+
+              {filteredAgencies.map(agency => (
+                <div
+                  key={agency.id}
+                  onClick={() => handleAgencyChange(agency.id, agency.acronym)}
+                  className="flex flex-row items-center p-2 hover:bg-gray-100 cursor-pointer rounded-md h-8"
+                >
+                  <div className="font-medium mr-2 text-sm">
+                    {agency.acronym}
+                  </div>
+                  <div className="text-dim-500 text-xs truncate w-0 flex-1">
+                    {agency.name}
+                  </div>
                 </div>
-              </ScrollArea>
-            </CommandGroup>
-          </CommandList>
-        </Command>
+              ))}
+            </div>
+          </ScrollArea>
+        </div>
       </PopoverContent>
     </Popover>
   );
 };
 
-export default AgencyListDropdownRefactored;
+export default AgencyListDropdownEnhanced;
