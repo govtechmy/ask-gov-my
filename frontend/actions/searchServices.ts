@@ -133,7 +133,7 @@ export async function searchQuestionsWithPagination(
   try {
     const embedding = await getEmbedding(query);
 
-    const result = await client.search({
+    const result = await clientf().search({
       index: 'questions',
       body: {
         query: {
@@ -200,6 +200,7 @@ export async function searchQuestionsWithPagination(
     };
   }
 }
+
 
 export async function getRelatedQuestions(questionText: string) {
   try {
