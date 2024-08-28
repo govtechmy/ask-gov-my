@@ -3,13 +3,7 @@ import { render } from '@react-email/render';
 import nodemailer from 'nodemailer';
 import { JSXElementConstructor, ReactElement } from 'react';
 
-const sesClient = new SESClient({
-  region: process.env.AWS_REGION || 'us-east-1',
-  credentials: {
-    accessKeyId: process.env.AWS_ACCESS_KEY_ID || '',
-    secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY || '',
-  },
-});
+const sesClient = new SESClient({});
 
 export const sendEmail = async ({
   email,
