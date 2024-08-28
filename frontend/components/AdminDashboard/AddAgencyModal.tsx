@@ -40,7 +40,16 @@ const AddAgencyModal: React.FC<AddAgencyModalProps> = ({
           return;
         }
         try {
-          const url = await uploadFile(file);
+          const res = await fetch(`/api/presign?fileName=${file.name}`);
+          const { presignedUrl, url } = await res.json();
+          const uploadRes = await fetch(presignedUrl, {
+            method: 'PUT',
+            body: file,
+          });
+          if (!uploadRes.ok) {
+            return;
+            // TODO: better error catching
+          }
           setLogoUrl(url);
         } catch (err) {
           if (err instanceof Error) {

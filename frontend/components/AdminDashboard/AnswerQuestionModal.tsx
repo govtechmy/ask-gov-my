@@ -108,7 +108,16 @@ const AnswerQuestionModal = ({
     try {
       const attachmentUrls: string[] = [];
       for (const file of attachments) {
-        const url = await uploadFile(file);
+        const res = await fetch(`/api/presign?fileName=${file.name}`);
+        const { presignedUrl, url } = await res.json();
+        const uploadRes = await fetch(presignedUrl, {
+          method: 'PUT',
+          body: file,
+        });
+        if (!uploadRes.ok) {
+          return;
+          // TODO: better error catching
+        }
         attachmentUrls.push(url);
       }
 
