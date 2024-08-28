@@ -11,6 +11,7 @@ import { Agency } from '@/types/types';
 import { Input } from '../ui/input';
 import { ScrollArea } from '../ui/scroll-area';
 import { Popover, PopoverContent, PopoverTrigger } from '../ui/popover';
+import { CommandInput } from '../ui/command';
 
 interface AgencyListDropdownProps {
   agencies: Agency[];
@@ -114,49 +115,46 @@ const AgencyListDropdownUsersModal: React.FC<AgencyListDropdownProps> = ({
           </div>
         </div>
       </PopoverTrigger>
+
       <PopoverContent className="w-[var(--radix-popover-trigger-width)] p-0 border-0 rounded-lg">
-        <div className="rounded-lg border bg-background shadow-md">
-          <div className="p-2 bg-white rounded-md">
-            <div className="relative">
-              <Input
-                type="text"
-                placeholder="Search for agency name"
-                value={searchQuery}
-                onChange={handleSearchChange}
-                className="pr-8"
-              />
-              <Search className="absolute right-[10px] top-[10px] stroke-outline-400" />
+        {/* <CommandInput
+          placeholder="Search for agency name"
+          value={searchQuery}
+        ></CommandInput> */}
+        <Input
+          type="text"
+          placeholder="Search for agency name"
+          value={searchQuery}
+          onChange={handleSearchChange}
+          className="pr-8"
+        />
+
+        <ScrollArea className="h-[170px]">
+          <div className="p-2">
+            <div
+              className="flex h-8 cursor-pointer items-center rounded-md px-2 text-sm hover:bg-accent hover:text-accent-foreground"
+              onClick={() => handleAgencyChange(0, 'Unassigned', '')}
+            >
+              Unassigned
             </div>
-          </div>
-          <ScrollArea className="h-[170px]">
-            <div className="p-2">
+            {filteredAgencies.map(agency => (
               <div
+                key={agency.id}
                 className="flex h-8 cursor-pointer items-center rounded-md px-2 text-sm hover:bg-accent hover:text-accent-foreground"
-                onClick={() => handleAgencyChange(0, 'Unassigned', '')}
+                onClick={() =>
+                  handleAgencyChange(agency.id, agency.acronym, agency.name)
+                }
+                onMouseEnter={() =>
+                  handleMouseEnter(agency.id, agency.acronym, agency.name)
+                }
+                onMouseLeave={handleMouseLeave}
               >
-                Unassigned
+                {agency.acronym}
+                <span className="ml-2 text-xs text-dim-500">{agency.name}</span>
               </div>
-              {filteredAgencies.map(agency => (
-                <div
-                  key={agency.id}
-                  className="flex h-8 cursor-pointer items-center rounded-md px-2 text-sm hover:bg-accent hover:text-accent-foreground"
-                  onClick={() =>
-                    handleAgencyChange(agency.id, agency.acronym, agency.name)
-                  }
-                  onMouseEnter={() =>
-                    handleMouseEnter(agency.id, agency.acronym, agency.name)
-                  }
-                  onMouseLeave={handleMouseLeave}
-                >
-                  {agency.acronym}
-                  <span className="ml-2 text-xs text-dim-500">
-                    {agency.name}
-                  </span>
-                </div>
-              ))}
-            </div>
-          </ScrollArea>
-        </div>
+            ))}
+          </div>
+        </ScrollArea>
       </PopoverContent>
     </Popover>
   );
