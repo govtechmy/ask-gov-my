@@ -18,7 +18,7 @@ interface AgencyListDropdownProps {
   userAgency?: number | null;
 }
 
-const AgencyListDropdownUsers: React.FC<AgencyListDropdownProps> = ({
+const AgencyListDropdownUsersModal: React.FC<AgencyListDropdownProps> = ({
   agencies,
   setAgency,
   userAgency,
@@ -162,4 +162,4 @@ const AgencyListDropdownUsers: React.FC<AgencyListDropdownProps> = ({
   );
 };
 
-export default AgencyListDropdownUsers;
+export default AgencyListDropdownUsersModal;
