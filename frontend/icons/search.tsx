@@ -1,5 +1,5 @@
 export default function Search({
-  strokeWidth = 1.5,
+  strokeWidth = 2.2,
   className = '',
   width = '20',
   height = '20',
