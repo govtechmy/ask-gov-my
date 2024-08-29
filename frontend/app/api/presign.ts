@@ -32,7 +32,7 @@ export async function GET(request: NextRequest) {
     'putObject';
 
   if (!fileName) {
-    return Response.json(
+    return NextResponse.json(
       {
         error: {
           message: 'File name query parameter is compulsory',

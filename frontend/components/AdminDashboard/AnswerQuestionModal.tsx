@@ -1,6 +1,5 @@
 'use client';
 
-import { uploadFile } from '@/actions/fileServices';
 import { submitAnswer, saveQuestionAsDraft } from '@/actions/userServices';
 import { Question } from '@/types/types';
 import Close from '@/icons/close';
@@ -14,6 +13,7 @@ import AttachmentUpload from './AttachmentUpload';
 import React, { useEffect, useRef, useState } from 'react';
 import TipTap from '../Editor/TipTap';
 import { fetchFileSizes, formatDate } from '@/actions/utils';
+import { getPresignedUrl, uploadFile } from '@/lib/uploadUtils';
 
 interface AnswerQuestionModalProps {
   question: Question;
@@ -74,17 +74,15 @@ const AnswerQuestionModal = ({
     try {
       const attachmentUrls: string[] = [];
       for (const file of attachments) {
-        const res = await fetch(`/api/presign?fileName=${file.name}`);
-        const { presignedUrl, url } = await res.json();
-        const uploadRes = await fetch(presignedUrl, {
-          method: 'PUT',
-          body: file,
-        });
-        if (!uploadRes.ok) {
-          return;
-          // TODO: better error catching
+        const uploadSuccess = await uploadFile(file);
+        if (uploadSuccess) {
+          try {
+            const url = await getPresignedUrl(file.name, 'getObject');
+            attachmentUrls.push(url);
+          } catch (error) {
+            console.error('Error getting presigned URL:', error);
+          }
         }
-        attachmentUrls.push(url);
       }
 
       await submitAnswer(question.id, answer, [
