@@ -12,6 +12,14 @@ import { Button } from '../ui/button';
 import { Input } from '../ui/input';
 import { Label } from '../ui/label';
 import { generateHexColor } from '@/actions/utils';
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogFooter,
+  DialogDescription,
+  DialogTitle,
+} from '../ui/dialog';
 
 interface AddUserModalProps {
   isOpen: boolean;
@@ -72,38 +80,39 @@ const AddUserModal: React.FC<AddUserModalProps> = ({
     }
   };
 
-  if (!isOpen) return null;
-
   return (
-    <div className="z-20 fixed inset-0 bg-gray-900 flex items-center justify-center bg-opacity-70">
-      <div className="bg-white rounded-xl shadow-lg w-[600px]">
-        <div className="flex border-b-[1px] border-outline-200">
-          <div className="text-black-900 font-semibold text-lg leading-[26px] ml-6 mb-[16px] mt-6 mr-3 h-[26px] w-[350px]">
-            Add new user
-          </div>
-        </div>
-        <div>
-          <div className="m-6">
-            <Label>Full name</Label>
-            <Input
-              type="text"
-              value={name}
-              required
-              onChange={e => handleNameChange(e, setName, setNameError)}
-            ></Input>
-            {nameError && (
-              <div className="text-red-500 text-sm mb-4">{nameError}</div>
-            )}
-            <Label>Email</Label>
-            <Input
-              type="email"
-              value={email}
-              required
-              onChange={e => handleEmailChange(e, setEmail, setEmailError)}
-            ></Input>
-            {emailError && (
-              <div className="text-red-500 text-sm mb-4">{emailError}</div>
-            )}
+    <Dialog open={isOpen} onOpenChange={onClose}>
+      <DialogContent hideCloseButton className="w-[600px] p-0 gap-0">
+        <DialogHeader className="flex border-b-[1px] border-outline-200">
+          <DialogTitle className="p-6 pb-4">Add new user</DialogTitle>
+        </DialogHeader>
+        <DialogDescription className="p-6 border-y-[1px] border-outline-200">
+          <div className="space-y-4">
+            <div className="space-y-2">
+              <Label>Full name</Label>
+              <Input
+                type="text"
+                value={name}
+                required
+                onChange={e => handleNameChange(e, setName, setNameError)}
+              />
+              {nameError && (
+                <div className="text-red-500 text-sm mb-4">{nameError}</div>
+              )}
+            </div>
+            <div className="space-y-2">
+              <Label>Email</Label>
+              <Input
+                type="email"
+                value={email}
+                required
+                onChange={e => handleEmailChange(e, setEmail, setEmailError)}
+              />
+              {emailError && (
+                <div className="text-red-500 text-sm mb-4">{emailError}</div>
+              )}
+            </div>
+
             <DropdownRole
               agencies={agencies}
               setRole={setRole}
@@ -111,21 +120,19 @@ const AddUserModal: React.FC<AddUserModalProps> = ({
               roleEmpty={roleEmpty}
             />
           </div>
-        </div>
-        <div>
-          <div className="py-6 flex justify-end pr-6 border-t-[1px] border-outline-200">
-            <Button variant={'secondary'} onClick={onClose}>
-              Cancel
-            </Button>
-            <Button variant={'primary'} onClick={handleSubmit}>
-              Save
-            </Button>
-          </div>
-          {success && <div className="text-green-500 mt-4">{success}</div>}
-          {error && <div className="text-red-500 mt-4">{error}</div>}
-        </div>
-      </div>
-    </div>
+        </DialogDescription>
+        <DialogFooter className="p-6 flex justify-end">
+          <Button variant={'secondary'} onClick={onClose}>
+            Cancel
+          </Button>
+          <Button variant={'primary'} onClick={handleSubmit}>
+            Save
+          </Button>
+        </DialogFooter>
+        {success && <div className="text-green-500 mt-4 px-6">{success}</div>}
+        {error && <div className="text-red-500 mt-4 px-6">{error}</div>}
+      </DialogContent>
+    </Dialog>
   );
 };
 
