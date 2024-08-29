@@ -5,6 +5,8 @@ from .serializers import (
     VerificationTokenSerializer)
 from django.shortcuts import get_object_or_404
 from django.utils import timezone
+from rest_framework.filters import SearchFilter
+from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework.pagination import PageNumberPagination
 from rest_framework import generics, status, pagination
 from .models import Question, Agency, Topic, User, Account, Session, VerificationToken
@@ -31,9 +33,44 @@ class CompletedQuestionListView(generics.ListCreateAPIView):
         return Question.objects.filter(state='completed').order_by('-likes', 'id')
 
 
-class AllQuestionListView(generics.ListCreateAPIView):
+class AllQuestionListView(generics.ListAPIView):
     queryset = Question.objects.all()
     serializer_class = QuestionSerializer
+    pagination_class = CustomPagination
+    filter_backends = [DjangoFilterBackend, SearchFilter]
+    filterset_fields = ['agency', 'state']
+    search_fields = ['question', 'agency__name', 'agency__acronym', 'topics__name']
+
+    def get_queryset(self):
+        queryset = super().get_queryset()
+        tab = self.request.query_params.get('tab', 'all')
+
+        if tab == 'unassigned':
+            queryset = queryset.filter(agency__isnull=True).exclude(state='spam')
+        elif tab == 'assigned':
+            queryset = queryset.filter(agency__isnull=False).exclude(state='spam')
+        elif tab == 'spam':
+            queryset = queryset.filter(state='spam')
+        else:
+            queryset = queryset.exclude(state='spam')
+
+        search_term = self.request.query_params.get('search', None)
+        if search_term:
+            queryset = queryset.filter(
+                question__icontains=search_term
+            )
+
+        return queryset
+
+    def list(self, request, *args, **kwargs):
+        queryset = self.filter_queryset(self.get_queryset())
+        page = self.paginate_queryset(queryset)
+        if page is not None:
+            serializer = self.get_serializer(page, many=True)
+            return self.get_paginated_response(serializer.data)
+
+        serializer = self.get_serializer(queryset, many=True)
+        return Response(serializer.data)
 
 
 class QuestionDetailView(generics.RetrieveAPIView):
