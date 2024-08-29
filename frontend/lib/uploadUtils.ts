@@ -20,7 +20,7 @@ export async function getPresignedUrl(
   fileName: string,
   operation: 'putObject' | 'getObject' = 'putObject',
 ) {
-  const dir = `uploads/${fileName}`;
+  const dir = `${fileName}`;
   const res = await fetch(
     `/api/presign?fileName=${dir}&operation=${operation}`,
   );

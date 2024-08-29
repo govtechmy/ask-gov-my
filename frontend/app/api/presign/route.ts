@@ -7,19 +7,19 @@ import { NextRequest, NextResponse } from 'next/server';
 import { getSignedUrl } from '@aws-sdk/s3-request-presigner';
 
 if (
-  !process.env.AWS_REGION ||
-  !process.env.S3_ACCESS_KEY ||
-  !process.env.S3_SECRET_KEY
+  !process.env.FIKRI_S3_REGION ||
+  !process.env.FIKRI_ACCESS_KEY_ID ||
+  !process.env.FIKRI_SECRET_ACCESS_KEY
 ) {
   throw new Error('Missing required S3 configuration environment variables');
 }
 
 // TODO: change this to the correct s3 key
 const client = new S3Client({
-  region: process.env.AWS_REGION,
+  region: process.env.FIKRI_S3_REGION,
   credentials: {
-    accessKeyId: process.env.S3_ACCESS_KEY,
-    secretAccessKey: process.env.S3_SECRET_KEY,
+    accessKeyId: process.env.FIKRI_ACCESS_KEY_ID,
+    secretAccessKey: process.env.FIKRI_SECRET_ACCESS_KEY,
   },
 });
 
@@ -59,10 +59,10 @@ export async function GET(request: NextRequest) {
 async function generatePresignedUrl(
   path: string,
   operation: 'getObject' | 'putObject' = 'putObject',
-  expires: number = 60,
+  expires: number = 3600,
 ): Promise<string> {
   const params = {
-    Bucket: process.env.S3_BUCKET_NAME,
+    Bucket: process.env.FIKRI_BUCKET,
     Key: path,
   };
 
@@ -71,5 +71,6 @@ async function generatePresignedUrl(
       ? new GetObjectCommand(params)
       : new PutObjectCommand(params);
 
-  return await getSignedUrl(client, command, { expiresIn: expires });
+  const url = await getSignedUrl(client, command, { expiresIn: expires });
+  return url;
 }
