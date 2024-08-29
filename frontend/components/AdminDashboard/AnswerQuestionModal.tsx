@@ -106,17 +106,15 @@ const AnswerQuestionModal = ({
     try {
       const attachmentUrls: string[] = [];
       for (const file of attachments) {
-        const res = await fetch(`/api/presign?fileName=${file.name}`);
-        const { presignedUrl, url } = await res.json();
-        const uploadRes = await fetch(presignedUrl, {
-          method: 'PUT',
-          body: file,
-        });
-        if (!uploadRes.ok) {
-          return;
-          // TODO: better error catching
+        const uploadSuccess = await uploadFile(file);
+        if (uploadSuccess) {
+          try {
+            const url = await getPresignedUrl(file.name, 'getObject');
+            attachmentUrls.push(url);
+          } catch (error) {
+            console.error('Error getting presigned URL:', error);
+          }
         }
-        attachmentUrls.push(url);
       }
 
       await saveQuestionAsDraft(question.id, answer, [
@@ -142,6 +140,7 @@ const AnswerQuestionModal = ({
   // logo url for sample
   const logo_url =
     'https://ask-gov.s3.ap-southeast-2.amazonaws.com/uploads/1721638339654-images.jpeg';
+  // TODO: sample logo url should be serve as static file in Next instead of through s3
 
   if (!isOpen) return null;
 

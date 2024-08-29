@@ -1,13 +1,12 @@
 'use client';
 
 import React, { useState } from 'react';
-import { useTranslations } from 'next-intl';
-import { uploadFile } from '@/actions/fileServices';
 import { updateAgency } from '@/actions/userServices';
 import ImageNext from 'next/image';
 import Pencil from '@/icons/pencil';
 import Asklogo from '@/icons/asklogo';
 import { Agency } from '@/types/types';
+import { getPresignedUrl, uploadFile } from '@/lib/uploadUtils';
 
 interface AgencySettingsModalProps {
   agency: Agency;
@@ -40,17 +39,15 @@ const AgencySettingsModal: React.FC<AgencySettingsModalProps> = ({
           return;
         }
         try {
-          const res = await fetch(`/api/presign?fileName=${file.name}`);
-          const { presignedUrl, url } = await res.json();
-          const uploadRes = await fetch(presignedUrl, {
-            method: 'PUT',
-            body: file,
-          });
-          if (!uploadRes.ok) {
-            return;
-            // TODO: better error catching
+          const uploadSuccess = await uploadFile(file);
+          if (uploadSuccess) {
+            try {
+              const url = await getPresignedUrl(file.name, 'getObject');
+              setLogoUrl(url);
+            } catch (error) {
+              console.error('Error getting presigned URL:', error);
+            }
           }
-          setLogoUrl(url);
         } catch (err) {
           if (err instanceof Error) {
             setError(err.message);
