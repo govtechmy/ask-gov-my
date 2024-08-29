@@ -3,7 +3,7 @@ import {
   PutObjectCommand,
   S3Client,
 } from '@aws-sdk/client-s3';
-import { NextRequest } from 'next/server';
+import { NextRequest, NextResponse } from 'next/server';
 import { getSignedUrl } from '@aws-sdk/s3-request-presigner';
 
 if (
@@ -27,6 +27,9 @@ export async function GET(request: NextRequest) {
   const { searchParams } = request.nextUrl;
 
   const fileName = searchParams.get('fileName');
+  const operation =
+    (searchParams.get('operation') as 'getObject' | 'putObject' | null) ??
+    'putObject';
 
   if (!fileName) {
     return Response.json(
@@ -41,17 +44,32 @@ export async function GET(request: NextRequest) {
 
   const file = `uploads/${Date.now()}-${fileName}`;
 
-  const putCommand = new PutObjectCommand({
-    Bucket: process.env.S3_BUCKET_NAME,
-    Key: file,
-  });
+  try {
+    const url = await generatePresignedUrl(file, operation);
+    return NextResponse.json({ presignedUrl: url });
+  } catch (error) {
+    console.error('Error generating pre-signed URL:', error);
+    return NextResponse.json(
+      { error: { message: 'Failed to generate pre-signed URL' } },
+      { status: 500 },
+    );
+  }
+}
 
-  const getCommand = new GetObjectCommand({
+async function generatePresignedUrl(
+  path: string,
+  operation: 'getObject' | 'putObject' = 'putObject',
+  expires: number = 60,
+): Promise<string> {
+  const params = {
     Bucket: process.env.S3_BUCKET_NAME,
-    Key: file,
-  });
+    Key: path,
+  };
 
-  const url = await getSignedUrl(client, putCommand, { expiresIn: 60 });
-  const getUrl = await getSignedUrl(client, getCommand, { expiresIn: 60 });
-  return Response.json({ presignedUrl: url, getUrl });
+  const command =
+    operation === 'getObject'
+      ? new GetObjectCommand(params)
+      : new PutObjectCommand(params);
+
+  return await getSignedUrl(client, command, { expiresIn: expires });
 }
