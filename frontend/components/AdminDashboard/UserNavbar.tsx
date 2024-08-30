@@ -147,8 +147,8 @@ const UserNavbar: React.FC<UserNavbarProps> = ({ setSearchTerm, agencies }) => {
         <Toast
           message="New user has been added!"
           icon={<TickCheckCircle />}
-          underlineColor="bg-[#16A34A]"
-          messageColor="text-[#15803D] dark:text-[#16A34A]"
+          underlineColor="bg-success-600"
+          messageColor="text-success-700"
           show={showAddUserToast}
           onClose={() => setShowAddUserToast(false)}
         />
