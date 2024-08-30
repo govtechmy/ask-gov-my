@@ -42,10 +42,26 @@ const config: Config = {
         danger: {
           600: colors.red[600],
           700: colors.red[700],
-          300: 'oklch(var(--danger-300)/<alpha-value>)',
-          200: 'oklch(var(--danger-200)/<alpha-value>)',
-          100: 'oklch(var(--danger-200)/<alpha-value>)',
-          50: 'oklch(var(--danger-50)/<alpha-value>)',
+          300: 'oklch(var(--myds-danger-300)/<alpha-value>)',
+          200: 'oklch(var(--myds-danger-200)/<alpha-value>)',
+          100: 'oklch(var(--myds-danger-100)/<alpha-value>)',
+          50: 'oklch(var(--myds-danger-50)/<alpha-value>)',
+        },
+        warning: {
+          700: 'oklch(var(--myds-warning-700)/<alpha-value>)',
+          600: 'oklch(var(--myds-warning-600)/<alpha-value>)',
+          300: 'oklch(var(--myds-warning-300)/<alpha-value>)',
+          200: 'oklch(var(--myds-warning-200)/<alpha-value>)',
+          100: 'oklch(var(--myds-warning-100)/<alpha-value>)',
+          50: 'oklch(var(--myds-warning-50)/<alpha-value>)',
+        },
+        success: {
+          700: 'oklch(var(--myds-success-700)/<alpha-value>)',
+          600: 'oklch(var(--myds-success-600)/<alpha-value>)',
+          300: 'oklch(var(--myds-success-300)/<alpha-value>)',
+          200: 'oklch(var(--myds-success-200)/<alpha-value>)',
+          100: 'oklch(var(--myds-success-100)/<alpha-value>)',
+          50: 'oklch(var(--myds-success-50)/<alpha-value>)',
         },
         askmygovtextbrand: {
           600: 'oklch(var(--askmygov-text-brand-600))',
@@ -56,6 +72,8 @@ const config: Config = {
         foreground: {
           DEFAULT: 'oklch(var(--myds-black-900))',
           danger: 'oklch(var(--text-danger-600))',
+          warning: 'oklch(var(--text-warning-700))',
+          success: 'oklch(var(--text-success-700))',
         },
         background: {
           DEFAULT: 'oklch(var(--myds-background-50))',

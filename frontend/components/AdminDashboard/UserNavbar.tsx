@@ -31,6 +31,7 @@ const UserNavbar: React.FC<UserNavbarProps> = ({
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isFocused, setIsFocused] = useState(false);
   const [showAddUserToast, setShowAddUserToast] = useState(false);
+  const [showFailAddUserToast, setShowFailAddUserToast] = useState(false);
 
   const AGENCY_TO_UUID = getDynamicAgencyMap();
 
@@ -115,7 +116,7 @@ const UserNavbar: React.FC<UserNavbarProps> = ({
             onChange={e => setSearchTerm(e.target.value)}
           />
           <div className="h-4 w-4 items-center justify-center flex">
-            <Search strokeWidth={1.88} className="stroke-[#A1A1AA]" />
+            <Search strokeWidth={1.88} className="stroke-[#A1A1AA] " />
           </div>
         </div>
         <div
@@ -139,6 +140,16 @@ const UserNavbar: React.FC<UserNavbarProps> = ({
       />
 
       {showAddUserToast && (
+        <Toast
+          message="New user has been added!"
+          icon={<TickCheckCircle />}
+          underlineColor="bg-[#16A34A]"
+          messageColor="text-[#15803D] dark:text-[#16A34A]"
+          show={showAddUserToast}
+          onClose={() => setShowAddUserToast(false)}
+        />
+      )}
+      {showFailAddUserToast && (
         <Toast
           message="New user has been added!"
           icon={<TickCheckCircle />}
