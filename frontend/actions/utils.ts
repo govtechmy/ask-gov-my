@@ -1,19 +1,41 @@
+import { getPresignedUrl } from '@/lib/uploadUtils';
+
 export async function fetchFileSizes(attachments: string[]): Promise<number[]> {
   const fileSizes: number[] = [];
 
   try {
     await Promise.all(
-      attachments.map(function (attachment) {
-        return fetch(attachment, { method: 'GET' })
-          .then(function (response) {
-            const contentLength = response.headers.get('Content-Length');
-            const size = contentLength ? parseInt(contentLength) : 0;
-            fileSizes.push(size);
-          })
-          .catch(function (error) {
-            console.error('Failed to fetch file size', error);
-            fileSizes.push(0); // Default size if fetch fails
+      attachments.map(async function (attachment) {
+        // return fetch(attachment, { method: 'GET' })
+        //   .then(function (response) {
+        //     const contentLength = response.headers.get('Content-Length');
+        //     const size = contentLength ? parseInt(contentLength) : 0;
+        //     fileSizes.push(size);
+        //   })
+        //   .catch(function (error) {
+        //     console.error('Failed to fetch file size', error);
+        //     fileSizes.push(0); // Default size if fetch fails
+        //   });
+        try {
+          const url = await getPresignedUrl(attachment, 'getObject');
+          const response = await fetch(url, {
+            method: 'GET',
+            headers: { Range: 'bytes=0-0' },
           });
+
+          if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+          }
+          const contentRange = response.headers.get('Content-Range');
+          console.log(response);
+          console.log(contentRange);
+          // const contentLength = response.headers.get('Content-Length');
+          // const size = contentLength ? parseInt(contentLength, 10) : 0;
+          // fileSizes.push(size);
+          fileSizes.push(0);
+        } catch (error) {
+          fileSizes.push(0);
+        }
       }),
     );
     return fileSizes;

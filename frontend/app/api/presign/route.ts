@@ -9,7 +9,8 @@ import { getSignedUrl } from '@aws-sdk/s3-request-presigner';
 if (
   !process.env.FIKRI_S3_REGION ||
   !process.env.FIKRI_ACCESS_KEY_ID ||
-  !process.env.FIKRI_SECRET_ACCESS_KEY
+  !process.env.FIKRI_SECRET_ACCESS_KEY ||
+  !process.env.FIKRI_BUCKET
 ) {
   throw new Error('Missing required S3 configuration environment variables');
 }
@@ -42,7 +43,7 @@ export async function GET(request: NextRequest) {
     );
   }
 
-  const file = `uploads/${Date.now()}-${fileName}`;
+  const file = `uploads/${fileName}`;
 
   try {
     const url = await generatePresignedUrl(file, operation);

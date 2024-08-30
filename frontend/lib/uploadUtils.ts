@@ -1,6 +1,16 @@
-export async function uploadFile(file: File): Promise<boolean> {
+interface PresignResponse {
+  presignedUrl: string;
+  error?: {
+    message: string;
+  };
+}
+
+export async function uploadFile(
+  file: File,
+  fileName: string,
+): Promise<boolean> {
   try {
-    const putPresignedUrl = await getPresignedUrl(file.name);
+    const putPresignedUrl = await getPresignedUrl(fileName);
 
     const uploadRes = await fetch(putPresignedUrl, {
       method: 'PUT',
@@ -19,15 +29,14 @@ export async function uploadFile(file: File): Promise<boolean> {
 export async function getPresignedUrl(
   fileName: string,
   operation: 'putObject' | 'getObject' = 'putObject',
-) {
-  const dir = `${fileName}`;
+): Promise<string> {
   const res = await fetch(
-    `/api/presign?fileName=${dir}&operation=${operation}`,
+    `/api/presign?fileName=${fileName}&operation=${operation}`,
   );
   if (!res.ok) {
     throw new Error(`HTTP error! status: ${res.status}`);
   }
-  const data = await res.json();
+  const data: PresignResponse = await res.json();
   if (data.error) {
     throw new Error(data.error.message);
   }
