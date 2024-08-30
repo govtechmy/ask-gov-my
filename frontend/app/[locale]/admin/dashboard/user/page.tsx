@@ -99,13 +99,7 @@ const ManageUsers: React.FC = () => {
 
   return (
     <div className="container max-w-screen-lg pt-3 mx-auto px-6">
-      <UserNavbar
-        setSearchTerm={setSearchTerm}
-        agencies={agencies}
-        onAddUser={function (): void {
-          throw new Error('Function not implemented.');
-        }}
-      />
+      <UserNavbar setSearchTerm={setSearchTerm} agencies={agencies} />
       {/* userNavbar prop didnt pass properly, something leftover, either make it as alternative or needed */}
       <div className="h-6"></div>
       {filteredUsers.length === 0 ? (

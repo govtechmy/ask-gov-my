@@ -25,16 +25,18 @@ interface AddUserModalProps {
   isOpen: boolean;
   onClose: () => void;
   agencies: Agency[];
-  onAddUser: any;
   handleAddUserToast: Function;
+  handleFailAddUserToast: Function;
+  handleErrorToast: Function;
 }
 
 const AddUserModal: React.FC<AddUserModalProps> = ({
   isOpen,
   onClose,
   agencies,
-  onAddUser,
   handleAddUserToast,
+  handleFailAddUserToast,
+  handleErrorToast,
 }) => {
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
@@ -42,19 +44,16 @@ const AddUserModal: React.FC<AddUserModalProps> = ({
     'unassigned',
   );
   const [agency, setAgency] = useState<number | null>(null);
-  const [success, setSuccess] = useState<string | null>(null);
-  const [error, setError] = useState<string | null>(null);
   const [nameError, setNameError] = useState<string | null>(null);
   const [emailError, setEmailError] = useState<string | null>(null);
   const [roleEmpty, setRoleEmpty] = useState<boolean>(false);
 
   const handleSubmit = async () => {
-    if (nameError || emailError) {
-      setError('Please fix the errors before submitting');
-      return;
-    }
     if (role === 'unassigned') {
       setRoleEmpty(true);
+      return;
+    }
+    if (nameError || emailError) {
       return;
     }
     try {
@@ -68,15 +67,14 @@ const AddUserModal: React.FC<AddUserModalProps> = ({
       );
       if (response.success) {
         handleAddUserToast();
-        setError(null);
-        onClose();
       } else {
-        setError(response.message || 'Failed to add user');
-        setSuccess(null);
+        handleFailAddUserToast();
       }
     } catch (error) {
-      setError('An unexpected error occurred');
-      setSuccess(null);
+      handleErrorToast();
+      throw error;
+    } finally {
+      onClose();
     }
   };
 
@@ -95,6 +93,7 @@ const AddUserModal: React.FC<AddUserModalProps> = ({
                 value={name}
                 required
                 onChange={e => handleNameChange(e, setName, setNameError)}
+                className={nameError ? 'border-danger-300' : ''}
               />
               {nameError && (
                 <div className="text-danger-600 text-sm mb-4">{nameError}</div>
@@ -107,6 +106,7 @@ const AddUserModal: React.FC<AddUserModalProps> = ({
                 value={email}
                 required
                 onChange={e => handleEmailChange(e, setEmail, setEmailError)}
+                className={emailError ? 'border-danger-300' : ''}
               />
               {emailError && (
                 <div className="text-danger-600 text-sm mb-4">{emailError}</div>
@@ -129,10 +129,6 @@ const AddUserModal: React.FC<AddUserModalProps> = ({
             Save
           </Button>
         </DialogFooter>
-
-        {/*error && <div className="text-red-500 mt-4 px-6">{error}</div>} */}
-        {/* error throw error toast
-         sucess throw success toast */}
       </DialogContent>
     </Dialog>
   );
