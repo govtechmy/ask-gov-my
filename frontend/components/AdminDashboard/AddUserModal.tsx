@@ -129,8 +129,8 @@ const AddUserModal: React.FC<AddUserModalProps> = ({
             Save
           </Button>
         </DialogFooter>
-        {/* {success && <div className="text-green-500 mt-4 px-6">{success}</div>}
-        {error && <div className="text-red-500 mt-4 px-6">{error}</div>} */}
+
+        {/*error && <div className="text-red-500 mt-4 px-6">{error}</div>} */}
         {/* error throw error toast
          sucess throw success toast */}
       </DialogContent>
