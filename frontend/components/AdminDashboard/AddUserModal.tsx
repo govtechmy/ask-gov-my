@@ -83,7 +83,7 @@ const AddUserModal: React.FC<AddUserModalProps> = ({
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
       <DialogContent hideCloseButton className="w-[600px] p-0 gap-0">
-        <DialogHeader className="flex border-b-[1px] border-outline-200">
+        <DialogHeader>
           <DialogTitle className="p-6 pb-4">Add new user</DialogTitle>
         </DialogHeader>
         <DialogDescription className="p-6 border-y-[1px] border-outline-200">
@@ -97,7 +97,7 @@ const AddUserModal: React.FC<AddUserModalProps> = ({
                 onChange={e => handleNameChange(e, setName, setNameError)}
               />
               {nameError && (
-                <div className="text-red-500 text-sm mb-4">{nameError}</div>
+                <div className="text-danger-600 text-sm mb-4">{nameError}</div>
               )}
             </div>
             <div className="space-y-2">
@@ -109,7 +109,7 @@ const AddUserModal: React.FC<AddUserModalProps> = ({
                 onChange={e => handleEmailChange(e, setEmail, setEmailError)}
               />
               {emailError && (
-                <div className="text-red-500 text-sm mb-4">{emailError}</div>
+                <div className="text-danger-600 text-sm mb-4">{emailError}</div>
               )}
             </div>
 
@@ -129,8 +129,10 @@ const AddUserModal: React.FC<AddUserModalProps> = ({
             Save
           </Button>
         </DialogFooter>
-        {success && <div className="text-green-500 mt-4 px-6">{success}</div>}
-        {error && <div className="text-red-500 mt-4 px-6">{error}</div>}
+        {/* {success && <div className="text-green-500 mt-4 px-6">{success}</div>}
+        {error && <div className="text-red-500 mt-4 px-6">{error}</div>} */}
+        {/* error throw error toast
+         sucess throw success toast */}
       </DialogContent>
     </Dialog>
   );
