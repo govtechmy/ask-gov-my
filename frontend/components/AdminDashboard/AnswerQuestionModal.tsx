@@ -44,6 +44,7 @@ const AnswerQuestionModal = ({
       const fetchSizes = async () => {
         try {
           if (question.attachments) {
+            console.log(question.attachments);
             const sizes = await fetchFileSizes(question.attachments);
             setFileSizes(sizes.map(Number)); // Update state with file sizes
           }
@@ -69,16 +70,16 @@ const AnswerQuestionModal = ({
       prev.filter((_, i) => i !== index),
     );
   };
-
   const handleSubmit = async () => {
     try {
-      const attachmentUrls: string[] = [];
+      const attachmentArr: string[] = [];
       for (const file of attachments) {
-        const uploadSuccess = await uploadFile(file);
+        let renamedFile = `${Date.now()}-${file.name}`;
+        const uploadSuccess = await uploadFile(file, renamedFile);
         if (uploadSuccess) {
           try {
-            const url = await getPresignedUrl(file.name, 'getObject');
-            attachmentUrls.push(url);
+            const url = await getPresignedUrl(renamedFile, 'getObject');
+            attachmentArr.push(renamedFile);
           } catch (error) {
             console.error('Error getting presigned URL:', error);
           }
@@ -87,10 +88,11 @@ const AnswerQuestionModal = ({
 
       await submitAnswer(question.id, answer, [
         ...uploadedAttachments,
-        ...attachmentUrls,
+        ...attachmentArr,
       ]);
       setSuccess('Answer submitted successfully');
       setError(null);
+      setAttachments([]);
       onClose();
     } catch (err) {
       if (err instanceof Error) {
@@ -99,18 +101,21 @@ const AnswerQuestionModal = ({
         setError('An unexpected error occurred');
       }
       setSuccess(null);
+    } finally {
+      setSuccess(null);
     }
   };
 
   const handleSaveDraft = async () => {
     try {
-      const attachmentUrls: string[] = [];
+      const attachmentArr: string[] = [];
       for (const file of attachments) {
-        const uploadSuccess = await uploadFile(file);
+        let renamedFile = `${Date.now()}-${file.name}`;
+        const uploadSuccess = await uploadFile(file, renamedFile);
         if (uploadSuccess) {
           try {
             const url = await getPresignedUrl(file.name, 'getObject');
-            attachmentUrls.push(url);
+            attachmentArr.push(renamedFile);
           } catch (error) {
             console.error('Error getting presigned URL:', error);
           }
@@ -119,10 +124,11 @@ const AnswerQuestionModal = ({
 
       await saveQuestionAsDraft(question.id, answer, [
         ...uploadedAttachments,
-        ...attachmentUrls,
+        ...attachmentArr,
       ]);
       setSuccess('Draft saved successfully');
       setError(null);
+      setAttachments([]);
       onClose();
     } catch (err) {
       if (err instanceof Error) {
@@ -231,7 +237,7 @@ const AnswerQuestionModal = ({
                         <AttachmentUpload
                           attachments={attachments}
                           handleRemoveAttachment={handleRemoveAttachment}
-                        ></AttachmentUpload>
+                        />
                       </div>
                     )}
 
@@ -251,7 +257,7 @@ const AnswerQuestionModal = ({
                             handleRemoveUploadedAttachment
                           }
                           fileSizes={fileSizes}
-                        ></AttachmentDownload>
+                        />
                       </div>
                     )}
                     {uploadedAttachments.length == 0 && (
@@ -276,7 +282,10 @@ const AnswerQuestionModal = ({
           <button
             className="mr-3 h-[44px] w-[77px] border-[1px] border-outline-200 shadow-button rounded-lg 
               text-base items-center justify-center flex hover:cursor-pointer"
-            onClick={onClose}
+            onClick={() => {
+              setAttachments([]);
+              onClose();
+            }}
           >
             Cancel
           </button>

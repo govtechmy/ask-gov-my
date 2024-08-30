@@ -13,6 +13,7 @@ const AttachmentUpload: React.FC<AttachmentUploadProps> = ({
   attachments,
   handleRemoveAttachment,
 }) => {
+  console.log(attachments);
   return (
     <div className="flex flex-wrap gap-2">
       {attachments.map((file, index) => (
@@ -25,10 +26,14 @@ const AttachmentUpload: React.FC<AttachmentUploadProps> = ({
             <GetFileIcon fileName={file.name} />
           </div>
           <div>
-            <div className="text-black-900 text-sm font-normal truncate w-[94px]">
-              {file.name}
+            <div className="text-black-900 text-sm font-normal w-[94px]">
+              {file.name.length > 10
+                ? `${file.name.substring(0, 9)}...`
+                : file.name}
             </div>
-            <div className="text-dim-500 font-normal text-sm">size 1.2mb</div>
+            <div className="text-dim-500 font-normal text-sm">
+              {`size ${(file.size / (1024 * 1024)).toFixed(2)} MB`}
+            </div>
           </div>
           <Button
             variant={'cancel-box-red'}
