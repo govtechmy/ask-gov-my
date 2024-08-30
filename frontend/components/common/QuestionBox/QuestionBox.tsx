@@ -13,6 +13,7 @@ interface QuestionBoxProps {
   agencyList: Agency[];
   totalItems: number;
   totalPages: number;
+  currentPage: number;
   importFunction: Function;
   value?: number | string;
   secondValue?: string;
@@ -22,6 +23,7 @@ const QuestionBox: React.FC<QuestionBoxProps> = ({
   questions: initialQuestions,
   agencyMap,
   agencyList,
+  currentPage,
   totalPages,
   importFunction,
   value,
@@ -32,13 +34,6 @@ const QuestionBox: React.FC<QuestionBoxProps> = ({
   const router = useRouter();
   
   const itemsPerPage = 6;
-
-  const getCurrentPage = (): number => {
-    const page = searchParams.get('page');
-    return page ? parseInt(page, 10) : 1;
-  };
-
-  const currentPage = getCurrentPage();
 
   const handlePageChange = async (page: number) => {
     if (page >= 1 && page <= totalPages) {
@@ -53,7 +48,6 @@ const QuestionBox: React.FC<QuestionBoxProps> = ({
           : await importFunction(page, itemsPerPage);
       
       setQuestions(newQuestions);
-
       const params = new URLSearchParams(searchParams.toString());
       params.set('page', page.toString());
       router.push(`${window.location.pathname}?${params.toString()}`);
