@@ -8,39 +8,20 @@ interface PaginationProps {
   currentPage: number;
   totalPages: number;
   onPageChange: (page: number) => void;
-  itemsPerPage: number;
-  totalItems: number;
 }
 
 const Pagination: React.FC<PaginationProps> = ({
   currentPage,
   totalPages,
   onPageChange,
-  itemsPerPage,
-  totalItems,
 }) => {
-  const renderPageNumbers = () => {
+  const getPageNumbers = () => {
     const pageNumbers = [];
-    pageNumbers.push(
-      <button
-        key={1}
-        onClick={() => onPageChange(1)}
-        className={`rounded-lg h-10 w-10 ${
-          currentPage === 1
-            ? 'bg-[#F4EFFF] text-[#702FF9] dark:bg-[#201636] dark:text-[#9E70FF]'
-            : 'bg-transparent text-black-700 dark:text-[#D4D4D8]'
-        }`}
-      >
-        {1}
-      </button>,
-    );
 
-    if (currentPage > 1) {
-      pageNumbers.push(
-        <span key="ellipsis-start" className="px-2 py-2">
-          ...
-        </span>,
-      );
+    pageNumbers.push(1);
+
+    if (currentPage > 2) {
+      pageNumbers.push('ellipsis-start');
     }
 
     let startPage, endPage;
@@ -51,51 +32,55 @@ const Pagination: React.FC<PaginationProps> = ({
       startPage = Math.max(2, totalPages - 3);
       endPage = totalPages - 1;
     } else {
-      startPage = Math.max(2, currentPage - 1);
-      endPage = Math.min(currentPage + 1, totalPages - 1);
+      startPage = currentPage - 1;
+      endPage = currentPage + 1;
     }
 
     for (let i = startPage; i <= endPage; i++) {
-      pageNumbers.push(
-        <button
-          key={i}
-          onClick={() => onPageChange(i)}
-          className={`rounded-lg h-10 w-10 ${
-            i === currentPage
-              ? 'bg-[#F4EFFF] text-[#702FF9] dark:bg-[#201636] dark:text-[#9E70FF]'
-              : 'bg-transparent text-black-700 dark:text-[#D4D4D8]'
-          }`}
-        >
-          {i}
-        </button>,
-      );
+      pageNumbers.push(i);
     }
 
     if (currentPage < totalPages - 2) {
-      pageNumbers.push(
-        <span key="ellipsis-end" className="px-2 py-2 rounded-lg">
-          ...
-        </span>,
-      );
+      pageNumbers.push('ellipsis-end');
     }
 
     if (totalPages > 1) {
-      pageNumbers.push(
-        <button
-          key={totalPages}
-          onClick={() => onPageChange(totalPages)}
-          className={`rounded-lg h-10 w-10 ${
-            totalPages === currentPage
-              ? 'bg-[#F4EFFF] dark:bg-[#201636] text-[#702FF9] dark:text-[#9E70FF]'
-              : 'bg-transparent text-black-700 dark:text-[#D4D4D8]'
-          }`}
-        >
-          {totalPages}
-        </button>,
-      );
+      pageNumbers.push(totalPages);
     }
 
-    return <div className="flex rounded items-center">{pageNumbers}</div>;
+    return pageNumbers;
+  };
+
+  const renderPageNumbers = () => {
+    const pageNumbers = getPageNumbers();
+
+    return (
+      <div className="flex rounded items-center">
+        {pageNumbers.map((pageNumber, index) => {
+          if (typeof pageNumber === 'number') {
+            return (
+              <button
+                key={index}
+                onClick={() => onPageChange(pageNumber)}
+                className={`rounded-lg h-10 w-10 ${
+                  pageNumber === currentPage
+                    ? 'bg-[#F4EFFF] text-[#702FF9] dark:bg-[#201636] dark:text-[#9E70FF]'
+                    : 'bg-transparent text-black-700 dark:text-[#D4D4D8]'
+                }`}
+              >
+                {pageNumber}
+              </button>
+            );
+          } else {
+            return (
+              <span key={index} className="px-2 py-2">
+                ...
+              </span>
+            );
+          }
+        })}
+      </div>
+    );
   };
 
   return (
