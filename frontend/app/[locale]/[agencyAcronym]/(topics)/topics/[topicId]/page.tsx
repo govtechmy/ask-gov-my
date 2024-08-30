@@ -14,26 +14,28 @@ import BaseHeader from '@/components/common/Header/BaseHeader';
 import SearchNavbar from '@/components/common/SearchNavbar/SearchNavbar';
 import Masthead from '@/components/common/Header/Masthead';
 
-interface Props {
+interface TopicPageProps {
   params: {
     agencyAcronym: string;
     topicId: string;
     locale: string;
   };
+  searchParams: {
+    page?: string;
+  };
 }
 
-const TopicPage = async ({ params }: Props) => {
+const TopicPage = async ({ params, searchParams }: TopicPageProps) => {
   const { agencyAcronym, topicId, locale } = params;
+  const currentPage = searchParams.page ? parseInt(searchParams.page, 10) : 1;
+
   const agencyMap = await getDynamicAgencyMap();
   const agencyUUID = agencyMap[agencyAcronym.toUpperCase()];
 
-  const { questions, totalItems, totalPages, currentPage } =
-    await getQuestionsByTopicAndAgency(agencyUUID, topicId);
+  const { questions, totalItems, totalPages } = await getQuestionsByTopicAndAgency(agencyUUID, topicId, currentPage);
 
   const topics = await getTopicByAgency(parseInt(agencyUUID, 10));
-  const selectedTopic = topics.find(
-    topic => topic.id === parseInt(topicId, 10),
-  );
+  const selectedTopic = topics.find(topic => topic.id === parseInt(topicId, 10));
 
   const upperCaseAgencyAcronym = agencyAcronym.toUpperCase();
 
@@ -86,8 +88,8 @@ const TopicPage = async ({ params }: Props) => {
               agencyMap={agencyMap}
               agencyList={agencyList}
               totalItems={totalItems}
-              totalPages={totalPages}
               currentPage={currentPage}
+              totalPages={totalPages}
               importFunction={getQuestionsByTopicAndAgency}
               value={agencyUUID}
               secondValue={topicId}
