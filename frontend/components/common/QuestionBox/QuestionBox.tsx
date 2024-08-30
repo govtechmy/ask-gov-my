@@ -1,17 +1,17 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import QuestionCard from './QuestionCard';
 import Pagination from '@/components/ui/pagination';
 import { Question, Agency } from '@/types/types';
-
+import { useSearchParams } from 'next/navigation';
+import { useRouter } from '@/lib/i18n';
 interface QuestionBoxProps {
   questions: Question[];
   agencyMap: Record<string, string>;
   agencyList: Agency[];
   totalItems: number;
   totalPages: number;
-  currentPage: number;
   importFunction: Function;
   value?: number | string;
   secondValue?: string;
@@ -21,18 +21,23 @@ const QuestionBox: React.FC<QuestionBoxProps> = ({
   questions: initialQuestions,
   agencyMap,
   agencyList,
-  totalItems: initialTotalItems,
-  totalPages: initialTotalPages,
-  currentPage: initialCurrentPage,
+  totalPages,
   importFunction,
   value,
   secondValue,
 }) => {
   const [questions, setQuestions] = useState<Question[]>(initialQuestions);
-  const [currentPage, setCurrentPage] = useState(initialCurrentPage);
-  const [totalItems, setTotalItems] = useState(initialTotalItems);
-  const [totalPages, setTotalPages] = useState(initialTotalPages);
+  const searchParams = useSearchParams();
+  const router = useRouter();
+  
   const itemsPerPage = 6;
+
+  const getCurrentPage = (): number => {
+    const page = searchParams.get('page');
+    return page ? parseInt(page, 10) : 1;
+  };
+
+  const currentPage = getCurrentPage();
 
   const handlePageChange = async (page: number) => {
     if (page >= 1 && page <= totalPages) {
@@ -45,10 +50,12 @@ const QuestionBox: React.FC<QuestionBoxProps> = ({
         : value
           ? await importFunction(value, page, itemsPerPage)
           : await importFunction(page, itemsPerPage);
+      
       setQuestions(newQuestions);
-      setCurrentPage(page);
-      setTotalItems(newTotalItems);
-      setTotalPages(newTotalPages);
+
+      const params = new URLSearchParams(searchParams.toString());
+      params.set('page', page.toString());
+      router.push(`${window.location.pathname}?${params.toString()}`);
     }
   };
 
@@ -68,8 +75,6 @@ const QuestionBox: React.FC<QuestionBoxProps> = ({
         currentPage={currentPage}
         totalPages={totalPages}
         onPageChange={handlePageChange}
-        itemsPerPage={itemsPerPage}
-        totalItems={totalItems}
       />
     </div>
   );
