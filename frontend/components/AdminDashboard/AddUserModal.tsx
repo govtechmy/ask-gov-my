@@ -56,6 +56,20 @@ const AddUserModal: React.FC<AddUserModalProps> = ({
     if (nameError || emailError) {
       return;
     }
+    if (name === '' || email === '') {
+      handleNameChange(
+        { target: { value: name } } as React.ChangeEvent<HTMLInputElement>,
+        setName,
+        setNameError,
+      );
+      handleEmailChange(
+        { target: { value: email } } as React.ChangeEvent<HTMLInputElement>,
+        setEmail,
+        setEmailError,
+      );
+      return;
+    }
+
     try {
       const userColor = generateHexColor(name);
       const response = await addUser(
