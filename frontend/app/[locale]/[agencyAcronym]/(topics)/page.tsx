@@ -14,20 +14,26 @@ import BaseHeader from '@/components/common/Header/BaseHeader';
 import SearchNavbar from '@/components/common/SearchNavbar/SearchNavbar';
 import Masthead from '@/components/common/Header/Masthead';
 
-interface Props {
+interface AgencyPageProps {
   params: {
     agencyAcronym: string;
     locale: string;
   };
+  searchParams: {
+    page?: string;
+  };
 }
 
-const AgencyPage = async ({ params }: Props) => {
+const AgencyPage = async ({ params, searchParams }: AgencyPageProps) => {
   const { agencyAcronym, locale } = params;
+  const currentPage = searchParams.page ? parseInt(searchParams.page, 10) : 1;
+
   const agencyMap = await getDynamicAgencyMap();
   const agencyUUID = agencyMap[agencyAcronym.toUpperCase()];
-  const { questions, totalItems, totalPages, currentPage } =
-    await getQuestionsByAgency(agencyUUID);
+  
+  const { questions, totalItems, totalPages } = await getQuestionsByAgency(agencyUUID, currentPage);
   const topics = await getTopicByAgency(parseInt(agencyUUID));
+
   const upperCaseAgencyAcronym = agencyAcronym.toUpperCase();
 
   let agencyList: any = [];
