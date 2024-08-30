@@ -6,6 +6,7 @@ import Pagination from '@/components/ui/pagination';
 import { Question, Agency } from '@/types/types';
 import { useSearchParams } from 'next/navigation';
 import { useRouter } from '@/lib/i18n';
+
 interface QuestionBoxProps {
   questions: Question[];
   agencyMap: Record<string, string>;
