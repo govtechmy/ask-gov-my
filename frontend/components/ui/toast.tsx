@@ -8,6 +8,7 @@ interface ToastProps {
   messageColor: string;
   show: boolean;
   onClose: () => void;
+  time?: number;
 }
 
 const Toast: React.FC<ToastProps> = ({
@@ -17,6 +18,7 @@ const Toast: React.FC<ToastProps> = ({
   messageColor,
   show,
   onClose,
+  time = 2000,
 }) => {
   const [visible, setVisible] = useState(false);
   const [animationState, setAnimationState] = useState<'enter' | 'exit'>(
@@ -27,14 +29,14 @@ const Toast: React.FC<ToastProps> = ({
     if (show) {
       setVisible(true);
       setAnimationState('enter');
-      const timer = setTimeout(() => setAnimationState('exit'), 2000);
+      const timer = setTimeout(() => setAnimationState('exit'), time);
       return () => clearTimeout(timer);
     } else {
       setAnimationState('exit');
       const timer = setTimeout(() => setVisible(false), 500);
       return () => clearTimeout(timer);
     }
-  }, [show]);
+  }, [show, time]);
 
   useEffect(() => {
     if (animationState === 'exit') {
@@ -47,16 +49,21 @@ const Toast: React.FC<ToastProps> = ({
 
   return (
     <div
-      className={`fixed z-50 bottom-6 right-6 bg-white-focuswhite200 rounded-lg shadow-button transition-opacity duration-300 opacity-100 h-[48px] w-[312px] border-[1px] border-outline-200 overflow-hidden ${animationState === 'enter' ? 'animate-slideIn' : 'animate-slideOut'}`}
+      className={`fixed z-50 bottom-6 right-6 bg-white-focuswhite200 rounded-lg shadow-button transition-opacity duration-300 opacity-100 h-[48px] border-[1px] border-outline-200 overflow-hidden min-w-[312px] max-w-[80%] ${
+        animationState === 'enter' ? 'animate-slideIn' : 'animate-slideOut'
+      }`}
     >
       <div className="relative flex items-center h-full">
         <div
           className={`absolute top-[43px] left-0 h-[3px] ${underlineColor} animate-underlineDecline`}
+          style={{ animationDuration: `${time}ms` }}
         />
         <div className={`flex items-center w-full px-4 gap-3 ${messageColor}`}>
           {icon}
-          <div className="text-sm font-medium">{message}</div>
-          <button onClick={onClose} className="ml-auto">
+          <div className="text-sm font-medium whitespace-nowrap overflow-hidden text-ellipsis">
+            {message}
+          </div>
+          <button onClick={onClose} className="ml-auto flex-shrink-0">
             <Close className="stroke-dim-500" />
           </button>
         </div>
@@ -99,7 +106,7 @@ const Toast: React.FC<ToastProps> = ({
           animation: slideOut 0.2s ease-in-out forwards;
         }
         .animate-underlineDecline {
-          animation: underlineDecline 2s linear forwards;
+          animation: underlineDecline linear forwards;
         }
       `}</style>
     </div>
