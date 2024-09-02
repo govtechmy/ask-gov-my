@@ -26,10 +26,11 @@ const client = new S3Client({
 });
 
 const expires = 3600;
+
 export async function GET(request: NextRequest) {
   const { searchParams } = request.nextUrl;
   const fileName = searchParams.get('fileName');
-  const operation = searchParams.get('operation') as 'GET' | 'PUT';
+  const operation = searchParams.get('operation') as 'GET' | 'PUT' | 'HEAD';
 
   if (!fileName) {
     return NextResponse.json(
@@ -45,39 +46,17 @@ export async function GET(request: NextRequest) {
   const file = `uploads/${fileName}`;
 
   try {
-    const url = await generatePresignedUrl(file, operation);
-    return NextResponse.json({ presignedUrl: url });
+    if (operation == 'GET' || operation == 'PUT') {
+      const url = await generatePresignedUrl(file, operation);
+      return NextResponse.json({ data: url });
+    } else {
+      // operation == 'HEAD'
+      const fileSize = await getFileSize(file);
+      return NextResponse.json({ data: fileSize });
+    }
   } catch (error) {
     return NextResponse.json(
       { error: { message: 'Failed to generate a pre-signed url' } },
-      { status: 500 },
-    );
-  }
-}
-
-export async function HEAD(request: NextRequest) {
-  const { searchParams } = request.nextUrl;
-
-  const fileName = searchParams.get('fileName');
-
-  if (!fileName) {
-    return NextResponse.json(
-      {
-        error: {
-          message: 'File name query parameter is compulsory',
-        },
-      },
-      { status: 400 },
-    );
-  }
-
-  const file = `uploads/${fileName}`;
-  try {
-    const fileSize = await getFileSize(file);
-    return NextResponse.json({ fileSize });
-  } catch (error) {
-    return NextResponse.json(
-      { error: { message: 'Failed to generate' } },
       { status: 500 },
     );
   }

@@ -7,27 +7,32 @@ import GetFileIcon from './GetFileIcon';
 import { downloadFile, getLastSegment, formatFileSize } from '@/actions/utils';
 
 interface AttachmentDownloadProps {
-  uploadedAttachments: string[];
-  fileSizes?: number[];
-  handleRemoveUploadedAttachment?: (index: number) => void;
+  attachments: UploadItem[];
+  handleRemoveUploadedAttachment?: (index: string) => void;
+}
+
+interface UploadItem {
+  file: File | null; // will be null if it has been uploaded or from database. Will only have value if it is in draft (not yet uploaded) stage
+  fileName: string;
+  fileSize: number;
+  isUploaded: boolean; // will be true if it exists in s3. If it is not yet uploaded, the value will be false
 }
 
 const AttachmentDownload: React.FC<AttachmentDownloadProps> = ({
-  uploadedAttachments,
-  fileSizes = [],
+  attachments,
   handleRemoveUploadedAttachment,
 }) => {
   return (
     <div className="flex flex-wrap gap-2">
-      {uploadedAttachments.map((url, index) => {
-        const fileName = getLastSegment(url);
-        const size = fileSizes[index];
+      {attachments.map((file, index) => {
+        const fileName = file.fileName;
+        const size = file.fileSize;
 
         return (
           <StyledDisplay
             variant={'uploadDownload'}
             key={index}
-            onClick={() => downloadFile(url, fileName)}
+            onClick={() => downloadFile(fileName)}
           >
             <div className="flex-shrink-0">
               <GetFileIcon fileName={fileName} />
@@ -40,16 +45,14 @@ const AttachmentDownload: React.FC<AttachmentDownloadProps> = ({
               >
                 {fileName}
               </div>
-              <div className="text-dim-500 font-normal text-sm">
-                {formatFileSize(size)}
-              </div>
+              <div className="text-dim-500 font-normal text-sm">{`${size} MB`}</div>
             </div>
             {handleRemoveUploadedAttachment && (
               <Button
                 variant="cancel-box-red"
                 onClick={e => {
                   e.stopPropagation();
-                  handleRemoveUploadedAttachment(index);
+                  handleRemoveUploadedAttachment(fileName);
                 }}
               >
                 <div className="flex-shrink-0">
