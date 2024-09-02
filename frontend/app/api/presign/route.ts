@@ -1,5 +1,6 @@
 import {
   GetObjectCommand,
+  HeadObjectCommand,
   PutObjectCommand,
   S3Client,
 } from '@aws-sdk/client-s3';
@@ -24,13 +25,11 @@ const client = new S3Client({
   },
 });
 
+const expires = 3600;
 export async function GET(request: NextRequest) {
   const { searchParams } = request.nextUrl;
-
   const fileName = searchParams.get('fileName');
-  const operation =
-    (searchParams.get('operation') as 'getObject' | 'putObject' | null) ??
-    'putObject';
+  const operation = searchParams.get('operation') as 'GET' | 'PUT';
 
   if (!fileName) {
     return NextResponse.json(
@@ -49,9 +48,36 @@ export async function GET(request: NextRequest) {
     const url = await generatePresignedUrl(file, operation);
     return NextResponse.json({ presignedUrl: url });
   } catch (error) {
-    console.error('Error generating pre-signed URL:', error);
     return NextResponse.json(
-      { error: { message: 'Failed to generate pre-signed URL' } },
+      { error: { message: 'Failed to generate a pre-signed url' } },
+      { status: 500 },
+    );
+  }
+}
+
+export async function HEAD(request: NextRequest) {
+  const { searchParams } = request.nextUrl;
+
+  const fileName = searchParams.get('fileName');
+
+  if (!fileName) {
+    return NextResponse.json(
+      {
+        error: {
+          message: 'File name query parameter is compulsory',
+        },
+      },
+      { status: 400 },
+    );
+  }
+
+  const file = `uploads/${fileName}`;
+  try {
+    const fileSize = await getFileSize(file);
+    return NextResponse.json({ fileSize });
+  } catch (error) {
+    return NextResponse.json(
+      { error: { message: 'Failed to generate' } },
       { status: 500 },
     );
   }
@@ -59,8 +85,7 @@ export async function GET(request: NextRequest) {
 
 async function generatePresignedUrl(
   path: string,
-  operation: 'getObject' | 'putObject' = 'putObject',
-  expires: number = 3600,
+  operation: 'GET' | 'PUT',
 ): Promise<string> {
   const params = {
     Bucket: process.env.FIKRI_BUCKET,
@@ -68,10 +93,21 @@ async function generatePresignedUrl(
   };
 
   const command =
-    operation === 'getObject'
+    operation === 'GET'
       ? new GetObjectCommand(params)
       : new PutObjectCommand(params);
 
   const url = await getSignedUrl(client, command, { expiresIn: expires });
   return url;
+}
+
+async function getFileSize(path: string) {
+  const params = {
+    Bucket: process.env.FIKRI_BUCKET,
+    Key: path,
+  };
+  const command = new HeadObjectCommand(params);
+
+  const response = await client.send(command);
+  return response.ContentLength;
 }

@@ -1,13 +1,12 @@
 'use client';
 
 import React, { useState } from 'react';
-import { useTranslations } from 'next-intl';
 import { addAgency } from '@/actions/userServices';
 import ImageNext from 'next/image';
 import Pencil from '@/icons/pencil';
 import Asklogo from '@/icons/asklogo';
 import PlusIcon from '@/icons/plusicon';
-import { getPresignedUrl, uploadFile } from '@/lib/uploadUtils';
+import { getPresignUrl, uploadFile } from '@/lib/uploadUtils';
 
 interface AddAgencyModalProps {
   isOpen: boolean;
@@ -40,10 +39,11 @@ const AddAgencyModal: React.FC<AddAgencyModalProps> = ({
           return;
         }
         try {
-          const uploadSuccess = await uploadFile(file);
+          let renamedFile = `${Date.now()}-${file.name}`;
+          const uploadSuccess = await uploadFile(file, renamedFile);
           if (uploadSuccess) {
             try {
-              const url = await getPresignedUrl(file.name, 'getObject');
+              const url = await getPresignUrl(file.name, 'GET');
               setLogoUrl(url);
             } catch (error) {
               console.error('Error getting presigned URL:', error);

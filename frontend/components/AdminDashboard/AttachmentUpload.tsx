@@ -13,7 +13,6 @@ const AttachmentUpload: React.FC<AttachmentUploadProps> = ({
   attachments,
   handleRemoveAttachment,
 }) => {
-  console.log(attachments);
   return (
     <div className="flex flex-wrap gap-2">
       {attachments.map((file, index) => (
