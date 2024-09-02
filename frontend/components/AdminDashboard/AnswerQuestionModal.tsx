@@ -21,6 +21,13 @@ interface AnswerQuestionModalProps {
   onClose: () => void;
 }
 
+interface UploadItem {
+  file: File | null; // will be null if it has been uploaded or from database. Will only have value if it is in draft (not yet uploaded) stage
+  fileName: string;
+  fileSize: number;
+  isUploaded: boolean; // will be true if it exists in s3. If it is not yet uploaded, the value will be false
+}
+
 const AnswerQuestionModal = ({
   question,
   isOpen,
@@ -34,6 +41,14 @@ const AnswerQuestionModal = ({
   const [success, setSuccess] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [fileSizes, setFileSizes] = useState<number[]>([]);
+  const [uploadItem, setUploadItem] = useState<UploadItem[] | []>([]);
+  const [svgHeight, setSvgHeight] = useState<number>(15);
+  const questionTextRef = useRef<HTMLDivElement>(null);
+
+  // logo url for sample
+  const logo_url =
+    'https://ask-gov.s3.ap-southeast-2.amazonaws.com/uploads/1721638339654-images.jpeg';
+  // TODO: sample logo url should be serve as static file in Next instead of through s3
 
   useEffect(() => {
     setAnswer(question.answer || '');
@@ -43,10 +58,15 @@ const AnswerQuestionModal = ({
     if (isOpen) {
       const fetchSizes = async () => {
         try {
-          if (question.attachments) {
-            console.log(question.attachments);
-            const sizes = await fetchFileSizes(question.attachments);
-            setFileSizes(sizes.map(Number)); // Update state with file sizes
+          if (question.attachments && question.attachments.length > 0) {
+            const fileSize = await fetchFileSizes(question.attachments);
+            const fileData = fileSize.map(file => ({
+              file: null,
+              fileName: file.fileName,
+              fileSize: file.fileSize,
+              isUploaded: true,
+            }));
+            setUploadItem(fileData);
           }
         } catch (error) {
           console.log('error on fileSize', error);
@@ -61,15 +81,18 @@ const AnswerQuestionModal = ({
     setAttachments((prev: File[]) => [...prev, ...files]);
   };
 
-  const handleRemoveAttachment = (index: number) => {
-    setAttachments((prev: File[]) => prev.filter((_, i) => i !== index));
-  };
-
-  const handleRemoveUploadedAttachment = (index: number) => {
-    setUploadedAttachments((prev: string[]) =>
-      prev.filter((_, i) => i !== index),
+  const handleRemoveAttachment = (fileName: string) => {
+    setUploadItem(uploadItem =>
+      uploadItem.filter(item => item.fileName !== fileName),
     );
   };
+
+  const handleRemoveUploadedAttachment = (fileName: string) => {
+    setUploadItem(uploadItem =>
+      uploadItem.filter(item => item.fileName !== fileName),
+    );
+  };
+
   const handleSubmit = async () => {
     try {
       const attachmentArr: string[] = [];
@@ -139,14 +162,6 @@ const AnswerQuestionModal = ({
       setSuccess(null);
     }
   };
-
-  const [svgHeight, setSvgHeight] = useState<number>(15);
-  const questionTextRef = useRef<HTMLDivElement>(null);
-
-  // logo url for sample
-  const logo_url =
-    'https://ask-gov.s3.ap-southeast-2.amazonaws.com/uploads/1721638339654-images.jpeg';
-  // TODO: sample logo url should be serve as static file in Next instead of through s3
 
   if (!isOpen) return null;
 
@@ -232,34 +247,32 @@ const AnswerQuestionModal = ({
                     </div>
                   </div>
                   <div>
-                    {attachments.length > 0 && (
+                    {uploadItem.filter(item => !item.isUploaded).length > 0 && (
                       <div className="m-4">
                         <AttachmentUpload
-                          attachments={attachments}
+                          attachments={uploadItem}
                           handleRemoveAttachment={handleRemoveAttachment}
                         />
                       </div>
                     )}
 
-                    {uploadedAttachments.length > 0 && (
+                    {uploadItem.filter(item => item.isUploaded).length > 0 && (
                       <>
                         <div className="border-b-[1px] border-outline-200 m-4"></div>
                         <div className="text-sm text-dim-500 font-normal ml-4 mt-4">
                           Previously Uploaded
                         </div>
+                        <div className="m-4">
+                          <AttachmentDownload
+                            attachments={uploadItem}
+                            handleRemoveUploadedAttachment={
+                              handleRemoveUploadedAttachment
+                            }
+                          />
+                        </div>
                       </>
                     )}
-                    {uploadedAttachments.length > 0 && (
-                      <div className="m-4">
-                        <AttachmentDownload
-                          uploadedAttachments={uploadedAttachments}
-                          handleRemoveUploadedAttachment={
-                            handleRemoveUploadedAttachment
-                          }
-                          fileSizes={fileSizes}
-                        />
-                      </div>
-                    )}
+
                     {uploadedAttachments.length == 0 && (
                       <div className="m-4"></div>
                     )}

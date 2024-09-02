@@ -44,26 +44,15 @@ export async function getPresignUrl(
 }
 
 export async function getFileSize(fileName: string) {
-  const url = `/api/presign?fileName=${fileName}`;
+  const url = `/api/presign?fileName=${fileName}&action=${'HEAD'}`;
 
   try {
-    const response = await fetch(url, {
-      method: 'HEAD',
-    });
+    const response = await fetch(url);
     if (!response.ok) {
       throw new Error(`HTTP error! status: ${response.status}`);
     }
-
-    console.log(response);
-
-    // console.log(response);
-    // const fileSize = data.fileSize;
-
-    // if (fileSize === null) {
-    //   throw new Error('Content-Length header is missing');
-    // }
-
-    // return parseInt(fileSize, 10);
+    const data = await response.json();
+    return Number((data.data / 1e6).toFixed(2));
   } catch (error) {
     console.error('Error getting file size:', error);
     throw error;

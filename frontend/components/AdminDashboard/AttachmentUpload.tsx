@@ -4,9 +4,16 @@ import { Button } from '../ui/button';
 import { StyledDisplay } from '../ui/display';
 import GetFileIcon from './GetFileIcon'; // Import the factorized component
 
+interface UploadItem {
+  file: File | null; // will be null if it has been uploaded or from database. Will only have value if it is in draft (not yet uploaded) stage
+  fileName: string;
+  fileSize: number;
+  isUploaded: boolean; // will be true if it exists in s3. If it is not yet uploaded, the value will be false
+}
+
 interface AttachmentUploadProps {
-  attachments: File[];
-  handleRemoveAttachment: (index: number) => void;
+  attachments: UploadItem[];
+  handleRemoveAttachment: (index: string) => void;
 }
 
 const AttachmentUpload: React.FC<AttachmentUploadProps> = ({
@@ -22,23 +29,23 @@ const AttachmentUpload: React.FC<AttachmentUploadProps> = ({
           className="w-[195px]"
         >
           <div className="flex-shrink-0">
-            <GetFileIcon fileName={file.name} />
+            <GetFileIcon fileName={file.fileName} />
           </div>
           <div>
             <div className="text-black-900 text-sm font-normal w-[94px]">
-              {file.name.length > 10
-                ? `${file.name.substring(0, 9)}...`
-                : file.name}
+              {file.fileName.length > 10
+                ? `${file.fileName.substring(0, 9)}...`
+                : file.fileName}
             </div>
             <div className="text-dim-500 font-normal text-sm">
-              {`size ${(file.size / (1024 * 1024)).toFixed(2)} MB`}
+              {`size ${(file.fileSize / 1e6).toFixed(2)} MB`}
             </div>
           </div>
           <Button
             variant={'cancel-box-red'}
             onClick={e => {
               e.stopPropagation();
-              handleRemoveAttachment(index);
+              handleRemoveAttachment(file.fileName);
             }}
           >
             <Close className="stroke-danger-600" />

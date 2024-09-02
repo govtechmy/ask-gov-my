@@ -1,38 +1,41 @@
 import { getFileSize, getPresignUrl } from '@/lib/uploadUtils';
 
-export async function fetchFileSizes(attachments: string[]): Promise<number[]> {
-  const fileSizes: number[] = [];
+interface fileInfo {
+  fileName: string;
+  fileSize: number;
+}
+
+export async function fetchFileSizes(
+  attachments: string[],
+): Promise<fileInfo[]> {
+  const fileSizes: fileInfo[] = [];
 
   try {
     await Promise.all(
       attachments.map(async function (attachment) {
-        // return fetch(attachment, { method: 'GET' })
-        //   .then(function (response) {
-        //     const contentLength = response.headers.get('Content-Length');
-        //     const size = contentLength ? parseInt(contentLength) : 0;
-        //     fileSizes.push(size);
-        //   })
-        //   .catch(function (error) {
-        //     console.error('Failed to fetch file size', error);
-        //     fileSizes.push(0); // Default size if fetch fails
-        //   });
         try {
           const fileSize = await getFileSize(attachment);
-          // console.log(attachment);
-          fileSizes.push(0);
+          fileSizes.push({
+            fileName: attachment,
+            fileSize,
+          });
         } catch (error) {
-          fileSizes.push(0);
+          fileSizes.push({
+            fileName: attachment,
+            fileSize: 0,
+          });
         }
       }),
     );
     return fileSizes;
-  } catch (error_1) {
-    console.error('Error fetching file sizes', error_1);
+  } catch (error) {
+    console.error('Error fetching file sizes', error);
     return fileSizes;
   }
 }
 
-export function downloadFile(url: string, fileName: string): void {
+export async function downloadFile(fileName: string): Promise<void> {
+  const url = await getPresignUrl(fileName, 'GET');
   fetch(url)
     .then(function (response) {
       return response.blob();
