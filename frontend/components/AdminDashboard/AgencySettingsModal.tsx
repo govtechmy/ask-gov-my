@@ -6,7 +6,7 @@ import ImageNext from 'next/image';
 import Pencil from '@/icons/pencil';
 import Asklogo from '@/icons/asklogo';
 import { Agency } from '@/types/types';
-import { getPresignedUrl, uploadFile } from '@/lib/uploadUtils';
+import { getPresignUrl, uploadFile } from '@/lib/uploadUtils';
 
 interface AgencySettingsModalProps {
   agency: Agency;
@@ -39,10 +39,11 @@ const AgencySettingsModal: React.FC<AgencySettingsModalProps> = ({
           return;
         }
         try {
-          const uploadSuccess = await uploadFile(file);
+          let renamedFile = `${Date.now()}-${file.name}`;
+          const uploadSuccess = await uploadFile(file, renamedFile);
           if (uploadSuccess) {
             try {
-              const url = await getPresignedUrl(file.name, 'getObject');
+              const url = await getPresignUrl(file.name, 'GET');
               setLogoUrl(url);
             } catch (error) {
               console.error('Error getting presigned URL:', error);

@@ -1,4 +1,4 @@
-import { getPresignedUrl } from '@/lib/uploadUtils';
+import { getFileSize, getPresignUrl } from '@/lib/uploadUtils';
 
 export async function fetchFileSizes(attachments: string[]): Promise<number[]> {
   const fileSizes: number[] = [];
@@ -17,21 +17,8 @@ export async function fetchFileSizes(attachments: string[]): Promise<number[]> {
         //     fileSizes.push(0); // Default size if fetch fails
         //   });
         try {
-          const url = await getPresignedUrl(attachment, 'getObject');
-          const response = await fetch(url, {
-            method: 'GET',
-            headers: { Range: 'bytes=0-0' },
-          });
-
-          if (!response.ok) {
-            throw new Error(`HTTP error! status: ${response.status}`);
-          }
-          const contentRange = response.headers.get('Content-Range');
-          console.log(response);
-          console.log(contentRange);
-          // const contentLength = response.headers.get('Content-Length');
-          // const size = contentLength ? parseInt(contentLength, 10) : 0;
-          // fileSizes.push(size);
+          const fileSize = await getFileSize(attachment);
+          // console.log(attachment);
           fileSizes.push(0);
         } catch (error) {
           fileSizes.push(0);

@@ -13,7 +13,7 @@ import AttachmentUpload from './AttachmentUpload';
 import React, { useEffect, useRef, useState } from 'react';
 import TipTap from '../Editor/TipTap';
 import { fetchFileSizes, formatDate } from '@/actions/utils';
-import { getPresignedUrl, uploadFile } from '@/lib/uploadUtils';
+import { getPresignUrl, uploadFile } from '@/lib/uploadUtils';
 
 interface AnswerQuestionModalProps {
   question: Question;
@@ -78,7 +78,7 @@ const AnswerQuestionModal = ({
         const uploadSuccess = await uploadFile(file, renamedFile);
         if (uploadSuccess) {
           try {
-            const url = await getPresignedUrl(renamedFile, 'getObject');
+            const url = await getPresignUrl(renamedFile, 'GET');
             attachmentArr.push(renamedFile);
           } catch (error) {
             console.error('Error getting presigned URL:', error);
@@ -114,7 +114,7 @@ const AnswerQuestionModal = ({
         const uploadSuccess = await uploadFile(file, renamedFile);
         if (uploadSuccess) {
           try {
-            const url = await getPresignedUrl(file.name, 'getObject');
+            const url = await getPresignUrl(file.name, 'GET');
             attachmentArr.push(renamedFile);
           } catch (error) {
             console.error('Error getting presigned URL:', error);
