@@ -39,7 +39,7 @@ class AllQuestionListView(generics.ListAPIView):
     pagination_class = CustomPagination
     filter_backends = [DjangoFilterBackend, SearchFilter]
     filterset_fields = ['agency', 'state']
-    search_fields = ['question', 'agency__name', 'agency__acronym', 'topics__name']
+    search_fields = ['question']
 
     def get_queryset(self):
         queryset = super().get_queryset()
