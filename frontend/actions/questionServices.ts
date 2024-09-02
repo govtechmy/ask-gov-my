@@ -6,7 +6,7 @@ export async function getAllQuestions(
   page: number = 1,
   pageSize: number = 6,
 ): Promise<{
-  questions: Question[];
+  data: Question[];
   totalItems: number;
   totalPages: number;
   currentPage: number;
@@ -30,7 +30,7 @@ export async function getAllQuestions(
     const data = await response.json();
 
     return {
-      questions: data.results,
+      data: data.results,
       totalItems: data.count,
       totalPages: Math.ceil(data.count / pageSize),
       currentPage: page,
@@ -38,7 +38,7 @@ export async function getAllQuestions(
   } catch (error) {
     console.error('Error in getAllQuestions:', error);
     return {
-      questions: [],
+      data: [],
       totalItems: 0,
       totalPages: 0,
       currentPage: 1,
@@ -95,7 +95,7 @@ export async function getQuestionsByAgency(
   page: number = 1,
   pageSize: number = 6,
 ): Promise<{
-  questions: Question[];
+  data: Question[];
   totalItems: number;
   totalPages: number;
   currentPage: number;
@@ -120,7 +120,7 @@ export async function getQuestionsByAgency(
     const data = await response.json();
 
     return {
-      questions: data.results,
+      data: data.results,
       totalItems: data.count,
       totalPages: Math.ceil(data.count / pageSize),
       currentPage: page,
@@ -128,7 +128,7 @@ export async function getQuestionsByAgency(
   } catch (error) {
     console.error('Error in getQuestionsByAgency:', error);
     return {
-      questions: [],
+      data: [],
       totalItems: 0,
       totalPages: 0,
       currentPage: 1,
@@ -142,7 +142,7 @@ export async function getQuestionsByTopicAndAgency(
   page: number = 1,
   pageSize: number = 6,
 ): Promise<{
-  questions: Question[];
+  data: Question[];
   totalItems: number;
   totalPages: number;
   currentPage: number;
@@ -167,7 +167,7 @@ export async function getQuestionsByTopicAndAgency(
     const data = await response.json();
 
     return {
-      questions: data.results,
+      data: data.results,
       totalItems: data.count,
       totalPages: Math.ceil(data.count / pageSize),
       currentPage: page,
@@ -175,7 +175,7 @@ export async function getQuestionsByTopicAndAgency(
   } catch (error) {
     console.error('Error fetching questions:', error);
     return {
-      questions: [],
+      data: [],
       totalItems: 0,
       totalPages: 0,
       currentPage: 1,

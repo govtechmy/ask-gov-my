@@ -125,7 +125,7 @@ export async function searchQuestionsWithPagination(
   page: number = 1,
   pageSize: number = 6,
 ): Promise<{
-  questions: Question[];
+  data: Question[];
   totalItems: number;
   totalPages: number;
   currentPage: number;
@@ -182,10 +182,10 @@ export async function searchQuestionsWithPagination(
       : 0;
     const totalPages = Math.ceil(totalItems / pageSize);
 
-    const questions = result.hits.hits.map((hit: any) => hit._source);
+    const data = result.hits.hits.map((hit: any) => hit._source);
 
     return {
-      questions,
+      data,
       totalItems,
       totalPages,
       currentPage: page,
@@ -193,7 +193,7 @@ export async function searchQuestionsWithPagination(
   } catch (error) {
     console.error('Error searching questions with pagination:', error);
     return {
-      questions: [],
+      data: [],
       totalItems: 0,
       totalPages: 0,
       currentPage: 1,
