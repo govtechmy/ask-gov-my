@@ -18,10 +18,11 @@ interface MainPageProps {
 const MainPage = async ({ searchParams }: MainPageProps) => {
   
   const currentPage = searchParams.page ? parseInt(searchParams.page, 10) : 1;
-  const { questions, totalItems, totalPages } = await getAllQuestions(currentPage);
+  const questions = await getAllQuestions(currentPage);
   const trendingAgencies = await getTrendingAgencies();
   const agencyList = await getAgencyList();
   const agencyMap = await getDynamicAgencyMap();
+  
   return (
     <div>
       <div className="container mt-10 flex">
@@ -33,10 +34,6 @@ const MainPage = async ({ searchParams }: MainPageProps) => {
             questions={questions}
             agencyMap={agencyMap}
             agencyList={agencyList}
-            totalItems={totalItems}
-            totalPages={totalPages}
-            currentPage={currentPage}
-            importFunction={getAllQuestions}
           />
         </div>
 
