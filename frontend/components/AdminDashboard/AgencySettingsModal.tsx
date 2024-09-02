@@ -8,6 +8,9 @@ import ImageNext from 'next/image';
 import Pencil from '@/icons/pencil';
 import Asklogo from '@/icons/asklogo';
 import { Agency } from '@/types/types';
+import { Input } from '../ui/input';
+import { Button } from '../ui/button';
+import { Label } from '../ui/label';
 
 interface AgencySettingsModalProps {
   agency: Agency;
@@ -110,12 +113,11 @@ const AgencySettingsModal: React.FC<AgencySettingsModalProps> = ({
                         <Pencil className="stroke-white-forcewhite"></Pencil>
                       </div>
                     </div>
-                    <input
-                      type="file"
+                    <Input
                       className="hidden"
                       accept="image/png, image/jpeg"
                       onChange={handleFileChange}
-                    />
+                    ></Input>
                   </label>
                 </div>
               ) : (
@@ -138,12 +140,12 @@ const AgencySettingsModal: React.FC<AgencySettingsModalProps> = ({
                         <Pencil className="stroke-white-forcewhite"></Pencil>
                       </div>
                     </div>
-                    <input
+                    <Input
                       type="file"
                       className="hidden"
                       accept="image/png, image/jpeg"
                       onChange={handleFileChange}
-                    />
+                    ></Input>
                   </label>
                 </div>
               )}
@@ -153,56 +155,34 @@ const AgencySettingsModal: React.FC<AgencySettingsModalProps> = ({
               </div>
             </div>
             <div className="mb-6">
-              <div className="text-black-700 text-sm font-medium mb-[6px] w-[552px] h-5">
-                Agency's name (English)
-              </div>
-              <input
+              <Label> Agency's name (English)</Label>
+              <Input
                 type="text"
-                className="bg-white h-10 w-[552px] border-[1px] border-outline-200 rounded-lg pl-[12px]
-                shadow-button focus:border-none focus:outline-none focus:shadow-[0_0_0_1px_#B794FF,0_0_0_4px_#DED1FA] mb-6
-                focus:dark:shadow-[0_0_0_1px_#4F20B2,0_0_0_4px_#281B46]
-                text-black-900 font-normal text-base"
                 value={name}
                 onChange={e => setName(e.target.value)}
-              />
-
-              <div className="text-black-700 text-sm font-medium mb-[6px] w-[552px] h-5">
-                Agency's name (Malay)
-              </div>
-              <input
+              ></Input>
+              <Label>Agency's name (Malay)</Label>
+              <Input
                 type="text"
-                className="bg-white h-10 w-[552px] border-[1px] border-outline-200 rounded-lg pl-[12px]
-                shadow-button focus:border-none focus:outline-none focus:shadow-[0_0_0_1px_#B794FF,0_0_0_4px_#DED1FA] mb-6
-                focus:dark:shadow-[0_0_0_1px_#4F20B2,0_0_0_4px_#281B46]
-                text-black-900 font-normal text-base"
                 value={nameMs}
                 onChange={e => setNameMs(e.target.value)}
-              />
-
+              ></Input>
               <div className="flex">
                 <div>
-                  <div className="text-black-700 text-sm font-medium mb-[6px] w-[264px] h-5">
-                    Agency's acronym:
-                  </div>
-                  <input
+                  <Label> Agency's acronym:</Label>
+                  <Input
                     type="text"
-                    className="bg-white h-10 w-[264px] border-[1px] border-outline-200 rounded-lg pl-[12px]
-                    shadow-button focus:border-none focus:outline-none focus:shadow-[0_0_0_1px_#B794FF,0_0_0_4px_#DED1FA] mb-6
-                    focus:dark:shadow-[0_0_0_1px_#4F20B2,0_0_0_4px_#281B46]
-                    text-black-900 font-normal text-base"
                     value={acronym}
                     onChange={e => setAcronym(e.target.value)}
-                  />
+                  ></Input>
                 </div>
                 <div className="h-[66px] w-[264px] ml-6">
-                  <div className="text-black-700 text-sm font-medium mb-[6px] w-[264px] h-5">
-                    Agency logo preview
-                  </div>
+                  <Label> Agency logo preview</Label>
                   <div className="font-poppins flex text-lg font-semibold items-center mt-[6px] h-10">
                     <Asklogo />
                     <div className="flex pl-[10px]">
                       Ask
-                      <div className="text-[#702FF9] dark:text-[#9E70FF]">
+                      <div className="text-askmygovtextbrand-600">
                         {acronym}
                       </div>
                     </div>
@@ -214,21 +194,10 @@ const AgencySettingsModal: React.FC<AgencySettingsModalProps> = ({
         </div>
         <div>
           <div className="py-6 flex justify-end pr-6 border-t-[1px] border-outline-200">
-            <button
-              className="mr-3 h-[44px] w-[77px] border-[1px] border-outline-200 shadow-button rounded-lg 
-              text-base items-center justify-center flex hover:cursor-pointer"
-              onClick={onClose}
-            >
-              Cancel
-            </button>
-            <button
-              className="w-[119px] h-[44px] rounded-lg items-center justify-center flex text-base font-normal  text-white-forcewhite 
-             bg-gradient-to-t from-[#702FF9] to-[#B379FF] dark:from-[#702FF9] dark:to-[#B379FF]
-              border-[1px] border-[#702FF9] hover:cursor-pointer shadow-button"
-              onClick={handleSubmit}
-            >
+            <Button>Cancel</Button>
+            <Button variant={'primary'} onClick={handleSubmit}>
               Save settings
-            </button>
+            </Button>
           </div>
           {success && <div className="text-green-500 mt-4">{success}</div>}
           {error && <div className="text-red-500 mt-4">{error}</div>}
