@@ -32,7 +32,11 @@ const TopicPage = async ({ params, searchParams }: TopicPageProps) => {
   const agencyMap = await getDynamicAgencyMap();
   const agencyUUID = agencyMap[agencyAcronym.toUpperCase()];
 
-  const { questions, totalItems, totalPages } = await getQuestionsByTopicAndAgency(agencyUUID, topicId, currentPage);
+  const questions = await getQuestionsByTopicAndAgency(
+    agencyUUID,
+    topicId,
+    currentPage
+  );
 
   const topics = await getTopicByAgency(parseInt(agencyUUID, 10));
   const selectedTopic = topics.find(topic => topic.id === parseInt(topicId, 10));
@@ -69,7 +73,7 @@ const TopicPage = async ({ params, searchParams }: TopicPageProps) => {
                   keyword={'showing'}
                 ></WordTranslate>
                 &nbsp;
-                {totalItems}
+                {questions.totalItems}
                 &nbsp;
                 <WordTranslate
                   translate={'Topics'}
@@ -82,20 +86,14 @@ const TopicPage = async ({ params, searchParams }: TopicPageProps) => {
               {locale === 'ms' ? selectedTopic?.title_ms : selectedTopic?.title}
             </div>
           </div>
-          {questions.length > 0 ? (
+          {questions.data.length > 0 ? (
             <QuestionBox
               questions={questions}
               agencyMap={agencyMap}
               agencyList={agencyList}
-              totalItems={totalItems}
-              currentPage={currentPage}
-              totalPages={totalPages}
-              importFunction={getQuestionsByTopicAndAgency}
-              value={agencyUUID}
-              secondValue={topicId}
             />
           ) : (
-            <div className=" h-[220px] w-[900px]">
+            <div className="h-[220px] w-[900px]">
               <div className="text-dim-500">
                 <WordTranslate
                   translate={'Topics'}
@@ -108,10 +106,7 @@ const TopicPage = async ({ params, searchParams }: TopicPageProps) => {
 
         <div className="pl-10 w-[500px]">
           <div className="font-semibold text-base text-black-700 pl-6 pb-8">
-            <WordTranslate
-              translate={'Topics'}
-              keyword={'topic'}
-            ></WordTranslate>
+            <WordTranslate translate={'Topics'} keyword={'topic'}></WordTranslate>
           </div>
           <div className="font-semibold text-base text-black-700 h-[500px]">
             <div className="hidden md:block">

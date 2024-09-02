@@ -30,8 +30,8 @@ const AgencyPage = async ({ params, searchParams }: AgencyPageProps) => {
 
   const agencyMap = await getDynamicAgencyMap();
   const agencyUUID = agencyMap[agencyAcronym.toUpperCase()];
-  
-  const { questions, totalItems, totalPages } = await getQuestionsByAgency(agencyUUID, currentPage);
+
+  const questions = await getQuestionsByAgency(agencyUUID, currentPage);
   const topics = await getTopicByAgency(parseInt(agencyUUID));
 
   const upperCaseAgencyAcronym = agencyAcronym.toUpperCase();
@@ -65,11 +65,6 @@ const AgencyPage = async ({ params, searchParams }: AgencyPageProps) => {
             questions={questions}
             agencyMap={agencyMap}
             agencyList={agencyList}
-            totalItems={totalItems}
-            totalPages={totalPages}
-            currentPage={currentPage}
-            importFunction={getQuestionsByAgency}
-            value={currentAgency.id}
           />
         </div>
 

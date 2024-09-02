@@ -20,8 +20,7 @@ const SearchResultPage = async ({ searchParams }: SearchResultPageProps) => {
   const query = searchParams.query || '';
   const currentPage = searchParams.page ? parseInt(searchParams.page, 10) : 1;
 
-  const { questions, totalItems, totalPages } =
-    await searchQuestionsWithPagination(query, currentPage);
+  const questions = await searchQuestionsWithPagination(query, currentPage);
 
   const trendingAgencies = await getTrendingAgencies();
   const agencyMap = await getDynamicAgencyMap();
@@ -32,22 +31,17 @@ const SearchResultPage = async ({ searchParams }: SearchResultPageProps) => {
       <div className="container mt-10 flex">
         <div className="max-w-screen-2xl">
           <div className="font-semibold text-base text-black-700 pb-7 flex">
-            {totalItems}&nbsp;
+            {questions.totalItems}&nbsp;
             <div>
               <WordTranslate translate={'Search'} keyword={'search_result'} />
             </div>
             <div>&nbsp;"{query}"</div>
           </div>
-          {questions.length > 0 ? (
+          {questions.data.length > 0 ? (
             <QuestionBox
               questions={questions}
               agencyMap={agencyMap}
               agencyList={agencyList}
-              totalItems={totalItems}
-              totalPages={totalPages}
-              currentPage={currentPage}
-              importFunction={searchQuestionsWithPagination}
-              value={query}
             />
           ) : (
             <div className="h-[220px] w-[900px] text-dim-500">
