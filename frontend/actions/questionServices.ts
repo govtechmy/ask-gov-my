@@ -266,6 +266,52 @@ export async function getAgencyList(): Promise<Agency[]> {
   }
 }
 
+export async function getAgencyListWithPagination(
+  page: number = 1,
+  pageSize: number = 27,
+  searchTerm: string = ''
+): Promise<{ agencies: Agency[]; totalItems: number; totalPages: number; currentPage: number }> {
+  try {
+    const searchQuery = searchTerm ? `&search=${encodeURIComponent(searchTerm)}` : '';
+    const response = await fetch(`${API_URL}/agencies?page=${page}&page_size=${pageSize}${searchQuery}`, {
+      method: 'GET',
+      headers: {
+        'Cache-Control': 'no-cache',
+        Pragma: 'no-cache',
+        Expires: '0',
+        'Content-Type': 'application/json',
+      },
+    });
+
+    if (!response.ok) {
+      throw new Error('Failed to fetch agency list');
+    }
+
+    const data = await response.json();
+    return {
+      agencies: data.results.map((agency: Agency) => ({
+        id: agency.id,
+        name: agency.name,
+        name_ms: agency.name_ms,
+        acronym: agency.acronym,
+        logo_url: agency.logo_url,
+      })),
+      totalItems: data.totalItems,
+      totalPages: data.totalPages,
+      currentPage: data.currentPage,
+    };
+  } catch (error) {
+    console.error('Error in getAgencyListWithPagination:', error);
+    return {
+      agencies: [],
+      totalItems: 0,
+      totalPages: 0,
+      currentPage: 1,
+    };
+  }
+}
+
+
 export async function getDynamicAgencyMap(): Promise<Record<string, string>> {
   try {
     const response = await fetch(`${API_URL}/agencies`, {
