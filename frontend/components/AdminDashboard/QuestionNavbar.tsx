@@ -1,64 +1,73 @@
 'use client';
+import React, { useState } from 'react';
 import Calendar from '@/icons/calendar';
-import React, { useEffect } from 'react';
 import Search from '@/icons/search';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { cn } from '@/lib/utils';
-import { useSearchParams, useRouter } from 'next/navigation';
 
 interface QuestionNavbarProps {
   unassignedCount: number;
-  setSearchTerm: (term: string) => void;
+  currentTab: string;
+  searchTerm: string;
 }
 
-const QuestionNavbar: React.FC<QuestionNavbarProps> = ({
-  unassignedCount,
-  setSearchTerm,
-}) => {
-  const searchParams = useSearchParams();
+const QuestionNavbar: React.FC<QuestionNavbarProps> = ({ unassignedCount, currentTab, searchTerm }) => {
   const router = useRouter();
-  const activeTab = searchParams.get('tab') || 'all';
+  const searchParams = useSearchParams();
+  const [searchValue, setSearchValue] = useState(searchTerm);
 
-  const setActiveTab = (tab: string) => {
-    const params = new URLSearchParams(window.location.search);
+  const handleTabChange = (tab: string) => {
+    const params = new URLSearchParams(searchParams.toString());
     params.set('tab', tab);
+    params.delete('page');
+    params.delete('searchTerm');
+    setSearchValue(''); 
     router.push(`${window.location.pathname}?${params.toString()}`);
   };
 
-  useEffect(() => {}, [activeTab]);
+  const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const term = e.target.value;
+    setSearchValue(term);
+    const params = new URLSearchParams(searchParams.toString());
+    if (term) {
+      params.set('searchTerm', term);
+    } else {
+      params.delete('searchTerm');
+    }
+    params.delete('page');
+    router.push(`${window.location.pathname}?${params.toString()}`);
+  };
 
   return (
     <div className="flex justify-between items-center pt-3 pb-[9px] border-b border-[#E4E4E7] dark:border-[#27272A]">
       <div className="flex space-x-8">
         <button
-          className={`font-medium text-sm pb-3 -mb-5 ${activeTab === 'all' ? 'text-black-900 border-b-2 border-[#702FF9]' : 'text-dim-500'}`}
-          onClick={() => setActiveTab('all')}
+          className={`font-medium text-sm pb-3 -mb-5 ${currentTab === 'all' ? 'text-black-900 border-b-2 border-[#702FF9]' : 'text-dim-500'}`}
+          onClick={() => handleTabChange('all')}
         >
           All Questions
         </button>
         <button
-          className={`font-medium text-sm pb-3 -mb-5 ${activeTab === 'unassigned' ? 'text-black-900 border-b-2 border-[#702FF9] ' : 'text-dim-500'}`}
-          onClick={() => setActiveTab('unassigned')}
+          className={`font-medium text-sm pb-3 -mb-5 ${currentTab === 'unassigned' ? 'text-black-900 border-b-2 border-[#702FF9]' : 'text-dim-500'}`}
+          onClick={() => handleTabChange('unassigned')}
         >
           Unassigned <span className="text-[#702FF9]">{unassignedCount}</span>
         </button>
         <button
-          className={`font-medium text-sm pb-3 -mb-5 ${activeTab === 'assigned' ? 'text-black-900 border-b-2 border-[#702FF9]' : 'text-dim-500'}`}
-          onClick={() => setActiveTab('assigned')}
+          className={`font-medium text-sm pb-3 -mb-5 ${currentTab === 'assigned' ? 'text-black-900 border-b-2 border-[#702FF9]' : 'text-dim-500'}`}
+          onClick={() => handleTabChange('assigned')}
         >
           Assigned
         </button>
         <button
-          className={`font-medium text-sm pb-3 -mb-5 ${activeTab === 'spam' ? 'text-black-900 border-b-2 border-[#702FF9]' : 'text-dim-500'}`}
-          onClick={() => setActiveTab('spam')}
+          className={`font-medium text-sm pb-3 -mb-5 ${currentTab === 'spam' ? 'text-black-900 border-b-2 border-[#702FF9]' : 'text-dim-500'}`}
+          onClick={() => handleTabChange('spam')}
         >
           Spam
         </button>
       </div>
       <div className="flex space-x-4 items-center">
-        <div
-          className="border-[1px] border-outline-200 h-8 rounded-md bg-white p-2 items-center flex
-        text-dim-500"
-        >
+        <div className="border-[1px] border-outline-200 h-8 rounded-md bg-white p-2 items-center flex text-dim-500">
           Agency:<div className="text-black-900 px-1">All</div>
         </div>
         <button className="px-3 border rounded-md h-8 items-center bg-[#FFFFFF] dark:bg-[#18181B]">
@@ -72,10 +81,11 @@ const QuestionNavbar: React.FC<QuestionNavbarProps> = ({
           <input
             type="search"
             placeholder="Search by ID, keywords"
+            value={searchValue}
             className={cn(
               'font-normal placeholder:text-dim-500 flex h-11 w-full rounded-md bg-transparent py-3 text-sm pl-2',
             )}
-            onChange={e => setSearchTerm(e.target.value)}
+            onChange={handleSearchChange}
           />
           <Search strokeWidth={1.88} className="stroke-[#A1A1AA]" />
         </div>
