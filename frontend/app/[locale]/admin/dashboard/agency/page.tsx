@@ -29,7 +29,6 @@ const ManageAgencies: React.FC = () => {
       const agencyList = await getAgencyList();
       setAgencies(agencyList);
       setFilteredAgencies(agencyList);
-      console.log(agencyList[1].last_edited);
     } catch (error) {
       if (error instanceof Error) {
         setError(error.message);
