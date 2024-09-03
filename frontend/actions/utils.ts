@@ -1,9 +1,5 @@
+import { fileInfo } from '@/lib/types/uploadFile';
 import { getFileSize, getPresignUrl } from '@/lib/uploadUtils';
-
-interface fileInfo {
-  fileName: string;
-  fileSize: number;
-}
 
 export async function fetchFileSizes(
   attachments: string[],
