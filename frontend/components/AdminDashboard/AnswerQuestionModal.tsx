@@ -28,16 +28,11 @@ const AnswerQuestionModal = ({
   onClose,
 }: AnswerQuestionModalProps) => {
   const [answer, setAnswer] = useState(question.answer || '');
-  const [attachments, setAttachments] = useState<File[]>([]);
-  const [uploadedAttachments, setUploadedAttachments] = useState<string[]>(
-    question.attachments || [],
-  );
   const [success, setSuccess] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
-  const [fileSizes, setFileSizes] = useState<number[]>([]);
   const [uploadItem, setUploadItem] = useState<UploadItem[] | []>([]);
-  const [svgHeight, setSvgHeight] = useState<number>(15);
   const questionTextRef = useRef<HTMLDivElement>(null);
+  const svgHeight = 15;
 
   // logo url for sample
   const logo_url =
@@ -112,7 +107,6 @@ const AnswerQuestionModal = ({
       const res = await submitAnswer(question.id, answer, attachmentArr);
       setSuccess('Answer submitted successfully');
       setError(null);
-      setAttachments([]);
       onClose();
     } catch (err) {
       if (err instanceof Error) {
@@ -145,7 +139,6 @@ const AnswerQuestionModal = ({
       await saveQuestionAsDraft(question.id, answer, attachmentArr);
       setSuccess('Draft saved successfully');
       setError(null);
-      setAttachments([]);
       onClose();
     } catch (err) {
       if (err instanceof Error) {
@@ -157,6 +150,11 @@ const AnswerQuestionModal = ({
     } finally {
       setSuccess(null);
     }
+  };
+
+  const handleCancel = () => {
+    const files = uploadItem.filter(file => file.isUploaded);
+    setUploadItem(files);
   };
 
   if (!isOpen) return null;
@@ -276,7 +274,7 @@ const AnswerQuestionModal = ({
                       </>
                     )}
 
-                    {uploadedAttachments.length == 0 && (
+                    {uploadItem.filter(item => item.isUploaded).length == 0 && (
                       <div className="m-4"></div>
                     )}
                   </div>
@@ -299,7 +297,7 @@ const AnswerQuestionModal = ({
             className="mr-3 h-[44px] w-[77px] border-[1px] border-outline-200 shadow-button rounded-lg 
               text-base items-center justify-center flex hover:cursor-pointer"
             onClick={() => {
-              setAttachments([]);
+              handleCancel();
               onClose();
             }}
           >

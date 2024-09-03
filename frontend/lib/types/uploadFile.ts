@@ -8,3 +8,8 @@ export interface UploadItem {
 export interface ToUploadItem extends UploadItem {
   file: File;
 }
+
+export interface fileInfo {
+  fileName: string;
+  fileSize: number;
+}
