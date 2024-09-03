@@ -29,6 +29,7 @@ const ManageAgencies: React.FC = () => {
       const agencyList = await getAgencyList();
       setAgencies(agencyList);
       setFilteredAgencies(agencyList);
+      console.log(agencyList[1].last_edited);
     } catch (error) {
       if (error instanceof Error) {
         setError(error.message);
@@ -122,6 +123,7 @@ const ManageAgencies: React.FC = () => {
                 name_ms={agency.name_ms}
                 acronym={agency.acronym}
                 logo_url={agency.logo_url}
+                last_edited={agency.last_edited}
                 onUpdate={fetchAgencies}
               />
             ))}
