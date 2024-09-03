@@ -17,7 +17,7 @@ export const handleNameChange = (
   setName: React.Dispatch<React.SetStateAction<string>>,
   setNameError: React.Dispatch<React.SetStateAction<string | null>>,
 ) => {
-  const value = e.target.value.trim();
+  const value = e.target.value;
   setName(value);
 
   if (value === '') {
@@ -41,7 +41,7 @@ export const handleEmailChange = (
   setEmail: React.Dispatch<React.SetStateAction<string>>,
   setEmailError: React.Dispatch<React.SetStateAction<string | null>>,
 ) => {
-  const value = e.target.value.trim();
+  const value = e.target.value;
   setEmail(value);
 
   if (value === '') {
@@ -59,13 +59,12 @@ export const handleEmailChange = (
 };
 
 //finalized agency name input validation En/Ms
-
 export const handleAgencyNameChange = (
   e: React.ChangeEvent<HTMLInputElement>,
   setName: React.Dispatch<React.SetStateAction<string>>,
   setNameError: React.Dispatch<React.SetStateAction<string | null>>,
 ) => {
-  const value = e.target.value.trim();
+  const value = e.target.value;
   setName(value);
 
   if (value === '') {
@@ -90,7 +89,7 @@ export const handleAgencyNameChangeMs = (
   setNameMs: React.Dispatch<React.SetStateAction<string>>,
   setNameMsError: React.Dispatch<React.SetStateAction<string | null>>,
 ) => {
-  const value = e.target.value.trim();
+  const value = e.target.value;
   setNameMs(value);
 
   if (value === '') {

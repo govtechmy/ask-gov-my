@@ -102,6 +102,7 @@ const ManageUsers: React.FC = () => {
       <UserNavbar
         setSearchTerm={setSearchTerm}
         agencies={agencies}
+        //remove onAddUser
         onAddUser={function (): void {
           throw new Error('Function not implemented.');
         }}
