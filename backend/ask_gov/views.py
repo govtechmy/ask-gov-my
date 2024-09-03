@@ -13,7 +13,7 @@ from .models import Question, Agency, Topic, User, Account, Session, Verificatio
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from django.contrib.auth import get_user_model
-from django.db.models import Sum
+from django.db.models import Sum, Q
 from .elasticsearch_client import client
 import logging, re
 
@@ -81,6 +81,35 @@ class QuestionDetailView(generics.RetrieveAPIView):
 class AgencyListView(generics.ListAPIView):
     queryset = Agency.objects.all()
     serializer_class = AgencySerializer
+    pagination_class = CustomPagination
+    filter_backends = [DjangoFilterBackend, SearchFilter]
+    filterset_fields = ['name', 'name_ms', 'acronym']  
+    search_fields = ['name', 'name_ms', 'acronym']
+
+    def get_queryset(self):
+        queryset = super().get_queryset()
+        search_term = self.request.query_params.get('search', None)
+        
+        if search_term:
+            queryset = queryset.filter(
+                Q(name__icontains=search_term) |
+                Q(name_ms__icontains=search_term) |
+                Q(acronym__icontains=search_term)
+            )
+
+        return queryset
+
+    def list(self, request, *args, **kwargs):
+        queryset = self.filter_queryset(self.get_queryset())
+
+        if any(param in request.query_params for param in ['page', 'page_size', 'search']):
+            page = self.paginate_queryset(queryset)
+            if page is not None:
+                serializer = self.get_serializer(page, many=True)
+                return self.get_paginated_response(serializer.data)
+
+        serializer = self.get_serializer(queryset, many=True)
+        return Response(serializer.data)
 
 
 class TopicListView(generics.ListAPIView):
