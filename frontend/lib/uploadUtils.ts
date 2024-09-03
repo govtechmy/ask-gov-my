@@ -11,12 +11,10 @@ export async function uploadFile(
 ): Promise<boolean> {
   try {
     const putPresignedUrl = await getPresignUrl(fileName, 'PUT');
-
     const uploadRes = await fetch(putPresignedUrl, {
       method: 'PUT',
       body: file,
     });
-
     if (!uploadRes.ok) {
       throw new Error(`Upload failed! status: ${uploadRes.status}`);
     }

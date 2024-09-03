@@ -3,16 +3,10 @@ import Close from '@/icons/close';
 import { Button } from '../ui/button';
 import { StyledDisplay } from '../ui/display';
 import GetFileIcon from './GetFileIcon'; // Import the factorized component
+import { ToUploadItem } from '@/lib/types/uploadFile';
 
-interface UploadItem {
-  file: File | null; // will be null if it has been uploaded or from database. Will only have value if it is in draft (not yet uploaded) stage
-  fileName: string;
-  fileSize: number;
-  isUploaded: boolean; // will be true if it exists in s3. If it is not yet uploaded, the value will be false
-}
-
-interface AttachmentUploadProps {
-  attachments: UploadItem[];
+export interface AttachmentUploadProps {
+  attachments: ToUploadItem[];
   handleRemoveAttachment: (index: string) => void;
 }
 
@@ -20,6 +14,7 @@ const AttachmentUpload: React.FC<AttachmentUploadProps> = ({
   attachments,
   handleRemoveAttachment,
 }) => {
+  let fileName = attachments[0].file.name;
   return (
     <div className="flex flex-wrap gap-2">
       {attachments.map((file, index) => (
@@ -29,13 +24,13 @@ const AttachmentUpload: React.FC<AttachmentUploadProps> = ({
           className="w-[195px]"
         >
           <div className="flex-shrink-0">
-            <GetFileIcon fileName={file.fileName} />
+            <GetFileIcon fileName={file.file.name} />
           </div>
           <div>
             <div className="text-black-900 text-sm font-normal w-[94px]">
-              {file.fileName.length > 10
-                ? `${file.fileName.substring(0, 9)}...`
-                : file.fileName}
+              {file.file.name.length > 10
+                ? `${file.file.name.substring(0, 9)}...`
+                : file.file.name}
             </div>
             <div className="text-dim-500 font-normal text-sm">
               {`size ${(file.fileSize / 1e6).toFixed(2)} MB`}

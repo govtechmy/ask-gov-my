@@ -14,18 +14,12 @@ import React, { useEffect, useRef, useState } from 'react';
 import TipTap from '../Editor/TipTap';
 import { fetchFileSizes, formatDate } from '@/actions/utils';
 import { getPresignUrl, uploadFile } from '@/lib/uploadUtils';
+import { ToUploadItem, UploadItem } from '@/lib/types/uploadFile';
 
 interface AnswerQuestionModalProps {
   question: Question;
   isOpen: boolean;
   onClose: () => void;
-}
-
-interface UploadItem {
-  file: File | null; // will be null if it has been uploaded or from database. Will only have value if it is in draft (not yet uploaded) stage
-  fileName: string;
-  fileSize: number;
-  isUploaded: boolean; // will be true if it exists in s3. If it is not yet uploaded, the value will be false
 }
 
 const AnswerQuestionModal = ({
@@ -55,30 +49,37 @@ const AnswerQuestionModal = ({
   }, [question.answer]);
 
   useEffect(() => {
-    if (isOpen) {
-      const fetchSizes = async () => {
-        try {
-          if (question.attachments && question.attachments.length > 0) {
-            const fileSize = await fetchFileSizes(question.attachments);
-            const fileData = fileSize.map(file => ({
-              file: null,
-              fileName: file.fileName,
-              fileSize: file.fileSize,
-              isUploaded: true,
-            }));
-            setUploadItem(fileData);
-          }
-        } catch (error) {
-          console.log('error on fileSize', error);
+    const fetchSizes = async () => {
+      try {
+        if (question.attachments && question.attachments.length > 0) {
+          const fileSize = await fetchFileSizes(question.attachments);
+          const fileData = fileSize.map(file => ({
+            file: null,
+            fileName: file.fileName,
+            fileSize: file.fileSize,
+            isUploaded: true,
+          }));
+          setUploadItem(fileData);
         }
-      };
-      fetchSizes();
-    }
-  }, [question.attachments, isOpen]);
+      } catch (error) {
+        console.log('error on fileSize', error);
+      }
+    };
+    fetchSizes();
+  }, []);
 
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const files = event.target.files ? Array.from(event.target.files) : [];
-    setAttachments((prev: File[]) => [...prev, ...files]);
+    const newUploadItems: UploadItem[] = files.map(file => {
+      let renamedFile = `${Date.now()}-${file.name}`;
+      return {
+        file: file,
+        fileName: renamedFile,
+        fileSize: file.size,
+        isUploaded: false,
+      };
+    });
+    setUploadItem((prev: UploadItem[]) => [...prev, ...newUploadItems]);
   };
 
   const handleRemoveAttachment = (fileName: string) => {
@@ -95,24 +96,20 @@ const AnswerQuestionModal = ({
 
   const handleSubmit = async () => {
     try {
-      const attachmentArr: string[] = [];
-      for (const file of attachments) {
-        let renamedFile = `${Date.now()}-${file.name}`;
-        const uploadSuccess = await uploadFile(file, renamedFile);
-        if (uploadSuccess) {
-          try {
-            const url = await getPresignUrl(renamedFile, 'GET');
-            attachmentArr.push(renamedFile);
-          } catch (error) {
-            console.error('Error getting presigned URL:', error);
+      const filesToUpload = [...uploadItem];
+
+      for (let i = 0; i < filesToUpload.length; i++) {
+        const file = filesToUpload[i];
+        if (file.file && !file.isUploaded) {
+          const uploadSuccess = await uploadFile(file.file, file.fileName);
+          if (uploadSuccess) {
+            filesToUpload[i] = { ...file, isUploaded: true, file: null };
           }
         }
       }
-
-      await submitAnswer(question.id, answer, [
-        ...uploadedAttachments,
-        ...attachmentArr,
-      ]);
+      setUploadItem(filesToUpload);
+      const attachmentArr = filesToUpload.map(file => file.fileName);
+      const res = await submitAnswer(question.id, answer, attachmentArr);
       setSuccess('Answer submitted successfully');
       setError(null);
       setAttachments([]);
@@ -131,24 +128,21 @@ const AnswerQuestionModal = ({
 
   const handleSaveDraft = async () => {
     try {
-      const attachmentArr: string[] = [];
-      for (const file of attachments) {
-        let renamedFile = `${Date.now()}-${file.name}`;
-        const uploadSuccess = await uploadFile(file, renamedFile);
-        if (uploadSuccess) {
-          try {
-            const url = await getPresignUrl(file.name, 'GET');
-            attachmentArr.push(renamedFile);
-          } catch (error) {
-            console.error('Error getting presigned URL:', error);
+      const filesToUpload = [...uploadItem];
+
+      for (let i = 0; i < filesToUpload.length; i++) {
+        const file = filesToUpload[i];
+        if (file.file && !file.isUploaded) {
+          const uploadSuccess = await uploadFile(file.file, file.fileName);
+          if (uploadSuccess) {
+            filesToUpload[i] = { ...file, isUploaded: true, file: null };
           }
         }
       }
+      setUploadItem(filesToUpload);
+      const attachmentArr = filesToUpload.map(file => file.fileName);
 
-      await saveQuestionAsDraft(question.id, answer, [
-        ...uploadedAttachments,
-        ...attachmentArr,
-      ]);
+      await saveQuestionAsDraft(question.id, answer, attachmentArr);
       setSuccess('Draft saved successfully');
       setError(null);
       setAttachments([]);
@@ -159,6 +153,8 @@ const AnswerQuestionModal = ({
       } else {
         setError('An unexpected error occurred');
       }
+      setSuccess(null);
+    } finally {
       setSuccess(null);
     }
   };
@@ -250,7 +246,12 @@ const AnswerQuestionModal = ({
                     {uploadItem.filter(item => !item.isUploaded).length > 0 && (
                       <div className="m-4">
                         <AttachmentUpload
-                          attachments={uploadItem}
+                          attachments={
+                            uploadItem.filter(
+                              // pass in the attachments that is not yet uploaded
+                              item => !item.isUploaded,
+                            ) as ToUploadItem[]
+                          }
                           handleRemoveAttachment={handleRemoveAttachment}
                         />
                       </div>
@@ -264,7 +265,9 @@ const AnswerQuestionModal = ({
                         </div>
                         <div className="m-4">
                           <AttachmentDownload
-                            attachments={uploadItem}
+                            attachments={uploadItem.filter(
+                              item => item.isUploaded,
+                            )}
                             handleRemoveUploadedAttachment={
                               handleRemoveUploadedAttachment
                             }

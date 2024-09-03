@@ -36,6 +36,11 @@ interface Props {
   question?: Question;
 }
 
+interface fileInfo {
+  fileName: string;
+  fileSize: number;
+}
+
 const QuestionDetailPage: React.FC<Props> = async ({ params }) => {
   const { locale, agencyAcronym, questionId } = params;
   const AGENCY_TO_UUID = await getDynamicAgencyMap();
@@ -64,7 +69,7 @@ const QuestionDetailPage: React.FC<Props> = async ({ params }) => {
 
   const attachments = question.attachments || [];
 
-  let fileSize: number[] = [];
+  let fileSize: fileInfo[] = [];
 
   try {
     fileSize = await fetchFileSizes(attachments);
@@ -183,10 +188,10 @@ const QuestionDetailPage: React.FC<Props> = async ({ params }) => {
                       />
                     </div>
                     <div className="mx-8 mb-8 ">
-                      <AttachmentDownload
+                      {/* <AttachmentDownload
                         uploadedAttachments={attachments}
                         fileSizes={fileSize}
-                      ></AttachmentDownload>
+                      ></AttachmentDownload> */}
                     </div>
                   </div>
                   <div>

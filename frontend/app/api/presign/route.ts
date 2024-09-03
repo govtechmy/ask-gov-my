@@ -48,7 +48,7 @@ export async function GET(request: NextRequest) {
   try {
     if (operation == 'GET' || operation == 'PUT') {
       const url = await generatePresignedUrl(file, operation);
-      return NextResponse.json({ data: url });
+      return NextResponse.json({ presignedUrl: url });
     } else {
       // operation == 'HEAD'
       const fileSize = await getFileSize(file);
