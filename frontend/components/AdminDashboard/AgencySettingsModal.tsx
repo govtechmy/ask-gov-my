@@ -30,9 +30,9 @@ interface AgencySettingsModalProps {
   agency: Agency;
   isOpen: boolean;
   onClose: () => void;
-  handleEditAgencyToast(): Function;
-  handleFailEditAgencyToast(): Function;
-  handleErrorToast(): Function;
+  handleEditAgencyToast: () => void;
+  handleFailEditAgencyToast: () => void;
+  handleErrorToast: () => void;
 }
 
 const AgencySettingsModal: React.FC<AgencySettingsModalProps> = ({
@@ -47,8 +47,6 @@ const AgencySettingsModal: React.FC<AgencySettingsModalProps> = ({
   const [nameMs, setNameMs] = useState(agency.name_ms);
   const [acronym, setAcronym] = useState(agency.acronym);
   const [logoUrl, setLogoUrl] = useState(agency.logo_url || '');
-  const [success, setSuccess] = useState<string | null>(null);
-  const [error, setError] = useState<string | null>(null);
   const [uploadError, setUploadError] = useState<string | null>(null);
   const [nameError, setNameError] = useState<string | null>(null);
   const [nameMsError, setNameMsError] = useState<string | null>(null);
@@ -76,11 +74,16 @@ const AgencySettingsModal: React.FC<AgencySettingsModalProps> = ({
               ? `Upload failed: ${err.message}`
               : 'An unexpected error occurred during the upload',
           );
+          handleErrorToast();
         }
       };
-      img.onerror = () => setUploadError('Failed to load the image');
+      img.onerror = () => {
+        setUploadError('Failed to load the image');
+        handleErrorToast();
+      };
     } else {
       setUploadError('No file selected');
+      handleErrorToast();
     }
   };
 
@@ -109,12 +112,29 @@ const AgencySettingsModal: React.FC<AgencySettingsModalProps> = ({
 
     try {
       await updateAgency(agency.id, name, nameMs, acronym, logoUrl || '');
-      setSuccess('Agency updated successfully');
+      handleEditAgencyToast();
       onClose();
     } catch (err) {
-      setError(
-        err instanceof Error ? 'Update failed' : 'An unexpected error occurred',
-      );
+      onClose();
+      console.error('Failed to update agency:', err);
+      if (err instanceof Error) {
+        if (
+          err.message.includes('Network error') ||
+          err.message.includes('Timeout')
+        ) {
+          handleErrorToast();
+        } else if (
+          err.message.includes('Validation failed') ||
+          err.message.includes('Invalid input')
+        ) {
+          handleFailEditAgencyToast();
+        } else {
+          handleFailEditAgencyToast();
+        }
+      } else {
+        // Handle unexpected errors
+        handleErrorToast();
+      }
     }
   };
 
@@ -244,8 +264,6 @@ const AgencySettingsModal: React.FC<AgencySettingsModalProps> = ({
             Save settings
           </Button>
         </DialogFooter>
-        {success && <div className="text-green-500 mt-4">{success}</div>}
-        {error && <div className="text-red-500 mt-4">{error}</div>}
       </DialogContent>
     </Dialog>
   );

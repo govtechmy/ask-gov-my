@@ -35,9 +35,11 @@ const AgencyCard: React.FC<AgencyCardProps> = ({
   const handleEditAgencyToast = () => {
     setShowEditAgencyToast(true);
   };
+
   const handleFailEditAgencyToast = () => {
     setShowFailEditAgencyToast(true);
   };
+
   const handleErrorToast = () => {
     setShowErrorToast(true);
   };
@@ -86,7 +88,7 @@ const AgencyCard: React.FC<AgencyCardProps> = ({
 
       {showEditAgencyToast && (
         <Toast
-          message="New user has been added!"
+          message="Agency have been Edited!"
           icon={<TickCheckCircle />}
           underlineColor="bg-success-600"
           messageColor="text-success-700"
