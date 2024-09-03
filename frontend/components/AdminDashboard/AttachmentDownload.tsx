@@ -5,17 +5,11 @@ import { Button } from '../ui/button';
 import { StyledDisplay } from '../ui/display';
 import GetFileIcon from './GetFileIcon';
 import { downloadFile, getLastSegment, formatFileSize } from '@/actions/utils';
+import { UploadItem } from '@/lib/types/uploadFile';
 
 interface AttachmentDownloadProps {
   attachments: UploadItem[];
   handleRemoveUploadedAttachment?: (index: string) => void;
-}
-
-interface UploadItem {
-  file: File | null; // will be null if it has been uploaded or from database. Will only have value if it is in draft (not yet uploaded) stage
-  fileName: string;
-  fileSize: number;
-  isUploaded: boolean; // will be true if it exists in s3. If it is not yet uploaded, the value will be false
 }
 
 const AttachmentDownload: React.FC<AttachmentDownloadProps> = ({
