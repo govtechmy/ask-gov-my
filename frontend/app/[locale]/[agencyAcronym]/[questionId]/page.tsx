@@ -26,6 +26,7 @@ import TipTap from '@/components/Editor/TipTap';
 import BaseHeader from '@/components/common/Header/BaseHeader';
 import Masthead from '@/components/common/Header/Masthead';
 import { StyledDisplay } from '@/components/ui/display';
+import { fileInfo, UploadItem } from '@/lib/types/uploadFile';
 
 interface Props {
   params: {
@@ -34,11 +35,6 @@ interface Props {
     locale: string;
   };
   question?: Question;
-}
-
-interface fileInfo {
-  fileName: string;
-  fileSize: number;
 }
 
 const QuestionDetailPage: React.FC<Props> = async ({ params }) => {
@@ -68,13 +64,15 @@ const QuestionDetailPage: React.FC<Props> = async ({ params }) => {
   }
 
   const attachments = question.attachments || [];
-
-  let fileSize: fileInfo[] = [];
-
-  try {
-    fileSize = await fetchFileSizes(attachments);
-  } catch (error) {
-    console.log('error on fileSize', error);
+  let fileData: UploadItem[] | null = null;
+  if (attachments && attachments.length > 0) {
+    const fileSize = await fetchFileSizes(attachments);
+    fileData = fileSize.map(file => ({
+      file: null,
+      fileName: file.fileName,
+      fileSize: file.fileSize,
+      isUploaded: true,
+    }));
   }
 
   let agencyList: any = [];
@@ -187,12 +185,13 @@ const QuestionDetailPage: React.FC<Props> = async ({ params }) => {
                         keyword={'attachment'}
                       />
                     </div>
-                    <div className="mx-8 mb-8 ">
-                      {/* <AttachmentDownload
-                        uploadedAttachments={attachments}
-                        fileSizes={fileSize}
-                      ></AttachmentDownload> */}
-                    </div>
+                    {attachments.length > 0 && (
+                      <div className="mx-8 mb-8 ">
+                        <AttachmentDownload
+                          attachments={fileData as UploadItem[]}
+                        />
+                      </div>
+                    )}
                   </div>
                   <div>
                     <ThumbsCounter
