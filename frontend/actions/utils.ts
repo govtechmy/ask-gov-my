@@ -58,19 +58,26 @@ export function formatFileSize(size: number | undefined): string {
   }
 }
 
-export function formatDate(dateString: string) {
+export const formatDate = (
+  dateString: string,
+  format: 'full' | 'short' = 'full',
+  locale = 'en-GB',
+): string => {
   const date = new Date(dateString);
-  return (
-    date.toLocaleDateString('en-GB', {
+  if (format === 'short') {
+    return date.toLocaleDateString(locale, {
       day: '2-digit',
-      month: 'long',
+      month: '2-digit',
       year: 'numeric',
-    }) +
-    ', ' +
-    date.toLocaleTimeString('en-GB', {
-      hour: '2-digit',
-      minute: '2-digit',
-      hour12: true,
-    })
-  );
-}
+    });
+  }
+  return `${date.toLocaleDateString(locale, {
+    day: '2-digit',
+    month: 'long',
+    year: 'numeric',
+  })}, ${date.toLocaleTimeString(locale, {
+    hour: '2-digit',
+    minute: '2-digit',
+    hour12: true,
+  })}`;
+};

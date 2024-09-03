@@ -30,7 +30,7 @@ export interface Agency {
   acronym: string;
   total_likes?: number;
   logo_url?: string;
-  last_edited: Date;
+  last_edited: string;
 }
 
 export interface Topic {

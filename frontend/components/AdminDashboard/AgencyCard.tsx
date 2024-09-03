@@ -11,6 +11,7 @@ interface AgencyCardProps {
   name_ms: string;
   acronym: string;
   logo_url?: string;
+  last_edited: string;
   onUpdate: () => void;
 }
 
@@ -20,6 +21,7 @@ const AgencyCard: React.FC<AgencyCardProps> = ({
   name_ms,
   acronym,
   logo_url,
+  last_edited,
   onUpdate,
 }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -47,7 +49,6 @@ const AgencyCard: React.FC<AgencyCardProps> = ({
         </div>
       </div>
 
-      {/* TODO fix this last edited*/}
       <AgencySettingsModal
         agency={{
           id,
@@ -55,7 +56,7 @@ const AgencyCard: React.FC<AgencyCardProps> = ({
           name_ms,
           acronym,
           logo_url,
-          last_edited: new Date(),
+          last_edited,
         }}
         isOpen={isModalOpen}
         onClose={() => {

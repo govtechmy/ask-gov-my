@@ -179,6 +179,7 @@ export async function getAgencyList(): Promise<Agency[]> {
       name_ms: agency.name_ms,
       acronym: agency.acronym,
       logo_url: agency.logo_url,
+      last_edited: agency.last_edited,
     }));
   } catch (error) {
     console.error('Error in getAgencyList:', error);
