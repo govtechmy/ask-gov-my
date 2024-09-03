@@ -20,17 +20,28 @@ import {
   DialogTitle,
 } from '../ui/dialog';
 import { formatDate } from '@/actions/utils';
+import {
+  handleAgencyAcronymChange,
+  handleAgencyNameChange,
+  handleAgencyNameChangeMs,
+} from '@/actions/userInputValidation';
 
 interface AgencySettingsModalProps {
   agency: Agency;
   isOpen: boolean;
   onClose: () => void;
+  handleEditAgencyToast(): Function;
+  handleFailEditAgencyToast(): Function;
+  handleErrorToast(): Function;
 }
 
 const AgencySettingsModal: React.FC<AgencySettingsModalProps> = ({
   agency,
   isOpen,
   onClose,
+  handleEditAgencyToast,
+  handleFailEditAgencyToast,
+  handleErrorToast,
 }) => {
   const [name, setName] = useState(agency.name);
   const [nameMs, setNameMs] = useState(agency.name_ms);
@@ -38,6 +49,10 @@ const AgencySettingsModal: React.FC<AgencySettingsModalProps> = ({
   const [logoUrl, setLogoUrl] = useState(agency.logo_url || '');
   const [success, setSuccess] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
+  const [uploadError, setUploadError] = useState<string | null>(null);
+  const [nameError, setNameError] = useState<string | null>(null);
+  const [nameMsError, setNameMsError] = useState<string | null>(null);
+  const [acronymError, setAcronymError] = useState<string | null>(null);
 
   const handleFileChange = async (
     event: React.ChangeEvent<HTMLInputElement>,
@@ -48,28 +63,50 @@ const AgencySettingsModal: React.FC<AgencySettingsModalProps> = ({
       img.src = URL.createObjectURL(file);
       img.onload = async () => {
         if (img.width !== 200 || img.height !== 200) {
-          setError('Image must be exactly 200x200 pixels');
+          setUploadError('Image must be exactly 200x200 pixels');
           return;
         }
         try {
           const url = await uploadFile(file);
           setLogoUrl(url);
-          setSuccess('Image uploaded successfully');
+          handleEditAgencyToast();
         } catch (err) {
-          setError(
+          setUploadError(
             err instanceof Error
               ? `Upload failed: ${err.message}`
               : 'An unexpected error occurred during the upload',
           );
         }
       };
-      img.onerror = () => setError('Failed to load the image');
+      img.onerror = () => setUploadError('Failed to load the image');
     } else {
-      setError('No file selected');
+      setUploadError('No file selected');
     }
   };
 
   const handleSubmit = async () => {
+    if (nameError || nameMsError || acronymError) {
+      return;
+    }
+    if (name === '' || nameMs === '' || acronym === '') {
+      handleAgencyNameChange(
+        { target: { value: name } } as React.ChangeEvent<HTMLInputElement>,
+        setName,
+        setNameError,
+      );
+      handleAgencyNameChangeMs(
+        { target: { value: nameMs } } as React.ChangeEvent<HTMLInputElement>,
+        setNameMs,
+        setNameMsError,
+      );
+      handleAgencyAcronymChange(
+        { target: { value: acronym } } as React.ChangeEvent<HTMLInputElement>,
+        setAcronym,
+        setAcronymError,
+      );
+      return;
+    }
+
     try {
       await updateAgency(agency.id, name, nameMs, acronym, logoUrl || '');
       setSuccess('Agency updated successfully');
@@ -135,6 +172,10 @@ const AgencySettingsModal: React.FC<AgencySettingsModalProps> = ({
             Upload photo ideally sized not more than 200x200 pixels in PNG or
             JPG format.
           </div>
+          {uploadError && (
+            <div className="text-danger-600 text-sm mb-4">{uploadError}</div>
+          )}
+
           <div className="space-y-4">
             <div className="space-y-2">
               <Label htmlFor="name-en">Agency's name (English)</Label>
@@ -142,18 +183,28 @@ const AgencySettingsModal: React.FC<AgencySettingsModalProps> = ({
                 id="name-en"
                 type="text"
                 value={name}
-                onChange={e => setName(e.target.value)}
+                onChange={e => handleAgencyNameChange(e, setName, setNameError)}
+                className={`${nameError ? 'border-danger-300' : ''}`}
               />
             </div>
+            {nameError && (
+              <div className="text-danger-600 text-sm">{nameError}</div>
+            )}
             <div className="space-y-2">
               <Label htmlFor="name-ms">Agency's name (Malay)</Label>
               <Input
                 id="name-ms"
                 type="text"
                 value={nameMs}
-                onChange={e => setNameMs(e.target.value)}
+                onChange={e =>
+                  handleAgencyNameChangeMs(e, setNameMs, setNameMsError)
+                }
+                className={`${nameMsError ? 'border-danger-300' : ''}`}
               />
             </div>
+            {nameMsError && (
+              <div className="text-danger-600 text-sm">{nameMsError}</div>
+            )}
             <div className="flex space-x-6">
               <div className="space-y-2">
                 <Label htmlFor="acronym">Agency's acronym:</Label>
@@ -161,10 +212,14 @@ const AgencySettingsModal: React.FC<AgencySettingsModalProps> = ({
                   id="acronym"
                   type="text"
                   value={acronym}
-                  onChange={e => setAcronym(e.target.value)}
+                  onChange={e =>
+                    handleAgencyAcronymChange(e, setAcronym, setAcronymError)
+                  }
+                  className={`${acronymError ? 'border-danger-300' : ''}`}
                 />
               </div>
-              <div className="h-[66px] w-[264px] flex flex-col">
+
+              <div className="h-[66px] flex flex-col">
                 <Label>Agency logo preview</Label>
                 <div className="font-poppins text-lg font-semibold flex items-center mt-[6px] h-10">
                   <Asklogo />
@@ -177,6 +232,10 @@ const AgencySettingsModal: React.FC<AgencySettingsModalProps> = ({
                 </div>
               </div>
             </div>
+
+            {acronymError && (
+              <div className="text-danger-600 text-sm">{acronymError}</div>
+            )}
           </div>
         </DialogDescription>
         <DialogFooter className="p-6 flex justify-end space-x-4">

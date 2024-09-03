@@ -4,6 +4,9 @@ import React, { useState } from 'react';
 import AgencySettingsModal from './AgencySettingsModal';
 import AgencyLogoImporter from '../common/AgencyLogoImporter';
 import Gear from '@/icons/gear';
+import Toast from '../ui/toast';
+import TickCheckCircle from '@/icons/tickcheckcircle';
+import AlarmTriangle from '@/icons/alarmtriangle';
 
 interface AgencyCardProps {
   id: number;
@@ -25,6 +28,19 @@ const AgencyCard: React.FC<AgencyCardProps> = ({
   onUpdate,
 }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [showEditAgencyToast, setShowEditAgencyToast] = useState(false);
+  const [showFailEditAgencyToast, setShowFailEditAgencyToast] = useState(false);
+  const [showErrorToast, setShowErrorToast] = useState(false);
+
+  const handleEditAgencyToast = () => {
+    setShowEditAgencyToast(true);
+  };
+  const handleFailEditAgencyToast = () => {
+    setShowFailEditAgencyToast(true);
+  };
+  const handleErrorToast = () => {
+    setShowErrorToast(true);
+  };
 
   return (
     <>
@@ -63,7 +79,43 @@ const AgencyCard: React.FC<AgencyCardProps> = ({
           setIsModalOpen(false);
           onUpdate();
         }}
+        handleEditAgencyToast={handleEditAgencyToast}
+        handleErrorToast={handleErrorToast}
+        handleFailEditAgencyToast={handleFailEditAgencyToast}
       />
+
+      {showEditAgencyToast && (
+        <Toast
+          message="New user has been added!"
+          icon={<TickCheckCircle />}
+          underlineColor="bg-success-600"
+          messageColor="text-success-700"
+          show={showEditAgencyToast}
+          onClose={() => setShowEditAgencyToast(false)}
+        />
+      )}
+      {showFailEditAgencyToast && (
+        <Toast
+          message="Failed to save. Please try again"
+          icon={<AlarmTriangle />}
+          underlineColor="bg-danger-600"
+          messageColor="text-danger-600"
+          show={showFailEditAgencyToast}
+          onClose={() => setShowFailEditAgencyToast(false)}
+          time={8000}
+        />
+      )}
+      {showErrorToast && (
+        <Toast
+          message="Unexpected Error Occured. Please Refresh Page."
+          icon={<AlarmTriangle />}
+          underlineColor="bg-danger-600"
+          messageColor="text-danger-600"
+          show={showErrorToast}
+          onClose={() => setShowErrorToast(false)}
+          time={8000}
+        />
+      )}
     </>
   );
 };
