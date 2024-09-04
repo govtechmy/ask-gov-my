@@ -621,8 +621,40 @@ class EditDeleteUserView(APIView):
 
 
 class GetAllUsersView(APIView):
+    pagination_class = CustomPagination
+
     def get(self, request):
         users = User.objects.all()
+
+        tab = request.query_params.get('tab', 'all')
+        if tab == 'superadmin':
+            users = users.filter(role='super_admin')
+        elif tab == 'staff':
+            users = users.filter(role='staff')
+
+        agency = request.query_params.get('agency', None)
+        if agency:
+            users = users.filter(agency_id=agency)
+
+        search_term = request.query_params.get('searchTerm', None)
+        if search_term:
+            users = users.filter(
+                Q(name__icontains=search_term) | Q(email__icontains=search_term)
+            )
+
+        paginator = self.pagination_class()
+        page = paginator.paginate_queryset(users, request)
+        if page is not None:
+            users_data = [{
+                'id': user.id,
+                'name': user.username,
+                'email': user.email,
+                'role': user.role,
+                'agency': user.agency,
+                'user_profile_colour': user.user_profile_colour,
+            } for user in page]
+            return paginator.get_paginated_response(users_data)
+
         users_data = [{
             'id': user.id,
             'name': user.username,
