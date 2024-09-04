@@ -10,12 +10,12 @@ const divVariants = cva('', {
         'p-2 px-3 border border-outline-200 hover:border-outline-300 bg-white rounded-lg flex items-center gap-1.5 justify-between` focus:border-outline-200 focus:ring focus:ring-offset-0 focus:ring-outline-400/20 shadow-button h-[54px] w-[195px]',
       nameHeader:
         'bg-black-800 text-white rounded-md font-bold text-xs flex justify-center items-center w-[53px] h-[22px]',
-      modal: '',
-      'modal-background':
-        'z-10 fixed inset-0 bg-gray-900 flex items-center justify-center bg-opacity-70',
-      'modal-display': 'bg-white rounded-xl shadow-lg',
-      'modal-header': 'text-black-900 text-lg font-semibold leading-[26px]',
-      'modal-body': 'text-black-700 text-sm font-normal',
+      logoBackground:
+        'absolute inset-0 rounded-full border border-outline-200 bg-transparent flex items-center justify-center overflow-hidden',
+      logoEditor:
+        'absolute bottom-0 left-12 h-5 w-5 flex items-center justify-center rounded-full bg-askmygovbrand-600 cursor-pointer',
+      nameLogoDisplay:
+        'font-poppins text-lg font-semibold flex items-center mt-[6px] h-10',
       Topics:
         'flex text-base font-medium text-askmygovbrand-600 bg-askmygovbrand-50 border-[1px] border-askmygovbrand-200 px-2 py-1 rounded-lg',
     },

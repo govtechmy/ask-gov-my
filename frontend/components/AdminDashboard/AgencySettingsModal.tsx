@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useRef, useState } from 'react';
 import { useTranslations } from 'next-intl';
 import { uploadFile } from '@/actions/fileServices';
 import { updateAgency } from '@/actions/userServices';
@@ -25,6 +25,7 @@ import {
   handleAgencyNameChange,
   handleAgencyNameChangeMs,
 } from '@/actions/userInputValidation';
+import { StyledDisplay } from '../ui/display';
 
 interface AgencySettingsModalProps {
   agency: Agency;
@@ -60,7 +61,13 @@ const AgencySettingsModal: React.FC<AgencySettingsModalProps> = ({
     event: React.ChangeEvent<HTMLInputElement>,
   ) => {
     const file = event.target.files?.[0];
+    const resetUploadState = () => {
+      setUploadError(null);
+      setUploadSuccess(null);
+      setUploadStatus('initial');
+    };
     if (file) {
+      resetUploadState();
       const img = new Image();
       img.src = URL.createObjectURL(file);
       img.onload = async () => {
@@ -149,6 +156,12 @@ const AgencySettingsModal: React.FC<AgencySettingsModalProps> = ({
     }
   };
 
+  const fileInputRef = useRef<HTMLInputElement>(null);
+
+  const handleDivClick = () => {
+    fileInputRef.current?.click();
+  };
+
   if (!isOpen) return null;
 
   return (
@@ -164,7 +177,7 @@ const AgencySettingsModal: React.FC<AgencySettingsModalProps> = ({
         </DialogHeader>
         <DialogDescription className="p-6 border-y-[1px] border-outline-200">
           <div className="relative w-16 h-16 flex-shrink-0">
-            <div className="absolute inset-0 rounded-full border border-outline-200 bg-transparent flex items-center justify-center overflow-hidden">
+            <StyledDisplay variant={'logoBackground'}>
               {logoUrl ? (
                 <ImageNext
                   src={logoUrl}
@@ -180,18 +193,17 @@ const AgencySettingsModal: React.FC<AgencySettingsModalProps> = ({
                   alt="JataNegara"
                 />
               )}
-            </div>
-            <Label
-              htmlFor="image-upload"
-              className="absolute bottom-0 left-12 h-5 w-5 flex items-center justify-center rounded-full bg-askmygovbrand-600 cursor-pointer"
-            >
+            </StyledDisplay>
+
+            <StyledDisplay variant={'logoEditor'} onClick={handleDivClick}>
               <Pencil
                 className="stroke-white-forcewhite"
                 width="12"
                 height="12"
               />
-            </Label>
+            </StyledDisplay>
             <Input
+              ref={fileInputRef}
               id="image-upload"
               type="file"
               className="hidden"
@@ -258,15 +270,15 @@ const AgencySettingsModal: React.FC<AgencySettingsModalProps> = ({
 
               <div className="h-[66px] flex flex-col">
                 <Label>Agency logo preview</Label>
-                <div className="font-poppins text-lg font-semibold flex items-center mt-[6px] h-10">
+                <StyledDisplay variant={'nameLogoDisplay'}>
                   <Asklogo />
                   <div className="pl-[10px]">
-                    Ask{' '}
+                    Ask
                     <span className="text-askmygovtextbrand-600">
                       {acronym}
                     </span>
                   </div>
-                </div>
+                </StyledDisplay>
               </div>
             </div>
 
