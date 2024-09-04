@@ -6,22 +6,20 @@ import {
 } from '@aws-sdk/client-s3';
 import { NextRequest, NextResponse } from 'next/server';
 import { getSignedUrl } from '@aws-sdk/s3-request-presigner';
-
 if (
-  !process.env.FIKRI_S3_REGION ||
-  !process.env.FIKRI_ACCESS_KEY_ID ||
-  !process.env.FIKRI_SECRET_ACCESS_KEY ||
-  !process.env.FIKRI_BUCKET
+  !process.env.AWS_REGION ||
+  !process.env.FILE_AWS_ACCESS_KEY_ID ||
+  !process.env.FILE_AWS_SECRET_ACCESS_KEY ||
+  !process.env.FILE_AWS_BUCKET_NAME
 ) {
   throw new Error('Missing required S3 configuration environment variables');
 }
 
-// TODO: change this to the correct s3 key
 const client = new S3Client({
-  region: process.env.FIKRI_S3_REGION,
+  region: process.env.AWS_REGION,
   credentials: {
-    accessKeyId: process.env.FIKRI_ACCESS_KEY_ID,
-    secretAccessKey: process.env.FIKRI_SECRET_ACCESS_KEY,
+    accessKeyId: process.env.FILE_AWS_ACCESS_KEY_ID,
+    secretAccessKey: process.env.FILE_AWS_SECRET_ACCESS_KEY,
   },
 });
 
@@ -67,7 +65,7 @@ async function generatePresignedUrl(
   operation: 'GET' | 'PUT',
 ): Promise<string> {
   const params = {
-    Bucket: process.env.FIKRI_BUCKET,
+    Bucket: process.env.FILE_AWS_BUCKET_NAME,
     Key: path,
   };
 

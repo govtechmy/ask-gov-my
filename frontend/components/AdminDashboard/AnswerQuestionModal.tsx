@@ -42,28 +42,27 @@ const AnswerQuestionModal = ({
   useEffect(() => {
     setAnswer(question.answer || '');
   }, [question.answer]);
-
   useEffect(() => {
     const fetchSizes = async () => {
-      if (isOpen) {
-        try {
-          if (question.attachments && question.attachments.length > 0) {
-            const fileSize = await fetchFileSizes(question.attachments);
-            const fileData = fileSize.map(file => ({
-              file: null,
-              fileName: file.fileName,
-              fileSize: file.fileSize,
-              isUploaded: true,
-            }));
-            setUploadItem(fileData);
-          }
-        } catch (error) {
-          console.log('error on fileSize', error);
+      try {
+        if (question.attachments && question.attachments.length > 0) {
+          const fileSize = await fetchFileSizes(question.attachments);
+          const fileData = fileSize.map(file => ({
+            file: null,
+            fileName: file.fileName,
+            fileSize: file.fileSize,
+            isUploaded: true,
+          }));
+          setUploadItem(fileData);
         }
+      } catch (error) {
+        console.log('error on fileSize', error);
       }
-      fetchSizes();
     };
-  }, []);
+    if (isOpen) {
+      fetchSizes();
+    }
+  }, [isOpen]);
 
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const files = event.target.files ? Array.from(event.target.files) : [];
