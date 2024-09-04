@@ -13,47 +13,51 @@ import Toast from '../ui/toast';
 import TickCheckCircle from '@/icons/tickcheckcircle';
 
 interface UserNavbarProps {
-  setSearchTerm: (term: string) => void;
+  currentTab: string;
+  searchTerm: string;
   agencies: Agency[];
-  onAddUser: () => void;
+  AGENCY_TO_UUID: Promise<Record<string, string>>;
 }
 
-const UserNavbar: React.FC<UserNavbarProps> = ({
-  setSearchTerm,
-  agencies,
-  onAddUser,
-}) => {
+const UserNavbar: React.FC<UserNavbarProps> = ({ currentTab, searchTerm, agencies, AGENCY_TO_UUID }) => {
   const searchParams = useSearchParams();
   const router = useRouter();
-  const [activeTab, setActiveTabState] = useState(
-    searchParams.get('tab') || 'all',
-  );
+  const [activeTab, setActiveTabState] = useState(currentTab || 'all');
+  const [searchValue, setSearchValue] = useState(searchTerm || '');
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isFocused, setIsFocused] = useState(false);
   const [showAddUserToast, setShowAddUserToast] = useState(false);
 
-  const AGENCY_TO_UUID = getDynamicAgencyMap();
 
-  const setActiveTab = useCallback(
-    (tab: string) => {
-      const params = new URLSearchParams(window.location.search);
-      params.set('tab', tab);
-      router.push(`${window.location.pathname}?${params.toString()}`);
-      setActiveTabState(tab);
-    },
-    [router],
-  );
+  const setActiveTab = useCallback((tab: string) => {
+    const params = new URLSearchParams(searchParams.toString());
+    params.set('tab', tab);
+    params.delete('page');
+    params.delete('searchTerm');
+    setSearchValue('');
+    router.push(`${window.location.pathname}?${params.toString()}`);
+    setActiveTabState(tab);
+  }, [router, searchParams]);
 
-  useEffect(() => {
-    const currentTab = searchParams.get('tab') || 'all';
-    if (currentTab !== activeTab) {
-      setActiveTabState(currentTab);
+
+  const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const term = e.target.value;
+    setSearchValue(term);
+    const params = new URLSearchParams(searchParams.toString());
+    if (term) {
+      params.set('searchTerm', term);
+    } else {
+      params.delete('searchTerm');
     }
-  }, [searchParams, activeTab]);
+    params.delete('page');
+    router.push(`${window.location.pathname}?${params.toString()}`);
+  };
 
   const handleAddUserToast = () => {
     setShowAddUserToast(true);
   };
+
+  //should create another function to select agency into params searchTerm once the dropdown is finished
 
   return (
     <div className="flex items-center justify-between pb-2 border-b border-[#E4E4E7] dark:border-[#27272A]">
@@ -109,10 +113,11 @@ const UserNavbar: React.FC<UserNavbarProps> = ({
           <input
             type="search"
             placeholder="Search by name or email"
+            value={searchValue}
             className="font-normal placeholder:text-dim-500 flex h-11 w-full rounded-md bg-transparent py-3 text-sm pl-2 focus:outline-none"
             onFocus={() => setIsFocused(true)}
             onBlur={() => setIsFocused(false)}
-            onChange={e => setSearchTerm(e.target.value)}
+            onChange={handleSearchChange}
           />
           <div className="h-4 w-4 items-center justify-center flex">
             <Search strokeWidth={1.88} className="stroke-[#A1A1AA]" />
@@ -134,7 +139,6 @@ const UserNavbar: React.FC<UserNavbarProps> = ({
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(false)}
         agencies={agencies}
-        onAddUser={onAddUser}
         handleAddUserToast={handleAddUserToast}
       />
 
