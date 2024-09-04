@@ -16,6 +16,7 @@ from django.contrib.auth import get_user_model
 from django.db.models import Sum, Q
 from .elasticsearch_client import client
 import logging, re
+from datetime import datetime
 
 logger = logging.getLogger(__name__)
 
@@ -60,17 +61,34 @@ class AllQuestionListView(generics.ListAPIView):
                 question__icontains=search_term
             )
 
+        date_str = self.request.query_params.get('date', None)
+        if date_str:
+            try:
+                date_obj = datetime.strptime(date_str, '%d%m%Y').date()
+                queryset = queryset.filter(date__date=date_obj)
+            except ValueError:
+                pass
+
         return queryset
 
     def list(self, request, *args, **kwargs):
         queryset = self.filter_queryset(self.get_queryset())
+
+        unassigned_count = Question.objects.filter(agency__isnull=True).exclude(state='spam').count()
+
         page = self.paginate_queryset(queryset)
         if page is not None:
             serializer = self.get_serializer(page, many=True)
-            return self.get_paginated_response(serializer.data)
+            return self.get_paginated_response({
+                'results': serializer.data,
+                'unassigned_count': unassigned_count
+            })
 
         serializer = self.get_serializer(queryset, many=True)
-        return Response(serializer.data)
+        return Response({
+            'results': serializer.data,
+            'unassigned_count': unassigned_count
+        })
 
 
 class QuestionDetailView(generics.RetrieveAPIView):
