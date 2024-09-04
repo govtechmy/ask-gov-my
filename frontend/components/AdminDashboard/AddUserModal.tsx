@@ -9,7 +9,6 @@ interface AddUserModalProps {
   isOpen: boolean;
   onClose: () => void;
   agencies: Agency[];
-  onAddUser: any;
   handleAddUserToast: Function;
 }
 
@@ -17,7 +16,6 @@ const AddUserModal: React.FC<AddUserModalProps> = ({
   isOpen,
   onClose,
   agencies,
-  onAddUser,
   handleAddUserToast,
 }) => {
   const [name, setName] = useState('');
