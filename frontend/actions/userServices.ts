@@ -43,21 +43,27 @@ export async function getAllUserQuestions(
   page: number = 1,
   pageSize: number = 10,
   tab: string = 'all',
-  searchTerm: string = ''
-): Promise<{ questions: Question[]; total: number; totalPages: number; currentPage: number }> {
+  searchTerm: string = '',
+  date: string 
+): Promise<{ questions: Question[]; total: number; totalPages: number; currentPage: number; unassignedCount: number }> {
   try {
-    const response = await fetch(
-      `${API_URL}/questions/all/?page=${page}&page_size=${pageSize}&tab=${tab}&search=${searchTerm}`,
-      {
-        method: 'GET',
-        headers: {
-          'Content-Type': 'application/json',
-          'Cache-Control': 'no-cache',
-          Pragma: 'no-cache',
-          Expires: '0',
-        },
-      }
-    );
+    const query = new URLSearchParams({
+      page: page.toString(),
+      page_size: pageSize.toString(),
+      tab,
+      search: searchTerm,
+      date: date
+    });
+    console.log(date)
+    const response = await fetch(`${API_URL}/questions/all/?${query.toString()}`, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+        'Cache-Control': 'no-cache',
+        Pragma: 'no-cache',
+        Expires: '0',
+      },
+    });
 
     if (!response.ok) {
       throw new Error('Failed to fetch user questions');
@@ -66,14 +72,15 @@ export async function getAllUserQuestions(
     const data = await response.json();
 
     return {
-      questions: data.results,
+      questions: data.results.results,
       total: data.count,
       totalPages: Math.ceil(data.count / pageSize),
       currentPage: page,
+      unassignedCount: data.results.unassigned_count, 
     };
   } catch (error) {
     console.error('Error in getAllUserQuestions:', error);
-    return { questions: [], total: 0, totalPages: 0, currentPage: 1 };
+    return { questions: [], total: 0, totalPages: 0, currentPage: 1, unassignedCount: 0 };
   }
 }
 
