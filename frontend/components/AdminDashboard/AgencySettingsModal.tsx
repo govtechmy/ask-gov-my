@@ -48,9 +48,13 @@ const AgencySettingsModal: React.FC<AgencySettingsModalProps> = ({
   const [acronym, setAcronym] = useState(agency.acronym);
   const [logoUrl, setLogoUrl] = useState(agency.logo_url || '');
   const [uploadError, setUploadError] = useState<string | null>(null);
+  const [uploadSuccess, setUploadSuccess] = useState<string | null>(null);
   const [nameError, setNameError] = useState<string | null>(null);
   const [nameMsError, setNameMsError] = useState<string | null>(null);
   const [acronymError, setAcronymError] = useState<string | null>(null);
+  const [uploadStatus, setUploadStatus] = useState<
+    'initial' | 'error' | 'success'
+  >('initial');
 
   const handleFileChange = async (
     event: React.ChangeEvent<HTMLInputElement>,
@@ -60,35 +64,43 @@ const AgencySettingsModal: React.FC<AgencySettingsModalProps> = ({
       const img = new Image();
       img.src = URL.createObjectURL(file);
       img.onload = async () => {
-        if (img.width !== 200 || img.height !== 200) {
-          setUploadError('Image must be exactly 200x200 pixels');
+        if (img.width > 201 && img.height > 201) {
+          setUploadError(
+            'Upload photo ideally sized not more than 200x200 pixels',
+          );
+          setUploadStatus('error');
           return;
         }
+
         try {
           const url = await uploadFile(file);
           setLogoUrl(url);
-          handleEditAgencyToast();
+          setUploadSuccess('Upload photo success!');
+          setUploadStatus('success');
         } catch (err) {
           setUploadError(
             err instanceof Error
               ? `Upload failed: ${err.message}`
               : 'An unexpected error occurred during the upload',
           );
+          setUploadStatus('error');
           handleErrorToast();
         }
       };
       img.onerror = () => {
         setUploadError('Failed to load the image');
+        setUploadStatus('error');
         handleErrorToast();
       };
     } else {
       setUploadError('No file selected');
+      setUploadStatus('error');
       handleErrorToast();
     }
   };
 
   const handleSubmit = async () => {
-    if (nameError || nameMsError || acronymError) {
+    if (nameError || nameMsError || acronymError || uploadError) {
       return;
     }
     if (name === '' || nameMs === '' || acronym === '') {
@@ -132,7 +144,6 @@ const AgencySettingsModal: React.FC<AgencySettingsModalProps> = ({
           handleFailEditAgencyToast();
         }
       } else {
-        // Handle unexpected errors
         handleErrorToast();
       }
     }
@@ -188,14 +199,20 @@ const AgencySettingsModal: React.FC<AgencySettingsModalProps> = ({
               onChange={handleFileChange}
             />
           </div>
-          <div className="mt-[6px] mb-6 text-dim-500 text-sm">
-            Upload photo ideally sized not more than 200x200 pixels in PNG or
-            JPG format.
-          </div>
-          {uploadError && (
-            <div className="text-danger-600 text-sm mb-4">{uploadError}</div>
+          {uploadStatus === 'error' ? (
+            <div className="text-danger-600 text-sm mt-[6px] mb-6">
+              {uploadError}
+            </div>
+          ) : uploadStatus === 'success' ? (
+            <div className="text-green-500 text-sm mt-[6px] mb-6">
+              {uploadSuccess}
+            </div>
+          ) : (
+            <div className="mt-[6px] mb-6 text-dim-500 text-sm">
+              Upload photo ideally sized not more than 200x200 pixels in PNG or
+              JPG format.
+            </div>
           )}
-
           <div className="space-y-4">
             <div className="space-y-2">
               <Label htmlFor="name-en">Agency's name (English)</Label>
