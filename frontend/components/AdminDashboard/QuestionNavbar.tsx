@@ -9,18 +9,21 @@ interface QuestionNavbarProps {
   unassignedCount: number;
   currentTab: string;
   searchTerm: string;
+  date: string;
 }
 
-const QuestionNavbar: React.FC<QuestionNavbarProps> = ({ unassignedCount, currentTab, searchTerm }) => {
+const QuestionNavbar: React.FC<QuestionNavbarProps> = ({ unassignedCount, currentTab, searchTerm, date }) => {
   const router = useRouter();
   const searchParams = useSearchParams();
   const [searchValue, setSearchValue] = useState(searchTerm);
+  const [selectedDate, setSelectedDate] = useState(date); 
 
   const handleTabChange = (tab: string) => {
     const params = new URLSearchParams(searchParams.toString());
     params.set('tab', tab);
     params.delete('page');
     params.delete('searchTerm');
+    params.delete('date')
     setSearchValue(''); 
     router.push(`${window.location.pathname}?${params.toString()}`);
   };
@@ -33,6 +36,18 @@ const QuestionNavbar: React.FC<QuestionNavbarProps> = ({ unassignedCount, curren
       params.set('searchTerm', term);
     } else {
       params.delete('searchTerm');
+    }
+    params.delete('page');
+    router.push(`${window.location.pathname}?${params.toString()}`);
+  };
+
+  const handleDateChange = (date: string) => { //DD/MM/YYYY
+    setSelectedDate(date);
+    const params = new URLSearchParams(searchParams.toString());
+    if (date) {
+      params.set('date', date); 
+    } else {
+      params.delete('date');
     }
     params.delete('page');
     router.push(`${window.location.pathname}?${params.toString()}`);
