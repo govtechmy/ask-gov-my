@@ -378,27 +378,44 @@ export async function deleteUser(
   }
 }
 
-export async function getAllUsers(): Promise<{
-  success: boolean;
-  users?: User[];
-  message?: string;
-}> {
+export async function getAllUsers({
+  page = 1,
+  pageSize = 12,
+  tab = 'all',
+  searchTerm = '',
+  agencyId = '',
+}: {
+  page?: number;
+  pageSize?: number;
+  tab?: string;
+  searchTerm?: string;
+  agencyId?: string;
+}): Promise<{ users: User[]; totalPages: number }> {
   try {
-    const response = await fetch(`${API_URL}/admin/users`, {
-      method: 'GET',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-    });
+    const response = await fetch(
+      `${API_URL}/admin/users?page=${page}&page_size=${pageSize}&tab=${tab}&searchTerm=${searchTerm}&agency=${agencyId}`,
+      {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      }
+    );
 
     if (!response.ok) {
       throw new Error('Failed to fetch users');
     }
 
-    const users = await response.json();
-    return { success: true, users };
+    const data = await response.json();
+    return {
+      users: data.results,
+      totalPages: Math.ceil(data.count / pageSize)
+    };
   } catch (error) {
     console.error('Error fetching users:', error);
-    return { success: false, message: 'Failed to fetch users' };
+    return {
+      users: [],
+      totalPages: 0,
+    };
   }
 }
