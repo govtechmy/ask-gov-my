@@ -126,8 +126,6 @@ const AgencySettingsModal: React.FC<AgencySettingsModalProps> = ({
     setHasUploaded(true);
   };
 
-  if (!isOpen) return null;
-
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
       <DialogContent hideCloseButton className="sm:max-w-[600px] p-0 gap-0">
