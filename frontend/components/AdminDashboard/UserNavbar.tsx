@@ -1,6 +1,6 @@
 'use client'
 import React, { useState, useCallback } from 'react';
-import { useSearchParams, useRouter } from 'next/navigation';
+import { useSearchParams } from 'next/navigation';
 import Search from '@/icons/search';
 import AddUserModal from './AddUserModal';
 import { cn } from '@/lib/utils';
@@ -9,22 +9,25 @@ import AgencyListDropdownUsers from './AgencyListDropdownUsers';
 import { Agency } from '@/types/types';
 import Toast from '../ui/toast';
 import TickCheckCircle from '@/icons/tickcheckcircle';
+import { useRouter } from '@/lib/i18n';
 
 interface UserNavbarProps {
-  currentTab: string;
-  searchTerm: string;
   agencies: Agency[];
 }
 
-const UserNavbar: React.FC<UserNavbarProps> = ({ currentTab, searchTerm, agencies }) => {
+const UserNavbar: React.FC<UserNavbarProps> = ({ agencies }) => {
   const searchParams = useSearchParams();
   const router = useRouter();
-  const [activeTab, setActiveTabState] = useState(currentTab || 'all');
-  const [searchValue, setSearchValue] = useState(searchTerm || '');
+
+  const currentTab = searchParams.get('tab') || 'all';  
+  const searchTerm = searchParams.get('searchTerm') || '';  
+  const selectedAgencyId = searchParams.get('agencyId') || '';  
+
+  const [activeTab, setActiveTabState] = useState(currentTab); 
+  const [searchValue, setSearchValue] = useState(searchTerm);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isFocused, setIsFocused] = useState(false);
   const [showAddUserToast, setShowAddUserToast] = useState(false);
-  const selectedAgencyId = searchParams.get('agencyId') || '';
 
   const setActiveTab = useCallback(
     (tab: string) => {

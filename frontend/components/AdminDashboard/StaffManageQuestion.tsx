@@ -33,9 +33,6 @@ const StaffManageQuestions = async ({ searchParams }: StaffManageQuestionsProps)
     <div className="container max-w-screen-lg px-6 mx-auto justify-between">
       <StaffQuestionNavbar
         unansweredCount={unansweredCount}
-        currentTab={tab}
-        searchTerm={searchTerm}
-        date={date}
       />
       <div className="pt-6">
         <StaffQuestionBox questions={questions} totalPages={totalPages} currentPage={currentPage} />

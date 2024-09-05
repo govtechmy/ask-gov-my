@@ -27,9 +27,6 @@ const ManageQuestions = async ({ searchParams }: ManageQuestionsProps) => {
     <div className="container max-w-screen-lg mx-auto justify-between px-6">
       <QuestionNavbar
         unassignedCount={unassignedCount}
-        currentTab={tab}
-        searchTerm={searchTerm}
-        date={date}
       />
       <div className="pt-6">
         <AdminQuestionBox

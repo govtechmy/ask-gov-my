@@ -8,20 +8,18 @@ import { cn } from '@/lib/utils';
 import { useSearchParams } from 'next/navigation';
 import { useRouter } from '@/lib/i18n';
 
-interface AgencyNavbarProps {
-  searchTerm: string;
-}
-
-const AgencyNavbar: React.FC<AgencyNavbarProps> = ({ searchTerm }) => {
+const AgencyNavbar: React.FC = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isFocused, setIsFocused] = useState(false);
 
   const router = useRouter();
   const searchParams = useSearchParams();
+  
+  const searchTerm = searchParams.get('searchTerm') || '';
 
   const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const term = e.target.value;
-    
+
     const params = new URLSearchParams(searchParams.toString());
     if (term) {
       params.set('searchTerm', term);
@@ -47,7 +45,7 @@ const AgencyNavbar: React.FC<AgencyNavbarProps> = ({ searchTerm }) => {
           <input
             type="search"
             placeholder="Search by agency or ID"
-            value={searchTerm}
+            value={searchTerm} // direct use of searchTerm from URL
             className="font-normal placeholder:text-dim-500 flex h-11 w-full rounded-md bg-transparent py-3 text-sm pl-2 focus:outline-none"
             onFocus={() => setIsFocused(true)}
             onBlur={() => setIsFocused(false)}
