@@ -10,7 +10,7 @@ interface DashboardPageProps {
 export default function DashboardPage({ searchParams }: DashboardPageProps) {
   const t = useTranslations('Adminlogin');
 
-  let role = 'super_admin';
+  let role = 'staff'; //user role will be extracted from user.role in real scenario
 
   return (
     <div className="">
@@ -22,7 +22,7 @@ export default function DashboardPage({ searchParams }: DashboardPageProps) {
         ) : (
           <>
             <StaffHeaderDashboard />
-            <StaffManageQuestions />
+            <StaffManageQuestions searchParams={searchParams} />
           </>
         )}
       </div>
