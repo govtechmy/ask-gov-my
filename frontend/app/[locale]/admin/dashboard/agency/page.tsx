@@ -14,15 +14,13 @@ const ManageAgencies: React.FC<ManageAgenciesProps> = async ({ searchParams }) =
   const currentPage = searchParams.page ? parseInt(searchParams.page, 10) : 1;
   const searchTerm = searchParams.searchTerm || '';
 
-  const { agencies, totalPages } = await getAgencyListWithPagination(currentPage,27, searchTerm);
+  const { data } = await getAgencyListWithPagination(currentPage,27, searchTerm);
 
   return (
     <div className="container max-w-screen-lg pt-3 mx-auto">
       <AgencyNavbar/>
       <AgencyBox
-        agencies={agencies}
-        totalPages={totalPages}
-        currentPage={currentPage}
+        data={data}
       />
     </div>
   );

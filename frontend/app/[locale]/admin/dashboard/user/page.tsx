@@ -20,7 +20,7 @@ const ManageUsers = async ({ searchParams }: ManageUsersProps) => {
   const searchTerm = searchParams.searchTerm || '';
   const agencyId = searchParams.agencyId || '';
   const agencyMap = getDynamicAgencyMap()
-  const { users, totalPages } = await getAllUsers({
+  const { data } = await getAllUsers({
     page: currentPage,
     tab: currentTab,
     searchTerm,
@@ -35,10 +35,8 @@ const ManageUsers = async ({ searchParams }: ManageUsersProps) => {
       />
       <div className="h-6"></div>
       <UserBox
-        users={users}
         agencies={agencies}
-        currentPage={currentPage}
-        totalPages={totalPages}
+        data={data}
       />
     </div>
   );

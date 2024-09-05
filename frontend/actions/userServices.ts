@@ -11,7 +11,7 @@ export async function getUserAgencyQuestions(
   tab: string = 'all',
   searchTerm: string = '',
   date?: string
-): Promise<{ questions: Question[]; total: number; totalPages: number; currentPage: number; unansweredCount: number }> {
+): Promise<{ data: { questions: Question[]; total: number; totalPages: number; currentPage: number; unansweredCount: number } }> {
   try {
     const query = new URLSearchParams({
       page: page.toString(),
@@ -38,20 +38,31 @@ export async function getUserAgencyQuestions(
       throw new Error('Failed to fetch questions');
     }
 
-    const data = await response.json();
+    const responseData = await response.json();
 
     return {
-      questions: data.results.results,
-      total: data.count,
-      totalPages: Math.ceil(data.count / pageSize),
-      currentPage: page,
-      unansweredCount: data.results.unanswered_count, 
+      data: {
+        questions: responseData.results.results,
+        total: responseData.count,
+        totalPages: Math.ceil(responseData.count / pageSize),
+        currentPage: page,
+        unansweredCount: responseData.results.unanswered_count, 
+      },
     };
   } catch (error) {
     console.error('Error in getUserAgencyQuestions:', error);
-    return { questions: [], total: 0, totalPages: 0, currentPage: 1, unansweredCount: 0 };
+    return {
+      data: {
+        questions: [],
+        total: 0,
+        totalPages: 0,
+        currentPage: 1,
+        unansweredCount: 0,
+      },
+    };
   }
 }
+
 
 // get all questions for user.role = super_admin
 export async function getAllUserQuestions(
@@ -59,8 +70,8 @@ export async function getAllUserQuestions(
   pageSize: number = 10,
   tab: string = 'all',
   searchTerm: string = '',
-  date: string 
-): Promise<{ questions: Question[]; total: number; totalPages: number; currentPage: number; unassignedCount: number }> {
+  date: string = ''
+): Promise<{ data: { questions: Question[]; total: number; totalPages: number; currentPage: number; unassignedCount: number } }> {
   try {
     const query = new URLSearchParams({
       page: page.toString(),
@@ -69,7 +80,7 @@ export async function getAllUserQuestions(
       search: searchTerm,
       date: date
     });
-    console.log(date)
+
     const response = await fetch(`${API_URL}/questions/all/?${query.toString()}`, {
       method: 'GET',
       headers: {
@@ -84,20 +95,31 @@ export async function getAllUserQuestions(
       throw new Error('Failed to fetch user questions');
     }
 
-    const data = await response.json();
+    const responseData = await response.json();
 
     return {
-      questions: data.results.results,
-      total: data.count,
-      totalPages: Math.ceil(data.count / pageSize),
-      currentPage: page,
-      unassignedCount: data.results.unassigned_count, 
+      data: {
+        questions: responseData.results.results,
+        total: responseData.count,
+        totalPages: Math.ceil(responseData.count / pageSize),
+        currentPage: page,
+        unassignedCount: responseData.results.unassigned_count, 
+      },
     };
   } catch (error) {
     console.error('Error in getAllUserQuestions:', error);
-    return { questions: [], total: 0, totalPages: 0, currentPage: 1, unassignedCount: 0 };
+    return {
+      data: {
+        questions: [],
+        total: 0,
+        totalPages: 0,
+        currentPage: 1,
+        unassignedCount: 0,
+      },
+    };
   }
 }
+
 
 export async function submitAnswer(
   questionId: number,
@@ -412,10 +434,12 @@ export async function getAllUsers({
   tab?: string;
   searchTerm?: string;
   agencyId?: string;
-}): Promise<{ users: User[]; totalPages: number }> {
+}): Promise<{ data: { users: User[]; totalPages: number; currentPage: number } }> {
   try {
     const response = await fetch(
-      `${API_URL}/admin/users?page=${page}&page_size=${pageSize}&tab=${tab}&searchTerm=${searchTerm}&agency=${agencyId}`,
+      `${API_URL}/admin/users?page=${page}&page_size=${pageSize}&tab=${tab}&searchTerm=${encodeURIComponent(
+        searchTerm
+      )}&agency=${agencyId}`,
       {
         method: 'GET',
         headers: {
@@ -428,16 +452,24 @@ export async function getAllUsers({
       throw new Error('Failed to fetch users');
     }
 
-    const data = await response.json();
+    const responseData = await response.json();
+
     return {
-      users: data.results,
-      totalPages: Math.ceil(data.count / pageSize)
+      data: {
+        users: responseData.results,
+        totalPages: Math.ceil(responseData.count / pageSize),
+        currentPage: page,
+      },
     };
   } catch (error) {
     console.error('Error fetching users:', error);
     return {
-      users: [],
-      totalPages: 0,
+      data: {
+        users: [],
+        totalPages: 0,
+        currentPage: 1,
+      },
     };
   }
 }
+

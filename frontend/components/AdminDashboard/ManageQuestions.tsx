@@ -19,20 +19,18 @@ const ManageQuestions = async ({ searchParams }: ManageQuestionsProps) => {
   const tab = searchParams.tab || 'all';
   const date = searchParams.date || '';
 
-  const { questions, totalPages, unassignedCount } = await getAllUserQuestions(currentPage, 10, tab, searchTerm, date);
+  const { data } = await getAllUserQuestions(currentPage, 10, tab, searchTerm, date);
   const agencyList = await getAgencyList();
   const agencyMap = await getDynamicAgencyMap();
 
   return (
     <div className="container max-w-screen-lg mx-auto justify-between px-6">
       <QuestionNavbar
-        unassignedCount={unassignedCount}
+        unassignedCount={data.unassignedCount}
       />
       <div className="pt-6">
         <AdminQuestionBox
-          questions={questions}
-          totalPages={totalPages}
-          currentPage={currentPage}
+          data={data}
           agencyMap={agencyMap}
           agencies={agencyList}
         />
