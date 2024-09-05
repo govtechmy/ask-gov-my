@@ -1,12 +1,12 @@
 from django.urls import path, include
 from .views import (
     CompletedQuestionListView, QuestionDetailView, AgencyListView, SubmitQuestionView,
-    QuestionsByAgencyView, UserAgencyQuestionsView, SubmitAnswerView,
+    AllQuestionsByAgencyView, UserAgencyQuestionsView, SubmitAnswerView,
     UserAgencyTopicsView, AddTopicView, TopicListView, LikeQuestionView, DislikeQuestionView,
     AssignAgencyToQuestionView, AddAgencyView, AllQuestionListView, TrendingAgenciesView,
     UpdateAgencyView, ChangeAdminIsOpenView, ChangeStaffIsOpenView, SaveDraftQuestionView,
     MarkQuestionAsSpamView, UnSpamQuestionView, UserView, SessionView, AccountView,
-    VerificationTokenView, AddUserView, GetAllUsersView,
+    VerificationTokenView, AddUserView, GetAllUsersView, QuestionsByAgencyView,
     CheckUserEmailExistsView, EditDeleteUserView, QuestionsByTopicAndAgencyView
 )
 
@@ -17,6 +17,7 @@ urlpatterns = [
     path('agencies/', AgencyListView.as_view(), name='agency-list'),
     path('agencies/<int:pk>/', UpdateAgencyView.as_view(), name='update-agency'),
     path('submit-question/', SubmitQuestionView.as_view(), name='submit-question'),
+    path('questions/all/by-agency/<int:agency_id>/', AllQuestionsByAgencyView.as_view(), name='questions-by-agency'),
     path('questions/by-agency/<int:agency_id>/', QuestionsByAgencyView.as_view(), name='questions-by-agency'),
     path('questions/by-agency/<int:agency_id>/topics/<int:topic_id>/', QuestionsByTopicAndAgencyView.as_view(), name='questions_by_topic_and_agency'),
     path('questions/user-agency/', UserAgencyQuestionsView.as_view(), name='user-agency-questions'),
