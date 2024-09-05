@@ -31,8 +31,6 @@ const ManageUsers = async ({ searchParams }: ManageUsersProps) => {
   return (
     <div className="container max-w-screen-lg pt-3 mx-auto px-6">
       <UserNavbar
-        currentTab={currentTab}
-        searchTerm={searchTerm}
         agencies={agencies}
       />
       <div className="h-6"></div>

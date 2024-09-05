@@ -18,7 +18,7 @@ const ManageAgencies: React.FC<ManageAgenciesProps> = async ({ searchParams }) =
 
   return (
     <div className="container max-w-screen-lg pt-3 mx-auto">
-      <AgencyNavbar searchTerm={searchTerm}/>
+      <AgencyNavbar/>
       <AgencyBox
         agencies={agencies}
         totalPages={totalPages}

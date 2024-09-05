@@ -1,26 +1,23 @@
 'use client';
+import React, { useState } from 'react';
 import Calendar from '@/icons/calendar';
-import React, { useState, useEffect } from 'react';
 import Search from '@/icons/search';
 import { cn } from '@/lib/utils';
 import { useSearchParams, useRouter } from 'next/navigation';
 
 interface StaffQuestionNavbarProps {
   unansweredCount: number;
-  currentTab: string;
-  searchTerm: string;
-  date: string;
 }
 
-const StaffQuestionNavbar: React.FC<StaffQuestionNavbarProps> = ({
-  unansweredCount,
-  currentTab,
-  searchTerm,
-  date
-}) => {
+const StaffQuestionNavbar: React.FC<StaffQuestionNavbarProps> = ({ unansweredCount }) => {
   const router = useRouter();
   const searchParams = useSearchParams();
-  const [searchValue, setSearchValue] = useState(searchTerm);
+
+  const currentTab = searchParams.get('tab') || 'all'; 
+  const searchTerm = searchParams.get('searchTerm') || ''; 
+  const date = searchParams.get('date') || '';
+
+  const [searchValue, setSearchValue] = useState(searchTerm); 
   const [selectedDate, setSelectedDate] = useState(date);
 
   const handleTabChange = (tab: string) => {
@@ -47,7 +44,7 @@ const StaffQuestionNavbar: React.FC<StaffQuestionNavbarProps> = ({
     router.push(`${window.location.pathname}?${params.toString()}`);
   };
 
-  const handleDateChange = (newDate: string) => { //handleDateChange is to be used when the date dropdown is complete
+  const handleDateChange = (newDate: string) => { // Handle date changes when the date dropdown is ready
     setSelectedDate(newDate);
     const params = new URLSearchParams(searchParams.toString());
     if (newDate) {
@@ -99,7 +96,7 @@ const StaffQuestionNavbar: React.FC<StaffQuestionNavbarProps> = ({
           <input
             type="search"
             placeholder="Search by ID, keywords"
-            value={searchValue}
+            value={searchValue} 
             className={cn('font-normal placeholder:text-dim-500 flex h-11 w-full rounded-md bg-transparent py-3 text-sm pl-2')}
             onChange={handleSearchChange}
           />
