@@ -24,7 +24,7 @@ export async function getUserAgencyQuestions(
       query.set('date', date);
     }
 
-    const response = await fetch(`${API_URL}/questions/by-agency/${agencyId}/?${query.toString()}`, {
+    const response = await fetch(`${API_URL}/questions/all/by-agency/${agencyId}/?${query.toString()}`, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
