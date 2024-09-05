@@ -8,7 +8,7 @@ interface DashboardPageProps {
 
 export default function DashboardPage({ searchParams }: DashboardPageProps) {
 
-  let role = 'staff'; //user role will be extracted from user.role in real scenario
+  let role = 'super_admin'; //user role will be extracted from user.role in real scenario
 
   return (
     <div className="">

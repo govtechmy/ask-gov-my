@@ -20,7 +20,7 @@ const StaffManageQuestions = async ({ searchParams }: StaffManageQuestionsProps)
 
   const userAgencyId = 1; // extracted from the user object in a real scenario
   // extracted from user.agency
-  const { questions, totalPages, unansweredCount } = await getUserAgencyQuestions(
+  const { data } = await getUserAgencyQuestions(
     userAgencyId,
     currentPage,
     8, 
@@ -32,10 +32,10 @@ const StaffManageQuestions = async ({ searchParams }: StaffManageQuestionsProps)
   return (
     <div className="container max-w-screen-lg px-6 mx-auto justify-between">
       <StaffQuestionNavbar
-        unansweredCount={unansweredCount}
+        unansweredCount={data.unansweredCount}
       />
       <div className="pt-6">
-        <StaffQuestionBox questions={questions} totalPages={totalPages} currentPage={currentPage} />
+        <StaffQuestionBox data={data} />
       </div>
     </div>
   );

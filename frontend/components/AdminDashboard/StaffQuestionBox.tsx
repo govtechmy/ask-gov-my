@@ -1,18 +1,21 @@
 'use client';
 
-import React, { useState } from 'react';
+import React from 'react';
 import AnswerQuestionCard from './AnswerQuestionCard';
 import Pagination from '../ui/pagination';
 import { Question } from '@/types/types';
 import { useSearchParams, useRouter } from 'next/navigation';
 
 interface QuestionBoxProps {
-  questions: Question[];
-  currentPage: number;
-  totalPages: number;
+  data: {
+    questions: Question[];
+    currentPage: number;
+    totalPages: number;
+  };
 }
 
-const StaffQuestionBox: React.FC<QuestionBoxProps> = ({ questions, currentPage, totalPages }) => {
+const StaffQuestionBox: React.FC<QuestionBoxProps> = ({ data }) => {
+  const { questions, currentPage, totalPages } = data;
   const searchParams = useSearchParams();
   const router = useRouter();
 

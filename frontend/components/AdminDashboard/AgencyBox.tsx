@@ -8,26 +8,25 @@ import { useRouter } from '@/lib/i18n';
 import { useSearchParams } from 'next/navigation';
 
 interface AgencyBoxProps {
-  agencies: Agency[];
-  totalPages: number;
-  currentPage: number;
+  data: {
+    agencies: Agency[];
+    totalPages: number;
+    currentPage: number;
+  };
 }
 
-const AgencyBox: React.FC<AgencyBoxProps> = ({
-  agencies,
-  totalPages,
-  currentPage,
-}) => {
-    const searchParams = useSearchParams();
-    const router = useRouter();
+const AgencyBox: React.FC<AgencyBoxProps> = ({ data }) => {
+  const { agencies, totalPages, currentPage } = data;
+  const searchParams = useSearchParams();
+  const router = useRouter();
 
-    const handlePageChange = (page: number) => {
-        if (page >= 1 && page <= totalPages) {
-            const params = new URLSearchParams(searchParams.toString());
-            params.set('page', page.toString());
-            router.push(`${window.location.pathname}?${params.toString()}`);
-        }
-        };
+  const handlePageChange = (page: number) => {
+    if (page >= 1 && page <= totalPages) {
+      const params = new URLSearchParams(searchParams.toString());
+      params.set('page', page.toString());
+      router.push(`${window.location.pathname}?${params.toString()}`);
+    }
+  };
 
   return (
     <div>

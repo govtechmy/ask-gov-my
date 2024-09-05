@@ -8,17 +8,17 @@ import { useSearchParams } from 'next/navigation';
 import { useRouter } from '@/lib/i18n';
 
 interface AdminQuestionBoxProps {
-  questions: Question[];
-  totalPages: number;
-  currentPage: number;
+  data: {
+    questions: Question[];
+    totalPages: number;
+    currentPage: number;
+  };
   agencyMap: Record<string, string>;
   agencies: Agency[];
 }
 
 const AdminQuestionBox: React.FC<AdminQuestionBoxProps> = ({
-  questions,
-  totalPages,
-  currentPage,
+  data: { questions, totalPages, currentPage },
   agencyMap,
   agencies,
 }) => {
