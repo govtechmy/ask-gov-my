@@ -1,8 +1,5 @@
-'use client';
-
 import React, { useRef, useState } from 'react';
 import { useTranslations } from 'next-intl';
-import { uploadFile } from '@/actions/fileServices';
 import { updateAgency } from '@/actions/userServices';
 import ImageNext from 'next/image';
 import Pencil from '@/icons/pencil';
@@ -20,12 +17,13 @@ import {
   DialogTitle,
 } from '../ui/dialog';
 import { formatDate } from '@/actions/utils';
+import { StyledDisplay } from '../ui/display';
 import {
-  handleAgencyAcronymChange,
   handleAgencyNameChange,
   handleAgencyNameChangeMs,
+  handleAgencyAcronymChange,
 } from '@/actions/userInputValidation';
-import { StyledDisplay } from '../ui/display';
+import { handleFileChange } from '@/actions/fileChangeHandler';
 
 interface AgencySettingsModalProps {
   agency: Agency;
@@ -48,87 +46,45 @@ const AgencySettingsModal: React.FC<AgencySettingsModalProps> = ({
   const [nameMs, setNameMs] = useState(agency.name_ms);
   const [acronym, setAcronym] = useState(agency.acronym);
   const [logoUrl, setLogoUrl] = useState(agency.logo_url || '');
-  const [uploadError, setUploadError] = useState<string | null>(null);
-  const [uploadSuccess, setUploadSuccess] = useState<string | null>(null);
   const [nameError, setNameError] = useState<string | null>(null);
   const [nameMsError, setNameMsError] = useState<string | null>(null);
   const [acronymError, setAcronymError] = useState<string | null>(null);
+
+  const [uploadError, setUploadError] = useState<string | null>(null);
+  const [uploadSuccess, setUploadSuccess] = useState<string | null>(null);
   const [uploadStatus, setUploadStatus] = useState<
     'initial' | 'error' | 'success'
   >('initial');
+  const [hasUploaded, setHasUploaded] = useState(false);
 
-  const handleFileChange = async (
-    event: React.ChangeEvent<HTMLInputElement>,
-  ) => {
-    const file = event.target.files?.[0];
-    const resetUploadState = () => {
-      setUploadError(null);
-      setUploadSuccess(null);
-      setUploadStatus('initial');
-    };
-    if (file) {
-      resetUploadState();
-      const img = new Image();
-      img.src = URL.createObjectURL(file);
-      img.onload = async () => {
-        if (img.width > 201 && img.height > 201) {
-          setUploadError(
-            'Upload photo ideally sized not more than 200x200 pixels',
-          );
-          setUploadStatus('error');
-          return;
-        }
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
-        try {
-          const url = await uploadFile(file);
-          setLogoUrl(url);
-          setUploadSuccess('Upload photo success!');
-          setUploadStatus('success');
-        } catch (err) {
-          setUploadError(
-            err instanceof Error
-              ? `Upload failed: ${err.message}`
-              : 'An unexpected error occurred during the upload',
-          );
-          setUploadStatus('error');
-          handleErrorToast();
-        }
-      };
-      img.onerror = () => {
-        setUploadError('Failed to load the image');
-        setUploadStatus('error');
-        handleErrorToast();
-      };
-    } else {
-      setUploadError('No file selected');
-      setUploadStatus('error');
-      handleErrorToast();
-    }
-  };
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
 
-  const handleSubmit = async () => {
+    // Validate all fields before submission
+    handleAgencyNameChange(
+      { target: { value: name } } as React.ChangeEvent<HTMLInputElement>,
+      setName,
+      setNameError,
+    );
+    handleAgencyNameChangeMs(
+      { target: { value: nameMs } } as React.ChangeEvent<HTMLInputElement>,
+      setNameMs,
+      setNameMsError,
+    );
+    handleAgencyAcronymChange(
+      { target: { value: acronym } } as React.ChangeEvent<HTMLInputElement>,
+      setAcronym,
+      setAcronymError,
+    );
+
+    // Check if there are any errors
     if (nameError || nameMsError || acronymError || uploadError) {
       return;
     }
-    if (name === '' || nameMs === '' || acronym === '') {
-      handleAgencyNameChange(
-        { target: { value: name } } as React.ChangeEvent<HTMLInputElement>,
-        setName,
-        setNameError,
-      );
-      handleAgencyNameChangeMs(
-        { target: { value: nameMs } } as React.ChangeEvent<HTMLInputElement>,
-        setNameMs,
-        setNameMsError,
-      );
-      handleAgencyAcronymChange(
-        { target: { value: acronym } } as React.ChangeEvent<HTMLInputElement>,
-        setAcronym,
-        setAcronymError,
-      );
-      return;
-    }
 
+    // Handle for Submit
     try {
       await updateAgency(agency.id, name, nameMs, acronym, logoUrl || '');
       handleEditAgencyToast();
@@ -156,10 +112,18 @@ const AgencySettingsModal: React.FC<AgencySettingsModalProps> = ({
     }
   };
 
-  const fileInputRef = useRef<HTMLInputElement>(null);
-
   const handleDivClick = () => {
     fileInputRef.current?.click();
+  };
+
+  const handleFileChangeWrapper = (e: React.ChangeEvent<HTMLInputElement>) => {
+    handleFileChange(e, {
+      setUploadError,
+      setUploadSuccess,
+      setUploadStatus,
+      setLogoUrl,
+    });
+    setHasUploaded(true);
   };
 
   if (!isOpen) return null;
@@ -176,123 +140,133 @@ const AgencySettingsModal: React.FC<AgencySettingsModalProps> = ({
           </div>
         </DialogHeader>
         <DialogDescription className="p-6 border-y-[1px] border-outline-200">
-          <div className="relative w-16 h-16 flex-shrink-0">
-            <StyledDisplay variant={'logoBackground'}>
-              {logoUrl ? (
-                <ImageNext
-                  src={logoUrl}
-                  width={200}
-                  height={200}
-                  alt="Agency Logo"
-                />
-              ) : (
-                <ImageNext
-                  src="/jata-200-transparent.png"
-                  width={200}
-                  height={200}
-                  alt="JataNegara"
-                />
-              )}
-            </StyledDisplay>
+          <form onSubmit={handleSubmit}>
+            <div className="relative w-16 h-16 flex-shrink-0">
+              <StyledDisplay variant={'logoBackground'}>
+                {logoUrl ? (
+                  <ImageNext
+                    src={logoUrl}
+                    width={200}
+                    height={200}
+                    alt="Agency Logo"
+                  />
+                ) : (
+                  <ImageNext
+                    src="/jata-200-transparent.png"
+                    width={200}
+                    height={200}
+                    alt="JataNegara"
+                  />
+                )}
+              </StyledDisplay>
 
-            <StyledDisplay variant={'logoEditor'} onClick={handleDivClick}>
-              <Pencil
-                className="stroke-white-forcewhite"
-                width="12"
-                height="12"
-              />
-            </StyledDisplay>
-            <Input
-              ref={fileInputRef}
-              id="image-upload"
-              type="file"
-              className="hidden"
-              accept="image/png, image/jpeg"
-              onChange={handleFileChange}
-            />
-          </div>
-          {uploadStatus === 'error' ? (
-            <div className="text-danger-600 text-sm mt-[6px] mb-6">
-              {uploadError}
-            </div>
-          ) : uploadStatus === 'success' ? (
-            <div className="text-green-500 text-sm mt-[6px] mb-6">
-              {uploadSuccess}
-            </div>
-          ) : (
-            <div className="mt-[6px] mb-6 text-dim-500 text-sm">
-              Upload photo ideally sized not more than 200x200 pixels in PNG or
-              JPG format.
-            </div>
-          )}
-          <div className="space-y-4">
-            <div className="space-y-2">
-              <Label htmlFor="name-en">Agency's name (English)</Label>
+              <StyledDisplay variant={'logoEditor'} onClick={handleDivClick}>
+                <Pencil
+                  className="stroke-white-forcewhite"
+                  width="12"
+                  height="12"
+                />
+              </StyledDisplay>
+
               <Input
-                id="name-en"
-                type="text"
-                value={name}
-                onChange={e => handleAgencyNameChange(e, setName, setNameError)}
-                className={`${nameError ? 'border-danger-300' : ''}`}
+                ref={fileInputRef}
+                id="image-upload"
+                type="file"
+                className="hidden"
+                accept="image/png, image/jpeg"
+                onChange={handleFileChangeWrapper}
               />
             </div>
-            {nameError && (
-              <div className="text-danger-600 text-sm">{nameError}</div>
+            {uploadStatus === 'error' ? (
+              <div className="text-danger-600 text-sm mt-[6px] mb-6">
+                {uploadError}
+              </div>
+            ) : uploadStatus === 'success' ? (
+              <div className="text-green-500 text-sm mt-[6px] mb-6">
+                {uploadSuccess}
+              </div>
+            ) : !hasUploaded ? (
+              <div className="mt-[6px] mb-6 text-dim-500 text-sm">
+                Upload photo ideally sized not more than 200x200 pixels in PNG
+                or JPG format.
+              </div>
+            ) : (
+              <div className="mt-[6px] h-11"></div>
             )}
-            <div className="space-y-2">
-              <Label htmlFor="name-ms">Agency's name (Malay)</Label>
-              <Input
-                id="name-ms"
-                type="text"
-                value={nameMs}
-                onChange={e =>
-                  handleAgencyNameChangeMs(e, setNameMs, setNameMsError)
-                }
-                className={`${nameMsError ? 'border-danger-300' : ''}`}
-              />
-            </div>
-            {nameMsError && (
-              <div className="text-danger-600 text-sm">{nameMsError}</div>
-            )}
-            <div className="flex space-x-6">
+            <div className="space-y-4">
               <div className="space-y-2">
-                <Label htmlFor="acronym">Agency's acronym:</Label>
+                <Label htmlFor="name-en">Agency's name (English)</Label>
                 <Input
-                  id="acronym"
+                  id="name-en"
                   type="text"
-                  value={acronym}
+                  value={name}
                   onChange={e =>
-                    handleAgencyAcronymChange(e, setAcronym, setAcronymError)
+                    handleAgencyNameChange(e, setName, setNameError)
                   }
-                  className={`${acronymError ? 'border-danger-300' : ''}`}
+                  className={`${nameError ? 'border-danger-300' : ''}`}
                 />
+                {nameError && (
+                  <div className="text-danger-600 text-sm">{nameError}</div>
+                )}
               </div>
+              <div className="space-y-2">
+                <Label htmlFor="name-ms">Agency's name (Malay)</Label>
+                <Input
+                  id="name-ms"
+                  type="text"
+                  value={nameMs}
+                  onChange={e =>
+                    handleAgencyNameChangeMs(e, setNameMs, setNameMsError)
+                  }
+                  className={`${nameMsError ? 'border-danger-300' : ''}`}
+                />
+                {nameMsError && (
+                  <div className="text-danger-600 text-sm">{nameMsError}</div>
+                )}
+              </div>
+              <div className="flex space-x-6">
+                <div className="space-y-2">
+                  <Label htmlFor="acronym">Agency's acronym:</Label>
+                  <Input
+                    id="acronym"
+                    type="text"
+                    value={acronym}
+                    onChange={e =>
+                      handleAgencyAcronymChange(e, setAcronym, setAcronymError)
+                    }
+                    className={`${acronymError ? 'border-danger-300' : ''}`}
+                  />
+                  {acronymError && (
+                    <div className="text-danger-600 text-sm">
+                      {acronymError}
+                    </div>
+                  )}
+                </div>
 
-              <div className="h-[66px] flex flex-col">
-                <Label>Agency logo preview</Label>
-                <StyledDisplay variant={'nameLogoDisplay'}>
-                  <Asklogo />
-                  <div className="pl-[10px]">
-                    Ask
-                    <span className="text-askmygovtextbrand-600">
-                      {acronym}
-                    </span>
-                  </div>
-                </StyledDisplay>
+                <div className="flex flex-col">
+                  <Label>Agency logo preview</Label>
+                  <StyledDisplay variant={'nameLogoDisplay'}>
+                    <Asklogo />
+                    <div className="pl-[10px]">
+                      Ask
+                      <span className="text-askmygovtextbrand-600">
+                        {acronym}
+                      </span>
+                    </div>
+                  </StyledDisplay>
+                </div>
               </div>
             </div>
-
-            {acronymError && (
-              <div className="text-danger-600 text-sm">{acronymError}</div>
-            )}
-          </div>
+            <DialogFooter className="p-6 flex justify-end space-x-4">
+              <Button type="button" onClick={onClose}>
+                Cancel
+              </Button>
+              <Button type="submit" variant="primary">
+                Save settings
+              </Button>
+            </DialogFooter>
+          </form>
         </DialogDescription>
-        <DialogFooter className="p-6 flex justify-end space-x-4">
-          <Button onClick={onClose}>Cancel</Button>
-          <Button variant="primary" onClick={handleSubmit}>
-            Save settings
-          </Button>
-        </DialogFooter>
       </DialogContent>
     </Dialog>
   );
