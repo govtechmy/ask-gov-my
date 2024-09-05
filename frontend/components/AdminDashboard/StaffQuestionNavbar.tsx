@@ -1,55 +1,88 @@
 'use client';
 import Calendar from '@/icons/calendar';
-import React, { useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import Search from '@/icons/search';
 import { cn } from '@/lib/utils';
 import { useSearchParams, useRouter } from 'next/navigation';
 
 interface StaffQuestionNavbarProps {
-  unassignedCount: number;
-  setSearchTerm: (term: string) => void;
+  unansweredCount: number;
+  currentTab: string;
+  searchTerm: string;
+  date: string;
 }
 
 const StaffQuestionNavbar: React.FC<StaffQuestionNavbarProps> = ({
-  unassignedCount,
-  setSearchTerm,
+  unansweredCount,
+  currentTab,
+  searchTerm,
+  date
 }) => {
-  const searchParams = useSearchParams();
   const router = useRouter();
-  const activeTab = searchParams.get('tab') || 'all';
+  const searchParams = useSearchParams();
+  const [searchValue, setSearchValue] = useState(searchTerm);
+  const [selectedDate, setSelectedDate] = useState(date);
 
-  const setActiveTab = (tab: string) => {
-    const params = new URLSearchParams(window.location.search);
+  const handleTabChange = (tab: string) => {
+    const params = new URLSearchParams(searchParams.toString());
     params.set('tab', tab);
+    params.delete('page');
+    params.delete('searchTerm');
+    params.delete('date');
+    setSearchValue('');
+    setSelectedDate('');
     router.push(`${window.location.pathname}?${params.toString()}`);
   };
 
-  useEffect(() => {}, [activeTab]);
+  const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const term = e.target.value;
+    setSearchValue(term);
+    const params = new URLSearchParams(searchParams.toString());
+    if (term) {
+      params.set('searchTerm', term);
+    } else {
+      params.delete('searchTerm');
+    }
+    params.delete('page');
+    router.push(`${window.location.pathname}?${params.toString()}`);
+  };
+
+  const handleDateChange = (newDate: string) => { //handleDateChange is to be used when the date dropdown is complete
+    setSelectedDate(newDate);
+    const params = new URLSearchParams(searchParams.toString());
+    if (newDate) {
+      params.set('date', newDate);
+    } else {
+      params.delete('date');
+    }
+    params.delete('page');
+    router.push(`${window.location.pathname}?${params.toString()}`);
+  };
 
   return (
     <div className="flex justify-between items-center pt-3 pb-2 border-b border-[#E4E4E7] dark:border-[#27272A]">
       <div className="flex space-x-8">
         <button
-          className={`font-medium text-sm pb-3 -mb-5 ${activeTab === 'all' ? 'text-black-900 border-b-2 border-[#702FF9]' : 'text-dim-500'}`}
-          onClick={() => setActiveTab('all')}
+          className={`font-medium text-sm pb-3 -mb-5 ${currentTab === 'all' ? 'text-black-900 border-b-2 border-[#702FF9]' : 'text-dim-500'}`}
+          onClick={() => handleTabChange('all')}
         >
           All Questions
         </button>
         <button
-          className={`font-medium text-sm pb-3 -mb-5 ${activeTab === 'unanswered' ? 'text-black-900 border-b-2 border-[#702FF9] ' : 'text-dim-500'}`}
-          onClick={() => setActiveTab('unanswered')}
+          className={`font-medium text-sm pb-3 -mb-5 ${currentTab === 'unanswered' ? 'text-black-900 border-b-2 border-[#702FF9]' : 'text-dim-500'}`}
+          onClick={() => handleTabChange('unanswered')}
         >
-          Unanswered <span className="text-[#702FF9]">{unassignedCount}</span>
+          Unanswered <span className="text-[#702FF9]">{unansweredCount}</span>
         </button>
         <button
-          className={`font-medium text-sm pb-3 -mb-5 ${activeTab === 'answered' ? 'text-black-900 border-b-2 border-[#702FF9]' : 'text-dim-500'}`}
-          onClick={() => setActiveTab('answered')}
+          className={`font-medium text-sm pb-3 -mb-5 ${currentTab === 'answered' ? 'text-black-900 border-b-2 border-[#702FF9]' : 'text-dim-500'}`}
+          onClick={() => handleTabChange('answered')}
         >
           Answered
         </button>
         <button
-          className={`font-medium text-sm pb-3 -mb-5 ${activeTab === 'draft' ? 'text-black-900 border-b-2 border-[#702FF9]' : 'text-dim-500'}`}
-          onClick={() => setActiveTab('draft')}
+          className={`font-medium text-sm pb-3 -mb-5 ${currentTab === 'draft' ? 'text-black-900 border-b-2 border-[#702FF9]' : 'text-dim-500'}`}
+          onClick={() => handleTabChange('draft')}
         >
           Draft
         </button>
@@ -66,10 +99,9 @@ const StaffQuestionNavbar: React.FC<StaffQuestionNavbarProps> = ({
           <input
             type="search"
             placeholder="Search by ID, keywords"
-            className={cn(
-              'font-normal placeholder:text-dim-500 flex h-11 w-full rounded-md bg-transparent py-3 text-sm pl-2',
-            )}
-            onChange={e => setSearchTerm(e.target.value)}
+            value={searchValue}
+            className={cn('font-normal placeholder:text-dim-500 flex h-11 w-full rounded-md bg-transparent py-3 text-sm pl-2')}
+            onChange={handleSearchChange}
           />
           <Search strokeWidth={1.88} className="stroke-[#FFFFFF]" />
         </div>
