@@ -693,7 +693,7 @@ class GetAllUsersView(APIView):
 
         agency = request.query_params.get('agency', None)
         if agency:
-            users = users.filter(agency_id=agency)
+            users = users.filter(agency=agency)
 
         search_term = request.query_params.get('searchTerm', None)
         if search_term:
