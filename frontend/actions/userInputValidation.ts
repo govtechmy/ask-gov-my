@@ -1,64 +1,37 @@
-import React from 'react';
+import { z } from 'zod';
 
-const acronymRegex = /^[A-Za-z]+$/;
-const nameRegex = /^[a-zA-Z\s'-]+$/;
-const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-const MIN_NAME_LENGTH = 2;
-const MAX_NAME_LENGTH = 50;
-const agencyNameRegex = /^[a-zA-Z0-9\s'&(),-]+$/;
-const MIN_AGENCY_NAME_LENGTH = 2;
-const MAX_AGENCY_NAME_LENGTH = 100;
-const MIN_ACRONYM_LENGTH = 2;
-const MAX_ACRONYM_LENGTH = 100;
+// Zod schemas
+export const agencyNameSchema = z
+  .string()
+  .min(2, { message: 'Name must be at least 2 characters long' })
+  .max(100, { message: 'Name cannot exceed 100 characters' })
+  .regex(/^[a-zA-Z0-9\s'&(),-]+$/, {
+    message:
+      "Name can only contain letters, numbers, spaces, and the following characters: ' & ( ) , -",
+  });
 
-//finalized name input validation
-export const handleNameChange = (
-  e: React.ChangeEvent<HTMLInputElement>,
-  setName: React.Dispatch<React.SetStateAction<string>>,
-  setNameError: React.Dispatch<React.SetStateAction<string | null>>,
-) => {
-  const value = e.target.value;
-  setName(value);
+export const acronymSchema = z
+  .string()
+  .min(2, { message: 'Acronym must be at least 2 characters long' })
+  .max(100, { message: 'Acronym cannot exceed 100 characters' })
+  .regex(/^[A-Za-z]+$/, {
+    message: 'Acronym can only contain letters',
+  });
 
-  if (value === '') {
-    setNameError('Name is required');
-  } else if (value.length < MIN_NAME_LENGTH) {
-    setNameError(`Name must be at least ${MIN_NAME_LENGTH} characters long`);
-  } else if (value.length > MAX_NAME_LENGTH) {
-    setNameError(`Name cannot exceed ${MAX_NAME_LENGTH} characters`);
-  } else if (!nameRegex.test(value)) {
-    setNameError(
-      'Name can only contain letters, spaces, hyphens, and apostrophes',
-    );
-  } else {
-    setNameError(null);
-  }
-};
-
-//finalized email input validation
-export const handleEmailChange = (
-  e: React.ChangeEvent<HTMLInputElement>,
-  setEmail: React.Dispatch<React.SetStateAction<string>>,
-  setEmailError: React.Dispatch<React.SetStateAction<string | null>>,
-) => {
-  const value = e.target.value;
-  setEmail(value);
-
-  if (value === '') {
-    setEmailError('Email cannot be empty');
-  } else if (!emailRegex.test(value)) {
-    setEmailError('Please enter a valid email address');
-  } else {
-    const domain = value.split('@')[1];
-    if (domain !== 'gov.my') {
-      setEmailError('Email must end with @gov.my');
-    } else {
-      setEmailError(null);
+// Helper function for validation
+export const validateInput = (schema: z.ZodType<any, any>, value: string) => {
+  try {
+    schema.parse(value);
+    return null;
+  } catch (error) {
+    if (error instanceof z.ZodError) {
+      return error.errors[0].message;
     }
+    return 'An unexpected error occurred';
   }
 };
 
-//finalized agency name input validation En/Ms
+// Input handlers
 export const handleAgencyNameChange = (
   e: React.ChangeEvent<HTMLInputElement>,
   setName: React.Dispatch<React.SetStateAction<string>>,
@@ -66,22 +39,7 @@ export const handleAgencyNameChange = (
 ) => {
   const value = e.target.value;
   setName(value);
-
-  if (value === '') {
-    setNameError('Agency name is required');
-  } else if (value.length < MIN_AGENCY_NAME_LENGTH) {
-    setNameError(
-      `Name must be at least ${MIN_AGENCY_NAME_LENGTH} characters long`,
-    );
-  } else if (value.length > MAX_AGENCY_NAME_LENGTH) {
-    setNameError(`Name cannot exceed ${MAX_AGENCY_NAME_LENGTH} characters`);
-  } else if (!agencyNameRegex.test(value)) {
-    setNameError(
-      "Name can only contain letters, numbers, spaces, and the following characters: ' & ( ) , -",
-    );
-  } else {
-    setNameError(null);
-  }
+  setNameError(validateInput(agencyNameSchema, value));
 };
 
 export const handleAgencyNameChangeMs = (
@@ -91,22 +49,7 @@ export const handleAgencyNameChangeMs = (
 ) => {
   const value = e.target.value;
   setNameMs(value);
-
-  if (value === '') {
-    setNameMsError('Agency name is required');
-  } else if (value.length < MIN_AGENCY_NAME_LENGTH) {
-    setNameMsError(
-      `Name must be at least ${MIN_AGENCY_NAME_LENGTH} characters long`,
-    );
-  } else if (value.length > MAX_AGENCY_NAME_LENGTH) {
-    setNameMsError(`Name cannot exceed ${MAX_AGENCY_NAME_LENGTH} characters`);
-  } else if (!agencyNameRegex.test(value)) {
-    setNameMsError(
-      "Name can only contain letters, numbers, spaces, and the following characters: ' & ( ) , -",
-    );
-  } else {
-    setNameMsError(null);
-  }
+  setNameMsError(validateInput(agencyNameSchema, value));
 };
 
 export const handleAgencyAcronymChange = (
@@ -116,18 +59,5 @@ export const handleAgencyAcronymChange = (
 ) => {
   const value = e.target.value.trim();
   setAcronym(value);
-
-  if (value === '') {
-    setAcronymError('Agency acronym is required');
-  } else if (value.length < MIN_ACRONYM_LENGTH) {
-    setAcronymError(
-      `Acronym must be at least ${MIN_ACRONYM_LENGTH} characters long`,
-    );
-  } else if (value.length > MAX_ACRONYM_LENGTH) {
-    setAcronymError(`Acronym cannot exceed ${MAX_ACRONYM_LENGTH} characters`);
-  } else if (!acronymRegex.test(value)) {
-    setAcronymError('Acronym can only contain letters');
-  } else {
-    setAcronymError(null);
-  }
+  setAcronymError(validateInput(acronymSchema, value));
 };
