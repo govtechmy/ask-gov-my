@@ -5,26 +5,90 @@ from .serializers import (
     VerificationTokenSerializer)
 from django.shortcuts import get_object_or_404
 from django.utils import timezone
-from rest_framework import generics, status
+from rest_framework.filters import SearchFilter
+from django_filters.rest_framework import DjangoFilterBackend
+from rest_framework.pagination import PageNumberPagination
+from rest_framework import generics, status, pagination
 from .models import Question, Agency, Topic, User, Account, Session, VerificationToken
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from django.contrib.auth import get_user_model
-from django.db.models import Sum
+from django.db.models import Sum, Q
 from .elasticsearch_client import client
 import logging, re
+from datetime import datetime
 
 logger = logging.getLogger(__name__)
 
 
+class CustomPagination(PageNumberPagination):
+    page_size = 6
+    page_size_query_param = 'page_size'
+    max_page_size = 100
+
 class CompletedQuestionListView(generics.ListCreateAPIView):
-    queryset = Question.objects.filter(state='completed')
     serializer_class = QuestionSerializer
+    pagination_class = CustomPagination
+
+    def get_queryset(self):
+        return Question.objects.filter(state='completed').order_by('-likes', 'id')
 
 
-class AllQuestionListView(generics.ListCreateAPIView):
+class AllQuestionListView(generics.ListAPIView):
     queryset = Question.objects.all()
     serializer_class = QuestionSerializer
+    pagination_class = CustomPagination
+    filter_backends = [DjangoFilterBackend, SearchFilter]
+    filterset_fields = ['agency', 'state']
+    search_fields = ['question']
+
+    def get_queryset(self):
+        queryset = super().get_queryset()
+        tab = self.request.query_params.get('tab', 'all')
+
+        if tab == 'unassigned':
+            queryset = queryset.filter(agency__isnull=True).exclude(state='spam')
+        elif tab == 'assigned':
+            queryset = queryset.filter(agency__isnull=False).exclude(state='spam')
+        elif tab == 'spam':
+            queryset = queryset.filter(state='spam')
+        else:
+            queryset = queryset.exclude(state='spam')
+
+        search_term = self.request.query_params.get('search', None)
+        if search_term:
+            queryset = queryset.filter(
+                question__icontains=search_term
+            )
+
+        date_str = self.request.query_params.get('date', None)
+        if date_str:
+            try:
+                date_obj = datetime.strptime(date_str, '%d%m%Y').date()
+                queryset = queryset.filter(date__date=date_obj)
+            except ValueError:
+                pass
+
+        return queryset
+
+    def list(self, request, *args, **kwargs):
+        queryset = self.filter_queryset(self.get_queryset())
+
+        unassigned_count = Question.objects.filter(agency__isnull=True).exclude(state='spam').count()
+
+        page = self.paginate_queryset(queryset)
+        if page is not None:
+            serializer = self.get_serializer(page, many=True)
+            return self.get_paginated_response({
+                'results': serializer.data,
+                'unassigned_count': unassigned_count
+            })
+
+        serializer = self.get_serializer(queryset, many=True)
+        return Response({
+            'results': serializer.data,
+            'unassigned_count': unassigned_count
+        })
 
 
 class QuestionDetailView(generics.RetrieveAPIView):
@@ -35,6 +99,35 @@ class QuestionDetailView(generics.RetrieveAPIView):
 class AgencyListView(generics.ListAPIView):
     queryset = Agency.objects.all()
     serializer_class = AgencySerializer
+    pagination_class = CustomPagination
+    filter_backends = [DjangoFilterBackend, SearchFilter]
+    filterset_fields = ['name', 'name_ms', 'acronym']  
+    search_fields = ['name', 'name_ms', 'acronym']
+
+    def get_queryset(self):
+        queryset = super().get_queryset()
+        search_term = self.request.query_params.get('search', None)
+        
+        if search_term:
+            queryset = queryset.filter(
+                Q(name__icontains=search_term) |
+                Q(name_ms__icontains=search_term) |
+                Q(acronym__icontains=search_term)
+            )
+
+        return queryset
+
+    def list(self, request, *args, **kwargs):
+        queryset = self.filter_queryset(self.get_queryset())
+
+        if any(param in request.query_params for param in ['page', 'page_size', 'search']):
+            page = self.paginate_queryset(queryset)
+            if page is not None:
+                serializer = self.get_serializer(page, many=True)
+                return self.get_paginated_response(serializer.data)
+
+        serializer = self.get_serializer(queryset, many=True)
+        return Response(serializer.data)
 
 
 class TopicListView(generics.ListAPIView):
@@ -67,14 +160,77 @@ class SubmitQuestionView(APIView):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
-class QuestionsByAgencyView(APIView):
-    def get(self, request, agency_id):
+class QuestionsByAgencyView(generics.ListAPIView):
+    serializer_class = QuestionSerializer
+    pagination_class = CustomPagination
+    filter_backends = [SearchFilter, DjangoFilterBackend]
+    filterset_fields = ['state']
+    search_fields = ['question']
+
+    def get_queryset(self):
+        agency_id = self.kwargs['agency_id']
         agency = get_object_or_404(Agency, pk=agency_id)
-        questions = Question.objects.filter(agency=agency, state='completed')
-        serializer = QuestionSerializer(questions, many=True)
-        return Response(serializer.data)
+
+        tab = self.request.query_params.get('tab', 'all')
+        search_term = self.request.query_params.get('search', None)
+        date_str = self.request.query_params.get('date', None)
+
+        queryset = Question.objects.filter(agency=agency)
+        if tab == 'unanswered':
+            queryset = queryset.filter(answer__isnull=True)
+        elif tab == 'answered':
+            queryset = queryset.filter(answer__isnull=False)
+        elif tab == 'draft':
+            queryset = queryset.filter(state='draft')
+
+        if search_term:
+            queryset = queryset.filter(question__icontains=search_term)
+
+        if date_str:
+            try:
+                date_obj = datetime.strptime(date_str, '%d%m%Y').date()
+                queryset = queryset.filter(date__date=date_obj)
+            except ValueError:
+                pass  
+
+        return queryset.order_by('-likes', 'id')
+
+    def list(self, request, *args, **kwargs):
+        queryset = self.filter_queryset(self.get_queryset())
+
+        unanswered_count = Question.objects.filter(agency=self.kwargs['agency_id'], answer__isnull=True).count()
+
+        page = self.paginate_queryset(queryset)
+        if page is not None:
+            serializer = self.get_serializer(page, many=True)
+            return self.get_paginated_response({
+                'results': serializer.data,
+                'unanswered_count': unanswered_count
+            })
+
+        serializer = self.get_serializer(queryset, many=True)
+        return Response({
+            'results': serializer.data,
+            'unanswered_count': unanswered_count
+        })
 
 
+class QuestionsByTopicAndAgencyView(APIView):
+    pagination_class = CustomPagination
+
+    def get(self, request, agency_id, topic_id):
+        agency = get_object_or_404(Agency, pk=agency_id)
+        topic = get_object_or_404(Topic, pk=topic_id)
+        
+        questions = Question.objects.filter(agency=agency, topics=topic, state='completed').order_by('-likes', 'id')
+        
+        paginator = self.pagination_class()
+        paginated_questions = paginator.paginate_queryset(questions, request)
+        
+        serializer = QuestionSerializer(paginated_questions, many=True)
+        
+        return paginator.get_paginated_response(serializer.data)
+    
 class UserAgencyQuestionsView(APIView):
     def get(self, request, agency_id):
         agency = get_object_or_404(Agency, id=agency_id)
@@ -524,8 +680,40 @@ class EditDeleteUserView(APIView):
 
 
 class GetAllUsersView(APIView):
+    pagination_class = CustomPagination
+
     def get(self, request):
         users = User.objects.all()
+
+        tab = request.query_params.get('tab', 'all')
+        if tab == 'superadmin':
+            users = users.filter(role='super_admin')
+        elif tab == 'staff':
+            users = users.filter(role='staff')
+
+        agency = request.query_params.get('agency', None)
+        if agency:
+            users = users.filter(agency=agency)
+
+        search_term = request.query_params.get('searchTerm', None)
+        if search_term:
+            users = users.filter(
+                Q(name__icontains=search_term) | Q(email__icontains=search_term)
+            )
+
+        paginator = self.pagination_class()
+        page = paginator.paginate_queryset(users, request)
+        if page is not None:
+            users_data = [{
+                'id': user.id,
+                'name': user.username,
+                'email': user.email,
+                'role': user.role,
+                'agency': user.agency,
+                'user_profile_colour': user.user_profile_colour,
+            } for user in page]
+            return paginator.get_paginated_response(users_data)
+
         users_data = [{
             'id': user.id,
             'name': user.username,
