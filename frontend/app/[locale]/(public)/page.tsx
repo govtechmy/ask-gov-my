@@ -9,18 +9,20 @@ import Footer from '@/components/common/Footer';
 import TrendingAgencies from '@/components/common/TrendingAgencies';
 import WordTranslate from '@/components/common/WordTranslate';
 
-const MainPage = async ({
-  searchParams,
-}: {
-  searchParams: { page?: string };
-}) => {
-  const page = parseInt(searchParams.page || '1', 10);
-  const pageSize = 1000;
-  const { questions } = await getAllQuestions(page, pageSize);
+interface MainPageProps {
+  searchParams: {
+    page?: string;
+  };
+}
+
+const MainPage = async ({ searchParams }: MainPageProps) => {
+  
+  const currentPage = searchParams.page ? parseInt(searchParams.page, 10) : 1;
+  const questions = await getAllQuestions(currentPage);
   const trendingAgencies = await getTrendingAgencies();
   const agencyList = await getAgencyList();
   const agencyMap = await getDynamicAgencyMap();
-
+  
   return (
     <div>
       <div className="container mt-10 flex">
