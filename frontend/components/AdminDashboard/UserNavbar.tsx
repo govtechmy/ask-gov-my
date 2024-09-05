@@ -17,9 +17,10 @@ interface UserNavbarProps {
   searchTerm: string;
   agencies: Agency[];
   AGENCY_TO_UUID: Promise<Record<string, string>>;
+  selectedAgencyId: string;
 }
 
-const UserNavbar: React.FC<UserNavbarProps> = ({ currentTab, searchTerm, agencies, AGENCY_TO_UUID }) => {
+const UserNavbar: React.FC<UserNavbarProps> = ({ currentTab, searchTerm, agencies, AGENCY_TO_UUID, selectedAgencyId }) => {
   const searchParams = useSearchParams();
   const router = useRouter();
   const [activeTab, setActiveTabState] = useState(currentTab || 'all');
@@ -27,7 +28,7 @@ const UserNavbar: React.FC<UserNavbarProps> = ({ currentTab, searchTerm, agencie
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isFocused, setIsFocused] = useState(false);
   const [showAddUserToast, setShowAddUserToast] = useState(false);
-
+  const [selectedAgency, setSelectedAgency] = useState(selectedAgencyId || '');
 
   const setActiveTab = useCallback((tab: string) => {
     const params = new URLSearchParams(searchParams.toString());
@@ -57,7 +58,13 @@ const UserNavbar: React.FC<UserNavbarProps> = ({ currentTab, searchTerm, agencie
     setShowAddUserToast(true);
   };
 
-  //should create another function to select agency into params searchTerm once the dropdown is finished
+  const handleAgencyChange = (agencyId: string) => { //this function should be used by agency dropdown to handle agency change
+    setSelectedAgency(agencyId);
+    const params = new URLSearchParams(searchParams.toString());
+    params.set('agencyId', agencyId);
+    params.delete('page');
+    router.push(`${window.location.pathname}?${params.toString()}`);
+  };
 
   return (
     <div className="flex items-center justify-between pb-2 border-b border-[#E4E4E7] dark:border-[#27272A]">
