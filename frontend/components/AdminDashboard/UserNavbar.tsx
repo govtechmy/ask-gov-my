@@ -1,6 +1,5 @@
-'use client';
-
-import React, { useState, useEffect, useCallback } from 'react';
+'use client'
+import React, { useState, useCallback } from 'react';
 import { useSearchParams, useRouter } from 'next/navigation';
 import Search from '@/icons/search';
 import AddUserModal from './AddUserModal';
@@ -8,7 +7,6 @@ import { cn } from '@/lib/utils';
 import PlusIcon from '@/icons/plusicon';
 import AgencyListDropdownUsers from './AgencyListDropdownUsers';
 import { Agency } from '@/types/types';
-import { getDynamicAgencyMap } from '@/actions/questionServices';
 import Toast from '../ui/toast';
 import TickCheckCircle from '@/icons/tickcheckcircle';
 
@@ -16,11 +14,9 @@ interface UserNavbarProps {
   currentTab: string;
   searchTerm: string;
   agencies: Agency[];
-  AGENCY_TO_UUID: Promise<Record<string, string>>;
-  selectedAgencyId: string;
 }
 
-const UserNavbar: React.FC<UserNavbarProps> = ({ currentTab, searchTerm, agencies, AGENCY_TO_UUID, selectedAgencyId }) => {
+const UserNavbar: React.FC<UserNavbarProps> = ({ currentTab, searchTerm, agencies }) => {
   const searchParams = useSearchParams();
   const router = useRouter();
   const [activeTab, setActiveTabState] = useState(currentTab || 'all');
@@ -28,18 +24,20 @@ const UserNavbar: React.FC<UserNavbarProps> = ({ currentTab, searchTerm, agencie
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isFocused, setIsFocused] = useState(false);
   const [showAddUserToast, setShowAddUserToast] = useState(false);
-  const [selectedAgency, setSelectedAgency] = useState(selectedAgencyId || '');
+  const selectedAgencyId = searchParams.get('agencyId') || '';
 
-  const setActiveTab = useCallback((tab: string) => {
-    const params = new URLSearchParams(searchParams.toString());
-    params.set('tab', tab);
-    params.delete('page');
-    params.delete('searchTerm');
-    setSearchValue('');
-    router.push(`${window.location.pathname}?${params.toString()}`);
-    setActiveTabState(tab);
-  }, [router, searchParams]);
-
+  const setActiveTab = useCallback(
+    (tab: string) => {
+      const params = new URLSearchParams(searchParams.toString());
+      params.set('tab', tab);
+      params.delete('page');
+      params.delete('searchTerm');
+      setSearchValue('');
+      router.push(`${window.location.pathname}?${params.toString()}`);
+      setActiveTabState(tab);
+    },
+    [router, searchParams]
+  );
 
   const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const term = e.target.value;
@@ -54,16 +52,19 @@ const UserNavbar: React.FC<UserNavbarProps> = ({ currentTab, searchTerm, agencie
     router.push(`${window.location.pathname}?${params.toString()}`);
   };
 
-  const handleAddUserToast = () => {
-    setShowAddUserToast(true);
-  };
-
-  const handleAgencyChange = (agencyId: string) => { //this function should be used by agency dropdown to handle agency change
-    setSelectedAgency(agencyId);
+  const handleAgencyChange = (agencyId: string) => {
     const params = new URLSearchParams(searchParams.toString());
-    params.set('agencyId', agencyId);
+    if (agencyId) {
+      params.set('agencyId', agencyId);
+    } else {
+      params.delete('agencyId');
+    }
     params.delete('page');
     router.push(`${window.location.pathname}?${params.toString()}`);
+  };
+
+  const handleAddUserToast = () => {
+    setShowAddUserToast(true);
   };
 
   return (
@@ -71,50 +72,41 @@ const UserNavbar: React.FC<UserNavbarProps> = ({ currentTab, searchTerm, agencie
       <div className="flex space-x-5">
         <button
           className={`font-medium text-sm pb-3 -mb-5 ${
-            activeTab === 'all'
-              ? 'text-black-900 border-b-2 border-[#702FF9]'
-              : 'text-dim-500'
+            activeTab === 'all' ? 'text-black-900 border-b-2 border-[#702FF9]' : 'text-dim-500'
           }`}
-          onClick={() => {
-            if (activeTab !== 'all') setActiveTab('all');
-          }}
+          onClick={() => setActiveTab('all')}
         >
           All
         </button>
         <button
           className={`font-medium text-sm pb-3 -mb-5 ${
-            activeTab === 'superadmin'
-              ? 'text-black-900 border-b-2 border-[#702FF9]'
-              : 'text-dim-500'
+            activeTab === 'superadmin' ? 'text-black-900 border-b-2 border-[#702FF9]' : 'text-dim-500'
           }`}
-          onClick={() => {
-            if (activeTab !== 'superadmin') setActiveTab('superadmin');
-          }}
+          onClick={() => setActiveTab('superadmin')}
         >
           Superadmin
         </button>
         <button
           className={`font-medium text-sm pb-3 -mb-5 ${
-            activeTab === 'staff'
-              ? 'text-black-900 border-b-2 border-[#702FF9]'
-              : 'text-dim-500'
+            activeTab === 'staff' ? 'text-black-900 border-b-2 border-[#702FF9]' : 'text-dim-500'
           }`}
-          onClick={() => {
-            if (activeTab !== 'staff') setActiveTab('staff');
-          }}
+          onClick={() => setActiveTab('staff')}
         >
           Staff
         </button>
       </div>
       <div className="flex items-center">
-        <AgencyListDropdownUsers AGENCY_TO_UUID={AGENCY_TO_UUID} />
+        <AgencyListDropdownUsers
+          agencies={agencies}
+          selectedAgencyId={selectedAgencyId}
+          handleAgencyChange={handleAgencyChange}
+        />
         <div
           className={cn(
             'bg-[#FFFFFF] dark:bg-[#18181B] rounded-md flex items-center h-8 w-[260px] border px-3 py-2 text-sm',
             {
-              'shadow-[0_0_0_1px_#B794FF,0_0_0_4px_#DED1FA] dark:shadow-[0_0_0_1px_#4F20B2,0_0_0_4px_#281B46]':
-                isFocused,
-            },
+              'shadow-[0_0_0_1px_#B794FF,0_0_0_4px_#DED1FA] dark:shadow-[0_0_0_1px_#4F20B2,0_0_0_4px_#281B46]': isFocused,
+            }
           )}
         >
           <input
