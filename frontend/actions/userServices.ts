@@ -7,34 +7,49 @@ const API_URL = process.env.API_URL;
 export async function getUserAgencyQuestions(
   agencyId: number,
   page: number = 1,
-  pageSize: number = 10,
-): Promise<{ questions: Question[]; total: number }> {
+  pageSize: number = 8,
+  tab: string = 'all',
+  searchTerm: string = '',
+  date?: string
+): Promise<{ questions: Question[]; total: number; totalPages: number; currentPage: number; unansweredCount: number }> {
   try {
-    const response = await fetch(
-      `${API_URL}/questions/by-agency/${agencyId}/`,
-      {
-        method: 'GET',
-        headers: {
-          'Content-Type': 'application/json',
-          'Cache-Control': 'no-cache',
-          Pragma: 'no-cache',
-          Expires: '0',
-        },
+    const query = new URLSearchParams({
+      page: page.toString(),
+      page_size: pageSize.toString(),
+      tab,
+      search: searchTerm,
+    });
+
+    if (date) {
+      query.set('date', date);
+    }
+
+    const response = await fetch(`${API_URL}/questions/by-agency/${agencyId}/?${query.toString()}`, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+        'Cache-Control': 'no-cache',
+        Pragma: 'no-cache',
+        Expires: '0',
       },
-    );
+    });
 
     if (!response.ok) {
       throw new Error('Failed to fetch questions');
     }
 
     const data = await response.json();
-    const start = (page - 1) * pageSize;
-    const end = start + pageSize;
-    const paginatedQuestions = data.slice(start, end);
-    return { questions: paginatedQuestions, total: data.length };
+
+    return {
+      questions: data.results.results,
+      total: data.count,
+      totalPages: Math.ceil(data.count / pageSize),
+      currentPage: page,
+      unansweredCount: data.results.unanswered_count, 
+    };
   } catch (error) {
     console.error('Error in getUserAgencyQuestions:', error);
-    return { questions: [], total: 0 };
+    return { questions: [], total: 0, totalPages: 0, currentPage: 1, unansweredCount: 0 };
   }
 }
 
