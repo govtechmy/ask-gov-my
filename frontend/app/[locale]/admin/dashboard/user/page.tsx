@@ -35,6 +35,7 @@ const ManageUsers = async ({ searchParams }: ManageUsersProps) => {
         searchTerm={searchTerm}
         agencies={agencies}
         AGENCY_TO_UUID={agencyMap}
+        selectedAgencyId={agencyId}
       />
       <div className="h-6"></div>
       <UserBox
