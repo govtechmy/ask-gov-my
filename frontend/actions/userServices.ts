@@ -473,3 +473,23 @@ export async function getAllUsers({
   }
 }
 
+export async function checkUserEmailExists(email: string): Promise<boolean> {
+  try {
+    const response = await fetch(`/admin/check-email?email=${encodeURIComponent(email)}`, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    });
+
+    if (!response.ok) {
+      throw new Error('Failed to check email existence');
+    }
+
+    const exists = await response.json();
+    return exists;
+  } catch (error) {
+    console.error('Error in checkUserEmailExists:', error);
+    return false;
+  }
+}
