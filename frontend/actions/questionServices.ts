@@ -266,6 +266,22 @@ export async function getAgencyList(): Promise<Agency[]> {
   }
 }
 
+export async function getAgency(agencyId: number): Promise<Agency | null> {
+  try {
+    const agencies = await getAgencyList();
+    const agency = agencies.find((agency) => agency.id === agencyId);
+
+    if (!agency) {
+      throw new Error(`Agency with ID ${agencyId} not found`);
+    }
+
+    return agency;
+  } catch (error) {
+    console.error('Error in getAgency:', error);
+    return null;
+  }
+}
+
 export async function getAgencyListWithPagination(
   page: number = 1,
   pageSize: number = 27,
