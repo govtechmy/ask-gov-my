@@ -523,6 +523,7 @@ class UserView(APIView):
         )
         return Response({
             'id': user.id,
+            'name': user.username,
             'email': user.email,
             'emailVerified': user.email_verified,
             'role': user.role,
@@ -542,6 +543,7 @@ class UserView(APIView):
 
         return Response({
             'id': user.id,
+            'name': user.username,
             'email': user.email,
             'emailVerified': user.email_verified,
             'role': user.role,
@@ -556,6 +558,7 @@ class UserView(APIView):
         user.save()
         return Response({
             'id': user.id,
+            'name': user.username,
             'email': user.email,
             'emailVerified': user.email_verified
         })
@@ -587,6 +590,7 @@ class SessionView(APIView):
             },
             'user': {
                 'id': session.user.id,
+                'name': session.user.username,
                 'email': session.user.email,
                 'emailVerified': session.user.email_verified,
                 'role': session.user.role,
