@@ -67,7 +67,7 @@ async function getEmbedding(text: string): Promise<number[]> {
   return response.data[0].embedding;
 }
 
-export async function searchQuestions(query: string) {
+export async function searchQuestions(query: string): Promise<Question[]> {
   try {
     const embedding = await getEmbedding(query);
 
@@ -76,35 +76,43 @@ export async function searchQuestions(query: string) {
       body: {
         query: {
           bool: {
-            should: [
+            must: [
+              { term: { state: 'completed' } },
               {
-                knn: {
-                  field: 'vector',
-                  query_vector: embedding,
-                  num_candidates: 1000,
-                },
-              },
-              {
-                multi_match: {
-                  query,
-                  fields: [
-                    'agency.name',
-                    'agency.acronym',
-                    'agency.name_ms',
-                    'topics.name',
-                    'topics.name_ms',
+                bool: {
+                  should: [
+                    {
+                      knn: {
+                        field: 'vector',
+                        query_vector: embedding,
+                        num_candidates: 50,
+                        boost: 1,
+                      },
+                    },
+                    {
+                      multi_match: {
+                        query,
+                        fields: [
+                          'agency.name',
+                          'agency.acronym',
+                          'agency.name_ms',
+                          'topics.name',
+                          'topics.name_ms',
+                        ],
+                        boost: 0.5,
+                      },
+                    },
                   ],
                 },
               },
             ],
           },
         },
+        size: 20,
       },
     });
 
-    const filteredQuestions = result.hits.hits
-      .map((hit: any) => hit._source)
-      .filter((question: Question) => question.state === 'completed');
+    const filteredQuestions = result.hits.hits.map((hit: any) => hit._source);
 
     return filteredQuestions;
   } catch (error) {
@@ -112,6 +120,87 @@ export async function searchQuestions(query: string) {
     return [];
   }
 }
+export async function searchQuestionsWithPagination(
+  query: string,
+  page: number = 1,
+  pageSize: number = 6,
+): Promise<{
+  data: Question[];
+  totalItems: number;
+  totalPages: number;
+  currentPage: number;
+}> {
+  try {
+    const embedding = await getEmbedding(query);
+
+    const result = await clientf().search({
+      index: 'questions',
+      body: {
+        query: {
+          bool: {
+            must: [
+              { term: { state: 'completed' } },
+              {
+                bool: {
+                  should: [
+                    {
+                      knn: {
+                        field: 'vector',
+                        query_vector: embedding,
+                        num_candidates: 50,
+                        boost: 1,
+                      },
+                    },
+                    {
+                      multi_match: {
+                        query,
+                        fields: [
+                          'agency.name',
+                          'agency.acronym',
+                          'agency.name_ms',
+                          'topics.name',
+                          'topics.name_ms',
+                        ],
+                        boost: 0.5,
+                      },
+                    },
+                  ],
+                },
+              },
+            ],
+          },
+        },
+        from: (page - 1) * pageSize,
+        size: pageSize,
+      },
+    });
+
+    const totalItems = result.hits.total
+      ? typeof result.hits.total === 'number'
+        ? result.hits.total
+        : result.hits.total.value
+      : 0;
+    const totalPages = Math.ceil(totalItems / pageSize);
+
+    const data = result.hits.hits.map((hit: any) => hit._source);
+
+    return {
+      data,
+      totalItems,
+      totalPages,
+      currentPage: page,
+    };
+  } catch (error) {
+    console.error('Error searching questions with pagination:', error);
+    return {
+      data: [],
+      totalItems: 0,
+      totalPages: 0,
+      currentPage: 1,
+    };
+  }
+}
+
 
 export async function getRelatedQuestions(questionText: string) {
   try {

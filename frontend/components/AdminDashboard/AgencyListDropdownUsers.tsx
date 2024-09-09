@@ -1,17 +1,21 @@
 import ChevronDown from '@/icons/ChevronDown';
 import Search from '@/icons/search';
-import React, { useState, useRef, ChangeEvent, useEffect } from 'react';
+import React, { useState, useRef, ChangeEvent } from 'react';
+import { Agency } from '@/types/types';
 
 interface AgencyListDropdownProps {
-  AGENCY_TO_UUID: Promise<Record<string, string>>;
+  agencies: Agency[];
+  selectedAgencyId: string;
+  handleAgencyChange: (agencyId: string) => void;
 }
 
 const AgencyListDropdownUsers: React.FC<AgencyListDropdownProps> = ({
-  AGENCY_TO_UUID,
+  agencies,
+  selectedAgencyId,
+  handleAgencyChange,
 }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
-  const [selectedAgency, setSelectedAgency] = useState<string | null>(null);
   const [hoveredAgency, setHoveredAgency] = useState<string | null>(null);
   const dropdownRef = useRef<HTMLDivElement>(null);
 
@@ -19,30 +23,28 @@ const AgencyListDropdownUsers: React.FC<AgencyListDropdownProps> = ({
     setIsOpen(!isOpen);
   };
 
-  const handleAgencyChange = (agencyAcronym: string) => {
-    setSelectedAgency(agencyAcronym === 'All' ? null : agencyAcronym);
-    setIsOpen(false);
-  };
-
   const handleSearchChange = (event: ChangeEvent<HTMLInputElement>) => {
     setSearchQuery(event.target.value);
   };
 
-  const handleMouseEnter = (agencyAcronym: string) => {
-    setHoveredAgency(agencyAcronym);
+  const handleMouseEnter = (agencyId: string) => {
+    setHoveredAgency(agencyId);
   };
 
   const handleMouseLeave = () => {
     setHoveredAgency(null);
   };
 
-  const filteredAgencies = Object.keys(AGENCY_TO_UUID).filter(agencyAcronym =>
-    agencyAcronym.toLowerCase().includes(searchQuery.toLowerCase()),
+  const filteredAgencies = agencies.filter(
+    agency =>
+      agency.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      agency.name_ms?.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      agency.acronym.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
   const displayText = isOpen
-    ? hoveredAgency || selectedAgency || 'All'
-    : selectedAgency || 'All';
+    ? hoveredAgency || (selectedAgencyId ? agencies.find(agency => agency.id === parseInt(selectedAgencyId))?.acronym || 'All' : 'All')
+    : selectedAgencyId ? agencies.find(agency => agency.id === parseInt(selectedAgencyId))?.acronym || 'All' : 'All';
 
   return (
     <div ref={dropdownRef} className="relative">
@@ -51,8 +53,8 @@ const AgencyListDropdownUsers: React.FC<AgencyListDropdownProps> = ({
         onClick={handleDropdownToggle}
       >
         <div className="flex">
-          <div className="text-dim-500 "> {`Agency`}</div>
-          <div className="pl-[6px] text-black-900 font-medium">{`${displayText}`}</div>
+          <div className="text-dim-500 ">Agency</div>
+          <div className="pl-[6px] text-black-900 font-medium">{displayText}</div>
         </div>
 
         <ChevronDown
@@ -66,21 +68,21 @@ const AgencyListDropdownUsers: React.FC<AgencyListDropdownProps> = ({
           <div className="absolute left-2 overflow-auto mt-[52px] max-h-[160px] bg-white-forcewhite max-w-[300px] rounded-md">
             <div
               className="h-8 w-[300px] pl-2 hover:bg-washed-100 cursor-pointer items-center flex rounded-md"
-              onClick={() => handleAgencyChange('All')}
+              onClick={() => handleAgencyChange('')}
             >
               All
             </div>
-            {filteredAgencies.map(agencyAcronym => (
+            {filteredAgencies.map(agency => (
               <div
-                key={agencyAcronym}
+                key={agency.id}
                 className="pl-2 h-8 hover:bg-washed-100 cursor-pointer items-center flex rounded-md"
-                onClick={() => handleAgencyChange(agencyAcronym)}
-                onMouseEnter={() => handleMouseEnter(agencyAcronym)}
+                onClick={() => handleAgencyChange(agency.id.toString())}
+                onMouseEnter={() => handleMouseEnter(agency.acronym)}
                 onMouseLeave={handleMouseLeave}
               >
-                {agencyAcronym}
+                {agency.acronym}
                 <div className="text-dim-500 font-medium text-xs leading-[18px] pl-2 rounded-md">
-                  {agencyAcronym}
+                  {agency.name}
                 </div>
               </div>
             ))}
