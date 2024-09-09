@@ -524,7 +524,10 @@ class UserView(APIView):
         return Response({
             'id': user.id,
             'email': user.email,
-            'emailVerified': user.email_verified
+            'emailVerified': user.email_verified,
+            'role': user.role,
+            'agency': user.agency
+
         }, status=status.HTTP_201_CREATED)
 
     def get(self, request):
@@ -540,7 +543,9 @@ class UserView(APIView):
         return Response({
             'id': user.id,
             'email': user.email,
-            'emailVerified': user.email_verified
+            'emailVerified': user.email_verified,
+            'role': user.role,
+            'agency': user.agency
         })
 
     def put(self, request):
@@ -583,7 +588,9 @@ class SessionView(APIView):
             'user': {
                 'id': session.user.id,
                 'email': session.user.email,
-                'emailVerified': session.user.email_verified
+                'emailVerified': session.user.email_verified,
+                'role': session.user.role,
+                'agency': session.user.agency
             }
         })
 
