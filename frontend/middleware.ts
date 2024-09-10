@@ -1,6 +1,11 @@
 import { defaultLocale, localePrefix, locales } from '@/lib/i18n';
+import { getServerSession } from 'next-auth';
 import createIntlMiddleware from 'next-intl/middleware';
-import { NextRequest } from 'next/server';
+import { NextRequest, NextResponse } from 'next/server';
+import { authOptions } from './app/api/auth/[...nextauth]/options';
+import { get } from './lib/api';
+import { AdapterSession, AdapterUser } from 'next-auth/adapters';
+import path from 'path';
 
 export default async function middleware(request: NextRequest) {
   // Create and call the next-intl middleware
@@ -12,25 +17,37 @@ export default async function middleware(request: NextRequest) {
 
   const response = handleI18nRouting(request);
 
-  // Development
-  if (process.env.APP_ENV === 'development') {
-    return response;
-  }
+  // Check for admin routes
+  const pathname = request.nextUrl.pathname;
+  const adminPathRegex = new RegExp(`^/(${locales.join('|')})?/admin(/|$)`);
+  if (adminPathRegex.test(pathname)) {
+    // Exclude /admin and /admin/checkmail from authorization
+    const excludedPaths = ['/admin', '/admin/checkmail'];
+    const isExcludedPath = excludedPaths.some(
+      path => pathname.endsWith(path) || pathname.endsWith(`${path}/`),
+    );
 
-  const basicAuth = request.headers.get('authorization');
-  if (basicAuth) {
-    const authValue = basicAuth.split(' ')[1];
-    const [user, password] = atob(authValue).split(':');
-    if (user === 'admin' && password === process.env.AUTH_TOKEN) {
-      return new Response('Auth required', {
-        status: 401,
-        headers: {
-          'WWW-Authenticate': `Basic realm="Secure Area"`,
-        },
-      });
+    if (!isExcludedPath) {
+      const sessionToken = request.cookies.get(
+        'next-auth.session-token',
+      )?.value;
+
+      if (!sessionToken) {
+        // Redirect to /admin login page if there's no session token
+        return NextResponse.redirect(new URL('/admin', request.url));
+      }
+
+      const API_URL = process.env.API_URL;
+      const session_and_user = await get<{
+        session: AdapterSession;
+        user: AdapterUser;
+      }>(`${API_URL}/auth/session`, { sessionToken });
+
+      if (!session_and_user) {
+        return NextResponse.redirect(new URL('/admin', request.url));
+      }
     }
   }
-
   return response;
 }
 
