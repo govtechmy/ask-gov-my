@@ -29,19 +29,24 @@ const AnswerQuestionCard: React.FC<QuestionCardProps> = ({ question }) => {
 
   const formatDate = (dateString: string) => {
     const date = new Date(dateString);
-    return (
-      date.toLocaleDateString('en-GB', {
-        day: '2-digit',
-        month: 'long',
-        year: 'numeric',
-      }) +
-      ', ' +
-      date.toLocaleTimeString('en-GB', {
-        hour: '2-digit',
-        minute: '2-digit',
-        hour12: true,
-      })
-    );
+    const dateFormatter = new Intl.DateTimeFormat('en-GB', {
+      day: '2-digit',
+      month: 'long',
+      year: 'numeric',
+    });
+    const timeFormatter = new Intl.DateTimeFormat('en-GB', {
+      hour: '2-digit',
+      minute: '2-digit',
+      hour12: true,
+    });
+
+    const formattedDate = dateFormatter.format(date);
+    const formattedTime = timeFormatter
+      .format(date)
+      .replace(/\s/g, '')
+      .toUpperCase();
+
+    return `${formattedDate}, ${formattedTime}`;
   };
   return (
     <>
