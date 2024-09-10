@@ -2,22 +2,16 @@
 import Link from 'next/link';
 import { Button, buttonVariants } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import BaseHeader from '@/components/common/Header/BaseHeader';
 import Google from '@/icons/google';
 import { useTranslations } from 'next-intl';
 import { useState } from 'react';
 import { signIn } from 'next-auth/react';
 import { redirect } from 'next/navigation';
 import { checkUserEmailExists } from '@/actions/userServices';
-import Toast from '../ui/toast';
-import TickCheckCircle from '@/icons/tickcheckcircle';
-import X from '@/icons/x';
 
 export function LoginForm() {
   const t = useTranslations('Adminlogin');
   const [email, setEmail] = useState('');
-  const [showToast, setShowToast] = useState(false);
-  const [toastMsg, setToastMsg] = useState('');
 
   const handleSignIn = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -33,19 +27,18 @@ export function LoginForm() {
         if (result?.ok) {
           redirect('/admin/checkmail');
         } else {
-          setToastMsg('Sign in failure');
-          setShowToast(true);
+          console.error('Sign in failure');
         }
       } else {
-        console.log('email not found');
-        setToastMsg('Email not found');
-        setShowToast(true);
+        console.error('Email not found');
       }
-    } catch {
-      setToastMsg('Error. Please contact the admin.');
-      setShowToast(true);
-    }
+    } catch {}
   };
+
+  const handleGoogleSignIn = () => {
+    signIn('google', { callbackUrl: '/admin/dashboard' });
+  };
+
   return (
     <>
       <div className="flex-grow flex items-center justify-center py-12">
@@ -77,7 +70,7 @@ export function LoginForm() {
                 {t('or')}
               </div>
 
-              <Button variant={'secondary'}>
+              <Button variant={'secondary'} onClick={handleGoogleSignIn}>
                 <Google></Google> {t('2ndbutton')}
               </Button>
             </div>
@@ -94,19 +87,6 @@ export function LoginForm() {
               {t('forgotpass')}
             </Link>
           </div>
-          {showToast && (
-            <Toast
-              message={toastMsg}
-              icon={<X />}
-              underlineColor="bg-[#16A34A]"
-              messageColor="text-[#15803D] dark:text-[#16A34A]"
-              show={showToast}
-              onClose={() => {
-                setShowToast(false);
-                setToastMsg('');
-              }}
-            />
-          )}
         </div>
       </div>
     </>
