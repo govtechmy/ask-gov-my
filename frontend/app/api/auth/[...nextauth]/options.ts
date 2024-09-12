@@ -30,13 +30,10 @@ export const authOptions: NextAuthOptions = {
     GoogleProvider({
       clientId: process.env.GOOGLE_CLIENT_ID ?? '',
       clientSecret: process.env.GOOGLE_CLIENT_SECRET ?? '',
+      allowDangerousEmailAccountLinking: true,
     }),
     EmailProvider({
       async sendVerificationRequest({ identifier, url }) {
-        //create function to send the magic link to django
-        //django will send the magic link to the users
-        console.log(`Magic link URL: ${url}`);
-        // NOTE: You are not required to use `nodemailer`
         const transport = createTransport({
           host: process.env.EMAIL_HOST,
           port: process.env.EMAIL_PORT,
@@ -69,26 +66,11 @@ export const authOptions: NextAuthOptions = {
   session: {
     strategy: 'database',
   },
-  debug: true,
   callbacks: {
     async signIn({ user, account, profile, email, credentials }) {
-      if (account?.type === 'email') {
-        // Only check on initial sign-in attempt, not on email link click
-        if (email?.verificationRequest) {
-          return await checkUserEmailExists(user.email);
-        }
-        return true; // Allow if they've clicked the login link from email
-      }
-
-      if (account?.provider === 'google') {
-        const res = await checkUserEmailExists(profile?.email as string);
-        return res;
-      }
-      return false; // false for any other provider other than Google and EmailProvider
+      return await checkUserEmailExists(user.email as string);
     },
     async session({ session, user }) {
-      console.log('session', session);
-      console.log('user', user);
       return {
         ...session,
         user: {
