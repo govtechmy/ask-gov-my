@@ -617,6 +617,38 @@ class SessionView(APIView):
 
 
 class AccountView(APIView):
+    def get(self, request):
+        provider = request.GET.get('provider')
+        provider_account_id = request.GET.get('providerAccountId')
+
+        if not provider or not provider_account_id:
+            return Response({
+                'status': 'fail',
+                'data': {'message': 'Invalid parameters'}
+            }, status=status.HTTP_400_BAD_REQUEST)
+
+        try:
+            account = Account.objects.select_related('user').get(
+                provider=provider,
+                provider_account_id=provider_account_id
+            )
+            user = account.user
+            return Response({
+                'status': 'success',
+                'data': {
+                    'id': user.id,
+                    'name': user.username,
+                    'email': user.email,
+                    'emailVerified': user.email_verified,
+                    'role': user.role,
+                    'agency': user.agency
+                }
+            })
+        except Account.DoesNotExist:
+            return Response({
+                'status': 'fail',
+                'data': {'message': 'Account not found'}
+            }, status=status.HTTP_404_NOT_FOUND)
     def post(self, request):
         data = request.data
         user = get_object_or_404(User, id=data['userId'])
