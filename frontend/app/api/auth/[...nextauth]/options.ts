@@ -3,6 +3,8 @@ import EmailProvider from 'next-auth/providers/email';
 import { createTransport } from 'nodemailer';
 import { DjangoAdapter } from './adapter';
 import email_html from './email_html';
+import GoogleProvider from 'next-auth/providers/google';
+import { checkUserEmailExists } from '@/actions/userServices';
 
 // Extend the built-in session type
 declare module 'next-auth' {
@@ -25,6 +27,10 @@ declare module 'next-auth' {
 
 export const authOptions: NextAuthOptions = {
   providers: [
+    GoogleProvider({
+      clientId: process.env.GOOGLE_CLIENT_ID ?? '',
+      clientSecret: process.env.GOOGLE_CLIENT_SECRET ?? '',
+    }),
     EmailProvider({
       async sendVerificationRequest({ identifier, url }) {
         //create function to send the magic link to django
@@ -63,8 +69,26 @@ export const authOptions: NextAuthOptions = {
   session: {
     strategy: 'database',
   },
+  debug: true,
   callbacks: {
+    async signIn({ user, account, profile, email, credentials }) {
+      if (account?.type === 'email') {
+        // Only check on initial sign-in attempt, not on email link click
+        if (email?.verificationRequest) {
+          return await checkUserEmailExists(user.email);
+        }
+        return true; // Allow if they've clicked the login link from email
+      }
+
+      if (account?.provider === 'google') {
+        const res = await checkUserEmailExists(profile?.email as string);
+        return res;
+      }
+      return false; // false for any other provider other than Google and EmailProvider
+    },
     async session({ session, user }) {
+      console.log('session', session);
+      console.log('user', user);
       return {
         ...session,
         user: {

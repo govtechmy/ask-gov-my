@@ -41,7 +41,10 @@ export const DjangoAdapter = (): Adapter => {
     },
 
     async getUserByAccount({ providerAccountId, provider }) {
-      return await get(`${API_URL}/auth/user`, { providerAccountId, provider });
+      return await get(`${API_URL}/auth/account`, {
+        providerAccountId,
+        provider,
+      });
     },
 
     async updateUser(user) {
