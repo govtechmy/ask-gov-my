@@ -497,7 +497,7 @@ export async function getAllUsers({
 
 export async function checkUserEmailExists(email: string): Promise<boolean> {
   try {
-    const response = await fetch(
+    const url = await fetch(
       `${API_URL}/admin/check-email?email=${encodeURIComponent(email)}`,
       {
         method: 'GET',
@@ -507,12 +507,13 @@ export async function checkUserEmailExists(email: string): Promise<boolean> {
       },
     );
 
-    if (!response.ok) {
+    if (!url.ok) {
       throw new Error('Failed to check email existence');
     }
 
-    const exists = await response.json();
-    return exists;
+    const res = await url.json();
+
+    return res.isExists;
   } catch (error) {
     console.error('Error in checkUserEmailExists:', error);
     return false;

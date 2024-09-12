@@ -623,8 +623,7 @@ class AccountView(APIView):
 
         if not provider or not provider_account_id:
             return Response({
-                'status': 'fail',
-                'data': {'message': 'Invalid parameters'}
+                'detail': 'Invalid parameters'
             }, status=status.HTTP_400_BAD_REQUEST)
 
         try:
@@ -634,8 +633,6 @@ class AccountView(APIView):
             )
             user = account.user
             return Response({
-                'status': 'success',
-                'data': {
                     'id': user.id,
                     'name': user.username,
                     'email': user.email,
@@ -643,12 +640,10 @@ class AccountView(APIView):
                     'role': user.role,
                     'agency': user.agency
                 }
-            })
+            )
         except Account.DoesNotExist:
-            return Response({
-                'status': 'fail',
-                'data': {'message': 'Account not found'}
-            }, status=status.HTTP_404_NOT_FOUND)
+            return Response({"detail": "Account not found."}, status=status.HTTP_404_NOT_FOUND)
+
     def post(self, request):
         data = request.data
         user = get_object_or_404(User, id=data['userId'])
@@ -786,4 +781,4 @@ class CheckUserEmailExistsView(APIView):
     def get(self, request):
         email = request.GET.get('email')
         exists = User.objects.filter(email=email).exists()
-        return Response(exists, status=status.HTTP_200_OK)
+        return Response({'isExists':exists}, status=status.HTTP_200_OK)
