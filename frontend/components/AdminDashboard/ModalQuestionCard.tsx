@@ -120,7 +120,7 @@ const ModalQuestionCard: React.FC<ModalProps> = ({
                 >
                   <AgencySearchList
                     agencies={agencies}
-                    onItemClick={async agency => {
+                    onSelect={async agency => {
                       setOpenAgencyPopover(false);
                       if (!agency) {
                         await unassignAgencyFromQuestion(question.id);
@@ -128,6 +128,7 @@ const ModalQuestionCard: React.FC<ModalProps> = ({
                       }
                       await assignAgencyToQuestion(question.id, agency.id);
                     }}
+                    nullItemLabel="Unassigned"
                   />
                 </PopoverContent>
               </Popover>

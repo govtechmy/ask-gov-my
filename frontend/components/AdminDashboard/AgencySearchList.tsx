@@ -15,14 +15,16 @@ type PickedAgency = Pick<Agency, 'id' | 'acronym' | 'name' | 'name_ms'>;
 
 type Props = {
   agencies: PickedAgency[];
-  onItemClick: (value: PickedAgency | null) => void;
+  onSelect: (value: PickedAgency | null) => void;
   inputSize?: 'sm' | 'md';
+  nullItemLabel: string;
 };
 
 export function AgencySearchList({
   agencies,
-  onItemClick,
+  onSelect,
   inputSize = 'md',
+  nullItemLabel,
 }: Props) {
   return (
     <Command
@@ -44,15 +46,15 @@ export function AgencySearchList({
         <CommandEmpty>No agencies were found</CommandEmpty>
         <CommandGroup>
           <CommandItem
-            onSelect={() => onItemClick(null)}
+            onSelect={() => onSelect(null)}
             className="cursor-pointer"
           >
-            Unassigned
+            {nullItemLabel}
           </CommandItem>
           {agencies.map(agency => (
             <CommandItem
               key={agency.id}
-              onSelect={() => onItemClick(agency)}
+              onSelect={() => onSelect(agency)}
               className="cursor-pointer"
               value={agency.id.toString()}
               keywords={[

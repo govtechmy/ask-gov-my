@@ -5,13 +5,19 @@ import Search from '@/icons/search';
 import AddUserModal from './AddUserModal';
 import { cn } from '@/lib/utils';
 import PlusIcon from '@/icons/plusicon';
-import AgencyListDropdownUsers from './AgencyListDropdownUsers';
 import { Agency } from '@/types/types';
 import Toast from '../ui/toast';
 import TickCheckCircle from '@/icons/tickcheckcircle';
-import { useRouter } from '@/lib/i18n';
+import { usePathname, useRouter } from '@/lib/i18n';
 import { Input } from '../ui/input';
-import { Button } from '../ui/button';
+import {
+  Popover,
+  PopoverTrigger,
+  PopoverContent,
+} from '@/components/ui/popover';
+import { AgencySearchList } from './AgencySearchList';
+import { Button } from '@/components/ui/button';
+import ChevronDown from '@/icons/ChevronDown';
 
 interface UserNavbarProps {
   agencies: Agency[];
@@ -20,15 +26,23 @@ interface UserNavbarProps {
 const UserNavbar: React.FC<UserNavbarProps> = ({ agencies }) => {
   const searchParams = useSearchParams();
   const router = useRouter();
+  const pathname = usePathname();
 
   const currentTab = searchParams.get('tab') || 'all';
   const searchTerm = searchParams.get('searchTerm') || '';
-  const selectedAgencyId = searchParams.get('agencyId') || '';
+  const selectedAgencyId = searchParams.has('agencyId')
+    ? Number.parseInt(searchParams.get('agencyId') as string)
+    : null;
 
   const [activeTab, setActiveTabState] = useState(currentTab);
   const [searchValue, setSearchValue] = useState(searchTerm);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [showAddUserToast, setShowAddUserToast] = useState(false);
+  const [openAgencyPopover, setOpenAgencyPopover] = useState(false);
+
+  const selectedAgency = agencies.find(
+    agency => agency.id === selectedAgencyId,
+  );
 
   const setActiveTab = useCallback(
     (tab: string) => {
@@ -37,7 +51,7 @@ const UserNavbar: React.FC<UserNavbarProps> = ({ agencies }) => {
       params.delete('page');
       params.delete('searchTerm');
       setSearchValue('');
-      router.push(`${window.location.pathname}?${params.toString()}`);
+      router.push(`${pathname}?${params.toString()}`);
       setActiveTabState(tab);
     },
     [router, searchParams],
@@ -53,18 +67,19 @@ const UserNavbar: React.FC<UserNavbarProps> = ({ agencies }) => {
       params.delete('searchTerm');
     }
     params.delete('page');
-    router.push(`${window.location.pathname}?${params.toString()}`);
+    router.push(`${pathname}?${params.toString()}`);
   };
 
-  const handleAgencyChange = (agencyId: string) => {
+  const filterByAgency = (agencyId: number) => {
     const params = new URLSearchParams(searchParams.toString());
-    if (agencyId) {
-      params.set('agencyId', agencyId);
-    } else {
-      params.delete('agencyId');
-    }
-    params.delete('page');
-    router.push(`${window.location.pathname}?${params.toString()}`);
+    params.set('agencyId', agencyId.toString());
+    router.push(`${pathname}?${params.toString()}`);
+  };
+
+  const removeAgencyFilter = () => {
+    const params = new URLSearchParams(searchParams.toString());
+    params.delete('agencyId');
+    router.push(`${pathname}?${params.toString()}`);
   };
 
   const handleAddUserToast = () => {
@@ -128,15 +143,35 @@ const UserNavbar: React.FC<UserNavbarProps> = ({ agencies }) => {
           Staff
         </button>
       </div>
-      <div className="flex items-center relative">
-        <AgencyListDropdownUsers
-          agencies={agencies}
-          selectedAgencyId={selectedAgencyId}
-          handleAgencyChange={handleAgencyChange}
-        />
+      <div className="flex items-center gap-2 relative">
+        <Popover open={openAgencyPopover} onOpenChange={setOpenAgencyPopover}>
+          <PopoverTrigger asChild>
+            <Button size="sm">
+              <span className="text-dim-500 mr-1">Agency</span>
+              <span>{selectedAgency?.acronym || 'All'}</span>
+              <ChevronDown className="ml-auto h-5 w-5" />
+            </Button>
+          </PopoverTrigger>
+          <PopoverContent
+            className="p-0 rounded-[14px] md:min-w-[320px]"
+            align="start"
+          >
+            <AgencySearchList
+              agencies={agencies}
+              onSelect={agency => {
+                setOpenAgencyPopover(false);
+                if (!agency) {
+                  removeAgencyFilter();
+                  return;
+                }
+                filterByAgency(agency.id);
+              }}
+              nullItemLabel="All"
+            />
+          </PopoverContent>
+        </Popover>
         <div>
           <Input
-            type="search"
             placeholder="Search by name or email"
             className="h-8 min-w-[250px] rounded-lg"
             onChange={handleSearchChange}

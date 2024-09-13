@@ -86,7 +86,7 @@ const DropdownRole: React.FC<DropdownRoleProps> = ({
             >
               <AgencySearchList
                 agencies={agencies}
-                onItemClick={async agency => {
+                onSelect={async agency => {
                   setOpenAgencyPopover(false);
                   if (!agency) {
                     setAgency(null);
@@ -94,6 +94,7 @@ const DropdownRole: React.FC<DropdownRoleProps> = ({
                   }
                   setAgency(agency.id);
                 }}
+                nullItemLabel="Unassigned"
               />
             </PopoverContent>
           </Popover>

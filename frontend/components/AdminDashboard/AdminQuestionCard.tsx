@@ -131,7 +131,7 @@ const AdminQuestionCard: React.FC<QuestionCardProps> = ({
             >
               <AgencySearchList
                 agencies={agencies}
-                onItemClick={async agency => {
+                onSelect={async agency => {
                   setOpenAgencyPopover(false);
                   if (!agency) {
                     await unassignAgencyFromQuestion(question.id);
@@ -139,6 +139,7 @@ const AdminQuestionCard: React.FC<QuestionCardProps> = ({
                   }
                   await assignAgencyToQuestion(question.id, agency.id);
                 }}
+                nullItemLabel="Unassigned"
               />
             </PopoverContent>
           </Popover>
