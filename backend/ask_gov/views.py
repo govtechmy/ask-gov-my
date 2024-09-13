@@ -523,8 +523,12 @@ class UserView(APIView):
         )
         return Response({
             'id': user.id,
+            'name': user.username,
             'email': user.email,
-            'emailVerified': user.email_verified
+            'emailVerified': user.email_verified,
+            'role': user.role,
+            'agency': user.agency
+
         }, status=status.HTTP_201_CREATED)
 
     def get(self, request):
@@ -539,8 +543,11 @@ class UserView(APIView):
 
         return Response({
             'id': user.id,
+            'name': user.username,
             'email': user.email,
-            'emailVerified': user.email_verified
+            'emailVerified': user.email_verified,
+            'role': user.role,
+            'agency': user.agency
         })
 
     def put(self, request):
@@ -551,6 +558,7 @@ class UserView(APIView):
         user.save()
         return Response({
             'id': user.id,
+            'name': user.username,
             'email': user.email,
             'emailVerified': user.email_verified
         })
@@ -582,8 +590,11 @@ class SessionView(APIView):
             },
             'user': {
                 'id': session.user.id,
+                'name': session.user.username,
                 'email': session.user.email,
-                'emailVerified': session.user.email_verified
+                'emailVerified': session.user.email_verified,
+                'role': session.user.role,
+                'agency': session.user.agency
             }
         })
 
@@ -606,6 +617,33 @@ class SessionView(APIView):
 
 
 class AccountView(APIView):
+    def get(self, request):
+        provider = request.GET.get('provider')
+        provider_account_id = request.GET.get('providerAccountId')
+
+        if not provider or not provider_account_id:
+            return Response({
+                'detail': 'Invalid parameters'
+            }, status=status.HTTP_400_BAD_REQUEST)
+
+        try:
+            account = Account.objects.select_related('user').get(
+                provider=provider,
+                provider_account_id=provider_account_id
+            )
+            user = account.user
+            return Response({
+                    'id': user.id,
+                    'name': user.username,
+                    'email': user.email,
+                    'emailVerified': user.email_verified,
+                    'role': user.role,
+                    'agency': user.agency
+                }
+            )
+        except Account.DoesNotExist:
+            return Response({"detail": "Account not found."}, status=status.HTTP_404_NOT_FOUND)
+
     def post(self, request):
         data = request.data
         user = get_object_or_404(User, id=data['userId'])
@@ -743,4 +781,4 @@ class CheckUserEmailExistsView(APIView):
     def get(self, request):
         email = request.GET.get('email')
         exists = User.objects.filter(email=email).exists()
-        return Response(exists, status=status.HTTP_200_OK)
+        return Response({'isExists':exists}, status=status.HTTP_200_OK)

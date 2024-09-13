@@ -19,7 +19,6 @@ const ManageUsers = async ({ searchParams }: ManageUsersProps) => {
   const currentTab = searchParams.tab || 'all';
   const searchTerm = searchParams.searchTerm || '';
   const agencyId = searchParams.agencyId || '';
-  const agencyMap = getDynamicAgencyMap()
   const { data } = await getAllUsers({
     page: currentPage,
     tab: currentTab,
@@ -27,17 +26,11 @@ const ManageUsers = async ({ searchParams }: ManageUsersProps) => {
     agencyId,
   });
   const agencies = await getAgencyList();
-
   return (
     <div className="container max-w-screen-lg pt-3 mx-auto px-6">
-      <UserNavbar
-        agencies={agencies}
-      />
+      <UserNavbar agencies={agencies} />
       <div className="h-6"></div>
-      <UserBox
-        agencies={agencies}
-        data={data}
-      />
+      <UserBox agencies={agencies} data={data} />
     </div>
   );
 };
