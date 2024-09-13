@@ -9,7 +9,7 @@ interface ManageQuestionsProps {
     page?: string;
     tab?: string;
     searchTerm?: string;
-    date?: string; 
+    date?: string;
   };
 }
 
@@ -19,15 +19,19 @@ const ManageQuestions = async ({ searchParams }: ManageQuestionsProps) => {
   const tab = searchParams.tab || 'all';
   const date = searchParams.date || '';
 
-  const { data } = await getAllUserQuestions(currentPage, 10, tab, searchTerm, date);
+  const { data } = await getAllUserQuestions(
+    currentPage,
+    10,
+    tab,
+    searchTerm,
+    date,
+  );
   const agencyList = await getAgencyList();
   const agencyMap = await getDynamicAgencyMap();
 
   return (
     <div className="container max-w-screen-lg mx-auto justify-between px-6">
-      <QuestionNavbar
-        unassignedCount={data.unassignedCount}
-      />
+      <QuestionNavbar unassignedCount={data.unassignedCount} />
       <div className="pt-6">
         <AdminQuestionBox
           data={data}

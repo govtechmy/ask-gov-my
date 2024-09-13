@@ -72,12 +72,14 @@ const UserNavbar: React.FC<UserNavbarProps> = ({ agencies }) => {
 
   const filterByAgency = (agencyId: number) => {
     const params = new URLSearchParams(searchParams.toString());
+    params.delete('page');
     params.set('agencyId', agencyId.toString());
     router.push(`${pathname}?${params.toString()}`);
   };
 
   const removeAgencyFilter = () => {
     const params = new URLSearchParams(searchParams.toString());
+    params.delete('page');
     params.delete('agencyId');
     router.push(`${pathname}?${params.toString()}`);
   };

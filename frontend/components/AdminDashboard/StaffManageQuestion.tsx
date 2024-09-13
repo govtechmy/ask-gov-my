@@ -12,7 +12,9 @@ interface StaffManageQuestionsProps {
   };
 }
 
-const StaffManageQuestions = async ({ searchParams }: StaffManageQuestionsProps) => {
+const StaffManageQuestions = async ({
+  searchParams,
+}: StaffManageQuestionsProps) => {
   const currentPage = searchParams.page ? parseInt(searchParams.page, 10) : 1;
   const searchTerm = searchParams.searchTerm || '';
   const tab = searchParams.tab || 'all';
@@ -23,17 +25,15 @@ const StaffManageQuestions = async ({ searchParams }: StaffManageQuestionsProps)
   const { data } = await getUserAgencyQuestions(
     userAgencyId,
     currentPage,
-    8, 
+    8,
     tab,
     searchTerm,
-    date
+    date,
   );
 
   return (
     <div className="container max-w-screen-lg px-6 mx-auto justify-between">
-      <StaffQuestionNavbar
-        unansweredCount={data.unansweredCount}
-      />
+      <StaffQuestionNavbar unansweredCount={data.unansweredCount} />
       <div className="pt-6">
         <StaffQuestionBox data={data} />
       </div>

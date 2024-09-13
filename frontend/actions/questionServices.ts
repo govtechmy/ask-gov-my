@@ -266,22 +266,50 @@ export async function getAgencyList(): Promise<Agency[]> {
   }
 }
 
+export async function getAgency(agencyId: number): Promise<Agency | null> {
+  try {
+    const agencies = await getAgencyList();
+    const agency = agencies.find((agency) => agency.id === agencyId);
+
+    if (!agency) {
+      throw new Error(`Agency with ID ${agencyId} not found`);
+    }
+
+    return agency;
+  } catch (error) {
+    console.error('Error in getAgency:', error);
+    return null;
+  }
+}
+
 export async function getAgencyListWithPagination(
   page: number = 1,
   pageSize: number = 27,
-  searchTerm: string = ''
-): Promise<{ data: { agencies: Agency[]; totalItems: number; totalPages: number; currentPage: number } }> {
+  searchTerm: string = '',
+): Promise<{
+  data: {
+    agencies: Agency[];
+    totalItems: number;
+    totalPages: number;
+    currentPage: number;
+  };
+}> {
   try {
-    const searchQuery = searchTerm ? `&search=${encodeURIComponent(searchTerm)}` : '';
-    const response = await fetch(`${API_URL}/agencies?page=${page}&page_size=${pageSize}${searchQuery}`, {
-      method: 'GET',
-      headers: {
-        'Cache-Control': 'no-cache',
-        Pragma: 'no-cache',
-        Expires: '0',
-        'Content-Type': 'application/json',
+    const searchQuery = searchTerm
+      ? `&search=${encodeURIComponent(searchTerm)}`
+      : '';
+    const response = await fetch(
+      `${API_URL}/agencies?page=${page}&page_size=${pageSize}${searchQuery}`,
+      {
+        method: 'GET',
+        headers: {
+          'Cache-Control': 'no-cache',
+          Pragma: 'no-cache',
+          Expires: '0',
+          'Content-Type': 'application/json',
+        },
       },
-    });
+    );
 
     if (!response.ok) {
       throw new Error('Failed to fetch agency list');
@@ -315,8 +343,6 @@ export async function getAgencyListWithPagination(
     };
   }
 }
-
-
 
 export async function getDynamicAgencyMap(): Promise<Record<string, string>> {
   try {
