@@ -212,6 +212,21 @@ export async function addUserAgencyTopic(
   return data;
 }
 
+const UNASSIGNED_AGENCY_ID = 0;
+export async function unassignAgencyFromQuestion(questionId: number) {
+  const response = await fetch(`${API_URL}/questions/${questionId}/agency/`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({ agency_id: UNASSIGNED_AGENCY_ID }),
+  });
+
+  if (!response.ok) {
+    throw new Error('Failed to unassign agency from question');
+  }
+}
+
 export async function assignAgencyToQuestion(
   questionId: number,
   agencyId: number,
