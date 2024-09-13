@@ -6,6 +6,7 @@ import { changeStaffIsOpen } from '@/actions/userServices';
 import { Question } from '@/types/types';
 import NewUpdateIcon from '@/icons/new';
 import DraftUpdateIcon from '@/icons/draft';
+import { formatDate } from '@/actions/utils';
 
 interface QuestionCardProps {
   question: Question;
@@ -27,22 +28,6 @@ const AnswerQuestionCard: React.FC<QuestionCardProps> = ({ question }) => {
     }
   };
 
-  const formatDate = (dateString: string) => {
-    const date = new Date(dateString);
-    return (
-      date.toLocaleDateString('en-GB', {
-        day: '2-digit',
-        month: 'long',
-        year: 'numeric',
-      }) +
-      ', ' +
-      date.toLocaleTimeString('en-GB', {
-        hour: '2-digit',
-        minute: '2-digit',
-        hour12: true,
-      })
-    );
-  };
   return (
     <>
       <div

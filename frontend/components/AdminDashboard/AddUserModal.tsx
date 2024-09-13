@@ -140,6 +140,7 @@ const AddUserModal: React.FC<AddUserModalProps> = ({
             {emailError && (
               <div className="text-red-500 text-sm mb-4">{emailError}</div>
             )}
+
             <DropdownRole
               agencies={agencies}
               setRole={setRole}

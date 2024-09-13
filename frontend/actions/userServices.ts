@@ -10,8 +10,16 @@ export async function getUserAgencyQuestions(
   pageSize: number = 8,
   tab: string = 'all',
   searchTerm: string = '',
-  date?: string
-): Promise<{ data: { questions: Question[]; total: number; totalPages: number; currentPage: number; unansweredCount: number } }> {
+  date?: string,
+): Promise<{
+  data: {
+    questions: Question[];
+    total: number;
+    totalPages: number;
+    currentPage: number;
+    unansweredCount: number;
+  };
+}> {
   try {
     const query = new URLSearchParams({
       page: page.toString(),
@@ -24,15 +32,18 @@ export async function getUserAgencyQuestions(
       query.set('date', date);
     }
 
-    const response = await fetch(`${API_URL}/questions/all/by-agency/${agencyId}/?${query.toString()}`, {
-      method: 'GET',
-      headers: {
-        'Content-Type': 'application/json',
-        'Cache-Control': 'no-cache',
-        Pragma: 'no-cache',
-        Expires: '0',
+    const response = await fetch(
+      `${API_URL}/questions/all/by-agency/${agencyId}/?${query.toString()}`,
+      {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+          'Cache-Control': 'no-cache',
+          Pragma: 'no-cache',
+          Expires: '0',
+        },
       },
-    });
+    );
 
     if (!response.ok) {
       throw new Error('Failed to fetch questions');
@@ -46,7 +57,7 @@ export async function getUserAgencyQuestions(
         total: responseData.count,
         totalPages: Math.ceil(responseData.count / pageSize),
         currentPage: page,
-        unansweredCount: responseData.results.unanswered_count, 
+        unansweredCount: responseData.results.unanswered_count,
       },
     };
   } catch (error) {
@@ -63,33 +74,43 @@ export async function getUserAgencyQuestions(
   }
 }
 
-
 // get all questions for user.role = super_admin
 export async function getAllUserQuestions(
   page: number = 1,
   pageSize: number = 10,
   tab: string = 'all',
   searchTerm: string = '',
-  date: string = ''
-): Promise<{ data: { questions: Question[]; total: number; totalPages: number; currentPage: number; unassignedCount: number } }> {
+  date: string = '',
+): Promise<{
+  data: {
+    questions: Question[];
+    total: number;
+    totalPages: number;
+    currentPage: number;
+    unassignedCount: number;
+  };
+}> {
   try {
     const query = new URLSearchParams({
       page: page.toString(),
       page_size: pageSize.toString(),
       tab,
       search: searchTerm,
-      date: date
+      date: date,
     });
 
-    const response = await fetch(`${API_URL}/questions/all/?${query.toString()}`, {
-      method: 'GET',
-      headers: {
-        'Content-Type': 'application/json',
-        'Cache-Control': 'no-cache',
-        Pragma: 'no-cache',
-        Expires: '0',
+    const response = await fetch(
+      `${API_URL}/questions/all/?${query.toString()}`,
+      {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+          'Cache-Control': 'no-cache',
+          Pragma: 'no-cache',
+          Expires: '0',
+        },
       },
-    });
+    );
 
     if (!response.ok) {
       throw new Error('Failed to fetch user questions');
@@ -103,7 +124,7 @@ export async function getAllUserQuestions(
         total: responseData.count,
         totalPages: Math.ceil(responseData.count / pageSize),
         currentPage: page,
-        unassignedCount: responseData.results.unassigned_count, 
+        unassignedCount: responseData.results.unassigned_count,
       },
     };
   } catch (error) {
@@ -119,7 +140,6 @@ export async function getAllUserQuestions(
     };
   }
 }
-
 
 export async function submitAnswer(
   questionId: number,
@@ -449,18 +469,20 @@ export async function getAllUsers({
   tab?: string;
   searchTerm?: string;
   agencyId?: string;
-}): Promise<{ data: { users: User[]; totalPages: number; currentPage: number } }> {
+}): Promise<{
+  data: { users: User[]; totalPages: number; currentPage: number };
+}> {
   try {
     const response = await fetch(
       `${API_URL}/admin/users?page=${page}&page_size=${pageSize}&tab=${tab}&searchTerm=${encodeURIComponent(
-        searchTerm
+        searchTerm,
       )}&agency=${agencyId}`,
       {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
         },
-      }
+      },
     );
 
     if (!response.ok) {
@@ -488,3 +510,27 @@ export async function getAllUsers({
   }
 }
 
+export async function checkUserEmailExists(email: string): Promise<boolean> {
+  try {
+    const url = await fetch(
+      `${API_URL}/admin/check-email?email=${encodeURIComponent(email)}`,
+      {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      },
+    );
+
+    if (!url.ok) {
+      throw new Error('Failed to check email existence');
+    }
+
+    const res = await url.json();
+
+    return res.isExists;
+  } catch (error) {
+    console.error('Error in checkUserEmailExists:', error);
+    return false;
+  }
+}
