@@ -30,10 +30,12 @@ const StaffQuestionBox: React.FC<QuestionBoxProps> = ({ data }) => {
   return (
     <div>
       {questions.length === 0 ? (
-        <p className="text-center">No questions available. Please adjust your filters or search criteria.</p>
+        <p className="text-center">
+          No questions available. Please adjust your filters or search criteria.
+        </p>
       ) : (
         <>
-          {questions.map((question) => (
+          {questions.map(question => (
             <div className="py-1" key={question.id}>
               <AnswerQuestionCard question={question} />
             </div>

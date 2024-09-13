@@ -7,7 +7,7 @@ import Asklogo from '@/icons/asklogo';
 import User from '@/icons/user';
 import ChevronDown from '@/icons/ChevronDown';
 import Logout from '@/icons/logout';
-import { signOut } from 'next-auth/react';
+import { signOut, useSession } from 'next-auth/react';
 
 const StaffHeaderDashboard = () => {
   const [open, setOpen] = useState(false);
@@ -20,6 +20,7 @@ const StaffHeaderDashboard = () => {
     signOut();
   };
 
+  const { data: session, status } = useSession();
   return (
     <div className="container  max-w-screen-lg mx-auto px-6">
       <div className="flex justify-between pt-6 pb-3  ">
@@ -47,7 +48,7 @@ const StaffHeaderDashboard = () => {
               <div className="w-8 h-8 flex items-center justify-center">
                 <User />
               </div>
-              <div className="pr-1 font-medium">Len E-Herng</div>
+              <div className="pr-1 font-medium">{session?.user.name}</div>
               <div className="font-normal text-gray-500">Staff</div>
               <div className="px-1 pr-2 text-dim-500">
                 <ChevronDown
