@@ -36,7 +36,7 @@ const CommandInput = React.forwardRef<
   React.ComponentPropsWithoutRef<typeof CommandPrimitive.Input>
 >(({ className, ...props }, ref) => (
   <div className="flex items-center relative p-2 rounded-[14px]">
-    <Input
+    <CommandPrimitive.Input
       ref={ref}
       className={cn(
         'placeholder:text-dim-500 flex h-10 w-full bg-white-focuswhite100 py-3 text-sm outline-none disabled:cursor-not-allowed disabled:opacity-50 pl-2 pr-10',

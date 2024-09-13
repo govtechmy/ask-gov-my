@@ -7,7 +7,18 @@ import PlusCircle from '@/icons/pluscircle';
 import TickCheckCircleInCircle from '@/icons/tickcheckcircleincircle';
 import { Agency, Question } from '@/types/types';
 import { formatDate } from '@/actions/utils';
-import AgencyListDropdownRefactored from './AgencyListsDropdownRefactored';
+import {
+  Popover,
+  PopoverTrigger,
+  PopoverContent,
+} from '@/components/ui/popover';
+import { AgencySearchList } from './AgencySearchList';
+import { Button } from '@/components/ui/button';
+import ChevronDown from '@/icons/ChevronDown';
+import {
+  assignAgencyToQuestion,
+  unassignAgencyFromQuestion,
+} from '@/actions/userServices';
 
 interface ModalProps {
   isOpen: boolean;
@@ -34,6 +45,7 @@ const ModalQuestionCard: React.FC<ModalProps> = ({
 }) => {
   const questionTextRef = React.useRef<HTMLDivElement>(null);
   const [svgHeight, setSvgHeight] = React.useState<number>(10);
+  const [openAgencyPopover, setOpenAgencyPopover] = React.useState(false);
 
   React.useEffect(() => {
     if (questionTextRef.current) {
@@ -92,14 +104,33 @@ const ModalQuestionCard: React.FC<ModalProps> = ({
               <div className="text-sm text-black-700 font-medium pb-[6px]">
                 Assign to agency:
               </div>
-              <AgencyListDropdownRefactored
-                selectedAgency={selectedAgency}
-                setSelectedAgency={setSelectedAgency}
-                setSuccessMessage={setSuccessMessage}
-                agencies={agencies}
-                questionId={question.id}
-                version={'modal'}
-              ></AgencyListDropdownRefactored>
+              <Popover
+                open={openAgencyPopover}
+                onOpenChange={setOpenAgencyPopover}
+              >
+                <PopoverTrigger asChild>
+                  <Button size="sm">
+                    {selectedAgency}
+                    <ChevronDown className="ml-auto h-5 w-5" />
+                  </Button>
+                </PopoverTrigger>
+                <PopoverContent
+                  className="p-0 rounded-[14px] md:min-w-[320px]"
+                  align="start"
+                >
+                  <AgencySearchList
+                    agencies={agencies}
+                    onItemClick={async agency => {
+                      setOpenAgencyPopover(false);
+                      if (!agency) {
+                        await unassignAgencyFromQuestion(question.id);
+                        return;
+                      }
+                      await assignAgencyToQuestion(question.id, agency.id);
+                    }}
+                  />
+                </PopoverContent>
+              </Popover>
             </div>
           </div>
         </div>
