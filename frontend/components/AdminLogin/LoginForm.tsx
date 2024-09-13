@@ -1,5 +1,4 @@
 'use client';
-import Link from 'next/link';
 import { Button, buttonVariants } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import Google from '@/icons/google';
@@ -12,11 +11,14 @@ import { checkUserEmailExists } from '@/actions/userServices';
 export function LoginForm() {
   const t = useTranslations('Adminlogin');
   const [email, setEmail] = useState('');
+  const [errorMsg, setErrorMsg] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleSignIn = async (e: React.FormEvent) => {
     e.preventDefault();
 
     try {
+      setIsLoading(true);
       const emailExists = await checkUserEmailExists(email);
       if (emailExists) {
         const result = await signIn('email', {
@@ -30,9 +32,14 @@ export function LoginForm() {
           console.error('Sign in failure');
         }
       } else {
-        console.error('Email not found');
+        setErrorMsg(
+          'Your account does not exist. Please contact your admin to request an invitation.',
+        );
       }
-    } catch {}
+    } catch {
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   const handleGoogleSignIn = () => {
@@ -62,9 +69,24 @@ export function LoginForm() {
                   value={email}
                   onChange={e => setEmail(e.target.value)}
                 />
+                {errorMsg && (
+                  <p className=" text-danger-600 font-normal text-base sm:max-w-[339px] w-max-[400px]">
+                    {errorMsg}
+                  </p>
+                )}
               </div>
 
-              <Button variant={'primary'}> {t('1stbutton')}</Button>
+              {isLoading ? (
+                <Button
+                  variant={'primary'}
+                  disabled={true}
+                  className="opacity-100"
+                >
+                  {t('1stbutton')}
+                </Button>
+              ) : (
+                <Button variant={'primary'}> {t('1stbutton')}</Button>
+              )}
 
               <div className="text-center font-normal text-zinc-500 text-sm">
                 {t('or')}
@@ -75,18 +97,6 @@ export function LoginForm() {
               </Button>
             </div>
           </form>
-
-          <div className="text-center pt-2">
-            <Link
-              className={buttonVariants({
-                variant: 'tertiary-colour',
-                size: 'sm',
-              })}
-              href="/forgot-password"
-            >
-              {t('forgotpass')}
-            </Link>
-          </div>
         </div>
       </div>
     </>
