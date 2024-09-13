@@ -17,14 +17,12 @@ export default async function DashboardLayout({
 
   return (
     <>
-      <Providers>
-        {role === 'super_admin' ? (
-          <AdminHeaderDashboard />
-        ) : (
-          <StaffHeaderDashboard />
-        )}
-        {children}
-      </Providers>
+      {role === 'super_admin' ? (
+        <AdminHeaderDashboard />
+      ) : (
+        <StaffHeaderDashboard />
+      )}
+      {children}
     </>
   );
 }
