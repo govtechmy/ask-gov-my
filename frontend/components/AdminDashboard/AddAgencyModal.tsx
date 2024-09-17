@@ -12,13 +12,11 @@ import PlusIcon from '@/icons/plusicon';
 interface AddAgencyModalProps {
   isOpen: boolean;
   onClose: () => void;
-  onAdd: () => void;
 }
 
 const AddAgencyModal: React.FC<AddAgencyModalProps> = ({
   isOpen,
   onClose,
-  onAdd,
 }) => {
   const [name, setName] = useState('');
   const [nameMs, setNameMs] = useState('');
@@ -64,7 +62,6 @@ const AddAgencyModal: React.FC<AddAgencyModalProps> = ({
       await addAgency(name, nameMs, acronym, logoUrl);
       setSuccess('Agency added successfully');
       setError(null);
-      onAdd();
       onClose();
     } catch (err) {
       if (err instanceof Error) {

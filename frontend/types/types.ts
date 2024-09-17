@@ -1,6 +1,6 @@
 export interface Question {
   id: number;
-  topics: number[];
+  topics: number[] | ESTopic[];
   question: string;
   date: string;
   state: string;
@@ -20,7 +20,7 @@ export interface Question {
         name_ms?: string;
         acronym: string;
       };
-  answer_preview: string;
+  answer_preview?: string;
 }
 
 export interface Agency {
@@ -31,6 +31,11 @@ export interface Agency {
   total_likes?: number;
   logo_url?: string;
   last_edited: Date;
+}
+export interface ESTopic {
+  id: number;
+  name: string;
+  name_ms: string;
 }
 
 export interface Topic {

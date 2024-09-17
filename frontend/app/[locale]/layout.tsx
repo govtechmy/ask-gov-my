@@ -44,7 +44,6 @@ export default async function RootLayout({
       <body className={cn(inter.className, poppins.variable)}>
         <ThemeProvider attribute="class">
           <NextIntlClientProvider messages={messages}>
-            {/* TODO */}
             <Suspense>
               <Providers>
                 <Masthead></Masthead>

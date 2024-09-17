@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import {
   Select,
   SelectContent,
@@ -7,8 +7,15 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 import { Label } from '@/components/ui/label';
-import AgencyListDropdownUsersModal from './AgencyListDropdownUsersModal';
 import { Agency, User } from '@/types/types';
+import {
+  Popover,
+  PopoverTrigger,
+  PopoverContent,
+} from '@/components/ui/popover';
+import { Button } from '@/components/ui/button';
+import { AgencySearchList } from './AgencySearchList';
+import ChevronDown from '@/icons/ChevronDown';
 
 interface DropdownRoleProps {
   agencies: Agency[];
@@ -25,6 +32,8 @@ const DropdownRole: React.FC<DropdownRoleProps> = ({
   roleEmpty,
   user = { role: 'unassigned', agency: null },
 }) => {
+  const [openAgencyPopover, setOpenAgencyPopover] = useState(false);
+
   const initialRole =
     user.role === 'staff' || user.role === 'super_admin'
       ? user.role
@@ -38,8 +47,6 @@ const DropdownRole: React.FC<DropdownRoleProps> = ({
     setSelectedRole(role);
     setRole(role);
   };
-
-  const userAgency = user.agency;
 
   return (
     <div className="space-y-4">
@@ -69,11 +76,31 @@ const DropdownRole: React.FC<DropdownRoleProps> = ({
       {selectedRole === 'staff' && (
         <div className="space-y-2">
           <Label htmlFor="agency-select">Agency</Label>
-          <AgencyListDropdownUsersModal
-            agencies={agencies}
-            setAgency={setAgency}
-            userAgency={userAgency}
-          />
+          <Popover open={openAgencyPopover} onOpenChange={setOpenAgencyPopover}>
+            <PopoverTrigger asChild>
+              <Button className="w-full h-10 text-sm font-normal">
+                {user.agency || 'Unassigned'}
+                <ChevronDown className="ml-auto h-5 w-5" />
+              </Button>
+            </PopoverTrigger>
+            <PopoverContent
+              className="p-0 rounded-[14px] md:min-w-[320px]"
+              align="start"
+            >
+              <AgencySearchList
+                agencies={agencies}
+                onSelect={async agency => {
+                  setOpenAgencyPopover(false);
+                  if (!agency) {
+                    setAgency(null);
+                    return;
+                  }
+                  setAgency(agency.id);
+                }}
+                nullItemLabel="Unassigned"
+              />
+            </PopoverContent>
+          </Popover>
         </div>
       )}
     </div>
