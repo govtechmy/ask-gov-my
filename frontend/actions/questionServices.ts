@@ -259,6 +259,7 @@ export async function getAgencyList(): Promise<Agency[]> {
       name_ms: agency.name_ms,
       acronym: agency.acronym,
       logo_url: agency.logo_url,
+      last_edited: agency.last_edited,
     }));
   } catch (error) {
     console.error('Error in getAgencyList:', error);
@@ -269,7 +270,7 @@ export async function getAgencyList(): Promise<Agency[]> {
 export async function getAgency(agencyId: number): Promise<Agency | null> {
   try {
     const agencies = await getAgencyList();
-    const agency = agencies.find((agency) => agency.id === agencyId);
+    const agency = agencies.find(agency => agency.id === agencyId);
 
     if (!agency) {
       throw new Error(`Agency with ID ${agencyId} not found`);
@@ -325,6 +326,7 @@ export async function getAgencyListWithPagination(
           name_ms: agency.name_ms,
           acronym: agency.acronym,
           logo_url: agency.logo_url,
+          last_edited: agency.last_edited,
         })),
         totalItems: responseData.totalItems,
         totalPages: Math.ceil(responseData.count / pageSize),

@@ -10,18 +10,22 @@ interface ManageAgenciesProps {
   };
 }
 
-const ManageAgencies: React.FC<ManageAgenciesProps> = async ({ searchParams }) => {
+const ManageAgencies: React.FC<ManageAgenciesProps> = async ({
+  searchParams,
+}) => {
   const currentPage = searchParams.page ? parseInt(searchParams.page, 10) : 1;
   const searchTerm = searchParams.searchTerm || '';
 
-  const { data } = await getAgencyListWithPagination(currentPage,27, searchTerm);
+  const { data } = await getAgencyListWithPagination(
+    currentPage,
+    27,
+    searchTerm,
+  );
 
   return (
     <div className="container max-w-screen-lg pt-3 mx-auto">
-      <AgencyNavbar/>
-      <AgencyBox
-        data={data}
-      />
+      <AgencyNavbar />
+      <AgencyBox data={data} />
     </div>
   );
 };
