@@ -41,9 +41,32 @@ interface AgencySettingsModalProps {
 }
 
 const formSchema = z.object({
-  name: z.string().min(1).max(200),
-  nameMs: z.string().min(1).max(200),
-  acronym: z.string().min(1).max(20),
+  name: z
+    .string()
+    .min(2, { message: 'Name must be at least 2 characters long' })
+    .max(100, { message: 'Name cannot exceed 100 characters' })
+    .regex(/^[a-zA-Z0-9\s'&(),-]+$/, {
+      message:
+        "Name can only contain letters, numbers, spaces, and the following characters: ' & ( ) , -",
+    }),
+  nameMs: z
+    .string()
+    .min(2, { message: 'Name must be at least 2 characters long' })
+    .max(100, { message: 'Name cannot exceed 100 characters' })
+    .regex(/^[a-zA-Z0-9\s'&(),-]+$/, {
+      message:
+        "Name can only contain letters, numbers, spaces, and the following characters: ' & ( ) , -",
+    })
+    .regex(/^[A-Za-z]+$/, {
+      message: 'Acronym can only contain letters',
+    }),
+  acronym: z
+    .string()
+    .min(2, { message: 'Acronym must be at least 2 characters long' })
+    .max(100, { message: 'Acronym cannot exceed 100 characters' })
+    .regex(/^[A-Za-z]+$/, {
+      message: 'Acronym can only contain letters',
+    }),
 });
 type FormValues = z.infer<typeof formSchema>;
 
