@@ -1,4 +1,5 @@
 import { get, post, put } from '@/lib/api';
+import { User } from 'next-auth';
 import type {
   Adapter,
   AdapterUser,
@@ -37,11 +38,15 @@ export const DjangoAdapter = (): Adapter => {
     },
 
     async getUserByEmail(email) {
+      const res = await get(`${API_URL}/auth/user`, { email });
       return await get(`${API_URL}/auth/user`, { email });
     },
 
     async getUserByAccount({ providerAccountId, provider }) {
-      return await get(`${API_URL}/auth/user`, { providerAccountId, provider });
+      return await get<User | null>(`${API_URL}/auth/account`, {
+        provider,
+        providerAccountId,
+      });
     },
 
     async updateUser(user) {
