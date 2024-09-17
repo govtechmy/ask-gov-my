@@ -18,12 +18,18 @@ import {
 } from '../ui/dialog';
 import { formatDate } from '@/actions/utils';
 import { StyledDisplay } from '../ui/display';
-import {
-  handleAgencyNameChange,
-  handleAgencyNameChangeMs,
-  handleAgencyAcronymChange,
-} from '@/actions/userInputValidation';
 import { handleFileChange } from '@/actions/fileChangeHandler';
+import { z } from 'zod';
+import { useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from '@/components/ui/form';
 
 interface AgencySettingsModalProps {
   agency: Agency;
@@ -34,6 +40,13 @@ interface AgencySettingsModalProps {
   handleErrorToast: () => void;
 }
 
+const formSchema = z.object({
+  name: z.string().min(1).max(200),
+  nameMs: z.string().min(1).max(200),
+  acronym: z.string().min(1).max(20),
+});
+type FormValues = z.infer<typeof formSchema>;
+
 const AgencySettingsModal: React.FC<AgencySettingsModalProps> = ({
   agency,
   isOpen,
@@ -42,49 +55,28 @@ const AgencySettingsModal: React.FC<AgencySettingsModalProps> = ({
   handleFailEditAgencyToast,
   handleErrorToast,
 }) => {
-  const [name, setName] = useState(agency.name);
-  const [nameMs, setNameMs] = useState(agency.name_ms);
-  const [acronym, setAcronym] = useState(agency.acronym);
+  const form = useForm<FormValues>({
+    resolver: zodResolver(formSchema),
+    defaultValues: {
+      name: agency.name,
+      nameMs: agency.name_ms,
+      acronym: agency.acronym,
+    },
+  });
+
   const [logoUrl, setLogoUrl] = useState(agency.logo_url || '');
-  const [nameError, setNameError] = useState<string | null>(null);
-  const [nameMsError, setNameMsError] = useState<string | null>(null);
-  const [acronymError, setAcronymError] = useState<string | null>(null);
+  const acronym = form.watch('acronym');
 
   const [uploadError, setUploadError] = useState<string | null>(null);
   const [uploadSuccess, setUploadSuccess] = useState<string | null>(null);
   const [uploadStatus, setUploadStatus] = useState<
     'initial' | 'error' | 'success'
   >('initial');
-  const [hasUploaded, setHasUploaded] = useState(false);
 
   const fileInputRef = useRef<HTMLInputElement>(null);
 
-  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-
-    // Validate all fields before submission
-    handleAgencyNameChange(
-      { target: { value: name } } as React.ChangeEvent<HTMLInputElement>,
-      setName,
-      setNameError,
-    );
-    handleAgencyNameChangeMs(
-      { target: { value: nameMs } } as React.ChangeEvent<HTMLInputElement>,
-      setNameMs,
-      setNameMsError,
-    );
-    handleAgencyAcronymChange(
-      { target: { value: acronym } } as React.ChangeEvent<HTMLInputElement>,
-      setAcronym,
-      setAcronymError,
-    );
-
-    // Check if there are any errors
-    if (nameError || nameMsError || acronymError || uploadError) {
-      return;
-    }
-
-    // Handle for Submit
+  const handleSubmit = form.handleSubmit(async (values: FormValues) => {
+    const { name, nameMs, acronym } = values;
     try {
       await updateAgency(agency.id, name, nameMs, acronym, logoUrl || '');
       handleEditAgencyToast();
@@ -110,7 +102,7 @@ const AgencySettingsModal: React.FC<AgencySettingsModalProps> = ({
         handleErrorToast();
       }
     }
-  };
+  });
 
   const handleDivClick = () => {
     fileInputRef.current?.click();
@@ -123,7 +115,6 @@ const AgencySettingsModal: React.FC<AgencySettingsModalProps> = ({
       setUploadStatus,
       setLogoUrl,
     });
-    setHasUploaded(true);
   };
 
   return (
@@ -138,109 +129,106 @@ const AgencySettingsModal: React.FC<AgencySettingsModalProps> = ({
           </div>
         </DialogHeader>
         <DialogDescription className="p-6 border-y-[1px] border-outline-200">
-          <form onSubmit={handleSubmit}>
-            <div className="relative w-16 h-16 flex-shrink-0">
-              <StyledDisplay variant={'logoBackground'}>
-                {logoUrl ? (
-                  <ImageNext
-                    src={logoUrl}
-                    width={200}
-                    height={200}
-                    alt="Agency Logo"
-                  />
-                ) : (
-                  <ImageNext
-                    src="/jata-200-transparent.png"
-                    width={200}
-                    height={200}
-                    alt="JataNegara"
-                  />
-                )}
-              </StyledDisplay>
-
-              <StyledDisplay variant={'logoEditor'} onClick={handleDivClick}>
-                <Pencil
-                  className="stroke-white-forcewhite"
-                  width="12"
-                  height="12"
+          <div className="relative w-16 h-16 flex-shrink-0">
+            <StyledDisplay variant={'logoBackground'}>
+              {logoUrl ? (
+                <ImageNext
+                  src={logoUrl}
+                  width={200}
+                  height={200}
+                  alt="Agency Logo"
                 />
-              </StyledDisplay>
+              ) : (
+                <ImageNext
+                  src="/jata-200-transparent.png"
+                  width={200}
+                  height={200}
+                  alt="JataNegara"
+                />
+              )}
+            </StyledDisplay>
 
-              <Input
-                ref={fileInputRef}
-                id="image-upload"
-                type="file"
-                className="hidden"
-                accept="image/png, image/jpeg"
-                onChange={handleFileChangeWrapper}
+            <StyledDisplay variant={'logoEditor'} onClick={handleDivClick}>
+              <Pencil
+                className="stroke-white-forcewhite"
+                width="12"
+                height="12"
               />
-            </div>
-            {uploadStatus === 'error' ? (
-              <div className="text-danger-600 text-sm mt-[6px] mb-6">
-                {uploadError}
-              </div>
-            ) : uploadStatus === 'success' ? (
-              <div className="text-green-500 text-sm mt-[6px] mb-6">
-                {uploadSuccess}
-              </div>
-            ) : !hasUploaded ? (
-              <div className="mt-[6px] mb-6 text-dim-500 text-sm">
-                Upload photo ideally sized not more than 200x200 pixels in PNG
-                or JPG format.
-              </div>
-            ) : (
-              <div className="mt-[6px] h-11"></div>
-            )}
-            <div className="space-y-4">
-              <div className="space-y-2">
-                <Label htmlFor="name-en">Agency's name (English)</Label>
-                <Input
-                  id="name-en"
-                  type="text"
-                  value={name}
-                  onChange={e =>
-                    handleAgencyNameChange(e, setName, setNameError)
-                  }
-                  className={`${nameError ? 'border-danger-300' : ''}`}
-                />
-                {nameError && (
-                  <div className="text-danger-600 text-sm">{nameError}</div>
-                )}
-              </div>
-              <div className="space-y-2">
-                <Label htmlFor="name-ms">Agency's name (Malay)</Label>
-                <Input
-                  id="name-ms"
-                  type="text"
-                  value={nameMs}
-                  onChange={e =>
-                    handleAgencyNameChangeMs(e, setNameMs, setNameMsError)
-                  }
-                  className={`${nameMsError ? 'border-danger-300' : ''}`}
-                />
-                {nameMsError && (
-                  <div className="text-danger-600 text-sm">{nameMsError}</div>
-                )}
-              </div>
-              <div className="flex space-x-6">
-                <div className="space-y-2">
-                  <Label htmlFor="acronym">Agency's acronym:</Label>
-                  <Input
-                    id="acronym"
-                    type="text"
-                    value={acronym}
-                    onChange={e =>
-                      handleAgencyAcronymChange(e, setAcronym, setAcronymError)
-                    }
-                    className={`${acronymError ? 'border-danger-300' : ''}`}
-                  />
-                  {acronymError && (
-                    <div className="text-danger-600 text-sm">
-                      {acronymError}
-                    </div>
-                  )}
-                </div>
+            </StyledDisplay>
+            <Input
+              ref={fileInputRef}
+              id="image-upload"
+              type="file"
+              className="hidden"
+              accept="image/png, image/jpeg"
+              onChange={handleFileChangeWrapper}
+            />
+          </div>
+          {uploadStatus === 'error' ? (
+            <p className="text-danger-600 text-sm mt-2 mb-6">{uploadError}</p>
+          ) : uploadStatus === 'success' ? (
+            <p className="text-green-500 text-sm mt-2 mb-6">{uploadSuccess}</p>
+          ) : (
+            <p className="mt-2 mb-6 text-dim-500 text-sm">
+              Upload photo ideally sized not more than 200x200 pixels in PNG or
+              JPG format.
+            </p>
+          )}
 
+          <Form {...form}>
+            <form onSubmit={handleSubmit} className="mt-6 space-y-4">
+              <FormField
+                control={form.control}
+                name="name"
+                render={({ field, fieldState }) => (
+                  <FormItem>
+                    <FormLabel>Agency's name (English)</FormLabel>
+                    <FormControl>
+                      <Input
+                        type="text"
+                        className={`${fieldState.error ? 'border-danger-300' : ''}`}
+                        {...field}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="nameMs"
+                render={({ field, fieldState }) => (
+                  <FormItem>
+                    <FormLabel>Agency's name (Malay)</FormLabel>
+                    <FormControl>
+                      <Input
+                        type="text"
+                        className={`${fieldState.error ? 'border-danger-300' : ''}`}
+                        {...field}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <div className="grid grid-cols-2 gap-6">
+                <FormField
+                  control={form.control}
+                  name="acronym"
+                  render={({ field, fieldState }) => (
+                    <FormItem>
+                      <FormLabel>Agency's acronym:</FormLabel>
+                      <FormControl>
+                        <Input
+                          type="text"
+                          className={`${fieldState.error ? 'border-danger-300' : ''}`}
+                          {...field}
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
                 <div className="flex flex-col">
                   <Label>Agency logo preview</Label>
                   <StyledDisplay variant={'nameLogoDisplay'}>
@@ -254,16 +242,16 @@ const AgencySettingsModal: React.FC<AgencySettingsModalProps> = ({
                   </StyledDisplay>
                 </div>
               </div>
-            </div>
-            <DialogFooter className="p-6 flex justify-end space-x-4">
-              <Button type="button" onClick={onClose}>
-                Cancel
-              </Button>
-              <Button type="submit" variant="primary">
-                Save settings
-              </Button>
-            </DialogFooter>
-          </form>
+              <DialogFooter className="p-6 flex justify-end space-x-4">
+                <Button type="button" onClick={onClose}>
+                  Cancel
+                </Button>
+                <Button type="submit" variant="primary">
+                  Save settings
+                </Button>
+              </DialogFooter>
+            </form>
+          </Form>
         </DialogDescription>
       </DialogContent>
     </Dialog>
