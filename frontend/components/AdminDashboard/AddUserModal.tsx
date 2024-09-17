@@ -9,7 +9,6 @@ interface AddUserModalProps {
   isOpen: boolean;
   onClose: () => void;
   agencies: Agency[];
-  onAddUser: any;
   handleAddUserToast: Function;
 }
 
@@ -17,7 +16,6 @@ const AddUserModal: React.FC<AddUserModalProps> = ({
   isOpen,
   onClose,
   agencies,
-  onAddUser,
   handleAddUserToast,
 }) => {
   const [name, setName] = useState('');
@@ -142,9 +140,7 @@ const AddUserModal: React.FC<AddUserModalProps> = ({
             {emailError && (
               <div className="text-red-500 text-sm mb-4">{emailError}</div>
             )}
-            <div className="text-black-700 text-sm font-medium mb-[6px] w-[552px] h-5">
-              Role
-            </div>
+
             <DropdownRole
               agencies={agencies}
               setRole={setRole}

@@ -61,23 +61,33 @@ export function formatFileSize(size: number | undefined): string {
 export const formatDate = (
   dateString: string,
   format: 'full' | 'short' = 'full',
-  locale = 'en-GB',
 ): string => {
   const date = new Date(dateString);
   if (format === 'short') {
-    return date.toLocaleDateString(locale, {
+    const dateFormatter = new Intl.DateTimeFormat('en-GB', {
       day: '2-digit',
       month: '2-digit',
       year: 'numeric',
     });
+    return dateFormatter.format(date);
   }
-  return `${date.toLocaleDateString(locale, {
+
+  const dateFormatter = new Intl.DateTimeFormat('en-GB', {
     day: '2-digit',
     month: 'long',
     year: 'numeric',
-  })}, ${date.toLocaleTimeString(locale, {
+  });
+  const timeFormatter = new Intl.DateTimeFormat('en-GB', {
     hour: '2-digit',
     minute: '2-digit',
     hour12: true,
-  })}`;
+  });
+
+  const formattedDate = dateFormatter.format(date);
+  const formattedTime = timeFormatter
+    .format(date)
+    .replace(/\s/g, '')
+    .toUpperCase();
+
+  return `${formattedDate}, ${formattedTime}`;
 };

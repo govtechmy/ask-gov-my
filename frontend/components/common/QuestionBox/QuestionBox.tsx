@@ -1,12 +1,21 @@
 'use client';
 
-import React, { useState, useMemo } from 'react';
+import React from 'react';
 import QuestionCard from './QuestionCard';
 import Pagination from '@/components/ui/pagination';
 import { Question, Agency } from '@/types/types';
+import { useSearchParams } from 'next/navigation';
+import { useRouter } from '@/lib/i18n';
+
+interface PaginatedQuestions {
+  data: Question[];
+  totalItems: number;
+  totalPages: number;
+  currentPage: number;
+}
 
 interface QuestionBoxProps {
-  questions: Question[];
+  questions: PaginatedQuestions;
   agencyMap: Record<string, string>;
   agencyList: Agency[];
 }
@@ -16,24 +25,22 @@ const QuestionBox: React.FC<QuestionBoxProps> = ({
   agencyMap,
   agencyList,
 }) => {
-  const [currentPage, setCurrentPage] = useState(1);
-  const [paginatedQuestions, setPaginatedQuestions] = useState<Question[]>([]);
-  const itemsPerPage = 6;
-  const totalPages = Math.ceil(questions.length / itemsPerPage);
-  const sortedQuestions = useMemo(() => {
-    return [...questions].sort((a, b) => b.likes - a.likes);
-  }, [questions]);
+  const { data, totalItems, currentPage, totalPages } = questions;
+  const searchParams = useSearchParams();
+  const router = useRouter();
 
   const handlePageChange = (page: number) => {
     if (page >= 1 && page <= totalPages) {
-      setCurrentPage(page);
+      const params = new URLSearchParams(searchParams.toString());
+      params.set('page', page.toString());
+      router.push(`${window.location.pathname}?${params.toString()}`);
     }
   };
 
   return (
     <div className="flex flex-col justify-center gap-4">
       <div className="flex flex-col gap-6">
-        {paginatedQuestions.map(question => (
+        {data.map(question => (
           <QuestionCard
             key={question.id}
             question={question}
@@ -46,10 +53,6 @@ const QuestionBox: React.FC<QuestionBoxProps> = ({
         currentPage={currentPage}
         totalPages={totalPages}
         onPageChange={handlePageChange}
-        itemsPerPage={itemsPerPage}
-        totalItems={questions.length}
-        setPaginatedItems={setPaginatedQuestions}
-        items={sortedQuestions}
       />
     </div>
   );
