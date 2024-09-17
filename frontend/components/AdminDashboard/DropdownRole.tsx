@@ -19,7 +19,7 @@ import ChevronDown from '@/icons/ChevronDown';
 
 interface DropdownRoleProps {
   agencies: Agency[];
-  setRole: (role: 'staff' | 'super_admin') => void;
+  setRole: (role: 'staff' | 'super_admin' | 'unassigned') => void;
   setAgency: React.Dispatch<React.SetStateAction<number | null>>;
   roleEmpty: boolean;
   user?: User;
@@ -43,7 +43,7 @@ const DropdownRole: React.FC<DropdownRoleProps> = ({
   >(initialRole);
 
   const handleRoleChange = (value: string) => {
-    const role = value as 'staff' | 'super_admin';
+    const role = value as 'staff' | 'super_admin' | 'unassigned';
     setSelectedRole(role);
     setRole(role);
   };
@@ -57,6 +57,9 @@ const DropdownRole: React.FC<DropdownRoleProps> = ({
             <SelectValue placeholder="Select a role" />
           </SelectTrigger>
           <SelectContent>
+            <SelectItem showCheckIcon={false} value="unassigned">
+              Unassigned
+            </SelectItem>
             <SelectItem showCheckIcon={false} value="staff">
               Staff
             </SelectItem>
