@@ -8,6 +8,7 @@ import PlusIcon from '@/icons/plusicon';
 import { Agency } from '@/types/types';
 import Toast from '../ui/toast';
 import TickCheckCircle from '@/icons/tickcheckcircle';
+import AlarmTriangle from '@/icons/alarmtriangle';
 import { usePathname, useRouter } from '@/lib/i18n';
 import { Input } from '../ui/input';
 import {
@@ -38,6 +39,8 @@ const UserNavbar: React.FC<UserNavbarProps> = ({ agencies }) => {
   const [searchValue, setSearchValue] = useState(searchTerm);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [showAddUserToast, setShowAddUserToast] = useState(false);
+  const [showFailAddUserToast, setShowFailAddUserToast] = useState(false);
+  const [showErrorToast, setShowErrorToast] = useState(false);
   const [openAgencyPopover, setOpenAgencyPopover] = useState(false);
 
   const selectedAgency = agencies.find(
@@ -86,6 +89,12 @@ const UserNavbar: React.FC<UserNavbarProps> = ({ agencies }) => {
 
   const handleAddUserToast = () => {
     setShowAddUserToast(true);
+  };
+  const handleFailAddUserToast = () => {
+    setShowFailAddUserToast(true);
+  };
+  const handleErrorToast = () => {
+    setShowErrorToast(true);
   };
 
   const renderTabButton = (tab: string) => (
@@ -204,16 +213,40 @@ const UserNavbar: React.FC<UserNavbarProps> = ({ agencies }) => {
         onClose={() => setIsModalOpen(false)}
         agencies={agencies}
         handleAddUserToast={handleAddUserToast}
+        handleFailAddUserToast={handleFailAddUserToast}
+        handleErrorToast={handleErrorToast}
       />
 
       {showAddUserToast && (
         <Toast
           message="New user has been added!"
           icon={<TickCheckCircle />}
-          underlineColor="bg-[#16A34A]"
-          messageColor="text-[#15803D] dark:text-[#16A34A]"
+          underlineColor="bg-success-600"
+          messageColor="text-success-700"
           show={showAddUserToast}
           onClose={() => setShowAddUserToast(false)}
+        />
+      )}
+      {showFailAddUserToast && (
+        <Toast
+          message="Failed to save. Please try again"
+          icon={<AlarmTriangle />}
+          underlineColor="bg-danger-600"
+          messageColor="text-danger-600"
+          show={showFailAddUserToast}
+          onClose={() => setShowFailAddUserToast(false)}
+          time={8000}
+        />
+      )}
+      {showErrorToast && (
+        <Toast
+          message="Unexpected Error Occured. Please Refresh Page."
+          icon={<AlarmTriangle />}
+          underlineColor="bg-danger-600"
+          messageColor="text-danger-600"
+          show={showErrorToast}
+          onClose={() => setShowErrorToast(false)}
+          time={8000}
         />
       )}
     </div>
