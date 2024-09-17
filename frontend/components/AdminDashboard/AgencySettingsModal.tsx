@@ -56,9 +56,6 @@ const formSchema = z.object({
     .regex(/^[a-zA-Z0-9\s'&(),-]+$/, {
       message:
         "Name can only contain letters, numbers, spaces, and the following characters: ' & ( ) , -",
-    })
-    .regex(/^[A-Za-z]+$/, {
-      message: 'Acronym can only contain letters',
     }),
   acronym: z
     .string()
