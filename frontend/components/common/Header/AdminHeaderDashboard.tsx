@@ -11,7 +11,7 @@ import { cn } from '@/lib/utils';
 import Gov from '@/icons/gov';
 import UserGroup from '@/icons/usergroup';
 import Logout from '@/icons/logout';
-import { signOut } from 'next-auth/react';
+import { signOut, useSession } from 'next-auth/react';
 import { buttonVariants } from '@/components/ui/button';
 import QuestionCircle from '@/icons/questioncircle';
 import { StyledDisplay } from '@/components/ui/display';
@@ -52,6 +52,7 @@ const AdminHeaderDashboard: React.FC = () => {
       {label}
     </Link>
   );
+  const { data: session, status } = useSession();
 
   return (
     <div className="container max-w-screen-lg mx-auto px-6">
@@ -74,7 +75,7 @@ const AdminHeaderDashboard: React.FC = () => {
               <div className="w-8 h-8 flex items-center justify-center">
                 <User />
               </div>
-              <div className="pr-1 font-medium">Harris Azmi</div>
+              <div className="pr-1 font-medium">{session?.user.name}</div>
               <div className="font-normal text-gray-500">Super Admin</div>
               <div className="px-1 pr-2 text-dim-500">
                 <ChevronDown

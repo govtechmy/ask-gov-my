@@ -1,6 +1,6 @@
 import {
   getAgencyList,
-  getQuestionsByAgency,
+  getQuestionsByTopicAndAgency,
   getTopicByAgency,
   getDynamicAgencyMap,
 } from '@/actions/questionServices';
@@ -14,28 +14,32 @@ import BaseHeader from '@/components/common/Header/BaseHeader';
 import SearchNavbar from '@/components/common/SearchNavbar/SearchNavbar';
 import Masthead from '@/components/common/Header/Masthead';
 
-interface Props {
+interface TopicPageProps {
   params: {
     agencyAcronym: string;
     topicId: string;
     locale: string;
   };
+  searchParams: {
+    page?: string;
+  };
 }
 
-const TopicPage = async ({ params }: Props) => {
+const TopicPage = async ({ params, searchParams }: TopicPageProps) => {
   const { agencyAcronym, topicId, locale } = params;
+  const currentPage = searchParams.page ? parseInt(searchParams.page, 10) : 1;
+
   const agencyMap = await getDynamicAgencyMap();
   const agencyUUID = agencyMap[agencyAcronym.toUpperCase()];
 
-  const { questions } = await getQuestionsByAgency(agencyUUID);
-  const filteredQuestions = questions.filter(question =>
-    question.topics.includes(parseInt(topicId, 10)),
+  const questions = await getQuestionsByTopicAndAgency(
+    agencyUUID,
+    topicId,
+    currentPage
   );
 
   const topics = await getTopicByAgency(parseInt(agencyUUID, 10));
-  const selectedTopic = topics.find(
-    topic => topic.id === parseInt(topicId, 10),
-  );
+  const selectedTopic = topics.find(topic => topic.id === parseInt(topicId, 10));
 
   const upperCaseAgencyAcronym = agencyAcronym.toUpperCase();
 
@@ -69,7 +73,7 @@ const TopicPage = async ({ params }: Props) => {
                   keyword={'showing'}
                 ></WordTranslate>
                 &nbsp;
-                {filteredQuestions.length}
+                {questions.totalItems}
                 &nbsp;
                 <WordTranslate
                   translate={'Topics'}
@@ -82,14 +86,14 @@ const TopicPage = async ({ params }: Props) => {
               {locale === 'ms' ? selectedTopic?.title_ms : selectedTopic?.title}
             </div>
           </div>
-          {filteredQuestions.length > 0 ? (
+          {questions.data.length > 0 ? (
             <QuestionBox
-              questions={filteredQuestions}
+              questions={questions}
               agencyMap={agencyMap}
               agencyList={agencyList}
             />
           ) : (
-            <div className=" h-[220px] w-[900px]">
+            <div className="h-[220px] w-[900px]">
               <div className="text-dim-500">
                 <WordTranslate
                   translate={'Topics'}
@@ -102,10 +106,7 @@ const TopicPage = async ({ params }: Props) => {
 
         <div className="pl-10 w-[500px]">
           <div className="font-semibold text-base text-black-700 pl-6 pb-8">
-            <WordTranslate
-              translate={'Topics'}
-              keyword={'topic'}
-            ></WordTranslate>
+            <WordTranslate translate={'Topics'} keyword={'topic'}></WordTranslate>
           </div>
           <div className="font-semibold text-base text-black-700 h-[500px]">
             <div className="hidden md:block">

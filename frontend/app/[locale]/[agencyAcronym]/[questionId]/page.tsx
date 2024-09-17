@@ -57,8 +57,9 @@ const QuestionDetailPage: React.FC<Props> = async ({ params }) => {
     if (!question) {
       throw new Error('Question not found');
     }
-
-    topicTitles = await getTopicsDetail(question.topics, locale);
+    if (Array.isArray(question.topics) && question.topics.every(topic => typeof topic === 'number')) {
+      topicTitles = await getTopicsDetail(question.topics, locale);
+    }
   } catch (error) {
     redirect('/');
   }

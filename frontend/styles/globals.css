@@ -46,6 +46,24 @@
     --myds-danger-100: 93.56% 0.031 17.72; /* #FEE2E2 or Red 100 */
     --myds-danger-50: 97.05% 0.013 17.38; /* #FEF2F2 or Red 50 */
     --text-danger-600: 57.71% 0.215 27.33; /* #DC2626 */
+
+    /* warning */
+    --myds-warning-700: 55.38% 0.121 66.44; /* #A16207 or Warning 700 */
+    --myds-warning-600: 68.06% 0.142 75.83; /* #CA8A04 or Warning 600 */
+    --myds-warning-300: 83.88% 0.136 98.52; /* #E1CB58 or Warning 300 */
+    --myds-warning-200: 94.51% 0.124 101.54; /* #FEF08A or Warning 200 */
+    --myds-warning-100: 97.29% 0.069 103.19; /* #FEF9C3 or Warning 100 */
+    --myds-warning-50: 98.73% 0.026 102.21; /* #FEFCE8 or Warning 50 */
+    --text-warning-700: 55.38% 0.121 66.44; /* #A16207 */
+
+    /* success */
+    --myds-success-700: 52.73% 0.137 150.07; /* #15803D or Success 700 */
+    --myds-success-600: 62.71% 0.17 149.21; /* #16A34A or Success 600 */
+    --myds-success-300: 81.86% 0.115 155.16; /* #83DAA3 or Success 300 */
+    --myds-success-200: 92.5% 0.081 155.99; /* #BBF7D0 or Success 200 */
+    --myds-danger-100: 96.24% 0.043 156.74; /* #DCFCE7 or Success 100 */
+    --myds-danger-50: 98.19% 0.018 155.83; /* #F0FDF4 or Success 50 */
+    --text-success-700: 52.73% 0.137 150.07; /* #15803D */
   }
 
   .dark {
@@ -89,6 +107,24 @@
     --myds-danger-100: 25.75% 0.089 26.04; /* #450A0A or Red 950 */
     --myds-danger-50: 19.68% 0.06 24.53; /* #2B0707 */
     --text-danger-600: 68.71% 0.202 24.13; /* #FF5959 */
+
+    /* warning */
+    --myds-warning-700: 55.38% 0.121 66.44; /* #A16207 or Warning 700 */
+    --myds-warning-600: 68.06% 0.142 75.83; /* #CA8A04 or Warning 600 */
+    --myds-warning-300: 47.62% 0.103 61.91; /* #854D0E or Warning 300 */
+    --myds-warning-200: 42.1% 0.09 57.71; /* #713F12 or Warning 200 */
+    --myds-warning-100: 28.57% 0.064 53.81; /* #422006 or Warning 100 */
+    --myds-warning-50: 23.6% 0.051 55.74; /* #301704 or Warning 50 */
+    --text-warning-700: 68.06% 0.142 75.83; /* #CA8A04 */
+
+    /* success */
+    --myds-success-700: 52.73% 0.137 150.07; /* #15803D or Success 700 */
+    --myds-success-600: 62.71% 0.17 149.21; /* #16A34A or Success 600 */
+    --myds-success-300: 44.79% 0.108 151.33; /* #166534 or Success 300 */
+    --myds-success-200: 39.25% 0.09 152.54; /* #14532D or Success 200 */
+    --myds-danger-100: 26.64% 0.063 152.93; /* #052E16 or Success 100 */
+    --myds-danger-50: 23.09% 0.053 153.65; /* #042411 or Success 50 */
+    --text-success-700: 62.71% 0.17 149.21; /* #16A34A */
   }
 
   html {

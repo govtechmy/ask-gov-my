@@ -3,11 +3,11 @@ import {
   assignAgencyToQuestion,
   changeAdminIsOpen,
   markQuestionAsSpam,
+  unassignAgencyFromQuestion,
   unSpamQuestion,
 } from '@/actions/userServices';
 import NewUpdateIcon from '@/icons/new';
 import { Question } from '@/types/types';
-import AgencyListDropdownOnCard from './AgencyListDropdownOnCard';
 import ModalQuestionCard from './ModalQuestionCard';
 import SpamUpdateIcon from '@/icons/spam';
 import { useSearchParams } from 'next/navigation';
@@ -16,7 +16,15 @@ import AlarmTriangle from '@/icons/alarmtriangle';
 import TickCheckCircle from '@/icons/tickcheckcircle';
 import { formatDate } from '@/actions/utils';
 import { Agency } from '@/types/types';
-import Toast from '../ui/toast';
+import Toast from '@/components/ui/toast';
+import {
+  Popover,
+  PopoverTrigger,
+  PopoverContent,
+} from '@/components/ui/popover';
+import { AgencySearchList } from './AgencySearchList';
+import { Button } from '@/components/ui/button';
+import ChevronDown from '@/icons/ChevronDown';
 
 interface QuestionCardProps {
   question: Question;
@@ -38,6 +46,7 @@ const AdminQuestionCard: React.FC<QuestionCardProps> = ({
   const [successMessage, setSuccessMessage] = useState('');
   const [showSpamToast, setShowSpamToast] = useState(false);
   const [showUnSpamToast, setShowUnSpamToast] = useState(false);
+  const [openAgencyPopover, setOpenAgencyPopover] = useState(false);
 
   useEffect(() => {
     if (question.agency !== null) {
@@ -108,17 +117,33 @@ const AdminQuestionCard: React.FC<QuestionCardProps> = ({
               <div className="h-[22px] w-[55px]"></div>
             )}
           </div>
-          <div className="relative pl-3">
-            <AgencyListDropdownOnCard
-              selectedAgency={selectedAgency}
-              setSelectedAgency={setSelectedAgency}
-              setSuccessMessage={setSuccessMessage}
-              activeQuestionId={activeQuestionId}
-              setactiveQuestionId={setactiveQuestionId}
-              questionId={question.id}
-              agencies={agencies}
-            />
-          </div>
+
+          <Popover open={openAgencyPopover} onOpenChange={setOpenAgencyPopover}>
+            <PopoverTrigger asChild>
+              <Button className="w-[130px]" size="sm">
+                {selectedAgency}
+                <ChevronDown className="ml-auto h-5 w-5" />
+              </Button>
+            </PopoverTrigger>
+            <PopoverContent
+              className="p-0 rounded-[14px] md:min-w-[320px]"
+              align="start"
+            >
+              <AgencySearchList
+                agencies={agencies}
+                onSelect={async agency => {
+                  setOpenAgencyPopover(false);
+                  if (!agency) {
+                    await unassignAgencyFromQuestion(question.id);
+                    return;
+                  }
+                  await assignAgencyToQuestion(question.id, agency.id);
+                }}
+                nullItemLabel="Unassigned"
+              />
+            </PopoverContent>
+          </Popover>
+
           <div className="font-normal text-sm text-dim-500 w-[180px] pl-3 ">
             {formatDate(question.date)}
           </div>
