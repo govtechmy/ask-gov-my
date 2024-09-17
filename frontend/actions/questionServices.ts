@@ -4,31 +4,45 @@ import { Question, Agency, Topic, QuestionSubmission } from '@/types/types';
 
 export async function getAllQuestions(
   page: number = 1,
-  pageSize: number = 1000,
-): Promise<{ questions: Question[]; total: number }> {
+  pageSize: number = 6,
+): Promise<{
+  data: Question[];
+  totalItems: number;
+  totalPages: number;
+  currentPage: number;
+}> {
   try {
-    const response = await fetch(`${API_URL}/questions/`, {
-      method: 'GET',
-      headers: {
-        'Cache-Control': 'no-cache',
-        Pragma: 'no-cache',
-        Expires: '0',
+    const response = await fetch(
+      `${API_URL}/questions/?page=${page}&page_size=${pageSize}`,
+      {
+        method: 'GET',
+        headers: {
+          'Cache-Control': 'no-cache',
+          Pragma: 'no-cache',
+          Expires: '0',
+        },
       },
-    });
+    );
     if (!response.ok) {
       throw new Error('Failed to fetch questions');
     }
 
     const data = await response.json();
 
-    const start = (page - 1) * pageSize;
-    const end = start + pageSize;
-    const paginatedQuestions = data.slice(start, end);
-
-    return { questions: paginatedQuestions, total: data.length };
+    return {
+      data: data.results,
+      totalItems: data.count,
+      totalPages: Math.ceil(data.count / pageSize),
+      currentPage: page,
+    };
   } catch (error) {
     console.error('Error in getAllQuestions:', error);
-    return { questions: [], total: 0 };
+    return {
+      data: [],
+      totalItems: 0,
+      totalPages: 0,
+      currentPage: 1,
+    };
   }
 }
 
@@ -79,28 +93,94 @@ export async function getTopicsDetail(
 export async function getQuestionsByAgency(
   agencyId: string,
   page: number = 1,
-  pageSize: number = 10,
-): Promise<{ questions: Question[]; total: number }> {
-  const response = await fetch(`${API_URL}/questions/by-agency/${agencyId}`, {
-    method: 'GET',
-    headers: {
-      'Cache-Control': 'no-cache',
-      Pragma: 'no-cache',
-      Expires: '0',
-    },
-  });
-  if (!response.ok) {
-    throw new Error('Failed to fetch questions');
+  pageSize: number = 6,
+): Promise<{
+  data: Question[];
+  totalItems: number;
+  totalPages: number;
+  currentPage: number;
+}> {
+  try {
+    const response = await fetch(
+      `${API_URL}/questions/by-agency/${agencyId}?page=${page}&page_size=${pageSize}`,
+      {
+        method: 'GET',
+        headers: {
+          'Cache-Control': 'no-cache',
+          Pragma: 'no-cache',
+          Expires: '0',
+        },
+      },
+    );
+
+    if (!response.ok) {
+      throw new Error('Failed to fetch questions');
+    }
+
+    const data = await response.json();
+
+    return {
+      data: data.results,
+      totalItems: data.count,
+      totalPages: Math.ceil(data.count / pageSize),
+      currentPage: page,
+    };
+  } catch (error) {
+    console.error('Error in getQuestionsByAgency:', error);
+    return {
+      data: [],
+      totalItems: 0,
+      totalPages: 0,
+      currentPage: 1,
+    };
   }
+}
 
-  const data = await response.json();
-  const Questions: Question[] = data;
+export async function getQuestionsByTopicAndAgency(
+  agencyUUID: string,
+  topicId: string,
+  page: number = 1,
+  pageSize: number = 6,
+): Promise<{
+  data: Question[];
+  totalItems: number;
+  totalPages: number;
+  currentPage: number;
+}> {
+  try {
+    const response = await fetch(
+      `${API_URL}/questions/by-agency/${agencyUUID}/topics/${topicId}/?page=${page}&page_size=${pageSize}`,
+      {
+        method: 'GET',
+        headers: {
+          'Cache-Control': 'no-cache',
+          Pragma: 'no-cache',
+          Expires: '0',
+        },
+      },
+    );
 
-  const start = (page - 1) * pageSize;
-  const end = start + pageSize;
-  const paginatedQuestions = Questions.slice(start, end);
+    if (!response.ok) {
+      throw new Error('Failed to fetch questions');
+    }
 
-  return { questions: paginatedQuestions, total: data.count };
+    const data = await response.json();
+
+    return {
+      data: data.results,
+      totalItems: data.count,
+      totalPages: Math.ceil(data.count / pageSize),
+      currentPage: page,
+    };
+  } catch (error) {
+    console.error('Error fetching questions:', error);
+    return {
+      data: [],
+      totalItems: 0,
+      totalPages: 0,
+      currentPage: 1,
+    };
+  }
 }
 
 export async function getQuestionById(
@@ -184,6 +264,84 @@ export async function getAgencyList(): Promise<Agency[]> {
   } catch (error) {
     console.error('Error in getAgencyList:', error);
     return [];
+  }
+}
+
+export async function getAgency(agencyId: number): Promise<Agency | null> {
+  try {
+    const agencies = await getAgencyList();
+    const agency = agencies.find((agency) => agency.id === agencyId);
+
+    if (!agency) {
+      throw new Error(`Agency with ID ${agencyId} not found`);
+    }
+
+    return agency;
+  } catch (error) {
+    console.error('Error in getAgency:', error);
+    return null;
+  }
+}
+
+export async function getAgencyListWithPagination(
+  page: number = 1,
+  pageSize: number = 27,
+  searchTerm: string = '',
+): Promise<{
+  data: {
+    agencies: Agency[];
+    totalItems: number;
+    totalPages: number;
+    currentPage: number;
+  };
+}> {
+  try {
+    const searchQuery = searchTerm
+      ? `&search=${encodeURIComponent(searchTerm)}`
+      : '';
+    const response = await fetch(
+      `${API_URL}/agencies?page=${page}&page_size=${pageSize}${searchQuery}`,
+      {
+        method: 'GET',
+        headers: {
+          'Cache-Control': 'no-cache',
+          Pragma: 'no-cache',
+          Expires: '0',
+          'Content-Type': 'application/json',
+        },
+      },
+    );
+
+    if (!response.ok) {
+      throw new Error('Failed to fetch agency list');
+    }
+
+    const responseData = await response.json();
+
+    return {
+      data: {
+        agencies: responseData.results.map((agency: Agency) => ({
+          id: agency.id,
+          name: agency.name,
+          name_ms: agency.name_ms,
+          acronym: agency.acronym,
+          logo_url: agency.logo_url,
+        })),
+        totalItems: responseData.totalItems,
+        totalPages: Math.ceil(responseData.count / pageSize),
+        currentPage: page,
+      },
+    };
+  } catch (error) {
+    console.error('Error in getAgencyListWithPagination:', error);
+    return {
+      data: {
+        agencies: [],
+        totalItems: 0,
+        totalPages: 0,
+        currentPage: 1,
+      },
+    };
   }
 }
 
