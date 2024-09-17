@@ -1,247 +1,280 @@
-'use client';
-
-import React, { useState } from 'react';
+import React, { useRef, useState } from 'react';
+import { useTranslations } from 'next-intl';
 import { updateAgency } from '@/actions/userServices';
 import ImageNext from 'next/image';
 import Pencil from '@/icons/pencil';
 import Asklogo from '@/icons/asklogo';
 import { Agency } from '@/types/types';
-import { getPresignUrl, uploadFile } from '@/lib/uploadUtils';
+import { Input } from '../ui/input';
+import { Button } from '../ui/button';
+import { Label } from '../ui/label';
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogFooter,
+  DialogDescription,
+  DialogTitle,
+} from '../ui/dialog';
+import { formatDate } from '@/actions/utils';
+import { StyledDisplay } from '../ui/display';
+import { handleFileChange } from '@/actions/fileChangeHandler';
+import { z } from 'zod';
+import { useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from '@/components/ui/form';
 
 interface AgencySettingsModalProps {
   agency: Agency;
   isOpen: boolean;
   onClose: () => void;
+  handleEditAgencyToast: () => void;
+  handleFailEditAgencyToast: () => void;
+  handleErrorToast: () => void;
 }
+
+const formSchema = z.object({
+  name: z
+    .string()
+    .min(2, { message: 'Name must be at least 2 characters long' })
+    .max(100, { message: 'Name cannot exceed 100 characters' })
+    .regex(/^[a-zA-Z0-9\s'&(),-]+$/, {
+      message:
+        "Name can only contain letters, numbers, spaces, and the following characters: ' & ( ) , -",
+    }),
+  nameMs: z
+    .string()
+    .min(2, { message: 'Name must be at least 2 characters long' })
+    .max(100, { message: 'Name cannot exceed 100 characters' })
+    .regex(/^[a-zA-Z0-9\s'&(),-]+$/, {
+      message:
+        "Name can only contain letters, numbers, spaces, and the following characters: ' & ( ) , -",
+    }),
+  acronym: z
+    .string()
+    .min(2, { message: 'Acronym must be at least 2 characters long' })
+    .max(100, { message: 'Acronym cannot exceed 100 characters' })
+    .regex(/^[A-Za-z]+$/, {
+      message: 'Acronym can only contain letters',
+    }),
+});
+type FormValues = z.infer<typeof formSchema>;
 
 const AgencySettingsModal: React.FC<AgencySettingsModalProps> = ({
   agency,
   isOpen,
   onClose,
+  handleEditAgencyToast,
+  handleFailEditAgencyToast,
+  handleErrorToast,
 }) => {
-  const [name, setName] = useState(agency.name);
-  const [nameMs, setNameMs] = useState(agency.name_ms);
-  const [acronym, setAcronym] = useState(agency.acronym);
+  const form = useForm<FormValues>({
+    resolver: zodResolver(formSchema),
+    defaultValues: {
+      name: agency.name,
+      nameMs: agency.name_ms,
+      acronym: agency.acronym,
+    },
+  });
+
   const [logoUrl, setLogoUrl] = useState(agency.logo_url || '');
-  const [success, setSuccess] = useState<string | null>(null);
-  const [error, setError] = useState<string | null>(null);
+  const acronym = form.watch('acronym');
 
-  const handleFileChange = async (
-    event: React.ChangeEvent<HTMLInputElement>,
-  ) => {
-    const file = event.target.files ? event.target.files[0] : null;
-    if (file) {
-      const img = new Image();
-      img.src = URL.createObjectURL(file);
-      img.onload = async () => {
-        if (img.width !== 200 || img.height !== 200) {
-          setError('Image must be 200x200 pixels');
-          return;
-        }
-        try {
-          let renamedFile = `${Date.now()}-${file.name}`;
-          const uploadSuccess = await uploadFile(file, renamedFile);
-          if (uploadSuccess) {
-            try {
-              const url = await getPresignUrl(file.name, 'GET');
-              setLogoUrl(url);
-            } catch (error) {
-              console.error('Error getting presigned URL:', error);
-            }
-          }
-        } catch (err) {
-          if (err instanceof Error) {
-            setError(err.message);
-          } else {
-            setError('An unexpected error occurred');
-          }
-          setSuccess(null);
-        }
-      };
-    }
-  };
+  const [uploadError, setUploadError] = useState<string | null>(null);
+  const [uploadSuccess, setUploadSuccess] = useState<string | null>(null);
+  const [uploadStatus, setUploadStatus] = useState<
+    'initial' | 'error' | 'success'
+  >('initial');
 
-  const handleSubmit = async () => {
+  const fileInputRef = useRef<HTMLInputElement>(null);
+
+  const handleSubmit = form.handleSubmit(async (values: FormValues) => {
+    const { name, nameMs, acronym } = values;
     try {
       await updateAgency(agency.id, name, nameMs, acronym, logoUrl || '');
-      setSuccess('Agency updated successfully');
-      setError(null);
+      handleEditAgencyToast();
       onClose();
     } catch (err) {
+      onClose();
+      console.error('Failed to update agency:', err);
       if (err instanceof Error) {
-        setError(err.message);
+        if (
+          err.message.includes('Network error') ||
+          err.message.includes('Timeout')
+        ) {
+          handleErrorToast();
+        } else if (
+          err.message.includes('Validation failed') ||
+          err.message.includes('Invalid input')
+        ) {
+          handleFailEditAgencyToast();
+        } else {
+          handleFailEditAgencyToast();
+        }
       } else {
-        setError('An unexpected error occurred');
+        handleErrorToast();
       }
-      setSuccess(null);
     }
+  });
+
+  const handleDivClick = () => {
+    fileInputRef.current?.click();
   };
 
-  if (!isOpen) return null;
+  const handleFileChangeWrapper = (e: React.ChangeEvent<HTMLInputElement>) => {
+    handleFileChange(e, {
+      setUploadError,
+      setUploadSuccess,
+      setUploadStatus,
+      setLogoUrl,
+    });
+  };
 
   return (
-    <div className="z-10 fixed inset-0 bg-gray-900 flex items-center justify-center bg-opacity-70">
-      <div className="bg-white rounded-xl shadow-lg w-[600px]">
-        <div className="flex border-b-[1px] border-outline-200">
-          <div className="text-black-900 font-semibold text-lg leading-[26px] ml-6 mb-[16px] mt-6 mr-3 h-[26px] w-[350px]">
-            Agency Setting
+    <Dialog open={isOpen} onOpenChange={onClose}>
+      <DialogContent hideCloseButton className="sm:max-w-[600px] p-0 gap-0">
+        <DialogHeader>
+          <div className="flex items-center justify-between">
+            <DialogTitle className="p-6 pb-4">Agency Setting</DialogTitle>
+            <div className="text-dim-500 text-sm font-normal pt-2 pr-6">
+              Last updated on {formatDate(agency.last_edited, 'short')}
+            </div>
           </div>
-          <div className="text-dim-500 text-sm mt-[27px] font-normal mr-6 flex">
-            Last updated on{' '}
-            {new Date().toLocaleDateString('en-GB', {
-              day: '2-digit',
-              month: '2-digit',
-              year: 'numeric',
-            })}
-          </div>
-        </div>
-        <div>
-          <div className="h-[360px] w-[552px] m-6 ">
-            <div className="mb-6">
+        </DialogHeader>
+        <DialogDescription className="p-6 border-y-[1px] border-outline-200">
+          <div className="relative w-16 h-16 flex-shrink-0">
+            <StyledDisplay variant={'logoBackground'}>
               {logoUrl ? (
-                <div className="relative">
-                  <div className="w-[64px] h-[64px] relative flex-shrink-0">
-                    <div className="absolute h-full w-full rounded-full border-[1px] border-outline-200 bg-transparent"></div>
-                    <div className="flex items-center justify-center h-full w-full overflow-hidden rounded-full">
-                      <ImageNext
-                        src={logoUrl}
-                        width={200}
-                        height={200}
-                        alt="Agency Logo"
-                      />
-                    </div>
-                  </div>
-                  <label className="cursor-pointer">
-                    <div className=" absolute bottom-0 left-[45px] h-5 w-5 rounded-full bg-askmygovbrand-600 items-center justify-center flex">
-                      <div className="h-3 w-3 flex items-center justify-center">
-                        <Pencil className="stroke-white-forcewhite"></Pencil>
-                      </div>
-                    </div>
-                    <input
-                      type="file"
-                      className="hidden"
-                      accept="image/png, image/jpeg"
-                      onChange={handleFileChange}
-                    />
-                  </label>
-                </div>
+                <ImageNext
+                  src={logoUrl}
+                  width={200}
+                  height={200}
+                  alt="Agency Logo"
+                />
               ) : (
-                <div className="relative">
-                  <div className="w-[64px] h-[64px] relative flex-shrink-0">
-                    <div className="absolute h-full w-full rounded-full border-[1px] border-outline-200 bg-transparent"></div>
-                    <div className="flex items-center justify-center h-full w-full overflow-hidden rounded-full">
-                      <ImageNext
-                        src="/jata-200-transparent.png"
-                        width={200}
-                        height={200}
-                        alt="JataNegara"
-                      />
-                    </div>
-                  </div>
-
-                  <label className="cursor-pointer">
-                    <div className=" absolute bottom-0 left-[45px] h-5 w-5 rounded-full bg-askmygovbrand-600 items-center justify-center flex">
-                      <div className="h-3 w-3 flex items-center justify-center">
-                        <Pencil className="stroke-white-forcewhite"></Pencil>
-                      </div>
-                    </div>
-                    <input
-                      type="file"
-                      className="hidden"
-                      accept="image/png, image/jpeg"
-                      onChange={handleFileChange}
-                    />
-                  </label>
-                </div>
+                <ImageNext
+                  src="/jata-200-transparent.png"
+                  width={200}
+                  height={200}
+                  alt="JataNegara"
+                />
               )}
-              <div className="mt-[6px] text-dim-500 text-sm">
-                Upload photo ideally sized not more than 200x200 pixels in PNG
-                or JPG format.
-              </div>
-            </div>
-            <div className="mb-6">
-              <div className="text-black-700 text-sm font-medium mb-[6px] w-[552px] h-5">
-                Agency's name (English)
-              </div>
-              <input
-                type="text"
-                className="bg-white h-10 w-[552px] border-[1px] border-outline-200 rounded-lg pl-[12px]
-                shadow-button focus:border-none focus:outline-none focus:shadow-[0_0_0_1px_#B794FF,0_0_0_4px_#DED1FA] mb-6
-                focus:dark:shadow-[0_0_0_1px_#4F20B2,0_0_0_4px_#281B46]
-                text-black-900 font-normal text-base"
-                value={name}
-                onChange={e => setName(e.target.value)}
-              />
+            </StyledDisplay>
 
-              <div className="text-black-700 text-sm font-medium mb-[6px] w-[552px] h-5">
-                Agency's name (Malay)
-              </div>
-              <input
-                type="text"
-                className="bg-white h-10 w-[552px] border-[1px] border-outline-200 rounded-lg pl-[12px]
-                shadow-button focus:border-none focus:outline-none focus:shadow-[0_0_0_1px_#B794FF,0_0_0_4px_#DED1FA] mb-6
-                focus:dark:shadow-[0_0_0_1px_#4F20B2,0_0_0_4px_#281B46]
-                text-black-900 font-normal text-base"
-                value={nameMs}
-                onChange={e => setNameMs(e.target.value)}
+            <StyledDisplay variant={'logoEditor'} onClick={handleDivClick}>
+              <Pencil
+                className="stroke-white-forcewhite"
+                width="12"
+                height="12"
               />
+            </StyledDisplay>
+            <Input
+              ref={fileInputRef}
+              id="image-upload"
+              type="file"
+              className="hidden"
+              accept="image/png, image/jpeg"
+              onChange={handleFileChangeWrapper}
+            />
+          </div>
+          {uploadStatus === 'error' ? (
+            <p className="text-danger-600 text-sm mt-2 mb-6">{uploadError}</p>
+          ) : uploadStatus === 'success' ? (
+            <p className="text-green-500 text-sm mt-2 mb-6">{uploadSuccess}</p>
+          ) : (
+            <p className="mt-2 mb-6 text-dim-500 text-sm">
+              Upload photo ideally sized not more than 200x200 pixels in PNG or
+              JPG format.
+            </p>
+          )}
 
-              <div className="flex">
-                <div>
-                  <div className="text-black-700 text-sm font-medium mb-[6px] w-[264px] h-5">
-                    Agency's acronym:
-                  </div>
-                  <input
-                    type="text"
-                    className="bg-white h-10 w-[264px] border-[1px] border-outline-200 rounded-lg pl-[12px]
-                    shadow-button focus:border-none focus:outline-none focus:shadow-[0_0_0_1px_#B794FF,0_0_0_4px_#DED1FA] mb-6
-                    focus:dark:shadow-[0_0_0_1px_#4F20B2,0_0_0_4px_#281B46]
-                    text-black-900 font-normal text-base"
-                    value={acronym}
-                    onChange={e => setAcronym(e.target.value)}
-                  />
-                </div>
-                <div className="h-[66px] w-[264px] ml-6">
-                  <div className="text-black-700 text-sm font-medium mb-[6px] w-[264px] h-5">
-                    Agency logo preview
-                  </div>
-                  <div className="font-poppins flex text-lg font-semibold items-center mt-[6px] h-10">
+          <Form {...form}>
+            <form onSubmit={handleSubmit} className="mt-6 space-y-4">
+              <FormField
+                control={form.control}
+                name="name"
+                render={({ field, fieldState }) => (
+                  <FormItem>
+                    <FormLabel>Agency's name (English)</FormLabel>
+                    <FormControl>
+                      <Input
+                        type="text"
+                        className={`${fieldState.error ? 'border-danger-300' : ''}`}
+                        {...field}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="nameMs"
+                render={({ field, fieldState }) => (
+                  <FormItem>
+                    <FormLabel>Agency's name (Malay)</FormLabel>
+                    <FormControl>
+                      <Input
+                        type="text"
+                        className={`${fieldState.error ? 'border-danger-300' : ''}`}
+                        {...field}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <div className="grid grid-cols-2 gap-6">
+                <FormField
+                  control={form.control}
+                  name="acronym"
+                  render={({ field, fieldState }) => (
+                    <FormItem>
+                      <FormLabel>Agency's acronym:</FormLabel>
+                      <FormControl>
+                        <Input
+                          type="text"
+                          className={`${fieldState.error ? 'border-danger-300' : ''}`}
+                          {...field}
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <div className="flex flex-col">
+                  <Label>Agency logo preview</Label>
+                  <StyledDisplay variant={'nameLogoDisplay'}>
                     <Asklogo />
-                    <div className="flex pl-[10px]">
+                    <div className="pl-[10px]">
                       Ask
-                      <div className="text-[#702FF9] dark:text-[#9E70FF]">
+                      <span className="text-askmygovtextbrand-600">
                         {acronym}
-                      </div>
+                      </span>
                     </div>
-                  </div>
+                  </StyledDisplay>
                 </div>
               </div>
-            </div>
-          </div>
-        </div>
-        <div>
-          <div className="py-6 flex justify-end pr-6 border-t-[1px] border-outline-200">
-            <button
-              className="mr-3 h-[44px] w-[77px] border-[1px] border-outline-200 shadow-button rounded-lg 
-              text-base items-center justify-center flex hover:cursor-pointer"
-              onClick={onClose}
-            >
-              Cancel
-            </button>
-            <button
-              className="w-[119px] h-[44px] rounded-lg items-center justify-center flex text-base font-normal  text-white-forcewhite 
-             bg-gradient-to-t from-[#702FF9] to-[#B379FF] dark:from-[#702FF9] dark:to-[#B379FF]
-              border-[1px] border-[#702FF9] hover:cursor-pointer shadow-button"
-              onClick={handleSubmit}
-            >
-              Save settings
-            </button>
-          </div>
-          {success && <div className="text-green-500 mt-4">{success}</div>}
-          {error && <div className="text-red-500 mt-4">{error}</div>}
-        </div>
-      </div>
-    </div>
+              <DialogFooter className="p-6 flex justify-end space-x-4">
+                <Button type="button" onClick={onClose}>
+                  Cancel
+                </Button>
+                <Button type="submit" variant="primary">
+                  Save settings
+                </Button>
+              </DialogFooter>
+            </form>
+          </Form>
+        </DialogDescription>
+      </DialogContent>
+    </Dialog>
   );
 };
 

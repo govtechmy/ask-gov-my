@@ -66,8 +66,20 @@ export function formatFileSize(size: number | undefined): string {
   }
 }
 
-export function formatDate(dateString: string) {
+export const formatDate = (
+  dateString: string,
+  format: 'full' | 'short' = 'full',
+): string => {
   const date = new Date(dateString);
+  if (format === 'short') {
+    const dateFormatter = new Intl.DateTimeFormat('en-GB', {
+      day: '2-digit',
+      month: '2-digit',
+      year: 'numeric',
+    });
+    return dateFormatter.format(date);
+  }
+
   const dateFormatter = new Intl.DateTimeFormat('en-GB', {
     day: '2-digit',
     month: 'long',
@@ -86,7 +98,7 @@ export function formatDate(dateString: string) {
     .toUpperCase();
 
   return `${formattedDate}, ${formattedTime}`;
-}
+};
 
 export function generateHexColor(name: string): string {
   let hash = 0;

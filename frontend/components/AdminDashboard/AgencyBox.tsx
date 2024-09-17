@@ -32,7 +32,8 @@ const AgencyBox: React.FC<AgencyBoxProps> = ({ data }) => {
     <div>
       {agencies.length === 0 ? (
         <p className="text-left text-dim-500 font-normal text-base">
-          We couldn't find the agency. Please try searching again using the search bar above.
+          We couldn't find the agency. Please try searching again using the
+          search bar above.
         </p>
       ) : (
         <>
@@ -45,6 +46,7 @@ const AgencyBox: React.FC<AgencyBoxProps> = ({ data }) => {
                 name_ms={agency.name_ms}
                 acronym={agency.acronym}
                 logo_url={agency.logo_url}
+                last_edited={agency.last_edited}
                 onUpdate={() => {}}
               />
             ))}
