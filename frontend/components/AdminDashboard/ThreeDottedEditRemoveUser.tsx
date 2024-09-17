@@ -34,6 +34,8 @@ interface ThreeProps {
   handleEditUserToast: () => void;
 }
 
+type UserRole = 'staff' | 'super_admin' | 'unassigned';
+
 const ThreeDottedEditRemoveUser: React.FC<ThreeProps> = ({
   user,
   onUpdate,
@@ -46,12 +48,11 @@ const ThreeDottedEditRemoveUser: React.FC<ThreeProps> = ({
   const [isModalDeleteUserOpen, setIsModalDeleteUserOpen] = useState(false);
   const [name, setName] = useState(user.name || '');
   const [email, setEmail] = useState(user.email);
-  const [role, setRole] = useState<'staff' | 'super_admin'>(
-    user.role as 'staff' | 'super_admin',
-  );
+  const [role, setRole] = useState<UserRole>(user.role as UserRole);
   const [agency, setAgency] = useState<number | null>(user.agency);
   const [success, setSuccess] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
+  const [roleEmpty, setRoleEmpty] = useState<boolean>(false);
 
   const handleDropdownClick = () => {
     setIsDropdownVisible(prevState => !prevState);
@@ -60,7 +61,7 @@ const ThreeDottedEditRemoveUser: React.FC<ThreeProps> = ({
   useEffect(() => {
     setName(user.name || '');
     setEmail(user.email);
-    setRole(user.role as 'staff' | 'super_admin');
+    setRole(user.role as UserRole);
     setAgency(user.agency);
   }, [user]);
 
@@ -75,6 +76,10 @@ const ThreeDottedEditRemoveUser: React.FC<ThreeProps> = ({
   }
 
   const handleSubmit = async () => {
+    if (role === 'unassigned') {
+      setRoleEmpty(true);
+      return;
+    }
     try {
       await editUser(user.id, name, email, role, agency);
       handleEditUserToast();
@@ -135,6 +140,7 @@ const ThreeDottedEditRemoveUser: React.FC<ThreeProps> = ({
                   <div className="space-y-2">
                     <Label htmlFor="name">Full Name</Label>
                     <Input
+                      id="name"
                       value={name}
                       placeholder="Enter your full name"
                       onChange={e => setName(e.target.value)}
@@ -144,6 +150,7 @@ const ThreeDottedEditRemoveUser: React.FC<ThreeProps> = ({
                   <div className="space-y-2">
                     <Label htmlFor="email">Email</Label>
                     <Input
+                      id="email"
                       value={email}
                       type="email"
                       placeholder="Enter your email"
@@ -155,7 +162,7 @@ const ThreeDottedEditRemoveUser: React.FC<ThreeProps> = ({
                     agencies={agencies}
                     setRole={setRole}
                     setAgency={setAgency}
-                    roleEmpty={false}
+                    roleEmpty={roleEmpty}
                     user={user}
                   />
                 </div>
@@ -179,13 +186,11 @@ const ThreeDottedEditRemoveUser: React.FC<ThreeProps> = ({
           open={isModalDeleteUserOpen}
           onOpenChange={setIsModalDeleteUserOpen}
         >
-          <DialogTrigger>
-            <DialogTrigger asChild className="text-danger-600 text-sm">
-              <Button variant={'tertiary-dropdown'}>
-                <TrashIcon />
-                Delete
-              </Button>
-            </DialogTrigger>
+          <DialogTrigger asChild className="text-danger-600 text-sm">
+            <Button variant={'tertiary-dropdown'}>
+              <TrashIcon />
+              Delete
+            </Button>
           </DialogTrigger>
 
           <DialogContent hideCloseButton className="w-[400px]">
