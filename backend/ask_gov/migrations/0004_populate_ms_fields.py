@@ -18,7 +18,7 @@ def populate_ms_fields(apps, schema_editor):
     Topic = apps.get_model('ask_gov', 'Topic')
     for topic in Topic.objects.filter(Q(title_ms='') | Q(title_ms__isnull=True)):
         topic.title_ms = topic.title
-        agency.save()
+        topic.save()
 
 class Migration(migrations.Migration):
 
