@@ -6,8 +6,8 @@ import uuid
 
 class Agency(models.Model):
     name = models.CharField()
-    name_ms = models.CharField(null=True, blank=True)
-    acronym = models.CharField(max_length=50, null=True, blank=True)
+    name_ms = models.CharField()
+    acronym = models.CharField(max_length=50, unique=True, db_index=True)
     logo_url = models.URLField(max_length=500, null=True, blank=True)
     last_edited = models.DateTimeField(auto_now=True)
 
@@ -17,7 +17,7 @@ class Agency(models.Model):
 
 class Topic(models.Model):
     title = models.CharField()
-    title_ms = models.CharField(null=True, blank=True)
+    title_ms = models.CharField()
     agency = models.ForeignKey(Agency, on_delete=models.CASCADE)
 
     def __str__(self):
@@ -37,7 +37,7 @@ class Question(models.Model):
         (DRAFT, 'Draft'),
     ]
 
-    question = models.TextField()
+    question = models.TextField(max_length=255)
     date = models.DateTimeField(auto_now_add=True)
     state = models.CharField(max_length=10, choices=STATE_CHOICES, default=BACKLOG)
     agency = models.ForeignKey(Agency, on_delete=models.CASCADE, null=True, blank=True)
