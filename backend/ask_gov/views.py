@@ -9,7 +9,7 @@ from rest_framework.filters import SearchFilter
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework.pagination import PageNumberPagination
 from rest_framework import generics, status, pagination
-from .models import Question, Agency, Topic, User, Account, Session, VerificationToken
+from .models import Answer, Question, Agency, Topic, User, Account, Session, VerificationToken
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from django.contrib.auth import get_user_model
@@ -315,44 +315,36 @@ class AddTopicView(APIView):
 
 class LikeQuestionView(APIView):
     def post(self, request, question_id):
-        try:
-            question = Question.objects.get(id=question_id)
-            question.likes += 1
-            question.save()
-            client.update(
-                index='questions',
-                id=str(question.id),
-                body={
-                    "doc": {
-                        "likes": question.likes
-                    }
+        answer = get_object_or_404(Answer, question=question_id)
+        answer.likes += 1
+        answer.save()
+        client.update(
+            index='questions',
+            id=str(question_id),
+            body={
+                "doc": {
+                    "likes": answer.likes
                 }
-            )
-            serializer = QuestionSerializer(question)
-            return Response(serializer.data, status=status.HTTP_200_OK)
-        except Question.DoesNotExist:
-            return Response({"error": "Question not found"}, status=status.HTTP_404_NOT_FOUND)
+            }
+        )
+        return Response(status=status.HTTP_204_NO_CONTENT)
 
 
 class DislikeQuestionView(APIView):
     def post(self, request, question_id):
-        try:
-            question = Question.objects.get(id=question_id)
-            question.dislikes += 1
-            question.save()
-            client.update(
-                index='questions',
-                id=str(question.id),
-                body={
-                    "doc": {
-                        "dislikes": question.dislikes
-                    }
+        answer = get_object_or_404(Answer, question=question_id)
+        answer.dislikes += 1
+        answer.save()
+        client.update(
+            index='questions',
+            id=str(question_id),
+            body={
+                "doc": {
+                    "dislikes": answer.dislikes
                 }
-            )
-            serializer = QuestionSerializer(question)
-            return Response(serializer.data, status=status.HTTP_200_OK)
-        except Question.DoesNotExist:
-            return Response({"error": "Question not found"}, status=status.HTTP_404_NOT_FOUND)
+            }
+        )
+        return Response(status=status.HTTP_204_NO_CONTENT)
 
 
 class AssignAgencyToQuestionView(APIView):
