@@ -255,33 +255,35 @@ class UserAgencyQuestionsView(APIView):
 
 class SubmitAnswerView(APIView):
     def post(self, request, question_id):
+
         data = request.data.get('data')
         if not data:
             return Response({"detail": "Data is required"}, status=status.HTTP_400_BAD_REQUEST)
 
-        answer = data.get('answer')
-        if not answer:
+
+        raw_answer = data.get('answer')
+        if not raw_answer:
             return Response({"detail": "Answer is required"}, status=status.HTTP_400_BAD_REQUEST)
 
         attachments = data.get('attachments', [])
 
-        try:
-            question = Question.objects.get(id=question_id)
+        question = get_object_or_404(Question, pk=question_id)
 
-            answer_preview = self.strip_tags(answer)
+        text_answer = self.strip_tags(raw_answer)
 
-            question.answer = answer
-            question.answer_preview = answer_preview
-            question.state = 'completed'
-            question.attachments = attachments
-            question.answered_date = timezone.now()
-            question.save()
+        Answer.objects.update_or_create(
+            question=question,
+            defaults={
+                'raw': raw_answer,
+                'text': text_answer
+            }
+        )
 
-            return Response({"detail": "Answer submitted successfully"}, status=status.HTTP_200_OK)
-        except Question.DoesNotExist:
-            return Response({"detail": "Question not found"}, status=status.HTTP_404_NOT_FOUND)
-        except Exception as e:
-            return Response({"detail": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+        question.state = 'completed'
+        question.attachments = attachments
+        question.save()
+
+        return Response({"detail": "Answer submitted successfully"}, status=status.HTTP_200_OK)
 
     @staticmethod
     def strip_tags(html):

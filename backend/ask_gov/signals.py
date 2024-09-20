@@ -14,7 +14,7 @@ def index_question(sender, instance, **kwargs):
     document = serializer.data
 
     if instance.has_answer():
-        document['answer'] = instance.answer.answer_preview
+        document['answer'] = instance.answer.text
 
     document.pop('admin_isopen', None)
     document.pop('staff_isopen', None)
@@ -58,7 +58,7 @@ def index_question(sender, instance, **kwargs):
 
     logger.debug(f'Indexing document: {document}')
 
-    document['vector'] = get_embedding(instance.question)
+    # document['vector'] = get_embedding(instance.question)
 
     client.delete(
         index='questions',
