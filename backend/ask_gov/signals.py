@@ -58,7 +58,7 @@ def index_question(sender, instance, **kwargs):
 
     logger.debug(f'Indexing document: {document}')
 
-    # document['vector'] = get_embedding(instance.question)
+    document['vector'] = get_embedding(instance.question)
 
     client.delete(
         index='questions',
