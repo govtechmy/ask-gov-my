@@ -31,7 +31,7 @@ class CompletedQuestionListView(generics.ListCreateAPIView):
     pagination_class = CustomPagination
 
     def get_queryset(self):
-        return Question.objects.filter(state='completed').order_by('-likes', 'id')
+        return Question.objects.trending()
 
 
 class AllQuestionListView(generics.ListAPIView):
@@ -193,7 +193,7 @@ class AllQuestionsByAgencyView(generics.ListAPIView):
             except ValueError:
                 pass  
 
-        return queryset.order_by('-likes', 'id')
+        return queryset
 
     def list(self, request, *args, **kwargs):
         queryset = self.filter_queryset(self.get_queryset())
@@ -219,7 +219,7 @@ class QuestionsByAgencyView(APIView):
 
     def get(self, request, agency_id):
         agency = get_object_or_404(Agency, pk=agency_id)
-        questions = Question.objects.filter(agency=agency, state='completed').order_by('-likes', 'id')
+        questions = Question.objects.trending().filter(agency=agency)
         
         paginator = self.pagination_class()
         paginated_questions = paginator.paginate_queryset(questions, request)
@@ -236,7 +236,7 @@ class QuestionsByTopicAndAgencyView(APIView):
         agency = get_object_or_404(Agency, pk=agency_id)
         topic = get_object_or_404(Topic, pk=topic_id)
         
-        questions = Question.objects.filter(agency=agency, topics=topic, state='completed').order_by('-likes', 'id')
+        questions = Question.objects.trending().filter(agency=agency, topics=topic)
         
         paginator = self.pagination_class()
         paginated_questions = paginator.paginate_queryset(questions, request)
@@ -417,7 +417,7 @@ class AddAgencyView(APIView):
 
 class TrendingAgenciesView(APIView):
     def get(self, request):
-        agencies = Agency.objects.annotate(total_likes=Sum('question__likes')).order_by('-total_likes')
+        agencies = Agency.objects.annotate(total_likes=Sum('questions__answer__likes')).order_by('-total_likes')
         agencies = agencies.filter(total_likes__isnull=False)
         serializer = AgencySerializer(agencies, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
@@ -722,6 +722,7 @@ class EditDeleteUserView(APIView):
         user.email = data['email']
         user.role = data['role']
         user.agency = data['agency']
+        user.user_profile_colour = data['userProfileColour']
         user.save()
         return Response({'message': 'User updated successfully'}, status=status.HTTP_200_OK)
 

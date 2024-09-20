@@ -72,7 +72,7 @@ class TestAskGov(APITestCase):
         response = self.client.get(url)
         self.assertEqual(response.status_code, 200)
         user_list = response.json()
-        self.assertEqual(len(user_list), 3)
+        self.assertEqual(len(user_list['results']), 3)
 
         user = User.objects.get(email=unique_email)
         user.name = unique_name
