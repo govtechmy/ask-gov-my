@@ -1,0 +1,105 @@
+{
+  "Masthead": {
+    "official_gov_website": "Official Malaysia Government Website",
+    "how_to_identify": "Here's how you know",
+    "official": "Official government websites end with .gov.my",
+    "not_govmy": "If the link does not end with ",
+    "close_site": ", exit the website immediately even if it looks similar.",
+    "secure": "Secure websites use HTTPS",
+    "find_lock": "Look for a lock (",
+    "or": ") or ",
+    "precaution": " as an added precaution. If not present, do not share any sensitive information."
+  },
+
+  "Footer": {
+    "api_docs": "API Docs",
+    "admin_login": "Admin Login",
+    "gov_mys": "Government of Malaysia",
+    "Home": "Home"
+  },
+  "Nav": {
+    "Theme": {
+      "toggle_theme": "Change theme",
+      "toggle_light": "Toggle Light",
+      "toggle_dark": "Toggle Dark"
+    }
+  },
+
+  "Checkmail": {
+    "checkmail": "Check your email",
+    "para1": "We've emailed a magic link to",
+    "para2": "Click the link to login.",
+    "backclick": "Back to Log in"
+  },
+
+  "Adminlogin": {
+    "h1": "Log in to AskMyGov",
+    "para1": "Welcome back! Please enter your details.",
+    "email": "Email",
+    "1stbutton": "Continue with Email",
+    "or": "OR",
+    "2ndbutton": "Continue with MyGovUC",
+    "forgotpass": "Forgot password?"
+  },
+
+  "Topics": {
+    "topic": "Topics",
+    "alltopics": "All Topics",
+    "relatedtopics": "Related Topics",
+    "showing": "Showing",
+    "questionsin": "questions in",
+    "notfound": "We couldn't find any questions for selected topics."
+  },
+
+  "Search": {
+    "title": "Your one-stop centre to ask questions to Government officers!",
+    "reminder": "You must search among existing questions before you are allowed to ask",
+    "search": "Search by keyword or agency name (eg. MOH, MOT)",
+    "search_agency": "Search by keyword (e.g COVID-19, MySejahtera)",
+    "search_result": "search results for ",
+    "press_enter": "Press",
+    "enter_key": "ENTER",
+    "display_matches": "to display all matches",
+    "searching": "Searching...",
+    "no_results": "No results found.",
+    "answernotfound": "We couldn't find an answer to your question. Please try asking again using the search bar above."
+  },
+
+  "Mainpage": {
+    "trendingQ": "Trending Questions",
+    "trendingA": "Trending Agencies"
+  },
+
+  "Askquestions": {
+    "ask_new_question": "Ask a new question",
+    "cant_find": "I can't find what I am looking for.",
+    "your_question": "Your question",
+    "type_your_question": "Type your question...",
+    "your_name": "Your name",
+    "name_not_displayed": "This will not be displayed publicly.",
+    "notify_me": "Notify me",
+    "your_email": "yourname@example.com",
+    "email_updates": "We'll send updates regarding your question.",
+    "response_time_p1": "We usually respond within",
+    "response_time_p2": "3 to 15 working days",
+    "response_time_p3": "but it may take longer if your question requires collaboration with other parties.",
+    "response_public_p1": "Once we've responded, the question and answer",
+    "response_public_p2": "may be published publicly on AskMyGov",
+    "response_public_p3": "to assist other rakyats.",
+    "submit": "Submit",
+    "terms": "By submitting, you agree to AskMyGov's Terms of Use and Privacy Policy.",
+    "submission_received": "Submission Received",
+    "submission_received_detail": "Your question has been received. We'll make every effort to connect you with the relevant agencies.",
+    "close": "Close"
+  },
+
+  "Questiondetail": {
+    "home": "Home",
+    "posted": "Posted",
+    "topics": "Topics",
+    "attachment": "Supporting Attachment",
+    "feedback": "Thank you for your feedback!",
+    "response": "Was this response helpful?",
+    "answered": "Answered 1 year ago"
+  }
+}
