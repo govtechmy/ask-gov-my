@@ -25,24 +25,12 @@ class Topic(models.Model):
 
 class QuestionManager(models.Manager):
     def trending(self):
-        return self.get_queryset().filter(state='completed').order_by('-answer__likes', 'id')
+        return self.get_queryset().filter(answer__isnull=False, answer__draft=False).order_by('-answer__likes', 'id')
 
 class Question(models.Model):
-    BACKLOG = 'backlog'
-    COMPLETED = 'completed'
-    SPAM = 'spam'
-    DRAFT = 'draft'
-
-    STATE_CHOICES = [
-        (BACKLOG, 'Backlog'),
-        (COMPLETED, 'Completed'),
-        (SPAM, 'Spam'),
-        (DRAFT, 'Draft'),
-    ]
-
     question = models.TextField()
     created_at = models.DateTimeField(auto_now_add=True)
-    state = models.CharField(max_length=10, choices=STATE_CHOICES, default=BACKLOG)
+    spam = models.BooleanField(default=False)
     agency = models.ForeignKey(Agency, on_delete=models.CASCADE, null=True, blank=True, related_name='questions')
     topics = models.ManyToManyField(Topic, blank=True)
     email = models.EmailField()
@@ -66,6 +54,7 @@ class Answer(models.Model):
     likes = models.IntegerField(default=0)
     dislikes = models.IntegerField(default=0)
     version = models.IntegerField(default=0)
+    draft = models.BooleanField()
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 

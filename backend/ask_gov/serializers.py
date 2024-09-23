@@ -21,8 +21,8 @@ class TopicSerializer(serializers.ModelSerializer):
 class AnswerSerializer(serializers.ModelSerializer):
     class Meta:
         model = Answer
-        fields = ['raw', 'text', 'likes', 'created_at', 'updated_at']
-        read_only_fields = ['text', 'likes', 'created_at', 'updated_at']
+        fields = ['raw', 'text', 'likes', 'draft', 'created_at', 'updated_at']
+        read_only_fields = ['text', 'likes', 'draft', 'created_at', 'updated_at']
 
 class QuestionSerializer(serializers.ModelSerializer):
     topics = serializers.PrimaryKeyRelatedField(many=True, queryset=Topic.objects.all(), required=False)

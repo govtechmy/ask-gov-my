@@ -34,19 +34,48 @@ class CompletedQuestionListView(generics.ListCreateAPIView):
     filterset_fields = ['agency', 'topics']
 
 class AdminQuestionListView(generics.ListAPIView):
-    queryset = Question.objects.all().order_by('-created_at')
+    """
+    This endpoint retrieves a list of questions for administrative purposes. It
+    allows filtering by state, agency, and search terms.
+
+    Example query parameters:
+    - state: 'completed', 'draft', 'spam', 'backlog' to filter questions by their state.
+    - agency: The ID of the agency to filter questions by.
+    - agency__isnull: 'true' to filter questions that do not have an agency assigned.  
+    - search: A search term to filter questions by their content.
+
+    Example URLs:
+    - /admin/questions/?state=completed&agency=1
+    - /admin/questions/?state=draft&search=example
+    - /admin/questions/?state=spam
+    - /admin/questions/?agency_isnull=true
+    """
+
     serializer_class = QuestionSerializer
     pagination_class = CustomPagination
     filter_backends = [DjangoFilterBackend, SearchFilter]
     filterset_fields = {
             'agency': ['exact', 'isnull'],
-            'state': ['exact'],
-            'answer': ['isnull']
         }
     search_fields = ['question']
 
+    def get_queryset(self):
+        queryset = Question.objects.all().order_by('-created_at')
+
+        state = self.request.query_params.get('state')
+        if state == 'completed':
+            queryset = queryset.filter(answer__isnull=False, answer__draft=False)
+        elif state == 'draft':
+            queryset = queryset.filter(answer__isnull=False, answer__draft=True)
+        elif state == 'spam':
+            queryset = queryset.filter(spam=True)
+        elif state == 'backlog':
+            queryset = queryset.filter(answer__isnull=True, spam=False)
+
+        return queryset
+
 class QuestionDetailView(generics.RetrieveAPIView):
-    queryset = Question.objects.filter(state='completed')
+    queryset = Question.objects.filter(answer__isnull=False, answer__draft=False)
     serializer_class = QuestionSerializer
 
 class AdminQuestionDetailView(generics.RetrieveAPIView):
@@ -139,10 +168,10 @@ class SubmitAnswerView(APIView):
             defaults={
                 'raw': raw_answer,
                 'text': text_answer
-            }
+            },
+            draft=False
         )
 
-        question.state = 'completed'
         question.attachments = attachments
         question.save()
 
@@ -337,22 +366,20 @@ class SaveDraftQuestionView(APIView):
 
         attachments = data.get('attachments', [])
 
-        try:
-            question = Question.objects.get(id=question_id)
-            question.state = 'draft'
-            question.attachments = attachments
-            question.save()
+        question = get_object_or_404(Question, pk=question_id)
+        answer = get_object_or_404(Answer, question=question)
+        answer.draft = True
+        question.attachments = attachments
+        question.save()
 
-            return Response({"detail": "Question saved as draft successfully"}, status=status.HTTP_200_OK)
-        except Question.DoesNotExist:
-            return Response({"detail": "Question not found"}, status=status.HTTP_404_NOT_FOUND)
+        return Response({"detail": "Question saved as draft successfully"}, status=status.HTTP_200_OK)
 
 
 class MarkQuestionAsSpamView(APIView):
     def post(self, request, question_id):
         try:
             question = Question.objects.get(id=question_id)
-            question.state = 'spam'
+            question.spam = True
             question.save()
             return Response({"detail": "Question marked as spam successfully"}, status=status.HTTP_200_OK)
         except Question.DoesNotExist:
@@ -363,7 +390,7 @@ class UnSpamQuestionView(APIView):
     def post(self, request, question_id):
         try:
             question = Question.objects.get(id=question_id)
-            question.state = 'backlog'
+            question.spam = False
             question.save()
             return Response({"detail": "Un-Spam question successfully"}, status=status.HTTP_200_OK)
         except Question.DoesNotExist:
