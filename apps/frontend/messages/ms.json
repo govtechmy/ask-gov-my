@@ -1,0 +1,105 @@
+{
+  "Masthead": {
+    "official_gov_website": "Portal Rasmi Kerajaan Malaysia",
+    "how_to_identify": "Kenal pasti begini",
+    "official": "Pautan portal rasmi berakhir dengan .gov.my",
+    "not_govmy": "Sekiranya anda melihat pautan selain ",
+    "close_site": ", segera tutupkan halaman itu walaupun ia menyerupai portal rasmi!",
+    "secure": "Portal yang selamat menggunakan HTTPS",
+    "find_lock": "Periksa ikon loker (",
+    "or": ") atau ",
+    "precaution": " di depan pautan. Sekiranya tiada, jangan kongsikan sebarang maklumat sensitif."
+  },
+
+  "Footer": {
+    "api_docs": "Dokumentasi API",
+    "admin_login": "Admin Log Masuk",
+    "gov_mys": "Kerajaan Malaysia",
+    "Home": "Halaman Utama"
+  },
+  "Nav": {
+    "Theme": {
+      "toggle_theme": "Pilih Mod",
+      "toggle_light": "Pilih Mod Terang",
+      "toggle_dark": "Pilih Mod Gelap"
+    }
+  },
+
+  "Checkmail": {
+    "checkmail": "Sila semak email anda",
+    "para1": "Kami telah menghantar pautan magic ke emel ",
+    "para2": "Klik pautan untuk log masuk.",
+    "backclick": "Kembali untuk Log masuk "
+  },
+
+  "Adminlogin": {
+    "h1": "Log masuk ke AskMyGov",
+    "para1": "Selamat kembali! Sila masukkan butiran anda.",
+    "email": "Emel",
+    "1stbutton": "Teruskan dengan Emel",
+    "or": "ATAU",
+    "2ndbutton": "Teruskan dengan MyGovUC",
+    "forgotpass": "Lupa kata laluan?"
+  },
+
+  "Topics": {
+    "topic": "Topik-Topik",
+    "alltopics": "Semua Topik",
+    "relatedtopics": "Topik Berkaitan",
+    "showing": "Memaparkan",
+    "questionsin": "soalan topik",
+    "notfound": "Kami tidak dapat mencari sebarang soalan untuk topik yang dipilih."
+  },
+
+  "Search": {
+    "title": "Pusat sehenti anda untuk bertanya soalan kepada pegawai Kerajaan!",
+    "reminder": "Anda mesti mencari antara soalan sedia ada sebelum anda dibenarkan bertanya",
+    "search": "Cari mengikut kata kunci atau nama agensi (cth. KKM, MOT)",
+    "search_agency": "Cari mengikut kata kunci (cth COVID-19, MySejahtera)",
+    "search_result": "jumlah carian untuk ",
+    "press_enter": "Tekan",
+    "enter_key": "ENTER",
+    "display_matches": "untuk memaparkan semua padanan",
+    "searching": "Sedang mencari...",
+    "no_results": "Tiada hasil dijumpai.",
+    "answernotfound": "Kami tidak dapat menemukan jawapan untuk pertanyaan anda. Sila gunakan kotak carian sekali lagi."
+  },
+
+  "Mainpage": {
+    "trendingQ": "Soalan-soalan sohor kini",
+    "trendingA": "Agensi-agensi sohor kini"
+  },
+
+  "Askquestions": {
+    "ask_new_question": "Tanya soalan baru",
+    "cant_find": "Saya tidak dapat mencari apa yang saya cari.",
+    "your_question": "Soalan anda",
+    "type_your_question": "Taip soalan anda...",
+    "your_name": "Nama anda",
+    "name_not_displayed": "Nama anda tidak akan dipaparkan secara terbuka.",
+    "notify_me": "Beritahu saya",
+    "your_email": "namaanda@contoh.com",
+    "email_updates": "Kami akan menghantar kemas kini mengenai soalan anda.",
+    "response_time_p1": "Biasanya kami akan memberi respons dalam",
+    "response_time_p2": "3 hingga 15 hari bekerja",
+    "response_time_p3": "tetapi mungkin mengambil masa lebih lama jika soalan anda memerlukan kerjasama dengan pihak lain.",
+    "response_public_p1": "Apabila kami telah memberi respons, soalan dan jawapan",
+    "response_public_p2": "mungkin akan diterbitkan secara awam di AskMyGov",
+    "response_public_p3": "untuk membantu rakyat lain.",
+    "submit": "Hantar",
+    "terms": "Dengan menghantar, anda bersetuju dengan Terma Penggunaan dan Dasar Privasi AskMyGov.",
+    "submission_received": "Penerimaan Penghantaran",
+    "submission_received_detail": "Soalan anda telah diterima. Kami akan berusaha sedaya upaya untuk menghubungkan anda dengan agensi yang berkaitan.",
+    "close": "Tutup"
+  },
+
+  "Questiondetail": {
+    "home": "Halaman Utama",
+    "posted": "Disiarkan",
+    "topics": "Topik-topik",
+    "attachment": "Lampiran Sokongan",
+    "feedback": "Terima kasih atas maklum balas anda!",
+    "response": "Adakah jawapan ini membantu?",
+    "answered": "Dijawab 1 tahun lepas"
+  }
+}
