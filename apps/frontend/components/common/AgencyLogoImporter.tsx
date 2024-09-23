@@ -1,6 +1,6 @@
-import JataNegaraIcon from '@/icons/jatanegaraicon';
-import React from 'react';
-import Image from 'next/image';
+import JataNegaraIcon from "@/icons/jatanegaraicon";
+import React from "react";
+import Image from "next/image";
 
 interface AgencyLogoImporterProps {
   currentAgency: {
@@ -15,7 +15,7 @@ const AgencyLogoImporter: React.FC<AgencyLogoImporterProps> = ({
   logo_url,
 }) => {
   // Determine which logo URL to use
-  const logoToUse = currentAgency.logo_url || logo_url;
+  const logoToUse = currentAgency?.logo_url || logo_url;
 
   return (
     <>

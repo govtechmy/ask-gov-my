@@ -2,26 +2,22 @@ import {
   getTrendingAgencies,
   getDynamicAgencyMap,
   getAgencyList,
-} from '@/actions/questionServices';
-import { searchQuestionsWithPagination } from '@/actions/searchServices';
-import QuestionBox from '@/components/common/QuestionBox/QuestionBox';
-import Footer from '@/components/common/Footer';
-import TrendingAgencies from '@/components/common/TrendingAgencies';
-import WordTranslate from '@/components/common/WordTranslate';
+} from "@/actions/questionServices";
+import { searchQuestionsWithPagination } from "@/actions/searchServices";
+import QuestionBox from "@/components/common/QuestionBox/QuestionBox";
+import Footer from "@/components/common/Footer";
+import TrendingAgencies from "@/components/common/TrendingAgencies";
+import WordTranslate from "@/components/common/WordTranslate";
+import { FSP, inject } from "@/lib/decorator";
 
-interface SearchResultPageProps {
-  searchParams: {
-    query?: string;
-    page?: string;
+const SearchResultPage: FSP = async ({ searchParams }) => {
+  const { page, query, start, end } = searchParams || {
+    page: 1,
+    query: "",
+    start: undefined,
+    end: undefined,
   };
-}
-
-const SearchResultPage = async ({ searchParams }: SearchResultPageProps) => {
-  const query = searchParams.query || '';
-  const currentPage = searchParams.page ? parseInt(searchParams.page, 10) : 1;
-
-  const questions = await searchQuestionsWithPagination(query, currentPage);
-
+  const questions = await searchQuestionsWithPagination(query, page);
   const trendingAgencies = await getTrendingAgencies();
   const agencyMap = await getDynamicAgencyMap();
   const agencyList = await getAgencyList();
@@ -33,7 +29,7 @@ const SearchResultPage = async ({ searchParams }: SearchResultPageProps) => {
           <div className="font-semibold text-base text-black-700 pb-7 flex">
             {questions.totalItems}&nbsp;
             <div>
-              <WordTranslate translate={'Search'} keyword={'search_result'} />
+              <WordTranslate translate={"Search"} keyword={"search_result"} />
             </div>
             <div>&nbsp;"{query}"</div>
           </div>
@@ -46,8 +42,8 @@ const SearchResultPage = async ({ searchParams }: SearchResultPageProps) => {
           ) : (
             <div className="h-[220px] w-[900px] text-dim-500">
               <WordTranslate
-                translate={'Search'}
-                keyword={'answernotfound'}
+                translate={"Search"}
+                keyword={"answernotfound"}
               ></WordTranslate>
             </div>
           )}
@@ -55,7 +51,7 @@ const SearchResultPage = async ({ searchParams }: SearchResultPageProps) => {
 
         <div className="pl-10 w-[500px]">
           <div className="font-semibold text-base text-black-700">
-            <WordTranslate translate={'Mainpage'} keyword={'trendingA'} />
+            <WordTranslate translate={"Mainpage"} keyword={"trendingA"} />
           </div>
           <TrendingAgencies trendingAgencies={trendingAgencies} />
         </div>
@@ -66,4 +62,4 @@ const SearchResultPage = async ({ searchParams }: SearchResultPageProps) => {
   );
 };
 
-export default SearchResultPage;
+export default inject(SearchResultPage);
