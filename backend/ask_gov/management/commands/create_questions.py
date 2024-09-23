@@ -132,14 +132,14 @@ class Command(BaseCommand):
                 random_attachments = random.sample(attachments, num_attachments)
                 question = Question.objects.create(
                     question=f"Sample question {j} for {name} but we have to make it longer for UI adjustments, this should go as max as 255 chars",
-                    state="completed",
+                    spam=False,
                     agency=agency,
                     email=f"sample{j}@example.com",
                     attachments= random_attachments,
                 )
                 question.topics.set(random.sample(topics, k=random.randint(1, 5)))
                 question.save()
-                Answer.objects.create(question=question, raw=raw_answer, text=text_answer)
+                Answer.objects.create(question=question, raw=raw_answer, text=text_answer, draft=False)
                 self.stdout.write(self.style.SUCCESS(f"Creating question ID {question.id}"))
 
         self.stdout.write(self.style.SUCCESS("Successfully seeded agencies, topics, questions data, and updated answers"))
