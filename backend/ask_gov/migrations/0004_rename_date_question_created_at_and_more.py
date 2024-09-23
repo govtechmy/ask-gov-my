@@ -4,6 +4,23 @@ import django.db.models.deletion
 from django.db import migrations, models
 
 
+def migrate_answers(apps, editor_schema):
+    Question = apps.get_model('ask_gov', 'Question')
+    Answer = apps.get_model('ask_gov', 'Answer')
+    for question in Question.objects.all():
+        raw = question.temp_answer
+        text = question.temp_answer_preview
+        likes = question.likes
+        dislikes = question.dislikes
+        answer = Answer.objects.create(
+            raw=raw,
+            text=text,
+            likes=likes,
+            dislikes=dislikes,
+            question=question
+        )
+        answer.save()
+
 class Migration(migrations.Migration):
 
     dependencies = [
@@ -11,35 +28,20 @@ class Migration(migrations.Migration):
     ]
 
     operations = [
-        migrations.RenameField(
-            model_name='question',
-            old_name='date',
-            new_name='created_at',
-        ),
-        migrations.RemoveField(
-            model_name='question',
-            name='answer',
-        ),
-        migrations.RemoveField(
-            model_name='question',
-            name='answer_preview',
-        ),
-        migrations.RemoveField(
-            model_name='question',
-            name='answered_date',
-        ),
-        migrations.RemoveField(
-            model_name='question',
-            name='dislikes',
-        ),
-        migrations.RemoveField(
-            model_name='question',
-            name='likes',
-        ),
         migrations.AlterField(
             model_name='question',
             name='agency',
             field=models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.CASCADE, related_name='questions', to='ask_gov.agency'),
+        ),
+        migrations.RenameField(
+            model_name='question',
+            old_name='answer',
+            new_name='temp_answer',
+        ),
+        migrations.RenameField(
+            model_name='question',
+            old_name='answer_preview',
+            new_name='temp_answer_preview',
         ),
         migrations.CreateModel(
             name='Answer',
@@ -54,5 +56,31 @@ class Migration(migrations.Migration):
                 ('updated_at', models.DateTimeField(auto_now=True)),
                 ('question', models.OneToOneField(on_delete=django.db.models.deletion.CASCADE, to='ask_gov.question')),
             ],
+        ),
+        migrations.RunPython(migrate_answers),
+        migrations.RenameField(
+            model_name='question',
+            old_name='date',
+            new_name='created_at',
+        ),
+        migrations.RemoveField(
+            model_name='question',
+            name='temp_answer',
+        ),
+        migrations.RemoveField(
+            model_name='question',
+            name='temp_answer_preview',
+        ),
+        migrations.RemoveField(
+            model_name='question',
+            name='answered_date',
+        ),
+        migrations.RemoveField(
+            model_name='question',
+            name='dislikes',
+        ),
+        migrations.RemoveField(
+            model_name='question',
+            name='likes',
         ),
     ]
