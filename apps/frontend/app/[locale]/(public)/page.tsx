@@ -8,16 +8,16 @@ import QuestionBox from "@/components/common/QuestionBox/QuestionBox";
 import Footer from "@/components/common/Footer";
 import TrendingAgencies from "@/components/common/TrendingAgencies";
 import WordTranslate from "@/components/common/WordTranslate";
+import { FSP, inject } from "@/lib/decorator";
 
-interface MainPageProps {
-  searchParams: {
-    page?: string;
+const MainPage: FSP = async ({ searchParams }) => {
+  const { page, search, start, end } = searchParams || {
+    page: 1,
+    search: "",
+    start: undefined,
+    end: undefined,
   };
-}
-
-const MainPage = async ({ searchParams }: MainPageProps) => {
-  const currentPage = searchParams.page ? parseInt(searchParams.page, 10) : 1;
-  const questions = await getAllQuestions(currentPage);
+  const questions = await getAllQuestions(page);
   const trendingAgencies = await getTrendingAgencies();
   const agencyList = await getAgencyList();
   const agencyMap = await getDynamicAgencyMap();
@@ -48,4 +48,4 @@ const MainPage = async ({ searchParams }: MainPageProps) => {
   );
 };
 
-export default MainPage;
+export default inject(MainPage);

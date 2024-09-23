@@ -1,6 +1,7 @@
-'use client';
-import { useParams } from 'next/navigation';
-import { Agency } from '@/types/types';
+"use client";
+import { useParams } from "next/navigation";
+import { Agency } from "@/types/types";
+import { defaultLocale } from "@/lib/i18n";
 
 interface AgencyNameProps {
   agency: Agency;
@@ -10,11 +11,11 @@ const AgencyName: React.FC<AgencyNameProps> = ({ agency }) => {
   const params = useParams();
   const locale = params.locale;
 
-  const displayName = locale === 'ms' ? agency.name_ms : agency.name;
+  const displayName = locale === defaultLocale ? agency?.name_ms : agency?.name;
 
   return (
     <p>
-      {displayName} ({agency.acronym})
+      {displayName} ({agency?.acronym})
     </p>
   );
 };
