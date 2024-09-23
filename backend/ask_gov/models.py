@@ -35,8 +35,8 @@ class Question(models.Model):
     topics = models.ManyToManyField(Topic, blank=True)
     email = models.EmailField()
     attachments = ArrayField(models.URLField(), blank=True, default=list)
-    admin_isopen = models.BooleanField(default=False)
-    staff_isopen = models.BooleanField(default=False)
+    admin_opened_at = models.DateTimeField(null=True, blank=True)
+    staff_opened_at = models.DateTimeField(null=True, blank=True)
 
     objects = QuestionManager()
 
