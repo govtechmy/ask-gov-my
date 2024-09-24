@@ -1,10 +1,9 @@
-'use client';
+"use client";
 
-import React from 'react';
-import AnswerQuestionCard from './AnswerQuestionCard';
-import Pagination from '../ui/pagination';
-import { Question } from '@/types/types';
-import { useSearchParams, useRouter } from 'next/navigation';
+import React from "react";
+import AnswerQuestionCard from "./AnswerQuestionCard";
+import { Question } from "@/types/types";
+import { useSearchParams, useRouter } from "next/navigation";
 
 interface QuestionBoxProps {
   data: {
@@ -22,7 +21,7 @@ const StaffQuestionBox: React.FC<QuestionBoxProps> = ({ data }) => {
   const handlePageChange = (page: number) => {
     if (page >= 1 && page <= totalPages) {
       const params = new URLSearchParams(searchParams.toString());
-      params.set('page', page.toString());
+      params.set("page", page.toString());
       router.push(`${window.location.pathname}?${params.toString()}`);
     }
   };
@@ -35,16 +34,11 @@ const StaffQuestionBox: React.FC<QuestionBoxProps> = ({ data }) => {
         </p>
       ) : (
         <>
-          {questions.map(question => (
+          {questions.map((question) => (
             <div className="py-1" key={question.id}>
               <AnswerQuestionCard question={question} />
             </div>
           ))}
-          <Pagination
-            currentPage={currentPage}
-            totalPages={totalPages}
-            onPageChange={handlePageChange}
-          />
         </>
       )}
     </div>
