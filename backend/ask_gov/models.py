@@ -1,6 +1,5 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser
-from django.utils import timezone
 import uuid
 
 
@@ -9,7 +8,8 @@ class Agency(models.Model):
     name_ms = models.CharField(null=True, blank=True)
     acronym = models.CharField(max_length=50, null=True, blank=True)
     logo_url = models.URLField(max_length=500, null=True, blank=True)
-    last_edited = models.DateTimeField(auto_now=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
 
     def __str__(self):
         return self.name
@@ -19,6 +19,8 @@ class Topic(models.Model):
     title = models.CharField()
     title_ms = models.CharField(null=True, blank=True)
     agency = models.ForeignKey(Agency, on_delete=models.CASCADE)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
 
     def __str__(self):
         return self.title
@@ -29,13 +31,14 @@ class QuestionManager(models.Manager):
 
 class Question(models.Model):
     question = models.TextField()
-    created_at = models.DateTimeField(auto_now_add=True)
     spam = models.BooleanField(default=False)
     agency = models.ForeignKey(Agency, on_delete=models.CASCADE, null=True, blank=True, related_name='questions')
     topics = models.ManyToManyField(Topic, blank=True)
     email = models.EmailField()
     admin_opened_at = models.DateTimeField(null=True, blank=True)
     staff_opened_at = models.DateTimeField(null=True, blank=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
 
     objects = QuestionManager()
 
@@ -73,10 +76,10 @@ class User(AbstractUser):
     email_verified = models.DateTimeField(null=True, blank=True)
     image = models.URLField(null=True, blank=True)
     role = models.CharField(choices=UserRole.choices, default=UserRole.STAFF)
-    created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now=True)
     agency = models.IntegerField(null=True, blank=True)
     user_profile_colour = models.CharField(max_length=50, null=True, blank=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
 
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = []
@@ -109,7 +112,7 @@ class Attachment(models.Model):
     answer = models.ForeignKey('Answer', related_name='attachments', on_delete=models.CASCADE)
     filekey = models.CharField(max_length=255, verbose_name="S3 File Key")
     filesize = models.PositiveIntegerField(verbose_name="File Size (bytes)")
-    created_at = models.DateTimeField(default=timezone.now)
+    created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
     @property
