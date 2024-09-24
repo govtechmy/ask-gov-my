@@ -1,6 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser
-from django.contrib.postgres.fields import ArrayField
+from django.utils import timezone
 import uuid
 
 
@@ -34,7 +34,6 @@ class Question(models.Model):
     agency = models.ForeignKey(Agency, on_delete=models.CASCADE, null=True, blank=True, related_name='questions')
     topics = models.ManyToManyField(Topic, blank=True)
     email = models.EmailField()
-    attachments = ArrayField(models.URLField(), blank=True, default=list)
     admin_opened_at = models.DateTimeField(null=True, blank=True)
     staff_opened_at = models.DateTimeField(null=True, blank=True)
 
@@ -105,3 +104,14 @@ class VerificationToken(models.Model):
     identifier = models.CharField()
     token = models.CharField()
     expires = models.DateTimeField()
+
+class Attachment(models.Model):
+    answer = models.ForeignKey('Answer', related_name='attachments', on_delete=models.CASCADE)
+    filekey = models.CharField(max_length=255, verbose_name="S3 File Key")
+    filesize = models.PositiveIntegerField(verbose_name="File Size (bytes)")
+    created_at = models.DateTimeField(default=timezone.now)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    @property
+    def filesize_mb(self):
+        return round(self.filesize / (1024 * 1024), 2)
