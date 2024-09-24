@@ -9,7 +9,7 @@ class AgencySerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Agency
-        fields = ['id', 'name', 'name_ms', 'acronym', 'total_likes', 'logo_url', 'last_edited']
+        fields = ['id', 'name', 'name_ms', 'acronym', 'total_likes', 'logo_url', 'updated_at']
 
 class TopicSerializer(serializers.ModelSerializer):
     agency = AgencySerializer()
