@@ -79,15 +79,6 @@ class Command(BaseCommand):
             "Numbered list 1 Numbered list 2 Numbered list 3 Bullet list 1 Bullet list 2 Bullet list 3"
         )
 
-        attachments = [
-        'https://ask-gov.s3.ap-southeast-2.amazonaws.com/uploads/1721178829856-sample (1).pdf',
-        'https://ask-gov.s3.ap-southeast-2.amazonaws.com/uploads/file-example_PDF_1MB.pdf',
-        'https://ask-gov.s3.ap-southeast-2.amazonaws.com/uploads/lovepik-kuala-lumpur-landmark-twin-towers-png-image_401483213_wh1200.png',
-        'https://ask-gov.s3.ap-southeast-2.amazonaws.com/uploads/random_pic121211111111111hdnaujdnowada.jpg',
-        'https://ask-gov.s3.ap-southeast-2.amazonaws.com/uploads/robby-mccullough-iCoKBp2bZEU-unsplash.jpg',
-        'https://ask-gov.s3.ap-southeast-2.amazonaws.com/uploads/SamplePDFFile_5mb.pdf',
-        'https://ask-gov.s3.ap-southeast-2.amazonaws.com/uploads/Very+Important.png',
-        ]
 
         agencies = [
             ("Ministry of Agriculture and Food Security", "MAFS", "Kementerian Pertanian dan Keterjaminan Makanan"),
@@ -128,14 +119,11 @@ class Command(BaseCommand):
                 self.stdout.write(self.style.SUCCESS(f"Adding Topic {i} for {name}"))
 
             for j in range(1, 11):
-                num_attachments = random.randint(3, 7)
-                random_attachments = random.sample(attachments, num_attachments)
                 question = Question.objects.create(
                     question=f"Sample question {j} for {name} but we have to make it longer for UI adjustments, this should go as max as 255 chars",
                     spam=False,
                     agency=agency,
                     email=f"sample{j}@example.com",
-                    attachments= random_attachments,
                 )
                 question.topics.set(random.sample(topics, k=random.randint(1, 5)))
                 question.save()
