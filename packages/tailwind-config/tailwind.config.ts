@@ -2,7 +2,8 @@ import type { Config } from "tailwindcss";
 import tailwindcssAnimate from "tailwindcss-animate";
 import colors from "tailwindcss/colors";
 
-const config: Omit<Config, "content"> = {
+const config: Config = {
+  content: ["./src/**/*.{js,ts,jsx,tsx,mdx}"],
   darkMode: "selector",
   theme: {
     container: {

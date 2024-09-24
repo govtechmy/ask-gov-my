@@ -1,12 +1,10 @@
-'use client';
+"use client";
 
-import React, { useState } from 'react';
-import AdminQuestionCard from './AdminQuestionCard';
-import { Question, Agency } from '@/types/types';
-import Pagination from '../ui/pagination';
-import { useSearchParams } from 'next/navigation';
-import { useRouter } from '@/lib/i18n';
-
+import React, { useState } from "react";
+import AdminQuestionCard from "./AdminQuestionCard";
+import { Question, Agency } from "@/types/types";
+import { useSearchParams } from "next/navigation";
+import { useRouter } from "@/lib/i18n";
 interface AdminQuestionBoxProps {
   data: {
     questions: Question[];
@@ -29,14 +27,14 @@ const AdminQuestionBox: React.FC<AdminQuestionBoxProps> = ({
   const handlePageChange = (page: number) => {
     if (page >= 1 && page <= totalPages) {
       const params = new URLSearchParams(searchParams.toString());
-      params.set('page', page.toString());
+      params.set("page", page.toString());
       router.push(`${window.location.pathname}?${params.toString()}`);
     }
   };
 
   return (
     <div>
-      {questions.map(question => (
+      {questions.map((question) => (
         <div className="py-1" key={question.id}>
           <AdminQuestionCard
             key={question.id}
@@ -48,11 +46,6 @@ const AdminQuestionBox: React.FC<AdminQuestionBoxProps> = ({
           />
         </div>
       ))}
-      <Pagination
-        currentPage={currentPage}
-        totalPages={totalPages}
-        onPageChange={handlePageChange}
-      />
     </div>
   );
 };

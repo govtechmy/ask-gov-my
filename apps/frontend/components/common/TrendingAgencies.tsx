@@ -1,8 +1,8 @@
-'use client';
-import { useParams } from 'next/navigation';
-import { Link } from '@/lib/i18n';
-import AgencyLogoImporter from './AgencyLogoImporter';
-import { Agency } from '@/types/types';
+"use client";
+import { useParams } from "next/navigation";
+import { Link } from "@/lib/i18n";
+import AgencyLogoImporter from "./AgencyLogoImporter";
+import { Agency } from "@/types/types";
 
 interface TrendingAgenciesProps {
   trendingAgencies: Agency[];
@@ -29,7 +29,7 @@ const TrendingAgencies: React.FC<TrendingAgenciesProps> = ({
                   </div>
                 </div>
                 <div className="text-base font-normal text-black-800 hover:text-askmygovtextbrand-600 hover:cursor-pointer">
-                  {locale === 'ms' ? agency.name_ms : agency.name}
+                  {locale === "ms" ? agency.name_ms : agency.name}
                 </div>
               </div>
             </Link>
