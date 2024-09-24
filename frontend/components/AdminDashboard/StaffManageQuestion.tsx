@@ -31,6 +31,7 @@ const StaffManageQuestions = async ({
     date,
   );
 
+  // console.log('staffManageQuestions', data);
   return (
     <div className="container max-w-screen-lg px-6 mx-auto justify-between">
       <StaffQuestionNavbar unansweredCount={data.unansweredCount} />

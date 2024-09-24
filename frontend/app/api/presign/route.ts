@@ -7,19 +7,19 @@ import {
 import { NextRequest, NextResponse } from 'next/server';
 import { getSignedUrl } from '@aws-sdk/s3-request-presigner';
 if (
-  !process.env.AWS_REGION ||
-  !process.env.FILE_AWS_ACCESS_KEY_ID ||
-  !process.env.FILE_AWS_SECRET_ACCESS_KEY ||
-  !process.env.FILE_AWS_BUCKET_NAME
+  !process.env.FIKRI_S3_REGION ||
+  !process.env.FIKRI_ACCESS_KEY_ID ||
+  !process.env.FIKRI_SECRET_ACCESS_KEY ||
+  !process.env.FIKRI_BUCKET
 ) {
   throw new Error('Missing required S3 configuration environment variables');
 }
 
 const client = new S3Client({
-  region: process.env.AWS_REGION,
+  region: process.env.FIKRI_S3_REGION,
   credentials: {
-    accessKeyId: process.env.FILE_AWS_ACCESS_KEY_ID,
-    secretAccessKey: process.env.FILE_AWS_SECRET_ACCESS_KEY,
+    accessKeyId: process.env.FIKRI_ACCESS_KEY_ID,
+    secretAccessKey: process.env.FIKRI_SECRET_ACCESS_KEY,
   },
 });
 
@@ -48,7 +48,6 @@ export async function GET(request: NextRequest) {
       const url = await generatePresignedUrl(file, operation);
       return NextResponse.json({ presignedUrl: url });
     } else {
-      // operation == 'HEAD'
       const fileSize = await getFileSize(file);
       return NextResponse.json({ data: fileSize });
     }

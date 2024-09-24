@@ -175,7 +175,8 @@ class AllQuestionsByAgencyView(generics.ListAPIView):
         search_term = self.request.query_params.get('search', None)
         date_str = self.request.query_params.get('date', None)
 
-        queryset = Question.objects.filter(agency=agency)
+        # queryset = Question.objects.filter(agency=agency)
+        queryset = Question.objects.filter(agency=agency).prefetch_related('attachments')
         if tab == 'unanswered':
             queryset = queryset.filter(answer__isnull=True)
         elif tab == 'answered':
