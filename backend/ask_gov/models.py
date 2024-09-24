@@ -106,7 +106,7 @@ class VerificationToken(models.Model):
     expires = models.DateTimeField()
 
 class Attachment(models.Model):
-    question_id = models.ForeignKey('Question', related_name='attachments', on_delete=models.CASCADE)
+    answer = models.ForeignKey('Answer', related_name='attachments', on_delete=models.CASCADE)
     filekey = models.CharField(max_length=255, verbose_name="S3 File Key")
     filesize = models.PositiveIntegerField(verbose_name="File Size (bytes)")
     created_at = models.DateTimeField(default=timezone.now)
