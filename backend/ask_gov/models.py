@@ -23,37 +23,43 @@ class Topic(models.Model):
     def __str__(self):
         return self.title
 
+class QuestionManager(models.Manager):
+    def trending(self):
+        return self.get_queryset().filter(answer__isnull=False, answer__draft=False).order_by('-answer__likes', 'id')
 
 class Question(models.Model):
-    BACKLOG = 'backlog'
-    COMPLETED = 'completed'
-    SPAM = 'spam'
-    DRAFT = 'draft'
-
-    STATE_CHOICES = [
-        (BACKLOG, 'Backlog'),
-        (COMPLETED, 'Completed'),
-        (SPAM, 'Spam'),
-        (DRAFT, 'Draft'),
-    ]
-
     question = models.TextField()
-    date = models.DateTimeField(auto_now_add=True)
-    state = models.CharField(max_length=10, choices=STATE_CHOICES, default=BACKLOG)
-    agency = models.ForeignKey(Agency, on_delete=models.CASCADE, null=True, blank=True)
-    answer = models.TextField(null=True, blank=True)
-    answer_preview = models.CharField(null=True, blank=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    spam = models.BooleanField(default=False)
+    agency = models.ForeignKey(Agency, on_delete=models.CASCADE, null=True, blank=True, related_name='questions')
     topics = models.ManyToManyField(Topic, blank=True)
     email = models.EmailField()
-    likes = models.IntegerField(default=0)
-    dislikes = models.IntegerField(default=0)
     attachments = ArrayField(models.URLField(), blank=True, default=list)
-    admin_isopen = models.BooleanField(default=False)
-    staff_isopen = models.BooleanField(default=False)
-    answered_date = models.DateTimeField(null=True, blank=True)
+    admin_opened_at = models.DateTimeField(null=True, blank=True)
+    staff_opened_at = models.DateTimeField(null=True, blank=True)
+
+    objects = QuestionManager()
+
+    def has_answer(self):
+        return hasattr(self, 'answer')
 
     def __str__(self):
         return self.question[:50]
+
+
+class Answer(models.Model):
+    question = models.OneToOneField(Question, on_delete=models.CASCADE)
+    raw = models.CharField()
+    text = models.CharField()
+    likes = models.IntegerField(default=0)
+    dislikes = models.IntegerField(default=0)
+    version = models.IntegerField(default=0)
+    draft = models.BooleanField()
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return self.answer_preview[:50]
 
 
 class UserRole(models.TextChoices):

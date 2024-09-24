@@ -1,6 +1,6 @@
 import random
 from django.core.management.base import BaseCommand
-from ask_gov.models import Agency, Topic, Question
+from ask_gov.models import Agency, Answer, Topic, Question
 
 class Command(BaseCommand):
     help = 'Seeds the database with agencies, topics, and questions, and updates the answer and answer_preview fields for all questions'
@@ -11,7 +11,7 @@ class Command(BaseCommand):
         Topic.objects.all().delete()
         Question.objects.all().delete()
 
-        new_answer = (
+        raw_answer = (
             "<h1>Answer</h1><h1>heading 1</h1><h2>heading 2</h2><h3>heading 3</h3>"
             "<h4>heading 4</h4><h5>heading 5</h5><h6>heading 6</h6>"
             "<p><strong>In today's rapidly changing world, the concept of lifelong learning has gained significant importance.</strong> "
@@ -42,7 +42,7 @@ class Command(BaseCommand):
             "<ul><li><p>Bullet list 1</p></li><li><p>Bullet list 2</p></li><li><p>Bullet list 3</p></li></ul>"
         )
 
-        new_answer_preview = (
+        text_answer = (
             "Answer heading 1 heading 2 heading 3 heading 4 heading 5 heading 6 "
             "In today's rapidly changing world, the concept of lifelong learning has gained significant importance. "
             "Lifelong learning refers to the ongoing, voluntary, and self-motivated pursuit of knowledge for personal or professional development. "
@@ -132,20 +132,14 @@ class Command(BaseCommand):
                 random_attachments = random.sample(attachments, num_attachments)
                 question = Question.objects.create(
                     question=f"Sample question {j} for {name} but we have to make it longer for UI adjustments, this should go as max as 255 chars",
-                    state="completed",
+                    spam=False,
                     agency=agency,
                     email=f"sample{j}@example.com",
-                    answer=new_answer,
-                    answer_preview=new_answer_preview,
                     attachments= random_attachments,
                 )
                 question.topics.set(random.sample(topics, k=random.randint(1, 5)))
                 question.save()
+                Answer.objects.create(question=question, raw=raw_answer, text=text_answer, draft=False)
                 self.stdout.write(self.style.SUCCESS(f"Creating question ID {question.id}"))
-
-        for question in Question.objects.all():
-            question.answered_date = question.date
-            question.save()
-            self.stdout.write(self.style.SUCCESS(f'Successfully updated Question {question.id} answered_date field'))
 
         self.stdout.write(self.style.SUCCESS("Successfully seeded agencies, topics, questions data, and updated answers"))
