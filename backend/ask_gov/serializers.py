@@ -1,6 +1,6 @@
 from rest_framework import serializers
 from django.contrib.auth import get_user_model
-from .models import Agency, Question, Topic, User, Account, Session, VerificationToken
+from .models import Agency, Answer, Question, Topic, User, Account, Session, VerificationToken
 
 User = get_user_model()
 
@@ -18,8 +18,15 @@ class TopicSerializer(serializers.ModelSerializer):
         model = Topic
         fields = '__all__'
 
+class AnswerSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Answer
+        fields = ['raw', 'text', 'likes', 'draft', 'created_at', 'updated_at']
+        read_only_fields = ['text', 'likes', 'draft', 'created_at', 'updated_at']
+
 class QuestionSerializer(serializers.ModelSerializer):
     topics = serializers.PrimaryKeyRelatedField(many=True, queryset=Topic.objects.all(), required=False)
+    answer = AnswerSerializer(read_only=True)
 
     class Meta:
         model = Question
@@ -33,6 +40,7 @@ class QuestionSerializer(serializers.ModelSerializer):
             question.topics.add(topic)
         
         return question
+
     
 class UserSerializer(serializers.ModelSerializer):
     class Meta:

@@ -13,7 +13,8 @@ def index_question(sender, instance, **kwargs):
     serializer = QuestionSerializer(instance)
     document = serializer.data
 
-    document['answer'] = instance.answer_preview
+    if instance.has_answer():
+        document['answer'] = instance.answer.text
 
     document.pop('admin_isopen', None)
     document.pop('staff_isopen', None)
