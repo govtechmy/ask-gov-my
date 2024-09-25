@@ -1,30 +1,30 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect } from "react";
 import {
   assignAgencyToQuestion,
   changeAdminIsOpen,
   markQuestionAsSpam,
   unassignAgencyFromQuestion,
   unSpamQuestion,
-} from '@/actions/userServices';
-import NewUpdateIcon from '@/icons/new';
-import { Question } from '@/types/types';
-import ModalQuestionCard from './ModalQuestionCard';
-import SpamUpdateIcon from '@/icons/spam';
-import { useSearchParams } from 'next/navigation';
-import ThreeDottedAction from './ThreeDottedAction';
-import AlarmTriangle from '@/icons/alarmtriangle';
-import TickCheckCircle from '@/icons/tickcheckcircle';
-import { formatDate } from '@/actions/utils';
-import { Agency } from '@/types/types';
-import Toast from '@/components/ui/toast';
+} from "@/actions/userServices";
+import NewUpdateIcon from "@/icons/new";
+import { Question } from "@/types/types";
+import ModalQuestionCard from "./ModalQuestionCard";
+import SpamUpdateIcon from "@/icons/spam";
+import { useSearchParams } from "next/navigation";
+import ThreeDottedAction from "./ThreeDottedAction";
+import AlarmTriangle from "@/icons/alarmtriangle";
+import TickCheckCircle from "@/icons/tickcheckcircle";
+import { formatDate } from "@/actions/utils";
+import { Agency } from "@/types/types";
+import Toast from "@/components/ui/toast";
 import {
   Popover,
   PopoverTrigger,
   PopoverContent,
-} from '@/components/ui/popover';
-import { AgencySearchList } from './AgencySearchList';
-import { Button } from '@/components/ui/button';
-import ChevronDown from '@/icons/ChevronDown';
+} from "@/components/ui/popover";
+import { AgencySearchList } from "./AgencySearchList";
+import { Button } from "@/components/ui/button";
+import ChevronDown from "@/icons/ChevronDown";
 
 interface QuestionCardProps {
   question: Question;
@@ -41,9 +41,9 @@ const AdminQuestionCard: React.FC<QuestionCardProps> = ({
   agencyMap,
   agencies,
 }) => {
-  const [selectedAgency, setSelectedAgency] = useState<string>('Unassigned');
+  const [selectedAgency, setSelectedAgency] = useState<string>("Unassigned");
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [successMessage, setSuccessMessage] = useState('');
+  const [successMessage, setSuccessMessage] = useState("");
   const [showSpamToast, setShowSpamToast] = useState(false);
   const [showUnSpamToast, setShowUnSpamToast] = useState(false);
   const [openAgencyPopover, setOpenAgencyPopover] = useState(false);
@@ -51,7 +51,7 @@ const AdminQuestionCard: React.FC<QuestionCardProps> = ({
   useEffect(() => {
     if (question.agency !== null) {
       const matchedAgency = agencies.find(
-        agency => agency.id === question.agency,
+        (agency) => agency.id === question.agency
       );
       if (matchedAgency) {
         setSelectedAgency(matchedAgency.acronym);
@@ -66,7 +66,7 @@ const AdminQuestionCard: React.FC<QuestionCardProps> = ({
         await changeAdminIsOpen(question.id);
         question.admin_isopen = true;
       } catch (error) {
-        console.error('Failed to change admin_isopen:', error);
+        console.error("Failed to change admin_isopen:", error);
       }
     }
   };
@@ -80,7 +80,7 @@ const AdminQuestionCard: React.FC<QuestionCardProps> = ({
   };
 
   const searchParams = useSearchParams();
-  const activeTab = searchParams.get('tab') || 'all';
+  const activeTab = searchParams.get("tab") || "all";
 
   return (
     <>
@@ -95,7 +95,7 @@ const AdminQuestionCard: React.FC<QuestionCardProps> = ({
         </div>
         <div className="flex items-center">
           <div>
-            {question.state === 'spam' && (
+            {question.state === "spam" && (
               <div className="w-16 h-8 items-center justify-center flex">
                 <SpamUpdateIcon
                   classNamePath="fill-[#FEF2F2] dark:fill-[#2B0707]"
@@ -104,7 +104,7 @@ const AdminQuestionCard: React.FC<QuestionCardProps> = ({
                 ></SpamUpdateIcon>
               </div>
             )}
-            {question.admin_isopen === false && question.state !== 'spam' && (
+            {question.admin_isopen === false && question.state !== "spam" && (
               <div className="w-16 h-8 items-center justify-center flex">
                 <NewUpdateIcon
                   classNamePath="fill-[#F0FDF4] dark:fill-[#052E16]"
@@ -113,7 +113,7 @@ const AdminQuestionCard: React.FC<QuestionCardProps> = ({
                 />
               </div>
             )}
-            {question.admin_isopen === true && question.state !== 'spam' && (
+            {question.admin_isopen === true && question.state !== "spam" && (
               <div className="h-[22px] w-[55px]"></div>
             )}
           </div>
@@ -131,7 +131,7 @@ const AdminQuestionCard: React.FC<QuestionCardProps> = ({
             >
               <AgencySearchList
                 agencies={agencies}
-                onSelect={async agency => {
+                onSelect={async (agency) => {
                   setOpenAgencyPopover(false);
                   if (!agency) {
                     await unassignAgencyFromQuestion(question.id);
@@ -148,7 +148,7 @@ const AdminQuestionCard: React.FC<QuestionCardProps> = ({
             {formatDate(question.date)}
           </div>
           <div>
-            {activeTab === 'spam' ? (
+            {activeTab === "spam" ? (
               // For Mark as Not Spam
               <ThreeDottedAction
                 question={question}

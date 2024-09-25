@@ -5,9 +5,6 @@ import QuestionCard from "./QuestionCard";
 import { Question, Agency } from "@/types/types";
 import { useSearchParams } from "next/navigation";
 import { useRouter } from "@/lib/i18n";
-import { Button } from "@askgovmy/ui";
-import { Button as _B } from "@/components/ui/button";
-
 interface PaginatedQuestions {
   data: Question[];
   totalItems: number;
@@ -41,10 +38,6 @@ const QuestionBox: React.FC<QuestionBoxProps> = ({
   return (
     <div className="flex flex-col justify-center gap-4">
       <div className="flex flex-col gap-6">
-        <Button variant={"primary"} className="bg-red-400">
-          dssada
-        </Button>
-        <_B>dsasas</_B>
         {data.map((question) => (
           <QuestionCard
             key={question.id}
