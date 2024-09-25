@@ -10,7 +10,7 @@ WORKDIR /app
 FROM base AS turbo
 RUN pnpm install turbo@2.1.2 --global
 COPY . .
-RUN turbo prune frontend --docker
+RUN turbo prune --scope=frontend --docker
 
 # Install dependencies in a separate stage to leverage Docker layer caching
 FROM base AS builder
