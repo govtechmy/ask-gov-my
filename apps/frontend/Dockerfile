@@ -5,17 +5,19 @@ ENV PATH="$PNPM_HOME:$PATH"
 
 RUN corepack enable
 WORKDIR /app
+
 # Install turbo
 FROM base AS turbo
 WORKDIR /app
 RUN pnpm install turbo@2.1.2 --global
 COPY . .
-RUN turbo prune --scope=frontend --docker
+RUN turbo prune frontend --docker
 
 # Install dependencies in a separate stage to leverage Docker layer caching
 FROM base AS builder
 RUN apk update
 RUN apk add --no-cache libc6-compat
+WORKDIR /app
 # First install the dependencies (as they change less often)
 COPY --from=turbo /app/out/json/ .
 COPY --from=turbo /app/out/pnpm-lock.yaml ./pnpm-lock.yaml
