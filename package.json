@@ -3,6 +3,7 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
+    "setup": "turbo run setup",
     "build": "turbo run build",
     "clean": "turbo run clean",
     "dev": "turbo run dev",
