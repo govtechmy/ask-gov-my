@@ -10,7 +10,7 @@ const nextConfig = {
     ],
   },
   reactStrictMode: true,
-  transpilePackages: ["@askgovmy/ui"],
+  transpilePackages: ["@askgovmy/ui", "@askgovmy/utils"],
   experimental: {
     instrumentationHook: true,
   },
