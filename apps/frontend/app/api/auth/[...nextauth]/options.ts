@@ -1,10 +1,29 @@
-import { NextAuthOptions } from "next-auth";
+import { DefaultSession, NextAuthOptions } from "next-auth";
 import EmailProvider from "next-auth/providers/email";
 import { createTransport } from "nodemailer";
 import { DjangoAdapter } from "./adapter";
 import email_html from "./email_html";
 import GoogleProvider from "next-auth/providers/google";
 import { checkUserEmailExists } from "@/actions/userServices";
+
+// Extend the built-in session type
+declare module "next-auth" {
+  interface Session extends DefaultSession {
+    user: {
+      role: "staff" | "super_admin";
+      agency: number;
+    } & DefaultSession["user"];
+  }
+
+  interface User {
+    id: string;
+    name: string;
+    email: string;
+    emailVerified: Date | null;
+    role: "staff" | "super_admin";
+    agency: number;
+  }
+}
 
 export const authOptions: NextAuthOptions = {
   providers: [

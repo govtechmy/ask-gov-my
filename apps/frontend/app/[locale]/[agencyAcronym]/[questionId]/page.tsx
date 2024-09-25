@@ -4,28 +4,28 @@ import {
   getTopicByAgency,
   getAgencyList,
   getDynamicAgencyMap,
-} from '@/actions/questionServices';
-import { getRelatedQuestions } from '@/actions/searchServices';
-import Footer from '@/components/common/Footer';
-import RelatedTopics from '@/components/QuestionDetailPage/RelatedTopics';
-import RightArrow from '@/icons/rightarrow';
-import IconQuestionSmileSolo from '@/icons/iconquestionsmilesolo';
-import ThumbsCounter from '@/components/QuestionDetailPage/ThumbsCounter';
-import AgencyName from '@/components/common/AgencyName';
-import JataNegaraIcon from '@/icons/jatanegaraicon';
-import { redirect } from 'next/navigation';
-import DateComponent from '@/components/common/Date';
-import Link from 'next/link';
-import WordTranslate from '@/components/common/WordTranslate';
-import { Question } from '@/types/types';
-import AgencyLogoImporter from '@/components/common/AgencyLogoImporter';
-import ContextSearchBar from '@/components/context/ContextSearchBar';
-import { fetchFileSizes } from '@/actions/utils';
-import AttachmentDownload from '@/components/AdminDashboard/AttachmentDownload';
-import TipTap from '@/components/Editor/TipTap';
-import BaseHeader from '@/components/common/Header/BaseHeader';
-import Masthead from '@/components/common/Header/Masthead';
-import { StyledDisplay } from '@/components/ui/display';
+} from "@/actions/questionServices";
+import { getRelatedQuestions } from "@/actions/searchServices";
+import Footer from "@/components/common/Footer";
+import RelatedTopics from "@/components/QuestionDetailPage/RelatedTopics";
+import RightArrow from "@/icons/rightarrow";
+import IconQuestionSmileSolo from "@/icons/iconquestionsmilesolo";
+import ThumbsCounter from "@/components/QuestionDetailPage/ThumbsCounter";
+import AgencyName from "@/components/common/AgencyName";
+import JataNegaraIcon from "@/icons/jatanegaraicon";
+import { redirect } from "next/navigation";
+import DateComponent from "@/components/common/Date";
+import Link from "next/link";
+import WordTranslate from "@/components/common/WordTranslate";
+import { Question } from "@/types/types";
+import AgencyLogoImporter from "@/components/common/AgencyLogoImporter";
+import ContextSearchBar from "@/components/context/ContextSearchBar";
+import { fetchFileSizes } from "@/actions/utils";
+import AttachmentDownload from "@/components/AdminDashboard/AttachmentDownload";
+import TipTap from "@/components/Editor/TipTap";
+import BaseHeader from "@/components/common/Header/BaseHeader";
+import Masthead from "@/components/common/Header/Masthead";
+import { StyledDisplay } from "@/components/ui/display";
 
 interface Props {
   params: {
@@ -33,7 +33,6 @@ interface Props {
     questionId: string;
     locale: string;
   };
-  question?: Question;
 }
 
 const QuestionDetailPage: React.FC<Props> = async ({ params }) => {
@@ -44,7 +43,7 @@ const QuestionDetailPage: React.FC<Props> = async ({ params }) => {
 
   const agencyAcronymObject = (id: number): string | undefined => {
     return Object.keys(AGENCY_TO_UUID).find(
-      key => AGENCY_TO_UUID[key] === id.toString(),
+      (key) => AGENCY_TO_UUID[key] === id.toString()
     );
   };
 
@@ -54,13 +53,16 @@ const QuestionDetailPage: React.FC<Props> = async ({ params }) => {
   try {
     question = await getQuestionById(questionId);
     if (!question) {
-      throw new Error('Question not found');
+      throw new Error("Question not found");
     }
-    if (Array.isArray(question.topics) && question.topics.every(topic => typeof topic === 'number')) {
+    if (
+      Array.isArray(question.topics) &&
+      question.topics.every((topic) => typeof topic === "number")
+    ) {
       topicTitles = await getTopicsDetail(question.topics, locale);
     }
   } catch (error) {
-    redirect('/');
+    redirect("/");
   }
 
   const attachments = question.attachments || [];
@@ -70,7 +72,7 @@ const QuestionDetailPage: React.FC<Props> = async ({ params }) => {
   try {
     fileSize = await fetchFileSizes(attachments);
   } catch (error) {
-    console.log('error on fileSize', error);
+    console.log("error on fileSize", error);
   }
 
   let agencyList: any = [];
@@ -79,13 +81,13 @@ const QuestionDetailPage: React.FC<Props> = async ({ params }) => {
     agencyList = await getAgencyList();
 
     if (!agencyList || agencyList.length === 0) {
-      throw new Error('Agency list is empty');
+      throw new Error("Agency list is empty");
     }
   } catch {}
 
   const currentAgency = agencyList.find(
     (agency: { acronym: string }) =>
-      agency.acronym === agencyAcronym.toUpperCase(),
+      agency.acronym === agencyAcronym.toUpperCase()
   );
 
   const relatedQuestions = await getRelatedQuestions(question.question);
@@ -100,11 +102,11 @@ const QuestionDetailPage: React.FC<Props> = async ({ params }) => {
         <div className="max-w-screen-2xl flex">
           <div className="pb-7 w-9/12">
             <div className="flex items-center gap-1">
-              <Link href={'/'}>
+              <Link href={"/"}>
                 <div className="font-medium text-dim-500 text-sm">
                   <WordTranslate
-                    translate={'Questiondetail'}
-                    keyword={'home'}
+                    translate={"Questiondetail"}
+                    keyword={"home"}
                   />
                 </div>
               </Link>
@@ -123,8 +125,8 @@ const QuestionDetailPage: React.FC<Props> = async ({ params }) => {
               <div className="text-black-700 flex text-base font-medium">
                 <div>
                   <WordTranslate
-                    translate={'Questiondetail'}
-                    keyword={'posted'}
+                    translate={"Questiondetail"}
+                    keyword={"posted"}
                   />
                 </div>
                 &nbsp;
@@ -149,8 +151,8 @@ const QuestionDetailPage: React.FC<Props> = async ({ params }) => {
                       </div>
                       <div className="font-medium text-sm text-dim-500">
                         <WordTranslate
-                          translate={'Questiondetail'}
-                          keyword={'answered'}
+                          translate={"Questiondetail"}
+                          keyword={"answered"}
                         />
                       </div>
                     </div>
@@ -168,7 +170,7 @@ const QuestionDetailPage: React.FC<Props> = async ({ params }) => {
                         <div className=" font-medium text-sm">Topics: </div>
                         <div className="flex gap-[6px]">
                           {topicTitles.map((TopicTitles, index) => (
-                            <StyledDisplay key={index} variant={'Topics'}>
+                            <StyledDisplay key={index} variant={"Topics"}>
                               {TopicTitles}
                             </StyledDisplay>
                           ))}
@@ -179,8 +181,8 @@ const QuestionDetailPage: React.FC<Props> = async ({ params }) => {
                   <div>
                     <div className="px-8 pb-8 pt-0">
                       <WordTranslate
-                        translate={'Questiondetail'}
-                        keyword={'attachment'}
+                        translate={"Questiondetail"}
+                        keyword={"attachment"}
                       />
                     </div>
                     <div className="mx-8 mb-8 ">

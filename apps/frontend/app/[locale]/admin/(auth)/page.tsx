@@ -1,15 +1,15 @@
-'use client';
+"use client";
 
-import { LoginForm } from '@/components/AdminLogin/LoginForm';
-import Footer from '@/components/common/Footer';
+import { LoginForm } from "@/components/AdminLogin/LoginForm";
+import Footer from "@/components/common/Footer";
 
-export function AdminPage() {
+const AdminPage = () => {
   return (
     <>
       <LoginForm />
       <Footer adminpage={true} />
     </>
   );
-}
+};
 
 export default AdminPage;
