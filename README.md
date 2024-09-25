@@ -1,95 +1,72 @@
-# Frontend Project
+# Turborepo Docker starter
 
-This project is a frontend application built with Next.js, React, and TailwindCSS. Below are the instructions to set up, develop, build, and start the application.
+This is an official Docker starter Turborepo.
 
-## Prerequisites
+## Using this example
 
-Ensure you have the following installed on your machine:
+Run the following command:
 
-- [Node.js](https://nodejs.org/) (v18 or higher recommended)
-- [npm](https://www.npmjs.com/) (v6 or higher)
+```sh
+npx create-turbo@latest -e with-docker
+```
 
-## Getting Started
+## What's inside?
 
-1. **Clone the repository**
+This Turborepo includes the following:
 
-   ```sh
-   git clone <repository-url>
-   cd frontend
-   ```
+### Apps and Packages
 
-2. **Install dependencies**
+- `web`: a [Next.js](https://nextjs.org/) app
+- `api`: an [Express](https://expressjs.com/) server
+- `@askgovmy/ui`: a React component library
+- `@askgovmy/logger`: Isomorphic logger (a small wrapper around console.log)
+- `@askgovmy/eslint-config`: ESLint presets
+- `@askgovmy/typescript-config`: tsconfig.json's used throughout the monorepo
+- `@askgovmy/jest-presets`: Jest configurations
 
-   ```sh
-   npm install
-   ```
+Each package/app is 100% [TypeScript](https://www.typescriptlang.org/).
 
-3. **Run the development server**
+### Docker
 
-   ```sh
-   npm run dev
-   ```
+This repo is configured to be built with Docker, and Docker compose. To build all apps in this repo:
 
-   Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+```
+# Install dependencies
+yarn install
 
-## Scripts
+# Create a network, which allows containers to communicate
+# with each other, by using their container name as a hostname
+docker network create app_network
 
-- **Development**
+# Build prod using new BuildKit engine
+COMPOSE_DOCKER_CLI_BUILD=1 DOCKER_BUILDKIT=1 docker-compose -f docker-compose.yml build
 
-  To start the development server:
+# Start prod in detached mode
+docker-compose -f docker-compose.yml up -d
+```
 
-  ```sh
-  npm run dev
-  ```
+Open http://localhost:3000.
 
-- **Build**
+To shutdown all running containers:
 
-  To build the application for production:
+```
+# Stop all running containers
+docker kill $(docker ps -q) && docker rm $(docker ps -a -q)
+```
 
-  ```sh
-  npm run build
-  ```
+### Remote Caching
 
-- **Start**
+This example includes optional remote caching. In the Dockerfiles of the apps, uncomment the build arguments for `TURBO_TEAM` and `TURBO_TOKEN`. Then, pass these build arguments to your Docker build.
 
-  To start the application in production mode:
+You can test this behavior using a command like:
 
-  ```sh
-  npm run start
-  ```
+`docker build -f apps/web/Dockerfile . --build-arg TURBO_TEAM=“your-team-name” --build-arg TURBO_TOKEN=“your-token“ --no-cache`
 
-- **Lint**
+### Utilities
 
-  To run ESLint:
+This Turborepo has some additional tools already setup for you:
 
-  ```sh
-  npm run lint
-  ```
-
-## Dependencies
-
-- `next`: Next.js framework
-- `react`: React library
-- `react-dom`: React DOM library
-
-## DevDependencies
-
-- `@types/node`: TypeScript definitions for Node.js
-- `@types/react`: TypeScript definitions for React
-- `@types/react-dom`: TypeScript definitions for React DOM
-- `eslint`: JavaScript linter
-- `eslint-config-next`: ESLint configuration for Next.js
-- `postcss`: Tool for transforming CSS
-- `tailwindcss`: Utility-first CSS framework
-
-## Tailwind CSS
-
-This project uses Tailwind CSS for styling. To customize Tailwind CSS, edit the `tailwind.config.js` file.
-
-## Learn More
-
-To learn more about Next.js, React, and Tailwind CSS, check out the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs)
-- [React Documentation](https://reactjs.org/docs/getting-started.html)
-- [Tailwind CSS Documentation](https://tailwindcss.com/docs)
+- [TypeScript](https://www.typescriptlang.org/) for static type checking
+- [ESLint](https://eslint.org/) for code linting
+- [Jest](https://jestjs.io) test runner for all things JavaScript
+- [Prettier](https://prettier.io) for code formatting
