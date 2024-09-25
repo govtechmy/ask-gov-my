@@ -1,4 +1,5 @@
 const createNextIntlPlugin = require("next-intl/plugin");
+const path = require("path");
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
@@ -10,8 +11,10 @@ const nextConfig = {
     ],
   },
   reactStrictMode: true,
+  output: "standalone",
   transpilePackages: ["@askgovmy/ui", "@askgovmy/utils"],
   experimental: {
+    outputFileTracingRoot: path.join(__dirname, "../../"),
     instrumentationHook: true,
   },
 };
