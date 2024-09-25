@@ -7,6 +7,7 @@ RUN corepack enable
 WORKDIR /app
 # Install turbo
 FROM base AS turbo
+WORKDIR /app
 RUN pnpm install turbo@2.1.2 --global
 COPY . .
 RUN turbo prune --scope=frontend --docker
