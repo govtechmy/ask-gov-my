@@ -27,6 +27,7 @@ yarn-error.log*
 .pnpm-debug.log*
 
 # local env files
+.env
 .env.local
 .env.development.local
 .env.test.local
@@ -34,3 +35,10 @@ yarn-error.log*
 
 # turbo
 .turbo
+
+# python/django related
+venv
+.venv/
+myenv/
+__pycache__
+.ipynb_checkpoints

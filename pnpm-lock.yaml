@@ -21,6 +21,8 @@ importers:
         specifier: ^2.1.2
         version: 2.1.2
 
+  apps/backend: {}
+
   apps/frontend:
     dependencies:
       '@askgovmy/ui':
