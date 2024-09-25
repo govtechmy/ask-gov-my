@@ -8,7 +8,6 @@ WORKDIR /app
 
 # Install turbo
 FROM base AS turbo
-WORKDIR /app
 RUN pnpm install turbo@2.1.2 --global
 COPY . .
 RUN turbo prune frontend --docker
@@ -17,7 +16,6 @@ RUN turbo prune frontend --docker
 FROM base AS builder
 RUN apk update
 RUN apk add --no-cache libc6-compat
-WORKDIR /app
 # First install the dependencies (as they change less often)
 COPY --from=turbo /app/out/json/ .
 COPY --from=turbo /app/out/pnpm-lock.yaml ./pnpm-lock.yaml
@@ -36,7 +34,6 @@ COPY --from=turbo /app/out/full/ .
 RUN pnpm run build --filter=frontend...
 
 FROM base AS runner
-# WORKDIR /app
 
 # Don't run production as root
 RUN addgroup --system --gid 1001 nodejs
