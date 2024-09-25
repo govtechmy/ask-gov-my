@@ -7,7 +7,8 @@ on:
       - staging
       - main
     paths-ignore:
-      - frontend/**
+      - apps/frontend/**
+      - packages/**
       - .kube/frontend/**
   workflow_dispatch:
 permissions:
@@ -38,8 +39,8 @@ jobs:
       - name: Build and push Docker images
         uses: docker/build-push-action@v5
         with:
-          context: backend/
-          file: backend/Dockerfile
+          context: apps/backend/
+          file: apps/backend/Dockerfile
           push: true
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
