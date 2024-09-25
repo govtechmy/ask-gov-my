@@ -1,0 +1,12 @@
+{
+  "name": "backend",
+  "version": "0.0.1",
+  "private": true,
+  "main": "manage.py",
+  "scripts": {
+    "dev": "python3 activate.py",
+    "build": "",
+    "start": "python3 manage.py runserver",
+    "lint": ""
+  }
+}
