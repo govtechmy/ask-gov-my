@@ -4,11 +4,10 @@ from rest_framework.routers import SimpleRouter
 from . import views
 from .views import (
     AgencyListView, SubmitAnswerView, UserAgencyTopicsView, AddTopicView,
-    TopicListView, AssignAgencyToQuestionView, AddAgencyView,
-    TrendingAgenciesView, UpdateAgencyView, ChangeAdminIsOpenView,
-    ChangeStaffIsOpenView, SaveDraftQuestionView, MarkQuestionAsSpamView,
-    UnSpamQuestionView, UserView, SessionView, AccountView,
-    VerificationTokenView, AddUserView, GetAllUsersView,
+    AssignAgencyToQuestionView, AddAgencyView, UpdateAgencyView,
+    ChangeAdminIsOpenView, ChangeStaffIsOpenView, SaveDraftQuestionView,
+    MarkQuestionAsSpamView, UnSpamQuestionView, UserView, SessionView,
+    AccountView, VerificationTokenView, AddUserView, GetAllUsersView,
     CheckUserEmailExistsView, EditDeleteUserView, AdminQuestionListView,
     AdminQuestionDetailView
 )
@@ -16,14 +15,11 @@ from .views import (
 router = SimpleRouter(use_regex_path=False)
 router.register("questions", views.QuestionViewSet, basename="question")
 router.register("answers", views.AnswerViewSet, basename="answer")
+router.register("agencies", views.AgencyViewSet, basename="agency")
+router.register("topics", views.TopicViewSet, basename="topic")
 
 urlpatterns = [
     path("", include(router.urls)),
-
-    # public paths
-    path('agencies/trending/', TrendingAgenciesView.as_view(), name='trending-agencies'),
-
-    path('topics/', TopicListView.as_view(), name='topics-list'),
 
     # admin paths
     path('admin/questions/', AdminQuestionListView.as_view(), name='admin-question-list'),

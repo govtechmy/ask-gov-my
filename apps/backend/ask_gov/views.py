@@ -61,6 +61,22 @@ class AnswerViewSet(
         serializer = AnswerSerializer(answer)
         return Response(serializer.data, status=status.HTTP_200_OK)
 
+class AgencyViewSet(
+    mixins.ListModelMixin,
+    viewsets.GenericViewSet,
+):
+    queryset = Agency.objects.trending()
+    serializer_class = AgencySerializer
+
+class TopicViewSet(
+    mixins.ListModelMixin,
+    viewsets.GenericViewSet,
+):
+    queryset = Topic.objects.all()
+    serializer_class = TopicSerializer
+    filter_backends = [DjangoFilterBackend]
+    filterset_fields = ["agency"]
+
 
 class AdminQuestionListView(generics.ListAPIView):
     """
@@ -139,11 +155,6 @@ class AgencyListView(generics.ListAPIView):
 
         serializer = self.get_serializer(queryset, many=True)
         return Response(serializer.data)
-
-
-class TopicListView(generics.ListAPIView):
-    queryset = Topic.objects.all()
-    serializer_class = TopicSerializer
 
 
 class SubmitAnswerView(APIView):
@@ -266,14 +277,6 @@ class AddAgencyView(APIView):
         )
         serializer = AgencySerializer(agency)
         return Response(serializer.data, status=status.HTTP_201_CREATED)
-
-
-class TrendingAgenciesView(APIView):
-    def get(self, request):
-        agencies = Agency.objects.annotate(total_likes=Sum('questions__answer__likes')).order_by('-total_likes')
-        agencies = agencies.filter(total_likes__isnull=False)
-        serializer = AgencySerializer(agencies, many=True)
-        return Response(serializer.data, status=status.HTTP_200_OK)
 
 
 class UpdateAgencyView(APIView):

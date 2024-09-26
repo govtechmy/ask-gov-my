@@ -1,7 +1,12 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser
+from django.db.models import Sum
 import uuid
 
+
+class AgencyManager(models.Manager):
+    def trending(self):
+        return self.get_queryset().annotate(total_likes=Sum('questions__answer__likes')).order_by('-total_likes')
 
 class Agency(models.Model):
     name = models.CharField()
@@ -10,6 +15,8 @@ class Agency(models.Model):
     logo_url = models.URLField(max_length=500, null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+
+    objects = AgencyManager()
 
     def __str__(self):
         return self.name
