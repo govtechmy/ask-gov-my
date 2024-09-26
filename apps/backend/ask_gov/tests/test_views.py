@@ -101,3 +101,38 @@ class TestQuestionViewSet(APITestCase):
             data=data,
         )
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+
+class TestAdminQuestionViewSet(APITestCase):
+    def setUp(self):
+        for i in range(0, 10):
+            Question.objects.create(
+                question=f"Question {i + 1}",
+                email="test@example.com",
+            )
+        self.agency = Agency.objects.create(name="Ministry of Education", name_ms="Kementerian Pendidikan", acronym="MOE")
+        self.question = Question.objects.first()
+        self.update_question_url = reverse("admin-question-detail", kwargs={"pk": self.question.id})
+
+    def test_assign_agency(self):
+        data = {
+            "agency": self.agency.id,
+        }
+        response = self.client.patch(
+            self.update_question_url,
+            data=data,
+        )
+        json_data = response.json()
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(json_data["agency"], self.agency.id)
+
+    def test_mark_as_spam(self):
+        data = {
+            "spam": True
+        }
+        response = self.client.patch(
+            self.update_question_url,
+            data=data,
+        )
+        json_data = response.json()
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(json_data["spam"], True)

@@ -1,5 +1,5 @@
 from .serializers import (
-    AnswerSerializer, QuestionSerializer, AgencySerializer,
+    AdminPatchedQuestionSerializer, AnswerSerializer, QuestionSerializer, AgencySerializer,
     TopicSerializer, UserSerializer,
     AccountSerializer, SessionSerializer,
     VerificationTokenSerializer)
@@ -77,25 +77,13 @@ class TopicViewSet(
     filter_backends = [DjangoFilterBackend]
     filterset_fields = ["agency"]
 
-
-class AdminQuestionListView(generics.ListAPIView):
-    """
-    This endpoint retrieves a list of questions for administrative purposes. It
-    allows filtering by state, agency, and search terms.
-
-    Example query parameters:
-    - state: 'completed', 'draft', 'spam', 'backlog' to filter questions by their state.
-    - agency: The ID of the agency to filter questions by.
-    - agency__isnull: 'true' to filter questions that do not have an agency assigned.  
-    - search: A search term to filter questions by their content.
-
-    Example URLs:
-    - /admin/questions/?state=completed&agency=1
-    - /admin/questions/?state=draft&search=example
-    - /admin/questions/?state=spam
-    - /admin/questions/?agency_isnull=true
-    """
-
+class AdminQuestionViewSet(
+    mixins.ListModelMixin,
+    mixins.RetrieveModelMixin,
+    mixins.UpdateModelMixin,
+    viewsets.GenericViewSet,
+):
+    queryset = Question.objects.all().order_by('-created_at')
     serializer_class = QuestionSerializer
     pagination_class = CustomPagination
     filter_backends = [DjangoFilterBackend, SearchFilter]
@@ -105,7 +93,7 @@ class AdminQuestionListView(generics.ListAPIView):
     search_fields = ['question']
 
     def get_queryset(self):
-        queryset = Question.objects.all().order_by('-created_at')
+        queryset = self.queryset
 
         state = self.request.query_params.get('state')
         if state == 'completed':
@@ -118,10 +106,12 @@ class AdminQuestionListView(generics.ListAPIView):
             queryset = queryset.filter(answer__isnull=True, spam=False)
 
         return queryset
+    
+    def get_serializer_class(self):
+        if self.action in ["update", "partial_update"]:
+            return AdminPatchedQuestionSerializer
+        return super().get_serializer_class()
 
-class AdminQuestionDetailView(generics.RetrieveAPIView):
-    queryset = Question.objects.all()
-    serializer_class = QuestionSerializer
 
 class AgencyListView(generics.ListAPIView):
     queryset = Agency.objects.all()
@@ -219,46 +209,6 @@ class AddTopicView(APIView):
         return Response(serializer.data, status=status.HTTP_201_CREATED)
 
 
-class AssignAgencyToQuestionView(APIView):
-    def post(self, request, question_id):
-        try:
-            question = Question.objects.get(id=question_id)
-        except Question.DoesNotExist:
-            return Response({"detail": "Question not found"}, status=status.HTTP_404_NOT_FOUND)
-
-        agency_id = request.data.get('agency_id')
-        if not agency_id:
-            return Response({"detail": "Agency ID is required"}, status=status.HTTP_400_BAD_REQUEST)
-
-        try:
-            agency = Agency.objects.get(id=agency_id)
-        except Agency.DoesNotExist:
-            return Response({"detail": "Agency not found"}, status=status.HTTP_404_NOT_FOUND)
-
-        question.agency = agency
-        question.save()
-
-        agency_data = {
-            "id": agency.id,
-            "name": agency.name,
-            "acronym": agency.acronym,
-            "name_ms": agency.name_ms
-        }
-
-        client.update(
-            index='questions',
-            id=str(question.id),
-            body={
-                "doc": {
-                    "agency": agency_data
-                }
-            }
-        )
-
-        serializer = QuestionSerializer(question)
-        return Response(serializer.data, status=status.HTTP_200_OK)
-
-
 class AddAgencyView(APIView):
     def post(self, request):
         name = request.data.get('name')
@@ -345,29 +295,6 @@ class SaveDraftQuestionView(APIView):
         question.save()
 
         return Response({"detail": "Question saved as draft successfully"}, status=status.HTTP_200_OK)
-
-
-class MarkQuestionAsSpamView(APIView):
-    def post(self, request, question_id):
-        try:
-            question = Question.objects.get(id=question_id)
-            question.spam = True
-            question.save()
-            return Response({"detail": "Question marked as spam successfully"}, status=status.HTTP_200_OK)
-        except Question.DoesNotExist:
-            return Response({"detail": "Question not found"}, status=status.HTTP_404_NOT_FOUND)
-
-
-class UnSpamQuestionView(APIView):
-    def post(self, request, question_id):
-        try:
-            question = Question.objects.get(id=question_id)
-            question.spam = False
-            question.save()
-            return Response({"detail": "Un-Spam question successfully"}, status=status.HTTP_200_OK)
-        except Question.DoesNotExist:
-            return Response({"detail": "Question not found"}, status=status.HTTP_404_NOT_FOUND)
-
 
 class UserView(APIView):
     def post(self, request):

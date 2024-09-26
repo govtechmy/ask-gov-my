@@ -4,12 +4,10 @@ from rest_framework.routers import SimpleRouter
 from . import views
 from .views import (
     AgencyListView, SubmitAnswerView, UserAgencyTopicsView, AddTopicView,
-    AssignAgencyToQuestionView, AddAgencyView, UpdateAgencyView,
-    ChangeAdminIsOpenView, ChangeStaffIsOpenView, SaveDraftQuestionView,
-    MarkQuestionAsSpamView, UnSpamQuestionView, UserView, SessionView,
+    AddAgencyView, UpdateAgencyView, ChangeAdminIsOpenView,
+    ChangeStaffIsOpenView, SaveDraftQuestionView, UserView, SessionView,
     AccountView, VerificationTokenView, AddUserView, GetAllUsersView,
-    CheckUserEmailExistsView, EditDeleteUserView, AdminQuestionListView,
-    AdminQuestionDetailView
+    CheckUserEmailExistsView, EditDeleteUserView
 )
 
 router = SimpleRouter(use_regex_path=False)
@@ -17,20 +15,16 @@ router.register("questions", views.QuestionViewSet, basename="question")
 router.register("answers", views.AnswerViewSet, basename="answer")
 router.register("agencies", views.AgencyViewSet, basename="agency")
 router.register("topics", views.TopicViewSet, basename="topic")
+router.register("admin/questions", views.AdminQuestionViewSet, basename="admin-question")
 
 urlpatterns = [
     path("", include(router.urls)),
 
     # admin paths
-    path('admin/questions/', AdminQuestionListView.as_view(), name='admin-question-list'),
-    path('admin/questions/<int:pk>/', AdminQuestionDetailView.as_view(), name='admin-question-detail'),
     path('questions/<int:question_id>/submit-answer/', SubmitAnswerView.as_view(), name='submit-answer'),
-    path('questions/<int:question_id>/agency/', AssignAgencyToQuestionView.as_view(), name='assign-agency-to-question'), 
     path('questions/<int:question_id>/admin_isopen/', ChangeAdminIsOpenView.as_view(), name='change-admin-isopen'),
     path('questions/<int:question_id>/staff_isopen/', ChangeStaffIsOpenView.as_view(), name='change-staff-isopen'),
     path('questions/<int:question_id>/save-draft/', SaveDraftQuestionView.as_view(), name='save-draft'),
-    path('questions/<int:question_id>/mark-spam/', MarkQuestionAsSpamView.as_view(), name='mark-question-spam'),
-    path('questions/<int:question_id>/un-spam/', UnSpamQuestionView.as_view(), name='mark-question-spam'),
 
     path('agencies/', AgencyListView.as_view(), name='agency-list'), 
     path('agencies/<int:pk>/', UpdateAgencyView.as_view(), name='update-agency'),

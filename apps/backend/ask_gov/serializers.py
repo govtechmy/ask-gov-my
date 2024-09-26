@@ -49,7 +49,37 @@ class QuestionSerializer(serializers.ModelSerializer):
         )
         
         return question
+    
 
+class AdminPatchedQuestionSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Question
+        fields = ["spam", "agency"]
+        write_only_fields = ["spam", "agency"]
+
+    def update(self, instance, validated_data):
+        super().update(instance, validated_data)
+
+        if "agency" in validated_data:
+            # Re-index the question in ElasticSearch with agency
+            agency = validated_data["agency"]
+            agency_data = {
+                "id": agency.id,
+                "name": agency.name,
+                "acronym": agency.acronym,
+                "name_ms": agency.name_ms
+            }
+            client.update(
+                index='questions',
+                id=str(instance.id),
+                body={
+                    "doc": {
+                        "agency": agency_data
+                    }
+                }
+            )
+
+        return instance
     
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
