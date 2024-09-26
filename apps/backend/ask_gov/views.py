@@ -140,6 +140,21 @@ class AdminTopicViewSet(
     filterset_fields = ["agency"]
 
 
+class AdminUserViewSet(
+    mixins.ListModelMixin,
+    mixins.RetrieveModelMixin,
+    mixins.CreateModelMixin,
+    mixins.UpdateModelMixin,
+    viewsets.GenericViewSet,
+):
+    queryset = User.objects.all()
+    serializer_class = UserSerializer
+    pagination_class = CustomPagination
+    filter_backends = [DjangoFilterBackend, SearchFilter]
+    filterset_fields = ["role", "agency"]
+    search_fields = ["name", "email"]
+
+
 class SubmitAnswerView(APIView):
     def post(self, request, question_id):
 
@@ -216,7 +231,7 @@ class SaveDraftQuestionView(APIView):
 
         return Response({"detail": "Question saved as draft successfully"}, status=status.HTTP_200_OK)
 
-class UserView(APIView):
+class AuthUserView(APIView):
     def post(self, request):
         data = request.data
         user = User.objects.create_user(
@@ -396,89 +411,6 @@ class VerificationTokenView(APIView):
             'identifier': token.identifier,
             'token': token.token
         }, status=status.HTTP_200_OK)
-
-
-class AddUserView(APIView):
-    def post(self, request):
-        data = request.data
-        user = User.objects.create_user(
-            username=data['name'],
-            email=data['email'],
-            role=data['role'],
-            agency=data['agency'],
-            user_profile_colour=data['userProfileColour']
-        )
-        user.save()
-        return Response({'message': 'User added successfully'}, status=status.HTTP_201_CREATED)
-
-
-class EditDeleteUserView(APIView):
-    def get(self, request, id):
-        user = get_object_or_404(User, id=id)
-        serializer = UserSerializer(user)
-        return Response(serializer.data, status=status.HTTP_200_OK)
-
-    def put(self, request, id):
-        data = request.data
-        user = get_object_or_404(User, id=id)
-        user.username = data['name']
-        user.email = data['email']
-        user.role = data['role']
-        user.agency = data['agency']
-        user.user_profile_colour = data['userProfileColour']
-        user.save()
-        return Response({'message': 'User updated successfully'}, status=status.HTTP_200_OK)
-
-    def delete(self, request, id):
-        user = get_object_or_404(User, id=id)
-        user.delete()
-        return Response({'message': 'User deleted successfully'}, status=status.HTTP_204_NO_CONTENT)
-
-
-class GetAllUsersView(APIView):
-    pagination_class = CustomPagination
-
-    def get(self, request):
-        users = User.objects.all()
-
-        tab = request.query_params.get('tab', 'all')
-        if tab == 'superadmin':
-            users = users.filter(role='super_admin')
-        elif tab == 'staff':
-            users = users.filter(role='staff')
-
-        agency = request.query_params.get('agency', None)
-        if agency:
-            users = users.filter(agency=agency)
-
-        search_term = request.query_params.get('searchTerm', None)
-        if search_term:
-            users = users.filter(
-                Q(name__icontains=search_term) | Q(email__icontains=search_term)
-            )
-
-        paginator = self.pagination_class()
-        page = paginator.paginate_queryset(users, request)
-        if page is not None:
-            users_data = [{
-                'id': user.id,
-                'name': user.username,
-                'email': user.email,
-                'role': user.role,
-                'agency': user.agency,
-                'user_profile_colour': user.user_profile_colour,
-            } for user in page]
-            return paginator.get_paginated_response(users_data)
-
-        users_data = [{
-            'id': user.id,
-            'name': user.username,
-            'email': user.email,
-            'role': user.role,
-            'agency': user.agency,
-            'user_profile_colour': user.user_profile_colour,
-        } for user in users]
-        return Response(users_data, status=status.HTTP_200_OK)
 
 
 class CheckUserEmailExistsView(APIView):

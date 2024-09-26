@@ -3,10 +3,9 @@ from rest_framework.routers import SimpleRouter
 
 from . import views
 from .views import (
-    SubmitAnswerView, ChangeAdminIsOpenView, ChangeStaffIsOpenView,
-    SaveDraftQuestionView, UserView, SessionView, AccountView,
-    VerificationTokenView, AddUserView, GetAllUsersView,
-    CheckUserEmailExistsView, EditDeleteUserView
+    AuthUserView, SubmitAnswerView, ChangeAdminIsOpenView,
+    ChangeStaffIsOpenView, SaveDraftQuestionView, SessionView, AccountView,
+    VerificationTokenView,  CheckUserEmailExistsView, 
 )
 
 router = SimpleRouter(use_regex_path=False)
@@ -17,6 +16,7 @@ router.register("topics", views.TopicViewSet, basename="topic")
 router.register("admin/questions", views.AdminQuestionViewSet, basename="admin-question")
 router.register("admin/agencies", views.AdminAgencyViewSet, basename="admin-agency")
 router.register("admin/topics", views.AdminTopicViewSet, basename="admin-topic")
+router.register("admin/users", views.AdminUserViewSet, basename="admin-user")
 
 urlpatterns = [
     path("", include(router.urls)),
@@ -27,12 +27,8 @@ urlpatterns = [
     path('questions/<int:question_id>/staff_isopen/', ChangeStaffIsOpenView.as_view(), name='change-staff-isopen'),
     path('questions/<int:question_id>/save-draft/', SaveDraftQuestionView.as_view(), name='save-draft'),
 
-    path('admin/user/', AddUserView.as_view(), name='add_user'),
-    path('admin/users/', GetAllUsersView.as_view(), name='get_all_users'),
-    path('admin/user/<uuid:id>/', EditDeleteUserView.as_view(), name='edit_delete_user'),
-
     # auth paths
-    path('auth/user/', UserView.as_view(), name='user'),
+    path('auth/user/', AuthUserView.as_view(), name='user'),
     path('auth/session/', SessionView.as_view(), name='session'),
     path('auth/account/', AccountView.as_view(), name='account'),
     path('auth/verification/', VerificationTokenView.as_view(), name='verification'),

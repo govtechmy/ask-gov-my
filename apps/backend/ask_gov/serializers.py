@@ -106,7 +106,8 @@ class AdminPatchedQuestionSerializer(serializers.ModelSerializer):
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
-        fields = '__all__'
+        fields = ["id", "name", "email", "role", "agency", "created_at", "updated_at"]
+        read_only_fields = ["id", "created_at", "updated_at"]
 
 class AccountSerializer(serializers.ModelSerializer):
     class Meta:
