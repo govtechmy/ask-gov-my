@@ -120,9 +120,24 @@ class AdminAgencyViewSet(
     mixins.CreateModelMixin,
     viewsets.GenericViewSet,
 ):
+    queryset = Agency.objects.all()
     serializer_class = AgencySerializer
     pagination_class = CustomPagination
     search_fields = ['name', 'name_ms', 'acronym']
+
+
+class AdminTopicViewSet(
+    mixins.ListModelMixin,
+    mixins.RetrieveModelMixin,
+    mixins.UpdateModelMixin,
+    mixins.CreateModelMixin,
+    mixins.DestroyModelMixin,
+    viewsets.GenericViewSet,
+):
+    queryset = Topic.objects.all()
+    serializer_class = TopicSerializer
+    filter_backends = [DjangoFilterBackend]
+    filterset_fields = ["agency"]
 
 
 class SubmitAnswerView(APIView):
@@ -165,26 +180,6 @@ class SubmitAnswerView(APIView):
         text = re.sub(r'\s+', ' ', text).strip()
 
         return text
-
-
-class UserAgencyTopicsView(APIView):
-    def get(self, request, agency_id):
-        agency = get_object_or_404(Agency, id=agency_id)
-        topics = Topic.objects.filter(agency=agency)
-        serializer = TopicSerializer(topics, many=True)
-        return Response(serializer.data, status=status.HTTP_200_OK)
-
-
-class AddTopicView(APIView):
-    def post(self, request, agency_id):
-        agency = get_object_or_404(Agency, id=agency_id)
-        title = request.data.get('title')
-        title_ms = request.data.get('title_ms')
-        if not title:
-            return Response({"detail": "Title is required"}, status=status.HTTP_400_BAD_REQUEST)
-        topic = Topic.objects.create(title=title, title_ms=title_ms, agency=agency)
-        serializer = TopicSerializer(topic)
-        return Response(serializer.data, status=status.HTTP_201_CREATED)
 
 
 class ChangeAdminIsOpenView(APIView):
