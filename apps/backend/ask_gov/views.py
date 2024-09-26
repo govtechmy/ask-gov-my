@@ -1,5 +1,5 @@
 from .serializers import (
-    QuestionSerializer, AgencySerializer,
+    AnswerSerializer, QuestionSerializer, AgencySerializer,
     TopicSerializer, UserSerializer,
     AccountSerializer, SessionSerializer,
     VerificationTokenSerializer)
@@ -8,6 +8,7 @@ from django.utils import timezone
 from rest_framework.filters import SearchFilter
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework.pagination import PageNumberPagination
+from rest_framework.decorators import action
 from rest_framework import generics, status, pagination, mixins, viewsets
 from .models import Answer, Question, Agency, Topic, User, Account, Session, VerificationToken
 from rest_framework.response import Response
@@ -37,6 +38,29 @@ class QuestionViewSet(
     pagination_class = CustomPagination
     filter_backends = [DjangoFilterBackend]
     filterset_fields = ['agency', 'topics']
+
+class AnswerViewSet(
+    viewsets.GenericViewSet,
+):
+    queryset = Answer.objects.filter(draft=False)
+    serializer_class = AnswerSerializer
+
+    @action(methods=["POST"], detail=True)
+    def like(self, request, pk):
+        answer: Answer = self.get_object()
+        answer.likes += 1
+        answer.save()
+        serializer = AnswerSerializer(answer)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
+    @action(methods=["POST"], detail=True)
+    def dislike(self, request, pk):
+        answer: Answer = self.get_object()
+        answer.dislikes += 1
+        answer.save()
+        serializer = AnswerSerializer(answer)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
 
 class AdminQuestionListView(generics.ListAPIView):
     """
@@ -182,40 +206,6 @@ class AddTopicView(APIView):
         topic = Topic.objects.create(title=title, title_ms=title_ms, agency=agency)
         serializer = TopicSerializer(topic)
         return Response(serializer.data, status=status.HTTP_201_CREATED)
-
-
-class LikeQuestionView(APIView):
-    def post(self, request, question_id):
-        answer = get_object_or_404(Answer, question=question_id)
-        answer.likes += 1
-        answer.save()
-        client.update(
-            index='questions',
-            id=str(question_id),
-            body={
-                "doc": {
-                    "likes": answer.likes
-                }
-            }
-        )
-        return Response(status=status.HTTP_204_NO_CONTENT)
-
-
-class DislikeQuestionView(APIView):
-    def post(self, request, question_id):
-        answer = get_object_or_404(Answer, question=question_id)
-        answer.dislikes += 1
-        answer.save()
-        client.update(
-            index='questions',
-            id=str(question_id),
-            body={
-                "doc": {
-                    "dislikes": answer.dislikes
-                }
-            }
-        )
-        return Response(status=status.HTTP_204_NO_CONTENT)
 
 
 class AssignAgencyToQuestionView(APIView):

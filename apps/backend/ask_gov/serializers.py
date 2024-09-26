@@ -20,8 +20,8 @@ class TopicSerializer(serializers.ModelSerializer):
 class AnswerSerializer(serializers.ModelSerializer):
     class Meta:
         model = Answer
-        fields = ['raw', 'text', 'likes', 'draft', 'created_at', 'updated_at']
-        read_only_fields = ['text', 'likes', 'draft', 'created_at', 'updated_at']
+        fields = ['id', 'raw', 'text', 'likes', 'draft', 'created_at', 'updated_at']
+        read_only_fields = ['id', 'raw', 'text', 'likes', 'draft', 'created_at', 'updated_at']
 
 class QuestionSerializer(serializers.ModelSerializer):
     answer = AnswerSerializer(read_only=True)
