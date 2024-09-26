@@ -30,7 +30,7 @@ class QuestionManager(models.Manager):
         return self.get_queryset().filter(answer__isnull=False, answer__draft=False).order_by('-answer__likes', 'id')
 
 class Question(models.Model):
-    question = models.TextField()
+    question = models.CharField(max_length=255)
     spam = models.BooleanField(default=False)
     agency = models.ForeignKey(Agency, on_delete=models.CASCADE, null=True, blank=True, related_name='questions')
     topics = models.ManyToManyField(Topic, blank=True)

@@ -1,22 +1,25 @@
 from django.urls import path, include
+from rest_framework.routers import SimpleRouter
+
+from . import views
 from .views import (
-    QuestionDetailView, AgencyListView, SubmitQuestionView, SubmitAnswerView,
-    UserAgencyTopicsView, AddTopicView, TopicListView, LikeQuestionView,
-    DislikeQuestionView, AssignAgencyToQuestionView, AddAgencyView,
-    TrendingAgenciesView, UpdateAgencyView, ChangeAdminIsOpenView,
-    ChangeStaffIsOpenView, SaveDraftQuestionView, MarkQuestionAsSpamView,
-    UnSpamQuestionView, UserView, SessionView, AccountView,
-    VerificationTokenView, AddUserView, GetAllUsersView,
-    CheckUserEmailExistsView, EditDeleteUserView, AdminQuestionListView,
-    CompletedQuestionListView, AdminQuestionDetailView
+    AgencyListView, SubmitAnswerView, UserAgencyTopicsView, AddTopicView,
+    TopicListView, LikeQuestionView, DislikeQuestionView,
+    AssignAgencyToQuestionView, AddAgencyView, TrendingAgenciesView,
+    UpdateAgencyView, ChangeAdminIsOpenView, ChangeStaffIsOpenView,
+    SaveDraftQuestionView, MarkQuestionAsSpamView, UnSpamQuestionView, UserView,
+    SessionView, AccountView, VerificationTokenView, AddUserView,
+    GetAllUsersView, CheckUserEmailExistsView, EditDeleteUserView,
+    AdminQuestionListView, AdminQuestionDetailView
 )
 
+router = SimpleRouter(use_regex_path=False)
+router.register("questions", views.QuestionViewSet, basename="question")
+
 urlpatterns = [
-    path('questions/', CompletedQuestionListView.as_view(), name='question-list-create'),
-    path('questions/<int:pk>/', QuestionDetailView.as_view(), name='question-detail'),
+    path("", include(router.urls)),
     path('agencies/', AgencyListView.as_view(), name='agency-list'),
     path('agencies/<int:pk>/', UpdateAgencyView.as_view(), name='update-agency'),
-    path('submit-question/', SubmitQuestionView.as_view(), name='submit-question'),
     path('questions/<int:question_id>/submit-answer/', SubmitAnswerView.as_view(), name='submit-answer'),
     path('topics/user-agency/<int:agency_id>/', UserAgencyTopicsView.as_view(), name='user-agency-topics'),
     path('topics/add/<int:agency_id>/', AddTopicView.as_view(), name='add-topic'),

@@ -8,7 +8,7 @@ from django.utils import timezone
 from rest_framework.filters import SearchFilter
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework.pagination import PageNumberPagination
-from rest_framework import generics, status, pagination
+from rest_framework import generics, status, pagination, mixins, viewsets
 from .models import Answer, Question, Agency, Topic, User, Account, Session, VerificationToken
 from rest_framework.response import Response
 from rest_framework.views import APIView
@@ -26,7 +26,12 @@ class CustomPagination(PageNumberPagination):
     page_size_query_param = 'page_size'
     max_page_size = 100
 
-class CompletedQuestionListView(generics.ListCreateAPIView):
+class QuestionViewSet(
+    mixins.CreateModelMixin,
+    mixins.RetrieveModelMixin,
+    mixins.ListModelMixin,
+    viewsets.GenericViewSet,
+):
     queryset = Question.objects.trending()
     serializer_class = QuestionSerializer
     pagination_class = CustomPagination
@@ -74,10 +79,6 @@ class AdminQuestionListView(generics.ListAPIView):
 
         return queryset
 
-class QuestionDetailView(generics.RetrieveAPIView):
-    queryset = Question.objects.filter(answer__isnull=False, answer__draft=False)
-    serializer_class = QuestionSerializer
-
 class AdminQuestionDetailView(generics.RetrieveAPIView):
     queryset = Question.objects.all()
     serializer_class = QuestionSerializer
@@ -120,30 +121,6 @@ class TopicListView(generics.ListAPIView):
     queryset = Topic.objects.all()
     serializer_class = TopicSerializer
 
-
-class SubmitQuestionView(APIView):
-    def post(self, request):
-        data = request.data.get('data')
-        serializer = QuestionSerializer(data=data)
-        if serializer.is_valid():
-            question = serializer.save()
-
-            document = serializer.data
-
-            document['agency'] = {
-                "id": "",
-                "name": "",
-                "acronym": "",
-                "name_ms": ""
-            }
-
-            client.index(
-                index='questions',
-                id=str(question.id),
-                document=document
-            )
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 class SubmitAnswerView(APIView):
     def post(self, request, question_id):

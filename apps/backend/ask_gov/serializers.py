@@ -1,6 +1,7 @@
 from rest_framework import serializers
 from django.contrib.auth import get_user_model
 from .models import Agency, Answer, Question, Topic, User, Account, Session, VerificationToken
+from .elasticsearch_client import client
 
 User = get_user_model()
 
@@ -12,8 +13,6 @@ class AgencySerializer(serializers.ModelSerializer):
         fields = ['id', 'name', 'name_ms', 'acronym', 'total_likes', 'logo_url', 'updated_at']
 
 class TopicSerializer(serializers.ModelSerializer):
-    agency = AgencySerializer()
-
     class Meta:
         model = Topic
         fields = '__all__'
@@ -25,19 +24,29 @@ class AnswerSerializer(serializers.ModelSerializer):
         read_only_fields = ['text', 'likes', 'draft', 'created_at', 'updated_at']
 
 class QuestionSerializer(serializers.ModelSerializer):
-    topics = serializers.PrimaryKeyRelatedField(many=True, queryset=Topic.objects.all(), required=False)
     answer = AnswerSerializer(read_only=True)
 
     class Meta:
         model = Question
-        fields = '__all__'
+        fields = ["id", "topics", "answer", "question", "spam", "email", "admin_opened_at", "staff_opened_at", "created_at", "updated_at", "agency"]
+        read_only_fields = ["id", "topics", "answer", "spam", "admin_opened_at", "staff_opened_at", "created_at", "updated_at", "agency"]
 
     def create(self, validated_data):
-        topics = validated_data.pop('topics', [])
         question = Question.objects.create(**validated_data)
-        
-        for topic in topics:
-            question.topics.add(topic)
+
+        # Index the question in ElasticSearch
+        document = validated_data
+        document['agency'] = {
+            "id": "",
+            "name": "",
+            "acronym": "",
+            "name_ms": ""
+        }
+        client.index(
+            index='questions',
+            id=str(question.id),
+            document=document
+        )
         
         return question
 
