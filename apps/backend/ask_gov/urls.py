@@ -3,8 +3,7 @@ from rest_framework.routers import SimpleRouter
 
 from . import views
 from .views import (
-    AgencyListView, SubmitAnswerView, UserAgencyTopicsView, AddTopicView,
-    AddAgencyView, UpdateAgencyView, ChangeAdminIsOpenView,
+    SubmitAnswerView, UserAgencyTopicsView, AddTopicView, ChangeAdminIsOpenView,
     ChangeStaffIsOpenView, SaveDraftQuestionView, UserView, SessionView,
     AccountView, VerificationTokenView, AddUserView, GetAllUsersView,
     CheckUserEmailExistsView, EditDeleteUserView
@@ -16,6 +15,7 @@ router.register("answers", views.AnswerViewSet, basename="answer")
 router.register("agencies", views.AgencyViewSet, basename="agency")
 router.register("topics", views.TopicViewSet, basename="topic")
 router.register("admin/questions", views.AdminQuestionViewSet, basename="admin-question")
+router.register("admin/agencies", views.AdminAgencyViewSet, basename="admin-agency")
 
 urlpatterns = [
     path("", include(router.urls)),
@@ -25,10 +25,6 @@ urlpatterns = [
     path('questions/<int:question_id>/admin_isopen/', ChangeAdminIsOpenView.as_view(), name='change-admin-isopen'),
     path('questions/<int:question_id>/staff_isopen/', ChangeStaffIsOpenView.as_view(), name='change-staff-isopen'),
     path('questions/<int:question_id>/save-draft/', SaveDraftQuestionView.as_view(), name='save-draft'),
-
-    path('agencies/', AgencyListView.as_view(), name='agency-list'), 
-    path('agencies/<int:pk>/', UpdateAgencyView.as_view(), name='update-agency'),
-    path('agencies/add/', AddAgencyView.as_view(), name='add-agency'),
 
     path('topics/user-agency/<int:agency_id>/', UserAgencyTopicsView.as_view(), name='user-agency-topics'),
     path('topics/add/<int:agency_id>/', AddTopicView.as_view(), name='add-topic'),

@@ -113,38 +113,16 @@ class AdminQuestionViewSet(
         return super().get_serializer_class()
 
 
-class AgencyListView(generics.ListAPIView):
-    queryset = Agency.objects.all()
+class AdminAgencyViewSet(
+    mixins.ListModelMixin,
+    mixins.RetrieveModelMixin,
+    mixins.UpdateModelMixin,
+    mixins.CreateModelMixin,
+    viewsets.GenericViewSet,
+):
     serializer_class = AgencySerializer
     pagination_class = CustomPagination
-    filter_backends = [DjangoFilterBackend, SearchFilter]
-    filterset_fields = ['name', 'name_ms', 'acronym']  
     search_fields = ['name', 'name_ms', 'acronym']
-
-    def get_queryset(self):
-        queryset = super().get_queryset()
-        search_term = self.request.query_params.get('search', None)
-        
-        if search_term:
-            queryset = queryset.filter(
-                Q(name__icontains=search_term) |
-                Q(name_ms__icontains=search_term) |
-                Q(acronym__icontains=search_term)
-            )
-
-        return queryset
-
-    def list(self, request, *args, **kwargs):
-        queryset = self.filter_queryset(self.get_queryset())
-
-        if any(param in request.query_params for param in ['page', 'page_size', 'search']):
-            page = self.paginate_queryset(queryset)
-            if page is not None:
-                serializer = self.get_serializer(page, many=True)
-                return self.get_paginated_response(serializer.data)
-
-        serializer = self.get_serializer(queryset, many=True)
-        return Response(serializer.data)
 
 
 class SubmitAnswerView(APIView):
@@ -207,59 +185,6 @@ class AddTopicView(APIView):
         topic = Topic.objects.create(title=title, title_ms=title_ms, agency=agency)
         serializer = TopicSerializer(topic)
         return Response(serializer.data, status=status.HTTP_201_CREATED)
-
-
-class AddAgencyView(APIView):
-    def post(self, request):
-        name = request.data.get('name')
-        name_ms = request.data.get('name_ms')
-        acronym = request.data.get('acronym')
-        logo_url = request.data.get('logo_url')
-
-        if not name or not name_ms:
-            return Response({"detail": "Both name and name_ms are required"}, status=status.HTTP_400_BAD_REQUEST)
-
-        agency = Agency.objects.create(
-            name=name,
-            name_ms=name_ms,
-            acronym=acronym,
-            logo_url=logo_url
-        )
-        serializer = AgencySerializer(agency)
-        return Response(serializer.data, status=status.HTTP_201_CREATED)
-
-
-class UpdateAgencyView(APIView):
-    def put(self, request, pk):
-        agency = get_object_or_404(Agency, pk=pk)
-        data = request.data
-
-        agency.name = data.get('name', agency.name)
-        agency.name_ms = data.get('name_ms', agency.name_ms)
-        agency.acronym = data.get('acronym', agency.acronym)
-
-        if 'logo_url' in data:
-            agency.logo_url = data['logo_url']
-
-        agency.save()
-
-        questions = Question.objects.filter(agency=agency)
-        for question in questions:
-            client.update(
-                index='questions',
-                id=str(question.id),
-                body={
-                    "doc": {
-                        "agency.id": agency.id,
-                        "agency.name": agency.name,
-                        "agency.acronym": agency.acronym,
-                        "agency.name_ms": agency.name_ms,
-                    }
-                }
-            )
-
-        serializer = AgencySerializer(agency)
-        return Response(serializer.data, status=status.HTTP_200_OK)
 
 
 class ChangeAdminIsOpenView(APIView):

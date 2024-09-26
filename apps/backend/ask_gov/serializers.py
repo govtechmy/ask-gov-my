@@ -12,6 +12,28 @@ class AgencySerializer(serializers.ModelSerializer):
         model = Agency
         fields = ['id', 'name', 'name_ms', 'acronym', 'total_likes', 'logo_url', 'updated_at']
 
+    def update(self, instance, validated_data):
+        super().update(instance, validated_data)
+
+        # Re-index the question in ElasticSearch with agency
+        agency = instance
+        questions = Question.objects.filter(agency=agency)
+        for question in questions:
+            client.update(
+                index='questions',
+                id=str(question.id),
+                body={
+                    "doc": {
+                        "agency.id": agency.id,
+                        "agency.name": agency.name,
+                        "agency.acronym": agency.acronym,
+                        "agency.name_ms": agency.name_ms,
+                    }
+                }
+            )
+        
+        return agency
+
 class TopicSerializer(serializers.ModelSerializer):
     class Meta:
         model = Topic
