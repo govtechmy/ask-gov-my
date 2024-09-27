@@ -5,20 +5,6 @@ from rest_framework import status
 
 from ..models import Answer, User, Question, Agency
 
-class TestSubmitAnswer(APITestCase):
-    def setUp(self):
-        agency = Agency.objects.create(name="Ministry of Education", name_ms="Kementerian Pendidikan", acronym="MOE")
-        self.question = Question.objects.create(question="Question 1", agency=agency)
-
-    def test_submit_answer(self):
-        url = reverse('submit-answer', kwargs={'question_id': self.question.id})
-        data = {
-            "data": {
-                "answer": "<p>Answer 1</p>"
-            }
-        }
-        response = self.client.post(url, data=data, format="json")
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
 
 class TestAdminListQuestions(APITestCase):
     """
@@ -112,8 +98,12 @@ class TestAdminQuestionViewSet(APITestCase):
         self.agency = Agency.objects.create(name="Ministry of Education", name_ms="Kementerian Pendidikan", acronym="MOE")
         self.question = Question.objects.first()
         self.update_question_url = reverse("admin-question-detail", kwargs={"pk": self.question.id})
+        self.open_question_url = reverse("admin-question-open", kwargs={"pk": self.question.id})
 
     def test_assign_agency(self):
+        """
+        Tests assigning an agency to a question.
+        """
         data = {
             "agency": self.agency.id,
         }
@@ -126,6 +116,9 @@ class TestAdminQuestionViewSet(APITestCase):
         self.assertEqual(json_data["agency"], self.agency.id)
 
     def test_mark_as_spam(self):
+        """
+        Tests marking a question as spam.
+        """
         data = {
             "spam": True
         }
@@ -136,3 +129,57 @@ class TestAdminQuestionViewSet(APITestCase):
         json_data = response.json()
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(json_data["spam"], True)
+    
+    def test_open_question(self):
+        """
+        Tests marking a question as opened.
+        """
+        self.assertFalse(self.question.admin_opened_at)
+        self.assertFalse(self.question.staff_opened_at)
+        response = self.client.post(
+            self.open_question_url,
+        )
+        self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
+        self.question.refresh_from_db()
+        self.assertTrue(self.question.admin_opened_at)
+        self.assertTrue(self.question.staff_opened_at)
+
+class TestAdminAnswerViewSet(APITestCase):
+    def setUp(self):
+        agency = Agency.objects.create(name="Ministry of Education", name_ms="Kementerian Pendidikan", acronym="MOE")
+        self.question = Question.objects.create(
+            agency=agency,
+            question="Test Question",
+        )
+        self.submit_answer_url = reverse("admin-answer-list")
+    
+    def test_submit_answer(self):
+        """
+        Tests submitting an answer.
+        """
+        self.assertFalse(self.question.has_answer())
+        data = {
+            "question": self.question.id,
+            "raw": "<p>Test Answer</p>",
+            "text": "Test Answer",
+            "draft": False,
+        }
+        response = self.client.post(self.submit_answer_url, data=data)
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+        self.question.refresh_from_db()
+        self.assertTrue(self.question.has_answer())
+    
+    def test_submit_answer_no_agency(self):
+        """
+        Tests submitting an answer that isn't assigned an agency yet.
+        """
+        self.question.agency = None
+        self.question.save()
+        data = {
+            "question": self.question.id,
+            "raw": "<p>Test Answer</p>",
+            "text": "Test Answer",
+            "draft": False,
+        }
+        response = self.client.post(self.submit_answer_url, data=data)
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)

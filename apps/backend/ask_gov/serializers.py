@@ -42,8 +42,15 @@ class TopicSerializer(serializers.ModelSerializer):
 class AnswerSerializer(serializers.ModelSerializer):
     class Meta:
         model = Answer
-        fields = ['id', 'raw', 'text', 'likes', 'draft', 'created_at', 'updated_at']
-        read_only_fields = ['id', 'raw', 'text', 'likes', 'draft', 'created_at', 'updated_at']
+        fields = ['id', 'question', 'raw', 'text', 'likes', 'draft', 'created_at', 'updated_at']
+        read_only_fields = ['id', 'likes', 'created_at', 'updated_at']
+    
+    def validate_question(self, question):
+        if question.spam:
+            raise serializers.ValidationError("Cannot answer a question marked as spam.")
+        if not question.agency:
+            raise serializers.ValidationError("Cannot answer a question that does not have an agency.")
+        return question
 
 class QuestionSerializer(serializers.ModelSerializer):
     answer = AnswerSerializer(read_only=True)

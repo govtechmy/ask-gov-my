@@ -3,9 +3,8 @@ from rest_framework.routers import SimpleRouter
 
 from . import views
 from .views import (
-    AuthUserView, SubmitAnswerView, ChangeAdminIsOpenView,
-    ChangeStaffIsOpenView, SaveDraftQuestionView, SessionView, AccountView,
-    VerificationTokenView,  CheckUserEmailExistsView, 
+    AuthUserView, SessionView, AccountView, VerificationTokenView,
+    CheckUserEmailExistsView, 
 )
 
 router = SimpleRouter(use_regex_path=False)
@@ -17,15 +16,10 @@ router.register("admin/questions", views.AdminQuestionViewSet, basename="admin-q
 router.register("admin/agencies", views.AdminAgencyViewSet, basename="admin-agency")
 router.register("admin/topics", views.AdminTopicViewSet, basename="admin-topic")
 router.register("admin/users", views.AdminUserViewSet, basename="admin-user")
+router.register("admin/answers", views.AdminAnswerViewSet, basename="admin-answer")
 
 urlpatterns = [
     path("", include(router.urls)),
-
-    # admin paths
-    path('questions/<int:question_id>/submit-answer/', SubmitAnswerView.as_view(), name='submit-answer'),
-    path('questions/<int:question_id>/admin_isopen/', ChangeAdminIsOpenView.as_view(), name='change-admin-isopen'),
-    path('questions/<int:question_id>/staff_isopen/', ChangeStaffIsOpenView.as_view(), name='change-staff-isopen'),
-    path('questions/<int:question_id>/save-draft/', SaveDraftQuestionView.as_view(), name='save-draft'),
 
     # auth paths
     path('auth/user/', AuthUserView.as_view(), name='user'),

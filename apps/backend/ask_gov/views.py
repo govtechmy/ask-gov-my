@@ -111,6 +111,20 @@ class AdminQuestionViewSet(
         if self.action in ["update", "partial_update"]:
             return AdminPatchedQuestionSerializer
         return super().get_serializer_class()
+    
+    @action(methods=["POST"], detail=True)
+    def open(self, request, pk):
+        """
+        Mark a question as opened.
+        """
+        question: Question = self.get_object()
+        if not question.staff_opened_at or not question.admin_opened_at:
+            now = timezone.now()
+            # TODO: Update based on request.user.role
+            question.admin_opened_at = now
+            question.staff_opened_at = now
+            question.save()
+        return Response(status=status.HTTP_204_NO_CONTENT)
 
 
 class AdminAgencyViewSet(
@@ -155,81 +169,14 @@ class AdminUserViewSet(
     search_fields = ["name", "email"]
 
 
-class SubmitAnswerView(APIView):
-    def post(self, request, question_id):
+class AdminAnswerViewSet(
+    mixins.CreateModelMixin,
+    mixins.UpdateModelMixin,
+    viewsets.GenericViewSet,
+):
+    queryset = Answer.objects.all()
+    serializer_class = AnswerSerializer
 
-        data = request.data.get('data')
-        if not data:
-            return Response({"detail": "Data is required"}, status=status.HTTP_400_BAD_REQUEST)
-
-
-        raw_answer = data.get('answer')
-        if not raw_answer:
-            return Response({"detail": "Answer is required"}, status=status.HTTP_400_BAD_REQUEST)
-
-        attachments = data.get('attachments', [])
-
-        question = get_object_or_404(Question, pk=question_id)
-
-        text_answer = self.strip_tags(raw_answer)
-
-        Answer.objects.update_or_create(
-            question=question,
-            defaults={
-                'raw': raw_answer,
-                'text': text_answer
-            },
-            draft=False
-        )
-
-        question.attachments = attachments
-        question.save()
-
-        return Response({"detail": "Answer submitted successfully"}, status=status.HTTP_200_OK)
-
-    @staticmethod
-    def strip_tags(html):
-        spaced_html = re.sub(r'>\s*<', '> <', html)
-        tag_re = re.compile(r'<[^>]+>')
-        text = tag_re.sub('', spaced_html)
-        text = re.sub(r'\s+', ' ', text).strip()
-
-        return text
-
-
-class ChangeAdminIsOpenView(APIView):
-    def post(self, request, question_id):
-        question = get_object_or_404(Question, id=question_id)
-        if not question.admin_opened_at:
-            question.admin_opened_at = timezone.now()
-            question.save()
-        return Response(status=status.HTTP_204_NO_CONTENT)
-
-
-class ChangeStaffIsOpenView(APIView):
-    def post(self, request, question_id):
-        question = get_object_or_404(Question, id=question_id)
-        if not question.staff_opened_at:
-            question.staff_opened_at = timezone.now()
-            question.save()
-        return Response(status=status.HTTP_204_NO_CONTENT)
-
-
-class SaveDraftQuestionView(APIView):
-    def post(self, request, question_id):
-        data = request.data.get('data')
-        if not data:
-            return Response({"detail": "Data is required"}, status=status.HTTP_400_BAD_REQUEST)
-
-        attachments = data.get('attachments', [])
-
-        question = get_object_or_404(Question, pk=question_id)
-        answer = get_object_or_404(Answer, question=question)
-        answer.draft = True
-        question.attachments = attachments
-        question.save()
-
-        return Response({"detail": "Question saved as draft successfully"}, status=status.HTTP_200_OK)
 
 class AuthUserView(APIView):
     def post(self, request):
