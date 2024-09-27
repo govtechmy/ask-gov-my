@@ -13,6 +13,7 @@ from rest_framework import generics, status, pagination, mixins, viewsets
 from .models import Answer, Question, Agency, Topic, User, Account, Session, VerificationToken
 from rest_framework.response import Response
 from rest_framework.views import APIView
+from drf_spectacular.utils import extend_schema
 from django.contrib.auth import get_user_model
 from django.db.models import Sum, Q
 from .elasticsearch_client import client
@@ -45,6 +46,7 @@ class AnswerViewSet(
     queryset = Answer.objects.filter(draft=False)
     serializer_class = AnswerSerializer
 
+    @extend_schema(request=None)
     @action(methods=["POST"], detail=True)
     def like(self, request, pk):
         answer: Answer = self.get_object()
@@ -53,6 +55,7 @@ class AnswerViewSet(
         serializer = AnswerSerializer(answer)
         return Response(serializer.data, status=status.HTTP_200_OK)
 
+    @extend_schema(request=None)
     @action(methods=["POST"], detail=True)
     def dislike(self, request, pk):
         answer: Answer = self.get_object()
