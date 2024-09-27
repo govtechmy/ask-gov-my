@@ -1,6 +1,7 @@
 annotated-types==0.7.0
 anyio==4.4.0
 asgiref==3.8.1
+attrs==24.2.0
 boto3==1.34.0
 botocore==1.34.0
 certifi==2024.6.2
@@ -15,6 +16,7 @@ django-filter==24.3
 django-heroku==0.3.1
 djangorestframework==3.15.2
 djangorestframework-simplejwt==5.3.1
+drf-spectacular==0.27.2
 elastic-transport==8.13.1
 elasticsearch==8.14.0
 Faker==25.9.2
@@ -23,9 +25,12 @@ h11==0.14.0
 httpcore==1.0.5
 httpx==0.27.0
 idna==3.7
+inflection==0.5.1
 jmespath==1.0.1
 jsonpatch==1.33
 jsonpointer==3.0.0
+jsonschema==4.23.0
+jsonschema-specifications==2023.12.1
 langchain-core==0.2.22
 langchain-openai==0.1.17
 langsmith==0.1.93
@@ -40,8 +45,10 @@ PyJWT==2.8.0
 python-dateutil==2.8.2
 python-dotenv==1.0.1
 PyYAML==6.0.1
+referencing==0.35.1
 regex==2024.5.15
 requests==2.32.3
+rpds-py==0.20.0
 s3transfer==0.9.0
 six==1.16.0
 sniffio==1.3.1
@@ -50,5 +57,6 @@ tenacity==8.5.0
 tiktoken==0.7.0
 tqdm==4.66.4
 typing_extensions==4.9.0
+uritemplate==4.1.1
 urllib3==2.0.7
 whitenoise==6.6.0
