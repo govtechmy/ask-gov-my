@@ -1,10 +1,10 @@
-'use server';
+"use server";
 const API_URL = process.env.API_URL;
-import { Question, Agency, Topic, QuestionSubmission } from '@/types/types';
+import { Question, Agency, Topic, QuestionSubmission } from "@/types/types";
 
 export async function getAllQuestions(
   page: number = 1,
-  pageSize: number = 6,
+  pageSize: number = 6
 ): Promise<{
   data: Question[];
   totalItems: number;
@@ -15,16 +15,16 @@ export async function getAllQuestions(
     const response = await fetch(
       `${API_URL}/questions/?page=${page}&page_size=${pageSize}`,
       {
-        method: 'GET',
+        method: "GET",
         headers: {
-          'Cache-Control': 'no-cache',
-          Pragma: 'no-cache',
-          Expires: '0',
+          "Cache-Control": "no-cache",
+          Pragma: "no-cache",
+          Expires: "0",
         },
-      },
+      }
     );
     if (!response.ok) {
-      throw new Error('Failed to fetch questions');
+      throw new Error("Failed to fetch questions");
     }
 
     const data = await response.json();
@@ -36,7 +36,7 @@ export async function getAllQuestions(
       currentPage: page,
     };
   } catch (error) {
-    console.error('Error in getAllQuestions:', error);
+    console.error("Error in getAllQuestions:", error);
     return {
       data: [],
       totalItems: 0,
@@ -48,16 +48,16 @@ export async function getAllQuestions(
 
 export async function getAllTopics(): Promise<Topic[]> {
   const response = await fetch(`${API_URL}/topics/`, {
-    method: 'GET',
+    method: "GET",
     headers: {
-      'Cache-Control': 'no-cache',
-      Pragma: 'no-cache',
-      Expires: '0',
+      "Cache-Control": "no-cache",
+      Pragma: "no-cache",
+      Expires: "0",
     },
   });
 
   if (!response.ok) {
-    throw new Error('Failed to fetch topics');
+    throw new Error("Failed to fetch topics");
   }
 
   const data = await response.json();
@@ -66,34 +66,34 @@ export async function getAllTopics(): Promise<Topic[]> {
 
 export async function getTopicByAgency(agencyId: number): Promise<Topic[]> {
   const topics = await getAllTopics();
-  const filteredTopics = topics.filter(topic => topic.agency.id === agencyId);
+  const filteredTopics = topics.filter((topic) => topic.agency === agencyId);
   return filteredTopics;
 }
 
 export async function getTopicsDetail(
   topicIds: number[],
-  locale: string,
+  locale: string
 ): Promise<string[]> {
   const topics = await getAllTopics();
   const topicIdToTitleMap: { [key: number]: string } = {};
 
-  if (locale === 'en') {
-    topics.forEach(topic => {
+  if (locale === "en-GB") {
+    topics.forEach((topic) => {
       topicIdToTitleMap[topic.id] = topic.title;
     });
   } else {
-    topics.forEach(topic => {
+    topics.forEach((topic) => {
       topicIdToTitleMap[topic.id] = topic.title_ms;
     });
   }
 
-  return topicIds.map(id => topicIdToTitleMap[id] || 'Unknown Topic');
+  return topicIds.map((id) => topicIdToTitleMap[id] || "Unknown Topic");
 }
 
 export async function getQuestionsByAgency(
   agencyId: string,
   page: number = 1,
-  pageSize: number = 6,
+  pageSize: number = 6
 ): Promise<{
   data: Question[];
   totalItems: number;
@@ -102,19 +102,19 @@ export async function getQuestionsByAgency(
 }> {
   try {
     const response = await fetch(
-      `${API_URL}/questions/by-agency/${agencyId}?page=${page}&page_size=${pageSize}`,
+      `${API_URL}/questions?agency=${agencyId}&page=${page}&page_size=${pageSize}`,
       {
-        method: 'GET',
+        method: "GET",
         headers: {
-          'Cache-Control': 'no-cache',
-          Pragma: 'no-cache',
-          Expires: '0',
+          "Cache-Control": "no-cache",
+          Pragma: "no-cache",
+          Expires: "0",
         },
-      },
+      }
     );
 
     if (!response.ok) {
-      throw new Error('Failed to fetch questions');
+      throw new Error("Failed to fetch questions");
     }
 
     const data = await response.json();
@@ -126,7 +126,7 @@ export async function getQuestionsByAgency(
       currentPage: page,
     };
   } catch (error) {
-    console.error('Error in getQuestionsByAgency:', error);
+    console.error("Error in getQuestionsByAgency:", error);
     return {
       data: [],
       totalItems: 0,
@@ -140,7 +140,7 @@ export async function getQuestionsByTopicAndAgency(
   agencyUUID: string,
   topicId: string,
   page: number = 1,
-  pageSize: number = 6,
+  pageSize: number = 6
 ): Promise<{
   data: Question[];
   totalItems: number;
@@ -149,19 +149,19 @@ export async function getQuestionsByTopicAndAgency(
 }> {
   try {
     const response = await fetch(
-      `${API_URL}/questions/by-agency/${agencyUUID}/topics/${topicId}/?page=${page}&page_size=${pageSize}`,
+      `${API_URL}/questions?agency=${agencyUUID}&topics=${topicId}&page=${page}&page_size=${pageSize}`,
       {
-        method: 'GET',
+        method: "GET",
         headers: {
-          'Cache-Control': 'no-cache',
-          Pragma: 'no-cache',
-          Expires: '0',
+          "Cache-Control": "no-cache",
+          Pragma: "no-cache",
+          Expires: "0",
         },
-      },
+      }
     );
 
     if (!response.ok) {
-      throw new Error('Failed to fetch questions');
+      throw new Error("Failed to fetch questions");
     }
 
     const data = await response.json();
@@ -173,7 +173,7 @@ export async function getQuestionsByTopicAndAgency(
       currentPage: page,
     };
   } catch (error) {
-    console.error('Error fetching questions:', error);
+    console.error("Error fetching questions:", error);
     return {
       data: [],
       totalItems: 0,
@@ -184,10 +184,10 @@ export async function getQuestionsByTopicAndAgency(
 }
 
 export async function getQuestionById(
-  questionId: string,
+  questionId: string
 ): Promise<Question | null> {
   const response = await fetch(`${API_URL}/questions/${questionId}/`, {
-    method: 'GET',
+    method: "GET",
     next: { revalidate: 0 },
   });
   if (response.ok) {
@@ -201,9 +201,9 @@ export async function submitQuestion(data: QuestionSubmission): Promise<void> {
 
   try {
     const response = await fetch(url, {
-      method: 'POST',
+      method: "POST",
       headers: {
-        'Content-Type': 'application/json',
+        "Content-Type": "application/json",
       },
       body: JSON.stringify({ data }),
     });
@@ -231,7 +231,7 @@ export async function submitQuestion(data: QuestionSubmission): Promise<void> {
     if (error instanceof Error) {
       throw new Error(`Network error: ${error.message}`);
     } else {
-      throw new Error('An unknown error occurred');
+      throw new Error("An unknown error occurred");
     }
   }
 }
@@ -239,17 +239,17 @@ export async function submitQuestion(data: QuestionSubmission): Promise<void> {
 export async function getAgencyList(): Promise<Agency[]> {
   try {
     const response = await fetch(`${API_URL}/agencies`, {
-      method: 'GET',
+      method: "GET",
       headers: {
-        'Cache-Control': 'no-cache',
-        Pragma: 'no-cache',
-        Expires: '0',
-        'Content-Type': 'application/json',
+        "Cache-Control": "no-cache",
+        Pragma: "no-cache",
+        Expires: "0",
+        "Content-Type": "application/json",
       },
     });
 
     if (!response.ok) {
-      throw new Error('Failed to fetch agency list');
+      throw new Error("Failed to fetch agency list");
     }
 
     const data = await response.json();
@@ -259,10 +259,10 @@ export async function getAgencyList(): Promise<Agency[]> {
       name_ms: agency.name_ms,
       acronym: agency.acronym,
       logo_url: agency.logo_url,
-      last_edited: agency.last_edited,
+      last_edited: agency.updated_at,
     }));
   } catch (error) {
-    console.error('Error in getAgencyList:', error);
+    console.error("Error in getAgencyList:", error);
     return [];
   }
 }
@@ -270,7 +270,7 @@ export async function getAgencyList(): Promise<Agency[]> {
 export async function getAgency(agencyId: number): Promise<Agency | null> {
   try {
     const agencies = await getAgencyList();
-    const agency = agencies.find(agency => agency.id === agencyId);
+    const agency = agencies.find((agency) => agency.id === agencyId);
 
     if (!agency) {
       throw new Error(`Agency with ID ${agencyId} not found`);
@@ -278,7 +278,7 @@ export async function getAgency(agencyId: number): Promise<Agency | null> {
 
     return agency;
   } catch (error) {
-    console.error('Error in getAgency:', error);
+    console.error("Error in getAgency:", error);
     return null;
   }
 }
@@ -286,7 +286,7 @@ export async function getAgency(agencyId: number): Promise<Agency | null> {
 export async function getAgencyListWithPagination(
   page: number = 1,
   pageSize: number = 27,
-  searchTerm: string = '',
+  searchTerm: string = ""
 ): Promise<{
   data: {
     agencies: Agency[];
@@ -298,22 +298,22 @@ export async function getAgencyListWithPagination(
   try {
     const searchQuery = searchTerm
       ? `&search=${encodeURIComponent(searchTerm)}`
-      : '';
+      : "";
     const response = await fetch(
       `${API_URL}/agencies?page=${page}&page_size=${pageSize}${searchQuery}`,
       {
-        method: 'GET',
+        method: "GET",
         headers: {
-          'Cache-Control': 'no-cache',
-          Pragma: 'no-cache',
-          Expires: '0',
-          'Content-Type': 'application/json',
+          "Cache-Control": "no-cache",
+          Pragma: "no-cache",
+          Expires: "0",
+          "Content-Type": "application/json",
         },
-      },
+      }
     );
 
     if (!response.ok) {
-      throw new Error('Failed to fetch agency list');
+      throw new Error("Failed to fetch agency list");
     }
 
     const responseData = await response.json();
@@ -326,7 +326,7 @@ export async function getAgencyListWithPagination(
           name_ms: agency.name_ms,
           acronym: agency.acronym,
           logo_url: agency.logo_url,
-          last_edited: agency.last_edited,
+          last_edited: agency.updated_at,
         })),
         totalItems: responseData.totalItems,
         totalPages: Math.ceil(responseData.count / pageSize),
@@ -334,7 +334,7 @@ export async function getAgencyListWithPagination(
       },
     };
   } catch (error) {
-    console.error('Error in getAgencyListWithPagination:', error);
+    console.error("Error in getAgencyListWithPagination:", error);
     return {
       data: {
         agencies: [],
@@ -349,23 +349,23 @@ export async function getAgencyListWithPagination(
 export async function getDynamicAgencyMap(): Promise<Record<string, string>> {
   try {
     const response = await fetch(`${API_URL}/agencies`, {
-      method: 'GET',
+      method: "GET",
       headers: {
-        'Cache-Control': 'no-cache',
-        Pragma: 'no-cache',
-        Expires: '0',
-        'Content-Type': 'application/json',
+        "Cache-Control": "no-cache",
+        Pragma: "no-cache",
+        Expires: "0",
+        "Content-Type": "application/json",
       },
     });
 
     if (!response.ok) {
-      throw new Error('Failed to fetch agency list');
+      throw new Error("Failed to fetch agency list");
     }
 
     const data: Agency[] = await response.json();
     const agencyMap: Record<string, string> = {};
 
-    data.forEach(agency => {
+    data.forEach((agency) => {
       if (agency.acronym) {
         agencyMap[agency.acronym] = agency.id.toString();
       }
@@ -373,7 +373,7 @@ export async function getDynamicAgencyMap(): Promise<Record<string, string>> {
 
     return agencyMap;
   } catch (error) {
-    console.error('Error in getDynamicAgencyMap:', error);
+    console.error("Error in getDynamicAgencyMap:", error);
     return {};
   }
 }
@@ -382,17 +382,17 @@ export async function likeQuestion(questionId: string): Promise<void> {
   const url = `${API_URL}/questions/${questionId}/like/`;
 
   const response = await fetch(url, {
-    method: 'POST',
+    method: "POST",
     headers: {
-      'Content-Type': 'application/json',
-      'Cache-Control': 'no-cache',
-      Pragma: 'no-cache',
-      Expires: '0',
+      "Content-Type": "application/json",
+      "Cache-Control": "no-cache",
+      Pragma: "no-cache",
+      Expires: "0",
     },
   });
 
   if (!response.ok) {
-    throw new Error('Failed to like question');
+    throw new Error("Failed to like question");
   }
 }
 
@@ -400,39 +400,39 @@ export async function dislikeQuestion(questionId: string): Promise<void> {
   const url = `${API_URL}/questions/${questionId}/dislike/`;
 
   const response = await fetch(url, {
-    method: 'POST',
+    method: "POST",
     headers: {
-      'Content-Type': 'application/json',
-      'Cache-Control': 'no-cache',
-      Pragma: 'no-cache',
-      Expires: '0',
+      "Content-Type": "application/json",
+      "Cache-Control": "no-cache",
+      Pragma: "no-cache",
+      Expires: "0",
     },
   });
 
   if (!response.ok) {
-    throw new Error('Failed to dislike question');
+    throw new Error("Failed to dislike question");
   }
 }
 
 export async function getTrendingAgencies(): Promise<Agency[]> {
   try {
-    const response = await fetch(`${API_URL}/agencies/trending/`, {
-      method: 'GET',
+    const response = await fetch(`${API_URL}/agencies/`, {
+      method: "GET",
       headers: {
-        'Cache-Control': 'no-cache',
-        Pragma: 'no-cache',
-        Expires: '0',
-        'Content-Type': 'application/json',
+        "Cache-Control": "no-cache",
+        Pragma: "no-cache",
+        Expires: "0",
+        "Content-Type": "application/json",
       },
     });
 
     if (!response.ok) {
-      throw new Error('Failed to fetch trending agencies');
+      throw new Error("Failed to fetch trending agencies");
     }
     const data = await response.json();
     return data;
   } catch (error) {
-    console.error('Error in getTrendingAgencies:', error);
+    console.error("Error in getTrendingAgencies:", error);
     return [];
   }
 }

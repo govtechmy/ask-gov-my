@@ -1,13 +1,13 @@
-'use client';
+"use client";
 
-import { useSearchParams } from 'next/navigation';
-import { Link } from '@/lib/i18n';
-import IconQuestionSmile from '@/icons/iconquestionsmile';
-import DateComponent from '../Date';
-import LikeIcon from '@/icons/likeicon';
-import AgencyLogoImporter from '../AgencyLogoImporter';
-import { Agency, Question } from '@/types/types';
-import AgencyName from '../AgencyName';
+import { useSearchParams } from "next/navigation";
+import { Link } from "@/lib/i18n";
+import IconQuestionSmile from "@/icons/iconquestionsmile";
+import DateComponent from "../Date";
+import LikeIcon from "@/icons/likeicon";
+import AgencyLogoImporter from "../AgencyLogoImporter";
+import { Agency, Question } from "@/types/types";
+import AgencyName from "../AgencyName";
 
 interface QuestionCardProps {
   question: Question;
@@ -21,15 +21,15 @@ const QuestionCard: React.FC<QuestionCardProps> = ({
   agencyList,
 }) => {
   const searchParams = useSearchParams();
-  const locale = searchParams.get('locale') || '';
+  const locale = searchParams.get("locale") || "";
   const agencyId =
-    typeof question.agency === 'object' ? question.agency.id : question.agency;
+    typeof question.agency === "object" ? question.agency.id : question.agency;
 
   const agencyAcronym = Object.keys(agencyMap).find(
-    key => agencyMap[key] === agencyId?.toString(),
+    (key) => agencyMap[key] === agencyId?.toString()
   );
 
-  const currentAgency = agencyList.find(agency => agency.id === agencyId);
+  const currentAgency = agencyList.find((agency) => agency.id === agencyId);
 
   return (
     <Link
@@ -58,7 +58,7 @@ const QuestionCard: React.FC<QuestionCardProps> = ({
             {currentAgency && <AgencyName agency={currentAgency} />}
             <div className="font-normal text-sm text-dim-500">
               &nbsp;
-              <DateComponent date={question.date} locale={locale} />
+              <DateComponent date={question.created_at} locale={locale} />
             </div>
           </div>
         </span>
@@ -66,16 +66,16 @@ const QuestionCard: React.FC<QuestionCardProps> = ({
 
       <div
         className="mt-2 ml-10 font-normal text-black-700 text-justify line-clamp-2 max-w-[900px]"
-        style={{ fontSize: '14px', lineHeight: '22px' }}
+        style={{ fontSize: "14px", lineHeight: "22px" }}
       >
-        {question.answer_preview || question.answer}
+        {question.answer.text}
       </div>
       <div className="mt-3 ml-10 flex items-center">
         <div className="mr-2">
           <LikeIcon />
         </div>
         <div className="mr-1 font-semibold text-sm text-dim-500">
-          {question.likes}
+          {question.answer.likes}
         </div>
         <div className="font-normal text-sm text-dim-500">
           people found this useful

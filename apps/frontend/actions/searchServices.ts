@@ -1,7 +1,7 @@
-'use server';
-import dotenv from 'dotenv';
-import { Client } from '@elastic/elasticsearch';
-import OpenAI from 'openai';
+"use server";
+import dotenv from "dotenv";
+import { Client } from "@elastic/elasticsearch";
+import OpenAI from "openai";
 dotenv.config();
 
 const elasticsearchURL = process.env.ELASTICSEARCH_URL;
@@ -11,6 +11,8 @@ const openaiApiKey = process.env.OPENAI_API_KEY;
 let client: Client | null = null;
 
 function clientf(): Client {
+  console.log("fefee", elasticsearchURL);
+  console.log("here", elasticsearchApiKey);
   if (!client) {
     client = new Client({
       node: elasticsearchURL,
@@ -35,33 +37,40 @@ function openaif(): OpenAI {
 
 interface Question {
   id: number;
+  topics: {
+    id: number;
+    name: string;
+    name_ms: string;
+  }[];
   question: string;
-  date: string;
-  answered_date: string;
-  state: string;
+  answer: Answer;
+  spam: boolean;
+  email: string;
+  admin_opened_at: string | null;
+  staff_opened_at: string | null;
+  created_at: string;
+  updated_at: string;
   agency: {
     id: number;
     name: string;
     acronym: string;
     name_ms: string;
   };
-  answer: string;
-  topics: {
-    id: number;
-    name: string;
-    name_ms: string;
-  }[];
-  email?: string;
+}
+interface Answer {
+  id: number;
+  question: number;
+  raw: string;
+  text: string;
   likes: number;
-  dislikes: number;
-  attachments?: string[];
-  admin_isopen?: boolean;
-  staff_isopen?: boolean;
+  draft: boolean;
+  created_at: string;
+  updated_at: string;
 }
 
 async function getEmbedding(text: string): Promise<number[]> {
   const response = await openaif().embeddings.create({
-    model: 'text-embedding-3-small',
+    model: "text-embedding-3-small",
     input: text,
   });
   return response.data[0].embedding;
@@ -72,18 +81,18 @@ export async function searchQuestions(query: string): Promise<Question[]> {
     const embedding = await getEmbedding(query);
 
     const result = await clientf().search({
-      index: 'questions',
+      index: "questions",
       body: {
         query: {
           bool: {
             must: [
-              { term: { state: 'completed' } },
+              // { term: { state: 'completed' } },
               {
                 bool: {
                   should: [
                     {
                       knn: {
-                        field: 'vector',
+                        field: "vector",
                         query_vector: embedding,
                         num_candidates: 50,
                         boost: 1,
@@ -93,11 +102,11 @@ export async function searchQuestions(query: string): Promise<Question[]> {
                       multi_match: {
                         query,
                         fields: [
-                          'agency.name',
-                          'agency.acronym',
-                          'agency.name_ms',
-                          'topics.name',
-                          'topics.name_ms',
+                          "agency.name",
+                          "agency.acronym",
+                          "agency.name_ms",
+                          "topics.name",
+                          "topics.name_ms",
                         ],
                         boost: 0.5,
                       },
@@ -116,14 +125,14 @@ export async function searchQuestions(query: string): Promise<Question[]> {
 
     return filteredQuestions;
   } catch (error) {
-    console.error('Error searching questions:', error);
+    console.error("Error searching questions:", error);
     return [];
   }
 }
 export async function searchQuestionsWithPagination(
   query: string,
   page: number = 1,
-  pageSize: number = 6,
+  pageSize: number = 6
 ): Promise<{
   data: Question[];
   totalItems: number;
@@ -134,18 +143,18 @@ export async function searchQuestionsWithPagination(
     const embedding = await getEmbedding(query);
 
     const result = await clientf().search({
-      index: 'questions',
+      index: "questions",
       body: {
         query: {
           bool: {
             must: [
-              { term: { state: 'completed' } },
+              // { term: { state: "completed" } },
               {
                 bool: {
                   should: [
                     {
                       knn: {
-                        field: 'vector',
+                        field: "vector",
                         query_vector: embedding,
                         num_candidates: 50,
                         boost: 1,
@@ -155,11 +164,11 @@ export async function searchQuestionsWithPagination(
                       multi_match: {
                         query,
                         fields: [
-                          'agency.name',
-                          'agency.acronym',
-                          'agency.name_ms',
-                          'topics.name',
-                          'topics.name_ms',
+                          "agency.name",
+                          "agency.acronym",
+                          "agency.name_ms",
+                          "topics.name",
+                          "topics.name_ms",
                         ],
                         boost: 0.5,
                       },
@@ -176,7 +185,7 @@ export async function searchQuestionsWithPagination(
     });
 
     const totalItems = result.hits.total
-      ? typeof result.hits.total === 'number'
+      ? typeof result.hits.total === "number"
         ? result.hits.total
         : result.hits.total.value
       : 0;
@@ -191,7 +200,7 @@ export async function searchQuestionsWithPagination(
       currentPage: page,
     };
   } catch (error) {
-    console.error('Error searching questions with pagination:', error);
+    console.error("Error searching questions with pagination:", error);
     return {
       data: [],
       totalItems: 0,
@@ -201,13 +210,12 @@ export async function searchQuestionsWithPagination(
   }
 }
 
-
 export async function getRelatedQuestions(questionText: string) {
   try {
     const relatedQuestions = await searchQuestions(questionText);
     return relatedQuestions.slice(0, 4); // Return only the top 4 related questions
   } catch (error) {
-    console.error('Error fetching related questions:', error);
+    console.error("Error fetching related questions:", error);
     return [];
   }
 }
