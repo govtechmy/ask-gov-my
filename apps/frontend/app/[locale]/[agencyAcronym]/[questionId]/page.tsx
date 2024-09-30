@@ -65,15 +65,16 @@ const QuestionDetailPage: React.FC<Props> = async ({ params }) => {
     redirect("/");
   }
 
-  const attachments = question.attachments || [];
+  // TODO: This is now in Answer
+  // const attachments = question.attachments || [];
 
-  let fileSize: number[] = [];
+  // let fileSize: number[] = [];
 
-  try {
-    fileSize = await fetchFileSizes(attachments);
-  } catch (error) {
-    console.log("error on fileSize", error);
-  }
+  // try {
+  //   fileSize = await fetchFileSizes(attachments);
+  // } catch (error) {
+  //   console.log("error on fileSize", error);
+  // }
 
   let agencyList: any = [];
 
@@ -91,6 +92,8 @@ const QuestionDetailPage: React.FC<Props> = async ({ params }) => {
   );
 
   const relatedQuestions = await getRelatedQuestions(question.question);
+
+  console.log("here", relatedQuestions);
 
   return (
     <div>
@@ -130,7 +133,7 @@ const QuestionDetailPage: React.FC<Props> = async ({ params }) => {
                   />
                 </div>
                 &nbsp;
-                <DateComponent date={question.date} locale={locale} />
+                <DateComponent date={question.created_at} locale={locale} />
               </div>
             </div>
 
@@ -158,7 +161,7 @@ const QuestionDetailPage: React.FC<Props> = async ({ params }) => {
                     </div>
                     <div className="flex px-8 pb-5 pt-4 text-justify text-black-700 flex-col">
                       <TipTap
-                        editorText={question.answer}
+                        editorText={question.answer.raw}
                         className="w-full flex-1"
                         isEditable={false}
                         hasMenuBar={false}
@@ -185,17 +188,17 @@ const QuestionDetailPage: React.FC<Props> = async ({ params }) => {
                         keyword={"attachment"}
                       />
                     </div>
-                    <div className="mx-8 mb-8 ">
+                    {/* <div className="mx-8 mb-8 ">
                       <AttachmentDownload
                         uploadedAttachments={attachments}
                         fileSizes={fileSize}
                       ></AttachmentDownload>
-                    </div>
+                    </div> */}
                   </div>
                   <div>
                     <ThumbsCounter
                       questionId={questionId}
-                      totalLikes={question.likes}
+                      totalLikes={question.answer.likes}
                     />
                   </div>
                 </div>
@@ -219,7 +222,7 @@ const QuestionDetailPage: React.FC<Props> = async ({ params }) => {
                           {relatedQuestion.question}
                         </span>
                         <span className="mt-1 font-normal text-sm text-dim-500 line-clamp-1">
-                          Answer: {relatedQuestion.answer}
+                          Answer: {relatedQuestion.answer.text}
                         </span>
                       </Link>
                       <span className="on hover:cursor-pointer pl-3">

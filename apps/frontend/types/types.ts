@@ -2,16 +2,13 @@ export interface Question {
   id: number;
   topics: number[] | ESTopic[];
   question: string;
-  date: string;
-  state: string;
-  answer: string;
-  email?: string;
-  likes: number;
-  dislikes: number;
-  attachments?: string[];
-  answered_date: string;
-  admin_isopen?: boolean;
-  staff_isopen?: boolean;
+  answer: Answer;
+  spam: boolean;
+  email: string;
+  admin_opened_at: string | null;
+  staff_opened_at: string | null;
+  created_at: string;
+  updated_at: string;
   agency:
     | number
     | {
@@ -20,7 +17,17 @@ export interface Question {
         name_ms?: string;
         acronym: string;
       };
-  answer_preview?: string;
+}
+
+export interface Answer {
+  id: number;
+  question: number;
+  raw: string;
+  text: string;
+  likes: number;
+  draft: boolean;
+  created_at: string;
+  updated_at: string;
 }
 
 export interface Agency {
@@ -28,9 +35,9 @@ export interface Agency {
   name: string;
   name_ms: string;
   acronym: string;
-  total_likes?: number;
+  total_likes: number;
   logo_url?: string;
-  last_edited: string;
+  updated_at: string;
 }
 export interface ESTopic {
   id: number;
@@ -39,20 +46,23 @@ export interface ESTopic {
 }
 
 export interface Topic {
-  title_ms: string;
   id: number;
   title: string;
-  agency: {
-    id: number;
-    name: string;
-    acronym: string;
-  };
+  title_ms: string;
+  created_at: string;
+  updated_at: string;
+  agency:
+    | number
+    | {
+        id: number;
+        name: string;
+        name_ms?: string;
+        acronym: string;
+      };
 }
 
-export interface QuestionSubmission {
-  question: string;
-  email: string;
-}
+export interface QuestionSubmission
+  extends Pick<Question, "question" | "email"> {}
 
 export interface User {
   id: string;
@@ -60,8 +70,16 @@ export interface User {
   email: string;
   emailVerified: Date | null;
   image: string | null;
-  role: 'staff' | 'super_admin';
-  createdAt: Date;
-  updatedAt: Date;
+  role: "staff" | "super_admin";
   agency: number | null;
+  user_profile_colour: string | null;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface PageResult<T> {
+  results: T[];
+  count: number;
+  next: string;
+  previous: string;
 }
