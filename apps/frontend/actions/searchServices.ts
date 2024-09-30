@@ -11,8 +11,6 @@ const openaiApiKey = process.env.OPENAI_API_KEY;
 let client: Client | null = null;
 
 function clientf(): Client {
-  console.log("fefee", elasticsearchURL);
-  console.log("here", elasticsearchApiKey);
   if (!client) {
     client = new Client({
       node: elasticsearchURL,
@@ -86,7 +84,7 @@ export async function searchQuestions(query: string): Promise<Question[]> {
         query: {
           bool: {
             must: [
-              // { term: { state: 'completed' } },
+              { term: { state: "completed" } },
               {
                 bool: {
                   should: [
@@ -148,7 +146,7 @@ export async function searchQuestionsWithPagination(
         query: {
           bool: {
             must: [
-              // { term: { state: "completed" } },
+              { term: { state: "completed" } },
               {
                 bool: {
                   should: [

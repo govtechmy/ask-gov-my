@@ -21,7 +21,6 @@ import { Question } from "@/types/types";
 import AgencyLogoImporter from "@/components/common/AgencyLogoImporter";
 import ContextSearchBar from "@/components/context/ContextSearchBar";
 import { fetchFileSizes } from "@/actions/utils";
-import AttachmentDownload from "@/components/AdminDashboard/AttachmentDownload";
 import TipTap from "@/components/Editor/TipTap";
 import BaseHeader from "@/components/common/Header/BaseHeader";
 import Masthead from "@/components/common/Header/Masthead";

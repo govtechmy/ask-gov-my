@@ -1,7 +1,5 @@
-import React from 'react';
-import { getAgencyListWithPagination } from '@/actions/questionServices';
-import AgencyNavbar from '@/components/AdminDashboard/AgencyNavbar';
-import AgencyBox from '@/components/AdminDashboard/AgencyBox';
+import React from "react";
+import { getAgencyListWithPagination } from "@/actions/questionServices";
 
 interface ManageAgenciesProps {
   searchParams: {
@@ -14,18 +12,17 @@ const ManageAgencies: React.FC<ManageAgenciesProps> = async ({
   searchParams,
 }) => {
   const currentPage = searchParams.page ? parseInt(searchParams.page, 10) : 1;
-  const searchTerm = searchParams.searchTerm || '';
+  const searchTerm = searchParams.searchTerm || "";
 
   const { data } = await getAgencyListWithPagination(
     currentPage,
     27,
-    searchTerm,
+    searchTerm
   );
 
   return (
     <div className="container max-w-screen-lg pt-3 mx-auto">
-      <AgencyNavbar />
-      <AgencyBox data={data} />
+      <div>TEMP AGENCY ADMIN PAGE</div>
     </div>
   );
 };

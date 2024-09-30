@@ -1,16 +1,16 @@
-'use client';
+"use client";
 
-import { useEffect, useState, useCallback, useRef } from 'react';
-import Link from 'next/link';
-import { searchQuestions } from '@/actions/searchServices';
-import Search from '@/icons/search';
-import JataNegaraIcon from '@/icons/jatanegaraicon';
-import Close from '@/icons/close';
-import RightArrow from '@/icons/rightarrow';
-import AskQuestion from './AskQuestion';
-import { useRouter } from '@/lib/i18n';
-import { useTranslations } from 'next-intl';
-import { getDynamicAgencyMap } from '@/actions/questionServices';
+import { useEffect, useState, useCallback, useRef } from "react";
+import Link from "next/link";
+import { searchQuestions } from "@/actions/searchServices";
+import Search from "@/icons/search";
+import JataNegaraIcon from "@/icons/jatanegaraicon";
+import Close from "@/icons/close";
+import RightArrow from "@/icons/rightarrow";
+import AskQuestion from "./AskQuestion";
+import { useRouter } from "@/lib/i18n";
+import { useTranslations } from "next-intl";
+import { getDynamicAgencyMap } from "@/actions/questionServices";
 
 interface InputNavbarProps {
   searchQuery: string;
@@ -32,7 +32,7 @@ const debounce = (func: Function, delay: number) => {
 
 const highlightText = (text: string, query: string) => {
   if (!query) return text;
-  const parts = text.split(new RegExp(`(${query})`, 'gi'));
+  const parts = text.split(new RegExp(`(${query})`, "gi"));
   return parts.map((part, index) =>
     part.toLowerCase() === query.toLowerCase() ? (
       <span key={index} className="text-[#702FF9] dark:text-[#9E70FF]">
@@ -40,7 +40,7 @@ const highlightText = (text: string, query: string) => {
       </span>
     ) : (
       part
-    ),
+    )
   );
 };
 
@@ -59,7 +59,7 @@ const InputNavbar: React.FC<InputNavbarProps> = ({
   const [hiddenDisplay, setHiddendisplay] = useState(true);
   const [agencyMap, setAgencyMap] = useState<Record<string, string>>({});
   const router = useRouter();
-  const t = useTranslations('Search');
+  const t = useTranslations("Search");
   const inputRef = useRef<HTMLInputElement>(null);
 
   const handleInfoClick = () => {
@@ -77,7 +77,7 @@ const InputNavbar: React.FC<InputNavbarProps> = ({
   };
 
   const handleKeyPress = (event: React.KeyboardEvent<HTMLInputElement>) => {
-    if (event.key === 'Enter' && searchQuery.trim().length > 0) {
+    if (event.key === "Enter" && searchQuery.trim().length > 0) {
       setDisplayAllMatches(true);
       router.push(`/searchresults?query=${searchQuery}`);
       setSearchResults([]);
@@ -89,7 +89,7 @@ const InputNavbar: React.FC<InputNavbarProps> = ({
   const fetchSearchResults = async (query: string) => {
     if (query.length > 0) {
       setIsSearching(true);
-      const results = await searchQuestions(query);
+      const results = await searchQuestions("sample");
       setSearchResults(results);
       setIsSearching(false);
       setIsTyping(false);
@@ -103,11 +103,11 @@ const InputNavbar: React.FC<InputNavbarProps> = ({
 
   const debouncedFetchSearchResults = useCallback(
     debounce((query: string) => fetchSearchResults(query), 1000), // ms delay
-    [],
+    []
   );
 
   const clearSearch = () => {
-    setSearchQuery('');
+    setSearchQuery("");
     setSearchResults([]);
     setIsTyping(false);
     setShowNoResults(false); // reset no results message on clear
@@ -129,32 +129,32 @@ const InputNavbar: React.FC<InputNavbarProps> = ({
   return (
     <div
       id="inputnavbar"
-      className={`flex items-center border-outline-200 h-11 shadow-button border pl-3 pr-2 py-2 bg-[#FFFFFF] dark:bg-[#1D1D21] w-[800px] relative ${searchQuery.length > 0 && hiddenDisplay ? 'rounded-b-none rounded-t-3xl' : 'rounded-full'}`}
+      className={`flex items-center border-outline-200 h-11 shadow-button border pl-3 pr-2 py-2 bg-[#FFFFFF] dark:bg-[#1D1D21] w-[800px] relative ${searchQuery.length > 0 && hiddenDisplay ? "rounded-b-none rounded-t-3xl" : "rounded-full"}`}
     >
       <input
         ref={inputRef}
         className="flex-1 border-none outline-none px-2 py-1 bg-inherit w-[740px]"
-        placeholder={t(agencyUUID ? 'search_agency' : 'search')}
+        placeholder={t(agencyUUID ? "search_agency" : "search")}
         value={searchQuery}
         onChange={handleInputChange}
         onKeyPress={handleKeyPress}
       />
       {searchQuery.length > 0 && (
         <div className="absolute right-10 bg-transparent flex text-dim-500 items-center">
-          <div className="font-normal text-xs" style={{ lineHeight: '18px' }}>
-            {t('press_enter')} &nbsp;
+          <div className="font-normal text-xs" style={{ lineHeight: "18px" }}>
+            {t("press_enter")} &nbsp;
           </div>
           <div
             className="font-semibold text-xs "
-            style={{ lineHeight: '18px' }}
+            style={{ lineHeight: "18px" }}
           >
-            {t('enter_key')} &nbsp;
+            {t("enter_key")} &nbsp;
           </div>
           <div
             className="font-normal text-xs pr-2"
-            style={{ lineHeight: '18px' }}
+            style={{ lineHeight: "18px" }}
           >
-            {t('display_matches')}
+            {t("display_matches")}
           </div>
           <div className="pr-4 hover:cursor-pointer" onClick={clearSearch}>
             <Close />
@@ -172,18 +172,18 @@ const InputNavbar: React.FC<InputNavbarProps> = ({
           <div className="overflow-y-auto max-h-60 pl-2 pr-3 pt-2">
             {/* Wrapper for scrollbar */}
             {isSearching ? (
-              <div className="px-4 py-2 text-center">{t('searching')}</div>
+              <div className="px-4 py-2 text-center">{t("searching")}</div>
             ) : (
               <>
                 {searchResults.length === 0 && showNoResults && (
-                  <div className="px-4 py-2 text-center">{t('no_results')}</div>
+                  <div className="px-4 py-2 text-center">{t("no_results")}</div>
                 )}
                 {searchResults.length > 0 && (
                   <ul>
                     {searchResults.slice(0, 20).map((result, index) => {
                       // take 20 result max
                       const agencyAcronym = Object.keys(agencyMap).find(
-                        key => agencyMap[key] === result.agency.id.toString(),
+                        (key) => agencyMap[key] === result.agency.id.toString()
                       );
 
                       return (
@@ -199,7 +199,7 @@ const InputNavbar: React.FC<InputNavbarProps> = ({
                               {highlightText(result.question, searchQuery)}
                             </span>
                             <span className="mt-1 font-normal text-sm text-dim-500 line-clamp-1">
-                              Answer:{' '}
+                              Answer:{" "}
                               {highlightText(result.answer, searchQuery)}
                             </span>
                           </Link>
