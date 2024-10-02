@@ -41,11 +41,16 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     "ask_gov",
     "rest_framework",
+    "rest_framework.authtoken",
     "django_filters",
-    "rest_framework_simplejwt",
     "corsheaders",
     'django_extensions',
     'drf_spectacular',
+    "allauth",
+    "allauth.account",
+    "allauth.headless",
+    "allauth.socialaccount",
+    "allauth.socialaccount.providers.google",
 ]
 
 MIDDLEWARE = [
@@ -57,7 +62,19 @@ MIDDLEWARE = [
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
+    # `allauth` middleware
+    "allauth.account.middleware.AccountMiddleware",
 ]
+
+AUTHENTICATION_BACKENDS = [
+    # Needed to login by username in Django admin, regardless of `allauth`
+    "django.contrib.auth.backends.ModelBackend",
+    # `allauth` specific authentication methods, such as login by email
+    "allauth.account.auth_backends.AuthenticationBackend",
+]
+
+# TODO: Use a real email backend
+EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
 
 CORS_ALLOW_ALL_ORIGINS = True
 
@@ -121,6 +138,9 @@ AUTH_PASSWORD_VALIDATORS = [
 
 REST_FRAMEWORK = {
     'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema',
+    "DEFAULT_AUTHENTICATION_CLASSES": [
+        "rest_framework.authentication.TokenAuthentication"
+    ],
 }
 
 # Internationalization
@@ -150,4 +170,28 @@ AUTH_USER_MODEL = "ask_gov.User"
 
 SPECTACULAR_SETTINGS = {
     'TITLE': 'AskGov API',
+}
+
+# `allauth` related settings
+HEADLESS_ONLY = True
+ACCOUNT_EMAIL_REQUIRED = True
+ACCOUNT_AUTHENTICATION_METHOD = "email"
+ACCOUNT_LOGIN_BY_CODE_ENABLED = True
+ACCOUNT_USERNAME_REQUIRED = False
+ACCOUNT_USER_MODEL_USERNAME_FIELD = None
+HEADLESS_ADAPTER = "ask_gov.auth.HeadlessAdapter"
+HEADLESS_TOKEN_STRATEGY = "ask_gov.auth.AuthTokenStrategy"
+HEADLESS_FRONTEND_URLS = {
+    "account_signup": "https://app.project.org/account/signup",
+}
+SOCIALACCOUNT_PROVIDERS = {
+    "google": {
+        "EMAIL_AUTHENTICATION": True,
+        "APPS": [
+            {
+                "client_id": os.getenv("GOOGLE_CLIENT_ID"),
+                "secret": os.getenv("GOOGLE_CLIENT_SECRET"),
+            },
+        ],
+    }
 }
