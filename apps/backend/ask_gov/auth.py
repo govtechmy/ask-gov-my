@@ -3,6 +3,7 @@ from allauth.headless.tokens.sessions import SessionTokenStrategy
 from django.http import HttpRequest
 from rest_framework.authtoken.models import Token
 from allauth.headless.adapter import DefaultHeadlessAdapter
+from allauth.account.adapter import DefaultAccountAdapter
 
 from ask_gov.serializers import UserSerializer
 
@@ -16,3 +17,7 @@ class HeadlessAdapter(DefaultHeadlessAdapter):
     def serialize_user(self, user) -> Dict[str, Any]:
         serializer = UserSerializer(user)
         return serializer.data
+
+class AccountAdapter(DefaultAccountAdapter):
+    def is_open_for_signup(self, request):
+        return False
