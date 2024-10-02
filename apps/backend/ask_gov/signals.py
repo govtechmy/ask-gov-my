@@ -31,13 +31,12 @@ def index_question(sender, instance, **kwargs):
             "name_ms": ""
         }
     else:
-        agency_id = int(document['agency'])
-        agency = Agency.objects.get(id=agency_id)
+        agency = document['agency']
         agency_data = {
-            "id": agency.id,
-            "name": agency.name,
-            "acronym": agency.acronym,
-            "name_ms": agency.name_ms
+            "id": agency["id"],
+            "name": agency["name"],
+            "acronym": agency["acronym"],
+            "name_ms": agency["name_ms"]
         }
     document['agency'] = agency_data
 

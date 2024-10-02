@@ -54,6 +54,7 @@ class AnswerSerializer(serializers.ModelSerializer):
 
 class QuestionSerializer(serializers.ModelSerializer):
     answer = AnswerSerializer(read_only=True)
+    agency = AgencySerializer(read_only=True)
 
     class Meta:
         model = Question
