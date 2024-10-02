@@ -77,6 +77,7 @@ export const authOptions: NextAuthOptions = {
   ],
   session: {
     strategy: "jwt",
+    maxAge: 12 * 60 * 60, // 12 hours
   },
   callbacks: {
     signIn: async ({ account, user }) => {
@@ -88,7 +89,6 @@ export const authOptions: NextAuthOptions = {
           );
         }
         const authData = await loginByGoogle(idToken);
-        console.log({ authData });
         user.id = authData.user.id;
         user.name = authData.user.name;
         user.email = authData.user.email;
