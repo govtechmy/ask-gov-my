@@ -4,7 +4,7 @@ import { Agency } from "@/types/types";
 import { defaultLocale } from "@/lib/i18n";
 
 interface AgencyNameProps {
-  agency: Agency;
+  agency: Omit<Agency, "total_likes">;
 }
 
 const AgencyName: React.FC<AgencyNameProps> = ({ agency }) => {

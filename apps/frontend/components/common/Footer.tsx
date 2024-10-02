@@ -1,12 +1,12 @@
-import Image from 'next/image';
-import { useTranslations } from 'next-intl';
+import Image from "next/image";
+import { useTranslations } from "next-intl";
 
 interface FooterProps {
   adminpage?: boolean;
 }
 
 const Footer: React.FC<FooterProps> = ({ adminpage = false }) => {
-  const t = useTranslations('Footer');
+  const t = useTranslations("Footer");
   const currentYear = new Date().getFullYear();
 
   const Logo: React.FC<{ size: number }> = ({ size }) => (
@@ -20,7 +20,7 @@ const Footer: React.FC<FooterProps> = ({ adminpage = false }) => {
 
   const Copyright: React.FC = () => (
     <p className="text-xs text-zinc-500 font-normal">
-      © {currentYear} {t('gov_mys')}
+      © {currentYear} {t("gov_mys")}
     </p>
   );
 
@@ -30,13 +30,13 @@ const Footer: React.FC<FooterProps> = ({ adminpage = false }) => {
         href="#"
         className="text-sm text-black-700 hover:text-black hover:underline"
       >
-        {adminpage ? t('Home') : t('api_docs')}
+        {adminpage ? t("Home") : t("api_docs")}
       </a>
       <a
-        href={adminpage ? '#' : '/admin'}
+        href={adminpage ? "#" : "/admin"}
         className="text-sm text-black-700 hover:text-black hover:underline pl-5"
       >
-        {adminpage ? t('api_docs') : t('admin_login')}
+        {adminpage ? t("api_docs") : t("admin_login")}
       </a>
     </div>
   );
@@ -52,7 +52,7 @@ const Footer: React.FC<FooterProps> = ({ adminpage = false }) => {
             <Logo size={96} />
           </div>
           <p className="font-poppins whitespace-nowrap font-semibold text-sm pl-[10px]">
-            {t('gov_mys')}
+            {t("gov_mys")}
           </p>
           <span className="px-2 hidden sm:block">
             <Copyright />
@@ -72,12 +72,12 @@ const Footer: React.FC<FooterProps> = ({ adminpage = false }) => {
   return (
     <div className="bg-white border-t">
       <div className="container justify-center mx-auto">
-        <div className="gap-4.5 flex flex-col justify-between sm:flex-row px-6 pb-16 pt-12 lg:px-8">
+        <div className="gap-4.5 flex flex-col-reverse justify-between md:flex-row p-4.5 md:px-6 md:pb-16 md:pt-12 lg:px-8">
           <div className="flex items-center gap-x-2.5">
             <Logo size={48} />
             <div>
               <p className="font-poppins whitespace-nowrap font-semibold">
-                {t('gov_mys')}
+                {t("gov_mys")}
               </p>
               <Copyright />
             </div>

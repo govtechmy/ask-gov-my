@@ -1,51 +1,47 @@
-import {
-  getAgencyList,
-  getAllQuestions,
-  getTrendingAgencies,
-  getDynamicAgencyMap,
-} from "@/actions/questionServices";
-import QuestionBox from "@/components/common/QuestionBox/QuestionBox";
-import Footer from "@/components/common/Footer";
-import TrendingAgencies from "@/components/common/TrendingAgencies";
+import { getAllQuestions } from "@/actions/questionServices";
+import QuestionCard from "@/components/common/QuestionBox/QuestionCard";
 import WordTranslate from "@/components/common/WordTranslate";
 import { FSP, inject } from "@/lib/decorator";
+import { PageResult, Question } from "@/types/types";
+import { Paginator } from "@/components/client/paginator";
 
-const MainPage: FSP = async ({ searchParams }) => {
-  const { page, search, start, end } = searchParams || {
-    page: 1,
-    search: "",
-    start: undefined,
-    end: undefined,
-  };
-  const questions = await getAllQuestions(page);
-  const trendingAgencies = await getTrendingAgencies();
-  const agencyList = await getAgencyList();
-  const agencyMap = await getDynamicAgencyMap();
+interface MainPageProps {
+  questions: PageResult<Question>;
+}
 
+const MainPage: FSP<MainPageProps> = async ({ data, params }) => {
+  const { questions } = data!;
   return (
-    <div>
-      <div className="container mt-10 flex">
-        <div className="max-w-screen-2xl">
-          <div className="font-semibold text-base text-black-700 pb-7">
-            <WordTranslate translate="Mainpage" keyword="trendingQ" />
-          </div>
-          <QuestionBox
-            questions={questions}
-            agencyMap={agencyMap}
-            agencyList={agencyList}
-          />
-        </div>
+    <div className="w-full flex flex-col gap-6">
+      <WordTranslate
+        translate="Mainpage"
+        keyword="trendingQ"
+        className="font-semibold text-base text-black-700"
+      />
 
-        <div className="pl-10 w-[500px]">
-          <div className="font-semibold text-base text-black-700">
-            <WordTranslate translate="Mainpage" keyword="trendingA" />
-          </div>
-          <TrendingAgencies trendingAgencies={trendingAgencies} />
+      <div className="flex flex-col justify-center gap-4">
+        <div className="flex flex-col gap-6">
+          {questions.results.map((question) => (
+            <QuestionCard
+              key={question.id}
+              question={question}
+              locale={params?.locale}
+            />
+          ))}
         </div>
       </div>
-      <Footer />
+
+      <Paginator route="home" data={questions.page} />
     </div>
   );
 };
 
-export default inject(MainPage);
+export default inject(MainPage, {
+  async data({ searchParams }) {
+    const { page = 1 } = searchParams;
+    const questions = await getAllQuestions(page);
+    return {
+      questions,
+    };
+  },
+});

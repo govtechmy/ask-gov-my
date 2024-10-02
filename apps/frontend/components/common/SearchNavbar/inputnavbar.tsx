@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState, useCallback, useRef } from "react";
+import React, { useEffect, useState, useCallback, useRef } from "react";
 import Link from "next/link";
 import { searchQuestions } from "@/actions/searchServices";
 import Search from "@/icons/search";
@@ -133,7 +133,7 @@ const InputNavbar: React.FC<InputNavbarProps> = ({
     >
       <input
         ref={inputRef}
-        className="flex-1 border-none outline-none px-2 py-1 bg-inherit w-[740px]"
+        className="flex-1 border-none outline-none px-2 py-1 bg-inherit w-full md:w-[740px]"
         placeholder={t(agencyUUID ? "search_agency" : "search")}
         value={searchQuery}
         onChange={handleInputChange}

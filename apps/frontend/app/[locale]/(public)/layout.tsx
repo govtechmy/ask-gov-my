@@ -1,11 +1,15 @@
-import BaseHeader from '@/components/common/Header/BaseHeader';
-import SearchNavbar from '@/components/common/SearchNavbar/SearchNavbar';
-import ContextSearchBar from '@/components/context/ContextSearchBar';
+import React from "react";
+import BaseHeader from "@/components/common/Header/BaseHeader";
+import SearchNavbar from "@/components/common/SearchNavbar/SearchNavbar";
+import ContextSearchBar from "@/components/context/ContextSearchBar";
+import Footer from "@/components/common/Footer";
 
 export default function DashboardLayout({
   children,
+  sidebar,
 }: {
   children: React.ReactNode;
+  sidebar: React.ReactNode;
 }) {
   return (
     <>
@@ -13,7 +17,11 @@ export default function DashboardLayout({
         <BaseHeader></BaseHeader>
         <SearchNavbar></SearchNavbar>
       </ContextSearchBar>
-      {children}
+      <div className="container p-4.5  md:py-8 flex-col md:flex-row flex print:mt-0 print:max-w-none gap-12">
+        <div className="flex-1">{children}</div>
+        {sidebar}
+      </div>
+      <Footer />
     </>
   );
 }

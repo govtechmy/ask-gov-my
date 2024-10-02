@@ -1,19 +1,21 @@
 "use server";
 const API_URL = process.env.API_URL;
-import { Question, Agency, Topic, QuestionSubmission } from "@/types/types";
+import { paginate } from "@/lib/server-helper";
+import {
+  Question,
+  Agency,
+  Topic,
+  QuestionSubmission,
+  PageResult,
+} from "@/types/types";
 
 export async function getAllQuestions(
   page: number = 1,
-  pageSize: number = 6
-): Promise<{
-  data: Question[];
-  totalItems: number;
-  totalPages: number;
-  currentPage: number;
-}> {
+  limit: number = 6
+): Promise<PageResult<Question>> {
   try {
     const response = await fetch(
-      `${API_URL}/questions/?page=${page}&page_size=${pageSize}`,
+      `${API_URL}/questions/?page=${page}&page_size=${limit}`,
       {
         method: "GET",
         headers: {
@@ -29,19 +31,17 @@ export async function getAllQuestions(
 
     const data = await response.json();
 
-    return {
-      data: data.results,
-      totalItems: data.count,
-      totalPages: Math.ceil(data.count / pageSize),
-      currentPage: page,
-    };
+    return paginate(data.results, data.count, page, limit);
   } catch (error) {
     console.error("Error in getAllQuestions:", error);
     return {
-      data: [],
-      totalItems: 0,
-      totalPages: 0,
-      currentPage: 1,
+      results: [],
+      page: {
+        current: 1,
+        max: 0,
+        total: 0,
+        limit: 0,
+      },
     };
   }
 }
