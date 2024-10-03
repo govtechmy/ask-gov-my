@@ -68,9 +68,9 @@ export const Paginator: FunctionComponent<PaginatorProps> = ({
           {getVisiblePageNumber().map((page, index) =>
             typeof page === "number" ? (
               <Link
+                key={index}
                 href={route(_route, params, { ...searchParams, page })}
                 scroll={false}
-                // variant="reset"
                 className={cn(
                   "rounded-lg text-sm",
                   page === data.current &&

@@ -3,13 +3,12 @@ import { extract } from "@askgovmy/utils";
 
 export const routes = {
   home: "/",
-  // admin: {
-  //   index: "/:belanjawan_id/admin",
-  //   belanjawan: {
-  //     index: "/:belanjawan_id/admin/belanjawan",
-  //     create: "/:belanjawan_id/admin/belanjawan/cipta",
-  //   }
-  // },
+  searchresults: "/searchresults/",
+  agency: "/:agencyAcronym/",
+  agencyTopic: "/:agencyAcronym/topics/:topicId",
+  admin: {
+    index: "/admin/",
+  },
 };
 
 const serializeQuery = (data: Record<string, any>) => {

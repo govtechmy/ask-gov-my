@@ -2,6 +2,8 @@
 import dotenv from "dotenv";
 import { Client } from "@elastic/elasticsearch";
 import OpenAI from "openai";
+import { paginate } from "@/lib/server-helper";
+import { PageResult, Question } from "@/types/types";
 dotenv.config();
 
 const elasticsearchURL = process.env.ELASTICSEARCH_URL;
@@ -31,39 +33,6 @@ function openaif(): OpenAI {
     });
   }
   return openai;
-}
-
-interface Question {
-  id: number;
-  topics: {
-    id: number;
-    name: string;
-    name_ms: string;
-  }[];
-  question: string;
-  answer: Answer;
-  spam: boolean;
-  email: string;
-  admin_opened_at: string | null;
-  staff_opened_at: string | null;
-  created_at: string;
-  updated_at: string;
-  agency: {
-    id: number;
-    name: string;
-    acronym: string;
-    name_ms: string;
-  };
-}
-interface Answer {
-  id: number;
-  question: number;
-  raw: string;
-  text: string;
-  likes: number;
-  draft: boolean;
-  created_at: string;
-  updated_at: string;
 }
 
 async function getEmbedding(text: string): Promise<number[]> {
@@ -130,13 +99,8 @@ export async function searchQuestions(query: string): Promise<Question[]> {
 export async function searchQuestionsWithPagination(
   query: string,
   page: number = 1,
-  pageSize: number = 6
-): Promise<{
-  data: Question[];
-  totalItems: number;
-  totalPages: number;
-  currentPage: number;
-}> {
+  pageSize: number = 4
+): Promise<PageResult<Question>> {
   try {
     const embedding = await getEmbedding(query);
 
@@ -187,23 +151,20 @@ export async function searchQuestionsWithPagination(
         ? result.hits.total
         : result.hits.total.value
       : 0;
-    const totalPages = Math.ceil(totalItems / pageSize);
 
     const data = result.hits.hits.map((hit: any) => hit._source);
 
-    return {
-      data,
-      totalItems,
-      totalPages,
-      currentPage: page,
-    };
+    return paginate(data, totalItems, page, pageSize);
   } catch (error) {
     console.error("Error searching questions with pagination:", error);
     return {
-      data: [],
-      totalItems: 0,
-      totalPages: 0,
-      currentPage: 1,
+      results: [],
+      page: {
+        current: 1,
+        max: 0,
+        total: 0,
+        limit: 0,
+      },
     };
   }
 }

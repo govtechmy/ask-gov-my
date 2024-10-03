@@ -20,7 +20,10 @@ const TrendingAgenciesSidebar: FSP<AgenciesBarProps> = ({ data, locale }) => {
       />
       <ul className="flex flex-col gap-4.5">
         {agencies.map((agency: Agency) => (
-          <Link key={agency.id} href={`/${agency.acronym.toLowerCase()}`}>
+          <Link
+            key={agency.id}
+            href={`/${agency.acronym.toLowerCase()}/topics/all`}
+          >
             <li className="flex items-center gap-2.5">
               <div className="h-8 w-8 flex relative flex-shrink-0">
                 <AgencyLogoImporter currentAgency={agency} />

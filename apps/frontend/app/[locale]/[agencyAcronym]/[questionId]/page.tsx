@@ -6,7 +6,6 @@ import {
   getDynamicAgencyMap,
 } from "@/actions/questionServices";
 import { getRelatedQuestions } from "@/actions/searchServices";
-import Footer from "@/components/common/Footer";
 import RelatedTopics from "@/components/QuestionDetailPage/RelatedTopics";
 import RightArrow from "@/icons/rightarrow";
 import IconQuestionSmileSolo from "@/icons/iconquestionsmilesolo";
@@ -253,7 +252,6 @@ const QuestionDetailPage: React.FC<Props> = async ({ params }) => {
           </div>
         </div>
       </div>
-      <Footer />
     </div>
   );
 };

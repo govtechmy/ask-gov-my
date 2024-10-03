@@ -11,20 +11,31 @@ import {
 
 export async function getAllQuestions(
   page: number = 1,
-  limit: number = 6
+  limit: number = 6,
+  agencyId?: number,
+  topicId?: number
 ): Promise<PageResult<Question>> {
   try {
-    const response = await fetch(
-      `${API_URL}/questions/?page=${page}&page_size=${limit}`,
-      {
-        method: "GET",
-        headers: {
-          "Cache-Control": "no-cache",
-          Pragma: "no-cache",
-          Expires: "0",
-        },
-      }
-    );
+    const params = new URLSearchParams({
+      page: page.toString(),
+      page_size: limit.toString(),
+    });
+
+    if (agencyId) {
+      params.append("agency", agencyId.toString());
+    }
+    if (topicId) {
+      params.append("topics", topicId.toString());
+    }
+
+    const response = await fetch(`${API_URL}/questions/?${params.toString()}`, {
+      method: "GET",
+      headers: {
+        "Cache-Control": "no-cache",
+        Pragma: "no-cache",
+        Expires: "0",
+      },
+    });
     if (!response.ok) {
       throw new Error("Failed to fetch questions");
     }
@@ -46,8 +57,12 @@ export async function getAllQuestions(
   }
 }
 
-export async function getAllTopics(): Promise<Topic[]> {
-  const response = await fetch(`${API_URL}/topics/`, {
+export async function getAllTopics(agencyId?: number): Promise<Topic[]> {
+  const params = new URLSearchParams();
+  if (agencyId) {
+    params.append("agency", agencyId.toString());
+  }
+  const response = await fetch(`${API_URL}/topics/?${params.toString()}`, {
     method: "GET",
     headers: {
       "Cache-Control": "no-cache",
@@ -62,12 +77,6 @@ export async function getAllTopics(): Promise<Topic[]> {
 
   const data = await response.json();
   return data;
-}
-
-export async function getTopicByAgency(agencyId: number): Promise<Topic[]> {
-  const topics = await getAllTopics();
-  const filteredTopics = topics.filter((topic) => topic.agency === agencyId);
-  return filteredTopics;
 }
 
 export async function getTopicsDetail(
@@ -253,14 +262,7 @@ export async function getAgencyList(): Promise<Agency[]> {
     }
 
     const data = await response.json();
-    return data.map((agency: Agency) => ({
-      id: agency.id,
-      name: agency.name,
-      name_ms: agency.name_ms,
-      acronym: agency.acronym,
-      logo_url: agency.logo_url,
-      last_edited: agency.updated_at,
-    }));
+    return data;
   } catch (error) {
     console.error("Error in getAgencyList:", error);
     return [];

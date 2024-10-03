@@ -19,16 +19,14 @@ const MainPage: FSP<MainPageProps> = async ({ data, params }) => {
         className="font-semibold text-base text-black-700"
       />
 
-      <div className="flex flex-col justify-center gap-4">
-        <div className="flex flex-col gap-6">
-          {questions.results.map((question) => (
-            <QuestionCard
-              key={question.id}
-              question={question}
-              locale={params?.locale}
-            />
-          ))}
-        </div>
+      <div className="flex flex-col gap-6">
+        {questions.results.map((question) => (
+          <QuestionCard
+            key={question.id}
+            question={question}
+            locale={params?.locale}
+          />
+        ))}
       </div>
 
       <Paginator route="home" data={questions.page} />
