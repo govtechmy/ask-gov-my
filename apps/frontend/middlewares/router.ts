@@ -1,8 +1,13 @@
 import { NextFetchEvent, NextRequest, NextResponse } from "next/server";
 import { NextMiddleware } from "./chain";
 import { locales } from "@/lib/i18n";
-import { get } from "@/lib/api";
-import { AdapterSession, AdapterUser } from "next-auth/adapters";
+import { getToken } from "next-auth/jwt";
+
+async function isAuthenticated(req: NextRequest): Promise<boolean> {
+  // next-auth's getToken utility will verify the JWT
+  const jwt = await getToken({ req });
+  return jwt !== null;
+}
 
 export const RouterMiddleware = (middleware: NextMiddleware) => {
   return async (
@@ -20,45 +25,18 @@ export const RouterMiddleware = (middleware: NextMiddleware) => {
       const isExcludedPath = excludedPaths.some(
         (path) => pathname.endsWith(path) || pathname.endsWith(`${path}/`)
       );
+      const isLoggedIn = await isAuthenticated(request);
 
-      if (!isExcludedPath) {
-        const sessionToken = request.cookies.get(
-          "next-auth.session-token"
-        )?.value;
-
-        if (!sessionToken) {
-          // Redirect to /admin login page if there's no session token
-          return NextResponse.redirect(new URL("/admin", request.url));
-        }
-
-        const API_URL = process.env.API_URL;
-        const session_and_user = await get<{
-          session: AdapterSession;
-          user: AdapterUser;
-        }>(`${API_URL}/auth/session`, { sessionToken });
-
-        if (!session_and_user) {
-          return NextResponse.redirect(new URL("/admin", request.url));
-        }
+      if (!isExcludedPath && !isLoggedIn) {
+        // Redirect to /admin login page if user is not authenticated
+        return NextResponse.redirect(new URL("/admin", request.url));
       } else if (pathname.endsWith("/admin") || pathname.endsWith("/admin/")) {
         // Check if user is already authenticated when accessing /admin so that login page is not accessible to logged in user
-        const sessionToken = request.cookies.get(
-          "next-auth.session-token"
-        )?.value;
-
-        if (sessionToken) {
-          const API_URL = process.env.API_URL;
-          const session_and_user = await get<{
-            session: AdapterSession;
-            user: AdapterUser;
-          }>(`${API_URL}/auth/session`, { sessionToken });
-
-          if (session_and_user) {
-            // Redirect to dashboard if already authenticated
-            return NextResponse.redirect(
-              new URL("/admin/dashboard", request.url)
-            );
-          }
+        if (isLoggedIn) {
+          // Redirect to dashboard if already authenticated
+          return NextResponse.redirect(
+            new URL("/admin/dashboard", request.url)
+          );
         }
       }
     }

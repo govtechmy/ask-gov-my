@@ -79,6 +79,9 @@ export const authOptions: NextAuthOptions = {
     strategy: "jwt",
     maxAge: 12 * 60 * 60, // 12 hours
   },
+  pages: {
+    signIn: "/admin",
+  },
   callbacks: {
     signIn: async ({ account, user }) => {
       if (account?.provider === "google") {
