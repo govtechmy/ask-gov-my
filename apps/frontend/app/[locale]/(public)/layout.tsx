@@ -17,7 +17,7 @@ export default function DashboardLayout({
         <BaseHeader></BaseHeader>
         <SearchNavbar></SearchNavbar>
       </ContextSearchBar>
-      <div className="container p-4.5  md:py-8 flex-col md:flex-row flex print:mt-0 print:max-w-none gap-12">
+      <div className="container p-4.5  lg:py-8 flex-col lg:flex-row flex print:mt-0 print:max-w-none gap-12">
         <div className="flex-1">{children}</div>
         {sidebar}
       </div>

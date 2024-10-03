@@ -70,7 +70,7 @@ export default function Masthead() {
         </summary>
       </details>
       <div className="max-h-0 max-w-full transform-gpu overflow-hidden opacity-0 transition-[max-height,opacity] duration-300 ease-in-out peer-open:max-h-96 peer-open:opacity-100 peer-open:duration-200 motion-reduce:transition-none">
-        <div className="container grid grid-cols-1 gap-4.5 pb-6 pt-4.5 px-4.5 md:px-0 sm:grid-cols-2 sm:gap-6 sm:pb-8 sm:pt-6">
+        <div className="container grid grid-cols-1 gap-4.5 pb-6 pt-4.5 px-4.5 sm:px-0 sm:grid-cols-2 sm:gap-6 sm:pb-8 sm:pt-6">
           <span className="static text-sm text-foreground-primary sm:hidden">
             {t("how_to_identify")}
           </span>

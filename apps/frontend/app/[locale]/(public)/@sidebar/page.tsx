@@ -12,7 +12,7 @@ interface AgenciesBarProps {
 const TrendingAgenciesSidebar: FSP<AgenciesBarProps> = ({ data, locale }) => {
   const { agencies } = data!;
   return (
-    <div className="w-full md:w-[300px] flex flex-col gap-6">
+    <div className="w-full lg:w-[300px] flex flex-col gap-6">
       <WordTranslate
         translate="Mainpage"
         keyword="trendingA"
