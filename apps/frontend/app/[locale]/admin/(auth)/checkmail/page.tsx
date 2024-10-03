@@ -1,7 +1,7 @@
 "use client";
 import Link from "next/link";
 import Footer from "@/components/common/Footer";
-import { buttonVariants } from "@/components/ui/button";
+import { Button, buttonVariants } from "@/components/ui/button";
 import Maillogo from "@/icons/mail";
 import Arrowleft from "@/icons/arrowleft";
 import { useTranslations } from "next-intl";
@@ -9,6 +9,9 @@ import MailLogo from "@/icons/maillogo";
 import { useState, useEffect } from "react";
 import { cn } from "@/lib/utils";
 import BaseHeader from "@/components/common/Header/BaseHeader";
+import { Input } from "@/components/ui/input";
+import { signIn } from "next-auth/react";
+import { useRouter } from "next/navigation";
 
 const CheckmailPage = ({
   params: { locale },
@@ -19,6 +22,8 @@ const CheckmailPage = ({
   // const { data: session } = useSession();
   const [isDisabled, setIsDisabled] = useState(true); // Initially set to true
   const [countdown, setCountdown] = useState(60); // Countdown timer in 60 seconds edit here later
+  const [errorMsg, setErrorMsg] = useState("");
+  const router = useRouter();
 
   useEffect(() => {
     if (isDisabled && countdown > 0) {
@@ -36,6 +41,28 @@ const CheckmailPage = ({
     if (isDisabled) {
       e.preventDefault();
     }
+  };
+
+  const submitAction = async (formData: FormData) => {
+    const code = formData.get("code");
+    if (typeof code !== "string") {
+      throw Error("invalid code type");
+    }
+
+    const response = await signIn("code", {
+      code,
+      callbackUrl: "/admin/dashboard",
+      redirect: false,
+    });
+
+    if (!response) {
+      throw Error("expected a response from next-auth");
+    }
+    if (!response.ok) {
+      setErrorMsg(t("codeFailed"));
+      return;
+    }
+    router.push(response.url || "/admin/dashboard");
   };
 
   return (
@@ -57,7 +84,19 @@ const CheckmailPage = ({
             </div>
           </div>
 
-          <div className="sm:flex gap-3 w-full">
+          <form className="block space-y-3" action={submitAction}>
+            <Input required placeholder="ABC123" name="code" />
+            <Button variant="primary" className="w-full" type="submit">
+              {t("loginWithCode")}
+            </Button>
+            {errorMsg && (
+              <p className=" text-danger-600 font-normal text-base sm:max-w-[339px] w-max-[400px]">
+                {errorMsg}
+              </p>
+            )}
+          </form>
+
+          <div className="sm:flex gap-3 w-full mt-12">
             <div className="hidden sm:block">
               <Link
                 className={buttonVariants({ variant: "tertiary", size: "md" })}
