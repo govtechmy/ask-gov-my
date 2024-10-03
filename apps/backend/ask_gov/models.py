@@ -95,26 +95,6 @@ class User(AbstractUser):
         return self.email
 
 
-class Session(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
-    session_token = models.CharField(unique=True)
-    expires = models.DateTimeField()
-
-
-class Account(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
-    provider = models.CharField()
-    provider_account_id = models.CharField()
-    access_token = models.CharField(null=True, blank=True)
-    refresh_token = models.CharField(null=True, blank=True)
-    expires_at = models.DateTimeField(null=True, blank=True)
-
-
-class VerificationToken(models.Model):
-    identifier = models.CharField()
-    token = models.CharField()
-    expires = models.DateTimeField()
-
 class Attachment(models.Model):
     answer = models.ForeignKey('Answer', related_name='attachments', on_delete=models.CASCADE)
     filekey = models.CharField(max_length=255, verbose_name="S3 File Key")

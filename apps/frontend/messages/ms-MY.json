@@ -27,8 +27,10 @@
 
   "Checkmail": {
     "checkmail": "Sila semak email anda",
-    "para1": "Kami telah menghantar pautan magic ke emel ",
-    "para2": "Klik pautan untuk log masuk.",
+    "para1": "Kami telah menghantar kod ke emel ",
+    "para2": "Masukkan kod untuk log masuk.",
+    "loginWithCode": "Log masuk dengan kod",
+    "codeFailed": "Gagal mengesahkan kod. Cuba lagi.",
     "backclick": "Kembali untuk Log masuk "
   },
 

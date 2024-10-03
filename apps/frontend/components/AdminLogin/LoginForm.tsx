@@ -5,8 +5,8 @@ import Google from '@/icons/google';
 import { useTranslations } from 'next-intl';
 import { useState } from 'react';
 import { signIn } from 'next-auth/react';
-import { redirect } from 'next/navigation';
 import { checkUserEmailExists } from '@/actions/userServices';
+import { requestLoginCodeAction } from '@/actions/auth';
 
 export function LoginForm() {
   const t = useTranslations('Adminlogin');
@@ -21,22 +21,16 @@ export function LoginForm() {
       setIsLoading(true);
       const emailExists = await checkUserEmailExists(email);
       if (emailExists) {
-        const result = await signIn('email', {
-          email,
-          callbackUrl: '/admin/dashboard',
-          redirect: true,
-        });
-        if (result?.ok) {
-          redirect('/admin/checkmail');
-        } else {
-          console.error('Sign in failure');
-        }
+        await requestLoginCodeAction(email);
       } else {
         setErrorMsg(
           'Your account does not exist. Please contact your admin to request an invitation.',
         );
       }
     } catch {
+        setErrorMsg(
+          "Failed to send a login code. Try a different sign-in method."
+        )
     } finally {
       setIsLoading(false);
     }

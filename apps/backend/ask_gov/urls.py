@@ -3,10 +3,6 @@ from rest_framework.routers import SimpleRouter
 from drf_spectacular.views import SpectacularAPIView, SpectacularRedocView, SpectacularSwaggerView
 
 from . import views
-from .views import (
-    AuthUserView, SessionView, AccountView, VerificationTokenView,
-    CheckUserEmailExistsView, 
-)
 
 
 router = SimpleRouter(use_regex_path=False)
@@ -22,13 +18,7 @@ router.register("admin/answers", views.AdminAnswerViewSet, basename="admin-answe
 
 urlpatterns = [
     path("", include(router.urls)),
-
-    # auth
-    path('auth/user/', AuthUserView.as_view(), name='user'),
-    path('auth/session/', SessionView.as_view(), name='session'),
-    path('auth/account/', AccountView.as_view(), name='account'),
-    path('auth/verification/', VerificationTokenView.as_view(), name='verification'),
-    path('admin/check-email/', CheckUserEmailExistsView.as_view(), name='check_email_exists'),
+    path('admin/check-email/', views.CheckUserEmailExistsView.as_view(), name='check_email_exists'),
 
     # docs
     path('schema/', SpectacularAPIView.as_view(), name='schema'),
