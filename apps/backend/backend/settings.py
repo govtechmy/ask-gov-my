@@ -73,8 +73,10 @@ AUTHENTICATION_BACKENDS = [
     "allauth.account.auth_backends.AuthenticationBackend",
 ]
 
-# TODO: Use a real email backend
-EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
+EMAIL_BACKEND = "django_ses.SESBackend"
+DEFAULT_FROM_EMAIL = os.getenv("FROM_EMAIL")
+AWS_SES_REGION_NAME = os.getenv("AWS_REGION")
+AWS_SESSION_PROFILE = os.getenv("AWS_PROFILE")
 
 CORS_ALLOW_ALL_ORIGINS = True
 
