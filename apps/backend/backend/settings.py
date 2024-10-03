@@ -41,11 +41,16 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     "ask_gov",
     "rest_framework",
+    "rest_framework.authtoken",
     "django_filters",
-    "rest_framework_simplejwt",
     "corsheaders",
     'django_extensions',
     'drf_spectacular',
+    "allauth",
+    "allauth.account",
+    "allauth.headless",
+    "allauth.socialaccount",
+    "allauth.socialaccount.providers.google",
 ]
 
 MIDDLEWARE = [
@@ -57,7 +62,21 @@ MIDDLEWARE = [
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
+    # `allauth` middleware
+    "allauth.account.middleware.AccountMiddleware",
 ]
+
+AUTHENTICATION_BACKENDS = [
+    # Needed to login by username in Django admin, regardless of `allauth`
+    "django.contrib.auth.backends.ModelBackend",
+    # `allauth` specific authentication methods, such as login by email
+    "allauth.account.auth_backends.AuthenticationBackend",
+]
+
+EMAIL_BACKEND = "django_ses.SESBackend"
+DEFAULT_FROM_EMAIL = os.getenv("FROM_EMAIL")
+AWS_SES_REGION_NAME = os.getenv("AWS_REGION")
+AWS_SESSION_PROFILE = os.getenv("AWS_PROFILE")
 
 CORS_ALLOW_ALL_ORIGINS = True
 
@@ -121,6 +140,9 @@ AUTH_PASSWORD_VALIDATORS = [
 
 REST_FRAMEWORK = {
     'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema',
+    "DEFAULT_AUTHENTICATION_CLASSES": [
+        "rest_framework.authentication.TokenAuthentication"
+    ],
 }
 
 # Internationalization
@@ -150,4 +172,27 @@ AUTH_USER_MODEL = "ask_gov.User"
 
 SPECTACULAR_SETTINGS = {
     'TITLE': 'AskGov API',
+}
+
+# `allauth` related settings
+HEADLESS_ONLY = True
+ACCOUNT_EMAIL_REQUIRED = True
+ACCOUNT_AUTHENTICATION_METHOD = "email"
+ACCOUNT_LOGIN_BY_CODE_ENABLED = True
+ACCOUNT_USERNAME_REQUIRED = False
+ACCOUNT_USER_MODEL_USERNAME_FIELD = None
+ACCOUNT_EMAIL_UNKNOWN_ACCOUNTS=False
+ACCOUNT_ADAPTER = "ask_gov.auth.AccountAdapter"
+HEADLESS_ADAPTER = "ask_gov.auth.HeadlessAdapter"
+HEADLESS_TOKEN_STRATEGY = "ask_gov.auth.AuthTokenStrategy"
+SOCIALACCOUNT_PROVIDERS = {
+    "google": {
+        "EMAIL_AUTHENTICATION": True,
+        "APPS": [
+            {
+                "client_id": os.getenv("GOOGLE_CLIENT_ID"),
+                "secret": os.getenv("GOOGLE_CLIENT_SECRET"),
+            },
+        ],
+    }
 }

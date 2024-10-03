@@ -61,7 +61,6 @@ export interface User {
   id: string;
   name: string | null;
   email: string;
-  emailVerified: Date | null;
   image: string | null;
   role: "staff" | "super_admin";
   agency: number | null;

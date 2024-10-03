@@ -1,6 +1,6 @@
 from rest_framework import serializers
 from django.contrib.auth import get_user_model
-from .models import Agency, Answer, Question, Topic, User, Account, Session, VerificationToken
+from .models import Agency, Answer, Question, Topic
 from .elasticsearch_client import client
 
 User = get_user_model()
@@ -54,6 +54,7 @@ class AnswerSerializer(serializers.ModelSerializer):
 
 class QuestionSerializer(serializers.ModelSerializer):
     answer = AnswerSerializer(read_only=True)
+    agency = AgencySerializer(read_only=True)
 
     class Meta:
         model = Question
@@ -115,18 +116,3 @@ class UserSerializer(serializers.ModelSerializer):
         model = User
         fields = ["id", "name", "email", "role", "agency", "created_at", "updated_at"]
         read_only_fields = ["id", "created_at", "updated_at"]
-
-class AccountSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Account
-        fields = '__all__'
-
-class SessionSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Session
-        fields = '__all__'
-
-class VerificationTokenSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = VerificationToken
-        fields = '__all__'
