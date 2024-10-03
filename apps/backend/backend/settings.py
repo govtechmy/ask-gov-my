@@ -185,9 +185,6 @@ ACCOUNT_EMAIL_UNKNOWN_ACCOUNTS=False
 ACCOUNT_ADAPTER = "ask_gov.auth.AccountAdapter"
 HEADLESS_ADAPTER = "ask_gov.auth.HeadlessAdapter"
 HEADLESS_TOKEN_STRATEGY = "ask_gov.auth.AuthTokenStrategy"
-HEADLESS_FRONTEND_URLS = {
-    "account_signup": "https://app.project.org/account/signup",
-}
 SOCIALACCOUNT_PROVIDERS = {
     "google": {
         "EMAIL_AUTHENTICATION": True,
