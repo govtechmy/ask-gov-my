@@ -22,7 +22,6 @@ declare module "next-auth" {
     id: string;
     name: string;
     email: string;
-    emailVerified: Date | null;
     role: "staff" | "super_admin";
     agency: number | null;
   }
@@ -67,7 +66,6 @@ export const authOptions: NextAuthOptions = {
           id: authData.user.id,
           name: authData.user.name,
           email: authData.user.email,
-          emailVerified: null,
           role: authData.user.role,
           agency: authData.user.agency,
           accessToken: authData.accessToken,
@@ -95,7 +93,6 @@ export const authOptions: NextAuthOptions = {
         user.id = authData.user.id;
         user.name = authData.user.name;
         user.email = authData.user.email;
-        user.emailVerified = null;
         user.role = authData.user.role;
         user.agency = authData.user.agency;
         // @ts-expect-error include `acccessToken` in the user object for the jwt callback
