@@ -20,7 +20,7 @@ class TestAdminListQuestions(APITestCase):
 
     def setUp(self):
         agency = Agency.objects.create(name="Ministry of Education", name_ms="Kementerian Pendidikan", acronym="MOE")
-        user = User.objects.create(name="John Doe", email="johndoe@example.com", agency=agency.id, role=UserRole.STAFF)
+        user = User.objects.create(name="John Doe", email="johndoe@example.com", agency=agency, role=UserRole.STAFF)
         token = Token.objects.create(user=user)
         self.client.force_authenticate(user, token)
 
@@ -109,9 +109,9 @@ class TestAdminQuestionViewSet(APITestCase):
         self.open_question_url = reverse("admin-question-open", kwargs={"pk": self.question.id})
         self.list_questions_url = reverse("admin-question-list")
 
-        user = User.objects.create(name="John Doe", email="johndoe@example.com", agency=self.agency.id, role=UserRole.STAFF)
-        token = Token.objects.create(user=user)
-        self.client.force_authenticate(user, token)
+        self.user = User.objects.create(name="John Doe", email="johndoe@example.com", agency=self.agency, role=UserRole.STAFF)
+        token = Token.objects.create(user=self.user)
+        self.client.force_authenticate(self.user, token)
 
     def test_assign_agency(self):
         """
@@ -157,6 +157,26 @@ class TestAdminQuestionViewSet(APITestCase):
         self.assertTrue(self.question.admin_opened_at)
         self.assertTrue(self.question.staff_opened_at)
 
+    def test_list_question_filters_user_agency(self):
+        """
+        Tests listing questions as a `staff` should only return questions belonging to the user's agency.
+        """
+        other_agency = Agency.objects.create(name="Other Ministry", name_ms="Other Ministry", acronym="OM")
+        Question.objects.create(
+            question="Question from other ministry",
+            email="test@example.com",
+            agency=other_agency,
+        )
+        response = self.client.get(
+            self.list_questions_url,
+            {"page_size": Question.objects.count()}
+        )
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        json_data = response.json()
+        questions = json_data["results"]
+        for question in questions:
+            self.assertEqual(question["agency"]["id"], self.user.agency.id)
+
 class TestAdminAnswerViewSet(APITestCase):
     def setUp(self):
         agency = Agency.objects.create(name="Ministry of Education", name_ms="Kementerian Pendidikan", acronym="MOE")
@@ -166,7 +186,7 @@ class TestAdminAnswerViewSet(APITestCase):
         )
         self.submit_answer_url = reverse("admin-answer-list")
 
-        user = User.objects.create(name="John Doe", email="johndoe@example.com", agency=agency.id, role=UserRole.STAFF)
+        user = User.objects.create(name="John Doe", email="johndoe@example.com", agency=agency, role=UserRole.STAFF)
         token = Token.objects.create(user=user)
         self.client.force_authenticate(user, token)
         self.user=user
@@ -221,7 +241,7 @@ class TestAdminAnswerViewSet(APITestCase):
 class TestAdminTopicViewSet(APITestCase):
     def setUp(self):
         agency = Agency.objects.create(name="Ministry of Education", name_ms="Kementerian Pendidikan", acronym="MOE")
-        user = User.objects.create(name="John Doe", email="johndoe@example.com", agency=agency.id, role=UserRole.STAFF)
+        user = User.objects.create(name="John Doe", email="johndoe@example.com", agency=agency, role=UserRole.STAFF)
         token = Token.objects.create(user=user)
         self.client.force_authenticate(user, token)
 
