@@ -1,3 +1,4 @@
+from ask_gov.permissions import IsSuperAdmin
 from .serializers import (
     AdminPatchedQuestionSerializer, AnswerSerializer, QuestionSerializer,
     AgencySerializer, TopicSerializer, UserSerializer,
@@ -7,9 +8,10 @@ from django.utils import timezone
 from rest_framework.filters import SearchFilter
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework.pagination import PageNumberPagination
-from rest_framework.decorators import action
-from rest_framework import generics, status, pagination, mixins, viewsets
-from .models import Answer, Question, Agency, Topic, User
+from rest_framework.decorators import action 
+from rest_framework.permissions import IsAuthenticated, AllowAny
+from rest_framework import generics, status, pagination, mixins, viewsets, exceptions
+from .models import Answer, Question, Agency, Topic, User, UserRole
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from drf_spectacular.utils import extend_schema
@@ -38,12 +40,14 @@ class QuestionViewSet(
     pagination_class = CustomPagination
     filter_backends = [DjangoFilterBackend]
     filterset_fields = ['agency', 'topics']
+    permission_classes = [AllowAny]
 
 class AnswerViewSet(
     viewsets.GenericViewSet,
 ):
     queryset = Answer.objects.filter(draft=False)
     serializer_class = AnswerSerializer
+    permission_classes = [AllowAny]
 
     @extend_schema(request=None)
     @action(methods=["POST"], detail=True)
@@ -69,6 +73,7 @@ class AgencyViewSet(
 ):
     queryset = Agency.objects.trending()
     serializer_class = AgencySerializer
+    permission_classes = [AllowAny]
 
 class TopicViewSet(
     mixins.ListModelMixin,
@@ -78,6 +83,7 @@ class TopicViewSet(
     serializer_class = TopicSerializer
     filter_backends = [DjangoFilterBackend]
     filterset_fields = ["agency"]
+    permission_classes = [AllowAny]
 
 class AdminQuestionViewSet(
     mixins.ListModelMixin,
@@ -93,9 +99,14 @@ class AdminQuestionViewSet(
             'agency': ['exact', 'isnull'],
         }
     search_fields = ['question']
+    permission_classes = [IsAuthenticated]
 
     def get_queryset(self):
         queryset = self.queryset
+
+        # Filter query by user agency if they are not a super admin
+        if self.request.user.role != UserRole.SUPER_ADMIN:
+            queryset = queryset.filter(agency=self.request.user.agency)
 
         state = self.request.query_params.get('state')
         if state == 'completed':
@@ -136,10 +147,11 @@ class AdminAgencyViewSet(
     mixins.CreateModelMixin,
     viewsets.GenericViewSet,
 ):
-    queryset = Agency.objects.all()
+    queryset = Agency.objects.all().order_by("id")
     serializer_class = AgencySerializer
     pagination_class = CustomPagination
     search_fields = ['name', 'name_ms', 'acronym']
+    permission_classes = [IsAuthenticated, IsSuperAdmin]
 
 
 class AdminTopicViewSet(
@@ -154,6 +166,26 @@ class AdminTopicViewSet(
     serializer_class = TopicSerializer
     filter_backends = [DjangoFilterBackend]
     filterset_fields = ["agency"]
+    permission_classes = [IsAuthenticated]
+
+    def get_queryset(self):
+        queryset = self.queryset
+
+        # Filter query by user agency if they are not a super admin
+        if self.request.user.role != UserRole.SUPER_ADMIN:
+            queryset = queryset.filter(agency=self.request.user.agency)
+
+        return queryset
+
+    def perform_create(self, serializer):
+        if self.request.user.agency.id != serializer.validated_data["agency"].id:
+            raise exceptions.PermissionDenied("Cannot create a topic that does not belong to your agency.")
+        return super().perform_create(serializer)
+    
+    def perform_update(self, serializer):
+        if self.request.user.agency.id != serializer.validated_data["agency"].id:
+            raise exceptions.PermissionDenied("Cannot update a topic that does not belong to your agency.")
+        return super().perform_update(serializer)
 
 
 class AdminUserViewSet(
@@ -169,6 +201,7 @@ class AdminUserViewSet(
     filter_backends = [DjangoFilterBackend, SearchFilter]
     filterset_fields = ["role", "agency"]
     search_fields = ["name", "email"]
+    permission_classes = [IsAuthenticated, IsSuperAdmin]
 
 
 class AdminAnswerViewSet(
@@ -178,9 +211,22 @@ class AdminAnswerViewSet(
 ):
     queryset = Answer.objects.all()
     serializer_class = AnswerSerializer
+    permission_classes = [IsAuthenticated]
+
+    def perform_create(self, serializer):
+        if self.request.user.agency.id != serializer.validated_data["question"].agency.id:
+            raise exceptions.PermissionDenied("Cannot create an answer that does not belong to your agency.")
+        return super().perform_create(serializer)
+
+    def perform_update(self, serializer):
+        if self.request.user.agency.id != serializer.validated_data["question"].agency.id:
+            raise exceptions.PermissionDenied("Cannot update an answer that does not belong to your agency.")
+        return super().perform_update(serializer)
 
 
 class CheckUserEmailExistsView(APIView):
+    permission_classes = [AllowAny]
+
     def get(self, request):
         email = request.GET.get('email')
         exists = User.objects.filter(email=email).exists()

@@ -1,5 +1,5 @@
 from django.db import models
-from django.contrib.auth.models import AbstractUser
+from django.contrib.auth.base_user import AbstractBaseUser, BaseUserManager
 from django.db.models import Sum
 import uuid
 
@@ -75,24 +75,62 @@ class UserRole(models.TextChoices):
     STAFF = 'staff', 'Staff'
     SUPER_ADMIN = 'super_admin', 'Super Admin'
 
+class UserManager(BaseUserManager):
+    def create_user(self, email, name, role, agency=None, password=None):
+        user = self.model(
+            email=self.normalize_email(email),
+            name=name,
+            role=role,
+            agency=agency,
+        )
+        user.clean()
+        user.set_password(password)
+        user.save(using=self._db)
+        return user
 
-class User(AbstractUser):
+    def create_superuser(self, email, name, password=None):
+        """
+        Creates and saves a superuser with the given email and name
+        """
+        user = self.create_user(
+            email,
+            name=name,
+            role=UserRole.SUPER_ADMIN,
+            password=password,
+        )
+        return user
+
+
+class User(AbstractBaseUser):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-    name = models.CharField(null=True, blank=True)
+    name = models.CharField()
     email = models.EmailField(unique=True)
-    email_verified = models.DateTimeField(null=True, blank=True)
     image = models.URLField(null=True, blank=True)
     role = models.CharField(choices=UserRole.choices, default=UserRole.STAFF)
-    agency = models.IntegerField(null=True, blank=True)
+    agency = models.ForeignKey(Agency, null=True, blank=True, on_delete=models.PROTECT, related_name="agency")
     user_profile_colour = models.CharField(max_length=50, null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
+    EMAIL_FIELD = 'email'
     USERNAME_FIELD = 'email'
-    REQUIRED_FIELDS = []
+    REQUIRED_FIELDS = ['name']
+
+    objects = UserManager()
 
     def __str__(self):
         return self.email
+    
+    def has_perm(self, perm, obj=None):
+        return True
+
+    def has_module_perms(self, app_label):
+        return True
+
+    @property
+    def is_staff(self):
+        # `is_staff` is used by Django to determine if the user can login to Django admin
+        return self.role == UserRole.SUPER_ADMIN
 
 
 class Attachment(models.Model):
