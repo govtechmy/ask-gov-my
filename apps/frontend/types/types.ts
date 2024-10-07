@@ -1,6 +1,6 @@
 export interface Question {
   id: number;
-  topics: number[] | ESTopic[];
+  topics: number[];
   question: string;
   answer: Answer;
   spam: boolean;

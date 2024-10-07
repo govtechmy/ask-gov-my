@@ -1,22 +1,26 @@
 "use client";
 
 import { cn } from "@askgovmy/utils";
-import { useTranslations } from "next-intl";
+import { TranslationValues, useTranslations } from "next-intl";
 
 interface WordTranslateProps {
-  translate: string | undefined;
-  keyword: string | undefined;
+  translate: string;
+  keyword: string;
+  values?: TranslationValues;
   className?: string;
 }
 
 const WordTranslate: React.FC<WordTranslateProps> = ({
   translate,
   keyword,
+  values,
   className,
 }) => {
   const t = useTranslations(translate);
 
-  return <p className={cn("", className)}>{t(keyword)}</p>;
+  return (
+    <p className={cn("", className)}>{t(keyword, values ? values : {})}</p>
+  );
 };
 
 export default WordTranslate;

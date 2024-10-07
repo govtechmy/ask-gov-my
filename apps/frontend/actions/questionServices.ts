@@ -81,9 +81,10 @@ export async function getAllTopics(agencyId?: number): Promise<Topic[]> {
 
 export async function getTopicsDetail(
   topicIds: number[],
+  agencyId: number,
   locale: string
 ): Promise<string[]> {
-  const topics = await getAllTopics();
+  const topics = await getAllTopics(agencyId);
   const topicIdToTitleMap: { [key: number]: string } = {};
 
   if (locale === "en-GB") {
@@ -194,7 +195,7 @@ export async function getQuestionsByTopicAndAgency(
 
 export async function getQuestionById(
   questionId: string
-): Promise<Question | null> {
+): Promise<Question | { code: number }> {
   const response = await fetch(`${API_URL}/questions/${questionId}/`, {
     method: "GET",
     next: { revalidate: 0 },
@@ -202,7 +203,9 @@ export async function getQuestionById(
   if (response.ok) {
     return response.json();
   }
-  return null;
+  return {
+    code: response.status,
+  };
 }
 
 export async function submitQuestion(data: QuestionSubmission): Promise<void> {
