@@ -68,7 +68,7 @@ class Answer(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
 
     def __str__(self):
-        return self.answer_preview[:50]
+        return self.text[:50]
 
 
 class UserRole(models.TextChoices):

@@ -1,3 +1,5 @@
+import math
+from django.conf import settings
 from ask_gov.permissions import IsSuperAdmin
 from .serializers import (
     AdminPatchedQuestionSerializer, AnswerSerializer, QuestionSerializer,
@@ -17,7 +19,8 @@ from rest_framework.views import APIView
 from drf_spectacular.utils import extend_schema
 from django.contrib.auth import get_user_model
 from django.db.models import Sum, Q
-from .elasticsearch_client import client
+from .elastic import client
+from .embed import get_embedding
 import logging, re
 from datetime import datetime
 
@@ -41,6 +44,65 @@ class QuestionViewSet(
     filter_backends = [DjangoFilterBackend]
     filterset_fields = ['agency', 'topics']
     permission_classes = [AllowAny]
+
+    QUESTION_INDEX = settings.ELASTICSEARCH_QUESTION_INDEX
+    EMBEDDING_ENABLED = settings.FEATURE_FLAGS.get("EMBEDDING")
+
+    @action(methods=["GET"], detail=False)
+    def search(self, request):
+        """
+        Search questions.
+        """
+        query = request.query_params.get("q", "")
+        page = request.query_params.get("page", 1)
+        page_size = request.query_params.get("page_size", 6)
+        if not query:
+            raise exceptions.ValidationError("Search query is required.")
+
+        es_query = {
+            "bool": {
+                "should": [
+                    {
+                        "multi_match": {
+                            "query": query,
+                            "fields": ["agency.name", "agency.acronym", "agency.name_ms"],
+                            "boost": 0.5,
+                        },
+                    },
+                    {
+                        "knn": {
+                            "field": "vector",
+                            "query_vector": get_embedding(query),
+                            "num_candidates": 50,
+                            "boost": 1,
+                        }
+                    } if self.EMBEDDING_ENABLED else {}
+                ]
+            }
+        }
+
+        es_response = client.search(
+            index=self.QUESTION_INDEX,
+            query=es_query,
+            from_=(page - 1) * page_size,
+            size=page_size,
+            _source={
+                "excludes": ["vector"],
+            }
+        )
+
+        count = es_response["hits"]["total"]["value"]
+        questions = [hit["_source"] for hit in es_response["hits"]["hits"]]
+        last_page = math.ceil(count / page_size)
+
+        paginated_response = {
+            "count": count,
+            "next": page + 1 if page < last_page else None,
+            "prev": page - 1 if page > 1 else None,
+            "results": questions
+        }
+
+        return Response(paginated_response, status=status.HTTP_200_OK)
 
 class AnswerViewSet(
     viewsets.GenericViewSet,
