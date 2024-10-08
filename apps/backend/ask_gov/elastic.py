@@ -1,3 +1,4 @@
+import logging
 from django.conf import settings
 from elasticsearch import Elasticsearch
 from .embed import get_embedding
@@ -14,12 +15,17 @@ client = Elasticsearch(
     api_key=ELASTICSEARCH_API_KEY,
 )
 
+logger = logging.getLogger(__name__)
+
 def index_question(question: Question):
         serializer = QuestionSerializer(question)
 
         document = serializer.data
         if EMBEDDING_ENABLED:
-            document['vector'] = get_embedding(question.question)
+            try:
+                document['vector'] = get_embedding(question.question)
+            except Exception as e:
+                logger.error(f"Failed to get embedding for question: {question.id}. Error: {str(e)}")
 
         client.index(
             index=QUESTION_INDEX,
