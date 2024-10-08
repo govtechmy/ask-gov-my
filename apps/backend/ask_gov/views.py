@@ -77,6 +77,10 @@ class QuestionViewSet(
 
         es_query = {
             "bool": {
+                "must": [
+                    { "match": { "spam": False } },
+                    { "match": { "answer.draft": False } }
+                ],
                 "should": [
                     {
                         "multi_match": {
