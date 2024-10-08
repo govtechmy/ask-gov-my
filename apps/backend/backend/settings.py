@@ -117,7 +117,7 @@ DATABASES = {
 # Elasticsearch settings
 ELASTICSEARCH_URL = os.getenv("ELASTICSEARCH_URL")
 ELASTICSEARCH_API_KEY = os.getenv("ELASTICSEARCH_API_KEY")
-ELASTICSEARCH_QUESTION_INDEX = os.getenv("ELASTICSEARCH_QUESTION_INDEX")
+ELASTICSEARCH_QUESTION_INDEX = "questions"
 
 # Password validation
 # https://docs.djangoproject.com/en/5.0/ref/settings/#auth-password-validators
