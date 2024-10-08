@@ -12,11 +12,11 @@ from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework.pagination import PageNumberPagination
 from rest_framework.decorators import action 
 from rest_framework.permissions import IsAuthenticated, AllowAny
-from rest_framework import generics, status, pagination, mixins, viewsets, exceptions
+from rest_framework import generics, status, pagination, mixins, viewsets, exceptions, serializers
 from .models import Answer, Question, Agency, Topic, User, UserRole
 from rest_framework.response import Response
 from rest_framework.views import APIView
-from drf_spectacular.utils import extend_schema
+from drf_spectacular.utils import extend_schema, OpenApiParameter, OpenApiTypes, inline_serializer
 from django.contrib.auth import get_user_model
 from django.db.models import Sum, Q
 from .elastic import client
@@ -48,6 +48,22 @@ class QuestionViewSet(
     QUESTION_INDEX = settings.ELASTICSEARCH_QUESTION_INDEX
     EMBEDDING_ENABLED = settings.FEATURE_FLAGS.get("EMBEDDING")
 
+    @extend_schema(
+            parameters=[
+                OpenApiParameter("q", OpenApiTypes.STR, OpenApiParameter.QUERY, description="Search term"),
+                OpenApiParameter("page", OpenApiTypes.INT, OpenApiParameter.QUERY, default=1),
+                OpenApiParameter("page_size", OpenApiTypes.INT, OpenApiParameter.QUERY, default=6),
+            ],
+            responses=inline_serializer(
+                name="SearchQuestionResults",
+                fields={
+                    "count": serializers.IntegerField(),
+                    "next": serializers.IntegerField(allow_null=True),
+                    "prev": serializers.IntegerField(allow_null=True),
+                    "results": QuestionSerializer(many=True),
+                }
+            )
+    )
     @action(methods=["GET"], detail=False)
     def search(self, request):
         """
