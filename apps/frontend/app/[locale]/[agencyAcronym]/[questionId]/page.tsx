@@ -5,7 +5,7 @@ import {
 } from "@/actions/questionServices";
 import { getRelatedQuestions } from "@/actions/searchServices";
 import IconQuestionSmileSolo from "@/icons/iconquestionsmilesolo";
-import ThumbsCounter from "@/components/QuestionDetailPage/ThumbsCounter";
+import ThumbsCounter from "@/components/page/QuestionDetailPage/ThumbsCounter";
 import AgencyName from "@/components/common/AgencyName";
 import JataNegaraIcon from "@/icons/jatanegaraicon";
 import { notFound } from "next/navigation";

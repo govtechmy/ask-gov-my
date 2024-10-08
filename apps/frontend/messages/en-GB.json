@@ -28,10 +28,11 @@
   "Checkmail": {
     "checkmail": "Check your email",
     "para1": "We've emailed a code to",
-    "para2": "Enter the code to login.",
+    "para2": "Enter the code to complete the login process.",
     "loginWithCode": "Login with code",
     "codeFailed": "Failed to verify the code. Try again.",
-    "backclick": "Back to Log in"
+    "backclick": "Back to Log in",
+    "code": "Verification code"
   },
 
   "Adminlogin": {
@@ -41,7 +42,11 @@
     "1stbutton": "Continue with Email",
     "or": "OR",
     "2ndbutton": "Continue with MyGovUC",
-    "forgotpass": "Forgot password?"
+    "forgotpass": "Forgot password?",
+    "error_no_account": "Your account does not exist. Please contact your admin to request an invitation.",
+    "error_code_fail": "Failed to send a login code. Try a different sign-in method.",
+    "required": "Email is required",
+    "invalid_email": "Please use valid email format"
   },
 
   "Topics": {

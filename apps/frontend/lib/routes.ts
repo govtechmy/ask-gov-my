@@ -8,6 +8,7 @@ export const routes = {
   agencyTopic: "/:agencyAcronym/topics/:topicId",
   admin: {
     index: "/admin/",
+    dashboard: "/admin/dashboard/",
   },
 };
 

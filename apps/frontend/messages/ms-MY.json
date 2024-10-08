@@ -28,10 +28,11 @@
   "Checkmail": {
     "checkmail": "Sila semak email anda",
     "para1": "Kami telah menghantar kod ke emel ",
-    "para2": "Masukkan kod untuk log masuk.",
+    "para2": "Masukkan kod untuk lengkapkan proses log masuk",
     "loginWithCode": "Log masuk dengan kod",
     "codeFailed": "Gagal mengesahkan kod. Cuba lagi.",
-    "backclick": "Kembali untuk Log masuk "
+    "backclick": "Kembali untuk Log masuk ",
+    "code": "Kod pengesahan"
   },
 
   "Adminlogin": {
@@ -41,7 +42,11 @@
     "1stbutton": "Teruskan dengan Emel",
     "or": "ATAU",
     "2ndbutton": "Teruskan dengan MyGovUC",
-    "forgotpass": "Lupa kata laluan?"
+    "forgotpass": "Lupa kata laluan?",
+    "error_no_account": "Akaun tidak wujud. Sila hubungi pentadbir organisasi anda untuk dapatkan jemputan sebagai pengguna",
+    "error_code_fail": "Gagal untuk menghantar kod log masuk. Cuba cara lain untuk log masuk.",
+    "required": "Emel diperlukan",
+    "invalid_email": "Gunakan emel yang sah."
   },
 
   "Topics": {

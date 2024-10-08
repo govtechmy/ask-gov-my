@@ -1,15 +1,12 @@
-"use client";
+import { LoginForm } from "@/components/page/AdminLogin/LoginForm";
+import { FSP, inject } from "@/lib/decorator";
+import RedirectIfAuthenticated from "@/middlewares/injectors/redirect-if-authenticated";
 
-import { LoginForm } from "@/components/AdminLogin/LoginForm";
-import Footer from "@/components/common/Footer";
-
-const AdminPage = () => {
-  return (
-    <>
-      <LoginForm />
-      <Footer adminpage={true} />
-    </>
-  );
+const AdminPage: FSP = () => {
+  return <LoginForm />;
 };
 
-export default AdminPage;
+export default inject(AdminPage, {
+  // debug: true,
+  middleware: [RedirectIfAuthenticated],
+});
