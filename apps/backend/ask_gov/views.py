@@ -240,13 +240,15 @@ class AdminTopicViewSet(
         return queryset
 
     def perform_create(self, serializer):
-        if self.request.user.agency.id != serializer.validated_data["agency"].id:
-            raise exceptions.PermissionDenied("Cannot create a topic that does not belong to your agency.")
+        if self.request.user.role != UserRole.SUPER_ADMIN:
+            if self.request.user.agency.id != serializer.validated_data["agency"].id:
+                raise exceptions.PermissionDenied("Cannot create a topic that does not belong to your agency.")
         return super().perform_create(serializer)
     
     def perform_update(self, serializer):
-        if self.request.user.agency.id != serializer.validated_data["agency"].id:
-            raise exceptions.PermissionDenied("Cannot update a topic that does not belong to your agency.")
+        if self.request.user.role != UserRole.SUPER_ADMIN:
+            if self.request.user.agency.id != serializer.validated_data["agency"].id:
+                raise exceptions.PermissionDenied("Cannot update a topic that does not belong to your agency.")
         return super().perform_update(serializer)
 
 
@@ -276,13 +278,15 @@ class AdminAnswerViewSet(
     permission_classes = [IsAuthenticated]
 
     def perform_create(self, serializer):
-        if self.request.user.agency.id != serializer.validated_data["question"].agency.id:
-            raise exceptions.PermissionDenied("Cannot create an answer that does not belong to your agency.")
+        if self.request.user.role != UserRole.SUPER_ADMIN:
+            if self.request.user.agency.id != serializer.validated_data["question"].agency.id:
+                raise exceptions.PermissionDenied("Cannot create an answer that does not belong to your agency.")
         return super().perform_create(serializer)
 
     def perform_update(self, serializer):
-        if self.request.user.agency.id != serializer.validated_data["question"].agency.id:
-            raise exceptions.PermissionDenied("Cannot update an answer that does not belong to your agency.")
+        if self.request.user.role != UserRole.SUPER_ADMIN:
+            if self.request.user.agency.id != serializer.validated_data["question"].agency.id:
+                raise exceptions.PermissionDenied("Cannot update an answer that does not belong to your agency.")
         return super().perform_update(serializer)
 
 
