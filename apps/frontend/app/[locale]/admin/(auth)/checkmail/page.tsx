@@ -28,6 +28,8 @@ import {
 import { resendLoginCodeAction } from "@/actions/auth";
 import { route } from "@/lib/routes";
 
+export const dynamic = "force-dynamic";
+
 const CheckmailPage = ({ params }: { params: { locale: string } }) => {
   const t = useTranslations("Checkmail");
   const router = useRouter();

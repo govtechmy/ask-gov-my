@@ -1,4 +1,3 @@
-import StaffHeaderDashboard from "@/components/common/header/StaffHeaderDashboard";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/app/api/auth/[...nextauth]/options";
 import { FSP, inject } from "@/lib/decorator";

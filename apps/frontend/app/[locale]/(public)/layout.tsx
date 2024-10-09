@@ -4,13 +4,9 @@ import SearchNavbar from "@/components/common/SearchNavbar/SearchNavbar";
 import ContextSearchBar from "@/components/context/ContextSearchBar";
 import Footer from "@/components/layout/footer";
 
-export default function DashboardLayout({
-  children,
-  sidebar,
-}: {
-  children: React.ReactNode;
-  sidebar: React.ReactNode;
-}) {
+export const dynamic = "force-dynamic";
+
+export default function DashboardLayout({ children, sidebar }) {
   return (
     <>
       <ContextSearchBar>

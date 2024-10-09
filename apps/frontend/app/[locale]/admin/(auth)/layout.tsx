@@ -1,6 +1,8 @@
 import Footer from "@/components/layout/footer";
 import BaseHeader from "@/components/layout/header/BaseHeader";
 
+export const dynamic = "force-dynamic";
+
 export default function DashboardLayout({
   children,
 }: {

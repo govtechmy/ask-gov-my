@@ -13,7 +13,7 @@ export async function generateStaticParams() {
   }));
 }
 
-export default async function AgencyLayout({ children, params }) {
+export default async function AgencyLayout({ children, sidebar }) {
   return (
     <>
       {children}
