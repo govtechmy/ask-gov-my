@@ -134,7 +134,7 @@ class User(AbstractBaseUser):
 
 
 class Attachment(models.Model):
-    answer = models.ForeignKey('Answer', related_name='attachments', on_delete=models.CASCADE)
+    question = models.ForeignKey(Question, related_name='attachments', on_delete=models.CASCADE)
     filekey = models.CharField(max_length=255, verbose_name="S3 File Key")
     filesize = models.PositiveIntegerField(verbose_name="File Size (bytes)")
     created_at = models.DateTimeField(auto_now_add=True)
