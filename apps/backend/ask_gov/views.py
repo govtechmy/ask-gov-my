@@ -1,3 +1,5 @@
+import math
+from django.conf import settings
 from ask_gov.permissions import IsSuperAdmin
 from .serializers import (
     AdminPatchedQuestionSerializer, AnswerSerializer, QuestionSerializer,
@@ -10,14 +12,15 @@ from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework.pagination import PageNumberPagination
 from rest_framework.decorators import action 
 from rest_framework.permissions import IsAuthenticated, AllowAny
-from rest_framework import generics, status, pagination, mixins, viewsets, exceptions
+from rest_framework import generics, status, pagination, mixins, viewsets, exceptions, serializers
 from .models import Answer, Question, Agency, Topic, User, UserRole
 from rest_framework.response import Response
 from rest_framework.views import APIView
-from drf_spectacular.utils import extend_schema
+from drf_spectacular.utils import extend_schema, OpenApiParameter, OpenApiTypes, inline_serializer
 from django.contrib.auth import get_user_model
 from django.db.models import Sum, Q
-from .elasticsearch_client import client
+from .elastic import client
+from .embed import get_embedding
 import logging, re
 from datetime import datetime
 
@@ -41,6 +44,85 @@ class QuestionViewSet(
     filter_backends = [DjangoFilterBackend]
     filterset_fields = ['agency', 'topics']
     permission_classes = [AllowAny]
+
+    QUESTION_INDEX = settings.ELASTICSEARCH_QUESTION_INDEX
+    EMBEDDING_ENABLED = settings.FEATURE_FLAGS.get("EMBEDDING")
+
+    @extend_schema(
+            parameters=[
+                OpenApiParameter("q", OpenApiTypes.STR, OpenApiParameter.QUERY, description="Search term"),
+                OpenApiParameter("page", OpenApiTypes.INT, OpenApiParameter.QUERY, default=1),
+                OpenApiParameter("page_size", OpenApiTypes.INT, OpenApiParameter.QUERY, default=6),
+            ],
+            responses=inline_serializer(
+                name="SearchQuestionResults",
+                fields={
+                    "count": serializers.IntegerField(),
+                    "next": serializers.IntegerField(allow_null=True),
+                    "prev": serializers.IntegerField(allow_null=True),
+                    "results": QuestionSerializer(many=True),
+                }
+            )
+    )
+    @action(methods=["GET"], detail=False)
+    def search(self, request):
+        """
+        Search questions.
+        """
+        query = request.query_params.get("q", "")
+        page = request.query_params.get("page", 1)
+        page_size = request.query_params.get("page_size", 6)
+        if not query:
+            raise exceptions.ValidationError("Search query is required.")
+
+        es_query = {
+            "bool": {
+                "must": [
+                    { "match": { "spam": False } },
+                    { "match": { "answer.draft": False } }
+                ],
+                "should": [
+                    {
+                        "multi_match": {
+                            "query": query,
+                            "fields": ["agency.name", "agency.acronym", "agency.name_ms"],
+                            "boost": 0.5,
+                        },
+                    },
+                    {
+                        "knn": {
+                            "field": "vector",
+                            "query_vector": get_embedding(query),
+                            "num_candidates": 50,
+                            "boost": 1,
+                        }
+                    } if self.EMBEDDING_ENABLED else {}
+                ]
+            }
+        }
+
+        es_response = client.search(
+            index=self.QUESTION_INDEX,
+            query=es_query,
+            from_=(page - 1) * page_size,
+            size=page_size,
+            _source={
+                "excludes": ["vector"],
+            }
+        )
+
+        count = es_response["hits"]["total"]["value"]
+        questions = [hit["_source"] for hit in es_response["hits"]["hits"]]
+        last_page = math.ceil(count / page_size)
+
+        paginated_response = {
+            "count": count,
+            "next": page + 1 if page < last_page else None,
+            "prev": page - 1 if page > 1 else None,
+            "results": questions
+        }
+
+        return Response(paginated_response, status=status.HTTP_200_OK)
 
 class AnswerViewSet(
     viewsets.GenericViewSet,
@@ -178,13 +260,15 @@ class AdminTopicViewSet(
         return queryset
 
     def perform_create(self, serializer):
-        if self.request.user.agency.id != serializer.validated_data["agency"].id:
-            raise exceptions.PermissionDenied("Cannot create a topic that does not belong to your agency.")
+        if self.request.user.role != UserRole.SUPER_ADMIN:
+            if self.request.user.agency.id != serializer.validated_data["agency"].id:
+                raise exceptions.PermissionDenied("Cannot create a topic that does not belong to your agency.")
         return super().perform_create(serializer)
     
     def perform_update(self, serializer):
-        if self.request.user.agency.id != serializer.validated_data["agency"].id:
-            raise exceptions.PermissionDenied("Cannot update a topic that does not belong to your agency.")
+        if self.request.user.role != UserRole.SUPER_ADMIN:
+            if self.request.user.agency.id != serializer.validated_data["agency"].id:
+                raise exceptions.PermissionDenied("Cannot update a topic that does not belong to your agency.")
         return super().perform_update(serializer)
 
 
@@ -214,13 +298,15 @@ class AdminAnswerViewSet(
     permission_classes = [IsAuthenticated]
 
     def perform_create(self, serializer):
-        if self.request.user.agency.id != serializer.validated_data["question"].agency.id:
-            raise exceptions.PermissionDenied("Cannot create an answer that does not belong to your agency.")
+        if self.request.user.role != UserRole.SUPER_ADMIN:
+            if self.request.user.agency.id != serializer.validated_data["question"].agency.id:
+                raise exceptions.PermissionDenied("Cannot create an answer that does not belong to your agency.")
         return super().perform_create(serializer)
 
     def perform_update(self, serializer):
-        if self.request.user.agency.id != serializer.validated_data["question"].agency.id:
-            raise exceptions.PermissionDenied("Cannot update an answer that does not belong to your agency.")
+        if self.request.user.role != UserRole.SUPER_ADMIN:
+            if self.request.user.agency.id != serializer.validated_data["question"].agency.id:
+                raise exceptions.PermissionDenied("Cannot update an answer that does not belong to your agency.")
         return super().perform_update(serializer)
 
 
