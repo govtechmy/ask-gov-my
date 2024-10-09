@@ -2,10 +2,10 @@ import {
   getQuestionById,
   getTopicsDetail,
   getAgencyList,
+  searchQuestions,
 } from "@/actions/questionServices";
-import { getRelatedQuestions } from "@/actions/searchServices";
 import IconQuestionSmileSolo from "@/icons/iconquestionsmilesolo";
-import ThumbsCounter from "@/components/page/QuestionDetailPage/ThumbsCounter";
+import ThumbsCounter from "@/components/page/question-details/thumb-counters";
 import AgencyName from "@/components/common/AgencyName";
 import JataNegaraIcon from "@/icons/jatanegaraicon";
 import { notFound } from "next/navigation";
@@ -41,6 +41,8 @@ const QuestionDetailPage: FSP<QuestionDetailsProps> = async ({
   locale,
 }) => {
   const { question, relatedQuestions, relatedTopics } = data!;
+
+  console.log(relatedQuestions);
   return (
     <div className="w-full flex flex-col gap-6">
       <div className="flex flex-col gap-3">
@@ -96,16 +98,18 @@ const QuestionDetailPage: FSP<QuestionDetailsProps> = async ({
           />
         </div>
 
-        <div className="flex flex-col lg:flex-row gap-3 lg:items-center">
-          <p className=" font-medium text-sm">Topics: </p>
-          <div className="flex flex-col lg:flex-row gap-1.5">
-            {relatedTopics.map((title, index) => (
-              <StyledDisplay key={index} variant={"Topics"}>
-                {title}
-              </StyledDisplay>
-            ))}
+        {relatedTopics.length > 0 && (
+          <div className="flex flex-col lg:flex-row gap-3 lg:items-center">
+            <p className=" font-medium text-sm">Topics: </p>
+            <div className="flex flex-col lg:flex-row gap-1.5">
+              {relatedTopics.map((title, index) => (
+                <StyledDisplay key={index} variant={"Topics"}>
+                  {title}
+                </StyledDisplay>
+              ))}
+            </div>
           </div>
-        </div>
+        )}
 
         <Separator className="my-1.5" />
 
@@ -185,12 +189,12 @@ export default inject(QuestionDetailPage, {
 
     if (!("code" in question) && agencyId) {
       const [relatedQuestions, relatedTopics] = await Promise.all([
-        getRelatedQuestions(question.question),
+        searchQuestions(question.question, 1, 4),
         getTopicsDetail(question.topics, agencyId, params.locale),
       ]);
       return {
         question,
-        relatedQuestions,
+        relatedQuestions: relatedQuestions.results,
         relatedTopics,
       };
     }

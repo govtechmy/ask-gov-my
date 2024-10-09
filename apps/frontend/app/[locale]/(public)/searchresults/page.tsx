@@ -1,10 +1,10 @@
 import React from "react";
-import { searchQuestionsWithPagination } from "@/actions/searchServices";
 import WordTranslate from "@/components/common/WordTranslate";
 import { FSP, inject } from "@/lib/decorator";
 import { PageResult, Question } from "@/types/types";
 import QuestionCard from "@/components/common/QuestionBox/QuestionCard";
 import { Paginator } from "@/components/client/paginator";
+import { searchQuestions } from "@/actions/questionServices";
 
 interface SearchResultPageProps {
   questions: PageResult<Question>;
@@ -57,7 +57,7 @@ export default inject(SearchResultPage, {
   // debug: true,
   async data({ searchParams }) {
     const { page = 1, query = "" } = searchParams;
-    const questions = await searchQuestionsWithPagination(query, page);
+    const questions = await searchQuestions(query, page);
     return {
       questions,
     };

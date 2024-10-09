@@ -1,4 +1,4 @@
-import { LoginForm } from "@/components/page/AdminLogin/LoginForm";
+import { LoginForm } from "@/components/page/admin-login/login-form";
 import { FSP, inject } from "@/lib/decorator";
 import RedirectIfAuthenticated from "@/middlewares/injectors/redirect-if-authenticated";
 

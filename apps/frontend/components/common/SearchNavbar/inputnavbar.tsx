@@ -2,7 +2,7 @@
 
 import React, { useEffect, useState, useCallback, useRef } from "react";
 import { Link } from "@/lib/i18n";
-import { searchQuestions } from "@/actions/searchServices";
+import { searchQuestions } from "@/actions/questionServices";
 import Search from "@/icons/search";
 import JataNegaraIcon from "@/icons/jatanegaraicon";
 import Close from "@/icons/close";
@@ -11,12 +11,13 @@ import AskQuestion from "./AskQuestion";
 import { useRouter } from "@/lib/i18n";
 import { useTranslations } from "next-intl";
 import { getDynamicAgencyMap } from "@/actions/questionServices";
+import { Question } from "@/types/types";
 
 interface InputNavbarProps {
   searchQuery: string;
   setSearchQuery: (query: string) => void;
-  searchResults: any[];
-  setSearchResults: (results: any[]) => void;
+  searchResults: Question[];
+  setSearchResults: (results: Question[]) => void;
   displayAllMatches: boolean;
   setDisplayAllMatches: (display: boolean) => void;
   agencyUUID?: string;
@@ -89,11 +90,11 @@ const InputNavbar: React.FC<InputNavbarProps> = ({
   const fetchSearchResults = async (query: string) => {
     if (query.length > 0) {
       setIsSearching(true);
-      const results = await searchQuestions("sample");
-      setSearchResults(results);
+      const results = await searchQuestions(query);
+      setSearchResults(results.results);
       setIsSearching(false);
       setIsTyping(false);
-      setShowNoResults(results.length === 0); // show no results if results array is empty
+      setShowNoResults(results.results.length === 0); // show no results if results array is empty
     } else {
       setSearchResults([]);
       setIsTyping(false);
@@ -200,7 +201,7 @@ const InputNavbar: React.FC<InputNavbarProps> = ({
                             </span>
                             <span className="mt-1 font-normal text-sm text-dim-500 line-clamp-1">
                               Answer:{" "}
-                              {highlightText(result.answer, searchQuery)}
+                              {highlightText(result.answer.text, searchQuery)}
                             </span>
                           </Link>
                           <span className="on hover:cursor-pointer pl-3">

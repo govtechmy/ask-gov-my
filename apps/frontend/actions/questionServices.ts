@@ -57,6 +57,47 @@ export async function getAllQuestions(
   }
 }
 
+// Search questions endpoint via ES
+export async function searchQuestions(
+  query: string = "",
+  page: number = 1,
+  limit: number = 10
+): Promise<PageResult<Question>> {
+  try {
+    const params = new URLSearchParams({
+      q: query,
+      // TODO: Add this when endpoint is fixed.
+      // page: page.toString(),
+      // page_size: limit.toString(),
+    });
+    const response = await fetch(
+      `${API_URL}/questions/search/?${params.toString()}`,
+      {
+        method: "GET",
+      }
+    );
+
+    if (!response.ok) {
+      throw new Error("Failed to fetch questions");
+    }
+
+    const data = await response.json();
+
+    return paginate(data.results, data.count, page, limit);
+  } catch (error) {
+    console.error("Error in searchQuestions:", error);
+    return {
+      results: [],
+      page: {
+        current: 1,
+        max: 0,
+        total: 0,
+        limit: 0,
+      },
+    };
+  }
+}
+
 export async function getAllTopics(agencyId?: number): Promise<Topic[]> {
   const params = new URLSearchParams();
   if (agencyId) {
