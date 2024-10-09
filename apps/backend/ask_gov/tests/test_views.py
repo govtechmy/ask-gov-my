@@ -285,8 +285,8 @@ class TestAdminAttachmentViewSet(APITestCase):
         self.question.save()
         data = {
             "question": self.question.id,
-            "filekey": "foo",
-            "filesize": 16_000,
+            "file_key": "foo",
+            "file_size": 16_000,
         }
         response = self.client.post(self.create_attachments_url, data=data)
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)

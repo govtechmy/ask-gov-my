@@ -135,11 +135,11 @@ class User(AbstractBaseUser):
 
 class Attachment(models.Model):
     question = models.ForeignKey(Question, related_name='attachments', on_delete=models.CASCADE)
-    filekey = models.CharField(max_length=255, verbose_name="S3 File Key")
-    filesize = models.PositiveIntegerField(verbose_name="File Size (bytes)")
+    file_key = models.CharField(max_length=255, verbose_name="S3 File Key")
+    file_size = models.PositiveIntegerField(verbose_name="File Size (bytes)")
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
     @property
-    def filesize_mb(self):
+    def file_size_mb(self):
         return round(self.filesize / (1024 * 1024), 2)
