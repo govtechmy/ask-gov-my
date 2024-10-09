@@ -261,3 +261,32 @@ class TestAdminTopicViewSet(APITestCase):
             }
         )
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+
+class TestAdminAttachmentViewSet(APITestCase):
+    def setUp(self):
+        self.agency = Agency.objects.create(name="Ministry of Education", name_ms="Kementerian Pendidikan", acronym="MOE")
+        self.question = Question.objects.create(
+            question=f"Test Question",
+            email="test@example.com",
+            agency=self.agency,
+        )
+        self.create_attachments_url = reverse("admin-attachment-list")
+
+        self.user = User.objects.create(name="John Doe", email="johndoe@example.com", agency=self.agency, role=UserRole.STAFF)
+        token = Token.objects.create(user=self.user)
+        self.client.force_authenticate(self.user, token)
+
+    def test_attachment_for_other_agency(self):
+        """
+        Tests user with role `staff` creating an attachment for a different agency.
+        """
+        other_agency = Agency.objects.create(name="Other Ministry", name_ms="Other Ministry", acronym="OM")
+        self.question.agency = other_agency
+        self.question.save()
+        data = {
+            "question": self.question.id,
+            "file_key": "foo",
+            "file_size": 16_000,
+        }
+        response = self.client.post(self.create_attachments_url, data=data)
+        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)

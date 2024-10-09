@@ -2,7 +2,7 @@ import math
 from django.conf import settings
 from ask_gov.permissions import IsSuperAdmin
 from .serializers import (
-    AdminPatchedQuestionSerializer, AnswerSerializer, QuestionSerializer,
+    AdminPatchedQuestionSerializer, AnswerSerializer, AttachmentSerializer, QuestionSerializer,
     AgencySerializer, TopicSerializer, UserSerializer,
 )
 from django.shortcuts import get_object_or_404
@@ -13,7 +13,7 @@ from rest_framework.pagination import PageNumberPagination
 from rest_framework.decorators import action 
 from rest_framework.permissions import IsAuthenticated, AllowAny
 from rest_framework import generics, status, pagination, mixins, viewsets, exceptions, serializers
-from .models import Answer, Question, Agency, Topic, User, UserRole
+from .models import Answer, Attachment, Question, Agency, Topic, User, UserRole
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from drf_spectacular.utils import extend_schema, OpenApiParameter, OpenApiTypes, inline_serializer
@@ -317,3 +317,24 @@ class CheckUserEmailExistsView(APIView):
         email = request.GET.get('email')
         exists = User.objects.filter(email=email).exists()
         return Response({'isExists':exists}, status=status.HTTP_200_OK)
+
+class AdminAttachmentViewSet(
+    mixins.CreateModelMixin,
+    mixins.DestroyModelMixin,
+    viewsets.GenericViewSet,
+):
+    queryset = Attachment.objects.all()
+    serializer_class = AttachmentSerializer
+    permission_classes = [IsAuthenticated]
+
+    def perform_create(self, serializer):
+        if self.request.user.role != UserRole.SUPER_ADMIN:
+            if self.request.user.agency.id != serializer.validated_data["question"].agency.id:
+                raise exceptions.PermissionDenied("The question does not belong to your agency.")
+        return super().perform_create(serializer)
+
+    def perform_update(self, serializer):
+        if self.request.user.role != UserRole.SUPER_ADMIN:
+            if self.request.user.agency.id != serializer.validated_data["question"].agency.id:
+                raise exceptions.PermissionDenied("The question does not belong to your agency.")
+        return super().perform_update(serializer)

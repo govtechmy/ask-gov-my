@@ -1,6 +1,6 @@
 from rest_framework import serializers
 from django.contrib.auth import get_user_model
-from .models import Agency, Answer, Question, Topic
+from .models import Agency, Answer, Attachment, Question, Topic
 
 User = get_user_model()
 
@@ -15,6 +15,15 @@ class TopicSerializer(serializers.ModelSerializer):
     class Meta:
         model = Topic
         fields = '__all__'
+
+class AttachmentSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Attachment
+        fields = ["id", "question", "file_key", "file_size", "file_size_mb"]
+        read_only_fields = ["id"]
+        extra_kwargs = {
+                "question": {"write_only": True}
+        }
 
 class AnswerSerializer(serializers.ModelSerializer):
     class Meta:
@@ -32,11 +41,12 @@ class AnswerSerializer(serializers.ModelSerializer):
 class QuestionSerializer(serializers.ModelSerializer):
     answer = AnswerSerializer(read_only=True)
     agency = AgencySerializer(read_only=True)
+    attachments = AttachmentSerializer(read_only=True, many=True)
 
     class Meta:
         model = Question
-        fields = ["id", "topics", "answer", "question", "spam", "email", "admin_opened_at", "staff_opened_at", "created_at", "updated_at", "agency"]
-        read_only_fields = ["id", "topics", "answer", "spam", "admin_opened_at", "staff_opened_at", "created_at", "updated_at", "agency"]
+        fields = ["id", "topics", "answer", "question", "spam", "email", "admin_opened_at", "staff_opened_at", "created_at", "updated_at", "agency", "attachments"]
+        read_only_fields = ["id", "topics", "answer", "spam", "admin_opened_at", "staff_opened_at", "created_at", "updated_at", "agency", "attachments"]
 
 class AdminPatchedQuestionSerializer(serializers.ModelSerializer):
     class Meta:
