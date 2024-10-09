@@ -1,9 +1,6 @@
 import csv
 from django.core.management.base import BaseCommand
-from ask_gov.models import Agency, Question
-from ask_gov.serializers import QuestionSerializer
-from ask_gov.elasticsearch_client import client
-from ask_gov.embed import get_embeddings
+from ask_gov.models import Agency, Answer, Question
 
 class Command(BaseCommand):
     help = 'Load questions from a CSV file into the database and index them into Elasticsearch'
@@ -29,34 +26,15 @@ class Command(BaseCommand):
 
                 question = Question.objects.create(
                     question=question_text,
-                    answer=answer_text,
                     agency=agency,
-                    state='completed',  
                     email="example@example.com"
                 )
-
-                # serializer = QuestionSerializer(question)
-                # document = serializer.data
-
-                # agency_data = {
-                #     "id": agency.id,
-                #     "name": agency.name,
-                #     "acronym": agency.acronym,
-                #     "name_ms": agency.name_ms
-                # }
-
-                # document['agency'] = agency_data
-
-                # question_embedding = get_embeddings(question_text)
-                # answer_embedding = get_embeddings(answer_text) if answer_text else []
-
-                # document['vector'] = question_embedding + answer_embedding
-
-                # client.index(
-                #     index='questions',
-                #     id=str(question.id),
-                #     document=document
-                # )
+                Answer.objects.create(
+                    question=question,
+                    text=answer_text,
+                    raw=answer_text,
+                    draft=False,
+                )
 
                 self.stdout.write(self.style.SUCCESS(f'Successfully added and indexed question "{question_text}"'))
 

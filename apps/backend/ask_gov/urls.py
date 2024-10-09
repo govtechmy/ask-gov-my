@@ -15,6 +15,7 @@ router.register("admin/agencies", views.AdminAgencyViewSet, basename="admin-agen
 router.register("admin/topics", views.AdminTopicViewSet, basename="admin-topic")
 router.register("admin/users", views.AdminUserViewSet, basename="admin-user")
 router.register("admin/answers", views.AdminAnswerViewSet, basename="admin-answer")
+router.register("admin/attachments", views.AdminAttachmentViewSet, basename="admin-attachment")
 
 urlpatterns = [
     path("", include(router.urls)),

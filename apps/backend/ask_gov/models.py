@@ -68,7 +68,7 @@ class Answer(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
 
     def __str__(self):
-        return self.answer_preview[:50]
+        return self.text[:50]
 
 
 class UserRole(models.TextChoices):
@@ -134,12 +134,12 @@ class User(AbstractBaseUser):
 
 
 class Attachment(models.Model):
-    answer = models.ForeignKey('Answer', related_name='attachments', on_delete=models.CASCADE)
-    filekey = models.CharField(max_length=255, verbose_name="S3 File Key")
-    filesize = models.PositiveIntegerField(verbose_name="File Size (bytes)")
+    question = models.ForeignKey(Question, related_name='attachments', on_delete=models.CASCADE)
+    file_key = models.CharField(max_length=255, verbose_name="S3 File Key")
+    file_size = models.PositiveIntegerField(verbose_name="File Size (bytes)")
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
     @property
-    def filesize_mb(self):
+    def file_size_mb(self) -> int:
         return round(self.filesize / (1024 * 1024), 2)
