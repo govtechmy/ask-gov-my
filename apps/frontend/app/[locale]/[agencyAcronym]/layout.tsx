@@ -1,6 +1,6 @@
 import React from "react";
 import { getAgencyList } from "@/actions/questionServices";
-import Footer from "@/components/common/Footer";
+import Footer from "@/components/layout/footer";
 
 // All route not in agency list will return 404
 export const dynamicParams = false;

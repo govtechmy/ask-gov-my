@@ -11,6 +11,11 @@
     "precaution": " as an added precaution. If not present, do not share any sensitive information."
   },
 
+  "Role": {
+    "super_admin": "Super Admin",
+    "staff": "Staff"
+  },
+
   "Footer": {
     "api_docs": "API Docs",
     "admin_login": "Admin Login",
@@ -22,6 +27,11 @@
       "toggle_theme": "Change theme",
       "toggle_light": "Toggle Light",
       "toggle_dark": "Toggle Dark"
+    },
+    "Header": {
+      "questions": "Questions",
+      "agencies": "Agencies",
+      "users": "Users"
     }
   },
 

@@ -1,20 +1,20 @@
-'use client';
-import React, { useState, useEffect } from 'react';
-import Link from 'next/link';
-import { usePathname } from 'next/navigation';
-import ThemeToggle from '../theme';
-import LocaleSwitch from './LocaleSwitch';
-import Asklogo from '@/icons/asklogo';
-import User from '@/icons/user';
-import ChevronDown from '@/icons/ChevronDown';
-import { cn } from '@/lib/utils';
-import Gov from '@/icons/gov';
-import UserGroup from '@/icons/usergroup';
-import Logout from '@/icons/logout';
-import { signOut, useSession } from 'next-auth/react';
-import { buttonVariants } from '@/components/ui/button';
-import QuestionCircle from '@/icons/questioncircle';
-import { StyledDisplay } from '@/components/ui/display';
+"use client";
+import React, { useState, useEffect } from "react";
+import Link from "next/link";
+import { usePathname } from "next/navigation";
+import ThemeToggle from "./theme-toggle";
+import LocaleSwitch from "./locale-switch";
+import Asklogo from "@/icons/asklogo";
+import User from "@/icons/user";
+import ChevronDown from "@/icons/ChevronDown";
+import { cn } from "@/lib/utils";
+import Gov from "@/icons/gov";
+import UserGroup from "@/icons/usergroup";
+import Logout from "@/icons/logout";
+import { signOut, useSession } from "next-auth/react";
+import { buttonVariants } from "@/components/ui/button";
+import QuestionCircle from "@/icons/questioncircle";
+import { StyledDisplay } from "@/components/ui/display";
 
 interface NavLinkProps {
   href: string;
@@ -29,9 +29,9 @@ const AdminHeaderDashboard: React.FC = () => {
   const handleLogout = () => signOut();
 
   const navLinks: NavLinkProps[] = [
-    { href: '/admin/dashboard', icon: QuestionCircle, label: 'Questions' },
-    { href: '/admin/dashboard/agency', icon: Gov, label: 'Agencies' },
-    { href: '/admin/dashboard/user', icon: UserGroup, label: 'Users' },
+    { href: "/admin/dashboard", icon: QuestionCircle, label: "Questions" },
+    { href: "/admin/dashboard/agency", icon: Gov, label: "Agencies" },
+    { href: "/admin/dashboard/user", icon: UserGroup, label: "Users" },
   ];
 
   const pathName = usePathname();
@@ -39,12 +39,12 @@ const AdminHeaderDashboard: React.FC = () => {
   const NavLink: React.FC<NavLinkProps> = ({ href, icon: Icon, label }) => (
     <Link
       className={cn(
-        buttonVariants({ variant: 'tertiary-askmygov', size: 'sm' }),
+        buttonVariants({ variant: "tertiary-askmygov", size: "sm" }),
         {
-          'text-[#702FF9] bg-[#F4EFFF] dark:text-[#9E70FF] dark:bg-[#201636]':
+          "text-[#702FF9] bg-[#F4EFFF] dark:text-[#9E70FF] dark:bg-[#201636]":
             pathName === href,
-          'text-black-700': pathName !== href,
-        },
+          "text-black-700": pathName !== href,
+        }
       )}
       href={href}
     >
@@ -60,8 +60,8 @@ const AdminHeaderDashboard: React.FC = () => {
         <div className="font-poppins flex h-full gap-2.5 text-lg font-semibold items-center">
           <Asklogo />
           AskGovMY
-          <StyledDisplay variant={'nameHeader'}>ADMIN</StyledDisplay>
-          {navLinks.map(link => (
+          <StyledDisplay variant={"nameHeader"}>ADMIN</StyledDisplay>
+          {navLinks.map((link) => (
             <NavLink key={link.href} {...link} />
           ))}
         </div>
@@ -80,7 +80,7 @@ const AdminHeaderDashboard: React.FC = () => {
               <div className="px-1 pr-2 text-dim-500">
                 <ChevronDown
                   className={`h-5 w-5 transition-transform transform ${
-                    open ? 'rotate-180' : ''
+                    open ? "rotate-180" : ""
                   }`}
                 />
               </div>

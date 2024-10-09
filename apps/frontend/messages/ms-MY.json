@@ -11,6 +11,11 @@
     "precaution": " di depan pautan. Sekiranya tiada, jangan kongsikan sebarang maklumat sensitif."
   },
 
+  "Role": {
+    "super_admin": "Super Admin",
+    "staff": "Kakitangan"
+  },
+
   "Footer": {
     "api_docs": "Dokumentasi API",
     "admin_login": "Admin Log Masuk",
@@ -22,6 +27,11 @@
       "toggle_theme": "Pilih Mod",
       "toggle_light": "Pilih Mod Terang",
       "toggle_dark": "Pilih Mod Gelap"
+    },
+    "Header": {
+      "questions": "Soalan",
+      "agencies": "Agensi",
+      "users": "Pengguna"
     }
   },
 

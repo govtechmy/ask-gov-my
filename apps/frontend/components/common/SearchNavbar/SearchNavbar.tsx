@@ -5,7 +5,7 @@ import Info from "@/icons/info";
 import InputNavbar from "./inputnavbar";
 import { useTranslations } from "next-intl";
 import { context } from "@/components/context/ContextSearchBar";
-import Link from "next/link";
+import { Link } from "@/lib/i18n";
 import RightArrow from "@/icons/rightarrow";
 import { Agency } from "@/types/types";
 import AgencyName from "../AgencyName";

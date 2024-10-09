@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useEffect, useState, useCallback, useRef } from "react";
-import Link from "next/link";
+import { Link } from "@/lib/i18n";
 import { searchQuestions } from "@/actions/searchServices";
 import Search from "@/icons/search";
 import JataNegaraIcon from "@/icons/jatanegaraicon";

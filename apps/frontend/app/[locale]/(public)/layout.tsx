@@ -1,8 +1,8 @@
 import React from "react";
-import BaseHeader from "@/components/common/Header/BaseHeader";
+import BaseHeader from "@/components/layout/header/BaseHeader";
 import SearchNavbar from "@/components/common/SearchNavbar/SearchNavbar";
 import ContextSearchBar from "@/components/context/ContextSearchBar";
-import Footer from "@/components/common/Footer";
+import Footer from "@/components/layout/footer";
 
 export default function DashboardLayout({
   children,

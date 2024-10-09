@@ -19,9 +19,7 @@ const MustBeAuthenticated: MiddlewareFunction = async ({
       return reject({
         status: HttpStatusCode.UNAUTHORIZED_401,
         message: "Unauthenticated access",
-        redirect: route("home", null, {
-          callbackURL: getURLRouter().pathname,
-        }),
+        redirect: route("admin.index", null),
       });
     }
 

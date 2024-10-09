@@ -18,7 +18,7 @@ const RedirectIfAuthenticated: MiddlewareFunction = async ({
       return reject({
         status: HttpStatusCode.TEMPORARY_REDIRECT_307,
         message: "User authenticated. Redirecting.",
-        redirect: route("admin.dashboard", null),
+        redirect: route("admin.dashboard.index", null),
       });
     }
 

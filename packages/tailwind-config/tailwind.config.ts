@@ -1,5 +1,6 @@
 import type { Config } from "tailwindcss";
 import tailwindcssAnimate from "tailwindcss-animate";
+import tailwindRadix from "tailwindcss-radix";
 import colors from "tailwindcss/colors";
 
 const config: Config = {
@@ -122,6 +123,6 @@ const config: Config = {
       },
     },
   },
-  plugins: [tailwindcssAnimate],
+  plugins: [tailwindcssAnimate, tailwindRadix],
 };
 export default config;

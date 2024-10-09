@@ -9,6 +9,7 @@ export { default as EncryptedLockIcon } from "./encryptedlock";
 export { default as GearIcon } from "./gear";
 export { default as GoogleIcon } from "./google";
 export { default as GovIcon } from "./gov";
+export { default as HamburgerMenuIcon } from "./hamburger-menu";
 export { default as QuestionSmileIcon } from "./iconquestionsmile";
 export { default as QuestionSmile2Icon } from "./iconquestionsmile2";
 export { default as QuestionSmileSoloIcon } from "./iconquestionsmilesolo";
@@ -41,6 +42,7 @@ export { default as TickCheckCircleInCircleIcon } from "./tickcheckcircleincircl
 export { default as TickWithRugged } from "./tickwithrugged";
 export { default as TrashIcon } from "./trash";
 export { default as UploadIcon } from "./upload";
+export { default as UserIcon } from "./user";
 export { default as UserGroupIcon } from "./usergroup";
 export { default as XIcon } from "./x";
 

@@ -8,7 +8,11 @@ export const routes = {
   agencyTopic: "/:agencyAcronym/topics/:topicId",
   admin: {
     index: "/admin/",
-    dashboard: "/admin/dashboard/",
+    dashboard: {
+      index: "/admin/dashboard/",
+      agency: "/admin/dashboard/agency/",
+      user: "/admin/dashboard/user/",
+    },
   },
 };
 

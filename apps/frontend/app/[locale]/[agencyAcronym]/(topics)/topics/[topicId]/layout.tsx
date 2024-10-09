@@ -1,7 +1,7 @@
 import React from "react";
 import TopicsSidebar from "../../../@sidebar/page";
 import { getAgencyList, getDynamicAgencyMap } from "@/actions/questionServices";
-import BaseHeader from "@/components/common/Header/BaseHeader";
+import BaseHeader from "@/components/layout/header/BaseHeader";
 import SearchNavbar from "@/components/common/SearchNavbar/SearchNavbar";
 import ContextSearchBar from "@/components/context/ContextSearchBar";
 

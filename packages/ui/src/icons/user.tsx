@@ -1,4 +1,7 @@
-export default function User() {
+import { cn } from "@askgovmy/utils";
+import { FC } from "react";
+
+const User: FC<React.SVGProps<SVGSVGElement>> = ({ className, ...props }) => {
   return (
     <svg
       width="20"
@@ -6,6 +9,8 @@ export default function User() {
       viewBox="0 0 20 20"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
+      className={cn("", className)}
+      {...props}
     >
       <path
         d="M9.99997 9.25C11.7949 9.25 13.25 7.79493 13.25 6C13.25 4.20507 11.7949 2.75 9.99997 2.75C8.20505 2.75 6.74997 4.20507 6.74997 6C6.74997 7.79493 8.20505 9.25 9.99997 9.25Z"
@@ -23,4 +28,5 @@ export default function User() {
       />
     </svg>
   );
-}
+};
+export default User;

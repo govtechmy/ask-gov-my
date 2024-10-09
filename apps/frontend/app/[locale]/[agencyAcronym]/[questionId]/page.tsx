@@ -9,7 +9,7 @@ import ThumbsCounter from "@/components/page/QuestionDetailPage/ThumbsCounter";
 import AgencyName from "@/components/common/AgencyName";
 import JataNegaraIcon from "@/icons/jatanegaraicon";
 import { notFound } from "next/navigation";
-import Link from "next/link";
+import { Link } from "@/lib/i18n";
 import WordTranslate from "@/components/common/WordTranslate";
 import { Question } from "@/types/types";
 import AgencyLogoImporter from "@/components/common/AgencyLogoImporter";

@@ -1,5 +1,5 @@
-import Footer from "@/components/common/Footer";
-import BaseHeader from "@/components/common/Header/BaseHeader";
+import Footer from "@/components/layout/footer";
+import BaseHeader from "@/components/layout/header/BaseHeader";
 
 export default function DashboardLayout({
   children,

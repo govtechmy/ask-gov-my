@@ -1,5 +1,5 @@
 "use client";
-import Link from "next/link";
+import { Link } from "@/lib/i18n";
 import { useTranslations } from "next-intl";
 import {
   Button,
@@ -79,7 +79,7 @@ const CheckmailPage = ({ params }: { params: { locale: string } }) => {
       form.setError("code", { message: t("codeFailed") });
       return;
     }
-    router.push(response.url || route("admin.dashboard", params));
+    router.push(response.url || route("admin.dashboard.index", params));
   };
 
   return (

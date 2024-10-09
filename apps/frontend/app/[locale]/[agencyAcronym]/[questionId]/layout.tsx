@@ -1,6 +1,6 @@
 import React from "react";
 import ContextSearchBar from "@/components/context/ContextSearchBar";
-import BaseHeader from "@/components/common/Header/BaseHeader";
+import BaseHeader from "@/components/layout/header/BaseHeader";
 import TopicsSidebar from "../@sidebar/page";
 
 export default async function QuestionDetailsLayout({ children, params }) {

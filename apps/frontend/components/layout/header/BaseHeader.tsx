@@ -1,11 +1,11 @@
 "use client";
 import React, { Suspense, useContext } from "react";
-import Link from "next/link";
-import ThemeToggle from "../theme";
-import LocaleSwitch from "./LocaleSwitch";
+import { Link } from "@/lib/i18n";
+import ThemeToggle from "./theme-toggle";
+import LocaleSwitch from "./locale-switch";
 import Asklogo from "@/icons/asklogo";
 import { context } from "@/components/context/ContextSearchBar";
-import InputNavbar from "../SearchNavbar/inputnavbar";
+import InputNavbar from "../../common/SearchNavbar/inputnavbar";
 import { StyledDisplay } from "@/components/ui/display";
 
 interface HeaderProps {
@@ -46,7 +46,7 @@ const BaseHeader: React.FC<HeaderProps> = ({
                       {agencyAcronym.toUpperCase()}
                     </div>
                   ) : (
-                    <div className="hidden sm:block">MyGov</div>
+                    <div className="">MyGov</div>
                   )}
                 </div>
                 {isAdmin && (

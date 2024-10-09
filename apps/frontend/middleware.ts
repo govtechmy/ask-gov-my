@@ -7,7 +7,7 @@ import { RouterMiddleware } from "./middlewares/router";
  * 1. Sequence of middleware matters!
  * 2. Final middleware should return NextResponse
  */
-export default NextChain([RouterMiddleware, I18nMiddleware]);
+export default NextChain([I18nMiddleware]);
 
 export const config = {
   matcher: [

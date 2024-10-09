@@ -1,10 +1,14 @@
 // Components
+export * from "./avatar";
+export * from "./breadcrumb";
 export * from "./button";
 export * from "./collapse";
-export * from "./select";
-export * from "./breadcrumb";
-export * from "./separator";
+export * from "./display";
 export * from "./form";
+export * from "./popover";
+export * from "./select";
+export * from "./separator";
+export * from "./sheet";
 
 // Icons
 export * from "./icons";
