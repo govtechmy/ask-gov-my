@@ -141,5 +141,5 @@ class Attachment(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
 
     @property
-    def file_size_mb(self):
+    def file_size_mb(self) -> int:
         return round(self.filesize / (1024 * 1024), 2)
