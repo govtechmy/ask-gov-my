@@ -19,7 +19,8 @@ class TopicSerializer(serializers.ModelSerializer):
 class AttachmentSerializer(serializers.ModelSerializer):
     class Meta:
         model = Attachment
-        fields = ["question", "file_key", "file_size", "file_size_mb"]
+        fields = ["id", "question", "file_key", "file_size", "file_size_mb"]
+        read_only_fields = ["id"]
         extra_kwargs = {
                 "question": {"write_only": True}
         }
