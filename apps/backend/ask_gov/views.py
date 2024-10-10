@@ -70,10 +70,30 @@ class QuestionViewSet(
         Search questions.
         """
         query = request.query_params.get("q", "")
-        page = request.query_params.get("page", 1)
-        page_size = request.query_params.get("page_size", 6)
+        page = int(request.query_params.get("page", "1"))
+        page_size = int(request.query_params.get("page_size", "6"))
         if not query:
             raise exceptions.ValidationError("Search query is required.")
+
+        should = [
+            {
+                "multi_match": {
+                    "query": query,
+                    "fields": ["agency.name", "agency.acronym", "agency.name_ms"],
+                    "boost": 0.5,
+                },
+            },
+        ]
+
+        if self.EMBEDDING_ENABLED:
+            should.push({
+                "knn": {
+                    "field": "vector",
+                    "query_vector": get_embedding(query),
+                    "num_candidates": 50,
+                    "boost": 1,
+                }
+            })
 
         es_query = {
             "bool": {
@@ -81,23 +101,7 @@ class QuestionViewSet(
                     { "match": { "spam": False } },
                     { "match": { "answer.draft": False } }
                 ],
-                "should": [
-                    {
-                        "multi_match": {
-                            "query": query,
-                            "fields": ["agency.name", "agency.acronym", "agency.name_ms"],
-                            "boost": 0.5,
-                        },
-                    },
-                    {
-                        "knn": {
-                            "field": "vector",
-                            "query_vector": get_embedding(query),
-                            "num_candidates": 50,
-                            "boost": 1,
-                        }
-                    } if self.EMBEDDING_ENABLED else {}
-                ]
+                "should": should,
             }
         }
 

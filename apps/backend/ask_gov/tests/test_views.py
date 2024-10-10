@@ -72,12 +72,15 @@ class TestAdminListQuestions(APITestCase):
 
 class TestQuestionViewSet(APITestCase):
     def setUp(self):
+        self.agency = Agency.objects.create(name="Ministry of Education", name_ms="Kementerian Pendidikan", acronym="MOE")
         for i in range(0, 10):
             Question.objects.create(
                 question=f"Question {i + 1}",
                 email="test@example.com",
+                agency=self.agency,
             )
         self.submit_question_url = reverse("question-list")
+        self.search_questions_url = reverse("question-search")
     
     def test_submit_long_question(self):
         """
@@ -92,6 +95,16 @@ class TestQuestionViewSet(APITestCase):
             data=data,
         )
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+    
+    def test_search_questions(self):
+        """
+        Tests searching questions.
+        """
+        response = self.client.get(
+            self.search_questions_url,
+            {"page": "2", "page_size": "2", "q": self.agency.acronym},
+        )
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
 
 class TestAdminQuestionViewSet(APITestCase):
     NUM_QUESTIONS = 10

@@ -66,9 +66,8 @@ export async function searchQuestions(
   try {
     const params = new URLSearchParams({
       q: query,
-      // TODO: Add this when endpoint is fixed.
-      // page: page.toString(),
-      // page_size: limit.toString(),
+      page: page.toString(),
+      page_size: limit.toString(),
     });
     const response = await fetch(
       `${API_URL}/questions/search/?${params.toString()}`,
