@@ -1,53 +1,109 @@
 "use server";
 const API_URL = process.env.API_URL;
-import { Question, Agency, Topic, QuestionSubmission } from "@/types/types";
+import { paginate } from "@/lib/server-helper";
+import {
+  Question,
+  Agency,
+  Topic,
+  QuestionSubmission,
+  PageResult,
+} from "@/types/types";
 
 export async function getAllQuestions(
   page: number = 1,
-  pageSize: number = 6
-): Promise<{
-  data: Question[];
-  totalItems: number;
-  totalPages: number;
-  currentPage: number;
-}> {
+  limit: number = 6,
+  agencyId?: number,
+  topicId?: number
+): Promise<PageResult<Question>> {
   try {
-    const response = await fetch(
-      `${API_URL}/questions/?page=${page}&page_size=${pageSize}`,
-      {
-        method: "GET",
-        headers: {
-          "Cache-Control": "no-cache",
-          Pragma: "no-cache",
-          Expires: "0",
-        },
-      }
-    );
+    const params = new URLSearchParams({
+      page: page.toString(),
+      page_size: limit.toString(),
+    });
+
+    if (agencyId) {
+      params.append("agency", agencyId.toString());
+    }
+    if (topicId) {
+      params.append("topics", topicId.toString());
+    }
+
+    const response = await fetch(`${API_URL}/questions/?${params.toString()}`, {
+      method: "GET",
+      headers: {
+        "Cache-Control": "no-cache",
+        Pragma: "no-cache",
+        Expires: "0",
+      },
+    });
     if (!response.ok) {
       throw new Error("Failed to fetch questions");
     }
 
     const data = await response.json();
 
-    return {
-      data: data.results,
-      totalItems: data.count,
-      totalPages: Math.ceil(data.count / pageSize),
-      currentPage: page,
-    };
+    return paginate(data.results, data.count, page, limit);
   } catch (error) {
     console.error("Error in getAllQuestions:", error);
     return {
-      data: [],
-      totalItems: 0,
-      totalPages: 0,
-      currentPage: 1,
+      results: [],
+      page: {
+        current: 1,
+        max: 0,
+        total: 0,
+        limit: 0,
+      },
     };
   }
 }
 
-export async function getAllTopics(): Promise<Topic[]> {
-  const response = await fetch(`${API_URL}/topics/`, {
+// Search questions endpoint via ES
+export async function searchQuestions(
+  query: string = "",
+  page: number = 1,
+  limit: number = 10
+): Promise<PageResult<Question>> {
+  try {
+    const params = new URLSearchParams({
+      q: query,
+      // TODO: Add this when endpoint is fixed.
+      // page: page.toString(),
+      // page_size: limit.toString(),
+    });
+    const response = await fetch(
+      `${API_URL}/questions/search/?${params.toString()}`,
+      {
+        method: "GET",
+      }
+    );
+
+    if (!response.ok) {
+      throw new Error("Failed to fetch questions");
+    }
+
+    const data = await response.json();
+
+    return paginate(data.results, data.count, page, limit);
+  } catch (error) {
+    console.error("Error in searchQuestions:", error);
+    return {
+      results: [],
+      page: {
+        current: 1,
+        max: 0,
+        total: 0,
+        limit: 0,
+      },
+    };
+  }
+}
+
+export async function getAllTopics(agencyId?: number): Promise<Topic[]> {
+  const params = new URLSearchParams();
+  if (agencyId) {
+    params.append("agency", agencyId.toString());
+  }
+  const response = await fetch(`${API_URL}/topics/?${params.toString()}`, {
     method: "GET",
     headers: {
       "Cache-Control": "no-cache",
@@ -64,17 +120,12 @@ export async function getAllTopics(): Promise<Topic[]> {
   return data;
 }
 
-export async function getTopicByAgency(agencyId: number): Promise<Topic[]> {
-  const topics = await getAllTopics();
-  const filteredTopics = topics.filter((topic) => topic.agency === agencyId);
-  return filteredTopics;
-}
-
 export async function getTopicsDetail(
   topicIds: number[],
+  agencyId: number,
   locale: string
 ): Promise<string[]> {
-  const topics = await getAllTopics();
+  const topics = await getAllTopics(agencyId);
   const topicIdToTitleMap: { [key: number]: string } = {};
 
   if (locale === "en-GB") {
@@ -185,7 +236,7 @@ export async function getQuestionsByTopicAndAgency(
 
 export async function getQuestionById(
   questionId: string
-): Promise<Question | null> {
+): Promise<Question | { code: number }> {
   const response = await fetch(`${API_URL}/questions/${questionId}/`, {
     method: "GET",
     next: { revalidate: 0 },
@@ -193,7 +244,9 @@ export async function getQuestionById(
   if (response.ok) {
     return response.json();
   }
-  return null;
+  return {
+    code: response.status,
+  };
 }
 
 export async function submitQuestion(data: QuestionSubmission): Promise<void> {
@@ -253,14 +306,7 @@ export async function getAgencyList(): Promise<Agency[]> {
     }
 
     const data = await response.json();
-    return data.map((agency: Agency) => ({
-      id: agency.id,
-      name: agency.name,
-      name_ms: agency.name_ms,
-      acronym: agency.acronym,
-      logo_url: agency.logo_url,
-      last_edited: agency.updated_at,
-    }));
+    return data;
   } catch (error) {
     console.error("Error in getAgencyList:", error);
     return [];

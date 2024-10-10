@@ -1,12 +1,12 @@
-'use client';
-import React, { useContext } from 'react';
-import Link from 'next/link';
-import ThemeToggle from '../theme';
-import LocaleSwitch from './LocaleSwitch';
-import Asklogo from '@/icons/asklogo';
-import { context } from '@/components/context/ContextSearchBar';
-import InputNavbar from '../SearchNavbar/inputnavbar';
-import { StyledDisplay } from '@/components/ui/display';
+"use client";
+import React, { Suspense, useContext } from "react";
+import { Link } from "@/lib/i18n";
+import ThemeToggle from "./theme-toggle";
+import LocaleSwitch from "./locale-switch";
+import Asklogo from "@/icons/asklogo";
+import { context } from "@/components/context/ContextSearchBar";
+import InputNavbar from "../../common/SearchNavbar/inputnavbar";
+import { StyledDisplay } from "@/components/ui/display";
 
 interface HeaderProps {
   isAdmin?: boolean;
@@ -30,13 +30,13 @@ const BaseHeader: React.FC<HeaderProps> = ({
   } = useContext<any>(context);
 
   return (
-    <div id="header" className={`sticky top-0 z-50 ${isAdmin ? '' : 'w-full'}`}>
+    <div id="header" className={`sticky top-0 z-50 ${isAdmin ? "" : "w-full"}`}>
       <div
-        className={`w-full bg-white ${isAdmin ? 'border-[1px] border-outline-200' : 'p-2 border-[1px] border-outline-200 h-16'} flex items-center`}
+        className={`w-full bg-white ${isAdmin ? "border-[1px] border-outline-200" : "p-2 border-[1px] border-outline-200 h-16"} flex items-center`}
       >
-        <div className={`${isAdmin ? 'p-2' : 'container'} flex w-full`}>
+        <div className={`${isAdmin ? "p-2" : "container"} flex w-full`}>
           <div className="flex justify-between w-full items-center">
-            <Link href={agencyAcronym ? `/${agencyAcronym}` : '/'}>
+            <Link href={agencyAcronym ? `/${agencyAcronym}` : "/"}>
               <div className="font-poppins flex h-full gap-2.5 text-lg font-semibold items-center hover:cursor-pointer">
                 <Asklogo />
                 <div className="flex">
@@ -46,16 +46,16 @@ const BaseHeader: React.FC<HeaderProps> = ({
                       {agencyAcronym.toUpperCase()}
                     </div>
                   ) : (
-                    <div className="hidden sm:block">MyGov</div>
+                    <div className="">MyGov</div>
                   )}
                 </div>
                 {isAdmin && (
-                  <StyledDisplay variant={'nameHeader'}>ADMIN</StyledDisplay>
+                  <StyledDisplay variant={"nameHeader"}>ADMIN</StyledDisplay>
                 )}
               </div>
             </Link>
 
-            {(alwaysShowInput || headerContent === 'input') && (
+            {(alwaysShowInput || headerContent === "input") && (
               <InputNavbar
                 searchQuery={searchQuery}
                 setSearchQuery={setSearchQuery}
@@ -68,7 +68,9 @@ const BaseHeader: React.FC<HeaderProps> = ({
 
             <div className="flex gap-3 items-center">
               <ThemeToggle />
-              <LocaleSwitch />
+              <Suspense>
+                <LocaleSwitch />
+              </Suspense>
             </div>
           </div>
         </div>

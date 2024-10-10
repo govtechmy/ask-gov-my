@@ -1,14 +1,9 @@
-import StaffHeaderDashboard from "@/components/common/Header/StaffHeaderDashboard";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/app/api/auth/[...nextauth]/options";
+import { FSP, inject } from "@/lib/decorator";
+import MustBeAuthenticated from "@/middlewares/injectors/must-be-authenticated";
 
-interface DashboardPageProps {
-  searchParams: { [key: string]: string | undefined };
-}
-
-export default async function DashboardPage({
-  searchParams,
-}: DashboardPageProps) {
+const AdminDashboardPage: FSP = async ({}) => {
   const session = await getServerSession(authOptions);
   let role;
   if (session) {
@@ -30,4 +25,9 @@ export default async function DashboardPage({
       </div>
     </div>
   );
-}
+};
+
+export default inject(AdminDashboardPage, {
+  // debug: true,
+  middleware: [MustBeAuthenticated],
+});

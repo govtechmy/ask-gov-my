@@ -1,261 +1,202 @@
 import {
   getQuestionById,
   getTopicsDetail,
-  getTopicByAgency,
   getAgencyList,
-  getDynamicAgencyMap,
+  searchQuestions,
 } from "@/actions/questionServices";
-import { getRelatedQuestions } from "@/actions/searchServices";
-import Footer from "@/components/common/Footer";
-import RelatedTopics from "@/components/QuestionDetailPage/RelatedTopics";
-import RightArrow from "@/icons/rightarrow";
 import IconQuestionSmileSolo from "@/icons/iconquestionsmilesolo";
-import ThumbsCounter from "@/components/QuestionDetailPage/ThumbsCounter";
+import ThumbsCounter from "@/components/page/question-details/thumb-counters";
 import AgencyName from "@/components/common/AgencyName";
 import JataNegaraIcon from "@/icons/jatanegaraicon";
-import { redirect } from "next/navigation";
-import DateComponent from "@/components/common/Date";
-import Link from "next/link";
+import { notFound } from "next/navigation";
+import { Link } from "@/lib/i18n";
 import WordTranslate from "@/components/common/WordTranslate";
 import { Question } from "@/types/types";
 import AgencyLogoImporter from "@/components/common/AgencyLogoImporter";
-import ContextSearchBar from "@/components/context/ContextSearchBar";
 import { fetchFileSizes } from "@/actions/utils";
 import TipTap from "@/components/Editor/TipTap";
-import BaseHeader from "@/components/common/Header/BaseHeader";
-import Masthead from "@/components/common/Header/Masthead";
 import { StyledDisplay } from "@/components/ui/display";
+import { FSP, inject } from "@/lib/decorator";
+import {
+  Breadcrumb,
+  BreadcrumbItem,
+  BreadcrumbLink,
+  BreadcrumbList,
+  BreadcrumbSeparator,
+  BreadcrumbPage,
+  Separator,
+} from "@askgovmy/ui";
+import { routes } from "@/lib/routes";
+import { since } from "@askgovmy/utils";
 
-interface Props {
-  params: {
-    agencyAcronym: string;
-    questionId: string;
-    locale: string;
-  };
+interface QuestionDetailsProps {
+  question: Question;
+  relatedQuestions: Question[];
+  relatedTopics: string[];
 }
 
-const QuestionDetailPage: React.FC<Props> = async ({ params }) => {
-  const { locale, agencyAcronym, questionId } = params;
-  const AGENCY_TO_UUID = await getDynamicAgencyMap();
-  const agencyUUID = parseInt(AGENCY_TO_UUID[agencyAcronym.toUpperCase()]);
-  const topics = await getTopicByAgency(agencyUUID);
+const QuestionDetailPage: FSP<QuestionDetailsProps> = async ({
+  params,
+  data,
+  locale,
+}) => {
+  const { question, relatedQuestions, relatedTopics } = data!;
 
-  const agencyAcronymObject = (id: number): string | undefined => {
-    return Object.keys(AGENCY_TO_UUID).find(
-      (key) => AGENCY_TO_UUID[key] === id.toString()
-    );
-  };
-
-  let question: Question | null = null;
-  let topicTitles: Array<any> = [];
-
-  try {
-    question = await getQuestionById(questionId);
-    if (!question) {
-      throw new Error("Question not found");
-    }
-    if (
-      Array.isArray(question.topics) &&
-      question.topics.every((topic) => typeof topic === "number")
-    ) {
-      topicTitles = await getTopicsDetail(question.topics, locale);
-    }
-  } catch (error) {
-    redirect("/");
-  }
-
-  // TODO: This is now in Answer
-  // const attachments = question.attachments || [];
-
-  // let fileSize: number[] = [];
-
-  // try {
-  //   fileSize = await fetchFileSizes(attachments);
-  // } catch (error) {
-  //   console.log("error on fileSize", error);
-  // }
-
-  let agencyList: any = [];
-
-  try {
-    agencyList = await getAgencyList();
-
-    if (!agencyList || agencyList.length === 0) {
-      throw new Error("Agency list is empty");
-    }
-  } catch {}
-
-  const currentAgency = agencyList.find(
-    (agency: { acronym: string }) =>
-      agency.acronym === agencyAcronym.toUpperCase()
-  );
-
-  const relatedQuestions = await getRelatedQuestions(question.question);
-
-  console.log("here", relatedQuestions);
-
+  console.log(relatedQuestions);
   return (
-    <div>
-      <ContextSearchBar>
-        <BaseHeader alwaysShowInput={true}></BaseHeader>
-      </ContextSearchBar>
+    <div className="w-full flex flex-col gap-6">
+      <div className="flex flex-col gap-3">
+        <Breadcrumb className="print:hidden">
+          <BreadcrumbList>
+            <BreadcrumbItem>
+              <BreadcrumbLink href={routes.home}>
+                <WordTranslate translate={"Questiondetail"} keyword={"home"} />
+              </BreadcrumbLink>
+            </BreadcrumbItem>
+            <BreadcrumbSeparator />
+            <BreadcrumbItem>
+              <BreadcrumbPage> {question.agency.acronym}</BreadcrumbPage>
+            </BreadcrumbItem>
+          </BreadcrumbList>
+        </Breadcrumb>
 
-      <div className="container mt-10 flex">
-        <div className="max-w-screen-2xl flex">
-          <div className="pb-7 w-9/12">
-            <div className="flex items-center gap-1">
-              <Link href={"/"}>
-                <div className="font-medium text-dim-500 text-sm">
-                  <WordTranslate
-                    translate={"Questiondetail"}
-                    keyword={"home"}
-                  />
-                </div>
-              </Link>
-              <div>
-                <RightArrow />
-              </div>
-              <div className="font-medium text-black-800 text-sm">
-                {currentAgency.acronym}
-              </div>
-            </div>
-
-            <div className="flex items-center gap-3 mt-3">
-              <div>
-                <IconQuestionSmileSolo />
-              </div>
-              <div className="text-black-700 flex text-base font-medium">
-                <div>
-                  <WordTranslate
-                    translate={"Questiondetail"}
-                    keyword={"posted"}
-                  />
-                </div>
-                &nbsp;
-                <DateComponent date={question.created_at} locale={locale} />
-              </div>
-            </div>
-
-            <div className="py-6 text-[#1D4ED8] dark:text-[#588BFB] font-medium text-2xl">
-              {question.question}
-            </div>
-
-            <div className="pb-6 max-w-[932px]">
-              <div className="bg-[#FFFFFF] dark:bg-[#1D1D21] border-[1px] border-outline-200 rounded-lg ">
-                <div>
-                  <div className="">
-                    <div className="flex px-8 pt-8 pb-0 items-center">
-                      <div className="flex w-6 h-6 relative flex-shrink-0">
-                        <AgencyLogoImporter currentAgency={currentAgency} />
-                      </div>
-                      <div className="font-medium text-sm text-black-700 px-2">
-                        <AgencyName agency={currentAgency} />
-                      </div>
-                      <div className="font-medium text-sm text-dim-500">
-                        <WordTranslate
-                          translate={"Questiondetail"}
-                          keyword={"answered"}
-                        />
-                      </div>
-                    </div>
-                    <div className="flex px-8 pb-5 pt-4 text-justify text-black-700 flex-col">
-                      <TipTap
-                        editorText={question.answer.raw}
-                        className="w-full flex-1"
-                        isEditable={false}
-                        hasMenuBar={false}
-                      />
-                    </div>
-
-                    <div className="px-8 pb-8 pt-0">
-                      <div className="flex gap-3 items-center border-b-[1px] border-outline-200 pb-[22px]">
-                        <div className=" font-medium text-sm">Topics: </div>
-                        <div className="flex gap-[6px]">
-                          {topicTitles.map((TopicTitles, index) => (
-                            <StyledDisplay key={index} variant={"Topics"}>
-                              {TopicTitles}
-                            </StyledDisplay>
-                          ))}
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                  <div>
-                    <div className="px-8 pb-8 pt-0">
-                      <WordTranslate
-                        translate={"Questiondetail"}
-                        keyword={"attachment"}
-                      />
-                    </div>
-                    {/* <div className="mx-8 mb-8 ">
-                      <AttachmentDownload
-                        uploadedAttachments={attachments}
-                        fileSizes={fileSize}
-                      ></AttachmentDownload>
-                    </div> */}
-                  </div>
-                  <div>
-                    <ThumbsCounter
-                      questionId={questionId}
-                      totalLikes={question.answer.likes}
-                    />
-                  </div>
-                </div>
-              </div>
-
-              <div>
-                <div className="font-semibold text-base pt-6 pb-2">
-                  Related questions
-                </div>
-                <div>
-                  {relatedQuestions.map((relatedQuestion, index) => (
-                    <div
-                      key={index}
-                      className="flex rounded-md items-center pr-2 pl-4 py-2 last:border-0 hover:bg-outline-200 max-h-[76px] max-w-[780px]"
-                    >
-                      <Link
-                        className="grow"
-                        href={`/${relatedQuestion.agency.acronym.toLowerCase()}/${relatedQuestion.id}`}
-                      >
-                        <span className="font-medium text-sm text-black-700 line-clamp-1">
-                          {relatedQuestion.question}
-                        </span>
-                        <span className="mt-1 font-normal text-sm text-dim-500 line-clamp-1">
-                          Answer: {relatedQuestion.answer.text}
-                        </span>
-                      </Link>
-                      <span className="on hover:cursor-pointer pl-3">
-                        <div className="flex">
-                          <div className="pr-1.5">
-                            <JataNegaraIcon className="stroke-[#E4E4E7] dark:stroke-[#27272A] h-5 w-5" />
-                          </div>
-                          <div className="font-normal text-sm text-black-800">
-                            {agencyAcronymObject(relatedQuestion.agency.id)}
-                          </div>
-                          <div className="px-1">
-                            <RightArrow />
-                          </div>
-                        </div>
-                      </span>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <div className="font-semibold text-base text-black-700 pl-10 w-3/12">
-            <RelatedTopics
-              topics={topics}
-              locale={locale}
-              agencyAcronym={agencyAcronym}
-            />
+        <div className="flex items-center gap-3">
+          <IconQuestionSmileSolo />
+          <div className="flex text-black-700 text-base font-medium">
+            <WordTranslate translate={"Questiondetail"} keyword={"posted"} />
+            &nbsp;
+            {since(question.created_at, params?.locale)}
           </div>
         </div>
       </div>
-      <Footer />
+
+      <h3 className="text-mydstextbrand-600 font-medium text-2xl">
+        {question.question}
+      </h3>
+
+      <div className="bg-white rounded-xl border border-outline-200 p-4.5 lg:p-8 gap-4.5 flex flex-col">
+        <div className="flex flex-col lg:flex-row gap-2 lg:gap-0 lg:items-center">
+          <div className="flex lg:items-center">
+            <div className="flex w-6 h-6 relative flex-shrink-0">
+              <AgencyLogoImporter currentAgency={question.agency} />
+            </div>
+            <div className="font-medium text-sm text-black-700 px-2">
+              <AgencyName agency={question.agency} />
+            </div>
+          </div>
+          <p className="font-medium text-sm text-dim-500 flex items-center gap-1">
+            <WordTranslate translate={"Questiondetail"} keyword={"answered"} />
+            {since(question.answer.created_at, params?.locale)}
+          </p>
+        </div>
+        <div className="flex text-justify text-black-700 flex-col">
+          <TipTap
+            editorText={question.answer.raw}
+            className="w-full flex-1"
+            isEditable={false}
+            hasMenuBar={false}
+          />
+        </div>
+
+        {relatedTopics.length > 0 && (
+          <div className="flex flex-col lg:flex-row gap-3 lg:items-center">
+            <p className=" font-medium text-sm">Topics: </p>
+            <div className="flex flex-col lg:flex-row gap-1.5">
+              {relatedTopics.map((title, index) => (
+                <StyledDisplay key={index} variant={"Topics"}>
+                  {title}
+                </StyledDisplay>
+              ))}
+            </div>
+          </div>
+        )}
+
+        <Separator className="my-1.5" />
+
+        <div className="">
+          <WordTranslate
+            translate={"Questiondetail"}
+            keyword={"attachment"}
+            className="flex text-sm text-black-700"
+          />
+          {/* <div className="mx-8 mb-8 ">
+              <AttachmentDownload
+                uploadedAttachments={attachments}
+                fileSizes={fileSize}
+              ></AttachmentDownload>
+            </div> */}
+        </div>
+
+        <Separator className="my-1.5 w-[calc(100%+4rem)] -mx-8" />
+
+        <ThumbsCounter
+          questionId={question.id.toString()}
+          totalLikes={question.answer.likes}
+        />
+      </div>
+
+      <div>
+        <h6 className="font-semibold text-base pt-6 pb-2">Related questions</h6>
+        <div className="w-full">
+          {relatedQuestions.map((relatedQuestion, index) => (
+            <Link
+              href={`/${relatedQuestion.agency.acronym.toLowerCase()}/${relatedQuestion.id}`}
+              key={relatedQuestion.id}
+              className="flex flex-col lg:flex-row lg:items-center gap-3 lg:gap-0 py-4 border-b border-outline-200 hover:rounded-md hover:bg-outline-200 px-4 -mx-4 lg:max-h-[76px]"
+            >
+              <div className="flex flex-col gap-1 flex-1">
+                <span className="font-medium text-sm text-black-700 line-clamp-1">
+                  {relatedQuestion.question}
+                </span>
+                <span className="font-normal text-sm text-dim-500 line-clamp-1">
+                  Answer: {relatedQuestion.answer.text}
+                </span>
+              </div>
+
+              <div className="lg:pl-3">
+                <div className="flex">
+                  <div className="pr-1.5">
+                    {/* TODO: Use agency icons instead */}
+                    <JataNegaraIcon className="stroke-[#E4E4E7] dark:stroke-[#27272A] h-5 w-5" />
+                  </div>
+                  <div className="font-normal text-sm text-black-800">
+                    {relatedQuestion.agency.acronym}
+                  </div>
+                </div>
+              </div>
+            </Link>
+          ))}
+        </div>
+      </div>
     </div>
   );
 };
 
-export default QuestionDetailPage;
+export default inject(QuestionDetailPage, {
+  // debug: true,
+  async data({ searchParams, params }) {
+    const agencies = await getAgencyList();
+
+    const agencyId = agencies.find(
+      (agency) => agency.acronym.toLowerCase() === params.agencyAcronym
+    )?.id;
+
+    const question = await getQuestionById(params.questionId);
+
+    if ("code" in question && question.code === 404) {
+      return notFound();
+    }
+
+    if (!("code" in question) && agencyId) {
+      const [relatedQuestions, relatedTopics] = await Promise.all([
+        searchQuestions(question.question, 1, 4),
+        getTopicsDetail(question.topics, agencyId, params.locale),
+      ]);
+      return {
+        question,
+        relatedQuestions: relatedQuestions.results,
+        relatedTopics,
+      };
+    }
+  },
+});

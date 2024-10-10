@@ -10,10 +10,13 @@ import {
   FieldValues,
   FormProvider,
   useFormContext,
+  UseFormReturn,
 } from "react-hook-form";
 
 import { cn } from "@askgovmy/utils";
 import { Label } from "./label";
+import { Button } from "./button";
+import Spinner from "./spinner";
 
 const Form = FormProvider;
 
@@ -95,7 +98,7 @@ const FormLabel = React.forwardRef<
   return (
     <Label
       ref={ref}
-      className={cn(className)}
+      className={cn("text-dim-500 text-sm font-medium", className)}
       htmlFor={formItemId}
       {...props}
     />
@@ -170,6 +173,33 @@ const FormMessage = React.forwardRef<
 });
 FormMessage.displayName = "FormMessage";
 
+type FormSubmitProps<T extends FieldValues> = Omit<
+  React.ComponentPropsWithoutRef<typeof Button>,
+  "form"
+> & {
+  form: UseFormReturn<T>;
+};
+
+const FormSubmit = <T extends FieldValues>({
+  className,
+  children,
+  form,
+  icon,
+  ...props
+}: FormSubmitProps<T>) => {
+  return (
+    <Button
+      variant="primary"
+      className={cn(className)}
+      disabled={props.disabled || form.formState.isSubmitting}
+      icon={form.formState.isSubmitting ? <Spinner className="mr-1" /> : icon}
+      {...props}
+    >
+      {children}
+    </Button>
+  );
+};
+
 export {
   useFormField,
   Form,
@@ -179,4 +209,5 @@ export {
   FormDescription,
   FormMessage,
   FormField,
+  FormSubmit,
 };

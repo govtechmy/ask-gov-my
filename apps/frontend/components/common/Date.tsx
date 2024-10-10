@@ -10,7 +10,7 @@ const DateComponent: React.FC<Props> = ({ date, locale }) => {
 
     const diffTime = Math.abs(today.getTime() - date.getTime());
     const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
-    if (locale === 'ms') {
+    if (locale === "ms-MY") {
       return `${diffDays}h lepas`;
     } else {
       return `${diffDays}d ago`;

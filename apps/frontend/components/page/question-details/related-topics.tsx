@@ -1,6 +1,6 @@
 "use client";
 import { useTranslations } from "next-intl";
-import Link from "next/link";
+import { Link } from "@/lib/i18n";
 import { Topic } from "@/types/types";
 
 interface RelatedTopicsProps {

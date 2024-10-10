@@ -1,13 +1,13 @@
-'use client';
+"use client";
 
-import { useState } from 'react';
-import ThemeToggle from '../theme';
-import LocaleSwitch from './LocaleSwitch';
-import Asklogo from '@/icons/asklogo';
-import User from '@/icons/user';
-import ChevronDown from '@/icons/ChevronDown';
-import Logout from '@/icons/logout';
-import { signOut, useSession } from 'next-auth/react';
+import { useState } from "react";
+import ThemeToggle from "./theme-toggle";
+import LocaleSwitch from "./locale-switch";
+import Asklogo from "@/icons/asklogo";
+import User from "@/icons/user";
+import ChevronDown from "@/icons/ChevronDown";
+import Logout from "@/icons/logout";
+import { signOut, useSession } from "next-auth/react";
 
 const StaffHeaderDashboard = () => {
   const [open, setOpen] = useState(false);
@@ -53,7 +53,7 @@ const StaffHeaderDashboard = () => {
               <div className="px-1 pr-2 text-dim-500">
                 <ChevronDown
                   className={`h-5 w-5 transition-transform transform ${
-                    open ? 'rotate-180' : ''
+                    open ? "rotate-180" : ""
                   }`}
                 />
               </div>

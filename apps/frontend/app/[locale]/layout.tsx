@@ -7,8 +7,8 @@ import { locales } from "@/lib/i18n";
 import { cn } from "@/lib/utils";
 import { ThemeProvider } from "next-themes";
 import Providers from "./providers/providers";
-import Masthead from "@/components/common/Header/Masthead";
 import { Suspense } from "react";
+import Masthead from "@/components/layout/masthead";
 
 const inter = Inter({ subsets: ["latin"] });
 const poppins = Poppins({
@@ -37,7 +37,7 @@ export default async function RootLayout({
   };
 }) {
   unstable_setRequestLocale(locale);
-  const messages = await getMessages();
+  const messages = await getMessages({ locale });
 
   return (
     <html lang={locale}>

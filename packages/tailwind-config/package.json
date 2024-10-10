@@ -3,6 +3,9 @@
   "version": "0.0.1",
   "main": "index.ts",
   "types": "index.ts",
+  "dependencies": {
+    "tailwindcss-radix": "^3.0.5"
+  },
   "devDependencies": {
     "@askgovmy/typescript-config": "workspace:*",
     "tailwindcss": "^3.4.12",

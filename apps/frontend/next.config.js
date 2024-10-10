@@ -13,6 +13,9 @@ const nextConfig = {
   reactStrictMode: true,
   output: "standalone",
   transpilePackages: ["@askgovmy/ui", "@askgovmy/utils"],
+  compiler: {
+    removeConsole: process.env.APP_ENV === "production",
+  },
   experimental: {
     outputFileTracingRoot: path.join(__dirname, "../../"),
     instrumentationHook: true,

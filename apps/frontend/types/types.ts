@@ -1,6 +1,6 @@
 export interface Question {
   id: number;
-  topics: number[] | ESTopic[];
+  topics: number[];
   question: string;
   answer: Answer;
   spam: boolean;
@@ -9,14 +9,7 @@ export interface Question {
   staff_opened_at: string | null;
   created_at: string;
   updated_at: string;
-  agency:
-    | number
-    | {
-        id: number;
-        name: string;
-        name_ms?: string;
-        acronym: string;
-      };
+  agency: Omit<Agency, "total_likes">;
 }
 
 export interface Answer {
@@ -78,7 +71,20 @@ export interface User {
 
 export interface PageResult<T> {
   results: T[];
-  count: number;
-  next: string;
-  previous: string;
+  page: {
+    current: number;
+    max: number; // Total page
+    total: number;
+    limit: number;
+  };
 }
+
+export type DeepKeys<T> = T extends object
+  ? {
+      [K in keyof T]-?: K extends string
+        ? T[K] extends object
+          ? `${K}.${DeepKeys<T[K]>}`
+          : K
+        : never;
+    }[keyof T]
+  : "";

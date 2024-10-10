@@ -11,6 +11,11 @@
     "precaution": " di depan pautan. Sekiranya tiada, jangan kongsikan sebarang maklumat sensitif."
   },
 
+  "Role": {
+    "super_admin": "Super Admin",
+    "staff": "Kakitangan"
+  },
+
   "Footer": {
     "api_docs": "Dokumentasi API",
     "admin_login": "Admin Log Masuk",
@@ -22,16 +27,22 @@
       "toggle_theme": "Pilih Mod",
       "toggle_light": "Pilih Mod Terang",
       "toggle_dark": "Pilih Mod Gelap"
+    },
+    "Header": {
+      "questions": "Soalan",
+      "agencies": "Agensi",
+      "users": "Pengguna"
     }
   },
 
   "Checkmail": {
     "checkmail": "Sila semak email anda",
     "para1": "Kami telah menghantar kod ke emel ",
-    "para2": "Masukkan kod untuk log masuk.",
+    "para2": "Masukkan kod untuk lengkapkan proses log masuk",
     "loginWithCode": "Log masuk dengan kod",
     "codeFailed": "Gagal mengesahkan kod. Cuba lagi.",
-    "backclick": "Kembali untuk Log masuk "
+    "backclick": "Kembali untuk Log masuk ",
+    "code": "Kod pengesahan"
   },
 
   "Adminlogin": {
@@ -41,11 +52,15 @@
     "1stbutton": "Teruskan dengan Emel",
     "or": "ATAU",
     "2ndbutton": "Teruskan dengan MyGovUC",
-    "forgotpass": "Lupa kata laluan?"
+    "forgotpass": "Lupa kata laluan?",
+    "error_no_account": "Akaun tidak wujud. Sila hubungi pentadbir organisasi anda untuk dapatkan jemputan sebagai pengguna",
+    "error_code_fail": "Gagal untuk menghantar kod log masuk. Cuba cara lain untuk log masuk.",
+    "required": "Emel diperlukan",
+    "invalid_email": "Gunakan emel yang sah."
   },
 
   "Topics": {
-    "topic": "Topik-Topik",
+    "topic": "Topik",
     "alltopics": "Semua Topik",
     "relatedtopics": "Topik Berkaitan",
     "showing": "Memaparkan",
@@ -102,6 +117,6 @@
     "attachment": "Lampiran Sokongan",
     "feedback": "Terima kasih atas maklum balas anda!",
     "response": "Adakah jawapan ini membantu?",
-    "answered": "Dijawab 1 tahun lepas"
+    "answered": "Dijawab"
   }
 }

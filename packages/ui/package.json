@@ -33,6 +33,7 @@
     "typescript": "^5.1.6"
   },
   "dependencies": {
+    "@radix-ui/react-avatar": "^1.1.1",
     "@radix-ui/react-dialog": "^1.1.1",
     "@radix-ui/react-label": "^2.1.0",
     "@radix-ui/react-popover": "^1.1.1",
@@ -47,7 +48,8 @@
     "js-cookie": "^3.0.5",
     "lucide-react": "^0.400.0",
     "react-hook-form": "^7.53.0",
-    "tailwind-merge": "^2.3.0"
+    "tailwind-merge": "^2.3.0",
+    "tailwindcss-radix": "^3.0.5"
   },
   "peerDependencies": {
     "next": "^14.2.4",

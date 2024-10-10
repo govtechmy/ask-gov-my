@@ -1,65 +1,65 @@
-import {
-  getTrendingAgencies,
-  getDynamicAgencyMap,
-  getAgencyList,
-} from "@/actions/questionServices";
-import { searchQuestionsWithPagination } from "@/actions/searchServices";
-import QuestionBox from "@/components/common/QuestionBox/QuestionBox";
-import Footer from "@/components/common/Footer";
-import TrendingAgencies from "@/components/common/TrendingAgencies";
+import React from "react";
 import WordTranslate from "@/components/common/WordTranslate";
 import { FSP, inject } from "@/lib/decorator";
+import { PageResult, Question } from "@/types/types";
+import QuestionCard from "@/components/common/QuestionBox/QuestionCard";
+import { Paginator } from "@/components/client/paginator";
+import { searchQuestions } from "@/actions/questionServices";
 
-const SearchResultPage: FSP = async ({ searchParams }) => {
-  const { page, query, start, end } = searchParams || {
-    page: 1,
-    query: "",
-    start: undefined,
-    end: undefined,
-  };
-  const questions = await searchQuestionsWithPagination(query, page);
-  const trendingAgencies = await getTrendingAgencies();
-  const agencyMap = await getDynamicAgencyMap();
-  const agencyList = await getAgencyList();
+interface SearchResultPageProps {
+  questions: PageResult<Question>;
+}
+
+const SearchResultPage: FSP<SearchResultPageProps> = async ({
+  searchParams,
+  data,
+  params,
+}) => {
+  const query = searchParams?.query;
+  const { questions } = data!;
 
   return (
-    <div>
-      <div className="container mt-10 flex">
-        <div className="max-w-screen-2xl">
-          <div className="font-semibold text-base text-black-700 pb-7 flex">
-            {questions.totalItems}&nbsp;
-            <div>
-              <WordTranslate translate={"Search"} keyword={"search_result"} />
-            </div>
-            <div>&nbsp;"{query}"</div>
-          </div>
-          {questions.data.length > 0 ? (
-            <QuestionBox
-              questions={questions}
-              agencyMap={agencyMap}
-              agencyList={agencyList}
-            />
-          ) : (
-            <div className="h-[220px] w-[900px] text-dim-500">
-              <WordTranslate
-                translate={"Search"}
-                keyword={"answernotfound"}
-              ></WordTranslate>
-            </div>
-          )}
-        </div>
-
-        <div className="pl-10 w-[500px]">
-          <div className="font-semibold text-base text-black-700">
-            <WordTranslate translate={"Mainpage"} keyword={"trendingA"} />
-          </div>
-          <TrendingAgencies trendingAgencies={trendingAgencies} />
-        </div>
+    <div className="w-full flex flex-col gap-6">
+      <div className="flex items-center font-semibold text-base text-black-700">
+        <p>{questions.page.total}&nbsp;</p>
+        <WordTranslate translate={"Search"} keyword={"search_result"} />
+        <p>&nbsp;"{query}"</p>
       </div>
 
-      <Footer />
+      {questions.results.length > 0 ? (
+        <>
+          <div className="flex flex-col justify-center gap-4">
+            <div className="flex flex-col gap-6">
+              {questions.results.map((question) => (
+                <QuestionCard
+                  key={question.id}
+                  question={question}
+                  locale={params?.locale}
+                />
+              ))}
+            </div>
+          </div>
+          <Paginator route="searchresults" data={questions.page} />
+        </>
+      ) : (
+        <div className="text-dim-500">
+          <WordTranslate
+            translate={"Search"}
+            keyword={"answernotfound"}
+          ></WordTranslate>
+        </div>
+      )}
     </div>
   );
 };
 
-export default inject(SearchResultPage);
+export default inject(SearchResultPage, {
+  // debug: true,
+  async data({ searchParams }) {
+    const { page = 1, query = "" } = searchParams;
+    const questions = await searchQuestions(query, page);
+    return {
+      questions,
+    };
+  },
+});

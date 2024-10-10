@@ -1,4 +1,7 @@
-import BaseHeader from '@/components/common/Header/BaseHeader';
+import Footer from "@/components/layout/footer";
+import BaseHeader from "@/components/layout/header/BaseHeader";
+
+export const dynamic = "force-dynamic";
 
 export default function DashboardLayout({
   children,
@@ -8,7 +11,8 @@ export default function DashboardLayout({
   return (
     <div className="flex flex-col min-h-screen">
       <BaseHeader isAdmin></BaseHeader>
-      {children}
+      <div className="flex-1 flex">{children}</div>
+      <Footer adminpage={true} />
     </div>
   );
 }
