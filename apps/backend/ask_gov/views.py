@@ -86,7 +86,7 @@ class QuestionViewSet(
         ]
 
         if self.EMBEDDING_ENABLED:
-            should.push({
+            should.append({
                 "knn": {
                     "field": "vector",
                     "query_vector": get_embedding(query),
