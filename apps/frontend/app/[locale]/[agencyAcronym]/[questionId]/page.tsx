@@ -41,8 +41,6 @@ const QuestionDetailPage: FSP<QuestionDetailsProps> = async ({
   locale,
 }) => {
   const { question, relatedQuestions, relatedTopics } = data!;
-
-  console.log(relatedQuestions);
   return (
     <div className="w-full flex flex-col gap-6">
       <div className="flex flex-col gap-3">

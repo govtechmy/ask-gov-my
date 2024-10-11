@@ -1,29 +1,9 @@
 import React from "react";
-import { getAllUsers } from "@/actions/userServices";
-import { getAgencyList, getDynamicAgencyMap } from "@/actions/questionServices";
-import { Agency, User } from "@/types/types";
+import { FSP, inject } from "@/lib/decorator";
+import MustBeAuthenticated from "@/middlewares/injectors/must-be-authenticated";
+import MustBeAuthorized from "@/middlewares/injectors/must-be-authorized";
 
-interface ManageUsersProps {
-  searchParams: {
-    page?: string;
-    tab?: string;
-    searchTerm?: string;
-    agencyId?: string;
-  };
-}
-
-const ManageUsers = async ({ searchParams }: ManageUsersProps) => {
-  const currentPage = searchParams.page ? parseInt(searchParams.page, 10) : 1;
-  const currentTab = searchParams.tab || "all";
-  const searchTerm = searchParams.searchTerm || "";
-  const agencyId = searchParams.agencyId || "";
-  const { data } = await getAllUsers({
-    page: currentPage,
-    tab: currentTab,
-    searchTerm,
-    agencyId,
-  });
-  const agencies = await getAgencyList();
+const ManageUsers: FSP = async ({ searchParams, context }) => {
   return (
     <div className="container max-w-screen-lg pt-3 mx-auto px-6">
       <div>TEMP ADMIN USER PAGE</div>
@@ -31,4 +11,7 @@ const ManageUsers = async ({ searchParams }: ManageUsersProps) => {
   );
 };
 
-export default ManageUsers;
+export default inject(ManageUsers, {
+  // debug: true,
+  middleware: [MustBeAuthenticated, MustBeAuthorized(["super_admin"])],
+});

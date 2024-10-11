@@ -1,25 +1,9 @@
 import React from "react";
-import { getAgencyListWithPagination } from "@/actions/questionServices";
+import { FSP, inject } from "@/lib/decorator";
+import MustBeAuthenticated from "@/middlewares/injectors/must-be-authenticated";
+import MustBeAuthorized from "@/middlewares/injectors/must-be-authorized";
 
-interface ManageAgenciesProps {
-  searchParams: {
-    page?: string;
-    searchTerm?: string;
-  };
-}
-
-const ManageAgencies: React.FC<ManageAgenciesProps> = async ({
-  searchParams,
-}) => {
-  const currentPage = searchParams.page ? parseInt(searchParams.page, 10) : 1;
-  const searchTerm = searchParams.searchTerm || "";
-
-  const { data } = await getAgencyListWithPagination(
-    currentPage,
-    27,
-    searchTerm
-  );
-
+const ManageAgencies: FSP = async ({ searchParams }) => {
   return (
     <div className="container max-w-screen-lg pt-3 mx-auto">
       <div>TEMP AGENCY ADMIN PAGE</div>
@@ -27,4 +11,7 @@ const ManageAgencies: React.FC<ManageAgenciesProps> = async ({
   );
 };
 
-export default ManageAgencies;
+export default inject(ManageAgencies, {
+  // debug: true,
+  middleware: [MustBeAuthenticated, MustBeAuthorized(["super_admin"])],
+});
