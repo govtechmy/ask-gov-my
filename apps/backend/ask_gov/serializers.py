@@ -63,6 +63,20 @@ class AdminPatchedQuestionSerializer(serializers.ModelSerializer):
         write_only_fields = ["spam", "agency"]
     
 class UserSerializer(serializers.ModelSerializer):
+    agency = AgencySerializer()
+
+    class Meta:
+        model = User
+        fields = ["id", "name", "email", "role", "agency", "created_at", "updated_at"]
+        read_only_fields = ["id", "agency", "created_at", "updated_at"]
+
+class CreateUpdateUserSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = ["id", "name", "email", "role", "agency", "created_at", "updated_at"]
+        read_only_fields = ["id", "created_at", "updated_at"]
+
+class AuthUserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
         fields = ["id", "name", "email", "role", "agency", "created_at", "updated_at"]

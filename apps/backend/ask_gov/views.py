@@ -2,7 +2,7 @@ import math
 from django.conf import settings
 from ask_gov.permissions import IsSuperAdmin
 from .serializers import (
-    AdminPatchedQuestionSerializer, AnswerSerializer, AttachmentSerializer, QuestionSerializer,
+    AdminPatchedQuestionSerializer, AnswerSerializer, AttachmentSerializer, CreateUpdateUserSerializer, QuestionSerializer,
     AgencySerializer, TopicSerializer, UserSerializer,
 )
 from django.shortcuts import get_object_or_404
@@ -303,6 +303,10 @@ class AdminUserViewSet(
     search_fields = ["name", "email"]
     permission_classes = [IsAuthenticated, IsSuperAdmin]
 
+    def get_serializer_class(self):
+        if self.action in ["create", "update", "partial_update"]:
+            return CreateUpdateUserSerializer
+        return super().get_serializer_class()
 
 class AdminAnswerViewSet(
     mixins.CreateModelMixin,
