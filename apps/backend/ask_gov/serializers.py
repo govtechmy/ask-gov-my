@@ -5,16 +5,24 @@ from .models import Agency, Answer, Attachment, Question, Topic
 User = get_user_model()
 
 class AgencySerializer(serializers.ModelSerializer):
-    total_likes = serializers.IntegerField(read_only=True)
+    # Translated fields must be required
+    name_ms = serializers.CharField(required=True)
+    name_en = serializers.CharField(required=True)
 
     class Meta:
         model = Agency
-        fields = ['id', 'name', 'name_ms', 'acronym', 'total_likes', 'logo_url', 'updated_at']
+        fields = ['id', 'name', 'name_ms', 'name_en', 'acronym', 'logo_url', 'created_at', 'updated_at']
+        read_only_fields = ['id', 'name', 'created_at', 'updated_at']
 
 class TopicSerializer(serializers.ModelSerializer):
+    # Translated fields must be required
+    title_ms = serializers.CharField(required=True)
+    title_en = serializers.CharField(required=True)
+
     class Meta:
         model = Topic
-        fields = '__all__'
+        fields = ['title', 'title_ms', 'title_en', 'agency', 'created_at', 'updated_at']
+        read_only_fields = ['title', 'created_at', 'updated_at']
 
 class AttachmentSerializer(serializers.ModelSerializer):
     class Meta:
