@@ -421,3 +421,31 @@ class TestAdminAttachmentViewSet(APITestCase):
         }
         response = self.client.post(self.create_attachments_url, data=data)
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+
+class TestAnswerViewSet(APITestCase):
+    def setUp(self):
+        agency = Agency.objects.create(name="Ministry of Education", name_ms="Kementerian Pendidikan", acronym="MOE")
+        question = Question.objects.create(question=f"Test Question", agency=agency, spam=False)
+        self.answer = Answer.objects.create(question=question, text=f"Test Answer", draft=False)
+        self.like_answer_url = reverse("answer-like", kwargs={"pk": self.answer.id})
+        self.dislike_answer_url = reverse("answer-dislike", kwargs={"pk": self.answer.id})
+    
+    def test_like_answer(self):
+        response = self.client.post(
+            self.like_answer_url,
+            data={
+                "actor_id": "127.0.0.1",
+                "ip_address": "127.0.0.1",
+            },
+        )
+        self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
+
+    def test_dislike_answer(self):
+        response = self.client.post(
+            self.dislike_answer_url,
+            data={
+                "actor_id": "127.0.0.1",
+                "ip_address": "127.0.0.1",
+            },
+        )
+        self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)

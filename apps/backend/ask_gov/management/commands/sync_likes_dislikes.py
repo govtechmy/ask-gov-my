@@ -1,0 +1,31 @@
+from django.conf import settings
+from django.core.management.base import BaseCommand
+from ask_gov.models import Answer
+from ask_gov.elastic import esclient
+
+class Command(BaseCommand):
+    help = 'Updates likes/dislikes count by counting documents from elasticsearch'
+
+    def handle(self, *args, **kwargs):
+        for answer in Answer.objects.all():
+            response = esclient.count(
+                index=settings.ELASTICSEARCH_LIKE_INDEX,
+                query={
+                    "match": { "answer_id": answer.id },
+                },
+                ignore_unavailable=True
+            )
+            answer.likes = response["count"]
+
+            response = esclient.count(
+                index=settings.ELASTICSEARCH_DISLIKE_INDEX,
+                query={
+                    "match": { "answer_id": answer.id },
+                },
+                ignore_unavailable=True
+            )
+            answer.dislikes = response["count"]
+
+            answer.save()
+
+        self.stdout.write(self.style.SUCCESS('Successfully synced likes/dislikes'))
