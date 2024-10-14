@@ -161,6 +161,10 @@ class AgencyViewSet(
     serializer_class = AgencySerializer
     permission_classes = [AllowAny]
 
+    # NOTE: Must overwrite get_queryset for translated models
+    def get_queryset(self):
+        return Agency.objects.trending()
+
 class TopicViewSet(
     mixins.ListModelMixin,
     viewsets.GenericViewSet,
@@ -170,6 +174,10 @@ class TopicViewSet(
     filter_backends = [DjangoFilterBackend]
     filterset_fields = ["agency"]
     permission_classes = [AllowAny]
+
+    # NOTE: Must overwrite get_queryset for translated models
+    def get_queryset(self):
+        return Topic.objects.all()
 
 class AdminQuestionViewSet(
     mixins.ListModelMixin,
@@ -239,6 +247,9 @@ class AdminAgencyViewSet(
     search_fields = ['name', 'name_ms', 'acronym']
     permission_classes = [IsAuthenticated, IsSuperAdmin]
 
+    # NOTE: Must overwrite get_queryset for translated models
+    def get_queryset(self):
+        return Agency.objects.all().order_by("id")
 
 class AdminTopicViewSet(
     mixins.ListModelMixin,
@@ -254,8 +265,9 @@ class AdminTopicViewSet(
     filterset_fields = ["agency"]
     permission_classes = [IsAuthenticated]
 
+    # NOTE: Must overwrite get_queryset for translated models
     def get_queryset(self):
-        queryset = self.queryset
+        queryset = Topic.objects.all()
 
         # Filter query by user agency if they are not a super admin
         if self.request.user.role != UserRole.SUPER_ADMIN:

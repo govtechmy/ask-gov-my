@@ -268,8 +268,8 @@ class TestAdminTopicViewSet(APITestCase):
         response = self.client.post(
             self.create_topic_url,
             data={
-                "title": "Test Topic",
                 "title_ms": "Test Topic",
+                "title_en": "Test Topic",
                 "agency": other_agency.id,
             }
         )

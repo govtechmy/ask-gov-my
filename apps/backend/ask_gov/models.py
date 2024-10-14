@@ -10,7 +10,6 @@ class AgencyManager(models.Manager):
 
 class Agency(models.Model):
     name = models.CharField()
-    name_ms = models.CharField(null=True, blank=True)
     acronym = models.CharField(max_length=50, null=True, blank=True)
     logo_url = models.URLField(max_length=500, null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
@@ -24,7 +23,6 @@ class Agency(models.Model):
 
 class Topic(models.Model):
     title = models.CharField()
-    title_ms = models.CharField(null=True, blank=True)
     agency = models.ForeignKey(Agency, on_delete=models.CASCADE)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
