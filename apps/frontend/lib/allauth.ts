@@ -7,11 +7,22 @@ const AuthDataSchema = z.object({
     name: z.string(),
     email: z.string().email(),
     role: z.enum(["super_admin", "staff"]),
-    agency: z.number().nullable(),
+    agency: z
+      .object({
+        id: z.number(),
+        name: z.string(),
+        name_ms: z.string(),
+        name_en: z.string(),
+        acronym: z.string(),
+        logo_url: z.string().nullable(),
+        updated_at: z.string(),
+        created_at: z.string(),
+      })
+      .nullable(),
   }),
   accessToken: z.string(),
 });
-type AuthData = z.infer<typeof AuthDataSchema>;
+export type AuthData = z.infer<typeof AuthDataSchema>;
 
 type AuthResponseMessage = {
   status: number;
