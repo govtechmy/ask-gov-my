@@ -244,8 +244,9 @@ class AdminAgencyViewSet(
     queryset = Agency.objects.all().order_by("id")
     serializer_class = AgencySerializer
     pagination_class = CustomPagination
-    search_fields = ['name', 'name_ms', 'acronym']
+    search_fields = ['name', 'acronym']
     permission_classes = [IsAuthenticated, IsSuperAdmin]
+    filter_backends = [SearchFilter]
 
     # NOTE: Must overwrite get_queryset for translated models
     def get_queryset(self):

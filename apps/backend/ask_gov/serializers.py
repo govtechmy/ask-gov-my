@@ -21,8 +21,8 @@ class TopicSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Topic
-        fields = ['title', 'title_ms', 'title_en', 'agency', 'created_at', 'updated_at']
-        read_only_fields = ['title', 'created_at', 'updated_at']
+        fields = ['id', 'title', 'title_ms', 'title_en', 'agency', 'created_at', 'updated_at']
+        read_only_fields = ['id', 'title', 'created_at', 'updated_at']
 
 class AttachmentSerializer(serializers.ModelSerializer):
     class Meta:
