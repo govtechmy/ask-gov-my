@@ -2,7 +2,7 @@ import math
 from django.conf import settings
 from ask_gov.permissions import IsSuperAdmin
 from .serializers import (
-    AdminPatchedQuestionSerializer, AnswerSerializer, AttachmentSerializer, QuestionSerializer,
+    AdminPatchedQuestionSerializer, AnswerSerializer, AttachmentSerializer, CreateUpdateUserSerializer, QuestionSerializer,
     AgencySerializer, TopicSerializer, UserSerializer,
 )
 from django.shortcuts import get_object_or_404
@@ -161,6 +161,10 @@ class AgencyViewSet(
     serializer_class = AgencySerializer
     permission_classes = [AllowAny]
 
+    # NOTE: Must overwrite get_queryset for translated models
+    def get_queryset(self):
+        return Agency.objects.trending()
+
 class TopicViewSet(
     mixins.ListModelMixin,
     viewsets.GenericViewSet,
@@ -170,6 +174,10 @@ class TopicViewSet(
     filter_backends = [DjangoFilterBackend]
     filterset_fields = ["agency"]
     permission_classes = [AllowAny]
+
+    # NOTE: Must overwrite get_queryset for translated models
+    def get_queryset(self):
+        return Topic.objects.all()
 
 class AdminQuestionViewSet(
     mixins.ListModelMixin,
@@ -236,9 +244,13 @@ class AdminAgencyViewSet(
     queryset = Agency.objects.all().order_by("id")
     serializer_class = AgencySerializer
     pagination_class = CustomPagination
-    search_fields = ['name', 'name_ms', 'acronym']
+    search_fields = ['name', 'acronym']
     permission_classes = [IsAuthenticated, IsSuperAdmin]
+    filter_backends = [SearchFilter]
 
+    # NOTE: Must overwrite get_queryset for translated models
+    def get_queryset(self):
+        return Agency.objects.all().order_by("id")
 
 class AdminTopicViewSet(
     mixins.ListModelMixin,
@@ -254,8 +266,9 @@ class AdminTopicViewSet(
     filterset_fields = ["agency"]
     permission_classes = [IsAuthenticated]
 
+    # NOTE: Must overwrite get_queryset for translated models
     def get_queryset(self):
-        queryset = self.queryset
+        queryset = Topic.objects.all()
 
         # Filter query by user agency if they are not a super admin
         if self.request.user.role != UserRole.SUPER_ADMIN:
@@ -291,6 +304,10 @@ class AdminUserViewSet(
     search_fields = ["name", "email"]
     permission_classes = [IsAuthenticated, IsSuperAdmin]
 
+    def get_serializer_class(self):
+        if self.action in ["create", "update", "partial_update"]:
+            return CreateUpdateUserSerializer
+        return super().get_serializer_class()
 
 class AdminAnswerViewSet(
     mixins.CreateModelMixin,
