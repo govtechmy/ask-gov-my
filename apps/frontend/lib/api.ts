@@ -1,82 +1,47 @@
-import { StatusCodes } from 'http-status-codes';
+import axios, { AxiosResponse } from "axios";
 
-const default_option: RequestInit = {
-  headers: { 'Content-Type': 'application/json' },
-  cache: 'no-store',
+// Request options type for the API wrapper
+type RequestOptions = {
+  method?: "GET" | "POST" | "PUT" | "DELETE" | "PATCH";
+  headers?: Record<string, string>;
+  body?: any;
+  params?: Record<string, string | number>;
+  timeout?: number; // Timeout in milliseconds
 };
 
-export const post = async <T>(
-  path: string,
-  payload: Record<string, any>,
-  option: RequestInit = default_option,
-) =>
-  new Promise<T | null>(async (resolve, reject) => {
-    fetch(path, {
-      method: 'POST',
-      body: JSON.stringify(payload),
-      ...option,
-    })
-      .then(response => {
-        // Check if the response body is null
-        if (response.body === null) {
-          resolve(null);
-        }
-        resolve(response.json() as T);
-      })
-      .catch(error => reject(error));
-  });
+// Create an axios instance
+const base = axios.create({
+  baseURL: process.env.API_URL,
+  timeout: 5000,
+  headers: {
+    "Content-Type": "application/json",
+  },
+});
 
-export const get = async <T>(
-  path: string,
-  payload?: Record<string, any>,
-  option: RequestInit = default_option,
-) =>
-  new Promise<T | null>(async (resolve, reject) => {
-    fetch(`${path}?${new URLSearchParams(payload).toString()}`, {
-      method: 'GET',
-      ...option,
-    })
-      .then(response => {
-        // Check if the response body is null
-        if (response.body === null) {
-          resolve(null);
-        }
-        try {
-          const item = response.json() as T;
-          resolve(item);
-        } catch (error) {
-          resolve(response.body as T);
-        }
-      })
-      .catch(error => {
-        console.log(error);
-        reject(error);
-      });
-  });
+// Reusable API wrapper function
+const api = async (url: string, options: RequestOptions = {}): Promise<any> => {
+  const {
+    method = "GET",
+    headers = {},
+    body,
+    params,
+    timeout = 5000,
+  } = options;
 
-export const put = async <T>(
-  path: string,
-  payload: Record<string, any>,
-  option: RequestInit = default_option,
-) =>
-  new Promise<T | null>(async (resolve, reject) => {
-    fetch(path, {
-      method: 'PUT',
-      body: JSON.stringify(payload),
-      ...option,
-    })
-      .then(response => {
-        if (!response.ok) {
-          if (response.status === StatusCodes.NO_CONTENT) return null;
-          else throw new Error('Network response was not ok');
-        }
-        if (response.body === null) {
-          resolve(null);
-        }
-        resolve(response.json() as T);
-      })
-      .catch(error => {
-        console.log(error);
-        reject(error);
-      });
-  });
+  try {
+    const response = await base.request({
+      url,
+      method,
+      headers: { ...headers },
+      data: body,
+      params,
+      timeout,
+    });
+
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};
+
+export default api;

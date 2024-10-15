@@ -118,5 +118,10 @@
     "feedback": "Thank you for your feedback!",
     "response": "Was this response helpful?",
     "answered": "Answered"
+  },
+  "AdminAgencies": {
+    "title": "Manage Agencies",
+    "search_placeholder": "Search by agency or ID",
+    "add_new": "New agency"
   }
 }

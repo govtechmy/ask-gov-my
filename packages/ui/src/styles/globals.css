@@ -148,4 +148,23 @@
   body {
     @apply bg-background text-foreground;
   }
+
+  h1 {
+    @apply font-poppins text-hxl
+  }
+  h2 {
+    @apply font-poppins text-hlg
+  }
+  h3 {
+    @apply font-poppins text-hmd
+  }
+  h4 {
+    @apply font-poppins text-hsm
+  }
+  h5 {
+    @apply font-poppins text-hxs
+  }
+  h6 {
+    @apply font-poppins text-hxxs
+  }
 }

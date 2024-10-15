@@ -10,7 +10,11 @@ import Providers from "./providers/providers";
 import { Suspense } from "react";
 import Masthead from "@/components/layout/masthead";
 
-const inter = Inter({ subsets: ["latin"] });
+const inter = Inter({
+  subsets: ["latin"],
+  display: "swap",
+  variable: "--font-inter",
+});
 const poppins = Poppins({
   subsets: ["latin"],
   weight: ["500", "600", "700"],
@@ -41,7 +45,7 @@ export default async function RootLayout({
 
   return (
     <html lang={locale}>
-      <body className={cn(inter.className, poppins.variable)}>
+      <body className={cn(inter.className, inter.variable, poppins.variable)}>
         <ThemeProvider attribute="class">
           <NextIntlClientProvider messages={messages}>
             <Suspense>

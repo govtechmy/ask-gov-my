@@ -1,8 +1,14 @@
-const Layout = ({ children, header }) => {
+import { unstable_setRequestLocale } from "next-intl/server";
+import AdminHeader from "./@header/page";
+
+const Layout = ({ children, params }) => {
+  unstable_setRequestLocale(params.locale);
   return (
     <>
-      {header}
-      {children}
+      <AdminHeader />
+      <div className="container max-w-screen-lg mx-auto p-4.5 pt-0 lg:px-0">
+        {children}
+      </div>
     </>
   );
 };

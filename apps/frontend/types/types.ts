@@ -27,9 +27,11 @@ export interface Agency {
   id: number;
   name: string;
   name_ms: string;
+  name_en: string;
   acronym: string;
-  total_likes: number;
+  total_likes?: number;
   logo_url?: string;
+  created_at: string;
   updated_at: string;
 }
 export interface ESTopic {
@@ -77,6 +79,10 @@ export interface PageResult<T> {
     total: number;
     limit: number;
   };
+}
+export interface ApiParams {
+  page?: number;
+  page_size?: number;
 }
 
 export type DeepKeys<T> = T extends object

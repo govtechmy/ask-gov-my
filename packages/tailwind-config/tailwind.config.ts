@@ -100,6 +100,7 @@ const config: Config = {
       },
       fontFamily: {
         poppins: ["var(--font-poppins)"],
+        inter: ["var(--font-inter)"],
       },
       fontSize: {
         xs: ["12px", "18px"],
@@ -107,6 +108,7 @@ const config: Config = {
         base: ["16px", "24px"],
         lg: ["18px", "26px"],
         xl: ["20px", "30px"],
+        hxxs: ["20px", "28px"],
         hxs: ["24px", "32px"],
         hsm: ["30px", "38px"],
         hmd: ["36px", "44px"],

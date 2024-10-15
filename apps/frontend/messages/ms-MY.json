@@ -118,5 +118,10 @@
     "feedback": "Terima kasih atas maklum balas anda!",
     "response": "Adakah jawapan ini membantu?",
     "answered": "Dijawab"
+  },
+  "AdminAgencies": {
+    "title": "Pengurusan Agensi",
+    "search_placeholder": "Cari mengikut agensi atau ID",
+    "add_new": "Agensi baru"
   }
 }

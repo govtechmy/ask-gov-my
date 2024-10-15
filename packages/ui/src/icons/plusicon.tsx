@@ -1,7 +1,7 @@
 export default function PlusIcon({
-  className = 'stroke-[#18181B] dark:stroke-[#FFFFFF]',
-  width = '20',
-  height = '20',
+  className = "",
+  width = "20",
+  height = "20",
 }) {
   return (
     <svg

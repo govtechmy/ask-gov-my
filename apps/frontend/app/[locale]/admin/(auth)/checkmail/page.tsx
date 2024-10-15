@@ -7,10 +7,10 @@ import {
   MailLogoIcon,
   ArrowLeftIcon,
   MailIcon,
+  Input,
 } from "@askgovmy/ui";
 import { useState, useEffect } from "react";
 import { cn } from "@askgovmy/utils";
-import { Input } from "@/components/ui/input";
 import { signIn } from "next-auth/react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { z } from "zod";

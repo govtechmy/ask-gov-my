@@ -52,6 +52,7 @@ const NavLinks: FC = () => {
         <div className="items-center hidden lg:flex">
           {navLinks.map((link) => (
             <Link
+              key={link.href}
               href={link.href}
               className={cn(
                 buttonVariants({

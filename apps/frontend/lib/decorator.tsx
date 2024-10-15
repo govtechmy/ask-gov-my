@@ -7,7 +7,7 @@ import { getCsrfToken } from "next-auth/react";
 import { authOptions } from "@/app/api/auth/[...nextauth]/options";
 import { getURLRouter } from "./server-helper";
 import { redirect } from "next/navigation";
-import Error from "@/components/server/layout/error";
+import Error from "@/components/layout/server/error";
 
 export type Context = {
   session: Session | null;

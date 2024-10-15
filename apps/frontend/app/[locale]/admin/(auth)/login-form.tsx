@@ -1,6 +1,5 @@
 "use client";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
+
 import Google from "@/icons/google";
 import { useTranslations } from "next-intl";
 import { signIn } from "next-auth/react";
@@ -17,8 +16,10 @@ import {
   FormLabel,
   FormMessage,
   FormSubmit,
+  Input,
+  Button,
 } from "@askgovmy/ui";
-import WordTranslate from "../../common/WordTranslate";
+import WordTranslate from "../../../../components/common/WordTranslate";
 
 export function LoginForm() {
   const t = useTranslations("Adminlogin");

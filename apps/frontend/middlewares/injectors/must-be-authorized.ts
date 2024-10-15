@@ -36,8 +36,6 @@ const MustBeAuthorized = (
         });
       }
 
-      console.log("this run", isValid);
-
       resolve({
         status: HttpStatusCode.OK_200,
         message: "Authorized to access this page",
