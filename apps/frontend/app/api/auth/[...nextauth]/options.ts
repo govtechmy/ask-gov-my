@@ -1,8 +1,11 @@
-import { confirmLoginByCode, loginByGoogle } from "@/lib/allauth";
+import { AuthData, confirmLoginByCode, loginByGoogle } from "@/lib/allauth";
 import { DefaultSession, NextAuthOptions, User } from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
 import GoogleProvider from "next-auth/providers/google";
 // import { checkUserEmailExists } from "@/actions/userServices";
+
+// Agency data from allauth
+type Agency = AuthData["user"]["agency"];
 
 // Extend the built-in session type
 declare module "next-auth" {
@@ -12,7 +15,7 @@ declare module "next-auth" {
       name: string;
       email: string;
       role: "staff" | "super_admin";
-      agency: number | null;
+      agency: Agency | null;
     } & DefaultSession["user"];
     /** Access token for our Django API */
     accessToken: string;
@@ -23,7 +26,7 @@ declare module "next-auth" {
     name: string;
     email: string;
     role: "staff" | "super_admin";
-    agency: number | null;
+    agency: Agency | null;
   }
 }
 
@@ -34,7 +37,7 @@ declare module "next-auth/jwt" {
     name: string;
     email: string;
     role: "staff" | "super_admin";
-    agency: number | null;
+    agency: Agency | null;
     /** Access token for our Django API */
     accessToken: string;
   }

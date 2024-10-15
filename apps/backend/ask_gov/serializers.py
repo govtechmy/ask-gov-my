@@ -75,9 +75,3 @@ class CreateUpdateUserSerializer(serializers.ModelSerializer):
         model = User
         fields = ["id", "name", "email", "role", "agency", "created_at", "updated_at"]
         read_only_fields = ["id", "created_at", "updated_at"]
-
-class AuthUserSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = User
-        fields = ["id", "name", "email", "role", "agency", "created_at", "updated_at"]
-        read_only_fields = ["id", "created_at", "updated_at"]
