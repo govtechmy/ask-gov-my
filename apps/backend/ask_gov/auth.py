@@ -5,7 +5,7 @@ from rest_framework.authtoken.models import Token
 from allauth.headless.adapter import DefaultHeadlessAdapter
 from allauth.account.adapter import DefaultAccountAdapter
 
-from ask_gov.serializers import AuthUserSerializer
+from .serializers import UserSerializer
 
 
 class AuthTokenStrategy(SessionTokenStrategy):
@@ -15,7 +15,7 @@ class AuthTokenStrategy(SessionTokenStrategy):
 
 class HeadlessAdapter(DefaultHeadlessAdapter):
     def serialize_user(self, user) -> Dict[str, Any]:
-        serializer = AuthUserSerializer(user)
+        serializer = UserSerializer(user)
         return serializer.data
 
 class AccountAdapter(DefaultAccountAdapter):
