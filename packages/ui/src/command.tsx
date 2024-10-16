@@ -33,11 +33,11 @@ const CommandInput = React.forwardRef<
   React.ElementRef<typeof CommandPrimitive.Input>,
   React.ComponentPropsWithoutRef<typeof CommandPrimitive.Input>
 >(({ className, ...props }, ref) => (
-  <div className="flex items-center relative p-2 rounded-[14px]">
+  <div className="flex items-center relative rounded-[14px]">
     <CommandPrimitive.Input
       ref={ref}
       className={cn(
-        "placeholder:text-dim-500 flex h-10 w-full bg-white-focuswhite100 py-3 text-sm outline-none disabled:cursor-not-allowed disabled:opacity-50 pl-2 pr-10",
+        "placeholder:text-dim-500 flex h-8 w-full bg-white-focuswhite100 py-3 text-sm outline-none disabled:cursor-not-allowed disabled:opacity-50 pl-2 pr-10 border border-askmygovbrand-600 rounded-lg shadow",
         className
       )}
       {...props}
@@ -59,7 +59,10 @@ const CommandList = React.forwardRef<
 >(({ className, ...props }, ref) => (
   <CommandPrimitive.List
     ref={ref}
-    className={cn("max-h-[300px] overflow-y-auto overflow-x-hidden", className)}
+    className={cn(
+      "max-h-[225px] py-3 overflow-y-auto overflow-x-hidden",
+      className
+    )}
     {...props}
   />
 ));
@@ -72,7 +75,7 @@ const CommandEmpty = React.forwardRef<
 >((props, ref) => (
   <CommandPrimitive.Empty
     ref={ref}
-    className="py-6 text-center text-sm"
+    className="text-dim-500 text-center text-sm"
     {...props}
   />
 ));
@@ -86,7 +89,7 @@ const CommandGroup = React.forwardRef<
   <CommandPrimitive.Group
     ref={ref}
     className={cn(
-      "text-foreground [&_[cmdk-group-heading]]:text-foreground overflow-hidden p-2 pt-0 [&_[cmdk-group-heading]]:px-2 [&_[cmdk-group-heading]]:py-1.5 [&_[cmdk-group-heading]]:text-xs [&_[cmdk-group-heading]]:font-medium",
+      "text-foreground [&_[cmdk-group-heading]]:text-foreground overflow-hidden pt-0 [&_[cmdk-group-heading]]:px-2 [&_[cmdk-group-heading]]:py-1.5 [&_[cmdk-group-heading]]:text-xs [&_[cmdk-group-heading]]:font-medium",
       className
     )}
     {...props}

@@ -2,14 +2,12 @@
 
 import { Button } from "@askgovmy/ui";
 import { FunctionComponent } from "react";
-import { useParams, useRouter } from "next/navigation";
-import { cn } from "@askgovmy/utils";
-
+import { cn, paramsToRecord } from "@askgovmy/utils";
 import { route, routes } from "@/lib/routes";
-import { useSearchParams } from "next/navigation";
+import { useParams, useSearchParams } from "next/navigation";
 import { PageResult, DeepKeys } from "@/types/types";
 import { ChevronLeft, ChevronRight } from "lucide-react";
-import { Link } from "@/lib/i18n";
+import { Link, usePathname, useRouter } from "@/lib/i18n";
 
 interface PaginatorProps {
   route: DeepKeys<typeof routes>;
@@ -23,6 +21,7 @@ export const Paginator: FunctionComponent<PaginatorProps> = ({
   const { push } = useRouter();
   const params = useParams();
   const searchParams = useSearchParams();
+  const pathname = usePathname();
   const getVisiblePageNumber = () => {
     if (data.max <= 4) return createRange(1, data.max);
 
@@ -48,7 +47,9 @@ export const Paginator: FunctionComponent<PaginatorProps> = ({
   };
 
   const navigate = (page: number) => {
-    push(route(_route, params, { ...searchParams, page }), { scroll: false });
+    const sp = new URLSearchParams(searchParams);
+    sp.set("page", page.toString());
+    push(`${pathname}?${sp.toString()}`, { scroll: false });
   };
 
   return (
@@ -69,7 +70,10 @@ export const Paginator: FunctionComponent<PaginatorProps> = ({
             typeof page === "number" ? (
               <Link
                 key={index}
-                href={route(_route, params, { ...searchParams, page })}
+                href={route(_route, params, {
+                  ...paramsToRecord(searchParams),
+                  page,
+                })}
                 scroll={false}
                 className={cn(
                   "rounded-lg text-sm",

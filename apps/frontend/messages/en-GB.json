@@ -12,6 +12,7 @@
   },
 
   "Role": {
+    "all": "All",
     "super_admin": "Super Admin",
     "staff": "Staff"
   },
@@ -122,6 +123,17 @@
   "AdminAgencies": {
     "title": "Manage Agencies",
     "search_placeholder": "Search by agency or ID",
-    "add_new": "New agency"
+    "add_new": "New agency",
+    "not_found": "We couldn't find the agency. Please try searching again using the search bar above."
+  },
+  "AdminUsers": {
+    "title": "Manage Users",
+    "search_placeholder": "Search by name or email",
+    "add_new": "New user",
+    "agency": "Agency",
+    "all_agency": "All",
+    "edit": "Edit",
+    "delete": "Delete",
+    "not_found": "We couldn't find the user. Please try searching again using the search bar above."
   }
 }

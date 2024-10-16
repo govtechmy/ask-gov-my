@@ -32,7 +32,9 @@ PopoverContent.displayName = PopoverPrimitive.Content.displayName;
 interface PopoverProps {
   className?: string;
   trigger: React.ReactNode;
-  children: React.ReactNode;
+  children: (
+    setOpen: React.Dispatch<React.SetStateAction<boolean>>
+  ) => React.ReactNode;
   option?: React.ComponentProps<typeof PopoverPrimitive.Content>;
   onOpen?: (open: boolean) => void;
 }
@@ -43,8 +45,9 @@ const Popover: React.FunctionComponent<PopoverProps> = ({
   option = { align: "center", sideOffset: 4 },
   children,
 }) => {
+  const [open, setOpen] = React.useState(false);
   return (
-    <PopoverRoot>
+    <PopoverRoot open={open} onOpenChange={setOpen}>
       <PopoverTrigger asChild>{trigger}</PopoverTrigger>
       <PopoverPrimitive.Portal>
         <PopoverPrimitive.Content
@@ -54,7 +57,7 @@ const Popover: React.FunctionComponent<PopoverProps> = ({
           )}
           {...option}
         >
-          {children}
+          {children(setOpen)}
         </PopoverPrimitive.Content>
       </PopoverPrimitive.Portal>
     </PopoverRoot>

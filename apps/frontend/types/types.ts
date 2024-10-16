@@ -65,7 +65,7 @@ export interface User {
   email: string;
   image: string | null;
   role: "staff" | "super_admin";
-  agency: number | null;
+  agency: Agency | null;
   user_profile_colour: string | null;
   created_at: string;
   updated_at: string;
@@ -83,6 +83,7 @@ export interface PageResult<T> {
 export interface ApiParams {
   page?: number;
   page_size?: number;
+  search?: string;
 }
 
 export type DeepKeys<T> = T extends object

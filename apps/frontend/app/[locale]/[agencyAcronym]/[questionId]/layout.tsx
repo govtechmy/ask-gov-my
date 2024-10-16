@@ -11,13 +11,13 @@ export default async function QuestionDetailsLayout({ children, params }) {
       </ContextSearchBar>
       <div className="container p-4.5 lg:px-0 lg:py-8 flex-col-reverse lg:flex-row flex print:mt-0 print:max-w-none gap-4.5 lg:gap-12">
         <div className="flex-1">{children}</div>
-        {/* <TopicsSidebar
+        <TopicsSidebar
           params={{
             agencyAcronym: params.agencyAcronym,
             locale: params.locale,
             topicId: params.topicId,
           }}
-        /> */}
+        />
       </div>
     </>
   );

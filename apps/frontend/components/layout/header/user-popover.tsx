@@ -32,14 +32,19 @@ const UserPopover: FC = ({}) => {
       option={{ align: "center", alignOffset: 0, sideOffset: 4 }}
       className="PopoverContent"
     >
-      <Button
-        onClick={handleLogout}
-        variant={"tertiary-dropdown"}
-        className="text-sm font-medium"
-      >
-        <LogoutIcon className="stroke-foreground-danger" />
-        Logout
-      </Button>
+      {(setOpen) => (
+        <Button
+          onClick={() => {
+            setOpen(false);
+            handleLogout();
+          }}
+          variant={"tertiary-dropdown"}
+          className="text-sm font-medium"
+        >
+          <LogoutIcon className="stroke-foreground-danger" />
+          Logout
+        </Button>
+      )}
     </Popover>
   );
 };

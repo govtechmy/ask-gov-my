@@ -12,6 +12,7 @@
   },
 
   "Role": {
+    "all": "Semua",
     "super_admin": "Super Admin",
     "staff": "Kakitangan"
   },
@@ -122,6 +123,17 @@
   "AdminAgencies": {
     "title": "Pengurusan Agensi",
     "search_placeholder": "Cari mengikut agensi atau ID",
-    "add_new": "Agensi baru"
+    "add_new": "Agensi baru",
+    "not_found": "Tidak dapat mencari agensi tersebut. Sila cuba cari semula menggunakan bar carian di atas."
+  },
+  "AdminUsers": {
+    "title": "Pengurusan Pengguna",
+    "search_placeholder": "Cari mengikut nama atau emel",
+    "add_new": "Pengguna baru",
+    "agency": "Agensi",
+    "all_agency": "Semua Agensi",
+    "edit": "Sunting",
+    "delete": "Padam",
+    "not_found": "Tidak dapat mencari pengguna tersebut. Sila cuba cari semula menggunakan bar carian di atas."
   }
 }
