@@ -120,6 +120,25 @@
     "response": "Adakah jawapan ini membantu?",
     "answered": "Dijawab"
   },
+  "AdminQuestions": {
+    "title": "Pengurusan Soalan",
+    "search_placeholder": "Cari soalan",
+    "not_found": "Tidak dapat mencari soalan tersebut. Sila cuba cari semula menggunakan bar carian di atas.",
+    "date": "Tarikh",
+    "new": "Baru",
+    "edit": "Sunting",
+    "state": {
+      "all": "Semua soalan",
+      "unassigned": "Belum Ditugaskan",
+      "assigned": "Ditugaskan",
+      "spam": "Spam",
+      "unanswered": "Belum Dijawab",
+      "answered": "Telah Dijawab",
+      "draft": "Draf"
+    },
+    "mark_spam": "Tanda sebagai Spam",
+    "unmark_spam": "Tanda sebagai bukan spam"
+  },
   "AdminAgencies": {
     "title": "Pengurusan Agensi",
     "search_placeholder": "Cari mengikut agensi atau ID",

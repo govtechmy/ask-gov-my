@@ -120,6 +120,25 @@
     "response": "Was this response helpful?",
     "answered": "Answered"
   },
+  "AdminQuestions": {
+    "title": "Manage Questions",
+    "search_placeholder": "Search questions",
+    "not_found": "We couldn't find the question. Please try searching again using the search bar above.",
+    "date": "Date",
+    "new": "New",
+    "edit": "Edit",
+    "state": {
+      "all": "All questions",
+      "unassigned": "Unassigned",
+      "assigned": "Assigned",
+      "spam": "Spam",
+      "unanswered": "Unanswered",
+      "answered": "Answered",
+      "draft": "Draft"
+    },
+    "mark_spam": "Mark as Spam",
+    "unmark_spam": "Mark as not spam"
+  },
   "AdminAgencies": {
     "title": "Manage Agencies",
     "search_placeholder": "Search by agency or ID",

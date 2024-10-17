@@ -4,6 +4,7 @@ import { DeepKeys } from "@/types/types";
 import { cn } from "@askgovmy/utils";
 import { TranslationValues, useTranslations } from "next-intl";
 import i18nKeys from "@/messages/en-GB.json";
+import { ReactNode } from "react";
 
 export type TranslationNamespace = DeepKeys<typeof i18nKeys>;
 
@@ -12,6 +13,7 @@ interface TranslatorProps {
   namespace: TranslationNamespace;
   values?: TranslationValues;
   className?: string;
+  prefix?: ReactNode;
 }
 
 const Translator: React.FC<TranslatorProps> = ({
@@ -19,12 +21,14 @@ const Translator: React.FC<TranslatorProps> = ({
   namespace,
   values,
   className,
+  prefix,
 }) => {
   const t = useTranslations();
   const Tag = tag;
 
   return (
-    <Tag className={cn("", className)}>
+    <Tag className={cn("flex items-center", className)}>
+      {prefix}
       {t(namespace, values ? values : {})}
     </Tag>
   );

@@ -61,8 +61,8 @@
     --myds-success-600: 62.71% 0.17 149.21; /* #16A34A or Success 600 */
     --myds-success-300: 81.86% 0.115 155.16; /* #83DAA3 or Success 300 */
     --myds-success-200: 92.5% 0.081 155.99; /* #BBF7D0 or Success 200 */
-    --myds-danger-100: 96.24% 0.043 156.74; /* #DCFCE7 or Success 100 */
-    --myds-danger-50: 98.19% 0.018 155.83; /* #F0FDF4 or Success 50 */
+    --myds-success-100: 96.24% 0.043 156.74; /* #DCFCE7 or Success 100 */
+    --myds-success-50: 98.19% 0.018 155.83; /* #F0FDF4 or Success 50 */
     --text-success-700: 52.73% 0.137 150.07; /* #15803D */
   }
 
@@ -122,8 +122,8 @@
     --myds-success-600: 62.71% 0.17 149.21; /* #16A34A or Success 600 */
     --myds-success-300: 44.79% 0.108 151.33; /* #166534 or Success 300 */
     --myds-success-200: 39.25% 0.09 152.54; /* #14532D or Success 200 */
-    --myds-danger-100: 26.64% 0.063 152.93; /* #052E16 or Success 100 */
-    --myds-danger-50: 23.09% 0.053 153.65; /* #042411 or Success 50 */
+    --myds-success-100: 26.64% 0.063 152.93; /* #052E16 or Success 100 */
+    --myds-success-50: 23.09% 0.053 153.65; /* #042411 or Success 50 */
     --text-success-700: 62.71% 0.17 149.21; /* #16A34A */
   }
 
