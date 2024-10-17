@@ -145,6 +145,33 @@
     outline: none;
   }
 
+  ::-webkit-scrollbar
+  {
+    width: 10px;  /* for vertical scrollbars */
+    height: 10px; /* for horizontal scrollbars */
+  }
+
+  ::-webkit-scrollbar-track
+  {
+    @apply bg-outline-200
+  }
+
+  ::-webkit-scrollbar-thumb
+  {
+    @apply bg-outline-400 rounded-md
+  }
+
+  /* Hide scrollbar for Chrome, Safari and Opera */
+.hide-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+/* Hide scrollbar for IE, Edge and Firefox */
+.hide-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
   body {
     @apply bg-background text-foreground;
   }

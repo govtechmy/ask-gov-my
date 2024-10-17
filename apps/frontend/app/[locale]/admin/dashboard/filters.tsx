@@ -74,7 +74,7 @@ const ManageQuestionsFilter: FC<ManageQuestionsFilter> = ({
         defaultValue={states[0]}
         value={searchParams.get("state") || "all"}
         onValueChange={(state) => onSelectChange(state, "state")}
-        className="flex-1 w-full overflow-scroll"
+        className="flex-1 w-full overflow-auto hide-scrollbar"
       >
         <TabsList className="gap-5 rounded-lg h-[46px]">
           {states.map((state) => {
