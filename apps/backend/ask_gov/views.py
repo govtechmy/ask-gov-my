@@ -236,12 +236,6 @@ class AdminQuestionViewSet(
 
         return queryset
     
-    def filter_queryset(self, queryset):
-        # Only super admins can filter by the filterset_fields
-        if self.request.user.role == UserRole.SUPER_ADMIN:
-            return super().filter_queryset(queryset)
-        return queryset
-    
     def get_serializer_class(self):
         if self.action in ["update", "partial_update"]:
             return AdminPatchedQuestionSerializer
