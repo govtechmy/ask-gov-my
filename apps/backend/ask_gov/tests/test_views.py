@@ -12,28 +12,32 @@ class TestAdminListQuestions(APITestCase):
     Ensure that the correct number of questions is returned for each state, and that the API returns a successful response.
     """
 
-    NUM_BACKLOG = 1
+    NUM_UNANSWERED = 1
     NUM_SPAM = 3
-    NUM_COMPLETED = 5
+    NUM_ANSWERED = 5
     NUM_DRAFT = 2
-    NUM_ALL = NUM_BACKLOG + NUM_SPAM + NUM_COMPLETED + NUM_DRAFT
+    NUM_UNASSIGNED = 4
+    NUM_ALL = NUM_UNANSWERED + NUM_SPAM + NUM_ANSWERED + NUM_DRAFT + NUM_UNASSIGNED
 
     def setUp(self):
         agency = Agency.objects.create(name="Ministry of Education", name_ms="Kementerian Pendidikan", acronym="MOE")
-        user = User.objects.create(name="John Doe", email="johndoe@example.com", agency=agency, role=UserRole.STAFF)
+        user = User.objects.create(name="John Doe", email="johndoe@example.com", role=UserRole.SUPER_ADMIN)
         token = Token.objects.create(user=user)
         self.client.force_authenticate(user, token)
+        self.agency = agency
 
-        for i in range(0, self.NUM_BACKLOG):
+        for i in range(0, self.NUM_UNANSWERED):
             Question.objects.create(question=f"Question backlog {i + 1}", agency=agency)
         for i in range (0, self.NUM_SPAM):
             Question.objects.create(question=f"Question spam {i + 1}", agency=agency, spam=True)
-        for i in range (0, self.NUM_COMPLETED):
+        for i in range (0, self.NUM_ANSWERED):
             question = Question.objects.create(question=f"Question completed {i + 1}", agency=agency, spam=False)
             Answer.objects.create(question=question, text=f"Answer completed {i + 1}", draft=False)
         for i in range (0, self.NUM_DRAFT):
             question = Question.objects.create(question=f"Question draft {i + 1}", agency=agency, spam=False)
             Answer.objects.create(question=question, text=f"Answer draft {i + 1}", draft=True)
+        for i in range (0, self.NUM_UNASSIGNED):
+            question = Question.objects.create(question=f"Question unassigned {i + 1}", spam=False)
         
     def test_list_all(self):
         url = reverse('admin-question-list')
@@ -42,12 +46,13 @@ class TestAdminListQuestions(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(json_data['count'], self.NUM_ALL)
 
-    def test_list_backlog(self):
+    def test_list_unanswered(self):
         url = reverse('admin-question-list')
-        response = self.client.get(url, {'state': 'backlog'})
+        response = self.client.get(url, {'state': 'unanswered'})
         json_data = response.json()
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(json_data['count'], self.NUM_BACKLOG)
+        # Super admins can see unassigned questions, and they are also considered unaswered!
+        self.assertEqual(json_data['count'], self.NUM_UNANSWERED + self.NUM_UNASSIGNED)
 
     def test_list_spam(self):
         url = reverse('admin-question-list')
@@ -56,12 +61,16 @@ class TestAdminListQuestions(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(json_data['count'], self.NUM_SPAM)
 
-    def test_list_completed(self):
+    def test_list_answered(self):
+        user = User.objects.create(name="Staff", email="staff@example.com", agency=self.agency, role=UserRole.STAFF)
+        token = Token.objects.create(user=user)
+        self.client.force_authenticate(user, token)
         url = reverse('admin-question-list')
-        response = self.client.get(url, {'state': 'completed'})
+
+        response = self.client.get(url, {'state': 'answered'})
         json_data = response.json()
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(json_data['count'], self.NUM_COMPLETED)
+        self.assertEqual(json_data['count'], self.NUM_ANSWERED)
 
     def test_list_draft(self):
         url = reverse('admin-question-list')
@@ -69,6 +78,104 @@ class TestAdminListQuestions(APITestCase):
         json_data = response.json()
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(json_data['count'], self.NUM_DRAFT)
+
+    def test_list_unassigned(self):
+        url = reverse('admin-question-list')
+        response = self.client.get(url, {'agency__isnull': 'true'})
+        json_data = response.json()
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(json_data['count'], self.NUM_UNASSIGNED)
+    
+class TestAdminListQuestionsAsStaff(APITestCase):
+    NUM_UNANSWERED = 1
+    NUM_SPAM = 3
+    NUM_ANSWERED = 5
+    NUM_DRAFT = 2
+    NUM_UNASSIGNED = 4
+    NUM_ALL = NUM_UNANSWERED + NUM_SPAM + NUM_ANSWERED + NUM_DRAFT + NUM_UNASSIGNED
+    NUM_VISIBLE = NUM_ALL - NUM_SPAM - NUM_UNASSIGNED
+
+    def setUp(self):
+        agency = Agency.objects.create(name="Ministry of Education", name_ms="Kementerian Pendidikan", acronym="MOE")
+        user = User.objects.create(name="Staff", email="staff@example.com", agency=agency, role=UserRole.STAFF)
+        token = Token.objects.create(user=user)
+        self.client.force_authenticate(user, token)
+        self.agency = agency
+
+        for i in range(0, self.NUM_UNANSWERED):
+            Question.objects.create(question=f"Question backlog {i + 1}", agency=agency)
+        for i in range (0, self.NUM_SPAM):
+            Question.objects.create(question=f"Question spam {i + 1}", agency=agency, spam=True)
+        for i in range (0, self.NUM_ANSWERED):
+            question = Question.objects.create(question=f"Question completed {i + 1}", agency=agency, spam=False)
+            Answer.objects.create(question=question, text=f"Answer completed {i + 1}", draft=False)
+        for i in range (0, self.NUM_DRAFT):
+            question = Question.objects.create(question=f"Question draft {i + 1}", agency=agency, spam=False)
+            Answer.objects.create(question=question, text=f"Answer draft {i + 1}", draft=True)
+        for i in range (0, self.NUM_UNASSIGNED):
+            question = Question.objects.create(question=f"Question unassigned {i + 1}", spam=False)
+        
+    def test_list_all(self):
+        """
+        Tests staff should only see questions that are:
+        1. Assigned to their own agency and
+        2. Not marked as spam
+        """
+        url = reverse('admin-question-list')
+        response = self.client.get(url)
+        json_data = response.json()
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(json_data['count'], self.NUM_VISIBLE)
+
+    def test_list_unanswered(self):
+        """
+        Tests listing unanswered questions.
+        """
+        url = reverse('admin-question-list')
+        response = self.client.get(url, {'state': 'unanswered'})
+        json_data = response.json()
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(json_data['count'], self.NUM_UNANSWERED)
+
+    def test_list_spam(self):
+        """
+        Tests staff shouldn't be able to list spammed questions.
+        """
+        url = reverse('admin-question-list')
+        response = self.client.get(url, {'state': 'spam'})
+        json_data = response.json()
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(json_data['count'], self.NUM_VISIBLE)
+
+    def test_list_answered(self):
+        """
+        Tests listing answered questions.
+        """
+        url = reverse('admin-question-list')
+        response = self.client.get(url, {'state': 'answered'})
+        json_data = response.json()
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(json_data['count'], self.NUM_ANSWERED)
+
+    def test_list_draft(self):
+        """
+        Tests listing drafted questions.
+        """
+        url = reverse('admin-question-list')
+        response = self.client.get(url, {'state': 'draft'})
+        json_data = response.json()
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(json_data['count'], self.NUM_DRAFT)
+
+    def test_list_unassigned(self):
+        """
+        Tests listing unassigned questions should return empty list to staff.
+        """
+        url = reverse('admin-question-list')
+        response = self.client.get(url, {'agency__isnull': 'true'})
+        json_data = response.json()
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(json_data['count'], self.NUM_VISIBLE)
 
 class TestQuestionViewSet(APITestCase):
     def setUp(self):

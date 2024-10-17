@@ -16,7 +16,7 @@ from rest_framework import generics, status, pagination, mixins, viewsets, excep
 from .models import Answer, Attachment, Question, Agency, Topic, User, UserRole
 from rest_framework.response import Response
 from rest_framework.views import APIView
-from drf_spectacular.utils import extend_schema, OpenApiParameter, OpenApiTypes, inline_serializer
+from drf_spectacular.utils import extend_schema, OpenApiParameter, OpenApiTypes, inline_serializer, extend_schema_view
 from django.contrib.auth import get_user_model
 from django.db.models import Sum, Q
 from .elastic import client
@@ -179,6 +179,25 @@ class TopicViewSet(
     def get_queryset(self):
         return Topic.objects.all()
 
+@extend_schema_view(
+    list=extend_schema(
+        parameters=[
+            OpenApiParameter(
+                "state", 
+                OpenApiTypes.STR, 
+                OpenApiParameter.QUERY, 
+                enum=["answered", "unanswered", "draft", "spam"],
+                description="Filter by spam only works if you are a `super_admin`.",
+            ),
+            OpenApiParameter(
+                "agency__isnull",
+                OpenApiTypes.BOOL,
+                OpenApiParameter.QUERY,
+                description="To filter assigned/unassigned questions. Only works if you are a `super_admin`."
+            )
+        ]
+    )
+)
 class AdminQuestionViewSet(
     mixins.ListModelMixin,
     mixins.RetrieveModelMixin,
@@ -198,20 +217,29 @@ class AdminQuestionViewSet(
     def get_queryset(self):
         queryset = self.queryset
 
-        # Filter query by user agency if they are not a super admin
+        # Non super admin users can only see questions that are:
+        # 1. Assigned to their own agency
+        # 2. Not marked as spam
         if self.request.user.role != UserRole.SUPER_ADMIN:
-            queryset = queryset.filter(agency=self.request.user.agency)
+            queryset = queryset.filter(agency=self.request.user.agency, spam=False, agency__isnull=False)
 
         state = self.request.query_params.get('state')
-        if state == 'completed':
+        if state == 'answered':
             queryset = queryset.filter(answer__isnull=False, answer__draft=False)
         elif state == 'draft':
             queryset = queryset.filter(answer__isnull=False, answer__draft=True)
-        elif state == 'spam':
+        # Only super admins can list questions marked as spam
+        elif state == 'spam' and self.request.user.role == UserRole.SUPER_ADMIN:
             queryset = queryset.filter(spam=True)
-        elif state == 'backlog':
+        elif state == 'unanswered':
             queryset = queryset.filter(answer__isnull=True, spam=False)
 
+        return queryset
+    
+    def filter_queryset(self, queryset):
+        # Only super admins can filter by the filterset_fields
+        if self.request.user.role == UserRole.SUPER_ADMIN:
+            return super().filter_queryset(queryset)
         return queryset
     
     def get_serializer_class(self):
