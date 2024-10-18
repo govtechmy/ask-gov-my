@@ -7,8 +7,10 @@ import { Agency, PageResult } from "@/types/types";
 import Translator from "@/components/client/translator";
 import Image from "next/image";
 import { Paginator } from "@/components/client/paginator";
-import { Button, GearIcon, PlusIcon, Empty } from "@askgovmy/ui";
+import { Empty } from "@askgovmy/ui";
 import Search from "@/components/client/search";
+import { AddAgencyButton } from "./add-agency-button";
+import { EditAgencyButton } from "./edit-agency-dialog";
 
 interface ManageAgenciesProps {
   agencies: PageResult<Agency>;
@@ -29,13 +31,7 @@ const ManageAgencies: FSP<ManageAgenciesProps> = async ({ data }) => {
             route="admin.dashboard.agency"
             placeholder="AdminAgencies.search_placeholder"
           />
-          <Button
-            variant={"primary"}
-            size={"sm"}
-            icon={<PlusIcon className="stroke-white-forcewhite" />}
-          >
-            <Translator namespace="AdminAgencies.add_new" />
-          </Button>
+          <AddAgencyButton />
         </div>
       </div>
       <Empty
@@ -64,12 +60,7 @@ const ManageAgencies: FSP<ManageAgenciesProps> = async ({ data }) => {
               </div>
               <p className="line-clamp-2 flex-1 text-sm">{agency.name}</p>
               <div className="absolute h-full w-14 right-4.5 bg-gradient-to-b from-white to-white/100 hidden justify-end py-4 z-10 group-hover:flex transition-all">
-                <Button
-                  className="w-8 h-8 p-1.5 hover:cursor-pointer"
-                  variant={"secondary"}
-                  size={"sm"}
-                  icon={<GearIcon className="w-4 h-4 stroke-black-700" />}
-                />
+                <EditAgencyButton agency={agency} />
               </div>
             </div>
           ))}

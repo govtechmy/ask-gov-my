@@ -14,6 +14,7 @@ export * from "./select";
 export * from "./separator";
 export * from "./sheet";
 export * from "./tabs";
+export * from "./dialog";
 
 // Icons
 export * from "./icons";
