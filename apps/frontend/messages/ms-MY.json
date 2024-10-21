@@ -154,5 +154,18 @@
     "edit": "Sunting",
     "delete": "Padam",
     "not_found": "Tidak dapat mencari pengguna tersebut. Sila cuba cari semula menggunakan bar carian di atas."
+  },
+  "AgencyForm": {
+    "add_new": "Tambah agensi baharu",
+    "setting": "Tetapan agensi",
+    "cancel": "Batal",
+    "save": "Simpan",
+    "agency_logo": "Logo agensi",
+    "agency_logo_helptext": " Muat naik foto bersaiz ideal tidak melebihi 200x200 piksel dalam format PNG atau JPG.",
+    "agency_name_english": "Nama agensi (Bahasa Inggeris)",
+    "agency_name_malay": "Nama agensi (Melayu)",
+    "agency_acronym": "Akronim agensi",
+    "agency_logo_preview": "Preview logo agensi",
+    "error_image_exceed_size": "Sila muat naik imej dengan saiz maksimum 200x200 piksel."
   }
 }

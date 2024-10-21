@@ -16,6 +16,7 @@ import { z } from "zod";
 import { ComponentProps, PropsWithChildren } from "react";
 import Asklogo from "@/icons/asklogo";
 import { AgencyImageInput, AgencyImageInputProps } from "./agency-image-input";
+import { useTranslations } from "next-intl";
 
 const formSchema = z.object({
   name_en: z.string().min(1),
@@ -81,6 +82,7 @@ export function useAgencyForm() {
 }
 
 export function AgencyFormFields() {
+  const t = useTranslations("AgencyForm");
   const form = useAgencyForm();
 
   const handleImageSelect: AgencyImageInputProps["onSelectImage"] = (
@@ -89,7 +91,8 @@ export function AgencyFormFields() {
   ) => {
     if (width > MAX_IMAGE_WIDTH || height > MAX_IMAGE_HEIGHT) {
       form.setError("logo_url", {
-        message: "Please upload images with a maximum size of 200x200 pixels.",
+        type: "custom",
+        message: t("error_image_exceed_size"),
       });
       return;
     }
@@ -105,7 +108,7 @@ export function AgencyFormFields() {
           name="logo_url"
           render={({ field, fieldState }) => (
             <FormItem className="w-full">
-              <FormLabel className="sr-only">Agency's logo</FormLabel>
+              <FormLabel className="sr-only">{t("agency_logo")}</FormLabel>
               <FormControl>
                 <AgencyImageInput
                   onSelectImage={handleImageSelect}
@@ -116,8 +119,7 @@ export function AgencyFormFields() {
               </FormControl>
               {!fieldState.error && (
                 <FormLabel className="text-xs text-dim-500 font-normal">
-                  Upload photo ideally sized not more than 200x200 pixels in PNG
-                  or JPG format.
+                  {t("agency_logo_helptext")}
                 </FormLabel>
               )}
               <FormMessage />
@@ -130,7 +132,7 @@ export function AgencyFormFields() {
         name="name_en"
         render={({ field }) => (
           <FormItem className="w-full">
-            <FormLabel>Agency's name (English)</FormLabel>
+            <FormLabel>{t("agency_name_english")}</FormLabel>
             <FormControl>
               <Input {...field} />
             </FormControl>
@@ -143,7 +145,7 @@ export function AgencyFormFields() {
         name="name_ms"
         render={({ field }) => (
           <FormItem className="w-full">
-            <FormLabel>Agency's name (Malay)</FormLabel>
+            <FormLabel>{t("agency_name_malay")}</FormLabel>
             <FormControl>
               <Input {...field} />
             </FormControl>
@@ -158,7 +160,7 @@ export function AgencyFormFields() {
           name="acronym"
           render={({ field }) => (
             <FormItem className="w-full">
-              <FormLabel>Agency's acronym</FormLabel>
+              <FormLabel>{t("agency_acronym")}</FormLabel>
               <FormControl>
                 <Input {...field} />
               </FormControl>
@@ -168,7 +170,7 @@ export function AgencyFormFields() {
         />
         <div className="space-y-2">
           <FormLabel asChild>
-            <p>Agency logo preview</p>
+            <p>{t("agency_logo_preview")}</p>
           </FormLabel>
           <div className="font-poppins flex gap-2.5 text-lg font-semibold items-center h-10">
             <Asklogo />

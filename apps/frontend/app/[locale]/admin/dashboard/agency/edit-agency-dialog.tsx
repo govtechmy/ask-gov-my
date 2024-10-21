@@ -19,12 +19,14 @@ import {
   AgencyFormValues,
 } from "./agency-form";
 import { updateAgency } from "@/actions/admin/agency";
+import { useTranslations } from "next-intl";
 
 interface EditAgencyButtonProps {
   agency: AgencyFormValues & { id: number };
 }
 
 export function EditAgencyButton({ agency }: EditAgencyButtonProps) {
+  const t = useTranslations("AgencyForm");
   const [open, setOpen] = useState(false);
   return (
     <Dialog open={open} onOpenChange={setOpen}>
@@ -46,9 +48,9 @@ export function EditAgencyButton({ agency }: EditAgencyButtonProps) {
           }}
         >
           <DialogHeader>
-            <DialogTitle>Add new agency</DialogTitle>
+            <DialogTitle>{t("setting")}</DialogTitle>
             <DialogDescription className="sr-only">
-              Add new agency
+              {t("setting")}
             </DialogDescription>
           </DialogHeader>
           <div className="flex-1 my-5">
@@ -60,9 +62,9 @@ export function EditAgencyButton({ agency }: EditAgencyButtonProps) {
               type="button"
               onClick={() => setOpen(false)}
             >
-              Cancel
+              {t("cancel")}
             </Button>
-            <AgencyFormSubmit className="w-fit">Save</AgencyFormSubmit>
+            <AgencyFormSubmit className="w-fit">{t("save")}</AgencyFormSubmit>
           </DialogFooter>
         </AgencyForm>
       </DialogContent>
