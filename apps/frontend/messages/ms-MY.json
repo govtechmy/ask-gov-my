@@ -167,5 +167,15 @@
     "agency_acronym": "Akronim agensi",
     "agency_logo_preview": "Preview logo agensi",
     "error_image_exceed_size": "Sila muat naik imej dengan saiz maksimum 200x200 piksel."
+  },
+  "UserForm": {
+    "add_new": "Add new user",
+    "cancel": "Cancel",
+    "save": "Save",
+    "name": "Full name",
+    "email": "Email",
+    "role": "Role",
+    "agency": "Agency",
+    "agency_unassigned": "Unassigned"
   }
 }
