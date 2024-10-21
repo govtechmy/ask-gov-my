@@ -15,10 +15,8 @@ import {
 } from "@askgovmy/ui";
 import { AgencyFormFields, AgencyForm, AgencyFormSubmit } from "./agency-form";
 import { createAgency } from "@/actions/admin/agency";
-import { useTranslations } from "next-intl";
 
-export function AddAgencyButton() {
-  const t = useTranslations("AgencyForm");
+export function AddAgencyDialog() {
   const [open, setOpen] = useState(false);
   return (
     <Dialog open={open} onOpenChange={setOpen}>
@@ -40,9 +38,11 @@ export function AddAgencyButton() {
           }}
         >
           <DialogHeader>
-            <DialogTitle>{t("add_new")}</DialogTitle>
+            <DialogTitle>
+              <Translator namespace="AgencyForm.add_new" />
+            </DialogTitle>
             <DialogDescription className="sr-only">
-              {t("add_new")}
+              <Translator namespace="AgencyForm.add_new" />
             </DialogDescription>
           </DialogHeader>
           <div className="flex-1 my-5">
@@ -54,9 +54,11 @@ export function AddAgencyButton() {
               type="button"
               onClick={() => setOpen(false)}
             >
-              {t("cancel")}
+              <Translator namespace="AgencyForm.cancel" />
             </Button>
-            <AgencyFormSubmit className="w-fit">{t("save")}</AgencyFormSubmit>
+            <AgencyFormSubmit className="w-fit">
+              <Translator namespace="AgencyForm.save" />
+            </AgencyFormSubmit>
           </DialogFooter>
         </AgencyForm>
       </DialogContent>

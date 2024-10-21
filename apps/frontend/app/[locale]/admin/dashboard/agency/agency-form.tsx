@@ -17,6 +17,7 @@ import { ComponentProps, PropsWithChildren } from "react";
 import Asklogo from "@/icons/asklogo";
 import { AgencyImageInput, AgencyImageInputProps } from "./agency-image-input";
 import { useTranslations } from "next-intl";
+import Translator from "@/components/client/translator";
 
 const formSchema = z.object({
   name_en: z.string().min(1),
@@ -108,7 +109,9 @@ export function AgencyFormFields() {
           name="logo_url"
           render={({ field, fieldState }) => (
             <FormItem className="w-full">
-              <FormLabel className="sr-only">{t("agency_logo")}</FormLabel>
+              <FormLabel className="sr-only">
+                <Translator namespace="AgencyForm.agency_acronym" />
+              </FormLabel>
               <FormControl>
                 <AgencyImageInput
                   onSelectImage={handleImageSelect}
@@ -118,7 +121,7 @@ export function AgencyFormFields() {
               </FormControl>
               {!fieldState.error && (
                 <FormLabel className="text-xs text-dim-500 font-normal">
-                  {t("agency_logo_helptext")}
+                  <Translator namespace="AgencyForm.agency_logo_helptext" />
                 </FormLabel>
               )}
               <FormMessage />
@@ -131,7 +134,9 @@ export function AgencyFormFields() {
         name="name_en"
         render={({ field }) => (
           <FormItem className="w-full">
-            <FormLabel>{t("agency_name_english")}</FormLabel>
+            <FormLabel>
+              <Translator namespace="AgencyForm.agency_name_english" />
+            </FormLabel>
             <FormControl>
               <Input {...field} />
             </FormControl>
@@ -144,7 +149,9 @@ export function AgencyFormFields() {
         name="name_ms"
         render={({ field }) => (
           <FormItem className="w-full">
-            <FormLabel>{t("agency_name_malay")}</FormLabel>
+            <FormLabel>
+              <Translator namespace="AgencyForm.agency_name_malay" />
+            </FormLabel>
             <FormControl>
               <Input {...field} />
             </FormControl>
@@ -159,7 +166,9 @@ export function AgencyFormFields() {
           name="acronym"
           render={({ field }) => (
             <FormItem className="w-full">
-              <FormLabel>{t("agency_acronym")}</FormLabel>
+              <FormLabel>
+                <Translator namespace="AgencyForm.agency_acronym" />
+              </FormLabel>
               <FormControl>
                 <Input {...field} />
               </FormControl>
@@ -169,7 +178,7 @@ export function AgencyFormFields() {
         />
         <div className="space-y-2">
           <FormLabel asChild>
-            <p>{t("agency_logo_preview")}</p>
+            <Translator namespace="AgencyForm.agency_logo_preview" />
           </FormLabel>
           <div className="font-poppins flex gap-2.5 text-lg font-semibold items-center h-10">
             <Asklogo />

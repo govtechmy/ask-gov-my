@@ -19,14 +19,13 @@ import {
   AgencyFormValues,
 } from "./agency-form";
 import { updateAgency } from "@/actions/admin/agency";
-import { useTranslations } from "next-intl";
+import Translator from "@/components/client/translator";
 
-interface EditAgencyButtonProps {
+interface EditAgencyDialogProps {
   agency: AgencyFormValues & { id: number };
 }
 
-export function EditAgencyButton({ agency }: EditAgencyButtonProps) {
-  const t = useTranslations("AgencyForm");
+export function EditAgencyDialog({ agency }: EditAgencyDialogProps) {
   const [open, setOpen] = useState(false);
   return (
     <Dialog open={open} onOpenChange={setOpen}>
@@ -48,9 +47,11 @@ export function EditAgencyButton({ agency }: EditAgencyButtonProps) {
           }}
         >
           <DialogHeader>
-            <DialogTitle>{t("setting")}</DialogTitle>
+            <DialogTitle>
+              <Translator namespace="AgencyForm.setting" />
+            </DialogTitle>
             <DialogDescription className="sr-only">
-              {t("setting")}
+              <Translator namespace="AgencyForm.setting" />
             </DialogDescription>
           </DialogHeader>
           <div className="flex-1 my-5">
@@ -62,9 +63,11 @@ export function EditAgencyButton({ agency }: EditAgencyButtonProps) {
               type="button"
               onClick={() => setOpen(false)}
             >
-              {t("cancel")}
+              <Translator namespace="AgencyForm.cancel" />
             </Button>
-            <AgencyFormSubmit className="w-fit">{t("save")}</AgencyFormSubmit>
+            <AgencyFormSubmit className="w-fit">
+              <Translator namespace="AgencyForm.save" />
+            </AgencyFormSubmit>
           </DialogFooter>
         </AgencyForm>
       </DialogContent>

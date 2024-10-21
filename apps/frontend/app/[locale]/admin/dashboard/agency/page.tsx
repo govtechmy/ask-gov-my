@@ -9,8 +9,8 @@ import Image from "next/image";
 import { Paginator } from "@/components/client/paginator";
 import { Empty } from "@askgovmy/ui";
 import Search from "@/components/client/search";
-import { AddAgencyButton } from "./add-agency-button";
-import { EditAgencyButton } from "./edit-agency-dialog";
+import { AddAgencyDialog } from "./add-agency-dialog";
+import { EditAgencyDialog } from "./edit-agency-dialog";
 
 interface ManageAgenciesProps {
   agencies: PageResult<Agency>;
@@ -31,7 +31,7 @@ const ManageAgencies: FSP<ManageAgenciesProps> = async ({ data }) => {
             route="admin.dashboard.agency"
             placeholder="AdminAgencies.search_placeholder"
           />
-          <AddAgencyButton />
+          <AddAgencyDialog />
         </div>
       </div>
       <Empty
@@ -60,7 +60,7 @@ const ManageAgencies: FSP<ManageAgenciesProps> = async ({ data }) => {
               </div>
               <p className="line-clamp-2 flex-1 text-sm">{agency.name}</p>
               <div className="absolute h-full w-14 right-4.5 bg-gradient-to-b from-white to-white/100 hidden justify-end py-4 z-10 group-hover:flex transition-all">
-                <EditAgencyButton agency={agency} />
+                <EditAgencyDialog agency={agency} />
               </div>
             </div>
           ))}
