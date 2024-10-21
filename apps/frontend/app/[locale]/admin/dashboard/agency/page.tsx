@@ -60,12 +60,7 @@ const ManageAgencies: FSP<ManageAgenciesProps> = async ({ data }) => {
               </div>
               <p className="line-clamp-2 flex-1 text-sm">{agency.name}</p>
               <div className="absolute h-full w-14 right-4.5 bg-gradient-to-b from-white to-white/100 hidden justify-end py-4 z-10 group-hover:flex transition-all">
-                <EditAgencyButton
-                  agency={{
-                    ...agency,
-                    logo_url: agency.logo_url || "/jata_logo.png",
-                  }}
-                />
+                <EditAgencyButton agency={agency} />
               </div>
             </div>
           ))}

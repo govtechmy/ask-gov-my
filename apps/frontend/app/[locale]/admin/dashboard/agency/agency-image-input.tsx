@@ -3,6 +3,7 @@ import { ComponentProps, useRef, useState } from "react";
 import Image from "next/image";
 import { cn } from "@askgovmy/utils";
 import { useTranslations } from "next-intl";
+import { useAgencyForm } from "./agency-form";
 
 const getHeightAndWidthFromDataURL = (
   dataURL: string
@@ -19,7 +20,6 @@ const getHeightAndWidthFromDataURL = (
   });
 
 export interface AgencyImageInputProps extends ComponentProps<"input"> {
-  defaultSrc?: string | null;
   onSelectImage: (
     file: File,
     imgSize: { width: number; height: number }
@@ -28,12 +28,14 @@ export interface AgencyImageInputProps extends ComponentProps<"input"> {
 
 export function AgencyImageInput({
   onSelectImage,
-  defaultSrc,
   className,
   ...props
 }: AgencyImageInputProps) {
+  const form = useAgencyForm();
   const t = useTranslations("AgencyForm");
-  const [previewSrc, setPreviewSrc] = useState(defaultSrc);
+  const [previewSrc, setPreviewSrc] = useState(
+    form.getValues("logo_url") || "/jata_logo.png"
+  );
   const fileInput = useRef<HTMLInputElement | null>(null);
   return (
     <div className={cn("w-fit relative cursor-pointer", className)}>

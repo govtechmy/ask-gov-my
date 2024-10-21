@@ -112,7 +112,6 @@ export function AgencyFormFields() {
               <FormControl>
                 <AgencyImageInput
                   onSelectImage={handleImageSelect}
-                  defaultSrc={form.getValues("logo_url")}
                   name={field.name}
                   disabled={field.disabled}
                 />
