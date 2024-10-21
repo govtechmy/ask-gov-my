@@ -13,10 +13,9 @@ import {
 import { useForm, useFormContext } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
-import PlusIcon from "@/icons/plusicon";
-import { ComponentProps, PropsWithChildren, useRef, useState } from "react";
-import Image from "next/image";
+import { ComponentProps, PropsWithChildren } from "react";
 import Asklogo from "@/icons/asklogo";
+import { AgencyImageInput, AgencyImageInputProps } from "./agency-image-input";
 
 const formSchema = z.object({
   name_en: z.string().min(1),
@@ -26,6 +25,9 @@ const formSchema = z.object({
 });
 type FormValues = z.infer<typeof formSchema>;
 export type AgencyFormValues = FormValues;
+
+const MAX_IMAGE_HEIGHT = 200;
+const MAX_IMAGE_WIDTH = 200;
 
 interface AgencyFormProviderProps extends PropsWithChildren {
   className?: string;
@@ -81,18 +83,47 @@ export function useAgencyForm() {
 export function AgencyFormFields() {
   const form = useAgencyForm();
 
-  const handleImageSelect: ImageInputProps["onSelect"] = () => {
+  const handleImageSelect: AgencyImageInputProps["onSelectImage"] = (
+    _file,
+    { width, height }
+  ) => {
+    if (width > MAX_IMAGE_WIDTH || height > MAX_IMAGE_HEIGHT) {
+      form.setError("logo_url", {
+        message: "Please upload images with a maximum size of 200x200 pixels.",
+      });
+      return;
+    }
+    // TODO: Upload image to S3
     form.setValue("logo_url", null);
   };
 
   return (
     <div className="grid gap-4">
       <div className="space-y-2">
-        <ImageInput onSelect={handleImageSelect} />
-        <p className="text-xs text-dim-500 font-normal">
-          Upload photo ideally sized not more than 200x200 pixels in PNG or JPG
-          format.
-        </p>
+        <FormField
+          control={form.control}
+          name="logo_url"
+          render={({ field, fieldState }) => (
+            <FormItem className="w-full">
+              <FormLabel className="sr-only">Agency's logo</FormLabel>
+              <FormControl>
+                <AgencyImageInput
+                  onSelectImage={handleImageSelect}
+                  defaultSrc={form.getValues("logo_url")}
+                  name={field.name}
+                  disabled={field.disabled}
+                />
+              </FormControl>
+              {!fieldState.error && (
+                <FormLabel className="text-xs text-dim-500 font-normal">
+                  Upload photo ideally sized not more than 200x200 pixels in PNG
+                  or JPG format.
+                </FormLabel>
+              )}
+              <FormMessage />
+            </FormItem>
+          )}
+        />
       </div>
       <FormField
         control={form.control}
@@ -159,49 +190,4 @@ export function AgencyFormSubmit(
 ) {
   const form = useAgencyForm();
   return <FormSubmit form={form} {...props} />;
-}
-
-interface ImageInputProps {
-  onSelect: (file: File) => void;
-}
-
-function ImageInput({ onSelect }: ImageInputProps) {
-  const [previewSrc, setPreviewSrc] = useState<string | null>(null);
-  const fileInput = useRef<HTMLInputElement | null>(null);
-  return (
-    <div className="w-fit relative cursor-pointer">
-      <button
-        type="button"
-        className="w-16 aspect-square rounded-full bg-washed-100 block relative border border-outline-200 overflow-hidden focus:outline-askmygovbrand-300 hover:border-askmygovbrand-300"
-        onClick={() => fileInput.current?.click()}
-      >
-        {previewSrc && (
-          <Image
-            src={previewSrc}
-            alt="Agency's logo"
-            fill
-            className="object-cover"
-          />
-        )}
-      </button>
-      <div
-        className="absolute bottom-0 right-0 w-5 h-5 rounded-full bg-askmygovbrand-600 text-white grid place-items-center"
-        aria-hidden="true"
-      >
-        <PlusIcon className="stroke-white-forcewhite" width="10" height="10" />
-      </div>
-      <input
-        type="file"
-        ref={fileInput}
-        accept="image/*"
-        onChange={(e) => {
-          const file = e.target.files?.[0];
-          if (!file) return;
-          onSelect(file);
-          setPreviewSrc(URL.createObjectURL(file));
-        }}
-        className="hidden"
-      />
-    </div>
-  );
 }
