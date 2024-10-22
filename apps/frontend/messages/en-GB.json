@@ -166,7 +166,9 @@
     "agency_name_malay": "Agency's name (Malay)",
     "agency_acronym": "Agency's acronym",
     "agency_logo_preview": "Agency logo preview",
-    "error_image_exceed_size": "Please upload images with a maximum size of 200x200 pixels."
+    "error_image_exceed_size": "Please upload images with a maximum size of 200x200 pixels.",
+    "created": "Agency successfully created!",
+    "edited": "Agency successfully edited!"
   },
   "UserForm": {
     "add_new": "Add new user",
@@ -180,6 +182,9 @@
     "agency_unassigned": "Unassigned",
     "delete": "Delete user?",
     "sure_delete": "Are you sure to delete user? Once deleted, it can't be retrieved.",
-    "confirm_delete": "Confirm & Delete"
+    "confirm_delete": "Confirm & Delete",
+    "created": "User successfully created!",
+    "edited": "User successfully edited!",
+    "deleted": "User successfully deleted!"
   }
 }

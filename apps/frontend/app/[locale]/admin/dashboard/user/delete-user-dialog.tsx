@@ -13,10 +13,12 @@ import {
   DialogTitle,
   DialogTrigger,
   TrashIcon,
+  useToast,
 } from "@askgovmy/ui";
 import { useState } from "react";
 
 export function DeleteUserDialog({ userId }: { userId: string }) {
+  const { toast } = useToast();
   const [open, setOpen] = useState(false);
   return (
     <Dialog open={open} onOpenChange={setOpen}>
@@ -47,7 +49,19 @@ export function DeleteUserDialog({ userId }: { userId: string }) {
           <Button
             variant="danger-primary"
             onClick={async () => {
-              await deleteUser({ id: userId });
+              const result = await deleteUser({ id: userId });
+              if (result.error) {
+                toast({
+                  variant: "error",
+                  title: result.error,
+                  description: result.message,
+                });
+              } else {
+                toast({
+                  variant: "success",
+                  title: <Translator namespace="UserForm.deleted" />,
+                });
+              }
               setOpen(false);
             }}
           >

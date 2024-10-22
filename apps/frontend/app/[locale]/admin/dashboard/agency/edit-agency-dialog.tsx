@@ -11,6 +11,7 @@ import {
   DialogTrigger,
   DialogDescription,
   GearIcon,
+  useToast,
 } from "@askgovmy/ui";
 import { AgencyFormFields, AgencyForm, AgencyFormSubmit } from "./agency-form";
 import { updateAgency } from "@/actions/admin/agency";
@@ -22,6 +23,7 @@ interface EditAgencyDialogProps {
 }
 
 export function EditAgencyDialog({ agency }: EditAgencyDialogProps) {
+  const { toast } = useToast();
   const [open, setOpen] = useState(false);
   return (
     <Dialog open={open} onOpenChange={setOpen}>
@@ -38,7 +40,19 @@ export function EditAgencyDialog({ agency }: EditAgencyDialogProps) {
           className="flex flex-col"
           defaultValues={agency}
           onSubmit={async (values) => {
-            await updateAgency({ ...values, id: agency.id });
+            const result = await updateAgency({ ...values, id: agency.id });
+            if (result.error) {
+              toast({
+                variant: "error",
+                title: result.error,
+                description: result.message,
+              });
+            } else {
+              toast({
+                variant: "success",
+                title: <Translator namespace="AgencyForm.edited" />,
+              });
+            }
             setOpen(false);
           }}
         >

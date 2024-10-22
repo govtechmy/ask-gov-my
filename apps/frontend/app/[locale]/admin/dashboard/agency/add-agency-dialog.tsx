@@ -12,11 +12,13 @@ import {
   DialogFooter,
   DialogTrigger,
   DialogDescription,
+  useToast,
 } from "@askgovmy/ui";
 import { AgencyFormFields, AgencyForm, AgencyFormSubmit } from "./agency-form";
 import { createAgency } from "@/actions/admin/agency";
 
 export function AddAgencyDialog() {
+  const { toast } = useToast();
   const [open, setOpen] = useState(false);
   return (
     <Dialog open={open} onOpenChange={setOpen}>
@@ -33,7 +35,19 @@ export function AddAgencyDialog() {
         <AgencyForm
           className="flex flex-col"
           onSubmit={async (values) => {
-            await createAgency(values);
+            const result = await createAgency(values);
+            if (result.error) {
+              toast({
+                variant: "error",
+                title: result.error,
+                description: result.message,
+              });
+            } else {
+              toast({
+                variant: "success",
+                title: <Translator namespace="AgencyForm.created" />,
+              });
+            }
             setOpen(false);
           }}
         >
