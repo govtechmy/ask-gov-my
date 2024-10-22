@@ -11,7 +11,6 @@ import {
   Empty,
   HoverCard,
   ThreeDottedIcon,
-  TrashIcon,
 } from "@askgovmy/ui";
 import Translator, {
   TranslationNamespace,
@@ -21,6 +20,7 @@ import Image from "next/image";
 import { Paginator } from "@/components/client/paginator";
 import { getAgencies } from "@/actions/admin/agency";
 import { EditUserDialog } from "./edit-user-dialog";
+import { DeleteUserDialog } from "./delete-user-dialog";
 
 interface ManageUsersProps {
   users: PageResult<User>;
@@ -107,7 +107,8 @@ const ManageUsers: FSP<ManageUsersProps> = async ({ data }) => {
                     className=""
                   >
                     <EditUserDialog
-                      defaultValues={{
+                      user={{
+                        id: user.id,
                         email: user.email,
                         name: user.name,
                         role: user.role,
@@ -115,17 +116,7 @@ const ManageUsers: FSP<ManageUsersProps> = async ({ data }) => {
                       }}
                       agencies={agencies.results}
                     />
-                    <Button
-                      // onClick={handleLogout}
-                      variant={"tertiary-dropdown"}
-                      className="text-sm font-medium"
-                    >
-                      <TrashIcon className="stroke-foreground-danger" />
-                      <Translator
-                        namespace="AdminUsers.delete"
-                        className="text-foreground-danger"
-                      />
-                    </Button>
+                    <DeleteUserDialog userId={user.id} />
                   </HoverCard>
                 </div>
               </div>

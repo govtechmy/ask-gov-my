@@ -20,16 +20,14 @@ import {
 } from "./user-form";
 import { Agency } from "@/types/types";
 import { useState } from "react";
+import { updateUser } from "@/actions/admin/user";
 
-type AddUserDialogProps = {
-  defaultValues: UserFormValues;
+type EditUserDialogProps = {
+  user: UserFormValues & { id: string };
   agencies: Agency[];
 };
 
-export function EditUserDialog({
-  defaultValues,
-  agencies,
-}: AddUserDialogProps) {
+export function EditUserDialog({ user, agencies }: EditUserDialogProps) {
   const [open, setOpen] = useState(false);
   return (
     <Dialog open={open} onOpenChange={setOpen}>
@@ -42,9 +40,9 @@ export function EditUserDialog({
       <DialogContent className="max-w-[600px] h-screen sm:h-fit">
         <UserForm
           className="flex flex-col"
-          defaultValues={defaultValues}
-          onSubmit={(formValues) => {
-            window.alert(JSON.stringify({ formValues }, null, 2));
+          defaultValues={user}
+          onSubmit={async (formValues) => {
+            await updateUser({ ...formValues, id: user.id });
             setOpen(false);
           }}
         >

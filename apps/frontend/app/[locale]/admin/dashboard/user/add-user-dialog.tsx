@@ -15,6 +15,7 @@ import {
 import { UserForm, UserFormFields, UserFormSubmit } from "./user-form";
 import { Agency } from "@/types/types";
 import { useState } from "react";
+import { createUser } from "@/actions/admin/user";
 
 type AddUserDialogProps = {
   agencies: Agency[];
@@ -39,8 +40,8 @@ export function AddUserDialog({ agencies }: AddUserDialogProps) {
       <DialogContent className="max-w-[600px] h-screen sm:h-fit">
         <UserForm
           className="flex flex-col"
-          onSubmit={(formValues) => {
-            window.alert(JSON.stringify({ formValues }, null, 2));
+          onSubmit={async (formValues) => {
+            await createUser(formValues);
             setOpen(false);
           }}
         >
