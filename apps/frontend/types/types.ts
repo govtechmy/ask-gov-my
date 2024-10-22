@@ -61,7 +61,7 @@ export interface QuestionSubmission
 
 export interface User {
   id: string;
-  name: string | null;
+  name: string;
   email: string;
   image: string | null;
   role: "staff" | "super_admin";

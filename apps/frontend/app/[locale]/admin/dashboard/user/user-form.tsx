@@ -16,8 +16,6 @@ import {
   SelectValue,
   SelectIcon,
   ChevronDownIcon,
-  Popover,
-  Button,
   Command,
   CommandInput,
   CommandList,
@@ -35,12 +33,31 @@ import { ComponentProps, PropsWithChildren, useState } from "react";
 import Translator from "@/components/client/translator";
 import { Agency } from "@/types/types";
 
-const formSchema = z.object({
-  name: z.string().min(1),
-  email: z.string().email(),
-  role: z.enum(["staff", "super_admin"]),
-  agency: z.number().nullable(),
-});
+const formSchema = z
+  .object({
+    name: z.string().min(1),
+    email: z.string().email(),
+    role: z.enum(["staff", "super_admin"]),
+    agency: z.number().nullable(),
+  })
+  .transform((arg, ctx) => {
+    // Ensure staff users must have an agency
+    if (arg.role === "staff" && arg.agency === null) {
+      ctx.addIssue({
+        code: "custom",
+        message: "Agency is required",
+        path: ["agency"],
+      });
+    }
+
+    // Ensure super_admin's `agency` field is null
+    if (arg.role === "super_admin") {
+      arg.agency = null;
+    }
+
+    return arg;
+  });
+
 type FormValues = z.infer<typeof formSchema>;
 export type UserFormValues = FormValues;
 
@@ -101,7 +118,7 @@ export function UserFormFields({ agencies }: UserFormFieldsProps) {
   const [openAgencyPopover, setOpenAgencyPopover] = useState(false);
   const [selectedAgency, setSelectedAgency] = useState<
     UserFormFieldsProps["agencies"][number] | null
-  >(null);
+  >(agencies.find(({ id }) => id === form.getValues("agency")) || null);
 
   return (
     <div className="grid gap-4">

@@ -10,7 +10,6 @@ import {
   Button,
   Empty,
   HoverCard,
-  PencilIcon,
   ThreeDottedIcon,
   TrashIcon,
 } from "@askgovmy/ui";
@@ -21,6 +20,7 @@ import { cn } from "@askgovmy/utils";
 import Image from "next/image";
 import { Paginator } from "@/components/client/paginator";
 import { getAgencies } from "@/actions/admin/agency";
+import { EditUserDialog } from "./edit-user-dialog";
 
 interface ManageUsersProps {
   users: PageResult<User>;
@@ -106,14 +106,15 @@ const ManageUsers: FSP<ManageUsersProps> = async ({ data }) => {
                     option={{ align: "end", alignOffset: 0, sideOffset: 4 }}
                     className=""
                   >
-                    <Button
-                      // onClick={handleLogout}
-                      variant={"tertiary-dropdown"}
-                      className="text-sm font-medium"
-                    >
-                      <PencilIcon className="stroke-black-900" />
-                      <Translator namespace="AdminUsers.edit" />
-                    </Button>
+                    <EditUserDialog
+                      defaultValues={{
+                        email: user.email,
+                        name: user.name,
+                        role: user.role,
+                        agency: user.agency?.id || null,
+                      }}
+                      agencies={agencies.results}
+                    />
                     <Button
                       // onClick={handleLogout}
                       variant={"tertiary-dropdown"}
