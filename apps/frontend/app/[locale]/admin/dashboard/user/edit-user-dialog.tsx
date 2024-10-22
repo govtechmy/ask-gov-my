@@ -12,15 +12,11 @@ import {
   DialogTitle,
   PencilIcon,
 } from "@askgovmy/ui";
-import {
-  UserForm,
-  UserFormFields,
-  UserFormSubmit,
-  UserFormValues,
-} from "./user-form";
+import { UserForm, UserFormFields, UserFormSubmit } from "./user-form";
 import { Agency } from "@/types/types";
 import { useState } from "react";
 import { updateUser } from "@/actions/admin/user";
+import { UserFormValues } from "@/actions/admin/user.schema";
 
 type EditUserDialogProps = {
   user: UserFormValues & { id: string };

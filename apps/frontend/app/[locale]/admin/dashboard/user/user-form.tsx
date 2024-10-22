@@ -28,43 +28,15 @@ import {
 } from "@askgovmy/ui";
 import { useForm, useFormContext } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { z } from "zod";
 import { ComponentProps, PropsWithChildren, useState } from "react";
 import Translator from "@/components/client/translator";
 import { Agency } from "@/types/types";
-
-const formSchema = z
-  .object({
-    name: z.string().min(1),
-    email: z.string().email(),
-    role: z.enum(["staff", "super_admin"]),
-    agency: z.number().nullable(),
-  })
-  .transform((arg, ctx) => {
-    // Ensure staff users must have an agency
-    if (arg.role === "staff" && arg.agency === null) {
-      ctx.addIssue({
-        code: "custom",
-        message: "Agency is required",
-        path: ["agency"],
-      });
-    }
-
-    // Ensure super_admin's `agency` field is null
-    if (arg.role === "super_admin") {
-      arg.agency = null;
-    }
-
-    return arg;
-  });
-
-type FormValues = z.infer<typeof formSchema>;
-export type UserFormValues = FormValues;
+import { UserFormSchema, UserFormValues } from "@/actions/admin/user.schema";
 
 interface UserFormProps extends PropsWithChildren {
   className?: string;
-  onSubmit: (formValues: FormValues) => void | Promise<void>;
-  defaultValues?: FormValues;
+  onSubmit: (formValues: UserFormValues) => void | Promise<void>;
+  defaultValues?: UserFormValues;
 }
 
 /**
@@ -83,8 +55,8 @@ export function UserForm({
   onSubmit,
   defaultValues,
 }: UserFormProps) {
-  const form = useForm<FormValues>({
-    resolver: zodResolver(formSchema),
+  const form = useForm<UserFormValues>({
+    resolver: zodResolver(UserFormSchema),
     defaultValues: defaultValues || {
       name: "",
       email: "",
@@ -103,7 +75,7 @@ export function UserForm({
 }
 
 export function useUserForm() {
-  const form = useFormContext<FormValues>();
+  const form = useFormContext<UserFormValues>();
   if (!form) {
     throw Error("Must use `useUserForm` within a `<UserForm />` component");
   }
