@@ -16,12 +16,16 @@ import { UserForm, UserFormFields, UserFormSubmit } from "./user-form";
 import { Agency } from "@/types/types";
 import { useState } from "react";
 import { createUser } from "@/actions/admin/user";
+import { useToast } from "@askgovmy/ui";
+import { useTranslations } from "next-intl";
 
 type AddUserDialogProps = {
   agencies: Agency[];
 };
 
 export function AddUserDialog({ agencies }: AddUserDialogProps) {
+  const t = useTranslations("UserForm");
+  const { toast } = useToast();
   const [open, setOpen] = useState(false);
   return (
     <Dialog open={open} onOpenChange={setOpen}>
@@ -41,7 +45,19 @@ export function AddUserDialog({ agencies }: AddUserDialogProps) {
         <UserForm
           className="flex flex-col"
           onSubmit={async (formValues) => {
-            await createUser(formValues);
+            const result = await createUser(formValues);
+            if (result.error) {
+              toast({
+                variant: "error",
+                title: result.error,
+                description: result.message,
+              });
+            } else {
+              toast({
+                variant: "success",
+                title: <Translator namespace="UserForm.created" />,
+              });
+            }
             setOpen(false);
           }}
         >

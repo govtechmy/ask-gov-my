@@ -11,6 +11,7 @@ import {
   DialogFooter,
   DialogTitle,
   PencilIcon,
+  useToast,
 } from "@askgovmy/ui";
 import { UserForm, UserFormFields, UserFormSubmit } from "./user-form";
 import { Agency } from "@/types/types";
@@ -24,6 +25,7 @@ type EditUserDialogProps = {
 };
 
 export function EditUserDialog({ user, agencies }: EditUserDialogProps) {
+  const { toast } = useToast();
   const [open, setOpen] = useState(false);
   return (
     <Dialog open={open} onOpenChange={setOpen}>
@@ -38,7 +40,19 @@ export function EditUserDialog({ user, agencies }: EditUserDialogProps) {
           className="flex flex-col"
           defaultValues={user}
           onSubmit={async (formValues) => {
-            await updateUser({ ...formValues, id: user.id });
+            const result = await updateUser({ ...formValues, id: user.id });
+            if (result.error) {
+              toast({
+                variant: "error",
+                title: result.error,
+                description: result.message,
+              });
+            } else {
+              toast({
+                variant: "success",
+                title: <Translator namespace="UserForm.edited" />,
+              });
+            }
             setOpen(false);
           }}
         >

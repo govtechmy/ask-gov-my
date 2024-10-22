@@ -166,7 +166,9 @@
     "agency_name_malay": "Nama agensi (Melayu)",
     "agency_acronym": "Akronim agensi",
     "agency_logo_preview": "Preview logo agensi",
-    "error_image_exceed_size": "Sila muat naik imej dengan saiz maksimum 200x200 piksel."
+    "error_image_exceed_size": "Sila muat naik imej dengan saiz maksimum 200x200 piksel.",
+    "created": "Agensi berjaya dibuat!",
+    "edited": "Agensi berjaya disunting!"
   },
   "UserForm": {
     "add_new": "Tambah pengguna baharu",
@@ -180,6 +182,9 @@
     "agency_unassigned": "Tidak ditugaskan",
     "delete": "Padam pengguna?",
     "sure_delete": "Adakah anda pasti akan memadamkan pengguna? Setelah dipadamkan, ia tidak boleh diambil semula.",
-    "confirm_delete": "Sahkan & Padam"
+    "confirm_delete": "Sahkan & Padam",
+    "created": "Pengguna berjaya dibuat!",
+    "edited": "Pengguna berjaya disunting!",
+    "deleted": "Pengguna berjaya dipadamkan!"
   }
 }
