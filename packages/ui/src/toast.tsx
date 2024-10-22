@@ -47,8 +47,8 @@ interface ToastViewportProps
   extends React.ComponentPropsWithoutRef<typeof ToastPrimitives.Viewport> {}
 
 const toast_viewport_cva = cva([
-  "fixed top-0 flex max-h-screen w-full overflow-hidden flex-col-reverse gap-1",
-  "p-4 sm:bottom-0 sm:right-0 sm:top-auto sm:flex-col md:max-w-sm",
+  "fixed bottom-0 flex max-h-screen w-full overflow-hidden flex-col-reverse gap-1",
+  "p-4 sm:right-0 sm:top-auto sm:flex-col md:max-w-sm",
 ]);
 
 const ToastViewport = React.forwardRef<
@@ -77,7 +77,7 @@ const toast_cva = cva([
   "data-[swipe=end]:translate-x-[var(--radix-toast-swipe-end-x)] data-[swipe=move]:translate-x-[var(--radix-toast-swipe-move-x)]",
   "data-[swipe=move]:transition-none data-[state=open]:animate-in data-[state=closed]:animate-out data-[swipe=end]:animate-out",
   "data-[state=closed]:fade-out-80 data-[state=closed]:slide-out-to-right-full",
-  "data-[state=open]:slide-in-from-top-full data-[state=open]:sm:slide-in-from-bottom-full",
+  "data-[state=open]:slide-in-from-bottom-full",
 ]);
 
 const ToastRoot = React.forwardRef<
