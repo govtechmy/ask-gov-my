@@ -9,7 +9,9 @@ import {
   Avatar,
   Button,
   Empty,
-  HoverCard,
+  PopoverContent,
+  PopoverRoot,
+  PopoverTrigger,
   ThreeDottedIcon,
 } from "@askgovmy/ui";
 import Translator, {
@@ -92,8 +94,8 @@ const ManageUsers: FSP<ManageUsersProps> = async ({ data }) => {
                 </div>
 
                 <div className="absolute flex h-full w-14 right-5 bg-gradient-to-b from-background/0 to-background/100 justify-end py-4 transition-all items-center">
-                  <HoverCard
-                    trigger={
+                  <PopoverRoot>
+                    <PopoverTrigger>
                       <Button
                         className="w-8 h-8 p-1.5 hover:cursor-pointer z-10 opacity-0 group-hover:opacity-100 data-[state=open]:opacity-100 transition-opacity"
                         variant={"secondary"}
@@ -102,22 +104,21 @@ const ManageUsers: FSP<ManageUsersProps> = async ({ data }) => {
                           <ThreeDottedIcon className="w-4 h-4 stroke-black-700" />
                         }
                       />
-                    }
-                    option={{ align: "end", alignOffset: 0, sideOffset: 4 }}
-                    className=""
-                  >
-                    <EditUserDialog
-                      user={{
-                        id: user.id,
-                        email: user.email,
-                        name: user.name,
-                        role: user.role,
-                        agency: user.agency?.id || null,
-                      }}
-                      agencies={agencies.results}
-                    />
-                    <DeleteUserDialog userId={user.id} />
-                  </HoverCard>
+                    </PopoverTrigger>
+                    <PopoverContent>
+                      <EditUserDialog
+                        user={{
+                          id: user.id,
+                          email: user.email,
+                          name: user.name,
+                          role: user.role,
+                          agency: user.agency?.id || null,
+                        }}
+                        agencies={agencies.results}
+                      />
+                      <DeleteUserDialog userId={user.id} />
+                    </PopoverContent>
+                  </PopoverRoot>
                 </div>
               </div>
             );
