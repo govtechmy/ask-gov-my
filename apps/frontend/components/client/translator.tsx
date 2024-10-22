@@ -9,7 +9,7 @@ import { ReactNode } from "react";
 export type TranslationNamespace = DeepKeys<typeof i18nKeys>;
 
 interface TranslatorProps {
-  tag?: "h1" | "h2" | "h3" | "h4" | "h5" | "h6" | "p" | "span";
+  tag?: "h1" | "h2" | "h3" | "h4" | "h5" | "h6" | "p" | "span" | "none";
   namespace: TranslationNamespace;
   values?: TranslationValues;
   className?: string;
@@ -24,6 +24,10 @@ const Translator: React.FC<TranslatorProps> = ({
   prefix,
 }) => {
   const t = useTranslations();
+  if (tag === "none") {
+    return <>{t(namespace, values ? values : {})}</>;
+  }
+
   const Tag = tag;
 
   return (

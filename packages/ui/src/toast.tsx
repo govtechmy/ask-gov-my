@@ -4,11 +4,11 @@ import { cn } from "@askgovmy/utils";
 import { cva, VariantProps } from "class-variance-authority";
 import { FunctionComponent, ReactNode, useEffect } from "react";
 import {
-  CheckCircleIcon,
+  TickCheckCircleIcon,
   InfoIcon,
   WarningCircleIcon,
   WarningIcon,
-  CrossIcon,
+  CloseIcon,
 } from "./icons";
 import { useToast } from "./hooks";
 
@@ -143,7 +143,7 @@ const ToastClose = React.forwardRef<
     toast-close=""
     {...props}
   >
-    <CrossIcon className="size-5 shrink-0" />
+    <CloseIcon className="size-3 shrink-0" />
   </ToastPrimitives.Close>
 ));
 ToastClose.displayName = ToastPrimitives.Close.displayName;
@@ -220,7 +220,7 @@ const ToastIcon = React.forwardRef<
     <div ref={ref} role="img" {...props}>
       {
         {
-          success: <CheckCircleIcon className={className} />,
+          success: <TickCheckCircleIcon className={className} />,
           info: <InfoIcon className={className} />,
           warning: <WarningCircleIcon className={className} />,
           error: <WarningIcon className={className} />,

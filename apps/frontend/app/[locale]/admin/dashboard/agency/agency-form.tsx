@@ -193,5 +193,7 @@ export function AgencyFormSubmit(
   props: Omit<ComponentProps<typeof FormSubmit>, "form">
 ) {
   const form = useAgencyForm();
-  return <FormSubmit form={form} {...props} />;
+  const { isDirty, isSubmitting } = form.formState;
+  const disabled = isSubmitting || !isDirty;
+  return <FormSubmit form={form} disabled={disabled} {...props} />;
 }

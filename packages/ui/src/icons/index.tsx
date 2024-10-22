@@ -45,9 +45,7 @@ export { default as UploadIcon } from "./upload";
 export { default as UserIcon } from "./user";
 export { default as UserGroupIcon } from "./usergroup";
 export { default as XIcon } from "./x";
-export { CheckCircleIcon } from "./check-circle";
 export { WarningCircleIcon } from "./warning-circle";
 export { WarningIcon } from "./warning";
-export { CrossIcon } from "./cross";
 
 export * from "./editor";

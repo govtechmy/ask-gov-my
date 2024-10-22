@@ -17,14 +17,12 @@ import { Agency } from "@/types/types";
 import { useState } from "react";
 import { createUser } from "@/actions/admin/user";
 import { useToast } from "@askgovmy/ui";
-import { useTranslations } from "next-intl";
 
 type AddUserDialogProps = {
   agencies: Agency[];
 };
 
 export function AddUserDialog({ agencies }: AddUserDialogProps) {
-  const t = useTranslations("UserForm");
   const { toast } = useToast();
   const [open, setOpen] = useState(false);
   return (
