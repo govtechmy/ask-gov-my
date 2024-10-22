@@ -31,14 +31,18 @@ export function DeleteUserDialog({ userId }: { userId: string }) {
       </DialogTrigger>
       <DialogContent className="max-w-[400px] rounded-lg">
         <DialogHeader>
-          <DialogTitle>Delete user?</DialogTitle>
+          <DialogTitle>
+            <Translator namespace="UserForm.delete" tag="span" />
+          </DialogTitle>
         </DialogHeader>
         <DialogDescription>
-          Are you sure to delete user? Once deleted, it can&apos;t be retrieved.
+          <Translator namespace="UserForm.sure_delete" tag="span" />
         </DialogDescription>
         <DialogFooter className="flex flex-row gap-2 justify-end mt-4">
           <DialogClose asChild>
-            <Button>Cancel</Button>
+            <Button>
+              <Translator namespace="UserForm.cancel" />
+            </Button>
           </DialogClose>
           <Button
             variant="danger-primary"
@@ -47,7 +51,7 @@ export function DeleteUserDialog({ userId }: { userId: string }) {
               setOpen(false);
             }}
           >
-            Confirm & Delete
+            <Translator namespace="UserForm.confirm_delete" tag="span" />
           </Button>
         </DialogFooter>
       </DialogContent>

@@ -95,7 +95,7 @@ const ManageUsers: FSP<ManageUsersProps> = async ({ data }) => {
 
                 <div className="absolute flex h-full w-14 right-5 bg-gradient-to-b from-background/0 to-background/100 justify-end py-4 transition-all items-center">
                   <PopoverRoot>
-                    <PopoverTrigger>
+                    <PopoverTrigger asChild>
                       <Button
                         className="w-8 h-8 p-1.5 hover:cursor-pointer z-10 opacity-0 group-hover:opacity-100 data-[state=open]:opacity-100 transition-opacity"
                         variant={"secondary"}

@@ -48,10 +48,10 @@ export function EditUserDialog({ user, agencies }: EditUserDialogProps) {
         >
           <DialogHeader>
             <DialogTitle>
-              <Translator namespace="UserForm.add_new" tag="span" />
+              <Translator namespace="UserForm.setting" tag="span" />
             </DialogTitle>
             <DialogDescription className="sr-only">
-              <Translator namespace="UserForm.add_new" tag="span" />
+              <Translator namespace="UserForm.setting" tag="span" />
             </DialogDescription>
           </DialogHeader>
           <div className="flex-1 my-5">
