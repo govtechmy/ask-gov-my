@@ -124,6 +124,15 @@ const config: Config = {
         6.5: "26px",
       },
     },
+    keyframes: {
+      "decrease-width": {
+        "0%": { width: "100%" },
+        "100%": { width: "0%" },
+      },
+    },
+    animation: {
+      expire: "decrease-width 5s linear",
+    },
   },
   plugins: [tailwindcssAnimate, tailwindRadix],
 };

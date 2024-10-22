@@ -9,6 +9,7 @@ import { ThemeProvider } from "next-themes";
 import Providers from "./providers/providers";
 import { Suspense } from "react";
 import Masthead from "@/components/layout/masthead";
+import { AutoToast } from "@askgovmy/ui";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -54,6 +55,7 @@ export default async function RootLayout({
                 {children}
               </Providers>
             </Suspense>
+            <AutoToast duration={3000} />
           </NextIntlClientProvider>
         </ThemeProvider>
       </body>
