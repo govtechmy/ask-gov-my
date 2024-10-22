@@ -6,6 +6,7 @@ import { paginate } from "@/lib/server-helper";
 import { ApiParams } from "@/types/types";
 import { HttpStatusCode, withResponse, Yikes } from "@askgovmy/utils";
 import { revalidatePath } from "next/cache";
+import { AgencyFormValues } from "./agency.schema";
 
 /**
  *  @Method: GET
@@ -39,12 +40,7 @@ export const getAgencies = withResponse(
   }
 );
 
-type CreateAgencyBody = {
-  name_en: string;
-  name_ms: string;
-  acronym: string;
-  logo_url?: string | null;
-};
+type CreateAgencyBody = AgencyFormValues;
 export const createAgency = withResponse(async (body: CreateAgencyBody) => {
   const session = await getSession();
   if (session?.user.role !== "super_admin")
@@ -66,7 +62,7 @@ export const createAgency = withResponse(async (body: CreateAgencyBody) => {
   };
 });
 
-type UpdateAgencyBody = CreateAgencyBody & { id: number };
+type UpdateAgencyBody = AgencyFormValues & { id: number };
 export const updateAgency = withResponse(async (body: UpdateAgencyBody) => {
   const session = await getSession();
   if (session?.user.role !== "super_admin")

@@ -12,29 +12,23 @@ import {
 } from "@askgovmy/ui";
 import { useForm, useFormContext } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { z } from "zod";
 import { ComponentProps, PropsWithChildren } from "react";
 import Asklogo from "@/icons/asklogo";
 import { AgencyImageInput, AgencyImageInputProps } from "./agency-image-input";
 import { useTranslations } from "next-intl";
 import Translator from "@/components/client/translator";
-
-const formSchema = z.object({
-  name_en: z.string().min(1),
-  name_ms: z.string().min(1),
-  acronym: z.string().min(1),
-  logo_url: z.string().url().nullish(),
-});
-type FormValues = z.infer<typeof formSchema>;
-export type AgencyFormValues = FormValues;
+import {
+  AgencyFormSchema,
+  AgencyFormValues,
+} from "@/actions/admin/agency.schema";
 
 const MAX_IMAGE_HEIGHT = 200;
 const MAX_IMAGE_WIDTH = 200;
 
 interface AgencyFormProviderProps extends PropsWithChildren {
   className?: string;
-  onSubmit: (formValues: FormValues) => void | Promise<void>;
-  defaultValues?: FormValues;
+  onSubmit: (formValues: AgencyFormValues) => void | Promise<void>;
+  defaultValues?: AgencyFormValues;
 }
 
 /**
@@ -53,8 +47,8 @@ export function AgencyForm({
   onSubmit,
   defaultValues,
 }: AgencyFormProviderProps) {
-  const form = useForm<FormValues>({
-    resolver: zodResolver(formSchema),
+  const form = useForm<AgencyFormValues>({
+    resolver: zodResolver(AgencyFormSchema),
     defaultValues: defaultValues || {
       name_en: "",
       name_ms: "",
@@ -73,7 +67,7 @@ export function AgencyForm({
 }
 
 export function useAgencyForm() {
-  const form = useFormContext<FormValues>();
+  const form = useFormContext<AgencyFormValues>();
   if (!form) {
     throw Error(
       "Must use `AgencyForm` or `useAgencyForm` inside an `AgencyFormProvider`"

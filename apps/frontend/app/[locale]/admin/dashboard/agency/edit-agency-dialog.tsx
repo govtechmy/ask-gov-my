@@ -12,14 +12,10 @@ import {
   DialogDescription,
   GearIcon,
 } from "@askgovmy/ui";
-import {
-  AgencyFormFields,
-  AgencyForm,
-  AgencyFormSubmit,
-  AgencyFormValues,
-} from "./agency-form";
+import { AgencyFormFields, AgencyForm, AgencyFormSubmit } from "./agency-form";
 import { updateAgency } from "@/actions/admin/agency";
 import Translator from "@/components/client/translator";
+import { AgencyFormValues } from "@/actions/admin/agency.schema";
 
 interface EditAgencyDialogProps {
   agency: AgencyFormValues & { id: number };
