@@ -41,10 +41,10 @@ export class Yikes {
   }
 }
 
-export const withResponse = <T extends object>(
-  fn: (...args: (object | null)[]) => Promise<OK<T> | YikeType>
+export const withResponse = <T extends object, Args extends unknown[]>(
+  fn: (...args: Args) => Promise<OK<T> | YikeType>
 ) => {
-  return async (...args: (object | null)[]) => {
+  return async (...args: Args) => {
     try {
       const resp = await fn(...args);
       return resp;
