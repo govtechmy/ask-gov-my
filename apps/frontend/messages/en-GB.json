@@ -167,5 +167,19 @@
     "agency_acronym": "Agency's acronym",
     "agency_logo_preview": "Agency logo preview",
     "error_image_exceed_size": "Please upload images with a maximum size of 200x200 pixels."
+  },
+  "UserForm": {
+    "add_new": "Add new user",
+    "setting": "User setting",
+    "cancel": "Cancel",
+    "save": "Save",
+    "name": "Full name",
+    "email": "Email",
+    "role": "Role",
+    "agency": "Agency",
+    "agency_unassigned": "Unassigned",
+    "delete": "Delete user?",
+    "sure_delete": "Are you sure to delete user? Once deleted, it can't be retrieved.",
+    "confirm_delete": "Confirm & Delete"
   }
 }

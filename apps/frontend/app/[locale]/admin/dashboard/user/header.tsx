@@ -6,7 +6,6 @@ import Translator, {
 import Search from "@/components/client/search";
 import {
   Button,
-  PlusIcon,
   Tabs,
   TabsList,
   TabsTrigger,
@@ -26,6 +25,7 @@ import { useSearchParams } from "next/navigation";
 import { usePathname, useRouter } from "@/lib/i18n";
 import { Agency } from "@/types/types";
 import { Check } from "lucide-react";
+import { AddUserDialog } from "./add-user-dialog";
 
 interface ManageUsersHeader {
   agencies: Agency[];
@@ -179,16 +179,7 @@ const ManageUsersHeader: FC<ManageUsersHeader> = ({ agencies }) => {
           placeholder="AdminUsers.search_placeholder"
           className="w-full"
         />
-        <Button
-          variant={"primary"}
-          size={"sm"}
-          icon={<PlusIcon className="stroke-white-forcewhite" />}
-        >
-          <Translator
-            className="hidden md:block"
-            namespace="AdminUsers.add_new"
-          />
-        </Button>
+        <AddUserDialog agencies={agencies} />
       </div>
     </div>
   );

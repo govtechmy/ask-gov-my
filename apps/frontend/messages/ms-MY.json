@@ -167,5 +167,19 @@
     "agency_acronym": "Akronim agensi",
     "agency_logo_preview": "Preview logo agensi",
     "error_image_exceed_size": "Sila muat naik imej dengan saiz maksimum 200x200 piksel."
+  },
+  "UserForm": {
+    "add_new": "Tambah pengguna baharu",
+    "setting": "Tetapan pengguna",
+    "cancel": "Batal",
+    "save": "Simpan",
+    "name": "Nama penuh",
+    "email": "E-mel",
+    "role": "Role",
+    "agency": "Agensi",
+    "agency_unassigned": "Tidak ditugaskan",
+    "delete": "Padam pengguna?",
+    "sure_delete": "Adakah anda pasti akan memadamkan pengguna? Setelah dipadamkan, ia tidak boleh diambil semula.",
+    "confirm_delete": "Sahkan & Padam"
   }
 }

@@ -9,10 +9,10 @@ import {
   Avatar,
   Button,
   Empty,
-  HoverCard,
-  PencilIcon,
+  PopoverContent,
+  PopoverRoot,
+  PopoverTrigger,
   ThreeDottedIcon,
-  TrashIcon,
 } from "@askgovmy/ui";
 import Translator, {
   TranslationNamespace,
@@ -21,6 +21,8 @@ import { cn } from "@askgovmy/utils";
 import Image from "next/image";
 import { Paginator } from "@/components/client/paginator";
 import { getAgencies } from "@/actions/admin/agency";
+import { EditUserDialog } from "./edit-user-dialog";
+import { DeleteUserDialog } from "./delete-user-dialog";
 
 interface ManageUsersProps {
   users: PageResult<User>;
@@ -92,8 +94,8 @@ const ManageUsers: FSP<ManageUsersProps> = async ({ data }) => {
                 </div>
 
                 <div className="absolute flex h-full w-14 right-5 bg-gradient-to-b from-background/0 to-background/100 justify-end py-4 transition-all items-center">
-                  <HoverCard
-                    trigger={
+                  <PopoverRoot>
+                    <PopoverTrigger asChild>
                       <Button
                         className="w-8 h-8 p-1.5 hover:cursor-pointer z-10 opacity-0 group-hover:opacity-100 data-[state=open]:opacity-100 transition-opacity"
                         variant={"secondary"}
@@ -102,30 +104,21 @@ const ManageUsers: FSP<ManageUsersProps> = async ({ data }) => {
                           <ThreeDottedIcon className="w-4 h-4 stroke-black-700" />
                         }
                       />
-                    }
-                    option={{ align: "end", alignOffset: 0, sideOffset: 4 }}
-                    className=""
-                  >
-                    <Button
-                      // onClick={handleLogout}
-                      variant={"tertiary-dropdown"}
-                      className="text-sm font-medium"
-                    >
-                      <PencilIcon className="stroke-black-900" />
-                      <Translator namespace="AdminUsers.edit" />
-                    </Button>
-                    <Button
-                      // onClick={handleLogout}
-                      variant={"tertiary-dropdown"}
-                      className="text-sm font-medium"
-                    >
-                      <TrashIcon className="stroke-foreground-danger" />
-                      <Translator
-                        namespace="AdminUsers.delete"
-                        className="text-foreground-danger"
+                    </PopoverTrigger>
+                    <PopoverContent>
+                      <EditUserDialog
+                        user={{
+                          id: user.id,
+                          email: user.email,
+                          name: user.name,
+                          role: user.role,
+                          agency: user.agency?.id || null,
+                        }}
+                        agencies={agencies.results}
                       />
-                    </Button>
-                  </HoverCard>
+                      <DeleteUserDialog userId={user.id} />
+                    </PopoverContent>
+                  </PopoverRoot>
                 </div>
               </div>
             );
