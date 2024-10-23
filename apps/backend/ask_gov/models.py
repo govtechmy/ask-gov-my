@@ -69,15 +69,15 @@ class Answer(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
-    LIKE_INDEX = settings.ELASTICSEARCH_LIKE_INDEX
-    DISLIKE_INDEX = settings.ELASTICSEARCH_DISLIKE_INDEX
+    LIKE_DISLIKE_INDEX = settings.ELASTICSEARCH_LIKE_DISLIKE_INDEX
 
     def like(self, actor_id: str, ip_address: str):
         document_id = self.__get_like_dislike_document_id(actor_id)
         esclient.index(
-            index=self.LIKE_INDEX,
+            index=self.LIKE_DISLIKE_INDEX,
             id=document_id,
             document={
+                "type": "like",
                 "question_id": self.question.id,
                 "answer_id": self.id,
                 "actor_id": actor_id,
@@ -89,9 +89,10 @@ class Answer(models.Model):
     def dislike(self, actor_id: str, ip_address: str):
         document_id = self.__get_like_dislike_document_id(actor_id)
         esclient.index(
-            index=self.DISLIKE_INDEX,
+            index=self.LIKE_DISLIKE_INDEX,
             id=document_id,
             document={
+                "type": "dislike",
                 "question_id": self.question.id,
                 "answer_id": self.id,
                 "actor_id": actor_id,

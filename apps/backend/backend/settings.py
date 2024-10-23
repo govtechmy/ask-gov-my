@@ -120,8 +120,7 @@ DATABASES = {
 ELASTICSEARCH_URL = os.getenv("ELASTICSEARCH_URL")
 ELASTICSEARCH_API_KEY = os.getenv("ELASTICSEARCH_API_KEY")
 ELASTICSEARCH_QUESTION_INDEX = "questions"
-ELASTICSEARCH_LIKE_INDEX = "likes"
-ELASTICSEARCH_DISLIKE_INDEX = "dislikes"
+ELASTICSEARCH_LIKE_DISLIKE_INDEX = "like_dislike_events"
 
 # Password validation
 # https://docs.djangoproject.com/en/5.0/ref/settings/#auth-password-validators

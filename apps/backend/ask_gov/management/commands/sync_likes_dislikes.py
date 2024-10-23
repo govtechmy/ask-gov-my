@@ -9,18 +9,28 @@ class Command(BaseCommand):
     def handle(self, *args, **kwargs):
         for answer in Answer.objects.all():
             response = esclient.count(
-                index=settings.ELASTICSEARCH_LIKE_INDEX,
+                index=settings.ELASTICSEARCH_LIKE_DISLIKE_INDEX,
                 query={
-                    "match": { "answer_id": answer.id },
+                    "bool": {
+                        "must": [
+                            { "match": { "type": "like" } },
+                            { "match": { "answer_id": answer.id } },
+                        ]
+                    }
                 },
                 ignore_unavailable=True
             )
             answer.likes = response["count"]
 
             response = esclient.count(
-                index=settings.ELASTICSEARCH_DISLIKE_INDEX,
+                index=settings.ELASTICSEARCH_LIKE_DISLIKE_INDEX,
                 query={
-                    "match": { "answer_id": answer.id },
+                    "bool": {
+                        "must": [
+                            { "match": { "type": "dislike" } },
+                            { "match": { "answer_id": answer.id } },
+                        ]
+                    }
                 },
                 ignore_unavailable=True
             )
