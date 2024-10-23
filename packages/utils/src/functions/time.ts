@@ -8,3 +8,7 @@ export const since = (
     ? DateTime.fromSQL(value).setLocale(locale).toRelative()
     : DateTime.fromISO(value).setLocale(locale).toRelative();
 };
+
+export function getTimestamp() {
+  return DateTime.now().toFormat("yyyy-LL-dd-HH-mm-ss-SSS");
+}
