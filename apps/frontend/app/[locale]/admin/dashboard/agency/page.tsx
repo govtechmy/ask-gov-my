@@ -49,7 +49,7 @@ const ManageAgencies: FSP<ManageAgenciesProps> = async ({ data }) => {
               key={agency.id}
               className="border border-outline-200 bg-white h-16 px-4.5 gap-3 rounded-lg flex items-center relative group"
             >
-              <div className="relative w-8 h-8 rounded-full border border-outline-200  p-0.5">
+              <div className="relative w-8 h-8 rounded-full border border-outline-200 overflow-hidden">
                 <Image
                   alt={agency.name}
                   width={32}

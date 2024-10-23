@@ -14,16 +14,12 @@ import { useForm, useFormContext } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { ComponentProps, PropsWithChildren } from "react";
 import Asklogo from "@/icons/asklogo";
-import { AgencyImageInput, AgencyImageInputProps } from "./agency-image-input";
-import { useTranslations } from "next-intl";
+import { AgencyImageInput } from "./agency-image-input";
 import Translator from "@/components/client/translator";
 import {
   AgencyFormSchema,
   AgencyFormValues,
 } from "@/actions/admin/agency.schema";
-
-const MAX_IMAGE_HEIGHT = 200;
-const MAX_IMAGE_WIDTH = 200;
 
 interface AgencyFormProviderProps extends PropsWithChildren {
   className?: string;
@@ -77,23 +73,7 @@ export function useAgencyForm() {
 }
 
 export function AgencyFormFields() {
-  const t = useTranslations("AgencyForm");
   const form = useAgencyForm();
-
-  const handleImageSelect: AgencyImageInputProps["onSelectImage"] = (
-    _file,
-    { width, height }
-  ) => {
-    if (width > MAX_IMAGE_WIDTH || height > MAX_IMAGE_HEIGHT) {
-      form.setError("logo_url", {
-        type: "custom",
-        message: t("error_image_exceed_size"),
-      });
-      return;
-    }
-    // TODO: Upload image to S3
-    form.setValue("logo_url", null);
-  };
 
   return (
     <div className="grid gap-4">
@@ -107,11 +87,7 @@ export function AgencyFormFields() {
                 <Translator namespace="AgencyForm.agency_acronym" />
               </FormLabel>
               <FormControl>
-                <AgencyImageInput
-                  onSelectImage={handleImageSelect}
-                  name={field.name}
-                  disabled={field.disabled}
-                />
+                <AgencyImageInput name={field.name} disabled={field.disabled} />
               </FormControl>
               {!fieldState.error && (
                 <FormLabel className="text-xs text-dim-500 font-normal">

@@ -7,6 +7,9 @@ import { ApiParams } from "@/types/types";
 import { HttpStatusCode, withResponse, Yikes } from "@askgovmy/utils";
 import { revalidatePath } from "next/cache";
 import { AgencyFormValues } from "./agency.schema";
+import { PutObjectCommand } from "@aws-sdk/client-s3";
+import { getSignedUrl } from "@aws-sdk/s3-request-presigner";
+import { s3 } from "@/lib/s3";
 
 /**
  *  @Method: GET
@@ -83,3 +86,29 @@ export const updateAgency = withResponse(async (body: UpdateAgencyBody) => {
     status: HttpStatusCode.OK_200,
   };
 });
+
+export async function getUploadLogoDetails({
+  fileName,
+  fileType,
+}: {
+  fileName: string;
+  fileType: string;
+}): Promise<{ uploadUrl: string; downloadUrl: string }> {
+  const session = await getSession();
+  if (session?.user.role !== "super_admin")
+    throw new Yikes("E_201_NOT_AUTHORIZED");
+
+  const key = `logos/${crypto.randomUUID()}/${fileName}`;
+  const command = new PutObjectCommand({
+    Bucket: process.env.STORAGE_BUCKET,
+    Key: key,
+    ContentType: fileType,
+  });
+
+  const uploadUrl = await getSignedUrl(s3, command, {
+    expiresIn: 60 * 5,
+  });
+  const downloadUrl = `${process.env.STORAGE_BASE_URL}/${key}`;
+
+  return { uploadUrl, downloadUrl };
+}

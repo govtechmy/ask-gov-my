@@ -1,14 +1,20 @@
 const createNextIntlPlugin = require("next-intl/plugin");
 const path = require("path");
 
+const remotePatterns = [
+  { hostname: "ask-gov.s3.ap-southeast-2.amazonaws.com" },
+];
+
+if (process.env.STORAGE_BASE_URL) {
+  remotePatterns.push({
+    hostname: new URL(process.env.STORAGE_BASE_URL).hostname,
+  });
+}
+
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   images: {
-    remotePatterns: [
-      {
-        hostname: "ask-gov.s3.ap-southeast-2.amazonaws.com",
-      },
-    ],
+    remotePatterns,
   },
   reactStrictMode: true,
   output: "standalone",
