@@ -6,19 +6,12 @@ import { FSP, inject } from "@/lib/decorator";
 import MustBeAuthenticated from "@/middlewares/injectors/must-be-authenticated";
 import MustBeAuthorized from "@/middlewares/injectors/must-be-authorized";
 import { Agency, PageResult, Question } from "@/types/types";
-import {
-  AlarmTriangleIcon,
-  Button,
-  Empty,
-  HoverCard,
-  PencilIcon,
-  ThreeDottedIcon,
-  TickCheckCircleIcon,
-} from "@askgovmy/ui";
+import { Button, Empty, PencilIcon } from "@askgovmy/ui";
 import { DateTime } from "luxon";
 import ManageQuestionsFilter from "./filters";
 import { cn } from "@askgovmy/utils";
 import { EyeIcon } from "lucide-react";
+import { AdminFloatButton } from "./super-admin";
 
 interface ForAdminProps {
   role: "super_admin";
@@ -125,7 +118,16 @@ const AdminDashboardPage: FSP<ManageQuestionsProps> = async ({ data }) => {
                       {question.question}
                     </p>
                     <div className="flex gap-3 items-center">
-                      {!question.admin_opened_at &&
+                      {question.spam ? (
+                        <Translator
+                          className="rounded-full gap-1.5 py-0.5 px-2 bg-danger-50 text-danger-700"
+                          namespace="AdminQuestions.state.spam"
+                          prefix={
+                            <span className="w-2 h-2 bg-danger-700 rounded-full" />
+                          }
+                        />
+                      ) : (
+                        !question.admin_opened_at &&
                         Math.abs(
                           DateTime.fromISO(question.created_at)
                             .diffNow()
@@ -138,7 +140,8 @@ const AdminDashboardPage: FSP<ManageQuestionsProps> = async ({ data }) => {
                               <span className="w-2 h-2 bg-success-700 rounded-full" />
                             }
                           />
-                        )}
+                        )
+                      )}
                       <div>dropdown</div>
                     </div>
                   </div>
@@ -151,43 +154,7 @@ const AdminDashboardPage: FSP<ManageQuestionsProps> = async ({ data }) => {
                 </p>
                 <div className="absolute flex h-full w-14 right-5 bg-gradient-to-b from-background/0 to-background/100 justify-end py-4 transition-all items-center gap-2">
                   {role === "super_admin" && (
-                    <HoverCard
-                      trigger={
-                        <Button
-                          className="w-8 h-8 p-1.5 hover:cursor-pointer z-10 opacity-0 group-hover:opacity-100 data-[state=open]:opacity-100 transition-opacity"
-                          variant={"secondary"}
-                          size={"sm"}
-                          icon={
-                            <ThreeDottedIcon className="w-4 h-4 stroke-black-700" />
-                          }
-                        />
-                      }
-                      option={{ align: "end", alignOffset: 0, sideOffset: 4 }}
-                      className=""
-                    >
-                      {question.spam ? (
-                        <Button
-                          // onClick={handleLogout}
-                          variant={"tertiary-dropdown"}
-                          className="text-sm font-medium"
-                        >
-                          <TickCheckCircleIcon className="stroke-black-900" />
-                          <Translator namespace="AdminQuestions.unmark_spam" />
-                        </Button>
-                      ) : (
-                        <Button
-                          // onClick={handleLogout}
-                          variant={"tertiary-dropdown"}
-                          className="text-sm font-medium"
-                        >
-                          <AlarmTriangleIcon className="stroke-foreground-danger" />
-                          <Translator
-                            namespace="AdminQuestions.mark_spam"
-                            className="text-foreground-danger"
-                          />
-                        </Button>
-                      )}
-                    </HoverCard>
+                    <AdminFloatButton question={question} />
                   )}
                   {role === "staff" && question.answer && (
                     <>

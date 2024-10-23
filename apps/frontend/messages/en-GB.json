@@ -137,7 +137,15 @@
       "draft": "Draft"
     },
     "mark_spam": "Mark as Spam",
-    "unmark_spam": "Mark as not spam"
+    "unmark_spam": "Mark as not spam",
+    "spam_dialog": {
+      "title_spam": "Mark question as spam?",
+      "title_unspam": "Mark question as not spam?",
+      "description": "Confirm your action by submiting",
+      "cancel": "Cancel",
+      "successful_spam": "Successfully marked the question as spam",
+      "successful_unspam": "Successfully marked the question as not spam"
+    }
   },
   "AdminAgencies": {
     "title": "Manage Agencies",

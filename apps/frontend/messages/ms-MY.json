@@ -137,7 +137,15 @@
       "draft": "Draf"
     },
     "mark_spam": "Tanda sebagai Spam",
-    "unmark_spam": "Tanda sebagai bukan spam"
+    "unmark_spam": "Tanda sebagai bukan spam",
+    "spam_dialog": {
+      "title_spam": "Tanda soalan ini sebagai spam?",
+      "title_unspam": "Tanda soalan ini sebagai bukan spam?",
+      "description": "Muktamadkan pilihan dengan menghantar pilihan",
+      "cancel": "Batal",
+      "successful_spam": "Soalan berjaya ditanda sebagai spam",
+      "successful_unspam": "Soalan berjaya ditanda sebagai bukan spam"
+    }
   },
   "AdminAgencies": {
     "title": "Pengurusan Agensi",
