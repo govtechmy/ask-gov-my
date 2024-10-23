@@ -81,10 +81,21 @@ class TestAdminListQuestions(APITestCase):
 
     def test_list_unassigned(self):
         url = reverse('admin-question-list')
-        response = self.client.get(url, {'agency__isnull': 'true'})
+        response = self.client.get(url, {'state': 'unassigned'})
         json_data = response.json()
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(json_data['count'], self.NUM_UNASSIGNED)
+
+    def test_list_assigned(self):
+        """
+        Tests listing assigned questions should return all questions except for
+        those without agency or marked as spam.
+        """
+        url = reverse('admin-question-list')
+        response = self.client.get(url, {'state': 'assigned'})
+        json_data = response.json()
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(json_data['count'], self.NUM_ALL - self.NUM_UNASSIGNED - self.NUM_SPAM)
     
 class TestAdminListQuestionsAsStaff(APITestCase):
     NUM_UNANSWERED = 1
@@ -175,7 +186,7 @@ class TestAdminListQuestionsAsStaff(APITestCase):
         response = self.client.get(url, {'agency__isnull': 'true'})
         json_data = response.json()
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(json_data['count'], self.NUM_VISIBLE)
+        self.assertEqual(json_data['count'], 0)
 
 class TestQuestionViewSet(APITestCase):
     def setUp(self):

@@ -233,6 +233,10 @@ class AdminQuestionViewSet(
             queryset = queryset.filter(spam=True)
         elif state == 'unanswered':
             queryset = queryset.filter(answer__isnull=True, spam=False)
+        elif state == 'assigned':
+            queryset = queryset.filter(agency__isnull=False, spam=False)
+        elif state == 'unassigned':
+            queryset = queryset.filter(agency__isnull=True, spam=False)
 
         return queryset
     
