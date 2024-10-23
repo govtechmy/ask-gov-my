@@ -11,7 +11,7 @@ import { DateTime } from "luxon";
 import ManageQuestionsFilter from "./filters";
 import { cn } from "@askgovmy/utils";
 import { EyeIcon } from "lucide-react";
-import { AdminFloatButton } from "./super-admin";
+import { AdminContent, AdminFloatButton } from "./super-admin";
 
 interface ForAdminProps {
   role: "super_admin";
@@ -62,10 +62,11 @@ const AdminDashboardPage: FSP<ManageQuestionsProps> = async ({ data }) => {
               <div
                 key={question.id}
                 className={cn(
-                  "rounded-lg border lg:h-20 py-4 px-5 bg-white text-sm flex items-center gap-3 relative group hover:bg-background hover:border-outline-300 flex-wrap",
-                  !question.answer && "hover:cursor-pointer",
-                  // role === "staff" &&
-                  "flex-col lg:flex-row items-start lg:items-center"
+                  "rounded-lg border lg:h-20 py-4 px-5 bg-white text-sm flex gap-3 relative group hover:bg-background hover:border-outline-300 flex-wrap flex-col lg:flex-row items-start lg:items-center",
+                  role === "staff" &&
+                    !question.answer &&
+                    "hover:cursor-pointer",
+                  role === "super_admin" && "hover:cursor-pointer"
                 )}
               >
                 {role === "staff" && (
@@ -113,38 +114,10 @@ const AdminDashboardPage: FSP<ManageQuestionsProps> = async ({ data }) => {
                 )}
 
                 {role === "super_admin" && (
-                  <div className="flex flex-1 gap-3 flex-col-reverse lg:flex-row">
-                    <p className="font-medium text-black-700 line-clamp-2 flex-1">
-                      {question.question}
-                    </p>
-                    <div className="flex gap-3 items-center">
-                      {question.spam ? (
-                        <Translator
-                          className="rounded-full gap-1.5 py-0.5 px-2 bg-danger-50 text-danger-700"
-                          namespace="AdminQuestions.state.spam"
-                          prefix={
-                            <span className="w-2 h-2 bg-danger-700 rounded-full" />
-                          }
-                        />
-                      ) : (
-                        !question.admin_opened_at &&
-                        Math.abs(
-                          DateTime.fromISO(question.created_at)
-                            .diffNow()
-                            .as("days")
-                        ) < 7 && (
-                          <Translator
-                            className="rounded-full gap-1.5 py-0.5 px-2 bg-success-50 text-success-700"
-                            namespace="AdminQuestions.new"
-                            prefix={
-                              <span className="w-2 h-2 bg-success-700 rounded-full" />
-                            }
-                          />
-                        )
-                      )}
-                      <div>dropdown</div>
-                    </div>
-                  </div>
+                  <AdminContent
+                    question={question}
+                    agencies={agencies.results}
+                  />
                 )}
 
                 <p className="text-dim-500 text-right">

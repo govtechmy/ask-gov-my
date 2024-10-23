@@ -145,6 +145,12 @@
       "cancel": "Cancel",
       "successful_spam": "Successfully marked the question as spam",
       "successful_unspam": "Successfully marked the question as not spam"
+    },
+    "agency_dropdown": {
+      "unassigned": "Unassigned",
+      "not_found": "Agency not found",
+      "successful": "Successfully assign to {acronym}",
+      "successful_unassigned": "Successfully unassign this question"
     }
   },
   "AdminAgencies": {

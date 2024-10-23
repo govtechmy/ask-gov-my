@@ -82,3 +82,29 @@ export const markQuestionSpam = withResponse(
     };
   }
 );
+
+type AssignAgencyToQuestionArgs = { id: string; agency: number | null };
+export const assignAgencyToQuestion = withResponse(
+  async ({ id, agency }: AssignAgencyToQuestionArgs) => {
+    const session = await getSession();
+    if (session?.user.role !== "super_admin")
+      throw new Yikes("E_201_NOT_AUTHORIZED");
+
+    await api(`/admin/questions/${id}/`, {
+      method: "PATCH",
+      headers: {
+        Authorization: `Token ${session.accessToken}`,
+      },
+      body: {
+        agency,
+      },
+    });
+
+    revalidatePath(route("admin.dashboard.index", undefined));
+
+    return {
+      message: "Sucesfully assign agency to this question",
+      status: HttpStatusCode.OK_200,
+    };
+  }
+);
