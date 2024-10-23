@@ -11,7 +11,13 @@ import { revalidatePath } from "next/cache";
 type getQuestionsProps = ApiParams & {
   agency?: number;
   agency__isnull?: string;
-  state?: "answered" | "draft" | "spam" | "unanswered";
+  state?:
+    | "answered"
+    | "draft"
+    | "spam"
+    | "unanswered"
+    | "assigned"
+    | "unassigned";
 };
 
 /**

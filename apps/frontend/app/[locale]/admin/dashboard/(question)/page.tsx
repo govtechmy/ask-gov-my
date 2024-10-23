@@ -175,36 +175,18 @@ export default inject(AdminDashboardPage, {
 
     if (context.session?.user.role === "super_admin") {
       // For super admin
-      const getQuery = (
-        current: "all" | "unassigned" | "assigned" | "spam"
-      ) => {
-        switch (current) {
-          case "all":
-            return {};
-          case "assigned":
-            return { agency__isnull: "false" };
-          case "unassigned":
-            return { agency__isnull: "true" };
-          case "spam":
-            return { state: current };
-
-          default:
-            return {};
-        }
-      };
-
       const { data: questions } = await getQuestionsList(
         {
           page,
           search,
           ...(agency !== "all" && { agency }),
-          ...getQuery(state),
+          ...(state !== "all" && { state }),
         },
         context
       );
       // Get the count for unassigned
       const { data: questionsCount } = await getQuestionsList(
-        { ...getQuery("unassigned") },
+        { state: "unassigned" },
         context
       );
       const { data: agencies } = await getAgencies({ page_size: 999 }, context);
@@ -218,35 +200,18 @@ export default inject(AdminDashboardPage, {
     }
 
     // For staff
-    const getQuery = (current: "all" | "answered" | "unanswered" | "draft") => {
-      switch (current) {
-        case "all":
-          return {};
-
-        case "answered":
-          return { state: current };
-        case "unanswered":
-          return { state: current };
-        case "draft":
-          return { state: current };
-
-        default:
-          return {};
-      }
-    };
-
     const { data: questions } = await getQuestionsList(
       {
         page,
         search,
-        ...getQuery(state),
+        ...(state !== "all" && { state }),
       },
       context
     );
 
     // Get the count for unassigned
     const { data: questionsCount } = await getQuestionsList(
-      { ...getQuery("unanswered") },
+      { state: "unanswered" },
       context
     );
     return {
