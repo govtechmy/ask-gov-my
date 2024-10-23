@@ -1,12 +1,13 @@
 export default function IconQuestionSmile({
-  className = 'stroke-[#E4E4E7] dark:stroke-[##27272A]',
+  className = "stroke-[#E4E4E7] dark:stroke-[##27272A]",
+  height = 41,
   ...props
-}) {
+}: React.SVGProps<SVGSVGElement>) {
   return (
     <svg
       width="24"
-      height="41"
-      viewBox="0 0 24 41"
+      height={height}
+      viewBox={`0 0 24 ${height}`}
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
       className={className}
@@ -35,7 +36,7 @@ export default function IconQuestionSmile({
         fill="#5B1AE6"
       />
       <path
-        d="M12 32V40"
+        d={`M12 32V${height}`}
         stroke="#D4D4D8"
         strokeWidth="2"
         strokeLinecap="round"

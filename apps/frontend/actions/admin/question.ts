@@ -28,18 +28,10 @@ type getQuestionsProps = ApiParams & {
  */
 export const getQuestionsList = withResponse(
   async (
-    {
-      page = 1,
-      page_size = 10,
-      search = "",
-      agency,
-      agency__isnull,
-      state,
-    }: getQuestionsProps,
+    { page = 1, page_size = 10, search = "", agency, state }: getQuestionsProps,
     context: Context
   ) => {
     if (!context.session) throw new Yikes("E_201_NOT_AUTHORIZED");
-    console.log("in here", agency__isnull);
 
     const data = await api("/admin/questions", {
       params: {
@@ -48,7 +40,6 @@ export const getQuestionsList = withResponse(
         search,
         ...(agency && { agency }),
         ...(state && { state }),
-        ...(agency__isnull !== undefined && { agency__isnull }),
       },
       headers: {
         Authorization: `Token ${context.session.accessToken}`,

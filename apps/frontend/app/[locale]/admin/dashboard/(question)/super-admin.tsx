@@ -79,6 +79,7 @@ export const AdminFloatButton: FC<{ question: Question }> = ({ question }) => {
     <Popover
       trigger={
         <Button
+          id={`float-button-${question.id}`}
           className="w-8 h-8 p-1.5 hover:cursor-pointer z-10 opacity-0 group-hover:opacity-100 data-[state=open]:opacity-100 transition-opacity"
           variant={"secondary"}
           size={"sm"}
@@ -117,7 +118,11 @@ export const MarkSpamDialog: FC<{
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <Button variant={"tertiary-dropdown"} className="text-sm font-medium">
+        <Button
+          id={`mark-spam-button-${questionId}`}
+          variant={"tertiary-dropdown"}
+          className="text-sm font-medium"
+        >
           {type === "spam" ? (
             <AlarmTriangleIcon className="stroke-foreground-danger" />
           ) : (
@@ -136,7 +141,11 @@ export const MarkSpamDialog: FC<{
           />
         </Button>
       </DialogTrigger>
-      <DialogContent className="max-w-[400px] rounded-lg">
+      <DialogContent
+        onInteractOutside={() => closePopover(false)}
+        id={`mark-spam-content-${questionId}`}
+        className="max-w-[400px] rounded-lg"
+      >
         <DialogHeader>
           <DialogTitle>
             <Translator
@@ -261,9 +270,9 @@ export const AgencyDropdown: FC<{
     <Popover
       trigger={
         <Button
-          id="question-agency-dropdown"
+          id={`question-agency-dropdown-${questionId}`}
           variant="secondary"
-          className="h-8 w-[130px] text-sm focus:outline-none whitespace-normal overflow-hidden flex items-center justify-start sm:px-1.5"
+          className="h-8 w-[160px] text-sm focus:outline-none overflow-hidden flex items-center justify-start sm:px-1.5"
         >
           <span className="flex-1">
             {dropdownValue === "unassigned" ? (
@@ -289,6 +298,7 @@ export const AgencyDropdown: FC<{
     >
       {(setOpen) => (
         <Command
+          id={`command-input-${questionId}`}
           filter={(value, _search) => {
             const search = _search.toLowerCase();
             if (value === "unassigned") return value.includes(search) ? 1 : 0;

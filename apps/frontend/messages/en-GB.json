@@ -151,6 +151,10 @@
       "not_found": "Agency not found",
       "successful": "Successfully assign to {acronym}",
       "successful_unassigned": "Successfully unassign this question"
+    },
+    "agency_dialog": {
+      "title": "Question posted {day}",
+      "assign_to_agency": "Assign to agency:"
     }
   },
   "AdminAgencies": {

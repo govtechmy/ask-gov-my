@@ -151,6 +151,10 @@
       "not_found": "Agensi tidak dijumpai",
       "successful": "Berjaya menugaskan soalan kepada {acronym}",
       "successful_unassigned": "Penugasan soalan berjaya ditarik"
+    },
+    "agency_dialog": {
+      "title": "Soalan dihantar {day}",
+      "assign_to_agency": "Tugaskan kepada agensi:"
     }
   },
   "AdminAgencies": {
