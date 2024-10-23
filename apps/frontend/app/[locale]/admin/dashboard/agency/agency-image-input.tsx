@@ -1,10 +1,9 @@
 import PlusIcon from "@/icons/plusicon";
-import { ComponentProps, useRef } from "react";
+import { ComponentProps, useRef, useState } from "react";
 import Image from "next/image";
 import { cn } from "@askgovmy/utils";
 import { useTranslations } from "next-intl";
 import { useAgencyForm } from "./agency-form";
-import { getUploadLogoDetails } from "@/actions/admin/agency";
 
 const getHeightAndWidthFromDataURL = (
   dataURL: string
@@ -20,33 +19,6 @@ const getHeightAndWidthFromDataURL = (
     img.src = dataURL;
   });
 
-async function uploadLogo(
-  file: File
-): Promise<{ success: false } | { success: true; logoUrl: string }> {
-  try {
-    const { uploadUrl, downloadUrl } = await getUploadLogoDetails({
-      fileName: file.name,
-      fileType: file.type,
-    });
-
-    const res = await fetch(uploadUrl, {
-      method: "PUT",
-      body: file,
-      headers: {
-        "Cache-Control": "public, max-age=31536000, immutable",
-        "Content-Disposition": "inline",
-      },
-    });
-
-    if (!res.ok) {
-      return { success: false };
-    }
-    return { success: true, logoUrl: downloadUrl };
-  } catch (error) {
-    return { success: false };
-  }
-}
-
 interface AgencyImageInputProps extends ComponentProps<"input"> {}
 
 const MAX_IMAGE_HEIGHT = 200;
@@ -58,7 +30,9 @@ export function AgencyImageInput({
 }: AgencyImageInputProps) {
   const form = useAgencyForm();
   const t = useTranslations("AgencyForm");
-  const previewSrc = form.watch("logo_url") || "/jata_logo.png";
+  const [previewSrc, setPreviewSrc] = useState(
+    form.getValues("logo_url") || "/jata_logo.png"
+  );
   const fileInput = useRef<HTMLInputElement | null>(null);
 
   const handleImageSelect = async (file: File) => {
@@ -74,17 +48,9 @@ export function AgencyImageInput({
       return;
     }
 
-    const uploadResult = await uploadLogo(file);
-    if (!uploadResult.success) {
-      form.setError("logo_url", {
-        type: "custom",
-        message: t("error_upload"),
-      });
-      if (fileInput.current) fileInput.current.value = "";
-      return;
-    }
-
-    form.setValue("logo_url", uploadResult.logoUrl, { shouldDirty: true });
+    form.clearErrors("logo_url");
+    form.setValue("logo_file", file, { shouldDirty: true });
+    setPreviewSrc(dataUrl);
   };
 
   return (

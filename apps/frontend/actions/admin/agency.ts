@@ -10,6 +10,8 @@ import { AgencyFormValues } from "./agency.schema";
 import { PutObjectCommand } from "@aws-sdk/client-s3";
 import { getSignedUrl } from "@aws-sdk/s3-request-presigner";
 import { s3 } from "@/lib/s3";
+import mime from "mime-types";
+import { getTimestamp } from "@/lib/utils";
 
 /**
  *  @Method: GET
@@ -88,17 +90,22 @@ export const updateAgency = withResponse(async (body: UpdateAgencyBody) => {
 });
 
 export async function getUploadLogoDetails({
-  fileName,
   fileType,
+  agencyAcronym,
 }: {
-  fileName: string;
   fileType: string;
+  agencyAcronym: string;
 }): Promise<{ uploadUrl: string; downloadUrl: string }> {
   const session = await getSession();
   if (session?.user.role !== "super_admin")
     throw new Yikes("E_201_NOT_AUTHORIZED");
 
-  const key = `logos/${crypto.randomUUID()}/${fileName}`;
+  let key = `logos/${agencyAcronym}_${getTimestamp()}`;
+  const fileExtension = mime.extension(fileType);
+  if (fileExtension) {
+    key += `.${fileExtension}`;
+  }
+
   const command = new PutObjectCommand({
     Bucket: process.env.STORAGE_BUCKET,
     Key: key,

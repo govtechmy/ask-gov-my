@@ -109,6 +109,9 @@ importers:
       '@tiptap/starter-kit':
         specifier: ^2.5.8
         version: 2.8.0(@tiptap/extension-text-style@2.8.0(@tiptap/core@2.8.0(@tiptap/pm@2.8.0)))
+      '@types/mime-types':
+        specifier: ^2.1.4
+        version: 2.1.4
       '@types/react':
         specifier: ^18.3.3
         version: 18.3.10
@@ -139,6 +142,9 @@ importers:
       luxon:
         specifier: ^3.5.0
         version: 3.5.0
+      mime-types:
+        specifier: ^2.1.35
+        version: 2.1.35
       next:
         specifier: ^14.2.4
         version: 14.2.13(@opentelemetry/api@1.9.0)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
@@ -2554,6 +2560,9 @@ packages:
 
   '@types/mdurl@2.0.0':
     resolution: {integrity: sha512-RGdgjQUZba5p6QEFAVx2OGb8rQDL/cPRG7GiedRzMcJ1tYnUANBncjbSB1NRGwbvjcPeikRABz2nshyPk1bhWg==}
+
+  '@types/mime-types@2.1.4':
+    resolution: {integrity: sha512-lfU4b34HOri+kAY5UheuFMWPDOI+OPceBSHZKp69gEyTL/mmJ4cnU6Y/rlme3UL3GyOn6Y42hyIEw0/q8sWx5w==}
 
   '@types/node-fetch@2.6.11':
     resolution: {integrity: sha512-24xFj9R5+rfQJLRyM56qh+wnVSYhyXC2tkoBndtY0U+vubqNsYXGjufB2nn8Q6gt0LrARwL6UBtMCSVCwl4B1g==}
@@ -8060,6 +8069,8 @@ snapshots:
       '@types/mdurl': 2.0.0
 
   '@types/mdurl@2.0.0': {}
+
+  '@types/mime-types@2.1.4': {}
 
   '@types/node-fetch@2.6.11':
     dependencies:
