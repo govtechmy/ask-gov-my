@@ -9,6 +9,7 @@ import { FSP, inject } from "@/lib/decorator";
 import { PageResult, Question, Topic } from "@/types/types";
 import QuestionCard from "@/components/common/QuestionBox/QuestionCard";
 import { Paginator } from "@/components/client/paginator";
+import { notFound } from "next/navigation";
 
 interface TopicPageProps {
   questions: PageResult<Question>;
@@ -79,6 +80,10 @@ export default inject(TopicPage, {
     const agencyId = agencies.find(
       (agency) => agency.acronym.toLowerCase() === params.agencyAcronym
     )?.id;
+
+    if (!agencyId) {
+      return notFound();
+    }
 
     const topicId = params.topicId === "all" ? undefined : params.topicId;
 

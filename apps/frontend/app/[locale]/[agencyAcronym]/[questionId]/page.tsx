@@ -179,6 +179,10 @@ export default inject(QuestionDetailPage, {
       (agency) => agency.acronym.toLowerCase() === params.agencyAcronym
     )?.id;
 
+    if (!agencyId) {
+      return notFound();
+    }
+
     const question = await getQuestionById(params.questionId);
 
     if ("code" in question && question.code === 404) {

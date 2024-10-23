@@ -1,10 +1,12 @@
+"use client";
 import { Link } from "@/lib/i18n";
-import IconQuestionSmile from "@/icons/iconquestionsmile";
 import DateComponent from "../Date";
 import LikeIcon from "@/icons/likeicon";
 import AgencyLogoImporter from "../AgencyLogoImporter";
 import { Question } from "@/types/types";
 import AgencyName from "../AgencyName";
+import { QuestionSmileIcon } from "@askgovmy/ui";
+import { useEffect, useRef, useState } from "react";
 
 interface QuestionCardProps {
   question: Question;
@@ -12,18 +14,32 @@ interface QuestionCardProps {
 }
 
 const QuestionCard: React.FC<QuestionCardProps> = ({ question, locale }) => {
+  const questionText = useRef<HTMLSpanElement | null>(null);
+  const [questionHeight, setQuestionHeight] = useState<number>();
+
+  useEffect(() => {
+    setTimeout(() => {
+      if (questionText.current) {
+        // Ref should now be accessible after the dialog renders
+        setQuestionHeight(questionText.current.clientHeight);
+      }
+    }, 0);
+  }, []);
+
   return (
     <Link
       className="cursor-pointer bg-white rounded-md border p-5 shadow-sm flex flex-col gap-2"
-      href={`/${question.agency.acronym?.toLowerCase()}/${question.id}`}
+      href={`/${question?.agency?.acronym?.toLowerCase()}/${question.id}`}
     >
       <div className="flex gap-2">
-        <div className="w-6 h-6">
-          <IconQuestionSmile />
-        </div>
-        <p className="text-base font-medium text-mydstextbrand-600">
+        <QuestionSmileIcon height={questionHeight} />
+
+        <span
+          ref={questionText}
+          className="flex-1 text-base font-medium text-mydstextbrand-600"
+        >
           {question.question}
-        </p>
+        </span>
       </div>
 
       <div className="flex items-center font-medium text-sm gap-2">
