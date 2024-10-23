@@ -10,6 +10,12 @@ export interface Question {
   created_at: string;
   updated_at: string;
   agency: Omit<Agency, "total_likes">;
+  attachments: {
+    id: number;
+    file_key: string;
+    /** File size in bytes */
+    file_size: number;
+  }[];
 }
 
 export interface Answer {
