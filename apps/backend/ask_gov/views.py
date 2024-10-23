@@ -186,14 +186,14 @@ class TopicViewSet(
                 "state", 
                 OpenApiTypes.STR, 
                 OpenApiParameter.QUERY, 
-                enum=["answered", "unanswered", "draft", "spam"],
+                enum=["answered", "unanswered", "draft", "spam", "assigned", "unassigned"],
                 description="Filter by spam only works if you are a `super_admin`.",
             ),
             OpenApiParameter(
                 "agency__isnull",
                 OpenApiTypes.BOOL,
                 OpenApiParameter.QUERY,
-                description="To filter assigned/unassigned questions. Only works if you are a `super_admin`."
+                description="DEPRECATED: use state query param `assigned` or `unassigned`"
             )
         ]
     )

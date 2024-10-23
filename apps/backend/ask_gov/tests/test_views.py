@@ -183,7 +183,7 @@ class TestAdminListQuestionsAsStaff(APITestCase):
         Tests listing unassigned questions should return empty list to staff.
         """
         url = reverse('admin-question-list')
-        response = self.client.get(url, {'agency__isnull': 'true'})
+        response = self.client.get(url, {'state': 'unassigned'})
         json_data = response.json()
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(json_data['count'], 0)
