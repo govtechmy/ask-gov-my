@@ -4,6 +4,7 @@ const requiredEnvVars = [
   "AWS_REGION",
   "STORAGE_BUCKET",
   "STORAGE_BASE_URL",
+  "NEXT_PUBLIC_STORAGE_BASE_URL",
 ];
 
 export function register() {
