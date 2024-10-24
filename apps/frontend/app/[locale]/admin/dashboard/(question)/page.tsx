@@ -6,13 +6,13 @@ import { FSP, inject } from "@/lib/decorator";
 import MustBeAuthenticated from "@/middlewares/injectors/must-be-authenticated";
 import MustBeAuthorized from "@/middlewares/injectors/must-be-authorized";
 import { Agency, PageResult, Question } from "@/types/types";
-import { Button, Empty, PencilIcon } from "@askgovmy/ui";
+import { Empty } from "@askgovmy/ui";
 import { DateTime } from "luxon";
 import ManageQuestionsFilter from "./filters";
 import { cn } from "@askgovmy/utils";
-import { EyeIcon } from "lucide-react";
 import { AdminContent, AdminFloatButton } from "./super-admin";
 import ContentDialog from "./content-dialog";
+import { StaffContent, StaffFloatButton } from "./admin";
 
 interface ForAdminProps {
   role: "super_admin";
@@ -64,7 +64,7 @@ const AdminDashboardPage: FSP<ManageQuestionsProps> = async ({ data }) => {
                 key={JSON.stringify(question)}
                 role={role}
                 question={question}
-                agencies={agencies.results}
+                agencies={agencies?.results}
               >
                 <div
                   key={question.id}
@@ -76,49 +76,7 @@ const AdminDashboardPage: FSP<ManageQuestionsProps> = async ({ data }) => {
                     role === "super_admin" && "hover:cursor-pointer"
                   )}
                 >
-                  {role === "staff" && (
-                    <>
-                      <div className="w-[125px]">
-                        {question.answer ? (
-                          question.answer.draft ? (
-                            <Translator
-                              className="rounded-full gap-1.5 py-0.5 px-2 bg-washed-100 text-dim-500 w-fit"
-                              namespace="AdminQuestions.state.draft"
-                              prefix={
-                                <span className="w-2 h-2 bg-dim-500 rounded-full" />
-                              }
-                            />
-                          ) : (
-                            <Translator
-                              className="rounded-full gap-1.5 py-0.5 px-2 bg-askmygovbrand-50 text-askmygovtextbrand-600 w-fit"
-                              namespace="AdminQuestions.state.answered"
-                              prefix={
-                                <span className="w-2 h-2 bg-askmygovtextbrand-600 rounded-full" />
-                              }
-                            />
-                          )
-                        ) : (
-                          <Translator
-                            className="rounded-full gap-1.5 py-0.5 px-2 bg-success-50 text-success-700 w-fit"
-                            namespace="AdminQuestions.new"
-                            prefix={
-                              <span className="w-2 h-2 bg-success-700 rounded-full" />
-                            }
-                          />
-                        )}
-                      </div>
-                      <div className="flex-1">
-                        <p className="font-medium text-black-700 line-clamp-1 ">
-                          {question.question}
-                        </p>
-                        {question.answer && (
-                          <p className="text-dim-500 line-clamp-1 flex-1">
-                            {question.answer.text}
-                          </p>
-                        )}
-                      </div>
-                    </>
-                  )}
+                  {role === "staff" && <StaffContent question={question} />}
 
                   {role === "super_admin" && (
                     <AdminContent
@@ -137,29 +95,7 @@ const AdminDashboardPage: FSP<ManageQuestionsProps> = async ({ data }) => {
                       <AdminFloatButton question={question} />
                     )}
                     {role === "staff" && question.answer && (
-                      <>
-                        {!question.answer.draft && (
-                          <Button
-                            className="w-8 h-8 p-1.5 opacity-0 group-hover:opacity-100 transition-opacity"
-                            variant={"secondary"}
-                            size={"sm"}
-                            icon={
-                              <EyeIcon className="w-4 h-4 stroke-black-700" />
-                            }
-                          />
-                        )}
-                        <Button
-                          className="h-8 p-1.5 opacity-0 group-hover:opacity-100 transition-opacity"
-                          variant={"secondary"}
-                          size={"sm"}
-                        >
-                          <PencilIcon className="w-4 h-4 stroke-black-700" />
-                          <Translator
-                            namespace="AdminQuestions.edit"
-                            tag="span"
-                          />
-                        </Button>
-                      </>
+                      <StaffFloatButton question={question} />
                     )}
                   </div>
                 </div>

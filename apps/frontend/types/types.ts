@@ -2,7 +2,7 @@ export interface Question {
   id: number;
   topics: number[];
   question: string;
-  answer: Answer;
+  answer: Answer | null;
   spam: boolean;
   email: string;
   admin_opened_at: string | null;

@@ -11,11 +11,14 @@ import {
   DialogTrigger,
   QuestionSmileIcon,
   PlusCircleIcon,
+  DialogClose,
+  XIcon,
 } from "@askgovmy/ui";
 import { since } from "@askgovmy/utils";
 import { useParams } from "next/navigation";
 import { ReactNode, useEffect, useRef, useState } from "react";
 import { AgencyDropdown } from "./super-admin";
+import { AdminAnswerDialog } from "./admin";
 
 export default function ContentDialog({
   children,
@@ -73,16 +76,39 @@ export default function ContentDialog({
                     `question-agency-dropdown-${question.id}`,
                     `command-input-${question.id}`,
                   ]
-                : [],
+                : role === "staff"
+                  ? [
+                      `preview-button-${question.id}`,
+                      `edit-answer-button-${question.id}`,
+                      `portal`,
+                    ]
+                  : [],
               event
             );
 
-            setOpen(open);
+            if (role === "super_admin") {
+              setOpen(open);
+            }
+
+            if (role === "staff") {
+              if (!question.answer) {
+                setOpen(open);
+              }
+            }
           }}
           asChild
         >
           {children}
         </DialogTrigger>
+        {role === "staff" && (
+          <DialogContent
+            hideCloseButton={true}
+            onInteractOutside={() => setOpen(false)}
+            className="max-w-[700px] h-[700px] rounded-lg gap-2"
+          >
+            <AdminAnswerDialog question={question} type="create" />
+          </DialogContent>
+        )}
         {role === "super_admin" && (
           <DialogContent
             hideCloseButton={true}
@@ -125,6 +151,14 @@ export default function ContentDialog({
                 />
               </div>
             </div>
+
+            <DialogClose
+              onClick={() => setOpen(false)}
+              className="ring-offset-background focus:ring-ring data-[state=open]:bg-background data-[state=open]:text-foreground absolute right-4 top-4 rounded-sm opacity-70 transition-opacity hover:opacity-100 focus:outline-none focus:ring-2 focus:ring-offset-2 disabled:pointer-events-none"
+            >
+              <XIcon className="h-4 w-4" />
+              <span className="sr-only">Close</span>
+            </DialogClose>
           </DialogContent>
         )}
       </Dialog>

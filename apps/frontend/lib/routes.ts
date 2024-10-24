@@ -5,6 +5,7 @@ export const routes = {
   home: "/",
   searchresults: "/searchresults/",
   agency: "/:agencyAcronym/",
+  questionsDetails: "/:agencyAcronym/:questionId",
   agencyTopic: "/:agencyAcronym/topics/:topicId",
   admin: {
     index: "/admin/",
