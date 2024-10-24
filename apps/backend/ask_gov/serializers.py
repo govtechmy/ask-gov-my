@@ -75,3 +75,10 @@ class CreateUpdateUserSerializer(serializers.ModelSerializer):
         model = User
         fields = ["id", "name", "email", "role", "agency", "created_at", "updated_at"]
         read_only_fields = ["id", "created_at", "updated_at"]
+
+class LikeDislikeSerializer(serializers.Serializer):
+    # An arbitrary string to identify the anonymous user who performed the like/dislike.
+    # The value could be an IP address, user agent string, token, etc.
+    actor_id = serializers.CharField(required=True)
+
+    ip_address = serializers.IPAddressField(required=True)
