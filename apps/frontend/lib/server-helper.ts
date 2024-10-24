@@ -43,5 +43,11 @@ export const paginate = <T>(
  * @returns {string} IPv4/IPv6 address
  */
 export function getIPAddress(): string | null {
-  return headers().get("x-forwarded-for");
+  const forwardedFor = headers().get("x-forwarded-for");
+  if (!forwardedFor) {
+    return null;
+  }
+  // X-Forwarded-For values can contain IP addresses of proxies, the first one
+  // is the originating client's address
+  return forwardedFor.split(",").at(0)?.trim() || null;
 }

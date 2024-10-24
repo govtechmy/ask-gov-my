@@ -427,18 +427,29 @@ export async function likeAnswer(answerId: number): Promise<void> {
   const url = `${API_URL}/answers/${answerId}/like/`;
   const ip = getIPAddress() || "0.0.0.0";
 
+  const body = {
+    actor_id: ip,
+    ip_address: ip,
+  };
   const response = await fetch(url, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
     },
-    body: JSON.stringify({
-      actor_id: ip,
-      ip_address: ip,
-    }),
+    body: JSON.stringify(body),
   });
 
   if (!response.ok) {
+    console.error("Failed to like answer", {
+      answerId,
+      request: {
+        body,
+      },
+      response: {
+        status: response.status,
+        body: await response.json(),
+      },
+    });
     throw new Error("Failed to like answer");
   }
 }
@@ -447,18 +458,29 @@ export async function dislikeAnswer(answerId: number): Promise<void> {
   const url = `${API_URL}/answers/${answerId}/dislike/`;
   const ip = getIPAddress() || "0.0.0.0";
 
+  const body = {
+    actor_id: ip,
+    ip_address: ip,
+  };
   const response = await fetch(url, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
     },
-    body: JSON.stringify({
-      actor_id: ip,
-      ip_address: ip,
-    }),
+    body: JSON.stringify(body),
   });
 
   if (!response.ok) {
+    console.error("Failed to dislike answer", {
+      answerId,
+      request: {
+        body,
+      },
+      response: {
+        status: response.status,
+        body: await response.json(),
+      },
+    });
     throw new Error("Failed to dislike answer");
   }
 }
