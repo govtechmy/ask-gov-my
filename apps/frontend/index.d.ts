@@ -2,13 +2,18 @@ declare namespace NodeJS {
   export interface ProcessEnv {
     APP_URL: string;
     APP_ENV: string;
-    AUTH_TOKEN: string;
-    REVALIDATE_TOKEN: string;
+    API_URL: string;
 
-    EMAIL_FROM: string;
-    EMAIL_HOST: string;
-    EMAIL_PORT: number;
-    EMAIL_AUTH_USER: string;
-    EMAIL_AUTH_PASS: string;
+    AUTH_BASE_URL: string;
+    NEXTAUTH_SECRET: string;
+    NEXTAUTH_URL: string;
+    GOOGLE_CLIENT_ID: string;
+    GOOGLE_CLIENT_SECRET: string;
+
+    AWS_PROFILE: string;
+    AWS_REGION: string;
+    STORAGE_BUCKET: string;
+    STORAGE_BASE_URL: string;
+    NEXT_PUBLIC_STORAGE_BASE_URL: string;
   }
 }
