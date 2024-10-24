@@ -10,7 +10,6 @@ import AgencyName from "@/components/common/AgencyName";
 import JataNegaraIcon from "@/icons/jatanegaraicon";
 import { notFound } from "next/navigation";
 import { Link } from "@/lib/i18n";
-import WordTranslate from "@/components/common/WordTranslate";
 import { Question } from "@/types/types";
 import AgencyLogoImporter from "@/components/common/AgencyLogoImporter";
 import TipTap from "@/components/Editor/TipTap";
@@ -49,7 +48,7 @@ const QuestionDetailPage: FSP<QuestionDetailsProps> = async ({
           <BreadcrumbList>
             <BreadcrumbItem>
               <BreadcrumbLink href={routes.home}>
-                <WordTranslate translate={"Questiondetail"} keyword={"home"} />
+                <Translator namespace="Questiondetail.home" tag="none" />
               </BreadcrumbLink>
             </BreadcrumbItem>
             <BreadcrumbSeparator />
@@ -62,7 +61,7 @@ const QuestionDetailPage: FSP<QuestionDetailsProps> = async ({
         <div className="flex items-center gap-3">
           <IconQuestionSmileSolo />
           <div className="flex text-black-700 text-base font-medium">
-            <WordTranslate translate={"Questiondetail"} keyword={"posted"} />
+            <Translator namespace="Questiondetail.posted" tag="none" />
             &nbsp;
             {since(question.created_at, params?.locale)}
           </div>
@@ -84,7 +83,7 @@ const QuestionDetailPage: FSP<QuestionDetailsProps> = async ({
             </div>
           </div>
           <p className="font-medium text-sm text-dim-500 flex items-center gap-1">
-            <Translator namespace="Questiondetail.answered" tag="none" />
+            <Translator namespace="Questiondetail.answered" tag="span" />
             {since(question.answer.created_at, params?.locale)}
           </p>
         </div>
@@ -113,9 +112,8 @@ const QuestionDetailPage: FSP<QuestionDetailsProps> = async ({
         <Separator className="my-1.5" />
 
         <div className="">
-          <WordTranslate
-            translate={"Questiondetail"}
-            keyword={"attachment"}
+          <Translator
+            namespace="Questiondetail.attachment"
             className="flex text-sm text-black-700 mb-3 font-medium"
           />
           <div className="grid grid-cols-2 gap-2 md:flex md:flex-wrap">
