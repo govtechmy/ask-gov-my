@@ -81,10 +81,33 @@ class TestAdminListQuestions(APITestCase):
 
     def test_list_unassigned(self):
         url = reverse('admin-question-list')
-        response = self.client.get(url, {'agency__isnull': 'true'})
+        response = self.client.get(url, {'state': 'unassigned'})
         json_data = response.json()
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(json_data['count'], self.NUM_UNASSIGNED)
+
+    def test_list_assigned(self):
+        """
+        Tests listing assigned questions should return all questions except for
+        those without agency or marked as spam.
+        """
+        url = reverse('admin-question-list')
+        response = self.client.get(url, {'state': 'assigned'})
+        json_data = response.json()
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(json_data['count'], self.NUM_ALL - self.NUM_UNASSIGNED - self.NUM_SPAM)
+    
+    def test_questions_have_dislike_count(self):
+        url = reverse('admin-question-list')
+        response = self.client.get(url, {'state': 'answered'})
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        json_data = response.json()
+        self.assertEqual(json_data['count'], self.NUM_ANSWERED)
+        questions = json_data["results"]
+        for question in questions:
+            self.assertIn('answer', question)
+            self.assertIn('dislikes', question['answer'])
+            self.assertIsInstance(question['answer']['dislikes'], int)
     
 class TestAdminListQuestionsAsStaff(APITestCase):
     NUM_UNANSWERED = 1
@@ -145,7 +168,7 @@ class TestAdminListQuestionsAsStaff(APITestCase):
         response = self.client.get(url, {'state': 'spam'})
         json_data = response.json()
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(json_data['count'], self.NUM_VISIBLE)
+        self.assertEqual(json_data['count'], 0)
 
     def test_list_answered(self):
         """
@@ -172,10 +195,10 @@ class TestAdminListQuestionsAsStaff(APITestCase):
         Tests listing unassigned questions should return empty list to staff.
         """
         url = reverse('admin-question-list')
-        response = self.client.get(url, {'agency__isnull': 'true'})
+        response = self.client.get(url, {'state': 'unassigned'})
         json_data = response.json()
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(json_data['count'], self.NUM_VISIBLE)
+        self.assertEqual(json_data['count'], 0)
 
 class TestQuestionViewSet(APITestCase):
     def setUp(self):
@@ -410,3 +433,31 @@ class TestAdminAttachmentViewSet(APITestCase):
         }
         response = self.client.post(self.create_attachments_url, data=data)
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+
+class TestAnswerViewSet(APITestCase):
+    def setUp(self):
+        agency = Agency.objects.create(name="Ministry of Education", name_ms="Kementerian Pendidikan", acronym="MOE")
+        question = Question.objects.create(question=f"Test Question", agency=agency, spam=False)
+        self.answer = Answer.objects.create(question=question, text=f"Test Answer", draft=False)
+        self.like_answer_url = reverse("answer-like", kwargs={"pk": self.answer.id})
+        self.dislike_answer_url = reverse("answer-dislike", kwargs={"pk": self.answer.id})
+    
+    def test_like_answer(self):
+        response = self.client.post(
+            self.like_answer_url,
+            data={
+                "actor_id": "127.0.0.1",
+                "ip_address": "127.0.0.1",
+            },
+        )
+        self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
+
+    def test_dislike_answer(self):
+        response = self.client.post(
+            self.dislike_answer_url,
+            data={
+                "actor_id": "127.0.0.1",
+                "ip_address": "127.0.0.1",
+            },
+        )
+        self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)

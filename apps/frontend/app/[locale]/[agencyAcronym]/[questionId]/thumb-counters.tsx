@@ -1,151 +1,123 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useEffect, useState, useTransition } from "react";
 import ThumbsDown from "@/icons/thumbsdown";
 import ThumbsUp from "@/icons/thumbsup";
-import { likeQuestion, dislikeQuestion } from "@/actions/questionServices";
-import Cookies from "js-cookie";
+import { dislikeAnswer, likeAnswer } from "@/actions/questionServices";
 import { useTranslations } from "next-intl";
 import { Button } from "@askgovmy/ui";
 import { cn } from "@askgovmy/utils";
 
 interface ThumbsCounterProps {
+  answerId: number;
   questionId: string;
   totalLikes: number;
 }
 
-const ThumbsCounter: React.FC<ThumbsCounterProps> = ({
-  questionId,
-  totalLikes,
-}) => {
-  const [likes, setLikes] = useState(totalLikes);
-  const [feedbackLike, setFeedbackLike] = useState(false);
-  const [feedbackDislike, setFeedbackDislike] = useState(false);
-  const [lastVote, setLastVote] = useState<"like" | "dislike" | null>(null);
-  const [isProcessing, setIsProcessing] = useState(false);
-  const t = useTranslations("Questiondetail");
+type LikeStatus = "liked" | "disliked" | null;
+
+const localStorageKey = "answer_like_status";
+
+function getLocalLikeStatus(answerId: number): LikeStatus {
+  const record = JSON.parse(
+    localStorage.getItem(localStorageKey) || "{}"
+  ) as Record<string, LikeStatus>;
+  return record[answerId] || null;
+}
+
+function saveLocalLikeStatus(answerId: number, status: LikeStatus): void {
+  const record = JSON.parse(
+    localStorage.getItem(localStorageKey) || "{}"
+  ) as Record<string, LikeStatus>;
+  record[answerId] = status;
+  localStorage.setItem(localStorageKey, JSON.stringify(record));
+}
+
+function useLikeStatus({
+  answerId,
+  initialLikesCount,
+}: {
+  answerId: number;
+  initialLikesCount: number;
+}) {
+  const [numLikes, setNumLikes] = useState(initialLikesCount);
+  const [status, setStatus] = useState<LikeStatus>(null);
+  const [isLoading, startTransition] = useTransition();
 
   useEffect(() => {
-    const savedFeedback = Cookies.get(`feedback_${questionId}`);
-    if (savedFeedback) {
-      const feedback = JSON.parse(savedFeedback);
-      setFeedbackLike(feedback.voted_like);
-      setFeedbackDislike(feedback.voted_dislike);
-      setLastVote(feedback.last_vote);
-    }
-  }, [questionId]);
+    setStatus(getLocalLikeStatus(answerId));
+  }, []);
 
-  const handleLike = async () => {
-    if (isProcessing) return;
-
-    const savedFeedback = Cookies.get(`feedback_${questionId}`);
-    const feedback = savedFeedback
-      ? JSON.parse(savedFeedback)
-      : { voted_like: false, voted_dislike: false };
-
-    setLastVote("like");
-    setFeedbackLike(true);
-    setFeedbackDislike(false);
-
-    if (feedback.last_vote !== "like") {
-      setLikes((prevLikes) => prevLikes + 1);
-
-      Cookies.set(
-        `feedback_${questionId}`,
-        JSON.stringify({
-          voted_like: true,
-          voted_dislike: feedback.voted_dislike,
-          last_vote: "like",
-        })
-      );
-
-      if (!feedback.voted_like) {
-        setIsProcessing(true);
-        try {
-          await likeQuestion(questionId);
-          feedback.voted_like = true;
-        } catch (error) {
-          console.error("Failed to like question:", error);
-          setLikes((prevLikes) => prevLikes - 1);
-          setFeedbackLike(false);
-          setLastVote(null);
-          Cookies.remove(`feedback_${questionId}`);
-        } finally {
-          setIsProcessing(false);
-        }
-      }
-    }
+  const like = async () => {
+    if (isLoading || status === "liked") return;
+    startTransition(async () => {
+      setStatus("liked");
+      setNumLikes((prev) => prev + 1);
+      await likeAnswer(answerId);
+      saveLocalLikeStatus(answerId, "liked");
+    });
   };
 
-  const handleDislike = async () => {
-    if (isProcessing) return;
-
-    const savedFeedback = Cookies.get(`feedback_${questionId}`);
-    const feedback = savedFeedback
-      ? JSON.parse(savedFeedback)
-      : { voted_like: false, voted_dislike: false };
-
-    setLastVote("dislike");
-    setFeedbackLike(false);
-    setFeedbackDislike(true);
-
-    if (feedback.last_vote !== "dislike" && likes > 0) {
-      setLikes((prevLikes) => Math.max(prevLikes - 1, 0));
-
-      Cookies.set(
-        `feedback_${questionId}`,
-        JSON.stringify({
-          voted_like: feedback.voted_like,
-          voted_dislike: true,
-          last_vote: "dislike",
-        })
-      );
-
-      if (!feedback.voted_dislike) {
-        setIsProcessing(true);
-        try {
-          await dislikeQuestion(questionId);
-          feedback.voted_dislike = true;
-        } catch (error) {
-          console.error("Failed to dislike question:", error);
-          setLikes((prevLikes) => prevLikes + 1);
-          setFeedbackDislike(false);
-          setLastVote(null);
-          Cookies.remove(`feedback_${questionId}`);
-        } finally {
-          setIsProcessing(false);
-        }
-      }
-    }
+  const dislike = async () => {
+    if (isLoading || status === "disliked") return;
+    startTransition(async () => {
+      setStatus("disliked");
+      setNumLikes((prev) => prev - 1);
+      await dislikeAnswer(answerId);
+      saveLocalLikeStatus(answerId, "disliked");
+    });
   };
+
+  return { status, numLikes, like, dislike, isLoading };
+}
+
+const ThumbsCounter: React.FC<ThumbsCounterProps> = ({
+  answerId,
+  totalLikes,
+}) => {
+  const t = useTranslations("Questiondetail");
+  const { status, numLikes, like, dislike } = useLikeStatus({
+    answerId,
+    initialLikesCount: totalLikes,
+  });
 
   return (
     <div className="flex items-center gap-2">
-      <p>{feedbackLike || feedbackDislike ? t("feedback") : t("response")}</p>
+      <p>{status ? t("feedback") : t("response")}</p>
       <Button
-        onClick={handleLike}
-        className="flex p-3 gap-1.5 rounded-[32px] border-askmygovbrand-600 hover:border-askmygovbrand-600"
+        onClick={like}
+        className={cn(
+          "flex p-3 gap-1.5 rounded-[32px] border-askmygovbrand-600 hover:border-askmygovbrand-600",
+          status === "liked" &&
+            "bg-gradient-to-t from-askmygovbrand-600 to-askmygovbrand-300"
+        )}
         variant={"secondary-askmygov"}
       >
         <ThumbsUp
-          className={`${lastVote === "like" ? "stroke-white" : "stroke-askmygovbrand-600"}`}
+          className={`${status === "liked" ? "stroke-white-forcewhite" : "stroke-askmygovbrand-600"}`}
         />
         <p
           className={cn(
-            "text-sm",
-            lastVote === "like" ? "text-white" : "text-askmygovbrand-600"
+            "text-sm text-askmygovbrand-600",
+            status === "liked"
+              ? "text-white-forcewhite"
+              : "text-askmygovbrand-600"
           )}
         >
-          {likes}
+          {numLikes}
         </p>
       </Button>
       <Button
-        onClick={handleDislike}
-        className="flex p-3 gap-1.5 rounded-[32px] border-askmygovbrand-600 hover:border-askmygovbrand-600"
+        onClick={dislike}
+        className={cn(
+          "flex p-3 gap-1.5 rounded-[32px] border-askmygovbrand-600 hover:border-askmygovbrand-600",
+          status === "disliked" &&
+            "bg-gradient-to-t from-askmygovbrand-600 to-askmygovbrand-300"
+        )}
         variant={"secondary-askmygov"}
       >
         <ThumbsDown
-          className={`${lastVote === "dislike" ? "stroke-white" : "stroke-askmygovbrand-600"}`}
+          className={`${status === "disliked" ? "stroke-white-forcewhite" : "stroke-askmygovbrand-600"}`}
         />
       </Button>
     </div>

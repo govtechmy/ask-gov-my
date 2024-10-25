@@ -1,6 +1,10 @@
+import base64
+from datetime import datetime, timezone
+from django.conf import settings
 from django.db import models
 from django.contrib.auth.base_user import AbstractBaseUser, BaseUserManager
 from django.db.models import Sum
+from .elastic import esclient
 import uuid
 
 
@@ -64,6 +68,45 @@ class Answer(models.Model):
     draft = models.BooleanField()
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+
+    LIKE_DISLIKE_INDEX = settings.ELASTICSEARCH_LIKE_DISLIKE_INDEX
+
+    def like(self, actor_id: str, ip_address: str):
+        document_id = self.__get_like_dislike_document_id(actor_id)
+        esclient.index(
+            index=self.LIKE_DISLIKE_INDEX,
+            id=document_id,
+            document={
+                "type": "like",
+                "question_id": self.question.id,
+                "answer_id": self.id,
+                "actor_id": actor_id,
+                "ip_address": ip_address,
+                "@timestamp": datetime.now(timezone.utc),
+            },
+        )
+    
+    def dislike(self, actor_id: str, ip_address: str):
+        document_id = self.__get_like_dislike_document_id(actor_id)
+        esclient.index(
+            index=self.LIKE_DISLIKE_INDEX,
+            id=document_id,
+            document={
+                "type": "dislike",
+                "question_id": self.question.id,
+                "answer_id": self.id,
+                "actor_id": actor_id,
+                "ip_address": ip_address,
+                "@timestamp": datetime.now(timezone.utc),
+            },
+        )
+
+    def __get_like_dislike_document_id(self, actor_id: str) -> str:
+        b64 = lambda text: base64.b64encode(text.encode("utf-8")).decode("utf-8")
+        answer_id = self.id
+        # document id is in the format `<base64(answer_id)>:<base64(actor_id)>`
+        document_id = f"{b64(str(answer_id))}:{b64(actor_id)}"
+        return document_id
 
     def __str__(self):
         return self.text[:50]

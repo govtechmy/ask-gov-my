@@ -1,6 +1,6 @@
 "use server";
 const API_URL = process.env.API_URL;
-import { paginate } from "@/lib/server-helper";
+import { getIPAddress, paginate } from "@/lib/server-helper";
 import {
   Question,
   Agency,
@@ -423,39 +423,65 @@ export async function getDynamicAgencyMap(): Promise<Record<string, string>> {
   }
 }
 
-export async function likeQuestion(questionId: string): Promise<void> {
-  const url = `${API_URL}/questions/${questionId}/like/`;
+export async function likeAnswer(answerId: number): Promise<void> {
+  const url = `${API_URL}/answers/${answerId}/like/`;
+  const ip = getIPAddress() || "0.0.0.0";
 
+  const body = {
+    actor_id: ip,
+    ip_address: ip,
+  };
   const response = await fetch(url, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
-      "Cache-Control": "no-cache",
-      Pragma: "no-cache",
-      Expires: "0",
     },
+    body: JSON.stringify(body),
   });
 
   if (!response.ok) {
-    throw new Error("Failed to like question");
+    console.error("Failed to like answer", {
+      answerId,
+      request: {
+        body,
+      },
+      response: {
+        status: response.status,
+        body: await response.json(),
+      },
+    });
+    throw new Error("Failed to like answer");
   }
 }
 
-export async function dislikeQuestion(questionId: string): Promise<void> {
-  const url = `${API_URL}/questions/${questionId}/dislike/`;
+export async function dislikeAnswer(answerId: number): Promise<void> {
+  const url = `${API_URL}/answers/${answerId}/dislike/`;
+  const ip = getIPAddress() || "0.0.0.0";
 
+  const body = {
+    actor_id: ip,
+    ip_address: ip,
+  };
   const response = await fetch(url, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
-      "Cache-Control": "no-cache",
-      Pragma: "no-cache",
-      Expires: "0",
     },
+    body: JSON.stringify(body),
   });
 
   if (!response.ok) {
-    throw new Error("Failed to dislike question");
+    console.error("Failed to dislike answer", {
+      answerId,
+      request: {
+        body,
+      },
+      response: {
+        status: response.status,
+        body: await response.json(),
+      },
+    });
+    throw new Error("Failed to dislike answer");
   }
 }
 

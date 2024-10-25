@@ -5,9 +5,8 @@ const path = require("path");
 const nextConfig = {
   images: {
     remotePatterns: [
-      {
-        hostname: "ask-gov.s3.ap-southeast-2.amazonaws.com",
-      },
+      { hostname: "ask-gov.s3.ap-southeast-2.amazonaws.com" },
+      { hostname: "askgov-dev.s3.ap-southeast-1.amazonaws.com" },
     ],
   },
   reactStrictMode: true,

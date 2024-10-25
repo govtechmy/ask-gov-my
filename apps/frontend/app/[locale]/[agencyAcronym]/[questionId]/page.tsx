@@ -10,10 +10,8 @@ import AgencyName from "@/components/common/AgencyName";
 import JataNegaraIcon from "@/icons/jatanegaraicon";
 import { notFound } from "next/navigation";
 import { Link } from "@/lib/i18n";
-import WordTranslate from "@/components/common/WordTranslate";
 import { Question } from "@/types/types";
 import AgencyLogoImporter from "@/components/common/AgencyLogoImporter";
-import { fetchFileSizes } from "@/actions/utils";
 import TipTap from "@/components/Editor/TipTap";
 import { StyledDisplay } from "@/components/ui/display";
 import { FSP, inject } from "@/lib/decorator";
@@ -28,6 +26,9 @@ import {
 } from "@askgovmy/ui";
 import { routes } from "@/lib/routes";
 import { since } from "@askgovmy/utils";
+import mime from "mime-types";
+import { AttachmentIcon } from "./attachment-icon";
+import Translator from "@/components/client/translator";
 
 interface QuestionDetailsProps {
   question: Question;
@@ -38,7 +39,6 @@ interface QuestionDetailsProps {
 const QuestionDetailPage: FSP<QuestionDetailsProps> = async ({
   params,
   data,
-  locale,
 }) => {
   const { question, relatedQuestions, relatedTopics } = data!;
   return (
@@ -48,7 +48,7 @@ const QuestionDetailPage: FSP<QuestionDetailsProps> = async ({
           <BreadcrumbList>
             <BreadcrumbItem>
               <BreadcrumbLink href={routes.home}>
-                <WordTranslate translate={"Questiondetail"} keyword={"home"} />
+                <Translator namespace="Questiondetail.home" tag="none" />
               </BreadcrumbLink>
             </BreadcrumbItem>
             <BreadcrumbSeparator />
@@ -61,7 +61,7 @@ const QuestionDetailPage: FSP<QuestionDetailsProps> = async ({
         <div className="flex items-center gap-3">
           <IconQuestionSmileSolo />
           <div className="flex text-black-700 text-base font-medium">
-            <WordTranslate translate={"Questiondetail"} keyword={"posted"} />
+            <Translator namespace="Questiondetail.posted" tag="none" />
             &nbsp;
             {since(question.created_at, params?.locale)}
           </div>
@@ -83,7 +83,7 @@ const QuestionDetailPage: FSP<QuestionDetailsProps> = async ({
             </div>
           </div>
           <p className="font-medium text-sm text-dim-500 flex items-center gap-1">
-            <WordTranslate translate={"Questiondetail"} keyword={"answered"} />
+            <Translator namespace="Questiondetail.answered" tag="span" />
             {since(question.answer.created_at, params?.locale)}
           </p>
         </div>
@@ -112,22 +112,45 @@ const QuestionDetailPage: FSP<QuestionDetailsProps> = async ({
         <Separator className="my-1.5" />
 
         <div className="">
-          <WordTranslate
-            translate={"Questiondetail"}
-            keyword={"attachment"}
-            className="flex text-sm text-black-700"
+          <Translator
+            namespace="Questiondetail.attachment"
+            className="flex text-sm text-black-700 mb-3 font-medium"
           />
-          {/* <div className="mx-8 mb-8 ">
-              <AttachmentDownload
-                uploadedAttachments={attachments}
-                fileSizes={fileSize}
-              ></AttachmentDownload>
-            </div> */}
+          <div className="grid grid-cols-2 gap-2 md:flex md:flex-wrap">
+            {question.attachments.map((attachment) => (
+              <a
+                href={`${process.env.NEXT_PUBLIC_STORAGE_BASE_URL}/${attachment.file_key}`}
+                key={attachment.id}
+              >
+                <div className="bg-white border border-outline-200 rounded-lg max-w-[200px] flex items-center p-2 gap-3 md:w-[200px]">
+                  <div>
+                    <AttachmentIcon
+                      type={
+                        mime.lookup(attachment.file_key) ||
+                        "application/octet-stream"
+                      }
+                    />
+                  </div>
+                  <div className="min-w-0">
+                    <p className="text-black-900 text-sm overflow-hidden whitespace-nowrap text-ellipsis">
+                      {attachment.file_key.split("/").at(-1)}
+                    </p>
+                    <p className="text-dim-500 text-xs">
+                      {attachment.file_size < 1e6
+                        ? `${(attachment.file_size / 1e3).toFixed(1)} KB`
+                        : `${(attachment.file_size / 1e6).toFixed(1)} MB`}
+                    </p>
+                  </div>
+                </div>
+              </a>
+            ))}
+          </div>
         </div>
 
         <Separator className="my-1.5 w-[calc(100%+4rem)] -mx-8" />
 
         <ThumbsCounter
+          answerId={question.answer.id}
           questionId={question.id.toString()}
           totalLikes={question.answer.likes}
         />

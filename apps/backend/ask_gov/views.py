@@ -2,8 +2,8 @@ import math
 from django.conf import settings
 from ask_gov.permissions import IsSuperAdmin
 from .serializers import (
-    AdminPatchedQuestionSerializer, AnswerSerializer, AttachmentSerializer, CreateUpdateUserSerializer, QuestionSerializer,
-    AgencySerializer, TopicSerializer, UserSerializer,
+    AdminPatchedQuestionSerializer, AdminQuestionSerializer, AnswerSerializer, AttachmentSerializer, CreateUpdateUserSerializer, QuestionSerializer,
+    AgencySerializer, TopicSerializer, UserSerializer, LikeDislikeSerializer
 )
 from django.shortcuts import get_object_or_404
 from django.utils import timezone
@@ -19,7 +19,7 @@ from rest_framework.views import APIView
 from drf_spectacular.utils import extend_schema, OpenApiParameter, OpenApiTypes, inline_serializer, extend_schema_view
 from django.contrib.auth import get_user_model
 from django.db.models import Sum, Q
-from .elastic import client
+from .elastic import esclient
 from .embed import get_embedding
 import logging, re
 from datetime import datetime
@@ -105,7 +105,7 @@ class QuestionViewSet(
             }
         }
 
-        es_response = client.search(
+        es_response = esclient.search(
             index=self.QUESTION_INDEX,
             query=es_query,
             from_=(page - 1) * page_size,
@@ -135,23 +135,31 @@ class AnswerViewSet(
     serializer_class = AnswerSerializer
     permission_classes = [AllowAny]
 
-    @extend_schema(request=None)
+    @extend_schema(request=LikeDislikeSerializer, responses={"204": None})
     @action(methods=["POST"], detail=True)
     def like(self, request, pk):
-        answer: Answer = self.get_object()
-        answer.likes += 1
-        answer.save()
-        serializer = AnswerSerializer(answer)
-        return Response(serializer.data, status=status.HTTP_200_OK)
+        serializer = LikeDislikeSerializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        actor_id = serializer.validated_data["actor_id"]
+        ip_address = serializer.validated_data["ip_address"]
 
-    @extend_schema(request=None)
+        answer: Answer = self.get_object()
+        answer.like(actor_id, ip_address)
+
+        return Response(status=status.HTTP_204_NO_CONTENT)
+
+    @extend_schema(request=LikeDislikeSerializer, responses={"204": None})
     @action(methods=["POST"], detail=True)
     def dislike(self, request, pk):
+        serializer = LikeDislikeSerializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        actor_id = serializer.validated_data["actor_id"]
+        ip_address = serializer.validated_data["ip_address"]
+
         answer: Answer = self.get_object()
-        answer.dislikes += 1
-        answer.save()
-        serializer = AnswerSerializer(answer)
-        return Response(serializer.data, status=status.HTTP_200_OK)
+        answer.dislike(actor_id, ip_address)
+
+        return Response(status=status.HTTP_204_NO_CONTENT)
 
 class AgencyViewSet(
     mixins.ListModelMixin,
@@ -186,14 +194,14 @@ class TopicViewSet(
                 "state", 
                 OpenApiTypes.STR, 
                 OpenApiParameter.QUERY, 
-                enum=["answered", "unanswered", "draft", "spam"],
+                enum=["answered", "unanswered", "draft", "spam", "assigned", "unassigned"],
                 description="Filter by spam only works if you are a `super_admin`.",
             ),
             OpenApiParameter(
                 "agency__isnull",
                 OpenApiTypes.BOOL,
                 OpenApiParameter.QUERY,
-                description="To filter assigned/unassigned questions. Only works if you are a `super_admin`."
+                description="DEPRECATED: use state query param `assigned` or `unassigned`"
             )
         ]
     )
@@ -205,7 +213,7 @@ class AdminQuestionViewSet(
     viewsets.GenericViewSet,
 ):
     queryset = Question.objects.all().order_by('-created_at')
-    serializer_class = QuestionSerializer
+    serializer_class = AdminQuestionSerializer
     pagination_class = CustomPagination
     filter_backends = [DjangoFilterBackend, SearchFilter]
     filterset_fields = {
@@ -229,10 +237,14 @@ class AdminQuestionViewSet(
         elif state == 'draft':
             queryset = queryset.filter(answer__isnull=False, answer__draft=True)
         # Only super admins can list questions marked as spam
-        elif state == 'spam' and self.request.user.role == UserRole.SUPER_ADMIN:
+        elif state == 'spam':
             queryset = queryset.filter(spam=True)
         elif state == 'unanswered':
             queryset = queryset.filter(answer__isnull=True, spam=False)
+        elif state == 'assigned':
+            queryset = queryset.filter(agency__isnull=False, spam=False)
+        elif state == 'unassigned':
+            queryset = queryset.filter(agency__isnull=True, spam=False)
 
         return queryset
     

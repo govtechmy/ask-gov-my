@@ -1,7 +1,7 @@
 from django.conf import settings
 from django.core.management.base import BaseCommand
 from ask_gov.models import Question
-from apps.backend.ask_gov.elastic import index_question
+from ask_gov.elastic import index_question
 
 QUESTION_INDEX = settings.ELASTICSEARCH_QUESTION_INDEX
 

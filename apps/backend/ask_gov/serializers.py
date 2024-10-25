@@ -46,6 +46,11 @@ class AnswerSerializer(serializers.ModelSerializer):
             raise serializers.ValidationError("Cannot answer a question that does not have an agency.")
         return question
 
+class AdminAnswerSerializer(AnswerSerializer):
+    class Meta(AnswerSerializer.Meta):
+        fields = AnswerSerializer.Meta.fields + ['dislikes']
+        read_only_fields = AnswerSerializer.Meta.read_only_fields + ['dislikes']
+
 class QuestionSerializer(serializers.ModelSerializer):
     answer = AnswerSerializer(read_only=True)
     agency = AgencySerializer(read_only=True)
@@ -55,6 +60,12 @@ class QuestionSerializer(serializers.ModelSerializer):
         model = Question
         fields = ["id", "topics", "answer", "question", "spam", "email", "admin_opened_at", "staff_opened_at", "created_at", "updated_at", "agency", "attachments"]
         read_only_fields = ["id", "topics", "answer", "spam", "admin_opened_at", "staff_opened_at", "created_at", "updated_at", "agency", "attachments"]
+
+class AdminQuestionSerializer(QuestionSerializer):
+    answer = AdminAnswerSerializer(read_only=True)
+
+    class Meta(QuestionSerializer.Meta):
+        pass
 
 class AdminPatchedQuestionSerializer(serializers.ModelSerializer):
     class Meta:
@@ -75,3 +86,10 @@ class CreateUpdateUserSerializer(serializers.ModelSerializer):
         model = User
         fields = ["id", "name", "email", "role", "agency", "created_at", "updated_at"]
         read_only_fields = ["id", "created_at", "updated_at"]
+
+class LikeDislikeSerializer(serializers.Serializer):
+    # An arbitrary string to identify the anonymous user who performed the like/dislike.
+    # The value could be an IP address, user agent string, token, etc.
+    actor_id = serializers.CharField(required=True)
+
+    ip_address = serializers.IPAddressField(required=True)

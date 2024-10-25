@@ -185,6 +185,7 @@
     "agency_acronym": "Agency's acronym",
     "agency_logo_preview": "Agency logo preview",
     "error_image_exceed_size": "Please upload images with a maximum size of 200x200 pixels.",
+    "error_upload": "An error occured while trying to upload the image.",
     "created": "Agency successfully created!",
     "edited": "Agency successfully edited!"
   },

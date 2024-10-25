@@ -35,3 +35,19 @@ export const paginate = <T>(
     },
   };
 };
+
+/**
+ * Return the ip address of the current request context.
+ *
+ * If the ip address is unknown, null is returned.
+ * @returns {string} IPv4/IPv6 address
+ */
+export function getIPAddress(): string | null {
+  const forwardedFor = headers().get("x-forwarded-for");
+  if (!forwardedFor) {
+    return null;
+  }
+  // X-Forwarded-For values can contain IP addresses of proxies, the first one
+  // is the originating client's address
+  return forwardedFor.split(",").at(0)?.trim() || null;
+}

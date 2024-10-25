@@ -14,21 +14,53 @@ import { useForm, useFormContext } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { ComponentProps, PropsWithChildren } from "react";
 import Asklogo from "@/icons/asklogo";
-import { AgencyImageInput, AgencyImageInputProps } from "./agency-image-input";
-import { useTranslations } from "next-intl";
+import { AgencyImageInput } from "./agency-image-input";
 import Translator from "@/components/client/translator";
 import {
   AgencyFormSchema,
   AgencyFormValues,
 } from "@/actions/admin/agency.schema";
-
-const MAX_IMAGE_HEIGHT = 200;
-const MAX_IMAGE_WIDTH = 200;
+import { z } from "zod";
+import { getUploadLogoDetails } from "@/actions/admin/agency";
+import { useTranslations } from "next-intl";
 
 interface AgencyFormProviderProps extends PropsWithChildren {
   className?: string;
   onSubmit: (formValues: AgencyFormValues) => void | Promise<void>;
   defaultValues?: AgencyFormValues;
+}
+
+const ExtendedAgencyFormSchema = AgencyFormSchema.extend({
+  // An additional field to store logo that will be uploaded on submit
+  logo_file: z.instanceof(File).nullable(),
+});
+
+async function uploadLogo(
+  file: File,
+  agencyAcronym: string
+): Promise<{ success: false } | { success: true; logoUrl: string }> {
+  try {
+    const { uploadUrl, downloadUrl } = await getUploadLogoDetails({
+      fileType: file.type,
+      agencyAcronym,
+    });
+
+    const res = await fetch(uploadUrl, {
+      method: "PUT",
+      body: file,
+      headers: {
+        "Cache-Control": "public, max-age=31536000, immutable",
+        "Content-Disposition": "inline",
+      },
+    });
+
+    if (!res.ok) {
+      return { success: false };
+    }
+    return { success: true, logoUrl: downloadUrl };
+  } catch (error) {
+    return { success: false };
+  }
 }
 
 /**
@@ -47,19 +79,40 @@ export function AgencyForm({
   onSubmit,
   defaultValues,
 }: AgencyFormProviderProps) {
-  const form = useForm<AgencyFormValues>({
-    resolver: zodResolver(AgencyFormSchema),
+  const t = useTranslations("AgencyForm");
+  const form = useForm<z.infer<typeof ExtendedAgencyFormSchema>>({
+    resolver: zodResolver(ExtendedAgencyFormSchema),
     defaultValues: defaultValues || {
       name_en: "",
       name_ms: "",
       acronym: "",
       logo_url: null,
+      logo_file: null,
     },
+  });
+
+  const handleSubmit = form.handleSubmit(async (values) => {
+    const { logo_file, ...rest } = values;
+
+    // Upload the logo on submit
+    if (logo_file) {
+      const uploadResult = await uploadLogo(logo_file, values.acronym);
+      if (!uploadResult.success) {
+        form.setError("logo_url", {
+          type: "custom",
+          message: t("error_upload"),
+        });
+        return;
+      }
+      rest.logo_url = uploadResult.logoUrl;
+    }
+
+    await onSubmit(rest);
   });
 
   return (
     <Form {...form}>
-      <form className={className} onSubmit={form.handleSubmit(onSubmit)}>
+      <form className={className} onSubmit={handleSubmit}>
         {children}
       </form>
     </Form>
@@ -67,7 +120,7 @@ export function AgencyForm({
 }
 
 export function useAgencyForm() {
-  const form = useFormContext<AgencyFormValues>();
+  const form = useFormContext<z.infer<typeof ExtendedAgencyFormSchema>>();
   if (!form) {
     throw Error(
       "Must use `AgencyForm` or `useAgencyForm` inside an `AgencyFormProvider`"
@@ -77,23 +130,7 @@ export function useAgencyForm() {
 }
 
 export function AgencyFormFields() {
-  const t = useTranslations("AgencyForm");
   const form = useAgencyForm();
-
-  const handleImageSelect: AgencyImageInputProps["onSelectImage"] = (
-    _file,
-    { width, height }
-  ) => {
-    if (width > MAX_IMAGE_WIDTH || height > MAX_IMAGE_HEIGHT) {
-      form.setError("logo_url", {
-        type: "custom",
-        message: t("error_image_exceed_size"),
-      });
-      return;
-    }
-    // TODO: Upload image to S3
-    form.setValue("logo_url", null);
-  };
 
   return (
     <div className="grid gap-4">
@@ -107,11 +144,7 @@ export function AgencyFormFields() {
                 <Translator namespace="AgencyForm.agency_acronym" />
               </FormLabel>
               <FormControl>
-                <AgencyImageInput
-                  onSelectImage={handleImageSelect}
-                  name={field.name}
-                  disabled={field.disabled}
-                />
+                <AgencyImageInput name={field.name} disabled={field.disabled} />
               </FormControl>
               {!fieldState.error && (
                 <FormLabel className="text-xs text-dim-500 font-normal">

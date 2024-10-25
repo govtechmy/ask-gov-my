@@ -19,15 +19,12 @@ const getHeightAndWidthFromDataURL = (
     img.src = dataURL;
   });
 
-export interface AgencyImageInputProps extends ComponentProps<"input"> {
-  onSelectImage: (
-    file: File,
-    imgSize: { width: number; height: number }
-  ) => void;
-}
+interface AgencyImageInputProps extends ComponentProps<"input"> {}
+
+const MAX_IMAGE_HEIGHT = 200;
+const MAX_IMAGE_WIDTH = 200;
 
 export function AgencyImageInput({
-  onSelectImage,
   className,
   ...props
 }: AgencyImageInputProps) {
@@ -37,6 +34,25 @@ export function AgencyImageInput({
     form.getValues("logo_url") || "/jata_logo.png"
   );
   const fileInput = useRef<HTMLInputElement | null>(null);
+
+  const handleImageSelect = async (file: File) => {
+    const dataUrl = URL.createObjectURL(file);
+    const { width, height } = await getHeightAndWidthFromDataURL(dataUrl);
+
+    if (width > MAX_IMAGE_WIDTH || height > MAX_IMAGE_HEIGHT) {
+      form.setError("logo_url", {
+        type: "custom",
+        message: t("error_image_exceed_size"),
+      });
+      if (fileInput.current) fileInput.current.value = "";
+      return;
+    }
+
+    form.clearErrors("logo_url");
+    form.setValue("logo_file", file, { shouldDirty: true });
+    setPreviewSrc(dataUrl);
+  };
+
   return (
     <div className={cn("w-fit relative cursor-pointer", className)}>
       <button
@@ -46,6 +62,7 @@ export function AgencyImageInput({
       >
         {previewSrc && (
           <Image
+            unoptimized
             src={previewSrc}
             alt={t("agency_logo")}
             fill
@@ -65,11 +82,7 @@ export function AgencyImageInput({
         accept="image/*"
         onChange={async (e) => {
           const file = e.target.files?.[0];
-          if (!file) return;
-          const dataURL = URL.createObjectURL(file);
-          setPreviewSrc(dataURL);
-          const { width, height } = await getHeightAndWidthFromDataURL(dataURL);
-          onSelectImage(file, { width, height });
+          if (file) handleImageSelect(file);
         }}
         className="hidden"
         {...props}
