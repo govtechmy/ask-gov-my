@@ -2,7 +2,7 @@ import math
 from django.conf import settings
 from ask_gov.permissions import IsSuperAdmin
 from .serializers import (
-    AdminPatchedQuestionSerializer, AnswerSerializer, AttachmentSerializer, CreateUpdateUserSerializer, QuestionSerializer,
+    AdminPatchedQuestionSerializer, AdminQuestionSerializer, AnswerSerializer, AttachmentSerializer, CreateUpdateUserSerializer, QuestionSerializer,
     AgencySerializer, TopicSerializer, UserSerializer, LikeDislikeSerializer
 )
 from django.shortcuts import get_object_or_404
@@ -213,7 +213,7 @@ class AdminQuestionViewSet(
     viewsets.GenericViewSet,
 ):
     queryset = Question.objects.all().order_by('-created_at')
-    serializer_class = QuestionSerializer
+    serializer_class = AdminQuestionSerializer
     pagination_class = CustomPagination
     filter_backends = [DjangoFilterBackend, SearchFilter]
     filterset_fields = {
@@ -237,7 +237,7 @@ class AdminQuestionViewSet(
         elif state == 'draft':
             queryset = queryset.filter(answer__isnull=False, answer__draft=True)
         # Only super admins can list questions marked as spam
-        elif state == 'spam' and self.request.user.role == UserRole.SUPER_ADMIN:
+        elif state == 'spam':
             queryset = queryset.filter(spam=True)
         elif state == 'unanswered':
             queryset = queryset.filter(answer__isnull=True, spam=False)

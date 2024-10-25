@@ -97,6 +97,18 @@ class TestAdminListQuestions(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(json_data['count'], self.NUM_ALL - self.NUM_UNASSIGNED - self.NUM_SPAM)
     
+    def test_questions_have_dislike_count(self):
+        url = reverse('admin-question-list')
+        response = self.client.get(url, {'state': 'answered'})
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        json_data = response.json()
+        self.assertEqual(json_data['count'], self.NUM_ANSWERED)
+        questions = json_data["results"]
+        for question in questions:
+            self.assertIn('answer', question)
+            self.assertIn('dislikes', question['answer'])
+            self.assertIsInstance(question['answer']['dislikes'], int)
+    
 class TestAdminListQuestionsAsStaff(APITestCase):
     NUM_UNANSWERED = 1
     NUM_SPAM = 3
@@ -156,7 +168,7 @@ class TestAdminListQuestionsAsStaff(APITestCase):
         response = self.client.get(url, {'state': 'spam'})
         json_data = response.json()
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(json_data['count'], self.NUM_VISIBLE)
+        self.assertEqual(json_data['count'], 0)
 
     def test_list_answered(self):
         """
