@@ -23,11 +23,11 @@ import {
   BreadcrumbSeparator,
   BreadcrumbPage,
   Separator,
+  AttachmentIcon,
 } from "@askgovmy/ui";
 import { routes } from "@/lib/routes";
 import { since } from "@askgovmy/utils";
 import mime from "mime-types";
-import { AttachmentIcon } from "./attachment-icon";
 import Translator from "@/components/client/translator";
 
 interface QuestionDetailsProps {
@@ -40,7 +40,9 @@ const QuestionDetailPage: FSP<QuestionDetailsProps> = async ({
   params,
   data,
 }) => {
-  const { question, relatedQuestions, relatedTopics } = data!;
+  const { question: question, relatedQuestions, relatedTopics } = data!;
+  const answer = question.answer!;
+
   return (
     <div className="w-full flex flex-col gap-6">
       <div className="flex flex-col gap-3">
@@ -84,12 +86,12 @@ const QuestionDetailPage: FSP<QuestionDetailsProps> = async ({
           </div>
           <p className="font-medium text-sm text-dim-500 flex items-center gap-1">
             <Translator namespace="Questiondetail.answered" tag="span" />
-            {since(question.answer.created_at, params?.locale)}
+            {since(answer.created_at, params?.locale)}
           </p>
         </div>
         <div className="flex text-justify text-black-700 flex-col">
           <TipTap
-            editorText={question.answer.raw}
+            editorText={answer.raw}
             className="w-full flex-1"
             isEditable={false}
             hasMenuBar={false}
@@ -150,9 +152,9 @@ const QuestionDetailPage: FSP<QuestionDetailsProps> = async ({
         <Separator className="my-1.5 w-[calc(100%+4rem)] -mx-8" />
 
         <ThumbsCounter
-          answerId={question.answer.id}
+          answerId={answer.id}
           questionId={question.id.toString()}
-          totalLikes={question.answer.likes}
+          totalLikes={answer.likes}
         />
       </div>
 
@@ -170,7 +172,7 @@ const QuestionDetailPage: FSP<QuestionDetailsProps> = async ({
                   {relatedQuestion.question}
                 </span>
                 <span className="font-normal text-sm text-dim-500 line-clamp-1">
-                  Answer: {relatedQuestion.answer.text}
+                  Answer: {relatedQuestion.answer?.text}
                 </span>
               </div>
 

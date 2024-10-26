@@ -1,4 +1,5 @@
 // Components
+export * from "./attachment-icons";
 export * from "./avatar";
 export * from "./breadcrumb";
 export * from "./button";

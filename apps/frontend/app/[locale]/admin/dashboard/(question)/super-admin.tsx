@@ -220,7 +220,8 @@ export const AgencyDropdown: FC<{
   agencies: Agency[];
   defaultSelected?: string;
   questionId: string;
-}> = ({ agencies, defaultSelected, questionId }) => {
+  portalRef?: any;
+}> = ({ agencies, defaultSelected, questionId, portalRef }) => {
   const { toast } = useToast();
   const [dropdownValue, setDropdownValue] = useState<string>(
     defaultSelected || "unassigned"
@@ -293,8 +294,9 @@ export const AgencyDropdown: FC<{
       option={{
         side: "bottom",
         align: "start",
-        sideOffset: -32,
+        sideOffset: -40,
       }}
+      portalContainer={portalRef}
     >
       {(setOpen) => (
         <Command

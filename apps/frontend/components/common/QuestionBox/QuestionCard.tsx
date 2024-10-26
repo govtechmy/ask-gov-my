@@ -16,6 +16,7 @@ interface QuestionCardProps {
 const QuestionCard: React.FC<QuestionCardProps> = ({ question, locale }) => {
   const questionText = useRef<HTMLSpanElement | null>(null);
   const [questionHeight, setQuestionHeight] = useState<number>();
+  const answer = question.answer!;
 
   useEffect(() => {
     setTimeout(() => {
@@ -59,14 +60,14 @@ const QuestionCard: React.FC<QuestionCardProps> = ({ question, locale }) => {
         className="ml-8 font-normal text-black-700 text-justify line-clamp-2 max-w-[900px]"
         style={{ fontSize: "14px", lineHeight: "22px" }}
       >
-        {question.answer.text}
+        {answer.text}
       </div>
       <div className="ml-8 flex items-center">
         <div className="mr-2">
           <LikeIcon />
         </div>
         <div className="mr-1 font-semibold text-sm text-dim-500">
-          {question.answer.likes}
+          {answer.likes}
         </div>
         <div className="font-normal text-sm text-dim-500">
           people found this useful

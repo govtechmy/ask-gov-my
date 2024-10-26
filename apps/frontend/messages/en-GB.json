@@ -66,7 +66,9 @@
     "relatedtopics": "Related Topics",
     "showing": "Showing",
     "questionsin": "questions in",
-    "notfound": "We couldn't find any questions for selected topics."
+    "notfound": "We couldn't find any questions for selected topics.",
+    "notfound2": "Topics not found. Add the topic by clicking the button below",
+    "add_or_search": "Add topic or search for existing topic"
   },
 
   "Search": {
@@ -155,6 +157,17 @@
     "agency_dialog": {
       "title": "Question posted {day}",
       "assign_to_agency": "Assign to agency:"
+    },
+    "answer_dialog": {
+      "updating_published_text": "You're editing a response that was published {day}",
+      "supporting_attachments": "Supporting attachments",
+      "attachment_format": "Supported formats: JPG, PNG & PDF",
+      "attachment_size": "Maximum size: 25MB per file",
+      "upload_file": "Upload files",
+      "successful": "Successfully submitted the answer",
+      "cancel": "Cancel",
+      "save_draft": "Save as draft",
+      "publish": "Publish now"
     }
   },
   "AdminAgencies": {

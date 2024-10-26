@@ -66,7 +66,9 @@
     "relatedtopics": "Topik Berkaitan",
     "showing": "Memaparkan",
     "questionsin": "soalan topik",
-    "notfound": "Kami tidak dapat mencari sebarang soalan untuk topik yang dipilih."
+    "notfound": "Kami tidak dapat mencari sebarang soalan untuk topik yang dipilih.",
+    "notfound2": "Topik tidak dijumpai. Tambah topik dengan menekan butang dibawah",
+    "add_or_search": "Tambah topik atau cari mengikut topik sedia ada"
   },
 
   "Search": {
@@ -155,6 +157,17 @@
     "agency_dialog": {
       "title": "Soalan dihantar {day}",
       "assign_to_agency": "Tugaskan kepada agensi:"
+    },
+    "answer_dialog": {
+      "updating_published_text": "Anda sedang mengemaskini respond jawapan yang telah diterbitkan {day}",
+      "supporting_attachments": "Lampiran sokongan",
+      "attachment_format": "Format disokong: JPG, PNG & PDF",
+      "attachment_size": "Saiz maksimum: 25MB per file",
+      "upload_file": "Muatnaik lampiran",
+      "successful": "Berjaya menghantar jawapan",
+      "cancel": "Batal",
+      "save_draft": "Simpan sebagai draf",
+      "publish": "Terbit sekarang"
     }
   },
   "AdminAgencies": {

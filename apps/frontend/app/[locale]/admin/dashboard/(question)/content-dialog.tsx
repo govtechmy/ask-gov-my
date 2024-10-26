@@ -1,7 +1,7 @@
 "use client";
 
 import Translator from "@/components/client/translator";
-import { Agency, Question } from "@/types/types";
+import { Agency, Question, Topic } from "@/types/types";
 import {
   Dialog,
   DialogContent,
@@ -18,23 +18,26 @@ import { since } from "@askgovmy/utils";
 import { useParams } from "next/navigation";
 import { ReactNode, useEffect, useRef, useState } from "react";
 import { AgencyDropdown } from "./super-admin";
-import { AdminAnswerDialog } from "./admin";
+import { AdminAnswerDialog } from "./staff";
 
 export default function ContentDialog({
   children,
   role,
   question,
   agencies,
+  topics,
 }: {
   children: ReactNode;
   role: "super_admin" | "staff";
   question: Question;
   agencies: Agency[];
+  topics: Topic[];
 }) {
   const params = useParams();
   const locale = params.locale as "ms-MY" | "en-GB";
   const [open, setOpen] = useState(false);
   const questionText = useRef<HTMLSpanElement | null>(null);
+  const dropdownContainer = useRef<HTMLDivElement | null>(null);
   const [questionHeight, setQuestionHeight] = useState<number>();
 
   const handleClickTrigger = (triggers: string[], event: any) => {
@@ -104,9 +107,22 @@ export default function ContentDialog({
           <DialogContent
             hideCloseButton={true}
             onInteractOutside={() => setOpen(false)}
-            className="max-w-[700px] h-[700px] rounded-lg gap-2"
+            className="max-w-[700px] h-[700px] max-h-[700px] rounded-lg gap-2 flex flex-col"
           >
-            <AdminAnswerDialog question={question} type="create" />
+            <AdminAnswerDialog
+              question={question}
+              type="create"
+              trigger={undefined as never}
+              topics={topics}
+              setOpen={setOpen}
+            />
+            <DialogClose
+              onClick={() => setOpen(false)}
+              className="ring-offset-background focus:ring-ring data-[state=open]:bg-background data-[state=open]:text-foreground absolute right-4 top-4 rounded-sm opacity-70 transition-opacity hover:opacity-100 focus:outline-none focus:ring-2 focus:ring-offset-2 disabled:pointer-events-none"
+            >
+              <XIcon className="h-4 w-4" />
+              <span className="sr-only">Close</span>
+            </DialogClose>
           </DialogContent>
         )}
         {role === "super_admin" && (
@@ -139,7 +155,7 @@ export default function ContentDialog({
 
             <div className="flex gap-3">
               <PlusCircleIcon />
-              <div className="space-y-2">
+              <div className="space-y-2" ref={dropdownContainer}>
                 <Translator
                   namespace="AdminQuestions.agency_dialog.assign_to_agency"
                   className="text-sm"
@@ -148,6 +164,7 @@ export default function ContentDialog({
                   agencies={agencies}
                   defaultSelected={question.agency?.id.toString() || undefined}
                   questionId={question.id.toString()}
+                  portalRef={dropdownContainer.current}
                 />
               </div>
             </div>

@@ -1,23 +1,24 @@
 import { getAgencies } from "@/actions/admin/agency";
-import { getQuestionsList } from "@/actions/admin/question";
+import { getAdminTopicList, getQuestionsList } from "@/actions/admin/question";
 import { Paginator } from "@/components/client/paginator";
 import Translator from "@/components/client/translator";
 import { FSP, inject } from "@/lib/decorator";
 import MustBeAuthenticated from "@/middlewares/injectors/must-be-authenticated";
 import MustBeAuthorized from "@/middlewares/injectors/must-be-authorized";
-import { Agency, PageResult, Question } from "@/types/types";
+import { Agency, PageResult, Question, Topic } from "@/types/types";
 import { Empty } from "@askgovmy/ui";
 import { DateTime } from "luxon";
 import ManageQuestionsFilter from "./filters";
 import { cn } from "@askgovmy/utils";
 import { AdminContent, AdminFloatButton } from "./super-admin";
 import ContentDialog from "./content-dialog";
-import { StaffContent, StaffFloatButton } from "./admin";
+import { StaffContent, StaffFloatButton } from "./staff";
 
 interface ForAdminProps {
   role: "super_admin";
   questions: PageResult<Question>;
   agencies: PageResult<Agency>;
+  topics: never;
   count: number;
 }
 
@@ -25,13 +26,14 @@ interface ForStaffProps {
   role: "staff";
   questions: PageResult<Question>;
   agencies: never;
+  topics: Topic[];
   count: number;
 }
 
 type ManageQuestionsProps = ForAdminProps | ForStaffProps;
 
 const AdminDashboardPage: FSP<ManageQuestionsProps> = async ({ data }) => {
-  const { agencies, questions, role, count } = data!;
+  const { agencies, questions, role, count, topics } = data!;
   return (
     <div className="space-y-6">
       {role === "staff" && (
@@ -65,6 +67,7 @@ const AdminDashboardPage: FSP<ManageQuestionsProps> = async ({ data }) => {
                 role={role}
                 question={question}
                 agencies={agencies?.results}
+                topics={topics}
               >
                 <div
                   key={question.id}
@@ -95,7 +98,7 @@ const AdminDashboardPage: FSP<ManageQuestionsProps> = async ({ data }) => {
                       <AdminFloatButton question={question} />
                     )}
                     {role === "staff" && question.answer && (
-                      <StaffFloatButton question={question} />
+                      <StaffFloatButton question={question} topics={topics} />
                     )}
                   </div>
                 </div>
@@ -119,21 +122,24 @@ export default inject(AdminDashboardPage, {
 
     if (context.session?.user.role === "super_admin") {
       // For super admin
-      const { data: questions } = await getQuestionsList(
-        {
-          page,
-          search,
-          ...(agency !== "all" && { agency }),
-          ...(state !== "all" && { state }),
-        },
-        context
-      );
-      // Get the count for unassigned
-      const { data: questionsCount } = await getQuestionsList(
-        { state: "unassigned" },
-        context
-      );
-      const { data: agencies } = await getAgencies({ page_size: 999 }, context);
+      const [
+        { data: questions },
+        { data: questionsCount },
+        { data: agencies },
+      ] = await Promise.all([
+        getQuestionsList(
+          {
+            page,
+            search,
+            ...(agency !== "all" && { agency }),
+            ...(state !== "all" && { state }),
+          },
+          context
+        ),
+        // Get the count for unassigned
+        getQuestionsList({ state: "unassigned" }, context),
+        getAgencies({ page_size: 999 }, context),
+      ]);
 
       return {
         role: "super_admin",
@@ -144,24 +150,29 @@ export default inject(AdminDashboardPage, {
     }
 
     // For staff
-    const { data: questions } = await getQuestionsList(
-      {
-        page,
-        search,
-        ...(state !== "all" && { state }),
-      },
-      context
-    );
+    const [{ data: questions }, { data: questionsCount }, { data: topics }] =
+      await Promise.all([
+        getQuestionsList(
+          {
+            page,
+            search,
+            ...(state !== "all" && { state }),
+          },
+          context
+        ),
+        // Get the count for unassigned
+        getQuestionsList({ state: "unanswered" }, context),
+        getAdminTopicList(
+          { agency: context.session?.user.agency?.id },
+          context
+        ),
+      ]);
 
-    // Get the count for unassigned
-    const { data: questionsCount } = await getQuestionsList(
-      { state: "unanswered" },
-      context
-    );
     return {
       role: "staff",
       questions,
       count: questionsCount?.page.total,
+      topics,
     };
   },
 });

@@ -105,3 +105,124 @@ export const assignAgencyToQuestion = withResponse(
     };
   }
 );
+
+/**
+ *  @Method: GET
+ *
+ *  @Response: List of topics for the agency the staff is in in admin dashboard
+ *
+ */
+export const getAdminTopicList = withResponse(
+  async ({ agency }: { agency?: number }, context: Context) => {
+    if (!context.session) throw new Yikes("E_201_NOT_AUTHORIZED");
+
+    if (!agency) throw new Yikes("E_303_INSUFFICIENT_INPUT");
+
+    const data = await api("/admin/topics", {
+      params: {
+        agency,
+      },
+      headers: {
+        Authorization: `Token ${context.session.accessToken}`,
+      },
+    });
+
+    return {
+      data: data,
+      message: "Successfully fetch topic list",
+      status: HttpStatusCode.OK_200,
+    };
+  }
+);
+
+export const createNewTopic = withResponse(
+  async ({ title }: { title: string }, locale: "ms-MY" | "en-GB") => {
+    const session = await getSession();
+    if (!session) throw new Yikes("E_201_NOT_AUTHORIZED");
+
+    const response = await api("/admin/topics/", {
+      method: "POST",
+      body: {
+        title_ms: title,
+        title_en: title,
+        agency: session.user.agency?.id,
+      },
+      headers: {
+        Authorization: `Token ${session.accessToken}`,
+      },
+    });
+
+    revalidatePath("/admin/dashboard");
+
+    return {
+      data: response,
+      message: "Sucesfully created new topic",
+      status: HttpStatusCode.OK_200,
+    };
+  }
+);
+
+export const createNewAnswer = withResponse(
+  async (body: {
+    question: number;
+    raw: string;
+    text: string;
+    draft: boolean;
+  }) => {
+    const session = await getSession();
+    if (!session) throw new Yikes("E_201_NOT_AUTHORIZED");
+
+    if (!body.draft && !body.text.trim())
+      throw new Yikes("E_303_INSUFFICIENT_INPUT");
+
+    const response = await api("/admin/answers/", {
+      method: "POST",
+      body,
+      headers: {
+        Authorization: `Token ${session.accessToken}`,
+      },
+    });
+
+    revalidatePath("/admin/dashboard");
+
+    return {
+      data: response,
+      message: "Sucesfully created new answer",
+      status: HttpStatusCode.OK_200,
+    };
+  }
+);
+
+export const updateCurrentAnswer = withResponse(
+  async (
+    answerId: string,
+    body: {
+      question: number;
+      raw: string;
+      text: string;
+      draft: boolean;
+    }
+  ) => {
+    const session = await getSession();
+    if (!session) throw new Yikes("E_201_NOT_AUTHORIZED");
+
+    if (!body.draft && !body.text.trim())
+      throw new Yikes("E_303_INSUFFICIENT_INPUT");
+
+    const response = await api(`/admin/answers/${answerId}/`, {
+      method: "PUT",
+      body,
+      headers: {
+        Authorization: `Token ${session.accessToken}`,
+      },
+    });
+
+    revalidatePath("/admin/dashboard");
+
+    return {
+      data: response,
+      message: "Sucesfully update answer",
+      status: HttpStatusCode.OK_200,
+    };
+  }
+);
