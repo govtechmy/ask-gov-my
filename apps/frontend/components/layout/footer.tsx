@@ -27,16 +27,10 @@ const Footer: React.FC<FooterProps> = ({ adminpage = false }) => {
   const Links: React.FC = () => (
     <div>
       <a
-        href="#"
-        className="text-sm text-black-700 hover:text-black hover:underline"
-      >
-        {adminpage ? t("Home") : t("api_docs")}
-      </a>
-      <a
-        href={adminpage ? "#" : "/admin"}
+        href={adminpage ? "/" : "/admin"}
         className="text-sm text-black-700 hover:text-black hover:underline pl-5"
       >
-        {adminpage ? t("api_docs") : t("admin_login")}
+        {adminpage ? t("Home") : t("admin_login")}
       </a>
     </div>
   );
