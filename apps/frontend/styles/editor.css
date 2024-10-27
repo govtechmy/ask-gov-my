@@ -1,7 +1,12 @@
 div.tiptap.ProseMirror {
-  padding: 0.5rem 0rem;
+  padding: 0rem 0rem;
   font-size: 14px;
   line-height: 20px;
+  flex: 1 1 0%;
+
+  > *:first-child {
+    @apply m-3;
+  }
 
   > * + * {
     @apply m-3;
@@ -60,4 +65,5 @@ div.tiptap.ProseMirror {
 
 div.tiptap.ProseMirror:focus-visible {
   outline-color: oklch(var(--myds-brand-600) / 10);
+  outline-width: 0;
 }

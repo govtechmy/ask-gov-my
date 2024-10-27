@@ -66,7 +66,9 @@
     "relatedtopics": "Related Topics",
     "showing": "Showing",
     "questionsin": "questions in",
-    "notfound": "We couldn't find any questions for selected topics."
+    "notfound": "We couldn't find any questions for selected topics.",
+    "notfound2": "Topics not found. Add the topic by clicking the button below",
+    "add_or_search": "Add topic or search for existing topic"
   },
 
   "Search": {
@@ -137,7 +139,37 @@
       "draft": "Draft"
     },
     "mark_spam": "Mark as Spam",
-    "unmark_spam": "Mark as not spam"
+    "unmark_spam": "Mark as not spam",
+    "spam_dialog": {
+      "title_spam": "Mark question as spam?",
+      "title_unspam": "Mark question as not spam?",
+      "description": "Confirm your action by submiting",
+      "cancel": "Cancel",
+      "successful_spam": "Successfully marked the question as spam",
+      "successful_unspam": "Successfully marked the question as not spam"
+    },
+    "agency_dropdown": {
+      "unassigned": "Unassigned",
+      "not_found": "Agency not found",
+      "successful": "Successfully assign to {acronym}",
+      "successful_unassigned": "Successfully unassign this question"
+    },
+    "agency_dialog": {
+      "title": "Question posted {day}",
+      "assign_to_agency": "Assign to agency:"
+    },
+    "answer_dialog": {
+      "updating_published_text": "You're editing a response that was published {day}",
+      "supporting_attachments": "Supporting attachments",
+      "previously_uploaded": "Previously uploaded",
+      "attachment_format": "Supported formats: JPG, PNG, WebP, & PDF",
+      "attachment_size": "Maximum size: 10MB per file",
+      "upload_file": "Upload files",
+      "successful": "Successfully submitted the answer",
+      "cancel": "Cancel",
+      "save_draft": "Save as draft",
+      "publish": "Publish now"
+    }
   },
   "AdminAgencies": {
     "title": "Manage Agencies",

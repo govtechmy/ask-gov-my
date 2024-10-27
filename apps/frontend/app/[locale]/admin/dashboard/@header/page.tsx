@@ -11,13 +11,13 @@ import { FSP, inject } from "@/lib/decorator";
 import MustBeAuthenticated from "@/middlewares/injectors/must-be-authenticated";
 import MobileSheet from "@/components/layout/header/mobile-sheet";
 
-const AdminHeader: FSP = ({ params }) => {
+const AdminHeader: FSP = ({ params, context }) => {
+  const { session } = context;
   return (
     <header className="sticky top-0 z-50 bg-background lg:backdrop-blur-[30px] print:hidden">
       <div
         className={cn(
           "max-w-screen-lg mx-auto w-full px-4 lg:px-0 flex py-6 gap-4.5 items-center"
-          // showMenu ? "" : "xl:bg-transparent"
         )}
         data-nosnippet
       >
@@ -27,9 +27,18 @@ const AdminHeader: FSP = ({ params }) => {
             className="flex items-center gap-2.5"
           >
             <AskLogoIcon />
-            <p className="font-poppins text-black-900 text-lg font-semibold hidden lg:block">
-              AskMyGov
-            </p>
+            {session?.user.role === "staff" && session?.user.agency ? (
+              <p className="lg:flex font-poppins font-semibold text-lg hidden">
+                Ask
+                <span className="text-askmygovbrand-600">
+                  {session?.user.agency?.acronym.toUpperCase()}
+                </span>
+              </p>
+            ) : (
+              <p className="font-poppins text-black-900 text-lg font-semibold hidden lg:block">
+                AskMyGov
+              </p>
+            )}
             <StyledDisplay variant={"nameHeader"}>ADMIN</StyledDisplay>
           </Link>
           <NavLinks />

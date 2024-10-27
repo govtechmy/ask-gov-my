@@ -2,7 +2,7 @@ export interface Question {
   id: number;
   topics: number[];
   question: string;
-  answer: Answer;
+  answer: Answer | null;
   spam: boolean;
   email: string;
   admin_opened_at: string | null;
@@ -10,12 +10,14 @@ export interface Question {
   created_at: string;
   updated_at: string;
   agency: Omit<Agency, "total_likes">;
-  attachments: {
-    id: number;
-    file_key: string;
-    /** File size in bytes */
-    file_size: number;
-  }[];
+  attachments: Attachment[];
+}
+
+export interface Attachment {
+  id: number;
+  file_key: string;
+  /** File size in bytes */
+  file_size: number;
 }
 
 export interface Answer {
@@ -50,6 +52,7 @@ export interface Topic {
   id: number;
   title: string;
   title_ms: string;
+  title_en: string;
   created_at: string;
   updated_at: string;
   agency:

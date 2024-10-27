@@ -63,6 +63,7 @@ const Search: FunctionComponent<SearchProps> = ({
           <SearchIcon className="h-4 w-4 text-outline-400" />
         )
       }
+      autoComplete="off"
       defaultValue={text || ""}
       placeholder={t(placeholder)}
       className={cn(

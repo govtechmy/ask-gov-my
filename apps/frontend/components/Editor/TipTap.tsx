@@ -1,10 +1,10 @@
-'use client';
+"use client";
 
-import Underline from '@tiptap/extension-underline';
-import { EditorContent, useEditor, UseEditorOptions } from '@tiptap/react';
-import StarterKit from '@tiptap/starter-kit';
-import Link from '@tiptap/extension-link';
-import Menubar from './Menubar';
+import Underline from "@tiptap/extension-underline";
+import { EditorContent, useEditor, UseEditorOptions } from "@tiptap/react";
+import StarterKit from "@tiptap/starter-kit";
+import Link from "@tiptap/extension-link";
+import Menubar from "./Menubar";
 
 export default ({
   isEditable = true,
@@ -16,7 +16,7 @@ export default ({
   isEditable?: boolean;
   hasMenuBar?: boolean;
   editorText: any;
-  setEditorText?: (content: string) => void;
+  setEditorText?: (raw: string, text: string) => void;
   className: string;
 }) => {
   const editorProps: Partial<UseEditorOptions> = {
@@ -27,7 +27,7 @@ export default ({
       Link.configure({
         openOnClick: true,
         autolink: true,
-        defaultProtocol: 'https',
+        defaultProtocol: "https",
       }),
     ],
     content: editorText,
@@ -36,14 +36,19 @@ export default ({
   };
 
   if (isEditable && setEditorText) {
-    editorProps.onUpdate = ({ editor }) => setEditorText(editor.getHTML());
+    editorProps.onUpdate = ({ editor }) =>
+      setEditorText(editor.getHTML(), editor.getText());
   }
 
   const editor = useEditor(editorProps);
   return (
     <div className={className}>
       {hasMenuBar && <Menubar editor={editor} />}
-      <EditorContent editor={editor} />
+      <EditorContent
+        id="tip-tap-content"
+        editor={editor}
+        className="h-full flex flex-col"
+      />
     </div>
   );
 };
