@@ -10,12 +10,19 @@ import TickCheckCircle from "@/icons/tickcheckcircle";
 import { submitQuestion } from "@/actions/questionServices";
 import { useTranslations } from "next-intl";
 import { Button } from "../../ui/button";
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@askgovmy/ui";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from "@askgovmy/ui";
 
 const AskQuestion = () => {
   const [isClicked, setIsClicked] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [isModalOpenSubmit, setIsModalOpenSubmit] = useState(false);
+  const [isSuccessModalOpen, setIsSuccessModalOpen] = useState(false);
   const [question, setQuestion] = useState("");
   const [email, setEmail] = useState("");
   const t = useTranslations("Askquestions");
@@ -40,7 +47,7 @@ const AskQuestion = () => {
     setIsClicked(true);
   };
 
-  const handleModalDisplay = () => {
+  const openModal = () => {
     setIsModalOpen(true);
   };
 
@@ -48,25 +55,25 @@ const AskQuestion = () => {
     setIsModalOpen(false);
   };
 
-  const handleModalDisplaySubmit = () => {
-    setIsModalOpenSubmit(true);
+  const openSuccessModal = () => {
+    setIsSuccessModalOpen(true);
   };
 
-  const closeModalSubmit = () => {
-    setIsModalOpenSubmit(false);
+  const closeSuccessModal = () => {
+    setIsSuccessModalOpen(false);
   };
 
   const handleModalCloseOpenModalSubmit = () => {
     closeModal();
-    handleModalDisplaySubmit();
+    openSuccessModal();
   };
 
   return (
     <div className="items-center px-4 py-2 text-center border-outline-200 h-[60px]">
       <div className="text-sm items-center flex text-primary-500 justify-center h-full">
         {isClicked ? (
-          <Button variant={"primary"} size={"md"} onClick={handleModalDisplay}>
-            <PlusIcon className="stroke-[#FFFFFF] dark:stroke-[#FFFFFF]"></PlusIcon>
+          <Button variant={"primary"} size={"md"} onClick={openModal}>
+            <PlusIcon className="stroke-white-forcewhite"></PlusIcon>
             {t("ask_new_question")}
           </Button>
         ) : (
@@ -180,35 +187,37 @@ const AskQuestion = () => {
         </DialogContent>
       </Dialog>
 
-      {isModalOpenSubmit && (
-        <div className="fixed inset-0 bg-gray-900 bg-opacity-50 flex items-center justify-center z-50">
-          <div className="bg-white rounded-xl shadow-card h-[248px] w-[400px] border-outline-200 border-[1px]">
-            <div className="p-6">
-              <div className="pb-4">
-                <TickCheckCircle className="stroke-[#15803D]"></TickCheckCircle>
-              </div>
-              <div className="pb-6 text-left">
-                <div className="text-black-900 font-semibold text-lg pb-2">
-                  {t("submission_received")}
-                </div>
-                <div className="text-black-700 font-normal text-sm">
-                  {t("submission_received_detail")}
-                </div>
-              </div>
-
-              <Button
-                className="w-full text-black-700"
-                variant={"secondary"}
-                size={"lg"}
-                onClick={closeModalSubmit}
-              >
-                <Close className="stroke-black-700"></Close>
-                {t("close")}
-              </Button>
-            </div>
-          </div>
-        </div>
-      )}
+      <Dialog open={isSuccessModalOpen} onOpenChange={setIsSuccessModalOpen}>
+        <DialogContent
+          className="h-full max-w-[600px] md:max-h-fit flex flex-col justify-center"
+          hideCloseButton
+        >
+          <DialogHeader>
+            <DialogTitle className="flex-col md:items-start gap-4">
+              <TickCheckCircle className="text-success-700 size-8" />
+              <h2 className="text-black-900 font-semibold text-lg pb-2">
+                {t("submission_received")}
+              </h2>
+            </DialogTitle>
+          </DialogHeader>
+          <DialogDescription asChild>
+            <p className="text-black-700 font-normal text-sm text-center md:text-left">
+              {t("submission_received_detail")}
+            </p>
+          </DialogDescription>
+          <DialogFooter>
+            <Button
+              className="w-full text-black-700"
+              variant={"secondary"}
+              size={"lg"}
+              onClick={closeSuccessModal}
+            >
+              <Close className="stroke-black-700"></Close>
+              {t("close")}
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 };
