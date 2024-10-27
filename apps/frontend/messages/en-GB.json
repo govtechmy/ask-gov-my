@@ -161,8 +161,9 @@
     "answer_dialog": {
       "updating_published_text": "You're editing a response that was published {day}",
       "supporting_attachments": "Supporting attachments",
-      "attachment_format": "Supported formats: JPG, PNG & PDF",
-      "attachment_size": "Maximum size: 25MB per file",
+      "previously_uploaded": "Previously uploaded",
+      "attachment_format": "Supported formats: JPG, PNG, WebP, & PDF",
+      "attachment_size": "Maximum size: 10MB per file",
       "upload_file": "Upload files",
       "successful": "Successfully submitted the answer",
       "cancel": "Cancel",

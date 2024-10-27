@@ -14,6 +14,7 @@ export * from "./popover";
 export * from "./select";
 export * from "./separator";
 export * from "./sheet";
+export { default as Spinner } from "./spinner";
 export * from "./tabs";
 export * from "./dialog";
 export * from "./toast";

@@ -10,5 +10,5 @@ export const since = (
 };
 
 export function getTimestamp() {
-  return DateTime.now().toFormat("yyyy-LL-dd-HH-mm-ss-SSS");
+  return DateTime.now().toFormat("dd-LL-yyyy-HH-mm-ss-SSS");
 }

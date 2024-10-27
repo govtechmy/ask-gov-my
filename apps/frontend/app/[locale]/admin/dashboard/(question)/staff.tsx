@@ -32,6 +32,7 @@ import {
   PlusIcon,
   DialogClose,
   useToast,
+  Spinner,
 } from "@askgovmy/ui";
 import { cn, since } from "@askgovmy/utils";
 import { EyeIcon } from "lucide-react";
@@ -51,6 +52,9 @@ import mime from "mime-types";
 import {
   createNewAnswer,
   createNewTopic,
+  createQuestionAttachment,
+  deleteQuestionAttachment,
+  getAttachmentPresignedURL,
   updateCurrentAnswer,
 } from "@/actions/admin/question";
 
@@ -177,9 +181,13 @@ export const AdminAnswerDialog: FC<AdminAnswerDialogProps> = ({
   const fileInput = useRef<HTMLInputElement | null>(null);
   const [open, setOpen] = useState(false);
   const [answerRaw, setAnswerRaw] = useState(question.answer?.raw || "");
-  const [answerText, setAnswerText] = useState(question.answer?.raw || "");
+  const [answerText, setAnswerText] = useState(question.answer?.text || "");
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const [topicSearch, setTopicSearch] = useState("");
   const [files, setFiles] = useState<Attachment[]>([]);
+  const [prevFiles, setPrevFiles] = useState<Attachment[]>(
+    question.attachments || []
+  );
   const [selectedTopics, setSelectedTopics] = useState<Topic[]>([]);
   const [questionHeight, setQuestionHeight] = useState<number>();
   useEffect(() => {
@@ -192,13 +200,55 @@ export const AdminAnswerDialog: FC<AdminAnswerDialogProps> = ({
   }, [open]);
 
   const handleFileSelection = (files: FileList) => {
-    setFiles(
-      Object.values(files).map((file) => ({
+    // temp state when file not uploaded yet.
+    setFiles((prev) => [
+      ...prev,
+      ...Object.values(files).map((file) => ({
         file_key: `uploads/${file.name}`,
         file_size: file.size,
         id: 0,
-      }))
-    );
+      })),
+    ]);
+
+    Object.values(files).forEach(async (file) => {
+      try {
+        // 1. get presigned url
+        const { uploadUrl } = await getAttachmentPresignedURL({
+          fileType: file.type,
+          fileName: `uploads/${file.name}`,
+          fileSize: file.size,
+        });
+
+        // 2. upload the attachment create endpoint
+        const res = await fetch(uploadUrl, {
+          method: "PUT",
+          body: file,
+          headers: {
+            "Cache-Control": "public, max-age=31536000, immutable",
+            "Content-Disposition": "inline",
+          },
+        });
+
+        if (!res.ok) return;
+        const { error, message, data } = await createQuestionAttachment({
+          question: question.id,
+          file_key: `uploads/${file.name}`,
+          file_size: file.size,
+        });
+
+        if (error) return;
+        // 3. set individual state to full data with id
+        setFiles((prev) => [
+          ...prev.filter(
+            (file) => !(file.id === 0 && file.file_key === data.file_key)
+          ),
+          data,
+        ]);
+      } catch (error) {
+        console.error("here", error);
+        return error;
+      }
+    });
   };
 
   const getContentOffset = () => {
@@ -224,7 +274,18 @@ export const AdminAnswerDialog: FC<AdminAnswerDialogProps> = ({
     setTopicSearch("");
   };
 
+  const handleDeleteUploadedAttachment = async (id: string) => {
+    const { message, error, data } = await deleteQuestionAttachment(id);
+
+    if (error) return;
+
+    setPrevFiles((prev) => prev.filter((file) => file.id.toString() !== id));
+  };
+
   const handleSubmitAnswer = async (draft: boolean) => {
+    if (!draft) {
+      setIsSubmitting(true);
+    }
     if (type === "create") {
       const { error, message } = await createNewAnswer({
         question: question.id,
@@ -233,15 +294,18 @@ export const AdminAnswerDialog: FC<AdminAnswerDialogProps> = ({
         draft,
       });
 
-      if (error)
+      if (error) {
         toast({ variant: "error", title: error, description: message });
-      else
+        setIsSubmitting(false);
+      } else {
+        setIsSubmitting(false);
         toast({
           variant: "success",
           title: (
             <Translator namespace="AdminQuestions.answer_dialog.successful" />
           ),
         });
+      }
     }
 
     if (type === "edit") {
@@ -255,15 +319,18 @@ export const AdminAnswerDialog: FC<AdminAnswerDialogProps> = ({
         }
       );
 
-      if (error)
+      if (error) {
         toast({ variant: "error", title: error, description: message });
-      else
+        setIsSubmitting(false);
+      } else {
+        setIsSubmitting(false);
         toast({
           variant: "success",
           title: (
             <Translator namespace="AdminQuestions.answer_dialog.successful" />
           ),
         });
+      }
     }
   };
 
@@ -319,7 +386,10 @@ export const AdminAnswerDialog: FC<AdminAnswerDialogProps> = ({
               setAnswerRaw(raw);
               setAnswerText(text);
             }}
-            className="flex flex-col divide-y rounded-lg w-full h-[250px] border-[1px] shadow-button overflow-y-auto relative"
+            className={cn(
+              "flex flex-col divide-y rounded-lg w-full h-[250px] border-[1px] shadow-button overflow-y-auto relative",
+              isSubmitting && "bg-washed-100"
+            )}
           />
           <div className="border p-4 space-y-4 rounded-lg">
             <div className="flex items-center">
@@ -341,6 +411,7 @@ export const AdminAnswerDialog: FC<AdminAnswerDialogProps> = ({
               </div>
 
               <Button
+                disabled={isSubmitting}
                 onClick={() => fileInput.current?.click()}
                 icon={<UploadIcon />}
               >
@@ -353,7 +424,7 @@ export const AdminAnswerDialog: FC<AdminAnswerDialogProps> = ({
                   type="file"
                   ref={fileInput}
                   multiple={true}
-                  accept=".jpg, .jpeg, .png, .pdf"
+                  accept=".jpg, .jpeg, .png, .webp, .pdf"
                   onChange={async (e) => {
                     const fileList = e.target.files;
                     if (fileList) handleFileSelection(fileList);
@@ -366,14 +437,17 @@ export const AdminAnswerDialog: FC<AdminAnswerDialogProps> = ({
               {files.map((file, idx) => (
                 <div
                   key={idx}
-                  className="px-3 py-2 w-[190px] flex items-center gap-1.5 bg-white-focuswhite100 border border-outline-300 rounded-lg"
+                  className={cn(
+                    "px-3 py-2 w-[180px] flex items-center gap-1.5 bg-white-focuswhite100 border border-outline-300 rounded-lg",
+                    file.id === 0 && "opacity-40"
+                  )}
                 >
                   <AttachmentIcon
                     type={
                       mime.lookup(file.file_key) || "application/octet-stream"
                     }
                   />
-                  <p className="flex flex-col flex-1">
+                  <p className="flex flex-col flex-1 line-clamp-2">
                     <span className="line-clamp-1 text-sm">
                       {file.file_key.split("/").at(-1)}
                     </span>
@@ -384,6 +458,7 @@ export const AdminAnswerDialog: FC<AdminAnswerDialogProps> = ({
                     </span>
                   </p>
                   <Button
+                    disabled={file.id === 0}
                     variant={"cancel-box-red"}
                     className="size-8"
                     icon={<CloseIcon className="stroke-danger-600" />}
@@ -394,6 +469,49 @@ export const AdminAnswerDialog: FC<AdminAnswerDialogProps> = ({
                 </div>
               ))}
             </div>
+            {prevFiles.length > 0 && (
+              <div className="border-t space-y-3 pt-3">
+                <Translator
+                  namespace="AdminQuestions.answer_dialog.previously_uploaded"
+                  className="text-sm text-dim-500"
+                />
+                <div className="flex items-center gap-2 flex-wrap">
+                  {prevFiles.map((file, idx) => (
+                    <div
+                      key={idx}
+                      className="px-3 py-2 w-[180px] flex items-center gap-1.5 bg-white-focuswhite100 border border-outline-300 rounded-lg"
+                    >
+                      <AttachmentIcon
+                        type={
+                          mime.lookup(file.file_key) ||
+                          "application/octet-stream"
+                        }
+                      />
+                      <p className="flex flex-col flex-1 line-clamp-2">
+                        <span className="line-clamp-1 text-sm ">
+                          {file.file_key.split("/").at(-1)}
+                        </span>
+                        <span className="text-xs text-dim-500">
+                          {file.file_size < 1e6
+                            ? `${(file.file_size / 1e3).toFixed(1)} KB`
+                            : `${(file.file_size / 1e6).toFixed(1)} MB`}
+                        </span>
+                      </p>
+                      <Button
+                        variant={"cancel-box-red"}
+                        className="size-8"
+                        icon={<CloseIcon className="stroke-danger-600" />}
+                        onClick={async () => {
+                          await handleDeleteUploadedAttachment(
+                            file.id.toString()
+                          );
+                        }}
+                      />
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
           </div>
 
           <div className="space-y-1.5" ref={topicContainer}>
@@ -515,7 +633,11 @@ export const AdminAnswerDialog: FC<AdminAnswerDialogProps> = ({
           type="button"
           onClick={() => handleSubmitAnswer(false)}
         >
-          <Translator namespace="AdminQuestions.answer_dialog.publish" />
+          {isSubmitting ? (
+            <Spinner />
+          ) : (
+            <Translator namespace="AdminQuestions.answer_dialog.publish" />
+          )}
         </Button>
       </DialogFooter>
     </>

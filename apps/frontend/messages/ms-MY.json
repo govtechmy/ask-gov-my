@@ -160,9 +160,10 @@
     },
     "answer_dialog": {
       "updating_published_text": "Anda sedang mengemaskini respond jawapan yang telah diterbitkan {day}",
+      "previously_uploaded": "Telah dimuatnaik",
       "supporting_attachments": "Lampiran sokongan",
-      "attachment_format": "Format disokong: JPG, PNG & PDF",
-      "attachment_size": "Saiz maksimum: 25MB per file",
+      "attachment_format": "Format disokong: JPG, PNG, WebP & PDF",
+      "attachment_size": "Saiz maksimum: 10MB per file",
       "upload_file": "Muatnaik lampiran",
       "successful": "Berjaya menghantar jawapan",
       "cancel": "Batal",

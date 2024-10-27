@@ -5,8 +5,17 @@ import { Context } from "@/lib/decorator";
 import { route } from "@/lib/routes";
 import { paginate } from "@/lib/server-helper";
 import { ApiParams } from "@/types/types";
-import { HttpStatusCode, withResponse, Yikes } from "@askgovmy/utils";
+import {
+  getTimestamp,
+  HttpStatusCode,
+  withResponse,
+  Yikes,
+} from "@askgovmy/utils";
 import { revalidatePath } from "next/cache";
+import mime from "mime-types";
+import { PutObjectCommand } from "@aws-sdk/client-s3";
+import { getSignedUrl } from "@aws-sdk/s3-request-presigner";
+import { s3 } from "@/lib/s3";
 
 type getQuestionsProps = ApiParams & {
   agency?: number;
@@ -222,6 +231,87 @@ export const updateCurrentAnswer = withResponse(
     return {
       data: response,
       message: "Sucesfully update answer",
+      status: HttpStatusCode.OK_200,
+    };
+  }
+);
+
+export async function getAttachmentPresignedURL({
+  fileType,
+  fileName,
+  fileSize,
+}: {
+  fileType: string;
+  fileName: string;
+  fileSize: number;
+}): Promise<{ uploadUrl: string; downloadUrl: string }> {
+  const session = await getSession();
+  if (!session) throw new Yikes("E_201_NOT_AUTHORIZED");
+
+  if (fileSize > 10485760) throw new Yikes("E_302_VALIDATION_ERROR");
+
+  let key = `${fileName}_${getTimestamp()}`;
+  const fileExtension = mime.extension(fileType);
+  if (fileExtension) {
+    key += `.${fileExtension}`;
+  }
+
+  if (
+    fileExtension &&
+    !["jpg", "jpeg", "png", "webp", "pdf"].includes(fileExtension)
+  ) {
+    throw new Yikes("E_302_VALIDATION_ERROR");
+  }
+
+  const command = new PutObjectCommand({
+    Bucket: process.env.STORAGE_BUCKET,
+    Key: key,
+    ContentType: fileType,
+  });
+
+  const uploadUrl = await getSignedUrl(s3, command, {
+    expiresIn: 60 * 5,
+  });
+  const downloadUrl = `${process.env.STORAGE_BASE_URL}/${key}`;
+
+  return { uploadUrl, downloadUrl };
+}
+
+export const createQuestionAttachment = withResponse(
+  async (body: { question: number; file_key: string; file_size: number }) => {
+    const session = await getSession();
+    if (!session) throw new Yikes("E_201_NOT_AUTHORIZED");
+
+    const response = await api(`/admin/attachments/`, {
+      method: "POST",
+      body,
+      headers: {
+        Authorization: `Token ${session.accessToken}`,
+      },
+    });
+
+    return {
+      data: response,
+      message: "Sucesfully deleted the attachment answer",
+      status: HttpStatusCode.OK_200,
+    };
+  }
+);
+export const deleteQuestionAttachment = withResponse(
+  async (attachmentId: string) => {
+    const session = await getSession();
+    if (!session) throw new Yikes("E_201_NOT_AUTHORIZED");
+
+    const response = await api(`/admin/attachments/${attachmentId}/`, {
+      method: "DELETE",
+      headers: {
+        Authorization: `Token ${session.accessToken}`,
+      },
+    });
+
+    return {
+      data: response,
+      message: "Sucesfully deleted the attachment answer",
       status: HttpStatusCode.OK_200,
     };
   }
