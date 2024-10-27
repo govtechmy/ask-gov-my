@@ -119,11 +119,11 @@ const InputNavbar: React.FC<InputNavbarProps> = ({
       ref={divRef}
       id="inputnavbar"
       className={cn(
-        className,
         `flex items-center border-outline-200 h-11 shadow-button border pl-3 pr-2 py-2 bg-[#FFFFFF] dark:bg-[#1D1D21] w-full relative `,
         searchQuery.length > 0 && showResultsPopup
           ? "rounded-b-none rounded-t-3xl"
-          : "rounded-full"
+          : "rounded-full",
+        className
       )}
     >
       <input

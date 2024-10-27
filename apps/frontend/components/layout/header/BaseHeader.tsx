@@ -7,6 +7,12 @@ import Asklogo from "@/icons/asklogo";
 import { context } from "@/components/context/ContextSearchBar";
 import InputNavbar from "../../common/SearchNavbar/inputnavbar";
 import { StyledDisplay } from "@/components/ui/display";
+import {
+  PopoverContent,
+  PopoverRoot,
+  PopoverTrigger,
+  SearchIcon,
+} from "@askgovmy/ui";
 
 interface HeaderProps {
   isAdmin?: boolean;
@@ -26,6 +32,8 @@ const BaseHeader: React.FC<HeaderProps> = ({
     searchResults,
     setSearchResults,
   } = useContext<any>(context);
+
+  const showSearchInput = alwaysShowInput || headerContent === "input";
 
   return (
     <div id="header" className={`sticky top-0 z-30 ${isAdmin ? "" : "w-full"}`}>
@@ -53,9 +61,9 @@ const BaseHeader: React.FC<HeaderProps> = ({
               </div>
             </Link>
 
-            {(alwaysShowInput || headerContent === "input") && (
+            {showSearchInput && (
               <InputNavbar
-                className="mx-3"
+                className="mx-3 hidden lg:flex"
                 searchQuery={searchQuery}
                 setSearchQuery={setSearchQuery}
                 searchResults={searchResults}
@@ -64,6 +72,25 @@ const BaseHeader: React.FC<HeaderProps> = ({
             )}
 
             <div className="flex gap-3 items-center">
+              {showSearchInput && (
+                <PopoverRoot>
+                  <PopoverTrigger className="lg:hidden">
+                    <SearchIcon />
+                  </PopoverTrigger>
+                  <PopoverContent
+                    className="w-screen bg-transparent border-none px-4 h-full"
+                    align="center"
+                  >
+                    <InputNavbar
+                      className="shadow-lg"
+                      searchQuery={searchQuery}
+                      setSearchQuery={setSearchQuery}
+                      searchResults={searchResults}
+                      setSearchResults={setSearchResults}
+                    />
+                  </PopoverContent>
+                </PopoverRoot>
+              )}
               <ThemeToggle />
               <Suspense>
                 <LocaleSwitch />
