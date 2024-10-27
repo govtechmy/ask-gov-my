@@ -1,4 +1,5 @@
 "use client";
+import { Question } from "@/types/types";
 import { createContext, useState } from "react";
 
 type contextvalue = {
@@ -6,8 +7,8 @@ type contextvalue = {
   setHeaderContent: (content: string) => void;
   searchQuery: string;
   setSearchQuery: (query: string) => void;
-  searchResults: any[];
-  setSearchResults: (results: any[]) => void;
+  searchResults: Question[];
+  setSearchResults: (results: Question[]) => void;
 };
 
 export const context = createContext<contextvalue>({
@@ -16,7 +17,7 @@ export const context = createContext<contextvalue>({
   searchQuery: "",
   setSearchQuery: (query: string) => {},
   searchResults: [],
-  setSearchResults: (results: any[]) => {},
+  setSearchResults: (results: Question[]) => {},
 });
 
 const ContextSearchBar = ({ children }: { children: React.ReactNode }) => {

@@ -10,7 +10,12 @@ import TickCheckCircle from "@/icons/tickcheckcircle";
 import { submitQuestion } from "@/actions/questionServices";
 import { useTranslations } from "next-intl";
 import { Button } from "../../ui/button";
-import { Dialog, DialogContent } from "@askgovmy/ui";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+} from "@askgovmy/ui";
 
 const AskQuestion = () => {
   const [isClicked, setIsClicked] = useState(false);
@@ -78,22 +83,16 @@ const AskQuestion = () => {
       </div>
       <Dialog open={isModalOpen} onOpenChange={setIsModalOpen}>
         <DialogContent className="max-h-[750px] max-w-[600px]">
-          <div className="p-[14px]">
-            <div className="flex justify-end">
-              <div
-                onClick={closeModal}
-                className="hover:cursor-pointer rounded-lg shadow-button h-8 w-8 flex items-center justify-center border-[1px] border-outline-200"
-              >
-                <Close className="stroke-black-900" />
-              </div>
-            </div>
-            <div className="text-lg font-semibold pt-[18px] px-[18px] pb-[24px] text-left -mt-8 flex items-center text-black-900">
-              <div className="pr-3">
-                <QuestionMarkWithBox></QuestionMarkWithBox>
-              </div>
-              <div>{t("ask_new_question")}</div>
-            </div>
-
+          <div className="text-lg font-semibold pt-[18px] px-[18px] pb-[24px] text-left -mt-8 flex items-center text-black-900">
+            <div className="pr-3"></div>
+          </div>
+          <DialogHeader>
+            <h2 className="text-lg font-semibold text-black-900 flex items-center gap-2">
+              <QuestionMarkWithBox />
+              <span>{t("ask_new_question")}</span>
+            </h2>
+          </DialogHeader>
+          <DialogDescription>
             <form className="px-[18px]" onSubmit={handleSubmit}>
               <div className="text-left">
                 <div className="text-base font-medium pb-0 mb-0 text-black-700">
@@ -186,7 +185,7 @@ const AskQuestion = () => {
                 </div>
               </div>
             </form>
-          </div>
+          </DialogDescription>
         </DialogContent>
       </Dialog>
 
