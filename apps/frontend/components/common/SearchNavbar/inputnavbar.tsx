@@ -101,19 +101,6 @@ const InputNavbar: React.FC<InputNavbarProps> = ({
     setSearchResults([]);
   };
 
-  useEffect(() => {
-    const handleClickOutside = (event) => {
-      if (divRef.current && !divRef.current.contains(event.target)) {
-        setShowResultsPopup(false);
-      }
-    };
-
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
-    };
-  }, []);
-
   return (
     <div
       ref={divRef}
