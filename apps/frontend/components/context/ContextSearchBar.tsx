@@ -3,8 +3,9 @@ import { Question } from "@/types/types";
 import { createContext, useState } from "react";
 
 type contextvalue = {
-  headerContent: string;
-  setHeaderContent: (content: string) => void;
+  navbarSearchIsVisible: boolean;
+  showNavbarSearch: () => void;
+  hideNavbarSearch: () => void;
   searchQuery: string;
   setSearchQuery: (query: string) => void;
   searchResults: Question[];
@@ -12,8 +13,9 @@ type contextvalue = {
 };
 
 export const context = createContext<contextvalue>({
-  headerContent: "",
-  setHeaderContent: (content: string) => {},
+  navbarSearchIsVisible: false,
+  showNavbarSearch: () => {},
+  hideNavbarSearch: () => {},
   searchQuery: "",
   setSearchQuery: (query: string) => {},
   searchResults: [],
@@ -21,15 +23,19 @@ export const context = createContext<contextvalue>({
 });
 
 const ContextSearchBar = ({ children }: { children: React.ReactNode }) => {
-  const [headerContent, setHeaderContent] = useState<string>("");
+  const [navbarSearchIsVisible, setNavbarSearchIsVisible] = useState(false);
   const [searchQuery, setSearchQuery] = useState<string>("");
   const [searchResults, setSearchResults] = useState<any[]>([]);
+
+  const showNavbarSearch = () => setNavbarSearchIsVisible(true);
+  const hideNavbarSearch = () => setNavbarSearchIsVisible(false);
 
   return (
     <context.Provider
       value={{
-        headerContent,
-        setHeaderContent,
+        navbarSearchIsVisible,
+        showNavbarSearch,
+        hideNavbarSearch,
         searchQuery,
         setSearchQuery,
         searchResults,

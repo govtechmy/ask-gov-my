@@ -16,27 +16,27 @@ import {
 
 interface HeaderProps {
   isAdmin?: boolean;
-  alwaysShowInput?: boolean;
+  alwaysShowSearch?: boolean;
   agencyAcronym?: string;
 }
 
 const BaseHeader: React.FC<HeaderProps> = ({
   isAdmin = false,
-  alwaysShowInput = false,
+  alwaysShowSearch = false,
   agencyAcronym,
 }) => {
   const {
-    headerContent,
+    navbarSearchIsVisible,
     searchQuery,
     setSearchQuery,
     searchResults,
     setSearchResults,
-  } = useContext<any>(context);
+  } = useContext(context);
 
-  const showSearchInput = alwaysShowInput || headerContent === "input";
+  const showSearch = alwaysShowSearch || navbarSearchIsVisible;
 
   return (
-    <div id="header" className={`sticky top-0 z-30 ${isAdmin ? "" : "w-full"}`}>
+    <div id="header" className={`sticky top-0 z-50 ${isAdmin ? "" : "w-full"}`}>
       <div
         className={`w-full bg-white ${isAdmin ? "border-[1px] border-outline-200" : "p-2 border-[1px] border-outline-200 h-16"} flex items-center`}
       >
@@ -61,7 +61,7 @@ const BaseHeader: React.FC<HeaderProps> = ({
               </div>
             </Link>
 
-            {showSearchInput && (
+            {showSearch && (
               <InputNavbar
                 className="mx-3 hidden lg:flex"
                 searchQuery={searchQuery}
@@ -72,7 +72,7 @@ const BaseHeader: React.FC<HeaderProps> = ({
             )}
 
             <div className="flex gap-3 items-center">
-              {showSearchInput && (
+              {showSearch && (
                 <PopoverRoot>
                   <PopoverTrigger className="lg:hidden">
                     <SearchIcon />

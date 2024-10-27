@@ -67,7 +67,6 @@ const InputNavbar: React.FC<InputNavbarProps> = ({
   const router = useRouter();
   const t = useTranslations("Search");
   const inputRef = useRef<HTMLInputElement>(null);
-  const divRef = useRef<HTMLDivElement>(null);
 
   const handleInfoClick = () => {
     if (searchQuery.trim().length > 0) {
@@ -118,7 +117,6 @@ const InputNavbar: React.FC<InputNavbarProps> = ({
     >
       <PopoverAnchor asChild>
         <div
-          ref={divRef}
           id="inputnavbar"
           className={cn(
             `flex items-center border-outline-200 h-11 shadow-button border pl-3 pr-2 py-2 bg-white w-full relative `,
