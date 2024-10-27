@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useState, useCallback, useRef } from "react";
+import React, { useState, useCallback, useRef } from "react";
 import { Link } from "@/lib/i18n";
 import { searchQuestions } from "@/actions/questionServices";
 import Search from "@/icons/search";
@@ -14,8 +14,10 @@ import { Question } from "@/types/types";
 import { cn } from "@askgovmy/utils";
 import {
   Command,
+  CommandEmpty,
   CommandItem,
   CommandList,
+  CommandLoading,
   PopoverAnchor,
   PopoverContent,
   PopoverRoot,
@@ -174,53 +176,49 @@ const InputNavbar: React.FC<InputNavbarProps> = ({
         sideOffset={0}
       >
         <div className="overflow-y-auto max-h-60">
-          {isSearching ? (
-            <div className="px-4 py-2 text-center">{t("searching")}</div>
-          ) : (
-            <>
-              {searchResults.length === 0 && (
-                <div className="px-4 py-2 text-center">{t("no_results")}</div>
+          <Command shouldFilter={false}>
+            <CommandList>
+              {isSearching && (
+                <CommandLoading>
+                  <p className="py-2 text-center">{t("searching")}</p>
+                </CommandLoading>
               )}
-              {searchResults.length > 0 && (
-                <Command shouldFilter={false}>
-                  <CommandList>
-                    {searchResults.map((result) => (
-                      <CommandItem
-                        key={result.id}
-                        className="flex rounded-md items-center pr-2 pl-4 py-2 last:border-0 hover:bg-outline-200 h-auto max-h-[60px]"
-                      >
-                        <Link
-                          className="grow"
-                          href={`/${result.agency.acronym.toLowerCase()}/${result.id}`}
-                        >
-                          <span className="font-medium text-sm text-black-700 line-clamp-1 ">
-                            {highlightText(result.question, searchQuery)}
-                          </span>
-                          <span className="mt-1 font-normal text-sm text-dim-500 line-clamp-1">
-                            Answer:{" "}
-                            {highlightText(result.answer.text, searchQuery)}
-                          </span>
-                        </Link>
-                        <span className="on hover:cursor-pointer pl-3">
-                          <div className="flex">
-                            <div className="pr-1.5">
-                              <JataNegaraIcon className="stroke-[#E4E4E7] dark:stroke-[#27272A] h-5 w-5"></JataNegaraIcon>
-                            </div>
-                            <div className="font-normal text-sm text-black-800">
-                              {result.agency.acronym}
-                            </div>
-                            <div className="px-1">
-                              <RightArrow />
-                            </div>
-                          </div>
-                        </span>
-                      </CommandItem>
-                    ))}
-                  </CommandList>
-                </Command>
-              )}
-            </>
-          )}
+              <CommandEmpty>
+                <p className="py-2 text-center">{t("no_results")}</p>
+              </CommandEmpty>
+              {searchResults.map((result) => (
+                <CommandItem
+                  key={result.id}
+                  className="flex rounded-md items-center pr-2 pl-4 py-2 last:border-0 hover:bg-outline-200 h-auto max-h-[60px]"
+                >
+                  <Link
+                    className="grow"
+                    href={`/${result.agency.acronym.toLowerCase()}/${result.id}`}
+                  >
+                    <span className="font-medium text-sm text-black-700 line-clamp-1 ">
+                      {highlightText(result.question, searchQuery)}
+                    </span>
+                    <span className="mt-1 font-normal text-sm text-dim-500 line-clamp-1">
+                      Answer: {highlightText(result.answer.text, searchQuery)}
+                    </span>
+                  </Link>
+                  <span className="on hover:cursor-pointer pl-3">
+                    <div className="flex">
+                      <div className="pr-1.5">
+                        <JataNegaraIcon className="stroke-[#E4E4E7] dark:stroke-[#27272A] h-5 w-5"></JataNegaraIcon>
+                      </div>
+                      <div className="font-normal text-sm text-black-800">
+                        {result.agency.acronym}
+                      </div>
+                      <div className="px-1">
+                        <RightArrow />
+                      </div>
+                    </div>
+                  </span>
+                </CommandItem>
+              ))}
+            </CommandList>
+          </Command>
         </div>
         <AskQuestion />
       </PopoverContent>
