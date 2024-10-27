@@ -4,7 +4,8 @@ import { extract } from "@askgovmy/utils";
 export const routes = {
   home: "/",
   searchresults: "/searchresults/",
-  agency: "/:agencyAcronym/",
+  agency: "/:agencyAcronym",
+  agencyAllTopics: "/:agencyAcronym/topics/all",
   agencyTopic: "/:agencyAcronym/topics/:topicId",
   admin: {
     index: "/admin/",

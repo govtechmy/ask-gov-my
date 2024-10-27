@@ -24,7 +24,7 @@ import {
   BreadcrumbPage,
   Separator,
 } from "@askgovmy/ui";
-import { routes } from "@/lib/routes";
+import { route, routes } from "@/lib/routes";
 import { since } from "@askgovmy/utils";
 import mime from "mime-types";
 import { AttachmentIcon } from "./attachment-icon";
@@ -79,7 +79,14 @@ const QuestionDetailPage: FSP<QuestionDetailsProps> = async ({
               <AgencyLogoImporter currentAgency={question.agency} />
             </div>
             <div className="font-medium text-sm text-black-700 px-2">
-              <AgencyName agency={question.agency} />
+              <Link
+                className="hover:underline"
+                href={route("agencyAllTopics", {
+                  agencyAcronym: question.agency.acronym,
+                })}
+              >
+                <AgencyName agency={question.agency} />
+              </Link>
             </div>
           </div>
           <p className="font-medium text-sm text-dim-500 flex items-center gap-1">
