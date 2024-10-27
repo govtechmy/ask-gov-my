@@ -76,7 +76,7 @@ const AskQuestion = () => {
         )}
       </div>
       {isModalOpen && (
-        <div className="fixed inset-0 bg-gray-900 bg-opacity-50 flex items-center justify-center">
+        <div className="fixed inset-0 bg-gray-900 bg-opacity-50 flex items-center justify-center z-50">
           <div className="bg-white rounded-xl shadow-card max-h-[750px] max-w-[600px] border-outline-200 border-[1px]">
             <div className="p-[14px]">
               <div className="flex justify-end">
@@ -192,7 +192,7 @@ const AskQuestion = () => {
       )}
 
       {isModalOpenSubmit && (
-        <div className="fixed inset-0 bg-gray-900 bg-opacity-50 flex items-center justify-center">
+        <div className="fixed inset-0 bg-gray-900 bg-opacity-50 flex items-center justify-center z-50">
           <div className="bg-white rounded-xl shadow-card h-[248px] w-[400px] border-outline-200 border-[1px]">
             <div className="p-6">
               <div className="pb-4">
