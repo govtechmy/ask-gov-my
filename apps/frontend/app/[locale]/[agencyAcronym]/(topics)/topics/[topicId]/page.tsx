@@ -58,7 +58,7 @@ const TopicPage: FSP<TopicPageProps> = async ({ params, data, locale }) => {
             ))}
           </div>
 
-          <Paginator route="agency" data={questions.page} />
+          <Paginator route="agencyAllTopics" data={questions.page} />
         </>
       ) : (
         <WordTranslate
