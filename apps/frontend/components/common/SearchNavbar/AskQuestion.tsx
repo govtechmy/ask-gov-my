@@ -84,19 +84,17 @@ const AskQuestion = () => {
         )}
       </div>
       <Dialog open={isModalOpen} onOpenChange={setIsModalOpen}>
-        <DialogContent className="h-full md:max-h-[750px] max-w-[600px]">
-          <div className="text-lg font-semibold pt-[18px] px-[18px] pb-[24px] text-left -mt-8 flex items-center text-black-900">
-            <div className="pr-3"></div>
-          </div>
+        <DialogContent className="h-full md:h-auto max-w-[600px] flex flex-col">
           <DialogHeader>
-            <DialogTitle>
-              <h2 className="text-lg font-semibold text-black-900 flex items-center gap-2">
-                <QuestionMarkWithBox />
-                <span>{t("ask_new_question")}</span>
-              </h2>
+            <DialogTitle className="justify-start gap-2">
+              <QuestionMarkWithBox />
+              <span>{t("ask_new_question")}</span>
             </DialogTitle>
+            <DialogDescription className="sr-only">
+              {t("ask_new_question")}
+            </DialogDescription>
           </DialogHeader>
-          <form className="px-[18px]" onSubmit={handleSubmit}>
+          <form onSubmit={handleSubmit} className="flex-1 relative">
             <div className="text-left">
               <div className="text-base font-medium pb-0 mb-0 text-black-700">
                 {t("your_question")}
@@ -113,9 +111,7 @@ const AskQuestion = () => {
               ></textarea>
             </div>
 
-            <div className="mt-4 mb-5"></div>
-
-            <div className="text-left">
+            <div className="text-left mt-4">
               {/* this is email input  */}
               <div className="mb-[4px] text-base font-medium pb-0 text-black-700">
                 {t("notify_me")}
@@ -175,7 +171,7 @@ const AskQuestion = () => {
               </div>
             </div>
 
-            <div className="flex flex-col items-center pt-9 pb-[18px]">
+            <div className="absolute bottom-0 md:static flex flex-col items-center pt-9 pb-[18px]">
               <Button type="submit" onClick={handleSubmit} variant={"primary"}>
                 {t("submit")}
               </Button>
@@ -195,9 +191,9 @@ const AskQuestion = () => {
           <DialogHeader>
             <DialogTitle className="flex-col md:items-start gap-4">
               <TickCheckCircle className="text-success-700 size-8" />
-              <h2 className="text-black-900 font-semibold text-lg pb-2">
+              <span className="text-black-900 font-semibold text-lg pb-2 inline-block">
                 {t("submission_received")}
-              </h2>
+              </span>
             </DialogTitle>
           </DialogHeader>
           <DialogDescription asChild>
