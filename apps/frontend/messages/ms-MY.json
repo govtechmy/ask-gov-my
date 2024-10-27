@@ -66,7 +66,9 @@
     "relatedtopics": "Topik Berkaitan",
     "showing": "Memaparkan",
     "questionsin": "soalan topik",
-    "notfound": "Kami tidak dapat mencari sebarang soalan untuk topik yang dipilih."
+    "notfound": "Kami tidak dapat mencari sebarang soalan untuk topik yang dipilih.",
+    "notfound2": "Topik tidak dijumpai. Tambah topik dengan menekan butang dibawah",
+    "add_or_search": "Tambah topik atau cari mengikut topik sedia ada"
   },
 
   "Search": {
@@ -137,7 +139,37 @@
       "draft": "Draf"
     },
     "mark_spam": "Tanda sebagai Spam",
-    "unmark_spam": "Tanda sebagai bukan spam"
+    "unmark_spam": "Tanda sebagai bukan spam",
+    "spam_dialog": {
+      "title_spam": "Tanda soalan ini sebagai spam?",
+      "title_unspam": "Tanda soalan ini sebagai bukan spam?",
+      "description": "Muktamadkan pilihan dengan menghantar pilihan",
+      "cancel": "Batal",
+      "successful_spam": "Soalan berjaya ditanda sebagai spam",
+      "successful_unspam": "Soalan berjaya ditanda sebagai bukan spam"
+    },
+    "agency_dropdown": {
+      "unassigned": "Tidak Ditugaskan",
+      "not_found": "Agensi tidak dijumpai",
+      "successful": "Berjaya menugaskan soalan kepada {acronym}",
+      "successful_unassigned": "Penugasan soalan berjaya ditarik"
+    },
+    "agency_dialog": {
+      "title": "Soalan dihantar {day}",
+      "assign_to_agency": "Tugaskan kepada agensi:"
+    },
+    "answer_dialog": {
+      "updating_published_text": "Anda sedang mengemaskini respond jawapan yang telah diterbitkan {day}",
+      "previously_uploaded": "Telah dimuatnaik",
+      "supporting_attachments": "Lampiran sokongan",
+      "attachment_format": "Format disokong: JPG, PNG, WebP & PDF",
+      "attachment_size": "Saiz maksimum: 10MB per file",
+      "upload_file": "Muatnaik lampiran",
+      "successful": "Berjaya menghantar jawapan",
+      "cancel": "Batal",
+      "save_draft": "Simpan sebagai draf",
+      "publish": "Terbit sekarang"
+    }
   },
   "AdminAgencies": {
     "title": "Pengurusan Agensi",

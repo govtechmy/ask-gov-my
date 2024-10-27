@@ -20,12 +20,11 @@ import {
   CommandList,
 } from "@askgovmy/ui";
 import { FC, startTransition } from "react";
-import { cn, RoleList } from "@askgovmy/utils";
+import { cn } from "@askgovmy/utils";
 import { useSearchParams } from "next/navigation";
 import { usePathname, useRouter } from "@/lib/i18n";
 import { Agency } from "@/types/types";
 import { Check } from "lucide-react";
-import { Context } from "@/lib/decorator";
 
 interface ForAdminProps {
   role: "super_admin";
@@ -156,8 +155,8 @@ const ManageQuestionsFilter: FC<ManageQuestionsFilter> = ({
                       <Translator
                         className="font-medium flex-1"
                         namespace="AdminUsers.all_agency"
+                        tag="span"
                       />
-                      {/* <span className="font-medium">{agency.acronym}</span> */}
 
                       <Check
                         className={cn(
