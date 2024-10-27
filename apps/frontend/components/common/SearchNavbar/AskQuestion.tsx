@@ -10,12 +10,7 @@ import TickCheckCircle from "@/icons/tickcheckcircle";
 import { submitQuestion } from "@/actions/questionServices";
 import { useTranslations } from "next-intl";
 import { Button } from "../../ui/button";
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogHeader,
-} from "@askgovmy/ui";
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@askgovmy/ui";
 
 const AskQuestion = () => {
   const [isClicked, setIsClicked] = useState(false);
@@ -82,110 +77,106 @@ const AskQuestion = () => {
         )}
       </div>
       <Dialog open={isModalOpen} onOpenChange={setIsModalOpen}>
-        <DialogContent className="max-h-[750px] max-w-[600px]">
+        <DialogContent className="h-full md:max-h-[750px] max-w-[600px]">
           <div className="text-lg font-semibold pt-[18px] px-[18px] pb-[24px] text-left -mt-8 flex items-center text-black-900">
             <div className="pr-3"></div>
           </div>
           <DialogHeader>
-            <h2 className="text-lg font-semibold text-black-900 flex items-center gap-2">
-              <QuestionMarkWithBox />
-              <span>{t("ask_new_question")}</span>
-            </h2>
+            <DialogTitle>
+              <h2 className="text-lg font-semibold text-black-900 flex items-center gap-2">
+                <QuestionMarkWithBox />
+                <span>{t("ask_new_question")}</span>
+              </h2>
+            </DialogTitle>
           </DialogHeader>
-          <DialogDescription>
-            <form className="px-[18px]" onSubmit={handleSubmit}>
-              <div className="text-left">
-                <div className="text-base font-medium pb-0 mb-0 text-black-700">
-                  {t("your_question")}
-                </div>
-                <textarea
-                  placeholder={t("type_your_question")}
-                  className="mt-[6px] h-[120px] text-left pl-3 pt-2 w-full rounded-lg shadow-sm border-[1px] border-outline-200
+          <form className="px-[18px]" onSubmit={handleSubmit}>
+            <div className="text-left">
+              <div className="text-base font-medium pb-0 mb-0 text-black-700">
+                {t("your_question")}
+              </div>
+              <textarea
+                placeholder={t("type_your_question")}
+                className="mt-[6px] h-[120px] text-left pl-3 pt-2 w-full rounded-lg shadow-sm border-[1px] border-outline-200
                      focus:border-none focus:outline-none focus:shadow-[0_0_0_1px_#B794FF,0_0_0_4px_#DED1FA] focus:dark:shadow-[0_0_0_1px_#4F20B2,0_0_0_4px_#281B46]
                      placeholder:text-black-900 placeholder:font-normal placeholder:text-base"
-                  name="question"
-                  value={question}
-                  onChange={(e) => setQuestion(e.target.value)}
+                name="question"
+                value={question}
+                onChange={(e) => setQuestion(e.target.value)}
+                required
+              ></textarea>
+            </div>
+
+            <div className="mt-4 mb-5"></div>
+
+            <div className="text-left">
+              {/* this is email input  */}
+              <div className="mb-[4px] text-base font-medium pb-0 text-black-700">
+                {t("notify_me")}
+              </div>
+              <div
+                className={`flex items-center border-[1px] border-outline-200 shadow-sm rounded-md h-10 w-full ${
+                  isFocused
+                    ? "shadow-[0_0_0_1px_#B794FF,0_0_0_4px_#DED1FA] dark:shadow-[0_0_0_1px_#4F20B2,0_0_0_4px_#281B46]"
+                    : ""
+                }`}
+              >
+                <div className="pl-3 pr-2">
+                  <MailLogo />
+                </div>
+                <input
+                  placeholder={t("your_email")}
+                  className="w-full outline-none"
+                  name="email"
+                  type="email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  onFocus={() => setIsFocused(true)}
+                  onBlur={() => setIsFocused(false)}
                   required
-                ></textarea>
+                />
               </div>
 
-              <div className="mt-4 mb-5"></div>
+              <div className="text-sm font-normal pt-[6px] mb-6 text-dim-500">
+                {t("email_updates")}
+              </div>
 
-              <div className="text-left">
-                {/* this is email input  */}
-                <div className="mb-[4px] text-base font-medium pb-0 text-black-700">
-                  {t("notify_me")}
+              <div className="flex border-[1px] border-askmygovbrand-200 shadow-sm rounded-md w-full bg-askmygovbrand-50">
+                <div className="pl-3 pt-3 pr-[10px]">
+                  <Info className="stroke-askmygovbrand-600"></Info>
                 </div>
-                <div
-                  className={`flex items-center border-[1px] border-outline-200 shadow-sm rounded-md h-10 w-full ${
-                    isFocused
-                      ? "shadow-[0_0_0_1px_#B794FF,0_0_0_4px_#DED1FA] dark:shadow-[0_0_0_1px_#4F20B2,0_0_0_4px_#281B46]"
-                      : ""
-                  }`}
-                >
-                  <div className="pl-3 pr-2">
-                    <MailLogo />
-                  </div>
-                  <input
-                    placeholder={t("your_email")}
-                    className="w-full outline-none"
-                    name="email"
-                    type="email"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                    onFocus={() => setIsFocused(true)}
-                    onBlur={() => setIsFocused(false)}
-                    required
-                  />
-                </div>
-
-                <div className="text-sm font-normal pt-[6px] mb-6 text-dim-500">
-                  {t("email_updates")}
-                </div>
-
-                <div className="flex border-[1px] border-askmygovbrand-200 shadow-sm rounded-md w-full bg-askmygovbrand-50">
-                  <div className="pl-3 pt-3 pr-[10px]">
-                    <Info className="stroke-askmygovbrand-600"></Info>
-                  </div>
-                  <div className="items-center text-sm font-normal text-black-700 py-3 pr-3">
+                <div className="items-center text-sm font-normal text-black-700 py-3 pr-3">
+                  <div>
                     <div>
-                      <div>
-                        {t("response_time_p1")}
-                        <span className="text-askmygovbrand-600 font-semibold">
-                          {" "}
-                          {t("response_time_p2")}{" "}
-                        </span>
-                        {t("response_time_p3")}
-                      </div>
+                      {t("response_time_p1")}
+                      <span className="text-askmygovbrand-600 font-semibold">
+                        {" "}
+                        {t("response_time_p2")}{" "}
+                      </span>
+                      {t("response_time_p3")}
+                    </div>
 
-                      <div className="pt-3">
-                        {t("response_public_p1")}
-                        <span className="text-askmygovbrand-600 font-semibold">
-                          {" "}
-                          {t("response_public_p2")}{" "}
-                        </span>
-                        {t("response_public_p3")}
-                      </div>
+                    <div className="pt-3">
+                      {t("response_public_p1")}
+                      <span className="text-askmygovbrand-600 font-semibold">
+                        {" "}
+                        {t("response_public_p2")}{" "}
+                      </span>
+                      {t("response_public_p3")}
                     </div>
                   </div>
                 </div>
               </div>
+            </div>
 
-              <div className="flex flex-col items-center pt-9 pb-[18px]">
-                <Button
-                  type="submit"
-                  onClick={handleSubmit}
-                  variant={"primary"}
-                >
-                  {t("submit")}
-                </Button>
-                <div className="pt-3 text-dim-500 font-normal text-sm text-center">
-                  {t("terms")}
-                </div>
+            <div className="flex flex-col items-center pt-9 pb-[18px]">
+              <Button type="submit" onClick={handleSubmit} variant={"primary"}>
+                {t("submit")}
+              </Button>
+              <div className="pt-3 text-dim-500 font-normal text-sm text-center">
+                {t("terms")}
               </div>
-            </form>
-          </DialogDescription>
+            </div>
+          </form>
         </DialogContent>
       </Dialog>
 

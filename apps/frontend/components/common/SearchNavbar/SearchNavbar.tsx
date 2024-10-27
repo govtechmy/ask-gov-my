@@ -104,7 +104,7 @@ const SearchNavbar: React.FC<SearchNavbarProps> = ({ agency }) => {
         >
           {showInputNavbar && (
             <InputNavbar
-              className="max-w-[780px]"
+              className="max-w-[780px] z-10"
               searchQuery={searchQuery}
               setSearchQuery={setSearchQuery}
               searchResults={searchResults}
