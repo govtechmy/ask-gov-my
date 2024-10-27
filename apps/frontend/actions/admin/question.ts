@@ -250,11 +250,8 @@ export async function getAttachmentPresignedURL({
 
   if (fileSize > 10485760) throw new Yikes("E_302_VALIDATION_ERROR");
 
-  let key = `${fileName}_${getTimestamp()}`;
+  let key = `${fileName}`;
   const fileExtension = mime.extension(fileType);
-  if (fileExtension) {
-    key += `.${fileExtension}`;
-  }
 
   if (
     fileExtension &&

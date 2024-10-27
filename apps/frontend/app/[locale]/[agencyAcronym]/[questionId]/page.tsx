@@ -84,7 +84,7 @@ const QuestionDetailPage: FSP<QuestionDetailsProps> = async ({
               <Link
                 className="hover:underline"
                 href={route("agencyAllTopics", {
-                  agencyAcronym: question.agency.acronym,
+                  agencyAcronym: question.agency.acronym.toLowerCase(),
                 })}
               >
                 <AgencyName agency={question.agency} />
@@ -129,6 +129,8 @@ const QuestionDetailPage: FSP<QuestionDetailsProps> = async ({
             {question.attachments.map((attachment) => (
               <a
                 href={`${process.env.NEXT_PUBLIC_STORAGE_BASE_URL}/${attachment.file_key}`}
+                download={attachment.file_key.split("/").at(-1)}
+                target="_blank"
                 key={attachment.id}
               >
                 <div className="bg-white border border-outline-200 rounded-lg max-w-[200px] flex items-center p-2 gap-3 md:w-[200px]">

@@ -34,7 +34,7 @@ import {
   useToast,
   Spinner,
 } from "@askgovmy/ui";
-import { cn, since } from "@askgovmy/utils";
+import { cn, getTimestamp, since } from "@askgovmy/utils";
 import { EyeIcon } from "lucide-react";
 import Image from "next/image";
 import { useParams, useSearchParams } from "next/navigation";
@@ -200,22 +200,30 @@ export const AdminAnswerDialog: FC<AdminAnswerDialogProps> = ({
   }, [open]);
 
   const handleFileSelection = (files: FileList) => {
+    const fileNames = Object.values(files).map((file) => {
+      let name = `uploads/${file.name.split(".").at(0)}_${getTimestamp()}`;
+      const fileExtension = mime.extension(file.type);
+      if (fileExtension) {
+        name += `.${fileExtension}`;
+      }
+      return name;
+    });
     // temp state when file not uploaded yet.
     setFiles((prev) => [
       ...prev,
-      ...Object.values(files).map((file) => ({
-        file_key: `uploads/${file.name}`,
+      ...Object.values(files).map((file, index) => ({
+        file_key: fileNames[index],
         file_size: file.size,
         id: 0,
       })),
     ]);
 
-    Object.values(files).forEach(async (file) => {
+    Object.values(files).forEach(async (file, index) => {
       try {
         // 1. get presigned url
         const { uploadUrl } = await getAttachmentPresignedURL({
           fileType: file.type,
-          fileName: `uploads/${file.name}`,
+          fileName: fileNames[index],
           fileSize: file.size,
         });
 
@@ -232,7 +240,7 @@ export const AdminAnswerDialog: FC<AdminAnswerDialogProps> = ({
         if (!res.ok) return;
         const { error, message, data } = await createQuestionAttachment({
           question: question.id,
-          file_key: `uploads/${file.name}`,
+          file_key: fileNames[index],
           file_size: file.size,
         });
 

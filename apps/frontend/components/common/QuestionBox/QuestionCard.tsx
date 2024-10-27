@@ -29,7 +29,7 @@ const QuestionCard: React.FC<QuestionCardProps> = ({ question, locale }) => {
 
   return (
     <Link
-      className="cursor-pointer bg-white rounded-md border p-5 shadow-sm flex flex-col gap-2"
+      className="cursor-pointer bg-white rounded-md border p-5 shadow-sm flex flex-col gap-2 hover:bg-washed-100"
       href={`/${question?.agency?.acronym?.toLowerCase()}/${question.id}`}
     >
       <div className="flex gap-2">
