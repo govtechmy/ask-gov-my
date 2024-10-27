@@ -28,7 +28,7 @@ const BaseHeader: React.FC<HeaderProps> = ({
   } = useContext<any>(context);
 
   return (
-    <div id="header" className={`sticky top-0 z-50 ${isAdmin ? "" : "w-full"}`}>
+    <div id="header" className={`sticky top-0 z-30 ${isAdmin ? "" : "w-full"}`}>
       <div
         className={`w-full bg-white ${isAdmin ? "border-[1px] border-outline-200" : "p-2 border-[1px] border-outline-200 h-16"} flex items-center`}
       >
@@ -55,6 +55,7 @@ const BaseHeader: React.FC<HeaderProps> = ({
 
             {(alwaysShowInput || headerContent === "input") && (
               <InputNavbar
+                className="mx-3"
                 searchQuery={searchQuery}
                 setSearchQuery={setSearchQuery}
                 searchResults={searchResults}

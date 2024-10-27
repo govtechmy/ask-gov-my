@@ -11,8 +11,10 @@ import AskQuestion from "./AskQuestion";
 import { useRouter } from "@/lib/i18n";
 import { useTranslations } from "next-intl";
 import { Question } from "@/types/types";
+import { cn } from "@askgovmy/utils";
 
 interface InputNavbarProps {
+  className?: string;
   searchQuery: string;
   setSearchQuery: (query: string) => void;
   searchResults: Question[];
@@ -43,6 +45,7 @@ const highlightText = (text: string, query: string) => {
 };
 
 const InputNavbar: React.FC<InputNavbarProps> = ({
+  className,
   searchQuery,
   setSearchQuery,
   searchResults,
@@ -115,11 +118,17 @@ const InputNavbar: React.FC<InputNavbarProps> = ({
     <div
       ref={divRef}
       id="inputnavbar"
-      className={`flex items-center border-outline-200 h-11 shadow-button border pl-3 pr-2 py-2 bg-[#FFFFFF] dark:bg-[#1D1D21] w-[800px] relative ${searchQuery.length > 0 && showResultsPopup ? "rounded-b-none rounded-t-3xl" : "rounded-full"}`}
+      className={cn(
+        className,
+        `flex items-center border-outline-200 h-11 shadow-button border pl-3 pr-2 py-2 bg-[#FFFFFF] dark:bg-[#1D1D21] w-full z-10 relative `,
+        searchQuery.length > 0 && showResultsPopup
+          ? "rounded-b-none rounded-t-3xl"
+          : "rounded-full"
+      )}
     >
       <input
         ref={inputRef}
-        className="flex-1 border-none outline-none px-2 py-1 bg-inherit w-full md:w-[740px]"
+        className="flex-1 border-none outline-none px-2 py-1 bg-inherit w-full"
         placeholder={t(agencyUUID ? "search_agency" : "search")}
         value={searchQuery}
         onChange={handleInputChange}
@@ -172,7 +181,7 @@ const InputNavbar: React.FC<InputNavbarProps> = ({
                       return (
                         <div
                           key={index}
-                          className="flex rounded-md items-center pr-2 pl-4 py-2 last:border-0 hover:bg-outline-200 max-h-[60px] max-w-[780px]"
+                          className="flex rounded-md items-center pr-2 pl-4 py-2 last:border-0 hover:bg-outline-200 max-h-[60px]"
                         >
                           <Link
                             className="grow"
