@@ -25,8 +25,6 @@ const BaseHeader: React.FC<HeaderProps> = ({
     setSearchQuery,
     searchResults,
     setSearchResults,
-    displayAllMatches,
-    setDisplayAllMatches,
   } = useContext<any>(context);
 
   return (
@@ -61,8 +59,6 @@ const BaseHeader: React.FC<HeaderProps> = ({
                 setSearchQuery={setSearchQuery}
                 searchResults={searchResults}
                 setSearchResults={setSearchResults}
-                displayAllMatches={displayAllMatches}
-                setDisplayAllMatches={setDisplayAllMatches}
               />
             )}
 

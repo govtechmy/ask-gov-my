@@ -1,5 +1,5 @@
-'use client';
-import { createContext, useState, useCallback } from 'react';
+"use client";
+import { createContext, useState } from "react";
 
 type contextvalue = {
   headerContent: string;
@@ -8,42 +8,31 @@ type contextvalue = {
   setSearchQuery: (query: string) => void;
   searchResults: any[];
   setSearchResults: (results: any[]) => void;
-  displayAllMatches: boolean;
-  setDisplayAllMatches: (display: boolean) => void;
 };
 
 export const context = createContext<contextvalue>({
-  headerContent: '',
+  headerContent: "",
   setHeaderContent: (content: string) => {},
-  searchQuery: '',
+  searchQuery: "",
   setSearchQuery: (query: string) => {},
   searchResults: [],
   setSearchResults: (results: any[]) => {},
-  displayAllMatches: false,
-  setDisplayAllMatches: (display: boolean) => {},
 });
 
 const ContextSearchBar = ({ children }: { children: React.ReactNode }) => {
-  const [headerContent, setHeaderContent] = useState<string>('');
-  const [searchQuery, setSearchQuery] = useState<string>('');
+  const [headerContent, setHeaderContent] = useState<string>("");
+  const [searchQuery, setSearchQuery] = useState<string>("");
   const [searchResults, setSearchResults] = useState<any[]>([]);
-  const [displayAllMatches, setDisplayAllMatches] = useState<boolean>(false);
-
-  const updateHeaderContent = useCallback((content: string) => {
-    setHeaderContent(content);
-  }, []);
 
   return (
     <context.Provider
       value={{
         headerContent,
-        setHeaderContent: updateHeaderContent,
+        setHeaderContent,
         searchQuery,
         setSearchQuery,
         searchResults,
         setSearchResults,
-        displayAllMatches,
-        setDisplayAllMatches,
       }}
     >
       {children}

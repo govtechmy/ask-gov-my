@@ -10,7 +10,6 @@ import RightArrow from "@/icons/rightarrow";
 import AskQuestion from "./AskQuestion";
 import { useRouter } from "@/lib/i18n";
 import { useTranslations } from "next-intl";
-import { getDynamicAgencyMap } from "@/actions/questionServices";
 import { Question } from "@/types/types";
 
 interface InputNavbarProps {
@@ -18,8 +17,6 @@ interface InputNavbarProps {
   setSearchQuery: (query: string) => void;
   searchResults: Question[];
   setSearchResults: (results: Question[]) => void;
-  displayAllMatches: boolean;
-  setDisplayAllMatches: (display: boolean) => void;
   agencyUUID?: string;
 }
 
@@ -50,18 +47,14 @@ const InputNavbar: React.FC<InputNavbarProps> = ({
   setSearchQuery,
   searchResults,
   setSearchResults,
-  displayAllMatches,
-  setDisplayAllMatches,
   agencyUUID,
 }) => {
-  const [isTyping, setIsTyping] = useState(false);
   const [isSearching, setIsSearching] = useState(false);
-  const [showNoResults, setShowNoResults] = useState(false);
-  const [hiddenDisplay, setHiddendisplay] = useState(true);
-  const [agencyMap, setAgencyMap] = useState<Record<string, string>>({});
+  const [showResultsPopup, setShowResultsPopup] = useState(false);
   const router = useRouter();
   const t = useTranslations("Search");
   const inputRef = useRef<HTMLInputElement>(null);
+  const divRef = useRef<HTMLDivElement>(null);
 
   const handleInfoClick = () => {
     if (searchQuery.trim().length > 0) {
@@ -71,18 +64,15 @@ const InputNavbar: React.FC<InputNavbarProps> = ({
 
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setSearchQuery(event.target.value);
-    setIsTyping(true);
-    setShowNoResults(false);
-    setHiddendisplay(true);
+    setShowResultsPopup(true);
     debouncedFetchSearchResults(event.target.value);
   };
 
   const handleKeyPress = (event: React.KeyboardEvent<HTMLInputElement>) => {
     if (event.key === "Enter" && searchQuery.trim().length > 0) {
-      setDisplayAllMatches(true);
       router.push(`/searchresults?query=${searchQuery}`);
       setSearchResults([]);
-      setHiddendisplay(false);
+      setShowResultsPopup(false);
       inputRef.current?.blur();
     }
   };
@@ -93,12 +83,8 @@ const InputNavbar: React.FC<InputNavbarProps> = ({
       const results = await searchQuestions(query);
       setSearchResults(results.results);
       setIsSearching(false);
-      setIsTyping(false);
-      setShowNoResults(results.results.length === 0); // show no results if results array is empty
     } else {
       setSearchResults([]);
-      setIsTyping(false);
-      setShowNoResults(false); // reset no results message if query is empty
     }
   };
 
@@ -110,27 +96,26 @@ const InputNavbar: React.FC<InputNavbarProps> = ({
   const clearSearch = () => {
     setSearchQuery("");
     setSearchResults([]);
-    setIsTyping(false);
-    setShowNoResults(false); // reset no results message on clear
   };
 
-  // useEffect(() => {
-  //   debouncedFetchSearchResults(searchQuery);
-  // }, [searchQuery, debouncedFetchSearchResults]);
-
   useEffect(() => {
-    const fetchAgencyMap = async () => {
-      const map = await getDynamicAgencyMap();
-      setAgencyMap(map);
+    const handleClickOutside = (event) => {
+      if (divRef.current && !divRef.current.contains(event.target)) {
+        setShowResultsPopup(false);
+      }
     };
 
-    fetchAgencyMap();
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
   }, []);
 
   return (
     <div
+      ref={divRef}
       id="inputnavbar"
-      className={`flex items-center border-outline-200 h-11 shadow-button border pl-3 pr-2 py-2 bg-[#FFFFFF] dark:bg-[#1D1D21] w-[800px] relative ${searchQuery.length > 0 && hiddenDisplay ? "rounded-b-none rounded-t-3xl" : "rounded-full"}`}
+      className={`flex items-center border-outline-200 h-11 shadow-button border pl-3 pr-2 py-2 bg-[#FFFFFF] dark:bg-[#1D1D21] w-[800px] relative ${searchQuery.length > 0 && showResultsPopup ? "rounded-b-none rounded-t-3xl" : "rounded-full"}`}
     >
       <input
         ref={inputRef}
@@ -168,7 +153,7 @@ const InputNavbar: React.FC<InputNavbarProps> = ({
       >
         <Search className="text-white" />
       </div>
-      {searchQuery.length > 0 && hiddenDisplay && (
+      {searchQuery.length > 0 && showResultsPopup && (
         <div className="absolute top-full left-0 border-t-[1px] rounded-b-3xl bg-[#FFFFFF] dark:bg-[#1D1D21] shadow-lg w-full max-h-96 overflow-y-auto">
           <div className="overflow-y-auto max-h-60 pl-2 pr-3 pt-2">
             {/* Wrapper for scrollbar */}
@@ -176,16 +161,13 @@ const InputNavbar: React.FC<InputNavbarProps> = ({
               <div className="px-4 py-2 text-center">{t("searching")}</div>
             ) : (
               <>
-                {searchResults.length === 0 && showNoResults && (
+                {searchResults.length === 0 && (
                   <div className="px-4 py-2 text-center">{t("no_results")}</div>
                 )}
                 {searchResults.length > 0 && (
                   <ul>
-                    {searchResults.slice(0, 20).map((result, index) => {
-                      // take 20 result max
-                      const agencyAcronym = Object.keys(agencyMap).find(
-                        (key) => agencyMap[key] === result.agency.id.toString()
-                      );
+                    {searchResults.map((result, index) => {
+                      const agencyAcronym = result.agency.acronym;
 
                       return (
                         <div

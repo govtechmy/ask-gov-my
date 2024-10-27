@@ -28,8 +28,6 @@ const SearchNavbar: React.FC<SearchNavbarProps> = ({ agency }) => {
     setSearchQuery,
     searchResults,
     setSearchResults,
-    displayAllMatches,
-    setDisplayAllMatches,
   } = useContext(context);
   const [showInputNavbar, setShowInputNavbar] = useState(true);
 
@@ -110,8 +108,6 @@ const SearchNavbar: React.FC<SearchNavbarProps> = ({ agency }) => {
               setSearchQuery={setSearchQuery}
               searchResults={searchResults}
               setSearchResults={setSearchResults}
-              displayAllMatches={displayAllMatches}
-              setDisplayAllMatches={setDisplayAllMatches}
               agencyUUID={agency?.uuid}
             />
           )}
