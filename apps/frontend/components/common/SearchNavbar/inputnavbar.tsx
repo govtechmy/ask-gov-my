@@ -197,7 +197,7 @@ const InputNavbar: React.FC<InputNavbarProps> = ({
                       {highlightText(result.question, searchQuery)}
                     </span>
                     <span className="mt-1 font-normal text-sm text-dim-500 line-clamp-1">
-                      Answer: {highlightText(result.answer.text, searchQuery)}
+                      Answer: {highlightText(result.answer!.text, searchQuery)}
                     </span>
                   </Link>
                   <span className="on hover:cursor-pointer pl-3">
