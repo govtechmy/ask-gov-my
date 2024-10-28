@@ -23,15 +23,14 @@ const SearchNavbar: React.FC<SearchNavbarProps> = ({ agency }) => {
   const t = useTranslations("Search");
 
   const {
-    setHeaderContent,
+    navbarSearchIsVisible,
+    showNavbarSearch,
+    hideNavbarSearch,
     searchQuery,
     setSearchQuery,
     searchResults,
     setSearchResults,
-    displayAllMatches,
-    setDisplayAllMatches,
   } = useContext(context);
-  const [showInputNavbar, setShowInputNavbar] = useState(true);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -39,11 +38,9 @@ const SearchNavbar: React.FC<SearchNavbarProps> = ({ agency }) => {
       if (searchNavbarTitle) {
         const rect = searchNavbarTitle.getBoundingClientRect();
         if (rect.bottom <= 0) {
-          setHeaderContent("input");
-          setShowInputNavbar(false);
+          showNavbarSearch();
         } else {
-          setHeaderContent("");
-          setShowInputNavbar(true);
+          hideNavbarSearch();
         }
       }
     };
@@ -53,7 +50,7 @@ const SearchNavbar: React.FC<SearchNavbarProps> = ({ agency }) => {
     return () => {
       window.removeEventListener("scroll", handleScroll);
     };
-  }, [setHeaderContent]);
+  }, [showNavbarSearch, hideNavbarSearch]);
 
   const renderTitle = () => {
     if (agency) {
@@ -104,14 +101,13 @@ const SearchNavbar: React.FC<SearchNavbarProps> = ({ agency }) => {
         <div
           className={`relative flex ${!agency ? "justify-center w-full" : ""}`}
         >
-          {showInputNavbar && (
+          {!navbarSearchIsVisible && (
             <InputNavbar
+              className="max-w-[780px] z-10"
               searchQuery={searchQuery}
               setSearchQuery={setSearchQuery}
               searchResults={searchResults}
               setSearchResults={setSearchResults}
-              displayAllMatches={displayAllMatches}
-              setDisplayAllMatches={setDisplayAllMatches}
               agencyUUID={agency?.uuid}
             />
           )}

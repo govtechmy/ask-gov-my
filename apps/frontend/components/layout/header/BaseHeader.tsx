@@ -7,27 +7,33 @@ import Asklogo from "@/icons/asklogo";
 import { context } from "@/components/context/ContextSearchBar";
 import InputNavbar from "../../common/SearchNavbar/inputnavbar";
 import { StyledDisplay } from "@/components/ui/display";
+import {
+  PopoverContent,
+  PopoverRoot,
+  PopoverTrigger,
+  SearchIcon,
+} from "@askgovmy/ui";
 
 interface HeaderProps {
   isAdmin?: boolean;
-  alwaysShowInput?: boolean;
+  alwaysShowSearch?: boolean;
   agencyAcronym?: string;
 }
 
 const BaseHeader: React.FC<HeaderProps> = ({
   isAdmin = false,
-  alwaysShowInput = false,
+  alwaysShowSearch = false,
   agencyAcronym,
 }) => {
   const {
-    headerContent,
+    navbarSearchIsVisible,
     searchQuery,
     setSearchQuery,
     searchResults,
     setSearchResults,
-    displayAllMatches,
-    setDisplayAllMatches,
-  } = useContext<any>(context);
+  } = useContext(context);
+
+  const showSearch = alwaysShowSearch || navbarSearchIsVisible;
 
   return (
     <div id="header" className={`sticky top-0 z-50 ${isAdmin ? "" : "w-full"}`}>
@@ -55,18 +61,36 @@ const BaseHeader: React.FC<HeaderProps> = ({
               </div>
             </Link>
 
-            {(alwaysShowInput || headerContent === "input") && (
+            {showSearch && (
               <InputNavbar
+                className="mx-3 hidden lg:flex"
                 searchQuery={searchQuery}
                 setSearchQuery={setSearchQuery}
                 searchResults={searchResults}
                 setSearchResults={setSearchResults}
-                displayAllMatches={displayAllMatches}
-                setDisplayAllMatches={setDisplayAllMatches}
               />
             )}
 
             <div className="flex gap-3 items-center">
+              {showSearch && (
+                <PopoverRoot>
+                  <PopoverTrigger className="lg:hidden">
+                    <SearchIcon />
+                  </PopoverTrigger>
+                  <PopoverContent
+                    className="w-screen bg-transparent border-none px-4 h-full"
+                    align="center"
+                  >
+                    <InputNavbar
+                      className="shadow-lg"
+                      searchQuery={searchQuery}
+                      setSearchQuery={setSearchQuery}
+                      searchResults={searchResults}
+                      setSearchResults={setSearchResults}
+                    />
+                  </PopoverContent>
+                </PopoverRoot>
+              )}
               <ThemeToggle />
               <Suspense>
                 <LocaleSwitch />

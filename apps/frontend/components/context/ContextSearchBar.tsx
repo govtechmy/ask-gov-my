@@ -1,49 +1,45 @@
-'use client';
-import { createContext, useState, useCallback } from 'react';
+"use client";
+import { Question } from "@/types/types";
+import { createContext, useState } from "react";
 
 type contextvalue = {
-  headerContent: string;
-  setHeaderContent: (content: string) => void;
+  navbarSearchIsVisible: boolean;
+  showNavbarSearch: () => void;
+  hideNavbarSearch: () => void;
   searchQuery: string;
   setSearchQuery: (query: string) => void;
-  searchResults: any[];
-  setSearchResults: (results: any[]) => void;
-  displayAllMatches: boolean;
-  setDisplayAllMatches: (display: boolean) => void;
+  searchResults: Question[];
+  setSearchResults: (results: Question[]) => void;
 };
 
 export const context = createContext<contextvalue>({
-  headerContent: '',
-  setHeaderContent: (content: string) => {},
-  searchQuery: '',
+  navbarSearchIsVisible: false,
+  showNavbarSearch: () => {},
+  hideNavbarSearch: () => {},
+  searchQuery: "",
   setSearchQuery: (query: string) => {},
   searchResults: [],
-  setSearchResults: (results: any[]) => {},
-  displayAllMatches: false,
-  setDisplayAllMatches: (display: boolean) => {},
+  setSearchResults: (results: Question[]) => {},
 });
 
 const ContextSearchBar = ({ children }: { children: React.ReactNode }) => {
-  const [headerContent, setHeaderContent] = useState<string>('');
-  const [searchQuery, setSearchQuery] = useState<string>('');
+  const [navbarSearchIsVisible, setNavbarSearchIsVisible] = useState(false);
+  const [searchQuery, setSearchQuery] = useState<string>("");
   const [searchResults, setSearchResults] = useState<any[]>([]);
-  const [displayAllMatches, setDisplayAllMatches] = useState<boolean>(false);
 
-  const updateHeaderContent = useCallback((content: string) => {
-    setHeaderContent(content);
-  }, []);
+  const showNavbarSearch = () => setNavbarSearchIsVisible(true);
+  const hideNavbarSearch = () => setNavbarSearchIsVisible(false);
 
   return (
     <context.Provider
       value={{
-        headerContent,
-        setHeaderContent: updateHeaderContent,
+        navbarSearchIsVisible,
+        showNavbarSearch,
+        hideNavbarSearch,
         searchQuery,
         setSearchQuery,
         searchResults,
         setSearchResults,
-        displayAllMatches,
-        setDisplayAllMatches,
       }}
     >
       {children}

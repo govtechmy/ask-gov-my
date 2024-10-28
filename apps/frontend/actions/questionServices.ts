@@ -249,7 +249,7 @@ export async function getQuestionById(
 }
 
 export async function submitQuestion(data: QuestionSubmission): Promise<void> {
-  const url = `${API_URL}/submit-question/`;
+  const url = `${API_URL}/questions/`;
 
   try {
     const response = await fetch(url, {
@@ -257,7 +257,7 @@ export async function submitQuestion(data: QuestionSubmission): Promise<void> {
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({ data }),
+      body: JSON.stringify(data),
     });
 
     if (!response.ok) {
