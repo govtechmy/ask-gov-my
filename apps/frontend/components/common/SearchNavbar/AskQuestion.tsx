@@ -33,13 +33,10 @@ const AskQuestion = () => {
     if (question && email) {
       try {
         await submitQuestion({ question, email });
-        console.log("Question submitted:", question, email);
         handleModalCloseOpenModalSubmit();
       } catch (error) {
         console.error("Error submitting question:", error);
       }
-    } else {
-      console.warn("Form is incomplete");
     }
   };
 
