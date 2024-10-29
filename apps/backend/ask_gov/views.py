@@ -2,7 +2,7 @@ import math
 from django.conf import settings
 from ask_gov.permissions import IsSuperAdmin
 from .serializers import (
-    AdminPatchedQuestionSerializer, AdminQuestionSerializer, AnswerSerializer, AttachmentSerializer, CreateUpdateUserSerializer, QuestionSerializer,
+    AdminPatchedQuestionSerializer, AdminQuestionSerializer, AnswerSerializer, AssignTopicsToQuestionSerializer, AttachmentSerializer, CreateUpdateUserSerializer, QuestionSerializer,
     AgencySerializer, TopicSerializer, UserSerializer, LikeDislikeSerializer
 )
 from django.shortcuts import get_object_or_404
@@ -251,6 +251,8 @@ class AdminQuestionViewSet(
     def get_serializer_class(self):
         if self.action in ["update", "partial_update"]:
             return AdminPatchedQuestionSerializer
+        if self.action in ["topics"]:
+            return AssignTopicsToQuestionSerializer
         return super().get_serializer_class()
     
     @action(methods=["POST"], detail=True)
@@ -266,7 +268,18 @@ class AdminQuestionViewSet(
             question.staff_opened_at = now
             question.save()
         return Response(status=status.HTTP_204_NO_CONTENT)
-
+    
+    @extend_schema(responses={"204": None})
+    @action(methods=["PUT"], detail=True)
+    def topics(self, request, pk):
+        """
+        Assign topics to a question. Replaces previous list of topics.
+        """
+        question: Question = self.get_object()
+        serialiazer = self.get_serializer(question, data=request.data)
+        serialiazer.is_valid(raise_exception=True)
+        serialiazer.save()
+        return Response(status=status.HTTP_204_NO_CONTENT)
 
 class AdminAgencyViewSet(
     mixins.ListModelMixin,

@@ -4,7 +4,7 @@ from rest_framework.test import APITestCase
 from rest_framework import status
 from rest_framework.authtoken.models import Token
 
-from ..models import Answer, User, Question, Agency, UserRole
+from ..models import Answer, Topic, User, Question, Agency, UserRole
 
 
 class TestAdminListQuestions(APITestCase):
@@ -251,6 +251,7 @@ class TestAdminQuestionViewSet(APITestCase):
         self.update_question_url = reverse("admin-question-detail", kwargs={"pk": self.question.id})
         self.open_question_url = reverse("admin-question-open", kwargs={"pk": self.question.id})
         self.list_questions_url = reverse("admin-question-list")
+        self.assign_topics_to_question_url = reverse("admin-question-topics", kwargs={"pk": self.question.id})
 
         self.user = User.objects.create(name="John Doe", email="johndoe@example.com", agency=self.agency, role=UserRole.STAFF)
         token = Token.objects.create(user=self.user)
@@ -320,6 +321,40 @@ class TestAdminQuestionViewSet(APITestCase):
         for question in questions:
             self.assertEqual(question["agency"]["id"], self.user.agency.id)
 
+    def test_assign_topics_to_question(self):
+        """
+        Tests assigning topics to a question.
+        """
+        topic_1 = Topic.objects.create(title="Topic 1", agency=self.agency)
+        topic_2 = Topic.objects.create(title="Topic 2", agency=self.agency)
+        data = {
+            "topics": [topic_1.id, topic_2.id]
+        }
+        response = self.client.put(
+            self.assign_topics_to_question_url,
+            data
+        )
+        self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
+        self.question.refresh_from_db()
+        self.assertEqual(len(self.question.topics.all()), 2)
+
+    def test_assign_invalid_topics_to_question(self):
+        """
+        Tests assigning topics from other agency to a question.
+        """
+        other_agency = Agency.objects.create(name="Other Ministry", name_ms="Other Ministry", acronym="OM")
+        topic = Topic.objects.create(title="Topic 1", agency=other_agency)
+        data = {
+            "topics": [topic.id]
+        }
+        response = self.client.put(
+            self.assign_topics_to_question_url,
+            data
+        )
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+        self.question.refresh_from_db()
+        self.assertEqual(len(self.question.topics.all()), 0)
+    
 class TestAdminAnswerViewSet(APITestCase):
     def setUp(self):
         agency = Agency.objects.create(name="Ministry of Education", name_ms="Kementerian Pendidikan", acronym="MOE")

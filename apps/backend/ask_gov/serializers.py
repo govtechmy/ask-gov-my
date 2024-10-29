@@ -72,6 +72,30 @@ class AdminPatchedQuestionSerializer(serializers.ModelSerializer):
         model = Question
         fields = ["spam", "agency"]
         write_only_fields = ["spam", "agency"]
+
+class AssignTopicsToQuestionSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Question
+        fields = ["topics"]
+    
+    def validate(self, data):
+        """
+        Validate topics belong to the correct agency.
+        """
+        question = self.instance
+        question_agency_id = question.agency.id
+        topics = data.get("topics", [])
+
+        topics_from_other_agency = []
+
+        for topic in topics:
+            if topic.agency.id != question_agency_id:
+                topics_from_other_agency.append(topic.id)
+        
+        if len(topics_from_other_agency) > 0:
+            raise serializers.ValidationError(f"Invalid topics (from other agency): {topics_from_other_agency}")
+        
+        return data
     
 class UserSerializer(serializers.ModelSerializer):
     agency = AgencySerializer()
