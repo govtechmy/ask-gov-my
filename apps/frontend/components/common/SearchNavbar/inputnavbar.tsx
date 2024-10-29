@@ -135,7 +135,7 @@ const InputNavbar: React.FC<InputNavbarProps> = ({
             onKeyPress={handleKeyPress}
           />
           {searchQuery.length > 0 && (
-            <div className="absolute right-10 bg-transparent flex text-dim-500 items-center">
+            <div className="hidden md:flex absolute right-10 bg-transparent text-dim-500 items-center">
               <div
                 className="font-normal text-xs"
                 style={{ lineHeight: "18px" }}
