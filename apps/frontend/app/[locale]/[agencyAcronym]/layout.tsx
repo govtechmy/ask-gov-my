@@ -2,6 +2,8 @@ import React from "react";
 import { getAgencyList } from "@/actions/questionServices";
 import Footer from "@/components/layout/footer";
 
+export const dynamic = "force-dynamic";
+
 // All route not in agency list will return 404
 export const dynamicParams = false;
 
