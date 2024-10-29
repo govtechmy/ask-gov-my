@@ -1,8 +1,4 @@
-import { unstable_setRequestLocale } from "next-intl/server";
-import AdminHeader from "./@header/page";
-
 const Layout = ({ children, params, header }) => {
-  unstable_setRequestLocale(params.locale);
   return (
     <>
       {header}
