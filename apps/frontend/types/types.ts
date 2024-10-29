@@ -26,6 +26,7 @@ export interface Answer {
   raw: string;
   text: string;
   likes: number;
+  dislikes: number;
   draft: boolean;
   created_at: string;
   updated_at: string;

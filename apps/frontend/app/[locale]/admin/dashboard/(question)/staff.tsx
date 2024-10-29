@@ -33,6 +33,8 @@ import {
   DialogClose,
   useToast,
   Spinner,
+  ThumbsUpIcon,
+  ThumbsDownIcon,
 } from "@askgovmy/ui";
 import { cn, getTimestamp, since } from "@askgovmy/utils";
 import { EyeIcon } from "lucide-react";
@@ -50,6 +52,7 @@ import {
 } from "react";
 import mime from "mime-types";
 import {
+  assignQuestionTopic,
   createNewAnswer,
   createNewTopic,
   createQuestionAttachment,
@@ -144,6 +147,18 @@ export const StaffContent: FC<{ question: Question }> = ({ question }) => {
           </p>
         )}
       </div>
+      {tab === "answered" && (
+        <div className="bg-background border border-outline-200 rounded-md py-1.5 px-2.5 flex gap-2.5 items-center">
+          <span className="flex gap-1 items-center text-success-700">
+            <ThumbsUpIcon className="stroke-success-700" />
+            {question.answer?.likes}
+          </span>
+          <span className="flex gap-1 items-center">
+            <ThumbsDownIcon className="stroke-dim-500" />
+            {question.answer?.dislikes}
+          </span>
+        </div>
+      )}
     </>
   );
 };
@@ -188,7 +203,9 @@ export const AdminAnswerDialog: FC<AdminAnswerDialogProps> = ({
   const [prevFiles, setPrevFiles] = useState<Attachment[]>(
     question.attachments || []
   );
-  const [selectedTopics, setSelectedTopics] = useState<Topic[]>([]);
+  const [selectedTopics, setSelectedTopics] = useState<number[]>(
+    question.topics || []
+  );
   const [questionHeight, setQuestionHeight] = useState<number>();
   useEffect(() => {
     setTimeout(() => {
@@ -266,8 +283,7 @@ export const AdminAnswerDialog: FC<AdminAnswerDialogProps> = ({
   };
 
   const remainingTopic = useMemo(() => {
-    const ids = selectedTopics.map((t) => t.id);
-    return topics.filter((topic) => !ids.includes(topic.id));
+    return topics.filter((topic) => !selectedTopics.includes(topic.id));
   }, [selectedTopics, topics]);
 
   const handleAddTopic = async () => {
@@ -278,7 +294,7 @@ export const AdminAnswerDialog: FC<AdminAnswerDialogProps> = ({
 
     if (error) return;
 
-    setSelectedTopics((prev) => [...prev, data]);
+    setSelectedTopics((prev) => [...prev, data.id]);
     setTopicSearch("");
   };
 
@@ -295,15 +311,25 @@ export const AdminAnswerDialog: FC<AdminAnswerDialogProps> = ({
       setIsSubmitting(true);
     }
     if (type === "create") {
-      const { error, message } = await createNewAnswer({
-        question: question.id,
-        raw: answerRaw,
-        text: answerText,
-        draft,
-      });
+      const [{ error: errorAnswer, message }, { error: errorTopic }] =
+        await Promise.all([
+          createNewAnswer({
+            question: question.id,
+            raw: answerRaw,
+            text: answerText,
+            draft,
+          }),
+          assignQuestionTopic(question.id.toString(), {
+            topics: selectedTopics.map((top) => top),
+          }),
+        ]);
 
-      if (error) {
-        toast({ variant: "error", title: error, description: message });
+      if (errorAnswer || errorTopic) {
+        toast({
+          variant: "error",
+          title: errorAnswer || errorTopic,
+          description: message,
+        });
         setIsSubmitting(false);
       } else {
         setIsSubmitting(false);
@@ -317,18 +343,27 @@ export const AdminAnswerDialog: FC<AdminAnswerDialogProps> = ({
     }
 
     if (type === "edit") {
-      const { error, message } = await updateCurrentAnswer(
-        question.answer!.id.toString(),
-        {
+      const [
+        { error: errorAnswer, message },
+        { error: errorTopic, message: me },
+      ] = await Promise.all([
+        updateCurrentAnswer(question.answer!.id.toString(), {
           question: question.id,
           raw: answerRaw,
           text: answerText,
           draft,
-        }
-      );
+        }),
+        assignQuestionTopic(question.id.toString(), {
+          topics: selectedTopics.map((top) => top),
+        }),
+      ]);
 
-      if (error) {
-        toast({ variant: "error", title: error, description: message });
+      if (errorAnswer || errorTopic) {
+        toast({
+          variant: "error",
+          title: errorAnswer || errorTopic,
+          description: message,
+        });
         setIsSubmitting(false);
       } else {
         setIsSubmitting(false);
@@ -527,24 +562,29 @@ export const AdminAnswerDialog: FC<AdminAnswerDialogProps> = ({
             <Popover
               trigger={
                 <div className="flex items-center w-full bg-white-forcewhite shadow-button rounded-lg border gap-2 px-3 py-2 text-sm focus:border focus:border-askmygovbrand-300  focus:outline-none disabled:cursor-not-allowed disabled:opacity-50 // focus:ring-0 flex-wrap">
-                  {selectedTopics.map((topic) => (
-                    <div
-                      key={topic.id}
-                      className={cn(
-                        "h-7 max-w-[140px] rounded-lg border border-askmygovbrand-300 py-1 px-2.5 gap-1 bg-askmygovbrand-50 shadow-button text-askmygovtextbrand-600 flex items-center"
-                      )}
-                    >
-                      <span className="flex-1 line-clamp-1">{topic.title}</span>
-                      <CloseIcon
-                        onClick={() => {
-                          setSelectedTopics((prev) =>
-                            prev.filter((t) => t.id !== topic.id)
-                          );
-                        }}
-                        className="stroke-askmygovtextbrand-600"
-                      />
-                    </div>
-                  ))}
+                  {selectedTopics.map((topic) => {
+                    const _topic = topics.find((t) => t.id === topic)!;
+                    return (
+                      <div
+                        key={topic}
+                        className={cn(
+                          "h-7 max-w-[140px] rounded-lg border border-askmygovbrand-300 py-1 px-2.5 gap-1 bg-askmygovbrand-50 shadow-button text-askmygovtextbrand-600 flex items-center"
+                        )}
+                      >
+                        <span className="flex-1 line-clamp-1">
+                          {_topic.title}
+                        </span>
+                        <CloseIcon
+                          onClick={() => {
+                            setSelectedTopics((prev) =>
+                              prev.filter((t) => t !== topic)
+                            );
+                          }}
+                          className="stroke-askmygovtextbrand-600"
+                        />
+                      </div>
+                    );
+                  })}
                   <Translator
                     namespace="Topics.add_or_search"
                     className="text-dim-500 whitespace-nowrap"
@@ -591,7 +631,7 @@ export const AdminAnswerDialog: FC<AdminAnswerDialogProps> = ({
                           onSelect={(topic) => {
                             setSelectedTopics((prev) => [
                               ...prev,
-                              topics.find((t) => t.id.toString() === topic)!,
+                              topics.find((t) => t.id.toString() === topic)!.id,
                             ]);
                             setOpen(false);
                             // handleSelectAgency(agency);

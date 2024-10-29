@@ -171,6 +171,31 @@ export const createNewTopic = withResponse(
   }
 );
 
+export const assignQuestionTopic = withResponse(
+  async (questionId: string, body: { topics: number[] }) => {
+    const session = await getSession();
+    if (!session) throw new Yikes("E_201_NOT_AUTHORIZED");
+
+    console.log(body);
+
+    const response = await api(`/admin/questions/${questionId}/topics/`, {
+      method: "PUT",
+      body,
+      headers: {
+        Authorization: `Token ${session.accessToken}`,
+      },
+    });
+
+    revalidatePath("/admin/dashboard");
+
+    return {
+      data: response,
+      message: "Sucesfully created new topic",
+      status: HttpStatusCode.OK_200,
+    };
+  }
+);
+
 export const createNewAnswer = withResponse(
   async (body: {
     question: number;
