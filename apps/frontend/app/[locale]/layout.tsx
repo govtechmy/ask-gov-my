@@ -1,10 +1,7 @@
+import type { Metadata } from "next";
 import { Inter, Poppins } from "next/font/google";
 import "@/styles/globals.css";
-import {
-  getMessages,
-  getTranslations,
-  unstable_setRequestLocale,
-} from "next-intl/server";
+import { getMessages, unstable_setRequestLocale } from "next-intl/server";
 import { NextIntlClientProvider } from "next-intl";
 import { locales } from "@/lib/i18n";
 import { cn } from "@/lib/utils";
@@ -13,8 +10,6 @@ import Providers from "./providers/providers";
 import { Suspense } from "react";
 import Masthead from "@/components/layout/masthead";
 import { AutoToast } from "@askgovmy/ui";
-import { FSM } from "@/lib/decorator";
-import { Metadata } from "next";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -28,40 +23,10 @@ const poppins = Poppins({
   variable: "--font-poppins",
 });
 
-export async function generateMetadata(params: FSM): Promise<Metadata> {
-  const { locale } = params;
-  const t = await getTranslations({ locale, namespace: "Site" });
-
-  let ogImages: NonNullable<Metadata["openGraph"]>["images"] = [];
-  if (locale === "ms-MY") {
-    ogImages.push({
-      url: `${process.env.APP_URL}/og/ms-MY.png`,
-      width: 1200,
-      height: 600,
-    });
-  } else {
-    ogImages.push({
-      url: `${process.env.APP_URL}/og/en-GB.png`,
-      width: 1200,
-      height: 600,
-    });
-  }
-
-  return {
-    title: t("name"),
-    description: t("description"),
-    metadataBase: new URL(process.env.APP_URL),
-    openGraph: {
-      images: ogImages,
-    },
-    alternates: {
-      canonical: `${process.env.APP_URL}`,
-      languages: {
-        "en-GB": `${process.env.APP_URL}/en-GB`,
-      },
-    },
-  };
-}
+export const metadata: Metadata = {
+  title: "AskMyGov",
+  description: "Your one-stop centre to ask questions to Government officers!",
+};
 
 export function generateStaticParams() {
   return locales.map((locale) => ({ locale }));
