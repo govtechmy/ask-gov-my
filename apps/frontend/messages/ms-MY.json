@@ -11,6 +11,11 @@
     "precaution": " di depan pautan. Sekiranya tiada, jangan kongsikan sebarang maklumat sensitif."
   },
 
+  "Site": {
+    "name": "AskMyGov",
+    "description": "Portal tunggal untuk bertanya soalan kepada pegawai Kerajaan!"
+  },
+
   "Role": {
     "all": "Semua",
     "super_admin": "Super Admin",
@@ -72,7 +77,7 @@
   },
 
   "Search": {
-    "title": "Pusat sehenti anda untuk bertanya soalan kepada pegawai Kerajaan!",
+    "title": "Portal tunggal untuk bertanya soalan kepada pegawai Kerajaan!",
     "reminder": "Anda mesti mencari antara soalan sedia ada sebelum anda dibenarkan bertanya",
     "search": "Cari mengikut kata kunci atau nama agensi (cth. KKM, MOT)",
     "search_agency": "Cari mengikut kata kunci (cth COVID-19, MySejahtera)",

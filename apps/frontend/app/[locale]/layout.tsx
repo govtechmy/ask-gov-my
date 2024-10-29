@@ -1,7 +1,10 @@
-import type { Metadata } from "next";
 import { Inter, Poppins } from "next/font/google";
 import "@/styles/globals.css";
-import { getMessages, unstable_setRequestLocale } from "next-intl/server";
+import {
+  getMessages,
+  getTranslations,
+  unstable_setRequestLocale,
+} from "next-intl/server";
 import { NextIntlClientProvider } from "next-intl";
 import { locales } from "@/lib/i18n";
 import { cn } from "@/lib/utils";
@@ -10,6 +13,7 @@ import Providers from "./providers/providers";
 import { Suspense } from "react";
 import Masthead from "@/components/layout/masthead";
 import { AutoToast } from "@askgovmy/ui";
+import { FSM } from "@/lib/decorator";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -23,10 +27,17 @@ const poppins = Poppins({
   variable: "--font-poppins",
 });
 
-export const metadata: Metadata = {
-  title: "AskMyGov",
-  description: "Your one-stop centre to ask questions to Government officers!",
-};
+export async function generateMetadata(params: FSM) {
+  const { locale } = params;
+  const t = await getTranslations({ locale, namespace: "Site" });
+
+  return {
+    title: {
+      default: t("name"),
+    },
+    description: t("description"),
+  };
+}
 
 export function generateStaticParams() {
   return locales.map((locale) => ({ locale }));

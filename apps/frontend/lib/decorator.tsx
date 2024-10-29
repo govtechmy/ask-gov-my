@@ -31,6 +31,7 @@ export type MiddlewareResponseProps = {
 };
 
 export type FSP<T = unknown> = FunctionComponent<ServerProp<T>>;
+export type FSM = Record<"locale", any>;
 
 export type ServerProp<T = unknown> = {
   context: Context;

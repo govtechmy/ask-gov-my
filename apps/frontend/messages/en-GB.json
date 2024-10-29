@@ -11,6 +11,10 @@
     "precaution": " as an added precaution. If not present, do not share any sensitive information."
   },
 
+  "Site": {
+    "name": "AskMyGov",
+    "description": "Your one-stop centre to ask questions to Government officers!"
+  },
   "Role": {
     "all": "All",
     "super_admin": "Super Admin",
