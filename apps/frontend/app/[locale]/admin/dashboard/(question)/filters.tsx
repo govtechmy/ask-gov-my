@@ -49,7 +49,14 @@ const ManageQuestionsFilter: FC<ManageQuestionsFilter> = ({
   const { replace } = useRouter();
   const pathname = usePathname();
 
-  const superAdminTabs = ["all", "unassigned", "assigned", "spam"];
+  const superAdminTabs = [
+    "all",
+    "unassigned",
+    "assigned",
+    "unanswered",
+    "answered",
+    "spam",
+  ];
   const staffTabs = ["all", "unanswered", "answered", "draft"];
 
   const states = role === "super_admin" ? superAdminTabs : staffTabs;
