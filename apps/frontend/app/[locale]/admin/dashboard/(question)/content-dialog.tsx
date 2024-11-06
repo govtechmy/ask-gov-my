@@ -114,7 +114,7 @@ export default function ContentDialog({
               type="create"
               trigger={undefined as never}
               topics={topics}
-              setOpen={setOpen}
+              onClose={() => setOpen(false)}
             />
             <DialogClose
               onClick={() => setOpen(false)}

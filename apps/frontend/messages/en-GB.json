@@ -133,6 +133,7 @@
     "date": "Date",
     "new": "New",
     "edit": "Edit",
+    "answer": "Answer",
     "state": {
       "all": "All questions",
       "unassigned": "Unassigned",
