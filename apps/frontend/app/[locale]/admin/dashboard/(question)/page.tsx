@@ -5,7 +5,7 @@ import Translator from "@/components/client/translator";
 import { FSP, inject } from "@/lib/decorator";
 import MustBeAuthenticated from "@/middlewares/injectors/must-be-authenticated";
 import MustBeAuthorized from "@/middlewares/injectors/must-be-authorized";
-import { Agency, PageResult, Question } from "@/types/types";
+import { Agency, PageResult, Question, Topic } from "@/types/types";
 import { Empty } from "@askgovmy/ui";
 import { DateTime } from "luxon";
 import ManageQuestionsFilter from "./filters";
@@ -66,10 +66,13 @@ const AdminDashboardPage: FSP<ManageQuestionsProps> = async ({
       >
         <div className="grid grid-cols-1 gap-2">
           {questions.results.map(async (question) => {
-            const { data: topics } = await getTopics(
-              { agency: question.agency.id },
-              context
-            );
+            let topics: Topic[] = [];
+            if (question.agency) {
+              ({ data: topics } = await getTopics(
+                { agency: question.agency.id },
+                context
+              ));
+            }
 
             return (
               <ContentDialog
