@@ -5,7 +5,7 @@ import Translator from "@/components/client/translator";
 import { FSP, inject } from "@/lib/decorator";
 import MustBeAuthenticated from "@/middlewares/injectors/must-be-authenticated";
 import MustBeAuthorized from "@/middlewares/injectors/must-be-authorized";
-import { Agency, PageResult, Question, Topic } from "@/types/types";
+import { Agency, PageResult, Question } from "@/types/types";
 import { Empty } from "@askgovmy/ui";
 import { DateTime } from "luxon";
 import ManageQuestionsFilter from "./filters";
@@ -13,12 +13,12 @@ import { cn } from "@askgovmy/utils";
 import { AdminContent, AdminFloatButton } from "./super-admin";
 import ContentDialog from "./content-dialog";
 import { StaffContent, StaffFloatButton } from "./staff";
+import { cache } from "react";
 
 interface ForAdminProps {
   role: "super_admin";
   questions: PageResult<Question>;
   agencies: PageResult<Agency>;
-  topics: never;
   count: number;
 }
 
@@ -26,14 +26,19 @@ interface ForStaffProps {
   role: "staff";
   questions: PageResult<Question>;
   agencies: never;
-  topics: Topic[];
   count: number;
 }
 
 type ManageQuestionsProps = ForAdminProps | ForStaffProps;
 
-const AdminDashboardPage: FSP<ManageQuestionsProps> = async ({ data }) => {
-  const { agencies, questions, role, count, topics } = data!;
+const getTopics = cache(getAdminTopicList);
+
+const AdminDashboardPage: FSP<ManageQuestionsProps> = async ({
+  data,
+  context,
+}) => {
+  const { agencies, questions, role, count } = data!;
+
   return (
     <div className="space-y-6">
       {role === "staff" && (
@@ -60,7 +65,12 @@ const AdminDashboardPage: FSP<ManageQuestionsProps> = async ({ data }) => {
         }
       >
         <div className="grid grid-cols-1 gap-2">
-          {questions.results.map((question) => {
+          {questions.results.map(async (question) => {
+            const { data: topics } = await getTopics(
+              { agency: question.agency.id },
+              context
+            );
+
             return (
               <ContentDialog
                 key={JSON.stringify(question)}
@@ -95,7 +105,7 @@ const AdminDashboardPage: FSP<ManageQuestionsProps> = async ({ data }) => {
                   </p>
                   <div className="absolute flex h-full w-14 right-5 bg-gradient-to-b from-background/0 to-background/100 justify-end py-4 transition-all items-center gap-2">
                     {role === "super_admin" && (
-                      <AdminFloatButton question={question} />
+                      <AdminFloatButton question={question} topics={topics} />
                     )}
                     {role === "staff" && question.answer && (
                       <StaffFloatButton question={question} topics={topics} />
@@ -150,29 +160,23 @@ export default inject(AdminDashboardPage, {
     }
 
     // For staff
-    const [{ data: questions }, { data: questionsCount }, { data: topics }] =
-      await Promise.all([
-        getQuestionsList(
-          {
-            page,
-            search,
-            ...(state !== "all" && { state }),
-          },
-          context
-        ),
-        // Get the count for unassigned
-        getQuestionsList({ state: "unanswered" }, context),
-        getAdminTopicList(
-          { agency: context.session?.user.agency?.id },
-          context
-        ),
-      ]);
+    const [{ data: questions }, { data: questionsCount }] = await Promise.all([
+      getQuestionsList(
+        {
+          page,
+          search,
+          ...(state !== "all" && { state }),
+        },
+        context
+      ),
+      // Get the count for unassigned
+      getQuestionsList({ state: "unanswered" }, context),
+    ]);
 
     return {
       role: "staff",
       questions,
       count: questionsCount?.page.total,
-      topics,
     };
   },
 });

@@ -25,7 +25,7 @@ import {
   ChevronDownIcon,
 } from "@askgovmy/ui";
 import { FC, Dispatch, SetStateAction, useState } from "react";
-import { Agency, Question } from "@/types/types";
+import { Agency, Question, Topic } from "@/types/types";
 import Translator from "@/components/client/translator";
 import { cn } from "@askgovmy/utils";
 import {
@@ -91,7 +91,10 @@ export const AdminContent: FC<{ question: Question; agencies: Agency[] }> = ({
   );
 };
 
-export const AdminFloatButton: FC<{ question: Question }> = ({ question }) => {
+export const AdminFloatButton: FC<{ question: Question; topics: Topic[] }> = ({
+  question,
+  topics,
+}) => {
   return (
     <Popover
       trigger={
@@ -122,7 +125,7 @@ export const AdminFloatButton: FC<{ question: Question }> = ({ question }) => {
                   <Translator namespace="AdminQuestions.answer" tag="span" />
                 </Button>
               }
-              topics={[]}
+              topics={topics}
               onClose={() => setOpenPopover(false)}
             />
           )}
@@ -140,7 +143,7 @@ export const AdminFloatButton: FC<{ question: Question }> = ({ question }) => {
                   <Translator namespace="AdminQuestions.edit" tag="span" />
                 </Button>
               }
-              topics={[]}
+              topics={topics}
               onClose={() => setOpenPopover(false)}
             />
           )}
