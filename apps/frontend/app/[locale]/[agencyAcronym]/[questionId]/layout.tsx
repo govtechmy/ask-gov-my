@@ -1,14 +1,14 @@
 import React from "react";
-import ContextSearchBar from "@/components/context/ContextSearchBar";
-import BaseHeader from "@/components/layout/header/BaseHeader";
+import NavBar from "@/components/layout/header/NavBar";
 import TopicsSidebar from "../@sidebar/page";
+import { SearchBarContextProvider } from "@/components/context/SearchBarContext";
 
 export default async function QuestionDetailsLayout({ children, params }) {
   return (
     <>
-      <ContextSearchBar>
-        <BaseHeader alwaysShowSearch={true}></BaseHeader>
-      </ContextSearchBar>
+      <SearchBarContextProvider>
+        <NavBar alwaysShowSearch={true} />
+      </SearchBarContextProvider>
       <div className="container p-4.5 lg:px-0 lg:py-8 flex-col-reverse lg:flex-row flex print:mt-0 print:max-w-none gap-4.5 lg:gap-12">
         <div className="flex-1">{children}</div>
         <TopicsSidebar

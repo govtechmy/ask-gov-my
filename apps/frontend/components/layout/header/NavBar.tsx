@@ -1,11 +1,10 @@
 "use client";
-import React, { Suspense, useContext } from "react";
+import React, { Suspense } from "react";
 import { Link } from "@/lib/i18n";
 import ThemeToggle from "./theme-toggle";
 import LocaleSwitch from "./locale-switch";
 import Asklogo from "@/icons/asklogo";
-import { context } from "@/components/context/ContextSearchBar";
-import InputNavbar from "../../common/SearchNavbar/inputnavbar";
+import SearchBar from "../../common/Header/SearchBar";
 import { StyledDisplay } from "@/components/ui/display";
 import {
   PopoverContent,
@@ -13,27 +12,22 @@ import {
   PopoverTrigger,
   SearchIcon,
 } from "@askgovmy/ui";
+import { useSearchBar } from "@/components/context/SearchBarContext";
 
-interface HeaderProps {
+interface NavBarProps {
   isAdmin?: boolean;
   alwaysShowSearch?: boolean;
   agencyAcronym?: string;
 }
 
-const BaseHeader: React.FC<HeaderProps> = ({
+const NavBar: React.FC<NavBarProps> = ({
   isAdmin = false,
   alwaysShowSearch = false,
   agencyAcronym,
 }) => {
-  const {
-    navbarSearchIsVisible,
-    searchQuery,
-    setSearchQuery,
-    searchResults,
-    setSearchResults,
-  } = useContext(context);
+  const { isNavbarSearchInputVisible } = useSearchBar();
 
-  const showSearch = alwaysShowSearch || navbarSearchIsVisible;
+  const showSearch = alwaysShowSearch || isNavbarSearchInputVisible;
 
   return (
     <div id="header" className={`sticky top-0 z-50 ${isAdmin ? "" : "w-full"}`}>
@@ -61,15 +55,7 @@ const BaseHeader: React.FC<HeaderProps> = ({
               </div>
             </Link>
 
-            {showSearch && (
-              <InputNavbar
-                className="mx-3 hidden lg:flex"
-                searchQuery={searchQuery}
-                setSearchQuery={setSearchQuery}
-                searchResults={searchResults}
-                setSearchResults={setSearchResults}
-              />
-            )}
+            {showSearch && <SearchBar className="mx-3 hidden lg:flex" />}
 
             <div className="flex gap-3 items-center">
               {showSearch && (
@@ -81,13 +67,7 @@ const BaseHeader: React.FC<HeaderProps> = ({
                     className="w-screen bg-transparent border-none px-4 h-full"
                     align="center"
                   >
-                    <InputNavbar
-                      className="shadow-lg"
-                      searchQuery={searchQuery}
-                      setSearchQuery={setSearchQuery}
-                      searchResults={searchResults}
-                      setSearchResults={setSearchResults}
-                    />
+                    <SearchBar className="shadow-lg" />
                   </PopoverContent>
                 </PopoverRoot>
               )}
@@ -103,4 +83,4 @@ const BaseHeader: React.FC<HeaderProps> = ({
   );
 };
 
-export default BaseHeader;
+export default NavBar;

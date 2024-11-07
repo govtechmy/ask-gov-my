@@ -1,5 +1,5 @@
 import Footer from "@/components/layout/footer";
-import BaseHeader from "@/components/layout/header/BaseHeader";
+import NavBar from "@/components/layout/header/NavBar";
 
 export const dynamic = "force-dynamic";
 
@@ -10,7 +10,7 @@ export default function DashboardLayout({
 }) {
   return (
     <div className="flex flex-col min-h-screen">
-      <BaseHeader isAdmin></BaseHeader>
+      <NavBar isAdmin />
       <div className="flex-1 flex">{children}</div>
       <Footer adminpage={true} />
     </div>

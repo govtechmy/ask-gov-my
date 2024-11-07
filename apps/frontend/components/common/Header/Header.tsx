@@ -1,17 +1,18 @@
 "use client";
 
-import React, { useContext, useEffect, useState } from "react";
+import React from "react";
 import Info from "@/icons/info";
-import InputNavbar from "./inputnavbar";
+import SearchBar from "./SearchBar";
 import { useTranslations } from "next-intl";
-import { context } from "@/components/context/ContextSearchBar";
 import { Link } from "@/lib/i18n";
 import RightArrow from "@/icons/rightarrow";
 import { Agency } from "@/types/types";
 import AgencyName from "../AgencyName";
 import AgencyLogoImporter from "../AgencyLogoImporter";
+import { useSearchBar } from "@/components/context/SearchBarContext";
+import { cn } from "@askgovmy/utils";
 
-interface SearchNavbarProps {
+interface HeaderProps {
   agency?: {
     acronym: string;
     uuid: string;
@@ -19,38 +20,9 @@ interface SearchNavbarProps {
   };
 }
 
-const SearchNavbar: React.FC<SearchNavbarProps> = ({ agency }) => {
+const Header: React.FC<HeaderProps> = ({ agency }) => {
   const t = useTranslations("Search");
-
-  const {
-    navbarSearchIsVisible,
-    showNavbarSearch,
-    hideNavbarSearch,
-    searchQuery,
-    setSearchQuery,
-    searchResults,
-    setSearchResults,
-  } = useContext(context);
-
-  useEffect(() => {
-    const handleScroll = () => {
-      const searchNavbarTitle = document.getElementById("search-navbar-title");
-      if (searchNavbarTitle) {
-        const rect = searchNavbarTitle.getBoundingClientRect();
-        if (rect.bottom <= 0) {
-          showNavbarSearch();
-        } else {
-          hideNavbarSearch();
-        }
-      }
-    };
-
-    window.addEventListener("scroll", handleScroll);
-
-    return () => {
-      window.removeEventListener("scroll", handleScroll);
-    };
-  }, [showNavbarSearch, hideNavbarSearch]);
+  const { headerSearchInputRef, isNavbarSearchInputVisible } = useSearchBar();
 
   const renderTitle = () => {
     if (agency) {
@@ -101,16 +73,12 @@ const SearchNavbar: React.FC<SearchNavbarProps> = ({ agency }) => {
         <div
           className={`relative flex ${!agency ? "justify-center w-full" : ""}`}
         >
-          {!navbarSearchIsVisible && (
-            <InputNavbar
-              className="max-w-[780px] z-10"
-              searchQuery={searchQuery}
-              setSearchQuery={setSearchQuery}
-              searchResults={searchResults}
-              setSearchResults={setSearchResults}
-              agencyUUID={agency?.uuid}
-            />
-          )}
+          <SearchBar
+            ref={headerSearchInputRef}
+            className={cn("max-w-[780px] z-10")}
+            agencyUUID={agency?.uuid}
+            hideResultsPopup={isNavbarSearchInputVisible}
+          />
         </div>
         {!agency && (
           <div className="flex items-start md:items-center  md:justify-center justify-start mt-3 md:gap-1.5">
@@ -125,4 +93,4 @@ const SearchNavbar: React.FC<SearchNavbarProps> = ({ agency }) => {
   );
 };
 
-export default SearchNavbar;
+export default Header;
