@@ -196,7 +196,7 @@ const SearchBar = forwardRef<HTMLInputElement, SearchBarProps>(
                 </CommandItem>
               ))}
             </CommandList>
-            {!isSearching && <AskQuestion />}
+            <AskQuestion />
           </PopoverContent>
         </PopoverRoot>
       </Command>
