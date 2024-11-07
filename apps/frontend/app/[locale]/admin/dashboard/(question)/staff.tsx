@@ -99,7 +99,6 @@ export const StaffFloatButton: FC<{ question: Question; topics: Topic[] }> = ({
         type="edit"
         question={question}
         topics={topics}
-        setOpen={undefined as never}
       />
     </>
   );
@@ -165,16 +164,16 @@ export const StaffContent: FC<{ question: Question }> = ({ question }) => {
 
 type CreateDialog = {
   type: "create";
-  trigger: never;
-  setOpen: Dispatch<SetStateAction<boolean>>;
+  trigger?: ReactNode;
   question: Question;
   topics: Topic[];
+  onClose?: () => void;
 };
 
 type EditDialog = {
   type: "edit";
   trigger: ReactNode;
-  setOpen: never;
+  onClose?: () => void;
   question: Question;
   topics: Topic[];
 };
@@ -186,7 +185,7 @@ export const AdminAnswerDialog: FC<AdminAnswerDialogProps> = ({
   trigger,
   type,
   topics,
-  setOpen: _setOpen,
+  onClose,
 }) => {
   const params = useParams();
   const { toast } = useToast();
@@ -563,7 +562,13 @@ export const AdminAnswerDialog: FC<AdminAnswerDialogProps> = ({
               trigger={
                 <div className="flex items-center w-full bg-white-forcewhite shadow-button rounded-lg border gap-2 px-3 py-2 text-sm focus:border focus:border-askmygovbrand-300  focus:outline-none disabled:cursor-not-allowed disabled:opacity-50 // focus:ring-0 flex-wrap">
                   {selectedTopics.map((topic) => {
-                    const _topic = topics.find((t) => t.id === topic)!;
+                    const _topic = topics.find((t) => t.id === topic);
+
+                    // Topic isn't in the list of availble topics
+                    if (!_topic) {
+                      return null;
+                    }
+
                     return (
                       <div
                         key={topic}
@@ -657,16 +662,18 @@ export const AdminAnswerDialog: FC<AdminAnswerDialogProps> = ({
         </div>
       </div>
       <DialogFooter className="flex mt-4 flex-row gap-2 justify-end border-t border-outline-200 pt-6">
-        <Button
-          className="w-fit"
-          type="button"
-          onClick={() => {
-            if (type === "create") _setOpen(false);
-            else setOpen(false);
-          }}
-        >
-          <Translator namespace="AdminQuestions.answer_dialog.cancel" />
-        </Button>
+        <DialogClose asChild>
+          <Button
+            className="w-fit"
+            type="button"
+            onClick={() => {
+              setOpen(false);
+              onClose?.();
+            }}
+          >
+            <Translator namespace="AdminQuestions.answer_dialog.cancel" />
+          </Button>
+        </DialogClose>
         <Button
           variant={"secondary-myds"}
           className="w-fit"
@@ -693,9 +700,18 @@ export const AdminAnswerDialog: FC<AdminAnswerDialogProps> = ({
 
   if (trigger) {
     return (
-      <Dialog open={open} onOpenChange={setOpen}>
+      <Dialog
+        open={open}
+        onOpenChange={(open) => {
+          if (!open) onClose?.();
+          setOpen(open);
+        }}
+      >
         <DialogTrigger asChild>{trigger}</DialogTrigger>
-        <DialogContent className="max-w-[700px] h-[724px] max-h-[724px] flex flex-col">
+        <DialogContent
+          className="max-w-[700px] h-[724px] max-h-[724px] flex flex-col"
+          onClick={(e) => e.stopPropagation()}
+        >
           {content}
         </DialogContent>
       </Dialog>

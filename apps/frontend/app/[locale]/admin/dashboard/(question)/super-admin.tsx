@@ -25,7 +25,7 @@ import {
   ChevronDownIcon,
 } from "@askgovmy/ui";
 import { FC, Dispatch, SetStateAction, useState } from "react";
-import { Agency, Question } from "@/types/types";
+import { Agency, Question, Topic } from "@/types/types";
 import Translator from "@/components/client/translator";
 import { cn } from "@askgovmy/utils";
 import {
@@ -33,7 +33,8 @@ import {
   markQuestionSpam,
 } from "@/actions/admin/question";
 import { DateTime } from "luxon";
-import { Check } from "lucide-react";
+import { Check, PencilIcon } from "lucide-react";
+import { AdminAnswerDialog } from "./staff";
 
 // This file has the responsibility to render "super-admin" role specific render for admin questions
 
@@ -47,6 +48,22 @@ export const AdminContent: FC<{ question: Question; agencies: Agency[] }> = ({
         {question.question}
       </p>
       <div className="flex gap-3 items-center">
+        {question.answer &&
+          (question.answer.draft ? (
+            <Translator
+              className="rounded-full gap-1.5 py-0.5 px-2 bg-washed-100 text-dim-500 w-fit"
+              namespace="AdminQuestions.state.draft"
+              prefix={<span className="w-2 h-2 bg-dim-500 rounded-full" />}
+            />
+          ) : (
+            <Translator
+              className="rounded-full gap-1.5 py-0.5 px-2 bg-askmygovbrand-50 text-askmygovtextbrand-600 w-fit"
+              namespace="AdminQuestions.state.answered"
+              prefix={
+                <span className="w-2 h-2 bg-askmygovtextbrand-600 rounded-full" />
+              }
+            />
+          ))}
         {question.spam ? (
           <Translator
             className="rounded-full gap-1.5 py-0.5 px-2 bg-danger-50 text-danger-700"
@@ -74,7 +91,10 @@ export const AdminContent: FC<{ question: Question; agencies: Agency[] }> = ({
   );
 };
 
-export const AdminFloatButton: FC<{ question: Question }> = ({ question }) => {
+export const AdminFloatButton: FC<{ question: Question; topics: Topic[] }> = ({
+  question,
+  topics,
+}) => {
   return (
     <Popover
       trigger={
@@ -89,21 +109,59 @@ export const AdminFloatButton: FC<{ question: Question }> = ({ question }) => {
       option={{ align: "end", alignOffset: 0, sideOffset: 4 }}
       className=""
     >
-      {(setOpen) =>
-        question.spam ? (
-          <MarkSpamDialog
-            questionId={question.id.toString()}
-            type="unspam"
-            closePopover={setOpen}
-          />
-        ) : (
-          <MarkSpamDialog
-            questionId={question.id.toString()}
-            type="spam"
-            closePopover={setOpen}
-          />
-        )
-      }
+      {(setOpenPopover) => (
+        <>
+          {!question.answer && question.agency && (
+            <AdminAnswerDialog
+              question={question}
+              type="create"
+              trigger={
+                <Button
+                  onClick={(e) => e.stopPropagation()}
+                  variant={"tertiary-dropdown"}
+                  size={"sm"}
+                >
+                  <PencilIcon className="w-4 h-4 stroke-black-700" />
+                  <Translator namespace="AdminQuestions.answer" tag="span" />
+                </Button>
+              }
+              topics={topics}
+              onClose={() => setOpenPopover(false)}
+            />
+          )}
+          {question.answer && (
+            <AdminAnswerDialog
+              question={question}
+              type="edit"
+              trigger={
+                <Button
+                  onClick={(e) => e.stopPropagation()}
+                  variant={"tertiary-dropdown"}
+                  size={"sm"}
+                >
+                  <PencilIcon className="w-4 h-4 stroke-black-700" />
+                  <Translator namespace="AdminQuestions.edit" tag="span" />
+                </Button>
+              }
+              topics={topics}
+              onClose={() => setOpenPopover(false)}
+            />
+          )}
+          {question.spam ? (
+            <MarkSpamDialog
+              questionId={question.id.toString()}
+              type="unspam"
+              closePopover={setOpenPopover}
+            />
+          ) : (
+            <MarkSpamDialog
+              questionId={question.id.toString()}
+              type="spam"
+              closePopover={setOpenPopover}
+            />
+          )}
+        </>
+      )}
     </Popover>
   );
 };
