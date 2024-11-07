@@ -28,6 +28,7 @@ interface SearchBarProps {
   agencyUUID?: string;
   hideResultsPopup?: boolean;
   scrollOnFocus?: boolean;
+  onClear?: () => void;
 }
 
 const highlightText = (text: string, query: string) => {
@@ -45,7 +46,10 @@ const highlightText = (text: string, query: string) => {
 };
 
 const SearchBar = forwardRef<HTMLInputElement, SearchBarProps>(
-  ({ className, agencyUUID, hideResultsPopup, scrollOnFocus }, ref) => {
+  (
+    { className, agencyUUID, hideResultsPopup, scrollOnFocus, onClear },
+    ref
+  ) => {
     const {
       query,
       isSearching,
@@ -53,6 +57,7 @@ const SearchBar = forwardRef<HTMLInputElement, SearchBarProps>(
       isResultsPopupOpen,
       search,
       closeResultsPopup,
+      clearSearchBar,
     } = useSearchBar();
     const router = useRouter();
     const t = useTranslations("Search");
@@ -80,17 +85,13 @@ const SearchBar = forwardRef<HTMLInputElement, SearchBarProps>(
       }
     };
 
-    const clearSearch = () => {
-      closeResultsPopup();
-    };
-
     return (
       <Command shouldFilter={false} className={cn("w-full", className)} loop>
         <PopoverRoot open={isResultsPopupOpen}>
           <PopoverAnchor asChild>
             <div
               className={cn(
-                `flex items-center border-outline-200 h-11 shadow-button border px-3 py-2 bg-white w-full relative `,
+                `flex items-center border-outline-200 h-11 shadow-button border px-3 py-2 bg-white w-full relative gap-2`,
                 isResultsPopupOpen
                   ? "rounded-b-none rounded-t-3xl"
                   : "rounded-full"
@@ -114,31 +115,21 @@ const SearchBar = forwardRef<HTMLInputElement, SearchBarProps>(
                 }}
               />
               {query.length > 0 && (
-                <div className="hidden md:flex absolute right-10 bg-transparent text-dim-500 items-center">
-                  <div
-                    className="font-normal text-xs"
-                    style={{ lineHeight: "18px" }}
-                  >
-                    {t("press_enter")} &nbsp;
-                  </div>
-                  <div
-                    className="font-semibold text-xs "
-                    style={{ lineHeight: "18px" }}
-                  >
-                    {t("enter_key")} &nbsp;
-                  </div>
-                  <div
-                    className="font-normal text-xs pr-2"
-                    style={{ lineHeight: "18px" }}
-                  >
-                    {t("display_matches")}
-                  </div>
-                  <div
-                    className="pr-4 hover:cursor-pointer"
-                    onClick={clearSearch}
-                  >
-                    <Close />
-                  </div>
+                <p className="text-xs text-dim-500 hidden md:block">
+                  {t("press_enter")} &nbsp;
+                  <span className="font-semibold">{t("enter_key")} &nbsp;</span>
+                  {t("display_matches")}
+                </p>
+              )}
+              {query.length > 0 && (
+                <div
+                  className="hover:cursor-pointer"
+                  onClick={() => {
+                    clearSearchBar();
+                    onClear?.();
+                  }}
+                >
+                  <Close />
                 </div>
               )}
               <div

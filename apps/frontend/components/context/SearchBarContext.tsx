@@ -23,6 +23,7 @@ type Context = {
   headerSearchInputRef: RefObject<HTMLInputElement>;
   search: (query: string) => void;
   closeResultsPopup: () => void;
+  clearSearchBar: () => void;
 } | null;
 
 const SearchBarContext = createContext<Context>(null);
@@ -100,6 +101,12 @@ export function SearchBarContextProvider({ children }: PropsWithChildren) {
     setResults([]);
   };
 
+  const clearSearchBar = () => {
+    setIsResultsPopupOpen(false);
+    setResults([]);
+    setQuery("");
+  };
+
   useEffect(() => {
     closeResultsPopup();
   }, [isHeaderSearchInputVisible]);
@@ -116,6 +123,7 @@ export function SearchBarContextProvider({ children }: PropsWithChildren) {
         headerSearchInputRef,
         search,
         closeResultsPopup,
+        clearSearchBar,
       }}
     >
       {children}

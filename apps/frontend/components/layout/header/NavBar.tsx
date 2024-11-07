@@ -1,5 +1,5 @@
 "use client";
-import React, { Suspense } from "react";
+import React, { Suspense, useState } from "react";
 import { Link } from "@/lib/i18n";
 import ThemeToggle from "./theme-toggle";
 import LocaleSwitch from "./locale-switch";
@@ -26,8 +26,8 @@ const NavBar: React.FC<NavBarProps> = ({
   agencyAcronym,
 }) => {
   const { isNavbarSearchInputVisible } = useSearchBar();
-
   const showSearch = alwaysShowSearch || isNavbarSearchInputVisible;
+  const [openSearchPopover, setOpenSearchPopover] = useState(false);
 
   return (
     <div id="header" className={`sticky top-0 z-50 ${isAdmin ? "" : "w-full"}`}>
@@ -59,15 +59,21 @@ const NavBar: React.FC<NavBarProps> = ({
 
             <div className="flex gap-3 items-center">
               {showSearch && (
-                <PopoverRoot>
+                <PopoverRoot
+                  open={openSearchPopover}
+                  onOpenChange={setOpenSearchPopover}
+                >
                   <PopoverTrigger className="lg:hidden">
                     <SearchIcon />
                   </PopoverTrigger>
                   <PopoverContent
-                    className="w-screen bg-transparent border-none px-4 h-full"
+                    className="w-screen bg-transparent border-none px-1 h-full"
                     align="center"
                   >
-                    <SearchBar className="shadow-lg" />
+                    <SearchBar
+                      className="shadow-2xl bg-transparent rounded-full"
+                      onClear={() => setOpenSearchPopover(false)}
+                    />
                   </PopoverContent>
                 </PopoverRoot>
               )}
