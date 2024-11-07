@@ -27,6 +27,7 @@ interface SearchBarProps {
   className?: string;
   agencyUUID?: string;
   hideResultsPopup?: boolean;
+  scrollOnFocus?: boolean;
 }
 
 const highlightText = (text: string, query: string) => {
@@ -44,7 +45,7 @@ const highlightText = (text: string, query: string) => {
 };
 
 const SearchBar = forwardRef<HTMLInputElement, SearchBarProps>(
-  ({ className, agencyUUID, hideResultsPopup }, ref) => {
+  ({ className, agencyUUID, hideResultsPopup, scrollOnFocus }, ref) => {
     const {
       query,
       isSearching,
@@ -104,12 +105,13 @@ const SearchBar = forwardRef<HTMLInputElement, SearchBarProps>(
                 onValueChange={handleInputValueChange}
                 onKeyDown={handleKeyDown}
                 hideSearchIcon
-                onFocus={(e) =>
+                onFocus={(e) => {
+                  if (!scrollOnFocus) return;
                   e.currentTarget.scrollIntoView({
                     behavior: "smooth",
                     block: "start",
-                  })
-                }
+                  });
+                }}
               />
               {query.length > 0 && (
                 <div className="hidden md:flex absolute right-10 bg-transparent text-dim-500 items-center">

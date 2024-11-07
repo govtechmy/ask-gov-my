@@ -78,6 +78,7 @@ const Header: React.FC<HeaderProps> = ({ agency }) => {
             className={cn("max-w-[780px] z-10")}
             agencyUUID={agency?.uuid}
             hideResultsPopup={isNavbarSearchInputVisible}
+            scrollOnFocus
           />
         </div>
         {!agency && (
