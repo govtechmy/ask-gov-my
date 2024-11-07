@@ -12,6 +12,7 @@ import { useTranslations } from "next-intl";
 import { cn } from "@askgovmy/utils";
 import {
   Command,
+  CommandInput,
   CommandEmpty,
   CommandItem,
   CommandList,
@@ -58,11 +59,12 @@ const SearchBar = forwardRef<HTMLInputElement, SearchBarProps>(
     const handleSearchIconClick = () => {
       if (query.length > 0) {
         router.push(`/searchresults?query=${query}`);
+        closeResultsPopup();
       }
     };
 
-    const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-      search(event.target.value);
+    const handleInputValueChange = (value: string) => {
+      search(value);
     };
 
     const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
@@ -82,73 +84,75 @@ const SearchBar = forwardRef<HTMLInputElement, SearchBarProps>(
     };
 
     return (
-      <PopoverRoot open={isResultsPopupOpen}>
-        <PopoverAnchor asChild>
-          <div
-            id="inputnavbar"
-            className={cn(
-              `flex items-center border-outline-200 h-11 shadow-button border pl-3 pr-2 py-2 bg-white w-full relative `,
-              isResultsPopupOpen
-                ? "rounded-b-none rounded-t-3xl"
-                : "rounded-full",
-              className
-            )}
-          >
-            <input
-              ref={ref}
-              className="flex-1 border-none outline-none px-2 py-1 bg-inherit w-full"
-              placeholder={t(agencyUUID ? "search_agency" : "search")}
-              value={query}
-              onChange={handleInputChange}
-              onKeyDown={handleKeyDown}
-            />
-            {query.length > 0 && (
-              <div className="hidden md:flex absolute right-10 bg-transparent text-dim-500 items-center">
-                <div
-                  className="font-normal text-xs"
-                  style={{ lineHeight: "18px" }}
-                >
-                  {t("press_enter")} &nbsp;
-                </div>
-                <div
-                  className="font-semibold text-xs "
-                  style={{ lineHeight: "18px" }}
-                >
-                  {t("enter_key")} &nbsp;
-                </div>
-                <div
-                  className="font-normal text-xs pr-2"
-                  style={{ lineHeight: "18px" }}
-                >
-                  {t("display_matches")}
-                </div>
-                <div
-                  className="pr-4 hover:cursor-pointer"
-                  onClick={clearSearch}
-                >
-                  <Close />
-                </div>
-              </div>
-            )}
+      <Command shouldFilter={false} className={cn("w-full", className)} loop>
+        <PopoverRoot open={isResultsPopupOpen}>
+          <PopoverAnchor asChild>
             <div
-              className="flex items-center justify-center w-7 h-7 rounded-full bg-gradient-to-b from-[#B379FF] to-[#702FF9] to-[60.94%] hover:cursor-pointer"
-              onClick={handleSearchIconClick}
+              className={cn(
+                `flex items-center border-outline-200 h-11 shadow-button border pl-3 pr-2 py-2 bg-white w-full relative `,
+                isResultsPopupOpen
+                  ? "rounded-b-none rounded-t-3xl"
+                  : "rounded-full"
+              )}
             >
-              <Search className="text-white" />
+              <CommandInput
+                ref={ref}
+                containerClassName="flex-1"
+                className="border-none shadow-none"
+                placeholder={t(agencyUUID ? "search_agency" : "search")}
+                value={query}
+                onValueChange={handleInputValueChange}
+                onKeyDown={handleKeyDown}
+                hideSearchIcon
+              />
+              {query.length > 0 && (
+                <div className="hidden md:flex absolute right-10 bg-transparent text-dim-500 items-center">
+                  <div
+                    className="font-normal text-xs"
+                    style={{ lineHeight: "18px" }}
+                  >
+                    {t("press_enter")} &nbsp;
+                  </div>
+                  <div
+                    className="font-semibold text-xs "
+                    style={{ lineHeight: "18px" }}
+                  >
+                    {t("enter_key")} &nbsp;
+                  </div>
+                  <div
+                    className="font-normal text-xs pr-2"
+                    style={{ lineHeight: "18px" }}
+                  >
+                    {t("display_matches")}
+                  </div>
+                  <div
+                    className="pr-4 hover:cursor-pointer"
+                    onClick={clearSearch}
+                  >
+                    <Close />
+                  </div>
+                </div>
+              )}
+              <div
+                className="flex items-center justify-center w-7 h-7 rounded-full bg-gradient-to-b from-[#B379FF] to-[#702FF9] to-[60.94%] hover:cursor-pointer"
+                onClick={handleSearchIconClick}
+              >
+                <Search className="text-white" />
+              </div>
             </div>
-          </div>
-        </PopoverAnchor>
-        <PopoverContent
-          className={cn(
-            "border-t-[1px] rounded-t-none rounded-b-3xl bg-[#FFFFFF] dark:bg-[#1D1D21] shadow-lg w-[var(--radix-popover-trigger-width)] max-h-96 overflow-y-auto",
-            hideResultsPopup && "hidden"
-          )}
-          onOpenAutoFocus={(e) => e.preventDefault()}
-          align="start"
-          sideOffset={0}
-        >
-          <div className="overflow-y-auto max-h-60">
-            <Command shouldFilter={false}>
+          </PopoverAnchor>
+          <PopoverContent
+            className={cn(
+              "border-t-[1px] rounded-t-none rounded-b-3xl bg-[#FFFFFF] dark:bg-[#1D1D21] shadow-lg w-[var(--radix-popover-trigger-width)] max-h-96 overflow-y-auto",
+              hideResultsPopup && "hidden"
+            )}
+            onOpenAutoFocus={(e) => e.preventDefault()}
+            onInteractOutside={closeResultsPopup}
+            onPointerDownOutside={closeResultsPopup}
+            align="start"
+            sideOffset={0}
+          >
+            <div className="overflow-y-auto max-h-60">
               <CommandList>
                 {isSearching && !results.length && (
                   <CommandLoading>
@@ -160,43 +164,45 @@ const SearchBar = forwardRef<HTMLInputElement, SearchBarProps>(
                     <p className="py-2 text-center">{t("no_results")}</p>
                   </CommandEmpty>
                 )}
+                {/* Hacky: A hidden first item so cmdk does not focus on the first item by default */}
+                <CommandItem value="-" className="hidden" />
                 {results.map((result) => (
                   <CommandItem
                     key={result.id}
-                    className="flex rounded-md items-center pr-2 pl-4 py-2 last:border-0 hover:bg-outline-200 h-auto max-h-[60px]"
+                    className="flex rounded-md items-center pr-2 pl-4 py-2 last:border-0 hover:bg-outline-200 h-auto max-h-[60px] cursor-pointer"
+                    onSelect={() =>
+                      router.push(
+                        `/${result.agency.acronym.toLowerCase()}/${result.id}`
+                      )
+                    }
                   >
-                    <Link
-                      className="grow"
-                      href={`/${result.agency.acronym.toLowerCase()}/${result.id}`}
-                    >
+                    <div className="grow">
                       <span className="font-medium text-sm text-black-700 line-clamp-1 ">
                         {highlightText(result.question, query)}
                       </span>
                       <span className="mt-1 font-normal text-sm text-dim-500 line-clamp-1">
                         Answer: {highlightText(result.answer!.text, query)}
                       </span>
-                    </Link>
-                    <span className="on hover:cursor-pointer pl-3">
-                      <div className="flex">
-                        <div className="pr-1.5">
-                          <JataNegaraIcon className="stroke-[#E4E4E7] dark:stroke-[#27272A] h-5 w-5"></JataNegaraIcon>
-                        </div>
-                        <div className="font-normal text-sm text-black-800">
-                          {result.agency.acronym}
-                        </div>
-                        <div className="px-1">
-                          <RightArrow />
-                        </div>
+                    </div>
+                    <div className="hidden md:flex">
+                      <div className="pr-1.5">
+                        <JataNegaraIcon className="stroke-[#E4E4E7] dark:stroke-[#27272A] h-5 w-5"></JataNegaraIcon>
                       </div>
-                    </span>
+                      <div className="font-normal text-sm text-black-800 hidden md:block">
+                        {result.agency.acronym}
+                      </div>
+                      <div className="px-1">
+                        <RightArrow />
+                      </div>
+                    </div>
                   </CommandItem>
                 ))}
               </CommandList>
-            </Command>
-          </div>
-          <AskQuestion />
-        </PopoverContent>
-      </PopoverRoot>
+            </div>
+            <AskQuestion />
+          </PopoverContent>
+        </PopoverRoot>
+      </Command>
     );
   }
 );

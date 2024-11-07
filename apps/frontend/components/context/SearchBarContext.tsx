@@ -27,7 +27,7 @@ type Context = {
 const SearchBarContext = createContext<Context>(null);
 
 const SEARCH_RESULTS_PAGE = 1;
-const SEARCH_RESULTS_LIMIT = 2;
+const SEARCH_RESULTS_LIMIT = 3;
 
 function useHeaderSearchInputVisibility() {
   const [isVisible, setIsVisible] = useState(false);
