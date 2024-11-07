@@ -2,6 +2,7 @@
 
 import { searchQuestions } from "@/actions/questionServices";
 import { Question } from "@/types/types";
+import { useDebounce } from "@uidotdev/usehooks";
 import {
   createContext,
   PropsWithChildren,
@@ -28,6 +29,7 @@ const SearchBarContext = createContext<Context>(null);
 
 const SEARCH_RESULTS_PAGE = 1;
 const SEARCH_RESULTS_LIMIT = 3;
+const DEBOUNCE = 300;
 
 function useHeaderSearchInputVisibility() {
   const [isVisible, setIsVisible] = useState(false);
@@ -62,6 +64,7 @@ function useHeaderSearchInputVisibility() {
 
 export function SearchBarContextProvider({ children }: PropsWithChildren) {
   const [query, setQuery] = useState("");
+  const debouncedQuery = useDebounce(query, DEBOUNCE);
   const [results, setResults] = useState<Question[]>([]);
   const [isResultsPopupOpen, setIsResultsPopupOpen] = useState(false);
   const [isSearching, startTranstion] = useTransition();
@@ -76,15 +79,21 @@ export function SearchBarContextProvider({ children }: PropsWithChildren) {
       return;
     }
     setIsResultsPopupOpen(true);
+  };
+
+  useEffect(() => {
+    if (!debouncedQuery.length) {
+      return;
+    }
     startTranstion(async () => {
       const { results } = await searchQuestions(
-        query,
+        debouncedQuery,
         SEARCH_RESULTS_PAGE,
         SEARCH_RESULTS_LIMIT
       );
       setResults(results);
     });
-  };
+  }, [debouncedQuery]);
 
   const closeResultsPopup = () => {
     setIsResultsPopupOpen(false);

@@ -89,7 +89,7 @@ const SearchBar = forwardRef<HTMLInputElement, SearchBarProps>(
           <PopoverAnchor asChild>
             <div
               className={cn(
-                `flex items-center border-outline-200 h-11 shadow-button border pl-3 pr-2 py-2 bg-white w-full relative `,
+                `flex items-center border-outline-200 h-11 shadow-button border px-3 py-2 bg-white w-full relative `,
                 isResultsPopupOpen
                   ? "rounded-b-none rounded-t-3xl"
                   : "rounded-full"
@@ -98,7 +98,7 @@ const SearchBar = forwardRef<HTMLInputElement, SearchBarProps>(
               <CommandInput
                 ref={ref}
                 containerClassName="flex-1"
-                className="border-none shadow-none"
+                className="border-none shadow-none p-0"
                 placeholder={t(agencyUUID ? "search_agency" : "search")}
                 value={query}
                 onValueChange={handleInputValueChange}
@@ -143,13 +143,14 @@ const SearchBar = forwardRef<HTMLInputElement, SearchBarProps>(
           </PopoverAnchor>
           <PopoverContent
             className={cn(
-              "border-t-[1px] rounded-t-none rounded-b-3xl bg-[#FFFFFF] dark:bg-[#1D1D21] shadow-lg w-[var(--radix-popover-trigger-width)] max-h-96 overflow-y-auto p-0",
+              "border-t-[1px] rounded-t-none rounded-b-3xl bg-[#FFFFFF] dark:bg-[#1D1D21] shadow-lg w-[var(--radix-popover-trigger-width)] max-h-[min(var(--radix-popover-content-available-height),400px)] overflow-y-auto p-0",
               hideResultsPopup && "hidden"
             )}
             onOpenAutoFocus={(e) => e.preventDefault()}
             onPointerDownOutside={closeResultsPopup}
             align="start"
             sideOffset={0}
+            avoidCollisions={false}
           >
             <CommandList className="max-h-full">
               {isSearching && !results.length && (
@@ -167,7 +168,7 @@ const SearchBar = forwardRef<HTMLInputElement, SearchBarProps>(
               {results.map((result) => (
                 <CommandItem
                   key={result.id}
-                  className="flex rounded-md items-center hover:bg-outline-200 h-auto cursor-pointer border-b"
+                  className="flex rounded-md items-center hover:bg-outline-200 h-auto cursor-pointer border-b px-3"
                   onSelect={() =>
                     router.push(
                       `/${result.agency.acronym.toLowerCase()}/${result.id}`
