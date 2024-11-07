@@ -98,12 +98,18 @@ const SearchBar = forwardRef<HTMLInputElement, SearchBarProps>(
               <CommandInput
                 ref={ref}
                 containerClassName="flex-1"
-                className="border-none shadow-none p-0"
+                className="border-none shadow-none p-0 scroll-mt-[80px]"
                 placeholder={t(agencyUUID ? "search_agency" : "search")}
                 value={query}
                 onValueChange={handleInputValueChange}
                 onKeyDown={handleKeyDown}
                 hideSearchIcon
+                onFocus={(e) =>
+                  e.currentTarget.scrollIntoView({
+                    behavior: "smooth",
+                    block: "start",
+                  })
+                }
               />
               {query.length > 0 && (
                 <div className="hidden md:flex absolute right-10 bg-transparent text-dim-500 items-center">
