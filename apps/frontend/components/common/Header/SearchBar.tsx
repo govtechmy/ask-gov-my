@@ -143,63 +143,60 @@ const SearchBar = forwardRef<HTMLInputElement, SearchBarProps>(
           </PopoverAnchor>
           <PopoverContent
             className={cn(
-              "border-t-[1px] rounded-t-none rounded-b-3xl bg-[#FFFFFF] dark:bg-[#1D1D21] shadow-lg w-[var(--radix-popover-trigger-width)] max-h-96 overflow-y-auto",
+              "border-t-[1px] rounded-t-none rounded-b-3xl bg-[#FFFFFF] dark:bg-[#1D1D21] shadow-lg w-[var(--radix-popover-trigger-width)] max-h-96 overflow-y-auto p-0",
               hideResultsPopup && "hidden"
             )}
             onOpenAutoFocus={(e) => e.preventDefault()}
-            onInteractOutside={closeResultsPopup}
             onPointerDownOutside={closeResultsPopup}
             align="start"
             sideOffset={0}
           >
-            <div className="overflow-y-auto max-h-60">
-              <CommandList>
-                {isSearching && !results.length && (
-                  <CommandLoading>
-                    <p className="py-2 text-center">{t("searching")}</p>
-                  </CommandLoading>
-                )}
-                {!isSearching && (
-                  <CommandEmpty>
-                    <p className="py-2 text-center">{t("no_results")}</p>
-                  </CommandEmpty>
-                )}
-                {/* Hacky: A hidden first item so cmdk does not focus on the first item by default */}
-                <CommandItem value="-" className="hidden" />
-                {results.map((result) => (
-                  <CommandItem
-                    key={result.id}
-                    className="flex rounded-md items-center pr-2 pl-4 py-2 last:border-0 hover:bg-outline-200 h-auto max-h-[60px] cursor-pointer"
-                    onSelect={() =>
-                      router.push(
-                        `/${result.agency.acronym.toLowerCase()}/${result.id}`
-                      )
-                    }
-                  >
-                    <div className="grow">
-                      <span className="font-medium text-sm text-black-700 line-clamp-1 ">
-                        {highlightText(result.question, query)}
-                      </span>
-                      <span className="mt-1 font-normal text-sm text-dim-500 line-clamp-1">
-                        Answer: {highlightText(result.answer!.text, query)}
-                      </span>
+            <CommandList className="max-h-full">
+              {isSearching && !results.length && (
+                <CommandLoading>
+                  <p className="py-2 text-center">{t("searching")}</p>
+                </CommandLoading>
+              )}
+              {!isSearching && (
+                <CommandEmpty>
+                  <p className="py-2 text-center">{t("no_results")}</p>
+                </CommandEmpty>
+              )}
+              {/* Hacky: A hidden first item so cmdk does not focus on the first item by default */}
+              <CommandItem value="-" className="hidden" />
+              {results.map((result) => (
+                <CommandItem
+                  key={result.id}
+                  className="flex rounded-md items-center hover:bg-outline-200 h-auto cursor-pointer border-b"
+                  onSelect={() =>
+                    router.push(
+                      `/${result.agency.acronym.toLowerCase()}/${result.id}`
+                    )
+                  }
+                >
+                  <div className="grow text-lg">
+                    <span className="font-medium text-black-700">
+                      {highlightText(result.question, query)}
+                    </span>
+                    <span className="mt-1 font-normal text-dim-500 line-clamp-3">
+                      {highlightText(result.answer!.text, query)}
+                    </span>
+                  </div>
+                  <div className="hidden md:flex">
+                    <div className="pr-1.5">
+                      <JataNegaraIcon className="stroke-[#E4E4E7] dark:stroke-[#27272A] h-5 w-5"></JataNegaraIcon>
                     </div>
-                    <div className="hidden md:flex">
-                      <div className="pr-1.5">
-                        <JataNegaraIcon className="stroke-[#E4E4E7] dark:stroke-[#27272A] h-5 w-5"></JataNegaraIcon>
-                      </div>
-                      <div className="font-normal text-sm text-black-800 hidden md:block">
-                        {result.agency.acronym}
-                      </div>
-                      <div className="px-1">
-                        <RightArrow />
-                      </div>
+                    <div className="font-normal text-sm text-black-800">
+                      {result.agency.acronym}
                     </div>
-                  </CommandItem>
-                ))}
-              </CommandList>
-            </div>
-            <AskQuestion />
+                    <div className="px-1">
+                      <RightArrow />
+                    </div>
+                  </div>
+                </CommandItem>
+              ))}
+            </CommandList>
+            {!isSearching && <AskQuestion />}
           </PopoverContent>
         </PopoverRoot>
       </Command>

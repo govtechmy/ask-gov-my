@@ -69,12 +69,25 @@ const AskQuestion = () => {
     <div className="items-center px-4 py-2 text-center border-outline-200 h-[60px]">
       <div className="text-sm items-center flex text-primary-500 justify-center h-full">
         {isClicked ? (
-          <Button variant={"primary"} size={"md"} onClick={openModal}>
+          <Button
+            variant={"primary"}
+            size={"md"}
+            onClick={(e) => {
+              e.stopPropagation();
+              openModal();
+            }}
+          >
             <PlusIcon className="stroke-white-forcewhite"></PlusIcon>
             {t("ask_new_question")}
           </Button>
         ) : (
-          <Button variant={"secondary-askmygov"} onClick={handleClick}>
+          <Button
+            variant={"secondary-askmygov"}
+            onClick={(e) => {
+              e.stopPropagation();
+              handleClick();
+            }}
+          >
             <QuestionCircle />
             {t("cant_find")}
           </Button>
