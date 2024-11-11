@@ -27,15 +27,23 @@ const AskQuestion = () => {
   const [email, setEmail] = useState("");
   const t = useTranslations("Askquestions");
   const [isFocused, setIsFocused] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (question && email) {
       try {
-        await submitQuestion({ question, email });
+        setIsSubmitting(true);
+        const recaptchaToken = await window.grecaptcha.enterprise.execute(
+          process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY!,
+          { action: "SUBMIT_QUESTION" }
+        );
+        await submitQuestion({ question, email, recaptchaToken });
         handleModalCloseOpenModalSubmit();
       } catch (error) {
         console.error("Error submitting question:", error);
+      } finally {
+        setIsSubmitting(false);
       }
     }
   };
@@ -182,11 +190,38 @@ const AskQuestion = () => {
             </div>
 
             <div className="absolute bottom-0 md:static flex flex-col items-center pt-9 pb-[18px]">
-              <Button type="submit" onClick={handleSubmit} variant={"primary"}>
+              <Button
+                type="submit"
+                onClick={handleSubmit}
+                variant={"primary"}
+                disabled={isSubmitting}
+              >
                 {t("submit")}
               </Button>
-              <div className="pt-3 text-dim-500 font-normal text-sm text-center">
-                {t("terms")}
+              <div className="text-dim-500 font-normal text-sm text-pretty text-center mt-3">
+                <p className="mb-3">{t("terms")}</p>
+                <p>
+                  {t.rich("recaptcha_terms", {
+                    ["privacy-policy"]: (chunks) => (
+                      <a
+                        target="_blank"
+                        href="https://policies.google.com/privacy"
+                        className="underline"
+                      >
+                        {chunks}
+                      </a>
+                    ),
+                    ["terms-of-service"]: (chunks) => (
+                      <a
+                        target="_blank"
+                        href="https://policies.google.com/terms"
+                        className="underline"
+                      >
+                        {chunks}
+                      </a>
+                    ),
+                  })}
+                </p>
               </div>
             </div>
           </form>

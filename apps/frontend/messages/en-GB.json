@@ -112,6 +112,7 @@
     "response_public_p3": "to assist other rakyats.",
     "submit": "Submit",
     "terms": "By submitting, you agree to AskMyGov's Terms of Use and Privacy Policy.",
+    "recaptcha_terms": "This site is protected by reCAPTCHA and the Google <privacy-policy>Privacy Policy</privacy-policy> and <terms-of-service>Terms of Service</terms-of-service> apply.",
     "submission_received": "Submission Received!",
     "submission_received_detail": "Your question has been received. We'll make every effort to connect you with the relevant agencies.",
     "close": "Close"

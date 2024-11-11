@@ -67,7 +67,9 @@ export interface Topic {
 }
 
 export interface QuestionSubmission
-  extends Pick<Question, "question" | "email"> {}
+  extends Pick<Question, "question" | "email"> {
+  recaptchaToken: string;
+}
 
 export interface User {
   id: string;
