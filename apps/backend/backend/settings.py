@@ -116,6 +116,16 @@ DATABASES = {
     }
 }
 
+
+
+# Google cloud settings - used in recaptcha flows
+GOOGLE_API_KEY = os.getenv("GOOGLE_API_KEY")
+GOOGLE_PROJECT_ID = os.getenv("GOOGLE_PROJECT_ID")
+
+# Recaptcha settings
+RECAPTCHA_SITE_KEY = os.getenv("RECAPTCHA_SITE_KEY")
+RECAPTCHA_MIN_SCORE = float(os.getenv("RECAPTCHA_MIN_SCORE"))
+
 # Elasticsearch settings
 ELASTICSEARCH_URL = os.getenv("ELASTICSEARCH_URL")
 ELASTICSEARCH_API_KEY = os.getenv("ELASTICSEARCH_API_KEY")

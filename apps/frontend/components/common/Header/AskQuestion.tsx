@@ -38,7 +38,11 @@ const AskQuestion = () => {
           process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY!,
           { action: "SUBMIT_QUESTION" }
         );
-        await submitQuestion({ question, email, recaptchaToken });
+        await submitQuestion({
+          question,
+          email,
+          recaptcha_token: recaptchaToken,
+        });
         handleModalCloseOpenModalSubmit();
       } catch (error) {
         console.error("Error submitting question:", error);
@@ -102,7 +106,10 @@ const AskQuestion = () => {
         )}
       </div>
       <Dialog open={isModalOpen} onOpenChange={setIsModalOpen}>
-        <DialogContent className="h-full md:h-auto max-w-[600px] flex flex-col">
+        <DialogContent
+          className="h-full md:h-auto max-w-[600px] flex flex-col"
+          onKeyDown={(e) => e.stopPropagation()}
+        >
           <DialogHeader>
             <DialogTitle className="justify-start gap-2">
               <QuestionMarkWithBox />
@@ -232,6 +239,8 @@ const AskQuestion = () => {
         <DialogContent
           className="h-full max-w-[600px] md:max-h-fit flex flex-col justify-center"
           hideCloseButton
+          onKeyDown={(e) => e.stopPropagation()}
+          onClick={(e) => e.stopPropagation()}
         >
           <DialogHeader>
             <DialogTitle className="flex-col md:items-start gap-4">

@@ -2,7 +2,7 @@ import math
 from django.conf import settings
 from ask_gov.permissions import IsSuperAdmin
 from .serializers import (
-    AdminPatchedQuestionSerializer, AdminQuestionSerializer, AnswerSerializer, AssignTopicsToQuestionSerializer, AttachmentSerializer, CreateUpdateUserSerializer, QuestionSerializer,
+    AdminPatchedQuestionSerializer, AdminQuestionSerializer, AnswerSerializer, AskQuestionSerializer, AssignTopicsToQuestionSerializer, AttachmentSerializer, CreateUpdateUserSerializer, QuestionSerializer,
     AgencySerializer, TopicSerializer, UserSerializer, LikeDislikeSerializer
 )
 from django.shortcuts import get_object_or_404
@@ -44,6 +44,11 @@ class QuestionViewSet(
     filter_backends = [DjangoFilterBackend]
     filterset_fields = ['agency', 'topics']
     permission_classes = [AllowAny]
+
+    def get_serializer_class(self):
+        if self.action == "create":
+            return AskQuestionSerializer
+        return super().get_serializer_class()
 
     QUESTION_INDEX = settings.ELASTICSEARCH_QUESTION_INDEX
     EMBEDDING_ENABLED = settings.FEATURE_FLAGS.get("EMBEDDING")

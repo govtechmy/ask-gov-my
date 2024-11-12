@@ -1,6 +1,8 @@
-from rest_framework import serializers
+from django.conf import settings
+from rest_framework import serializers, exceptions, status
 from django.contrib.auth import get_user_model
 from .models import Agency, Answer, Attachment, Question, Topic
+import requests
 
 User = get_user_model()
 
@@ -60,6 +62,51 @@ class QuestionSerializer(serializers.ModelSerializer):
         model = Question
         fields = ["id", "topics", "answer", "question", "spam", "email", "admin_opened_at", "staff_opened_at", "created_at", "updated_at", "agency", "attachments"]
         read_only_fields = ["id", "topics", "answer", "spam", "admin_opened_at", "staff_opened_at", "created_at", "updated_at", "agency", "attachments"]
+    
+    def create(self, validated_data):
+        # Don't create questions with this model serializer, use
+        # AskQuestionSerializer instead.
+        pass
+
+RECAPTCHA_SITE_KEY = settings.RECAPTCHA_SITE_KEY
+RECAPTCHA_MIN_SCORE = settings.RECAPTCHA_MIN_SCORE
+GOOGLE_PROJECT_ID = settings.GOOGLE_PROJECT_ID
+GOOGLE_API_KEY = settings.GOOGLE_API_KEY
+
+class AskQuestionSerializer(serializers.Serializer):
+    question = serializers.CharField(max_length=255, required=True)
+    email = serializers.EmailField(max_length=255, required=True)
+    recaptcha_token = serializers.CharField(required=True)
+
+    def create(self, validated_data):
+        recaptcha_token = validated_data["recaptcha_token"]
+
+        # Assess the recaptcha token
+        response = requests.post(
+            f"https://recaptchaenterprise.googleapis.com/v1/projects/{GOOGLE_PROJECT_ID}/assessments?key={GOOGLE_API_KEY}",
+            json={
+                "event": {
+                    "token": recaptcha_token,
+                    "expectedAction": "SUBMIT_QUESTION",
+                    "siteKey": RECAPTCHA_SITE_KEY,
+                }
+            }
+        )
+        if response.status_code != status.HTTP_200_OK:
+            raise exceptions.server_error(self.request)
+
+        json_data = response.json()
+        if json_data["riskAnalysis"]["score"] < RECAPTCHA_MIN_SCORE:
+            raise exceptions.ValidationError("Recaptcha token failed to pass assessment")
+
+        # Save the question after the recaptcha token passes the assessment
+        question = Question(
+            question=validated_data["question"],
+            email=validated_data["email"],
+        )
+        question.save()
+
+        return validated_data
 
 class AdminQuestionSerializer(QuestionSerializer):
     answer = AdminAnswerSerializer(read_only=True)
