@@ -35,6 +35,8 @@ jobs:
             ${{ steps.login-ecr.outputs.registry }}/${{ env.IMAGE }}
           tags: |
             type=sha
+          build-args: |
+            "NEXT_PUBLIC_RECAPTCHA_SITE_KEY=${{ env.STAGING_RECAPTCHA_SITE_KEY }}"
       - name: Build and push Docker images
         uses: docker/build-push-action@v5
         with:

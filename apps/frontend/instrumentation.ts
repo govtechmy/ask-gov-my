@@ -5,6 +5,7 @@ const requiredEnvVars = [
   "STORAGE_BUCKET",
   "STORAGE_BASE_URL",
   "NEXT_PUBLIC_STORAGE_BASE_URL",
+  "NEXT_PUBLIC_RECAPTCHA_SITE_KEY",
 ];
 
 export function register() {

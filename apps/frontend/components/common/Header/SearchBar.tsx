@@ -1,7 +1,6 @@
 "use client";
 
 import React, { forwardRef } from "react";
-import { Link } from "@/lib/i18n";
 import Search from "@/icons/search";
 import JataNegaraIcon from "@/icons/jatanegaraicon";
 import Close from "@/icons/close";

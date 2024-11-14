@@ -10,6 +10,7 @@ import Providers from "./providers/providers";
 import { Suspense } from "react";
 import Masthead from "@/components/layout/masthead";
 import { AutoToast } from "@askgovmy/ui";
+import Script from "next/script";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -59,6 +60,9 @@ export default async function RootLayout({
           </NextIntlClientProvider>
         </ThemeProvider>
       </body>
+      <Script
+        src={`https://www.google.com/recaptcha/enterprise.js?render=${process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY}`}
+      />
     </html>
   );
 }

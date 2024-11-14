@@ -22,6 +22,9 @@ COPY --from=turbo /app/out/pnpm-lock.yaml ./pnpm-lock.yaml
 # First install only production deps and cache them, then install all deps
 RUN --mount=type=cache,id=pnpm,target=/pnpm/store pnpm install --frozen-lockfile
 
+# Build arguments for the NextJS app
+ARG NEXT_PUBLIC_RECAPTCHA_SITE_KEY
+
 # Build the project
 COPY --from=turbo /app/out/full/ .
 # These arguments enable remote cacheing inside docker build

@@ -212,19 +212,37 @@ class TestQuestionViewSet(APITestCase):
         self.submit_question_url = reverse("question-list")
         self.search_questions_url = reverse("question-search")
     
+    def test_submit_question(self):
+        """
+        Tests submitting a question.
+        """
+        data = {
+            "question": "What should I do if I lost my driving license?",
+            "email": "test@example.com",
+            "recaptcha_token": "test_recaptcha_token",
+        }
+        response = self.client.post(
+            self.submit_question_url,
+            data=data,
+        )
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+
     def test_submit_long_question(self):
         """
         Tests submitting a question that exceeds the 255 character limit.
         """
         data = {
             "question": "X" * 256,
-            "email": "test@example.com"
+            "email": "test@example.com",
+            "recaptcha_token": "test_recaptcha_token",
         }
         response = self.client.post(
             self.submit_question_url,
             data=data,
         )
+        json_data = response.json()
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertIn("question", json_data)
     
     def test_search_questions(self):
         """

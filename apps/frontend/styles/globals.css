@@ -1,4 +1,4 @@
-@import './editor.css';
+@import "./editor.css";
 
 @tailwind base;
 @tailwind components;
@@ -145,54 +145,51 @@
     outline: none;
   }
 
-  ::-webkit-scrollbar
-  {
-    width: 10px;  /* for vertical scrollbars */
+  ::-webkit-scrollbar {
+    width: 10px; /* for vertical scrollbars */
     height: 10px; /* for horizontal scrollbars */
   }
 
-  ::-webkit-scrollbar-track
-  {
-    @apply bg-outline-200
+  ::-webkit-scrollbar-track {
+    @apply bg-outline-200;
   }
 
-  ::-webkit-scrollbar-thumb
-  {
-    @apply bg-outline-400 rounded-md
+  ::-webkit-scrollbar-thumb {
+    @apply bg-outline-400 rounded-md;
   }
 
   /* Hide scrollbar for Chrome, Safari and Opera */
-.hide-scrollbar::-webkit-scrollbar {
-  display: none;
-}
+  .hide-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
 
-/* Hide scrollbar for IE, Edge and Firefox */
-.hide-scrollbar {
-  -ms-overflow-style: none;
-  scrollbar-width: none;
-}
+  /* Hide scrollbar for IE, Edge and Firefox */
+  .hide-scrollbar {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
 
   body {
     @apply bg-background text-foreground;
   }
 
   h1 {
-    @apply font-poppins text-hxl
+    @apply font-poppins text-hxl;
   }
   h2 {
-    @apply font-poppins text-hlg
+    @apply font-poppins text-hlg;
   }
   h3 {
-    @apply font-poppins text-hmd
+    @apply font-poppins text-hmd;
   }
   h4 {
-    @apply font-poppins text-hsm
+    @apply font-poppins text-hsm;
   }
   h5 {
-    @apply font-poppins text-hxs
+    @apply font-poppins text-hxs;
   }
   h6 {
-    @apply font-poppins text-hxxs
+    @apply font-poppins text-hxxs;
   }
 }
 
@@ -201,4 +198,10 @@
     width: var(--radix-popover-trigger-width);
     max-height: var(--radix-popover-content-available-height);
   }
+}
+
+/* We can hide the reCAPTCHA badge as long as we display disclaimers appropriately */
+/* See: https://developers.google.com/recaptcha/docs/faq#id-like-to-hide-the-recaptcha-badge.-what-is-allowed */
+.grecaptcha-badge {
+  visibility: hidden;
 }
