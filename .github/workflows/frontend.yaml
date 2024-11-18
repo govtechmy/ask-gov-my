@@ -27,6 +27,9 @@ jobs:
       - name: Login to Amazon ECR
         id: login-ecr
         uses: aws-actions/amazon-ecr-login@v1
+      - name: Print NextJS build args
+        run: |
+          echo "NEXT_PUBLIC_RECAPTCHA_SITE_KEY=${{ vars.STAGING_RECAPTCHA_SITE_KEY }}"
       - name: Extract metadata (tags, labels) for Docker
         id: meta
         uses: docker/metadata-action@v5
