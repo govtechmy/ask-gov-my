@@ -27,9 +27,6 @@ jobs:
       - name: Login to Amazon ECR
         id: login-ecr
         uses: aws-actions/amazon-ecr-login@v1
-      - name: Print NextJS build args
-        run: |
-          echo "NEXT_PUBLIC_RECAPTCHA_SITE_KEY=${{ vars.STAGING_RECAPTCHA_SITE_KEY }}"
       - name: Extract metadata (tags, labels) for Docker
         id: meta
         uses: docker/metadata-action@v5
@@ -38,8 +35,6 @@ jobs:
             ${{ steps.login-ecr.outputs.registry }}/${{ env.IMAGE }}
           tags: |
             type=sha
-          build-args: |
-            "NEXT_PUBLIC_RECAPTCHA_SITE_KEY=${{ vars.STAGING_RECAPTCHA_SITE_KEY }}"
       - name: Build and push Docker images
         uses: docker/build-push-action@v5
         with:
@@ -48,6 +43,8 @@ jobs:
           push: true
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
+          build-args: |
+            "NEXT_PUBLIC_RECAPTCHA_SITE_KEY=${{ vars.STAGING_RECAPTCHA_SITE_KEY }}"
       - name: Log out of Amazon ECR
         run: docker logout ${{ steps.login-ecr.outputs.registry }}
       - name: Deploy with Spinnaker
