@@ -22,20 +22,27 @@ import { getTimestamp } from "@askgovmy/utils";
 export const getAgencies = withResponse(
   async (
     { page = 1, page_size = 24, search = "" }: ApiParams,
-    context: Context
+    context: Context,
+    params: Record<string, any>
   ) => {
     if (!context.session) throw new Yikes("E_201_NOT_AUTHORIZED");
 
-    const data = await api("/admin/agencies", {
-      params: {
-        page,
-        page_size,
-        search,
+    const lang: string | undefined = params.locale;
+
+    const data = await api(
+      "/admin/agencies",
+      {
+        params: {
+          page,
+          page_size,
+          search,
+        },
+        headers: {
+          Authorization: `Token ${context.session.accessToken}`,
+        },
       },
-      headers: {
-        Authorization: `Token ${context.session.accessToken}`,
-      },
-    });
+      lang
+    );
 
     return {
       data: paginate(data.results, data.count, page, page_size),
