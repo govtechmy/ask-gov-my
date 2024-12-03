@@ -17,7 +17,7 @@ const divVariants = cva("", {
       nameLogoDisplay:
         "font-poppins text-lg font-semibold flex items-center mt-[6px] h-10",
       Topics:
-        "flex text-base font-medium text-askmygovbrand-600 bg-askmygovbrand-50 border-[1px] border-askmygovbrand-200 px-2 py-1 rounded-lg line-clamp-1",
+        "flex text-base font-medium text-askmygovbrand-600 bg-askmygovbrand-50 border-[1px] border-askmygovbrand-200 px-2 py-1 rounded-lg line-clamp-1 lg:max-w-[250px]",
     },
   },
   defaultVariants: {

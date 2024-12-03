@@ -1,9 +1,10 @@
-import { getAgencyList, getAllTopics } from "@/actions/questionServices";
+import { getAgencyList } from "@/actions/questionServices";
 import WordTranslate from "@/components/common/WordTranslate";
 import { FSP, inject } from "@/lib/decorator";
 import { Topic } from "@/types/types";
 import TopicSidebarDropdown from "./dropdown";
 import TopicSidebarList from "./list";
+import { getAllTopics } from "@/actions/public/topic";
 
 interface TopicsBarProps {
   topics: Topic[];
@@ -34,10 +35,10 @@ export default inject(TopicsSidebar, {
       (agency) => agency.acronym.toLowerCase() === params.agencyAcronym
     )?.id;
 
-    const topics = await getAllTopics(agencyId);
+    const topics = await getAllTopics({ agencyId }, params);
 
     return {
-      topics,
+      topics: topics.data,
     };
   },
 });

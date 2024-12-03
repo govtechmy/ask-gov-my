@@ -1,9 +1,7 @@
 import React from "react";
-import {
-  getAgencyList,
-  getAllQuestions,
-  getAllTopics,
-} from "@/actions/questionServices";
+import { getAgencyList } from "@/actions/questionServices";
+import { getAllQuestions } from "@/actions/public/question";
+import { getAllTopics } from "@/actions/public/topic";
 import WordTranslate from "@/components/common/WordTranslate";
 import { FSP, inject } from "@/lib/decorator";
 import { PageResult, Question, Topic } from "@/types/types";
@@ -88,13 +86,13 @@ export default inject(TopicPage, {
     const topicId = params.topicId === "all" ? undefined : params.topicId;
 
     const [questions, topics] = await Promise.all([
-      getAllQuestions(page, 6, agencyId, topicId),
-      getAllTopics(agencyId),
+      getAllQuestions({ page, limit: 6, agencyId, topicId }, params),
+      getAllTopics({ agencyId }, params),
     ]);
 
     return {
-      questions,
-      topics,
+      questions: questions.data,
+      topics: topics.data,
     };
   },
 });

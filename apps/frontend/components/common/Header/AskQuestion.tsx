@@ -7,7 +7,7 @@ import QuestionMarkWithBox from "@/icons/questionmarkwithbox";
 import MailLogo from "@/icons/maillogo";
 import Info from "@/icons/info";
 import TickCheckCircle from "@/icons/tickcheckcircle";
-import { submitQuestion } from "@/actions/questionServices";
+import { submitQuestion } from "@/actions/public/question";
 import { useTranslations } from "next-intl";
 import { Button } from "../../ui/button";
 import {

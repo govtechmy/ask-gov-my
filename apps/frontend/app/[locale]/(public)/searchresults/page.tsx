@@ -4,7 +4,7 @@ import { FSP, inject } from "@/lib/decorator";
 import { PageResult, Question } from "@/types/types";
 import QuestionCard from "@/components/common/QuestionBox/QuestionCard";
 import { Paginator } from "@/components/client/paginator";
-import { searchQuestions } from "@/actions/questionServices";
+import { searchQuestions } from "@/actions/public/question";
 
 interface SearchResultPageProps {
   questions: PageResult<Question>;
@@ -55,11 +55,11 @@ const SearchResultPage: FSP<SearchResultPageProps> = async ({
 
 export default inject(SearchResultPage, {
   // debug: true,
-  async data({ searchParams }) {
+  async data({ searchParams, params }) {
     const { page = 1, query = "" } = searchParams;
-    const questions = await searchQuestions(query, page);
+    const questions = await searchQuestions({ query, page }, params);
     return {
-      questions,
+      questions: questions.data,
     };
   },
 });

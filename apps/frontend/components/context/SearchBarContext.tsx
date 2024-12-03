@@ -1,6 +1,6 @@
 "use client";
 
-import { searchQuestions } from "@/actions/questionServices";
+import { searchQuestions } from "@/actions/public/question";
 import { Question } from "@/types/types";
 import { useDebounce } from "@uidotdev/usehooks";
 import {
@@ -87,12 +87,12 @@ export function SearchBarContextProvider({ children }: PropsWithChildren) {
       return;
     }
     startTranstion(async () => {
-      const { results } = await searchQuestions(
-        debouncedQuery,
-        SEARCH_RESULTS_PAGE,
-        SEARCH_RESULTS_LIMIT
-      );
-      setResults(results);
+      const { data } = await searchQuestions({
+        query: debouncedQuery,
+        page: SEARCH_RESULTS_PAGE,
+        limit: SEARCH_RESULTS_LIMIT,
+      });
+      setResults(data ? data.results : []);
     });
   }, [debouncedQuery]);
 

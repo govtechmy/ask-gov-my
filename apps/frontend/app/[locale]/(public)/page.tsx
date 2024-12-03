@@ -1,4 +1,4 @@
-import { getAllQuestions } from "@/actions/questionServices";
+import { getAllQuestions } from "@/actions/public/question";
 import QuestionCard from "@/components/common/QuestionBox/QuestionCard";
 import WordTranslate from "@/components/common/WordTranslate";
 import { FSP, inject } from "@/lib/decorator";
@@ -35,11 +35,12 @@ const MainPage: FSP<MainPageProps> = async ({ data, params }) => {
 };
 
 export default inject(MainPage, {
-  async data({ searchParams }) {
+  // debug: true,
+  async data({ searchParams, params }) {
     const { page = 1 } = searchParams;
-    const questions = await getAllQuestions(page);
+    const questions = await getAllQuestions({ page }, params);
     return {
-      questions,
+      questions: questions.data,
     };
   },
 });

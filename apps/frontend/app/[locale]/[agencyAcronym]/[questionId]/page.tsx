@@ -1,16 +1,13 @@
-import {
-  getQuestionById,
-  getTopicsDetail,
-  getAgencyList,
-  searchQuestions,
-} from "@/actions/questionServices";
+import { getAgencyList } from "@/actions/questionServices";
+import { searchQuestions, getQuestionById } from "@/actions/public/question";
+import { getAllTopics } from "@/actions/public/topic";
 import IconQuestionSmileSolo from "@/icons/iconquestionsmilesolo";
 import ThumbsCounter from "@/app/[locale]/[agencyAcronym]/[questionId]/thumb-counters";
 import AgencyName from "@/components/common/AgencyName";
 import JataNegaraIcon from "@/icons/jatanegaraicon";
 import { notFound } from "next/navigation";
 import { Link } from "@/lib/i18n";
-import { Question } from "@/types/types";
+import { Question, Topic } from "@/types/types";
 import AgencyLogoImporter from "@/components/common/AgencyLogoImporter";
 import TipTap from "@/components/Editor/TipTap";
 import { StyledDisplay } from "@/components/ui/display";
@@ -33,7 +30,7 @@ import Translator from "@/components/client/translator";
 interface QuestionDetailsProps {
   question: Question;
   relatedQuestions: Question[];
-  relatedTopics: string[];
+  relatedTopics: Topic[];
 }
 
 const QuestionDetailPage: FSP<QuestionDetailsProps> = async ({
@@ -106,12 +103,12 @@ const QuestionDetailPage: FSP<QuestionDetailsProps> = async ({
         </div>
 
         {relatedTopics.length > 0 && (
-          <div className="flex flex-col lg:flex-row gap-3 lg:items-center">
-            <p className=" font-medium text-sm">Topics: </p>
-            <div className="flex flex-col lg:flex-row gap-1.5">
-              {relatedTopics.map((title, index) => (
+          <div className="flex flex-col lg:flex-row gap-3 lg:items-start">
+            <p className="font-medium text-sm">Topics: </p>
+            <div className="flex flex-col lg:flex-row gap-1.5 flex-wrap">
+              {relatedTopics.map((topic, index) => (
                 <StyledDisplay key={index} variant={"Topics"}>
-                  {title}
+                  {topic.title}
                 </StyledDisplay>
               ))}
             </div>
@@ -206,7 +203,7 @@ const QuestionDetailPage: FSP<QuestionDetailsProps> = async ({
 
 export default inject(QuestionDetailPage, {
   // debug: true,
-  async data({ searchParams, params }) {
+  async data({ params }) {
     const agencies = await getAgencyList();
 
     const agencyId = agencies.find(
@@ -217,21 +214,31 @@ export default inject(QuestionDetailPage, {
       return notFound();
     }
 
-    const question = await getQuestionById(params.questionId);
+    const { data: question, status } = await getQuestionById(
+      { questionId: params.questionId },
+      params
+    );
 
-    if ("code" in question && question.code === 404) {
+    if (status === 404) {
       return notFound();
     }
 
-    if (!("code" in question) && agencyId) {
+    if (question) {
       const [relatedQuestions, relatedTopics] = await Promise.all([
-        searchQuestions(question.question, 1, 4),
-        getTopicsDetail(question.topics, agencyId, params.locale),
+        searchQuestions(
+          { query: question.question, page: 1, limit: 4 },
+          params
+        ),
+        getAllTopics({ agencyId }, params),
       ]);
       return {
         question,
-        relatedQuestions: relatedQuestions.results,
-        relatedTopics,
+        relatedQuestions: relatedQuestions.data
+          ? relatedQuestions.data.results
+          : [],
+        relatedTopics: relatedTopics.data?.filter((topic) =>
+          question.topics.includes(topic.id)
+        ),
       };
     }
   },
