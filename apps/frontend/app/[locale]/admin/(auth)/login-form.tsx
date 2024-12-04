@@ -19,7 +19,7 @@ import {
   Input,
   Button,
 } from "@askgovmy/ui";
-import WordTranslate from "../../../../components/common/WordTranslate";
+import Translator from "@/components/client/translator";
 
 export function LoginForm() {
   const t = useTranslations("Adminlogin");
@@ -58,9 +58,8 @@ export function LoginForm() {
       <div className="max-w-[400px] flex flex-col items-center justify-center container gap-8 px-4.5 lg:px-0">
         <div className="text-center w-full flex flex-col gap-4">
           <h6 className="text-2xl font-semibold">{t("h1")}</h6>
-          <WordTranslate
-            translate="Adminlogin"
-            keyword={"para1"}
+          <Translator
+            namespace="Adminlogin.para1"
             className="text-base text-black-700"
           />
         </div>

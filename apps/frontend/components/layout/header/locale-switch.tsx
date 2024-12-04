@@ -1,6 +1,4 @@
 "use client";
-
-import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import {
   usePathname,
   useRouter,
@@ -8,6 +6,7 @@ import {
   locales,
   localeMeta,
 } from "@/lib/i18n";
+import { Tabs, TabsList, TabsTrigger } from "@askgovmy/ui";
 import { useParams, useSearchParams } from "next/navigation";
 import { useTransition } from "react";
 

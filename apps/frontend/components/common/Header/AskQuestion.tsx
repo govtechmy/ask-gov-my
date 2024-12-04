@@ -9,8 +9,8 @@ import Info from "@/icons/info";
 import TickCheckCircle from "@/icons/tickcheckcircle";
 import { submitQuestion } from "@/actions/public/question";
 import { useTranslations } from "next-intl";
-import { Button } from "../../ui/button";
 import {
+  Button,
   Dialog,
   DialogContent,
   DialogDescription,

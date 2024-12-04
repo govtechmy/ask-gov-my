@@ -5,12 +5,12 @@ import ThemeToggle from "./theme-toggle";
 import LocaleSwitch from "./locale-switch";
 import Asklogo from "@/icons/asklogo";
 import SearchBar from "../../common/Header/SearchBar";
-import { StyledDisplay } from "@/components/ui/display";
 import {
   PopoverContent,
   PopoverRoot,
   PopoverTrigger,
   SearchIcon,
+  StyledDisplay,
 } from "@askgovmy/ui";
 import { useSearchBar } from "@/components/context/SearchBarContext";
 

@@ -109,8 +109,10 @@ SelectLabel.displayName = SelectPrimitive.Label.displayName;
 
 const SelectItem = forwardRef<
   ComponentRef<typeof SelectPrimitive.Item>,
-  ComponentPropsWithoutRef<typeof SelectPrimitive.Item>
->(({ className, children, ...props }, ref) => (
+  ComponentPropsWithoutRef<typeof SelectPrimitive.Item> & {
+    showCheckIcon?: boolean;
+  }
+>(({ className, children, showCheckIcon = true, ...props }, ref) => (
   <SelectPrimitive.Item
     ref={ref}
     className={cn(
@@ -120,9 +122,11 @@ const SelectItem = forwardRef<
     {...props}
   >
     <SelectPrimitive.ItemText>{children}</SelectPrimitive.ItemText>
-    <SelectPrimitive.ItemIndicator>
-      <Check className="size-4.5 text-blue-600" />
-    </SelectPrimitive.ItemIndicator>
+    {showCheckIcon && (
+      <SelectPrimitive.ItemIndicator>
+        <Check className="size-4.5 text-blue-600" />
+      </SelectPrimitive.ItemIndicator>
+    )}
   </SelectPrimitive.Item>
 ));
 SelectItem.displayName = SelectPrimitive.Item.displayName;

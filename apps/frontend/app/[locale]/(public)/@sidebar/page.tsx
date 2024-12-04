@@ -1,6 +1,6 @@
 import { getAgencyList } from "@/actions/public/agency";
+import Translator from "@/components/client/translator";
 import AgencyLogoImporter from "@/components/common/AgencyLogoImporter";
-import WordTranslate from "@/components/common/WordTranslate";
 import { FSP, inject } from "@/lib/decorator";
 import { Link } from "@/lib/i18n";
 import { Agency } from "@/types/types";
@@ -13,9 +13,8 @@ const TrendingAgenciesSidebar: FSP<AgenciesBarProps> = ({ data, locale }) => {
   const { agencies } = data!;
   return (
     <div className="w-full lg:w-[300px] flex flex-col gap-6">
-      <WordTranslate
-        translate="Mainpage"
-        keyword="trendingA"
+      <Translator
+        namespace="Mainpage.trendingA"
         className="font-semibold text-base text-black-700"
       />
       <ul className="flex flex-col gap-4.5">

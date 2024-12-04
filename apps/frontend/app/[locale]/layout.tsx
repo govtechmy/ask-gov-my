@@ -4,7 +4,7 @@ import "@/styles/globals.css";
 import { getMessages, unstable_setRequestLocale } from "next-intl/server";
 import { NextIntlClientProvider } from "next-intl";
 import { locales } from "@/lib/i18n";
-import { cn } from "@/lib/utils";
+import { cn } from "@askgovmy/utils";
 import { ThemeProvider } from "next-themes";
 import Providers from "./providers/providers";
 import { Suspense } from "react";

@@ -10,7 +10,6 @@ import { Link } from "@/lib/i18n";
 import { Question, Topic } from "@/types/types";
 import AgencyLogoImporter from "@/components/common/AgencyLogoImporter";
 import TipTap from "@/components/Editor/TipTap";
-import { StyledDisplay } from "@/components/ui/display";
 import { FSP, inject } from "@/lib/decorator";
 import {
   Breadcrumb,
@@ -21,6 +20,7 @@ import {
   BreadcrumbPage,
   Separator,
   AttachmentIcon,
+  StyledDisplay,
 } from "@askgovmy/ui";
 import { route, routes } from "@/lib/routes";
 import { since } from "@askgovmy/utils";
