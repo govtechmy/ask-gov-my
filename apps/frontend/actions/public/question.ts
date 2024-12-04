@@ -1,6 +1,6 @@
 "use server";
 import api from "@/lib/api";
-import { paginate } from "@/lib/server-helper";
+import { getIPAddress, paginate } from "@/lib/server-helper";
 import { PageResult, Question, QuestionSubmission } from "@/types/types";
 import { HttpStatusCode, withResponse, Yikes } from "@askgovmy/utils";
 
@@ -133,6 +133,52 @@ export const submitQuestion = withResponse(async (data: QuestionSubmission) => {
 
   return {
     message: "Successfuly submit question",
+    status: HttpStatusCode.OK_200,
+  };
+});
+
+/**
+ *  @Method: POST
+ *  @description: To like an answer - on public access
+ */
+export const likeAnswer = withResponse(async (answerId: number) => {
+  const ip = getIPAddress() || "0.0.0.0";
+
+  const body = {
+    actor_id: ip,
+    ip_address: ip,
+  };
+
+  const response = await api(`/answers/${answerId}/like/`, {
+    body: body,
+    method: "POST",
+  });
+
+  return {
+    message: "Successfuly like the answer",
+    status: HttpStatusCode.OK_200,
+  };
+});
+
+/**
+ *  @Method: POST
+ *  @description: To dislike an answer - on public access
+ */
+export const dislikeAnswer = withResponse(async (answerId: number) => {
+  const ip = getIPAddress() || "0.0.0.0";
+
+  const body = {
+    actor_id: ip,
+    ip_address: ip,
+  };
+
+  const response = await api(`/answers/${answerId}/dislike/`, {
+    body: body,
+    method: "POST",
+  });
+
+  return {
+    message: "Successfuly dislike the answer",
     status: HttpStatusCode.OK_200,
   };
 });

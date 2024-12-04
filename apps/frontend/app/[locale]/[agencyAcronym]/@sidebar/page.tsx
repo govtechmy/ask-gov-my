@@ -1,10 +1,11 @@
-import { getAgencyList } from "@/actions/questionServices";
+import { getAgencyList } from "@/actions/public/agency";
 import WordTranslate from "@/components/common/WordTranslate";
 import { FSP, inject } from "@/lib/decorator";
 import { Topic } from "@/types/types";
 import TopicSidebarDropdown from "./dropdown";
 import TopicSidebarList from "./list";
 import { getAllTopics } from "@/actions/public/topic";
+import { notFound } from "next/navigation";
 
 interface TopicsBarProps {
   topics: Topic[];
@@ -29,7 +30,11 @@ const TopicsSidebar: FSP<TopicsBarProps> = ({ data, params }) => {
 export default inject(TopicsSidebar, {
   // debug: true,
   async data({ params }) {
-    const agencies = await getAgencyList();
+    const { data: agencies } = await getAgencyList();
+
+    if (!agencies) {
+      return notFound();
+    }
 
     const agencyId = agencies.find(
       (agency) => agency.acronym.toLowerCase() === params.agencyAcronym

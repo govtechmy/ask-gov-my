@@ -11,29 +11,28 @@ import AgencyName from "../AgencyName";
 import AgencyLogoImporter from "../AgencyLogoImporter";
 import { useSearchBar } from "@/components/context/SearchBarContext";
 import { cn } from "@askgovmy/utils";
+import { route } from "@/lib/routes";
+import { useParams } from "next/navigation";
 
 interface HeaderProps {
-  agency?: {
-    acronym: string;
-    uuid: string;
-    details: Agency;
-  };
+  agency?: Agency;
 }
 
 const Header: React.FC<HeaderProps> = ({ agency }) => {
   const t = useTranslations("Search");
   const { headerSearchInputRef, isNavbarSearchInputVisible } = useSearchBar();
+  const params = useParams();
 
   const renderTitle = () => {
     if (agency) {
       return (
         <>
           <div className="flex items-center gap-1">
-            <Link href={"/"}>
+            <Link href={route("home", params)}>
               <div className="font-medium text-dim-500 text-sm">Home</div>
             </Link>
             <div>
-              <RightArrow className="stroke-[#A1A1AA]" />
+              <RightArrow className="stroke-outline-400" />
             </div>
             <div className="font-medium text-black-800 text-sm">
               {agency.acronym.toUpperCase()}
@@ -41,13 +40,13 @@ const Header: React.FC<HeaderProps> = ({ agency }) => {
           </div>
           <div className="flex items-center pb-6 pt-3 text-2xl text-left">
             <div className="flex-shrink-0 flex items-center justify-center relative h-[42px] w-[42px]">
-              <AgencyLogoImporter currentAgency={agency.details} />
+              <AgencyLogoImporter currentAgency={agency} />
             </div>
             <div
               id="search-navbar-title"
               className="font-poppins text-black-900 font-semibold text-2xl px-3"
             >
-              <AgencyName agency={agency.details} />
+              <AgencyName agency={agency} />
             </div>
           </div>
         </>
@@ -76,7 +75,7 @@ const Header: React.FC<HeaderProps> = ({ agency }) => {
           <SearchBar
             ref={headerSearchInputRef}
             className={cn("max-w-[780px] z-10")}
-            agencyUUID={agency?.uuid}
+            agencyUUID={agency?.id.toString()}
             hideResultsPopup={isNavbarSearchInputVisible}
             scrollOnFocus
           />

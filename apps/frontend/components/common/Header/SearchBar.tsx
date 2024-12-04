@@ -35,7 +35,7 @@ const highlightText = (text: string, query: string) => {
   const parts = text.split(new RegExp(`(${query})`, "gi"));
   return parts.map((part, index) =>
     part.toLowerCase() === query.toLowerCase() ? (
-      <span key={index} className="text-[#702FF9] dark:text-[#9E70FF]">
+      <span key={index} className="text-askmygovtextbrand-600">
         {part}
       </span>
     ) : (
@@ -90,7 +90,7 @@ const SearchBar = forwardRef<HTMLInputElement, SearchBarProps>(
           <PopoverAnchor asChild>
             <div
               className={cn(
-                `flex items-center border-outline-200 h-11 shadow-button border px-3 py-2 bg-white w-full relative gap-2`,
+                `flex items-center border-outline-200 h-11 shadow-button border px-3 py-2 bg-white-focuswhite100 w-full relative gap-2`,
                 isResultsPopupOpen
                   ? "rounded-b-none rounded-t-3xl"
                   : "rounded-full"
@@ -141,7 +141,7 @@ const SearchBar = forwardRef<HTMLInputElement, SearchBarProps>(
           </PopoverAnchor>
           <PopoverContent
             className={cn(
-              "border-t-[1px] rounded-t-none rounded-b-3xl bg-[#FFFFFF] dark:bg-[#1D1D21] shadow-lg w-[var(--radix-popover-trigger-width)] max-h-[min(var(--radix-popover-content-available-height),400px)] overflow-y-auto p-0",
+              "border-t-[1px] rounded-t-none rounded-b-3xl bg-white-focuswhite100 shadow-lg w-[var(--radix-popover-trigger-width)] max-h-[min(var(--radix-popover-content-available-height),400px)] overflow-y-auto p-0",
               hideResultsPopup && "hidden"
             )}
             onOpenAutoFocus={(e) => e.preventDefault()}
@@ -166,15 +166,15 @@ const SearchBar = forwardRef<HTMLInputElement, SearchBarProps>(
               {results.map((result) => (
                 <CommandItem
                   key={result.id}
-                  className="flex rounded-md items-center hover:bg-outline-200 h-auto cursor-pointer border-b px-3"
+                  className="flex rounded-md items-center hover:bg-outline-200 h-auto cursor-pointer border-b p-3"
                   onSelect={() =>
                     router.push(
                       `/${result.agency.acronym.toLowerCase()}/${result.id}`
                     )
                   }
                 >
-                  <div className="grow text-lg">
-                    <span className="font-medium text-black-700">
+                  <div className="grow text-md font-semibold">
+                    <span className="text-black-700">
                       {highlightText(result.question, query)}
                     </span>
                     <span className="mt-1 font-normal text-dim-500 line-clamp-3">

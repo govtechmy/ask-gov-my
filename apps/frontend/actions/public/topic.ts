@@ -1,3 +1,4 @@
+"use server";
 import api from "@/lib/api";
 import { Topic } from "@/types/types";
 import { HttpStatusCode, withResponse } from "@askgovmy/utils";

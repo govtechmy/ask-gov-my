@@ -3,7 +3,7 @@
 import Google from "@/icons/google";
 import { useTranslations } from "next-intl";
 import { signIn } from "next-auth/react";
-import { checkUserEmailExists } from "@/actions/userServices";
+import { checkUserEmailExists } from "@/actions/auth";
 import { requestLoginCodeAction } from "@/actions/auth";
 import { useForm } from "react-hook-form";
 import z from "zod";

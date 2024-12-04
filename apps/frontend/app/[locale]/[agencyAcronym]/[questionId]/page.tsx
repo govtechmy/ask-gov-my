@@ -1,4 +1,4 @@
-import { getAgencyList } from "@/actions/questionServices";
+import { getAgencyList } from "@/actions/public/agency";
 import { searchQuestions, getQuestionById } from "@/actions/public/question";
 import { getAllTopics } from "@/actions/public/topic";
 import IconQuestionSmileSolo from "@/icons/iconquestionsmilesolo";
@@ -204,7 +204,11 @@ const QuestionDetailPage: FSP<QuestionDetailsProps> = async ({
 export default inject(QuestionDetailPage, {
   // debug: true,
   async data({ params }) {
-    const agencies = await getAgencyList();
+    const { data: agencies } = await getAgencyList();
+
+    if (!agencies) {
+      return notFound();
+    }
 
     const agencyId = agencies.find(
       (agency) => agency.acronym.toLowerCase() === params.agencyAcronym

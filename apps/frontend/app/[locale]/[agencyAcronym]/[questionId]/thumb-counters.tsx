@@ -3,7 +3,7 @@
 import { useEffect, useState, useTransition } from "react";
 import ThumbsDown from "@/icons/thumbsdown";
 import ThumbsUp from "@/icons/thumbsup";
-import { dislikeAnswer, likeAnswer } from "@/actions/questionServices";
+import { dislikeAnswer, likeAnswer } from "@/actions/public/question";
 import { useTranslations } from "next-intl";
 import { Button } from "@askgovmy/ui";
 import { cn } from "@askgovmy/utils";

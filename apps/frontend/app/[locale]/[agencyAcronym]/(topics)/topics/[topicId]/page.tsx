@@ -1,5 +1,5 @@
 import React from "react";
-import { getAgencyList } from "@/actions/questionServices";
+import { getAgencyList } from "@/actions/public/agency";
 import { getAllQuestions } from "@/actions/public/question";
 import { getAllTopics } from "@/actions/public/topic";
 import WordTranslate from "@/components/common/WordTranslate";
@@ -73,7 +73,11 @@ export default inject(TopicPage, {
   // debug: true,
   async data({ searchParams, params }) {
     const { page = 1 } = searchParams;
-    const agencies = await getAgencyList();
+    const { data: agencies } = await getAgencyList();
+
+    if (!agencies) {
+      return notFound();
+    }
 
     const agencyId = agencies.find(
       (agency) => agency.acronym.toLowerCase() === params.agencyAcronym
