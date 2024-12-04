@@ -60,8 +60,8 @@ class QuestionSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Question
-        fields = ["id", "topics", "answer", "question", "spam", "email", "admin_opened_at", "staff_opened_at", "created_at", "updated_at", "agency", "attachments"]
-        read_only_fields = ["id", "topics", "answer", "spam", "admin_opened_at", "staff_opened_at", "created_at", "updated_at", "agency", "attachments"]
+        fields = ["id", "topics", "answer", "question", "spam", "email", "created_at", "updated_at", "agency", "attachments"]
+        read_only_fields = ["id", "topics", "answer", "spam", "created_at", "updated_at", "agency", "attachments"]
     
     def create(self, validated_data):
         # Don't create questions with this model serializer, use
@@ -74,6 +74,7 @@ GOOGLE_PROJECT_ID = settings.GOOGLE_PROJECT_ID
 GOOGLE_API_KEY = settings.GOOGLE_API_KEY
 
 class AskQuestionSerializer(serializers.Serializer):
+    id = serializers.IntegerField(read_only=True)
     question = serializers.CharField(max_length=255, required=True)
     email = serializers.EmailField(max_length=255, required=True)
     recaptcha_token = serializers.CharField(required=True)
@@ -105,6 +106,8 @@ class AskQuestionSerializer(serializers.Serializer):
             email=validated_data["email"],
         )
         question.save()
+
+        validated_data["id"] = question.id
 
         return validated_data
 

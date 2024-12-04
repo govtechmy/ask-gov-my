@@ -44,8 +44,6 @@ class Question(models.Model):
     agency = models.ForeignKey(Agency, on_delete=models.CASCADE, null=True, blank=True, related_name='questions')
     topics = models.ManyToManyField(Topic, blank=True)
     email = models.EmailField()
-    admin_opened_at = models.DateTimeField(null=True, blank=True)
-    staff_opened_at = models.DateTimeField(null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
@@ -184,3 +182,18 @@ class Attachment(models.Model):
     @property
     def file_size_mb(self) -> int:
         return round(self.filesize / (1024 * 1024), 2)
+
+class EventType(models.TextChoices):
+    QUESTION_CREATED = 'question_created', 'Question created'
+    QUESTION_OPENED = 'question_opened', 'Question opened'
+    QUESTION_ANSWERED = 'question_answered', 'Question answered'
+    QUESTION_ASSIGNED = 'question_assigned', 'Question assigned'
+    ANSWER_UPDATED = 'answer_updated', 'Answer updated'
+
+class Event(models.Model):
+    type = models.CharField(choices=EventType.choices)
+    question = models.ForeignKey(Question, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
+    agency = models.ForeignKey(Agency, on_delete=models.SET_NULL, null=True)
+    details = models.JSONField(default=dict)
+    created_at = models.DateTimeField(auto_now_add=True)
