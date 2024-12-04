@@ -13,6 +13,8 @@ export async function generateStaticParams() {
     return data.map((agency) => ({
       agencyAcronym: agency.acronym.toLowerCase(),
     }));
+  } else {
+    return [];
   }
 }
 

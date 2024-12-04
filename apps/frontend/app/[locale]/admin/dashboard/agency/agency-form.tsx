@@ -9,11 +9,11 @@ import {
   FormControl,
   FormMessage,
   FormSubmit,
+  AskLogoIcon,
 } from "@askgovmy/ui";
 import { useForm, useFormContext } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { ComponentProps, PropsWithChildren } from "react";
-import Asklogo from "@/icons/asklogo";
 import { AgencyImageInput } from "./agency-image-input";
 import Translator from "@/components/client/translator";
 import {
@@ -208,7 +208,7 @@ export function AgencyFormFields() {
             <Translator namespace="AgencyForm.agency_logo_preview" />
           </FormLabel>
           <div className="font-poppins flex gap-2.5 text-lg font-semibold items-center h-10">
-            <Asklogo />
+            <AskLogoIcon />
             <div className="flex">
               Ask
               <div className="text-askmygovbrand-600">

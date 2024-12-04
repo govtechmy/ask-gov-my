@@ -1,6 +1,5 @@
 "use client";
 
-import Google from "@/icons/google";
 import { useTranslations } from "next-intl";
 import { signIn } from "next-auth/react";
 import { checkUserEmailExists } from "@/actions/auth";
@@ -18,6 +17,7 @@ import {
   FormSubmit,
   Input,
   Button,
+  GoogleIcon,
 } from "@askgovmy/ui";
 import Translator from "@/components/client/translator";
 
@@ -94,7 +94,7 @@ export function LoginForm() {
             variant={"secondary"}
             onClick={handleGoogleSignIn}
           >
-            <Google /> {t("2ndbutton")}
+            <GoogleIcon /> {t("2ndbutton")}
           </Button>
         </div>
       </div>
