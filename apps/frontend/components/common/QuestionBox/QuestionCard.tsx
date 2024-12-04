@@ -1,11 +1,10 @@
 "use client";
 import { Link } from "@/lib/i18n";
 import DateComponent from "../Date";
-import LikeIcon from "@/icons/likeicon";
 import AgencyLogoImporter from "../AgencyLogoImporter";
 import { Question } from "@/types/types";
 import AgencyName from "../AgencyName";
-import { QuestionSmileIcon } from "@askgovmy/ui";
+import { LikeIcon, QuestionSmileIcon } from "@askgovmy/ui";
 import { useEffect, useRef, useState } from "react";
 
 interface QuestionCardProps {

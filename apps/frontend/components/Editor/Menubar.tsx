@@ -11,7 +11,7 @@ import {
   StrikethroughIcon,
   UnderlineIcon,
   UndoIcon,
-} from "@/icons/editor";
+} from "@askgovmy/ui";
 import { Level } from "@tiptap/extension-heading";
 import {
   Select,

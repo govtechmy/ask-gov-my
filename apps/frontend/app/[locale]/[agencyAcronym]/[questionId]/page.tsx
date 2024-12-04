@@ -1,10 +1,8 @@
 import { getAgencyList } from "@/actions/public/agency";
 import { searchQuestions, getQuestionById } from "@/actions/public/question";
 import { getAllTopics } from "@/actions/public/topic";
-import IconQuestionSmileSolo from "@/icons/iconquestionsmilesolo";
 import ThumbsCounter from "@/app/[locale]/[agencyAcronym]/[questionId]/thumb-counters";
 import AgencyName from "@/components/common/AgencyName";
-import JataNegaraIcon from "@/icons/jatanegaraicon";
 import { notFound } from "next/navigation";
 import { Link } from "@/lib/i18n";
 import { Question, Topic } from "@/types/types";
@@ -21,6 +19,8 @@ import {
   Separator,
   AttachmentIcon,
   StyledDisplay,
+  QuestionSmileSoloIcon,
+  JataNegaraIcon,
 } from "@askgovmy/ui";
 import { route, routes } from "@/lib/routes";
 import { since } from "@askgovmy/utils";
@@ -58,7 +58,7 @@ const QuestionDetailPage: FSP<QuestionDetailsProps> = async ({
         </Breadcrumb>
 
         <div className="flex items-center gap-3">
-          <IconQuestionSmileSolo />
+          <QuestionSmileSoloIcon />
           <div className="flex text-black-700 text-base font-medium">
             <Translator namespace="Questiondetail.posted" tag="none" />
             &nbsp;
