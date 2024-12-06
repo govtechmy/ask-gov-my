@@ -1,11 +1,9 @@
 "use client";
 
 import { useEffect, useState, useTransition } from "react";
-import ThumbsDown from "@/icons/thumbsdown";
-import ThumbsUp from "@/icons/thumbsup";
-import { dislikeAnswer, likeAnswer } from "@/actions/questionServices";
+import { dislikeAnswer, likeAnswer } from "@/actions/public/question";
 import { useTranslations } from "next-intl";
-import { Button } from "@askgovmy/ui";
+import { Button, ThumbsDownIcon, ThumbsUpIcon } from "@askgovmy/ui";
 import { cn } from "@askgovmy/utils";
 
 interface ThumbsCounterProps {
@@ -93,7 +91,7 @@ const ThumbsCounter: React.FC<ThumbsCounterProps> = ({
         )}
         variant={"secondary-askmygov"}
       >
-        <ThumbsUp
+        <ThumbsUpIcon
           className={`${status === "liked" ? "stroke-white-forcewhite" : "stroke-askmygovbrand-600"}`}
         />
         <p
@@ -116,7 +114,7 @@ const ThumbsCounter: React.FC<ThumbsCounterProps> = ({
         )}
         variant={"secondary-askmygov"}
       >
-        <ThumbsDown
+        <ThumbsDownIcon
           className={`${status === "disliked" ? "stroke-white-forcewhite" : "stroke-askmygovbrand-600"}`}
         />
       </Button>

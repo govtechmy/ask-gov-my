@@ -176,8 +176,6 @@ export const assignQuestionTopic = withResponse(
     const session = await getSession();
     if (!session) throw new Yikes("E_201_NOT_AUTHORIZED");
 
-    console.log(body);
-
     const response = await api(`/admin/questions/${questionId}/topics/`, {
       method: "PUT",
       body,

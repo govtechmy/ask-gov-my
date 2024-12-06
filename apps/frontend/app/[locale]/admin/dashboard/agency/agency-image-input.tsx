@@ -1,9 +1,9 @@
-import PlusIcon from "@/icons/plusicon";
 import { ComponentProps, useRef, useState } from "react";
 import Image from "next/image";
 import { cn } from "@askgovmy/utils";
 import { useTranslations } from "next-intl";
 import { useAgencyForm } from "./agency-form";
+import { PlusIcon } from "@askgovmy/ui";
 
 const getHeightAndWidthFromDataURL = (
   dataURL: string

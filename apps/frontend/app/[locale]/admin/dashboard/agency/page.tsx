@@ -77,9 +77,9 @@ const ManageAgencies: FSP<ManageAgenciesProps> = async ({ data }) => {
 export default inject(ManageAgencies, {
   // debug: true,
   middleware: [MustBeAuthenticated, MustBeAuthorized(["super_admin"])],
-  async data({ searchParams, context }) {
+  async data({ searchParams, context, params }) {
     const { page = 1, search = "" } = searchParams;
-    const { data } = await getAgencies({ page, search }, context);
+    const { data } = await getAgencies({ page, search }, context, params);
 
     return {
       agencies: data,

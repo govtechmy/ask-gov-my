@@ -1,15 +1,13 @@
 import React from "react";
-import {
-  getAgencyList,
-  getAllQuestions,
-  getAllTopics,
-} from "@/actions/questionServices";
-import WordTranslate from "@/components/common/WordTranslate";
+import { getAgencyList } from "@/actions/public/agency";
+import { getAllQuestions } from "@/actions/public/question";
+import { getAllTopics } from "@/actions/public/topic";
 import { FSP, inject } from "@/lib/decorator";
 import { PageResult, Question, Topic } from "@/types/types";
 import QuestionCard from "@/components/common/QuestionBox/QuestionCard";
 import { Paginator } from "@/components/client/paginator";
 import { notFound } from "next/navigation";
+import Translator from "@/components/client/translator";
 
 interface TopicPageProps {
   questions: PageResult<Question>;
@@ -25,20 +23,15 @@ const TopicPage: FSP<TopicPageProps> = async ({ params, data, locale }) => {
   return (
     <div className="w-full flex flex-col gap-6">
       {params?.topicId === "all" ? (
-        <WordTranslate
-          translate="Mainpage"
-          keyword="trendingQ"
+        <Translator
+          namespace="Mainpage.trendingQ"
           className="font-semibold text-base text-black-700"
         />
       ) : (
         <div className="flex items-center font-semibold text-base text-black-700">
-          <WordTranslate translate={"Topics"} keyword={"showing"} />
+          <Translator namespace="Topics.showing" />
           <p>&nbsp;{questions.page.total}&nbsp;</p>
-          <WordTranslate
-            translate={"Topics"}
-            keyword={"questionsin"}
-            className="text-nowrap"
-          />
+          <Translator namespace="Topics.questionsin" className="text-nowrap" />
           &nbsp;&nbsp;
           <p className="border border-askmygovbrand-200 rounded-md py-1 px-2 text-askmygovtextbrand-600 font-medium hidden lg:block">
             {locale === "ms-MY" ? currTopic?.title_ms : currTopic?.title}
@@ -61,9 +54,8 @@ const TopicPage: FSP<TopicPageProps> = async ({ params, data, locale }) => {
           <Paginator route="agencyAllTopics" data={questions.page} />
         </>
       ) : (
-        <WordTranslate
-          translate="Topics"
-          keyword="notfound"
+        <Translator
+          namespace="Topics.notfound"
           className="text-base text-dim-500"
         />
       )}
@@ -75,7 +67,11 @@ export default inject(TopicPage, {
   // debug: true,
   async data({ searchParams, params }) {
     const { page = 1 } = searchParams;
-    const agencies = await getAgencyList();
+    const { data: agencies } = await getAgencyList();
+
+    if (!agencies) {
+      return notFound();
+    }
 
     const agencyId = agencies.find(
       (agency) => agency.acronym.toLowerCase() === params.agencyAcronym
@@ -88,13 +84,13 @@ export default inject(TopicPage, {
     const topicId = params.topicId === "all" ? undefined : params.topicId;
 
     const [questions, topics] = await Promise.all([
-      getAllQuestions(page, 6, agencyId, topicId),
-      getAllTopics(agencyId),
+      getAllQuestions({ page, limit: 6, agencyId, topicId }, params),
+      getAllTopics({ agencyId }, params),
     ]);
 
     return {
-      questions,
-      topics,
+      questions: questions.data,
+      topics: topics.data,
     };
   },
 });

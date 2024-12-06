@@ -1,22 +1,22 @@
 "use client";
 import React, { useState } from "react";
-import QuestionCircle from "@/icons/questioncircle";
-import PlusIcon from "@/icons/plusicon";
-import Close from "@/icons/close";
-import QuestionMarkWithBox from "@/icons/questionmarkwithbox";
-import MailLogo from "@/icons/maillogo";
-import Info from "@/icons/info";
-import TickCheckCircle from "@/icons/tickcheckcircle";
-import { submitQuestion } from "@/actions/questionServices";
+import { submitQuestion } from "@/actions/public/question";
 import { useTranslations } from "next-intl";
-import { Button } from "../../ui/button";
 import {
+  Button,
+  CloseIcon,
   Dialog,
   DialogContent,
   DialogDescription,
   DialogFooter,
   DialogHeader,
   DialogTitle,
+  InfoIcon,
+  MailLogoIcon,
+  PlusIcon,
+  QuestionCircleIcon,
+  QuestionMarkBoxIcon,
+  TickCheckCircleIcon,
 } from "@askgovmy/ui";
 
 const AskQuestion = () => {
@@ -100,7 +100,7 @@ const AskQuestion = () => {
               handleClick();
             }}
           >
-            <QuestionCircle />
+            <QuestionCircleIcon />
             {t("cant_find")}
           </Button>
         )}
@@ -112,7 +112,7 @@ const AskQuestion = () => {
         >
           <DialogHeader>
             <DialogTitle className="justify-start gap-2">
-              <QuestionMarkWithBox />
+              <QuestionMarkBoxIcon />
               <span>{t("ask_new_question")}</span>
             </DialogTitle>
             <DialogDescription className="sr-only">
@@ -149,7 +149,7 @@ const AskQuestion = () => {
                 }`}
               >
                 <div className="pl-3 pr-2">
-                  <MailLogo />
+                  <MailLogoIcon />
                 </div>
                 <input
                   placeholder={t("your_email")}
@@ -170,7 +170,7 @@ const AskQuestion = () => {
 
               <div className="flex border-[1px] border-askmygovbrand-200 shadow-sm rounded-md w-full bg-askmygovbrand-50">
                 <div className="pl-3 pt-3 pr-[10px]">
-                  <Info className="stroke-askmygovbrand-600"></Info>
+                  <InfoIcon className="stroke-askmygovbrand-600" />
                 </div>
                 <div className="items-center text-sm font-normal text-black-700 py-3 pr-3">
                   <div>
@@ -244,7 +244,7 @@ const AskQuestion = () => {
         >
           <DialogHeader>
             <DialogTitle className="flex-col md:items-start gap-4">
-              <TickCheckCircle className="text-success-700 size-8" />
+              <TickCheckCircleIcon className="text-success-700 size-8" />
               <span className="text-black-900 font-semibold text-lg pb-2 inline-block">
                 {t("submission_received")}
               </span>
@@ -262,7 +262,7 @@ const AskQuestion = () => {
               size={"lg"}
               onClick={closeSuccessModal}
             >
-              <Close className="stroke-black-700"></Close>
+              <CloseIcon className="stroke-black-700" />
               {t("close")}
             </Button>
           </DialogFooter>

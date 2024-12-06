@@ -1,9 +1,8 @@
 "use client";
 
-import Google from "@/icons/google";
 import { useTranslations } from "next-intl";
 import { signIn } from "next-auth/react";
-import { checkUserEmailExists } from "@/actions/userServices";
+import { checkUserEmailExists } from "@/actions/auth";
 import { requestLoginCodeAction } from "@/actions/auth";
 import { useForm } from "react-hook-form";
 import z from "zod";
@@ -18,8 +17,9 @@ import {
   FormSubmit,
   Input,
   Button,
+  GoogleIcon,
 } from "@askgovmy/ui";
-import WordTranslate from "../../../../components/common/WordTranslate";
+import Translator from "@/components/client/translator";
 
 export function LoginForm() {
   const t = useTranslations("Adminlogin");
@@ -58,9 +58,8 @@ export function LoginForm() {
       <div className="max-w-[400px] flex flex-col items-center justify-center container gap-8 px-4.5 lg:px-0">
         <div className="text-center w-full flex flex-col gap-4">
           <h6 className="text-2xl font-semibold">{t("h1")}</h6>
-          <WordTranslate
-            translate="Adminlogin"
-            keyword={"para1"}
+          <Translator
+            namespace="Adminlogin.para1"
             className="text-base text-black-700"
           />
         </div>
@@ -95,7 +94,7 @@ export function LoginForm() {
             variant={"secondary"}
             onClick={handleGoogleSignIn}
           >
-            <Google /> {t("2ndbutton")}
+            <GoogleIcon /> {t("2ndbutton")}
           </Button>
         </div>
       </div>

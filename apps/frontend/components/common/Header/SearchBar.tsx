@@ -1,10 +1,6 @@
 "use client";
 
 import React, { forwardRef } from "react";
-import Search from "@/icons/search";
-import JataNegaraIcon from "@/icons/jatanegaraicon";
-import Close from "@/icons/close";
-import RightArrow from "@/icons/rightarrow";
 import AskQuestion from "./AskQuestion";
 import { useRouter } from "@/lib/i18n";
 import { useTranslations } from "next-intl";
@@ -19,6 +15,10 @@ import {
   PopoverAnchor,
   PopoverContent,
   PopoverRoot,
+  CloseIcon,
+  SearchIcon,
+  JataNegaraIcon,
+  RightArrowIcon,
 } from "@askgovmy/ui";
 import { useSearchBar } from "@/components/context/SearchBarContext";
 
@@ -35,7 +35,7 @@ const highlightText = (text: string, query: string) => {
   const parts = text.split(new RegExp(`(${query})`, "gi"));
   return parts.map((part, index) =>
     part.toLowerCase() === query.toLowerCase() ? (
-      <span key={index} className="text-[#702FF9] dark:text-[#9E70FF]">
+      <span key={index} className="text-askmygovtextbrand-600">
         {part}
       </span>
     ) : (
@@ -90,7 +90,7 @@ const SearchBar = forwardRef<HTMLInputElement, SearchBarProps>(
           <PopoverAnchor asChild>
             <div
               className={cn(
-                `flex items-center border-outline-200 h-11 shadow-button border px-3 py-2 bg-white w-full relative gap-2`,
+                `flex items-center border-outline-200 h-11 shadow-button border px-3 py-2 bg-white-focuswhite100 w-full relative gap-2`,
                 isResultsPopupOpen
                   ? "rounded-b-none rounded-t-3xl"
                   : "rounded-full"
@@ -128,20 +128,20 @@ const SearchBar = forwardRef<HTMLInputElement, SearchBarProps>(
                     onClear?.();
                   }}
                 >
-                  <Close />
+                  <CloseIcon />
                 </div>
               )}
               <div
                 className="flex items-center justify-center w-7 h-7 rounded-full bg-gradient-to-b from-[#B379FF] to-[#702FF9] to-[60.94%] hover:cursor-pointer"
                 onClick={handleSearchIconClick}
               >
-                <Search className="text-white" />
+                <SearchIcon className="text-white" />
               </div>
             </div>
           </PopoverAnchor>
           <PopoverContent
             className={cn(
-              "border-t-[1px] rounded-t-none rounded-b-3xl bg-[#FFFFFF] dark:bg-[#1D1D21] shadow-lg w-[var(--radix-popover-trigger-width)] max-h-[min(var(--radix-popover-content-available-height),400px)] overflow-y-auto p-0",
+              "border-t-[1px] rounded-t-none rounded-b-3xl bg-white-focuswhite100 shadow-lg w-[var(--radix-popover-trigger-width)] max-h-[min(var(--radix-popover-content-available-height),400px)] overflow-y-auto p-0",
               hideResultsPopup && "hidden"
             )}
             onOpenAutoFocus={(e) => e.preventDefault()}
@@ -166,15 +166,15 @@ const SearchBar = forwardRef<HTMLInputElement, SearchBarProps>(
               {results.map((result) => (
                 <CommandItem
                   key={result.id}
-                  className="flex rounded-md items-center hover:bg-outline-200 h-auto cursor-pointer border-b px-3"
+                  className="flex rounded-md items-center hover:bg-outline-200 h-auto cursor-pointer border-b p-3"
                   onSelect={() =>
                     router.push(
                       `/${result.agency.acronym.toLowerCase()}/${result.id}`
                     )
                   }
                 >
-                  <div className="grow text-lg">
-                    <span className="font-medium text-black-700">
+                  <div className="grow text-md font-semibold">
+                    <span className="text-black-700">
                       {highlightText(result.question, query)}
                     </span>
                     <span className="mt-1 font-normal text-dim-500 line-clamp-3">
@@ -183,13 +183,13 @@ const SearchBar = forwardRef<HTMLInputElement, SearchBarProps>(
                   </div>
                   <div className="hidden md:flex">
                     <div className="pr-1.5">
-                      <JataNegaraIcon className="stroke-[#E4E4E7] dark:stroke-[#27272A] h-5 w-5"></JataNegaraIcon>
+                      <JataNegaraIcon className="stroke-[#E4E4E7] dark:stroke-[#27272A] h-5 w-5" />
                     </div>
                     <div className="font-normal text-sm text-black-800">
                       {result.agency.acronym}
                     </div>
                     <div className="px-1">
-                      <RightArrow />
+                      <RightArrowIcon />
                     </div>
                   </div>
                 </CommandItem>
