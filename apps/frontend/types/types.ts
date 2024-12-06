@@ -5,8 +5,6 @@ export interface Question {
   answer: Answer | null;
   spam: boolean;
   email: string;
-  admin_opened_at: string | null;
-  staff_opened_at: string | null;
   created_at: string;
   updated_at: string;
   agency: Omit<Agency, "total_likes">;

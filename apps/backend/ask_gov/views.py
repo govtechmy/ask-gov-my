@@ -290,6 +290,10 @@ class AdminQuestionViewSet(
                     agency=self.request.user.agency,
                 )
 
+    @extend_schema(
+        request=None,
+        responses={"204": None},
+    )
     @action(methods=["POST"], detail=True)
     def open(self, request, pk):
         """

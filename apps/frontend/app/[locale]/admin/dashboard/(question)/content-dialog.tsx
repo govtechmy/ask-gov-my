@@ -19,6 +19,7 @@ import { useParams } from "next/navigation";
 import { ReactNode, useEffect, useRef, useState } from "react";
 import { AgencyDropdown } from "./super-admin";
 import { AdminAnswerDialog } from "./staff";
+import { useOpenQuestion } from "./use-open-question";
 
 export default function ContentDialog({
   children,
@@ -39,6 +40,7 @@ export default function ContentDialog({
   const questionText = useRef<HTMLSpanElement | null>(null);
   const dropdownContainer = useRef<HTMLDivElement | null>(null);
   const [questionHeight, setQuestionHeight] = useState<number>();
+  const { markQuestionAsOpened } = useOpenQuestion({ questionId: question.id });
 
   const handleClickTrigger = (triggers: string[], event: any) => {
     const elements = triggers
@@ -69,6 +71,8 @@ export default function ContentDialog({
       <Dialog open={open}>
         <DialogTrigger
           onClick={(event) => {
+            markQuestionAsOpened();
+
             const open = handleClickTrigger(
               role === "super_admin"
                 ? [

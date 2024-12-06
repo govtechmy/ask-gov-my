@@ -336,3 +336,20 @@ export const deleteQuestionAttachment = withResponse(
     };
   }
 );
+
+export const markQuestionAsOpened = withResponse(async (questionId: number) => {
+  const session = await getSession();
+  if (!session) throw new Yikes("E_201_NOT_AUTHORIZED");
+
+  // This API is idempotent and not an issue in case it is accidentally called multiple times
+  await api(`/admin/questions/${questionId}/open/`, {
+    method: "POST",
+    headers: {
+      Authorization: `Token ${session.accessToken}`,
+    },
+  });
+
+  return {
+    status: HttpStatusCode.NO_CONTENT_204,
+  };
+});
