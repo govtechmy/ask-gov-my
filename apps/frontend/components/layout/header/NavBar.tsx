@@ -3,14 +3,14 @@ import React, { Suspense, useState } from "react";
 import { Link } from "@/lib/i18n";
 import ThemeToggle from "./theme-toggle";
 import LocaleSwitch from "./locale-switch";
-import Asklogo from "@/icons/asklogo";
 import SearchBar from "../../common/Header/SearchBar";
-import { StyledDisplay } from "@/components/ui/display";
 import {
+  AskLogoIcon,
   PopoverContent,
   PopoverRoot,
   PopoverTrigger,
   SearchIcon,
+  StyledDisplay,
 } from "@askgovmy/ui";
 import { useSearchBar } from "@/components/context/SearchBarContext";
 
@@ -38,7 +38,7 @@ const NavBar: React.FC<NavBarProps> = ({
           <div className="flex justify-between w-full items-center">
             <Link href={agencyAcronym ? `/${agencyAcronym}` : "/"}>
               <div className="font-poppins flex h-full gap-2.5 text-lg font-semibold items-center hover:cursor-pointer">
-                <Asklogo />
+                <AskLogoIcon />
                 <div className="flex">
                   Ask
                   {agencyAcronym ? (

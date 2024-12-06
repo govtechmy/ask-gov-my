@@ -21,22 +21,29 @@ type getUsersProps = ApiParams & {
 export const getUsers = withResponse(
   async (
     { page = 1, page_size = 8, search = "", role, agency }: getUsersProps,
-    context: Context
+    context: Context,
+    params: Record<string, any>
   ) => {
     if (!context.session) throw new Yikes("E_201_NOT_AUTHORIZED");
 
-    const data = await api("/admin/users", {
-      params: {
-        page,
-        page_size,
-        search,
-        ...(role && { role }),
-        ...(agency && { agency }),
+    const lang: string | undefined = params.locale;
+
+    const data = await api(
+      "/admin/users",
+      {
+        params: {
+          page,
+          page_size,
+          search,
+          ...(role && { role }),
+          ...(agency && { agency }),
+        },
+        headers: {
+          Authorization: `Token ${context.session.accessToken}`,
+        },
       },
-      headers: {
-        Authorization: `Token ${context.session.accessToken}`,
-      },
-    });
+      lang
+    );
 
     return {
       data: paginate(data.results, data.count, page, page_size),

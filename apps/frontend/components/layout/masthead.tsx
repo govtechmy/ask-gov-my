@@ -1,13 +1,15 @@
 "use client";
 
 import { usePathname } from "next/navigation";
-import ChevronDown from "@/icons/ChevronDown";
-import PutrajayaIcon from "@/icons/putrajaya";
-import EncryptedLock from "@/icons/encryptedlock";
-import SolidLock from "@/icons/solidlock";
 import { useTranslations } from "next-intl";
 import { useEffect } from "react";
-import MalaysiaFlag from "@/icons/malaysia-flag";
+import {
+  ChevronDownIcon,
+  EncryptedLockIcon,
+  MalaysiaFlagIcon,
+  PutrajayaIcon,
+  SolidLockIcon,
+} from "@askgovmy/ui";
 
 export default function Masthead() {
   const t = useTranslations("Masthead");
@@ -55,7 +57,7 @@ export default function Masthead() {
         <summary className="block cursor-pointer list-none py-2.5 outline-none sm:py-1">
           <div className="mx-auto flex container items-center gap-1.5 px-4.5 text-sm/4 text-foreground-primary max-sm:justify-between md:px-6">
             <div className="flex select-none items-center gap-2">
-              <MalaysiaFlag />
+              <MalaysiaFlagIcon />
               <span className="text-black-700">
                 {t("official_gov_website")}
               </span>
@@ -64,7 +66,7 @@ export default function Masthead() {
               <span className="hidden select-none tracking-[-0.01em] sm:block">
                 {t("how_to_identify")}
               </span>
-              <ChevronDown className="size-4 transition group-open:rotate-180" />
+              <ChevronDownIcon className="size-4 transition group-open:rotate-180" />
             </div>
           </div>
         </summary>
@@ -87,12 +89,12 @@ export default function Masthead() {
             </div>
           </div>
           <div className="flex gap-3">
-            <EncryptedLock className="shrink-0 text-dim-500" />
+            <EncryptedLockIcon className="shrink-0 text-dim-500" />
             <div className="space-y-1.5">
               <p className="font-medium max-sm:text-sm">{t("secure")}</p>
               <div className="max-w-prose text-balance text-sm text-black-700">
                 {t("find_lock")}{" "}
-                <SolidLock className="-ml-[3px] mb-0.5 mr-px inline size-3.5" />
+                <SolidLockIcon className="-ml-[3px] mb-0.5 mr-px inline size-3.5" />
                 {t("or")}
                 <span className="font-semibold">https://</span>
                 {t("precaution")}

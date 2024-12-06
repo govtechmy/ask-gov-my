@@ -1,4 +1,5 @@
-import axios, { AxiosResponse } from "axios";
+import axios from "axios";
+import { locales } from "./i18n";
 
 // Request options type for the API wrapper
 type RequestOptions = {
@@ -19,7 +20,11 @@ const base = axios.create({
 });
 
 // Reusable API wrapper function
-const api = async (url: string, options: RequestOptions = {}): Promise<any> => {
+const api = async (
+  url: string,
+  options: RequestOptions = {},
+  lang?: (typeof locales)[number]
+): Promise<any> => {
   const {
     method = "GET",
     headers = {},
@@ -32,7 +37,7 @@ const api = async (url: string, options: RequestOptions = {}): Promise<any> => {
     const response = await base.request({
       url,
       method,
-      headers: { ...headers },
+      headers: { ...headers, ...(lang ? { "Accept-Language": lang } : {}) },
       data: body,
       params,
       timeout,

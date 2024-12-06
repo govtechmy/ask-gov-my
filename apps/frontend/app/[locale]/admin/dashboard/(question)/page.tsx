@@ -130,7 +130,7 @@ const AdminDashboardPage: FSP<ManageQuestionsProps> = async ({
 export default inject(AdminDashboardPage, {
   // debug: true,
   middleware: [MustBeAuthenticated, MustBeAuthorized(["staff", "super_admin"])],
-  async data({ searchParams, context }) {
+  async data({ searchParams, context, params }) {
     const { page = 1, search = "", state, agency } = searchParams;
 
     if (context.session?.user.role === "super_admin") {
@@ -151,7 +151,7 @@ export default inject(AdminDashboardPage, {
         ),
         // Get the count for unassigned
         getQuestionsList({ state: "unassigned" }, context),
-        getAgencies({ page_size: 999 }, context),
+        getAgencies({ page_size: 999 }, context, params),
       ]);
 
       return {

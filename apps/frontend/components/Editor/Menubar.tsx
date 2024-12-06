@@ -1,13 +1,6 @@
-import { cn } from '@/lib/utils';
-import { Editor } from '@tiptap/react';
-import { useCallback } from 'react';
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from '../ui/select';
+import { cn } from "@askgovmy/utils";
+import { Editor } from "@tiptap/react";
+import { useCallback } from "react";
 import {
   BoldIcon,
   BulletedListIcon,
@@ -18,9 +11,16 @@ import {
   StrikethroughIcon,
   UnderlineIcon,
   UndoIcon,
-} from '@/icons/editor';
-import { Separator } from '../ui/separator';
-import { Level } from '@tiptap/extension-heading';
+} from "@askgovmy/ui";
+import { Level } from "@tiptap/extension-heading";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+  Separator,
+} from "@askgovmy/ui";
 
 export default ({ editor }: { editor: Editor | null }) => {
   if (!editor) {
@@ -28,13 +28,13 @@ export default ({ editor }: { editor: Editor | null }) => {
   }
 
   const style = {
-    active: 'bg-washed-100 dark:bg-slate-700',
-    button: cn('h-8 w-8 rounded-lg flex items-center justify-center'),
+    active: "bg-washed-100 dark:bg-slate-700",
+    button: cn("h-8 w-8 rounded-lg flex items-center justify-center"),
   };
 
   const setLink = useCallback(() => {
-    const previousUrl = editor.getAttributes('link').href;
-    const url = window.prompt('URL', previousUrl);
+    const previousUrl = editor.getAttributes("link").href;
+    const url = window.prompt("URL", previousUrl);
 
     // cancelled
     if (url === null) {
@@ -42,20 +42,20 @@ export default ({ editor }: { editor: Editor | null }) => {
     }
 
     // empty
-    if (url === '') {
-      editor.chain().focus().extendMarkRange('link').unsetLink().run();
+    if (url === "") {
+      editor.chain().focus().extendMarkRange("link").unsetLink().run();
 
       return;
     }
 
     // update link
-    editor.chain().focus().extendMarkRange('link').setLink({ href: url }).run();
+    editor.chain().focus().extendMarkRange("link").setLink({ href: url }).run();
   }, [editor]);
 
-  type headingType = '1' | '2' | '3' | '4' | '5' | '6' | 'paragraph';
+  type headingType = "1" | "2" | "3" | "4" | "5" | "6" | "paragraph";
 
   const setHeading = (headingLevel: headingType) => {
-    if (headingLevel === 'paragraph') {
+    if (headingLevel === "paragraph") {
       editor.chain().focus().setParagraph().run();
     } else {
       const level = Number(headingLevel) as Level;
@@ -63,19 +63,19 @@ export default ({ editor }: { editor: Editor | null }) => {
     }
   };
 
-  const currentLevel: headingType = editor.isActive('heading', { level: 1 })
-    ? '1'
-    : editor.isActive('heading', { level: 2 })
-      ? '2'
-      : editor.isActive('heading', { level: 3 })
-        ? '3'
-        : editor.isActive('heading', { level: 4 })
-          ? '4'
-          : editor.isActive('heading', { level: 5 })
-            ? '5'
-            : editor.isActive('heading', { level: 6 })
-              ? '6'
-              : 'paragraph';
+  const currentLevel: headingType = editor.isActive("heading", { level: 1 })
+    ? "1"
+    : editor.isActive("heading", { level: 2 })
+      ? "2"
+      : editor.isActive("heading", { level: 3 })
+        ? "3"
+        : editor.isActive("heading", { level: 4 })
+          ? "4"
+          : editor.isActive("heading", { level: 5 })
+            ? "5"
+            : editor.isActive("heading", { level: 6 })
+              ? "6"
+              : "paragraph";
 
   return (
     <div
@@ -145,14 +145,14 @@ export default ({ editor }: { editor: Editor | null }) => {
       <button
         onClick={() => editor.chain().focus().toggleBold().run()}
         disabled={!editor.can().chain().focus().toggleBold().run()}
-        className={cn(style.button, editor.isActive('bold') && style.active)}
+        className={cn(style.button, editor.isActive("bold") && style.active)}
       >
         <BoldIcon />
       </button>
       <button
         onClick={() => editor.chain().focus().toggleItalic().run()}
         disabled={!editor.can().chain().focus().toggleItalic().run()}
-        className={cn(style.button, editor.isActive('italic') && style.active)}
+        className={cn(style.button, editor.isActive("italic") && style.active)}
       >
         <ItalicIcon />
       </button>
@@ -161,7 +161,7 @@ export default ({ editor }: { editor: Editor | null }) => {
         disabled={!editor.can().chain().focus().toggleUnderline().run()}
         className={cn(
           style.button,
-          editor.isActive('underline') && style.active,
+          editor.isActive("underline") && style.active
         )}
       >
         <UnderlineIcon />
@@ -169,7 +169,7 @@ export default ({ editor }: { editor: Editor | null }) => {
       <button
         onClick={() => editor.chain().focus().toggleStrike().run()}
         disabled={!editor.can().chain().focus().toggleStrike().run()}
-        className={cn(style.button, editor.isActive('strike') && style.active)}
+        className={cn(style.button, editor.isActive("strike") && style.active)}
       >
         <StrikethroughIcon />
       </button>
@@ -182,7 +182,7 @@ export default ({ editor }: { editor: Editor | null }) => {
         disabled={!editor.can().chain().focus().toggleOrderedList().run()}
         className={cn(
           style.button,
-          editor.isActive('orderedList') && style.active,
+          editor.isActive("orderedList") && style.active
         )}
       >
         <OrderedListIcon />
@@ -192,7 +192,7 @@ export default ({ editor }: { editor: Editor | null }) => {
         disabled={!editor.can().chain().focus().toggleBulletList().run()}
         className={cn(
           style.button,
-          editor.isActive('bulletList') && style.active,
+          editor.isActive("bulletList") && style.active
         )}
       >
         <BulletedListIcon />
@@ -203,7 +203,7 @@ export default ({ editor }: { editor: Editor | null }) => {
       />
       <button
         onClick={setLink}
-        className={cn(style.button, editor.isActive('link') && style.active)}
+        className={cn(style.button, editor.isActive("link") && style.active)}
       >
         <LinkIcon />
       </button>

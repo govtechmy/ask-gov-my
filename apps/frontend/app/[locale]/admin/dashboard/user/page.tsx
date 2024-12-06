@@ -136,7 +136,7 @@ const ManageUsers: FSP<ManageUsersProps> = async ({ data }) => {
 export default inject(ManageUsers, {
   // debug: true,
   middleware: [MustBeAuthenticated, MustBeAuthorized(["super_admin"])],
-  async data({ searchParams, context }) {
+  async data({ searchParams, context, params }) {
     const { page = 1, search = "", role, agency } = searchParams;
     const { data: users } = await getUsers(
       {
@@ -145,10 +145,15 @@ export default inject(ManageUsers, {
         ...(role !== "all" && { role }),
         ...(agency !== "all" && { agency }),
       },
-      context
+      context,
+      params
     );
 
-    const { data: agencies } = await getAgencies({ page_size: 999 }, context);
+    const { data: agencies } = await getAgencies(
+      { page_size: 999 },
+      context,
+      params
+    );
 
     return {
       users,
