@@ -39,6 +39,11 @@ const AdminDashboardPage: FSP<ManageQuestionsProps> = async ({
 }) => {
   const { agencies, questions, role, count } = data!;
 
+  if (!context.session) {
+    throw Error("expected context.session to be not null");
+  }
+  const userId = context.session.user.id;
+
   return (
     <div className="space-y-6">
       {role === "staff" && (
@@ -77,6 +82,7 @@ const AdminDashboardPage: FSP<ManageQuestionsProps> = async ({
             return (
               <ContentDialog
                 key={JSON.stringify(question)}
+                userId={userId}
                 role={role}
                 question={question}
                 agencies={agencies?.results}
@@ -92,7 +98,9 @@ const AdminDashboardPage: FSP<ManageQuestionsProps> = async ({
                     role === "super_admin" && "hover:cursor-pointer"
                   )}
                 >
-                  {role === "staff" && <StaffContent question={question} />}
+                  {role === "staff" && (
+                    <StaffContent userId={userId} question={question} />
+                  )}
 
                   {role === "super_admin" && (
                     <AdminContent

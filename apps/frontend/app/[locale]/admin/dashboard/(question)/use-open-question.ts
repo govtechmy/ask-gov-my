@@ -3,40 +3,51 @@
 import { useEffect, useState } from "react";
 import { markQuestionAsOpened as markQuestionAsOpenedAction } from "@/actions/admin/question";
 
-const storageKey = "opened_questions";
+const storageKey = (userId: string) => `opened_questions_${userId}`;
 
-function getOpenedQuestionIds(): number[] {
-  return JSON.parse(localStorage.getItem(storageKey) || "[]") as number[];
+function getOpenedQuestionIds(userId: string): number[] {
+  return JSON.parse(
+    localStorage.getItem(storageKey(userId)) || "[]"
+  ) as number[];
 }
 
-function saveOpenedQuestionIds(questionIds: number[]): void {
-  localStorage.setItem(storageKey, JSON.stringify(questionIds));
+function saveOpenedQuestionIds(userId: string, questionIds: number[]): void {
+  localStorage.setItem(storageKey(userId), JSON.stringify(questionIds));
 }
 
-function checkIsQuestionOpened(questionId: number): boolean {
-  const openedQuestionIds = getOpenedQuestionIds();
+function checkIsQuestionOpened(userId: string, questionId: number): boolean {
+  const openedQuestionIds = getOpenedQuestionIds(userId);
   return openedQuestionIds.includes(questionId);
 }
 
-async function markQuestionAsOpened(questionId: number): Promise<void> {
-  const openedQuestionIds = getOpenedQuestionIds();
+async function markQuestionAsOpened(
+  userId: string,
+  questionId: number
+): Promise<void> {
+  const openedQuestionIds = getOpenedQuestionIds(userId);
   if (openedQuestionIds.includes(questionId)) {
     return;
   }
   await markQuestionAsOpenedAction(questionId);
   openedQuestionIds.push(questionId);
-  saveOpenedQuestionIds(openedQuestionIds);
+  saveOpenedQuestionIds(userId, openedQuestionIds);
 }
 
-export function useOpenQuestion({ questionId }: { questionId: number }) {
-  const [opened, setOpened] = useState<null | boolean>(null);
+export function useOpenQuestion({
+  questionId,
+  userId,
+}: {
+  questionId: number;
+  userId: string;
+}) {
+  const [opened, setOpened] = useState<boolean | null>(null);
 
   useEffect(() => {
-    setOpened(checkIsQuestionOpened(questionId));
-  }, []);
+    setOpened(checkIsQuestionOpened(userId, questionId));
+  }, [userId, questionId]);
 
   return {
-    markQuestionAsOpened: () => markQuestionAsOpened(questionId),
+    markQuestionAsOpened: () => markQuestionAsOpened(userId, questionId),
     opened,
   };
 }

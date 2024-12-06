@@ -23,12 +23,14 @@ import { useOpenQuestion } from "./use-open-question";
 
 export default function ContentDialog({
   children,
+  userId,
   role,
   question,
   agencies,
   topics,
 }: {
   children: ReactNode;
+  userId: string;
   role: "super_admin" | "staff";
   question: Question;
   agencies: Agency[];
@@ -40,7 +42,10 @@ export default function ContentDialog({
   const questionText = useRef<HTMLSpanElement | null>(null);
   const dropdownContainer = useRef<HTMLDivElement | null>(null);
   const [questionHeight, setQuestionHeight] = useState<number>();
-  const { markQuestionAsOpened } = useOpenQuestion({ questionId: question.id });
+  const { markQuestionAsOpened } = useOpenQuestion({
+    userId,
+    questionId: question.id,
+  });
 
   const handleClickTrigger = (triggers: string[], event: any) => {
     const elements = triggers

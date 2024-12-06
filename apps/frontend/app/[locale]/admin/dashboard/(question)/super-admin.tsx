@@ -35,7 +35,6 @@ import {
 import { DateTime } from "luxon";
 import { Check, PencilIcon } from "lucide-react";
 import { AdminAnswerDialog } from "./staff";
-import { useOpenQuestion } from "./use-open-question";
 
 // This file has the responsibility to render "super-admin" role specific render for admin questions
 
@@ -43,8 +42,6 @@ export const AdminContent: FC<{ question: Question; agencies: Agency[] }> = ({
   question,
   agencies,
 }) => {
-  const { opened } = useOpenQuestion({ questionId: question.id });
-
   return (
     <div className="flex lg:items-center flex-1 gap-3 flex-col-reverse lg:flex-row">
       <p className="font-medium text-black-700 line-clamp-2 flex-1">
@@ -74,7 +71,7 @@ export const AdminContent: FC<{ question: Question; agencies: Agency[] }> = ({
             prefix={<span className="w-2 h-2 bg-danger-700 rounded-full" />}
           />
         ) : (
-          opened === false &&
+          !question.agency &&
           Math.abs(DateTime.fromISO(question.created_at).diffNow().as("days")) <
             7 && (
             <Translator
