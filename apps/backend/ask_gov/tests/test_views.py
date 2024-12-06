@@ -298,6 +298,31 @@ class TestAdminQuestionViewSet(APITestCase):
         self.assertTrue(
             Event.objects.filter(type=EventType.QUESTION_ASSIGNED, question_id=question_id).exists(),
         )
+    
+    def test_unassign_agency(self):
+        """
+        Tests un-assigning an agency from a question.
+        """
+        question_id = self.question.id
+
+        # Assign an agency first
+        self.question.agency = self.agency
+        self.question.save()
+
+        data = {
+            "agency": None
+        }
+        response = self.client.patch(
+            self.update_question_url,
+            data=data,
+            format="json",
+        )
+        json_data = response.json()
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(json_data["agency"], None)
+        self.assertTrue(
+            Event.objects.filter(type=EventType.QUESTION_UNASSIGNED, question_id=question_id).exists(),
+        )
 
     def test_mark_as_spam(self):
         """
@@ -388,9 +413,11 @@ class TestAdminAnswerViewSet(APITestCase):
     def setUp(self):
         agency = Agency.objects.create(name="Ministry of Education", name_ms="Kementerian Pendidikan", acronym="MOE")
         self.question = Question.objects.create(
-            agency=agency,
             question="Test Question",
+            agency=agency,
+            email="test@example.com"
         )
+        self.question_id = self.question.id
         self.submit_answer_url = reverse("admin-answer-list")
 
         user = User.objects.create(name="John Doe", email="johndoe@example.com", agency=agency, role=UserRole.STAFF)
@@ -402,8 +429,8 @@ class TestAdminAnswerViewSet(APITestCase):
         """
         Tests submitting an answer.
         """
+        question_id = self.question_id
         self.assertFalse(self.question.has_answer())
-        question_id = self.question.id,
         data = {
             "question": question_id,
             "raw": "<p>Test Answer</p>",

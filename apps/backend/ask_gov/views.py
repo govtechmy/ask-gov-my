@@ -273,13 +273,22 @@ class AdminQuestionViewSet(
     def perform_update(self, serializer):
         question: Question = self.get_object()
         super().perform_update(serializer)
-        if 'agency' in serializer.initial_data and serializer.initial_data != None:
-            Event.objects.create(
-                type=EventType.QUESTION_ASSIGNED,
-                question_id=question.id,
-                user=self.request.user,
-                agency=self.request.user.agency,
-            )
+        if 'agency' in serializer.initial_data and question.agency != serializer.initial_data['agency']:
+            newAgency = serializer.initial_data['agency']
+            if newAgency != None:
+                Event.objects.create(
+                    type=EventType.QUESTION_ASSIGNED,
+                    question_id=question.id,
+                    user=self.request.user,
+                    agency=self.request.user.agency,
+                )
+            else:
+                Event.objects.create(
+                    type=EventType.QUESTION_UNASSIGNED,
+                    question_id=question.id,
+                    user=self.request.user,
+                    agency=self.request.user.agency,
+                )
 
     @action(methods=["POST"], detail=True)
     def open(self, request, pk):

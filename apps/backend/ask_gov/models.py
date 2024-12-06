@@ -188,6 +188,7 @@ class EventType(models.TextChoices):
     QUESTION_OPENED = 'question_opened', 'Question opened'
     QUESTION_ANSWERED = 'question_answered', 'Question answered'
     QUESTION_ASSIGNED = 'question_assigned', 'Question assigned'
+    QUESTION_UNASSIGNED = 'question_unassigned', 'Question unassigned'
     ANSWER_UPDATED = 'answer_updated', 'Answer updated'
 
 class Event(models.Model):
