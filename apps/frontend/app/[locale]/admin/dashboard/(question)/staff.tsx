@@ -60,6 +60,8 @@ import {
   getAttachmentPresignedURL,
   updateCurrentAnswer,
 } from "@/actions/admin/question";
+import { useOpenQuestion } from "./use-open-question";
+import { DateTime } from "luxon";
 
 export const StaffFloatButton: FC<{ question: Question; topics: Topic[] }> = ({
   question,
@@ -104,9 +106,14 @@ export const StaffFloatButton: FC<{ question: Question; topics: Topic[] }> = ({
   );
 };
 
-export const StaffContent: FC<{ question: Question }> = ({ question }) => {
+export const StaffContent: FC<{ userId: string; question: Question }> = ({
+  userId,
+  question,
+}) => {
   const searchParams = useSearchParams();
   const tab = searchParams.get("state") || "all";
+  const { opened } = useOpenQuestion({ userId, questionId: question.id });
+
   return (
     <>
       {tab === "all" && (
@@ -128,11 +135,18 @@ export const StaffContent: FC<{ question: Question }> = ({ question }) => {
               />
             )
           ) : (
-            <Translator
-              className="rounded-full gap-1.5 py-0.5 px-2 bg-success-50 text-success-700 w-fit"
-              namespace="AdminQuestions.new"
-              prefix={<span className="w-2 h-2 bg-success-700 rounded-full" />}
-            />
+            !opened &&
+            Math.abs(
+              DateTime.fromISO(question.created_at).diffNow().as("days")
+            ) < 7 && (
+              <Translator
+                className="rounded-full gap-1.5 py-0.5 px-2 bg-success-50 text-success-700 w-fit"
+                namespace="AdminQuestions.new"
+                prefix={
+                  <span className="w-2 h-2 bg-success-700 rounded-full" />
+                }
+              />
+            )
           )}
         </div>
       )}

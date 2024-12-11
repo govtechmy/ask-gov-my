@@ -4,7 +4,7 @@ from rest_framework.test import APITestCase
 from rest_framework import status
 from rest_framework.authtoken.models import Token
 
-from ..models import Answer, Topic, User, Question, Agency, UserRole
+from ..models import Answer, Topic, User, Question, Agency, UserRole, Event, EventType
 
 
 class TestAdminListQuestions(APITestCase):
@@ -226,6 +226,11 @@ class TestQuestionViewSet(APITestCase):
             data=data,
         )
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+        json_data = response.json()
+        self.assertIn("id", json_data)
+        self.assertTrue(
+            Event.objects.filter(type=EventType.QUESTION_CREATED, question_id=json_data["id"]).exists(),
+        )
 
     def test_submit_long_question(self):
         """
@@ -279,6 +284,7 @@ class TestAdminQuestionViewSet(APITestCase):
         """
         Tests assigning an agency to a question.
         """
+        question_id = self.question.id
         data = {
             "agency": self.agency.id,
         }
@@ -289,6 +295,34 @@ class TestAdminQuestionViewSet(APITestCase):
         json_data = response.json()
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(json_data["agency"], self.agency.id)
+        self.assertTrue(
+            Event.objects.filter(type=EventType.QUESTION_ASSIGNED, question_id=question_id).exists(),
+        )
+    
+    def test_unassign_agency(self):
+        """
+        Tests un-assigning an agency from a question.
+        """
+        question_id = self.question.id
+
+        # Assign an agency first
+        self.question.agency = self.agency
+        self.question.save()
+
+        data = {
+            "agency": None
+        }
+        response = self.client.patch(
+            self.update_question_url,
+            data=data,
+            format="json",
+        )
+        json_data = response.json()
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(json_data["agency"], None)
+        self.assertTrue(
+            Event.objects.filter(type=EventType.QUESTION_UNASSIGNED, question_id=question_id).exists(),
+        )
 
     def test_mark_as_spam(self):
         """
@@ -309,15 +343,17 @@ class TestAdminQuestionViewSet(APITestCase):
         """
         Tests marking a question as opened.
         """
-        self.assertFalse(self.question.admin_opened_at)
-        self.assertFalse(self.question.staff_opened_at)
+        question_id = self.question.id
+        self.assertFalse(
+            Event.objects.filter(type=EventType.QUESTION_OPENED, question_id=question_id).exists(),
+        )
         response = self.client.post(
             self.open_question_url,
         )
         self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
-        self.question.refresh_from_db()
-        self.assertTrue(self.question.admin_opened_at)
-        self.assertTrue(self.question.staff_opened_at)
+        self.assertTrue(
+            Event.objects.filter(type=EventType.QUESTION_OPENED, question_id=question_id).exists(),
+        )
 
     def test_list_question_filters_user_agency(self):
         """
@@ -377,9 +413,11 @@ class TestAdminAnswerViewSet(APITestCase):
     def setUp(self):
         agency = Agency.objects.create(name="Ministry of Education", name_ms="Kementerian Pendidikan", acronym="MOE")
         self.question = Question.objects.create(
-            agency=agency,
             question="Test Question",
+            agency=agency,
+            email="test@example.com"
         )
+        self.question_id = self.question.id
         self.submit_answer_url = reverse("admin-answer-list")
 
         user = User.objects.create(name="John Doe", email="johndoe@example.com", agency=agency, role=UserRole.STAFF)
@@ -391,9 +429,10 @@ class TestAdminAnswerViewSet(APITestCase):
         """
         Tests submitting an answer.
         """
+        question_id = self.question_id
         self.assertFalse(self.question.has_answer())
         data = {
-            "question": self.question.id,
+            "question": question_id,
             "raw": "<p>Test Answer</p>",
             "text": "Test Answer",
             "draft": False,
@@ -402,6 +441,9 @@ class TestAdminAnswerViewSet(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
         self.question.refresh_from_db()
         self.assertTrue(self.question.has_answer())
+        self.assertTrue(
+            Event.objects.filter(type=EventType.QUESTION_ANSWERED, question_id=question_id).exists(),
+        )
     
     def test_submit_answer_no_agency(self):
         """

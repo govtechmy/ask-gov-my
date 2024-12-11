@@ -71,7 +71,7 @@ export const AdminContent: FC<{ question: Question; agencies: Agency[] }> = ({
             prefix={<span className="w-2 h-2 bg-danger-700 rounded-full" />}
           />
         ) : (
-          !question.admin_opened_at &&
+          !question.agency &&
           Math.abs(DateTime.fromISO(question.created_at).diffNow().as("days")) <
             7 && (
             <Translator

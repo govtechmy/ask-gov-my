@@ -13,11 +13,12 @@ from rest_framework.pagination import PageNumberPagination
 from rest_framework.decorators import action 
 from rest_framework.permissions import IsAuthenticated, AllowAny
 from rest_framework import generics, status, pagination, mixins, viewsets, exceptions, serializers
-from .models import Answer, Attachment, Question, Agency, Topic, User, UserRole
+from .models import Answer, Attachment, Question, Agency, Topic, User, UserRole, Event, EventType
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from drf_spectacular.utils import extend_schema, OpenApiParameter, OpenApiTypes, inline_serializer, extend_schema_view
 from django.contrib.auth import get_user_model
+from django.db import transaction
 from django.db.models import Sum, Q
 from .elastic import esclient
 from .embed import get_embedding
@@ -49,6 +50,14 @@ class QuestionViewSet(
         if self.action == "create":
             return AskQuestionSerializer
         return super().get_serializer_class()
+    
+    @transaction.atomic
+    def perform_create(self, serializer):
+        super().perform_create(serializer)
+        Event.objects.create(
+            type=EventType.QUESTION_CREATED,
+            question_id=serializer.data["id"],
+        )
 
     QUESTION_INDEX = settings.ELASTICSEARCH_QUESTION_INDEX
     EMBEDDING_ENABLED = settings.FEATURE_FLAGS.get("EMBEDDING")
@@ -260,18 +269,43 @@ class AdminQuestionViewSet(
             return AssignTopicsToQuestionSerializer
         return super().get_serializer_class()
     
+    @transaction.atomic
+    def perform_update(self, serializer):
+        question: Question = self.get_object()
+        super().perform_update(serializer)
+        if 'agency' in serializer.initial_data and question.agency != serializer.initial_data['agency']:
+            newAgency = serializer.initial_data['agency']
+            if newAgency != None:
+                Event.objects.create(
+                    type=EventType.QUESTION_ASSIGNED,
+                    question_id=question.id,
+                    user=self.request.user,
+                    agency=self.request.user.agency,
+                )
+            else:
+                Event.objects.create(
+                    type=EventType.QUESTION_UNASSIGNED,
+                    question_id=question.id,
+                    user=self.request.user,
+                    agency=self.request.user.agency,
+                )
+
+    @extend_schema(
+        request=None,
+        responses={"204": None},
+    )
     @action(methods=["POST"], detail=True)
     def open(self, request, pk):
         """
         Mark a question as opened.
         """
         question: Question = self.get_object()
-        if not question.staff_opened_at or not question.admin_opened_at:
-            now = timezone.now()
-            # TODO: Update based on request.user.role
-            question.admin_opened_at = now
-            question.staff_opened_at = now
-            question.save()
+        Event.objects.get_or_create(
+            type=EventType.QUESTION_OPENED,
+            question_id=question.id,
+            user=self.request.user,
+            agency=self.request.user.agency,
+        )
         return Response(status=status.HTTP_204_NO_CONTENT)
     
     @extend_schema(responses={"204": None})
@@ -371,17 +405,31 @@ class AdminAnswerViewSet(
     serializer_class = AnswerSerializer
     permission_classes = [IsAuthenticated]
 
+    @transaction.atomic
     def perform_create(self, serializer):
         if self.request.user.role != UserRole.SUPER_ADMIN:
             if self.request.user.agency.id != serializer.validated_data["question"].agency.id:
                 raise exceptions.PermissionDenied("Cannot create an answer that does not belong to your agency.")
-        return super().perform_create(serializer)
+        super().perform_create(serializer)
+        Event.objects.create(
+            type=EventType.QUESTION_ANSWERED,
+            question_id=serializer.validated_data["question"].id,
+            user=self.request.user,
+            agency=self.request.user.agency,
+        )
 
+    @transaction.atomic
     def perform_update(self, serializer):
         if self.request.user.role != UserRole.SUPER_ADMIN:
             if self.request.user.agency.id != serializer.validated_data["question"].agency.id:
                 raise exceptions.PermissionDenied("Cannot update an answer that does not belong to your agency.")
-        return super().perform_update(serializer)
+        super().perform_update(serializer)
+        Event.objects.create(
+            type=EventType.ANSWER_UPDATED,
+            question_id=serializer.validated_data["question"].id,
+            user=self.request.user,
+            agency=self.request.user.agency,
+        )
 
 
 class CheckUserEmailExistsView(APIView):
