@@ -62,6 +62,7 @@ export default async function RootLayout({
       </body>
       <Script
         src={`https://www.google.com/recaptcha/enterprise.js?render=${process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY}`}
+        strategy="beforeInteractive"
       />
       <Script
         defer
