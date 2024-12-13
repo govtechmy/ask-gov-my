@@ -59,16 +59,16 @@ export default async function RootLayout({
             <AutoToast duration={3000} />
           </NextIntlClientProvider>
         </ThemeProvider>
+        <Script
+          src={`https://www.google.com/recaptcha/enterprise.js?render=${process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY}`}
+          strategy="beforeInteractive"
+        />
+        <Script
+          defer
+          src="https://unpkg.com/@tinybirdco/flock.js"
+          data-token={process.env.NEXT_PUBLIC_ANALYTICS_TRACKER_TOKEN}
+        />
       </body>
-      <Script
-        src={`https://www.google.com/recaptcha/enterprise.js?render=${process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY}`}
-        strategy="beforeInteractive"
-      />
-      <Script
-        defer
-        src="https://unpkg.com/@tinybirdco/flock.js"
-        data-token={process.env.NEXT_PUBLIC_ANALYTICS_TRACKER_TOKEN}
-      />
     </html>
   );
 }
