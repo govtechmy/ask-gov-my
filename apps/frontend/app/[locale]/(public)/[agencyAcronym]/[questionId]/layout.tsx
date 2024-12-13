@@ -1,7 +1,6 @@
 import React from "react";
 import NavBar from "@/components/layout/header/NavBar";
 import TopicsSidebar from "../@sidebar/page";
-import { SearchBarContextProvider } from "@/components/context/SearchBarContext";
 
 export default async function QuestionDetailsLayout({ children, params }) {
   return (

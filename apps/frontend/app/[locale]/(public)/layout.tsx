@@ -1,23 +1,23 @@
 import React from "react";
-import NavBar from "@/components/layout/header/NavBar";
-import Header from "@/components/common/Header/Header";
 import Footer from "@/components/layout/footer";
 import { SearchBarContextProvider } from "@/components/context/SearchBarContext";
+import Script from "next/script";
 
 export const dynamic = "force-dynamic";
 
-export default function DashboardLayout({ children, sidebar }) {
+export default function DashboardLayout({ children }) {
   return (
     <>
       <SearchBarContextProvider>
-        <NavBar />
-        <Header />
+        {children}
+        <Footer />
       </SearchBarContextProvider>
-      <div className="container p-4.5  lg:py-8 flex-col lg:flex-row flex print:mt-0 print:max-w-none gap-12">
-        <div className="flex-1">{children}</div>
-        {sidebar}
-      </div>
-      <Footer />
+
+      <Script
+        defer
+        src="https://unpkg.com/@tinybirdco/flock.js"
+        data-token={process.env.NEXT_PUBLIC_ANALYTICS_TRACKER_TOKEN}
+      />
     </>
   );
 }

@@ -1,6 +1,6 @@
 import React from "react";
 import { getAgencyList } from "@/actions/public/agency";
-import TopicsSidebar from "../../../@sidebar/page";
+import TopicsSidebar from "../../../(main)/@sidebar/page";
 import NavBar from "@/components/layout/header/NavBar";
 import Header from "@/components/common/Header/Header";
 import { notFound } from "next/navigation";

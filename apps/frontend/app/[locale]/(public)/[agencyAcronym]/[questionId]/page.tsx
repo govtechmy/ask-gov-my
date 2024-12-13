@@ -1,7 +1,7 @@
 import { getAgencyList } from "@/actions/public/agency";
 import { searchQuestions, getQuestionById } from "@/actions/public/question";
 import { getAllTopics } from "@/actions/public/topic";
-import ThumbsCounter from "@/app/[locale]/[agencyAcronym]/[questionId]/thumb-counters";
+import ThumbsCounter from "./thumb-counters";
 import AgencyName from "@/components/common/AgencyName";
 import { notFound } from "next/navigation";
 import { Link } from "@/lib/i18n";
