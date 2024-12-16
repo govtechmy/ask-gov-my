@@ -1,7 +1,4 @@
-import React from "react";
 import { getAgencyList } from "@/actions/public/agency";
-import Footer from "@/components/layout/footer";
-import { SearchBarContextProvider } from "@/components/context/SearchBarContext";
 
 // All route not in agency list will return 404
 export const dynamicParams = false;
@@ -19,10 +16,5 @@ export async function generateStaticParams() {
 }
 
 export default async function AgencyLayout({ children, sidebar }) {
-  return (
-    <SearchBarContextProvider>
-      {children}
-      <Footer />
-    </SearchBarContextProvider>
-  );
+  return children;
 }

@@ -59,10 +59,11 @@ export default async function RootLayout({
             <AutoToast duration={3000} />
           </NextIntlClientProvider>
         </ThemeProvider>
+        <Script
+          src={`https://www.google.com/recaptcha/enterprise.js?render=${process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY}`}
+          strategy="beforeInteractive"
+        />
       </body>
-      <Script
-        src={`https://www.google.com/recaptcha/enterprise.js?render=${process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY}`}
-      />
     </html>
   );
 }
