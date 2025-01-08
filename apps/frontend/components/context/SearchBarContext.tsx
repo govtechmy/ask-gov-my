@@ -3,6 +3,7 @@
 import { searchQuestions } from "@/actions/public/question";
 import { Question } from "@/types/types";
 import { useDebounce } from "@uidotdev/usehooks";
+import { useSearchParams } from "next/navigation";
 import {
   createContext,
   PropsWithChildren,
@@ -64,7 +65,8 @@ function useHeaderSearchInputVisibility() {
 }
 
 export function SearchBarContextProvider({ children }: PropsWithChildren) {
-  const [query, setQuery] = useState("");
+  const searchParams = useSearchParams();
+  const [query, setQuery] = useState(searchParams.get("query") || "");
   const debouncedQuery = useDebounce(query, DEBOUNCE);
   const [results, setResults] = useState<Question[]>([]);
   const [isResultsPopupOpen, setIsResultsPopupOpen] = useState(false);
