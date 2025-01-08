@@ -16,6 +16,10 @@ export const routes = {
       user: "/admin/dashboard/user/",
     },
   },
+  guide: {
+    superAdmin: "/admin/dashboard/guide/super-admin",
+    staff: "/admin/dashboard/guide/staff",
+  },
 };
 
 const serializeQuery = (data: Record<string, any>) => {
