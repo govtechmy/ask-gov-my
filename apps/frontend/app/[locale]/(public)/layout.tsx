@@ -1,17 +1,14 @@
 import React from "react";
 import Footer from "@/components/layout/footer";
-import { SearchBarContextProvider } from "@/components/context/SearchBarContext";
 import Script from "next/script";
 
 export const dynamic = "force-dynamic";
 
-export default function DashboardLayout({ children }) {
+export default function PublicLayout({ children }) {
   return (
     <>
-      <SearchBarContextProvider>
-        {children}
-        <Footer />
-      </SearchBarContextProvider>
+      {children}
+      <Footer />
 
       <Script
         defer
