@@ -56,7 +56,7 @@ export function AddAgencyDialog() {
               <Translator namespace="AgencyForm.add_new" />
             </DialogTitle>
             <DialogDescription className="sr-only">
-              <Translator namespace="AgencyForm.add_new" />
+              <Translator namespace="AgencyForm.add_new" tag="span" />
             </DialogDescription>
           </DialogHeader>
           <div className="flex-1 my-5">

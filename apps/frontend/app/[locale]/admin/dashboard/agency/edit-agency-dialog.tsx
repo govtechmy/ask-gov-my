@@ -61,7 +61,7 @@ export function EditAgencyDialog({ agency }: EditAgencyDialogProps) {
               <Translator namespace="AgencyForm.setting" />
             </DialogTitle>
             <DialogDescription className="sr-only">
-              <Translator namespace="AgencyForm.setting" />
+              <Translator namespace="AgencyForm.setting" tag="span" />
             </DialogDescription>
           </DialogHeader>
           <div className="flex-1 my-5">

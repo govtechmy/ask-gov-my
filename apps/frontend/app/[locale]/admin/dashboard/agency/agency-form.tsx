@@ -32,7 +32,7 @@ interface AgencyFormProviderProps extends PropsWithChildren {
 
 const ExtendedAgencyFormSchema = AgencyFormSchema.extend({
   // An additional field to store logo that will be uploaded on submit
-  logo_file: z.instanceof(File).nullable(),
+  logo_file: z.instanceof(File).nullable().default(null),
 });
 
 async function uploadLogo(
