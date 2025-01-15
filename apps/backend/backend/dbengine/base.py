@@ -15,11 +15,11 @@ from psycopg2 import OperationalError, errorcodes
 
 import json
 
-from backend.settings import DATABASE_SECRETSMANAGER_ARN
+from backend.settings import DATABASE_SECRETSMANAGER_ARN, AWS_SECRETS_MANAGER_REGION_NAME
 
 class DatabaseCredentials:
     def __init__(self):
-        client = botocore.session.get_session().create_client('secretsmanager')
+        client = botocore.session.get_session().create_client('secretsmanager', region_name=AWS_SECRETS_MANAGER_REGION_NAME)
         cache_config = SecretCacheConfig()
         self.cache_secrets_manager = SecretCache(config=cache_config, client=client)
         self.secret_id = DATABASE_SECRETSMANAGER_ARN
