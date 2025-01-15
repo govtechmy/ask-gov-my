@@ -107,7 +107,7 @@ WSGI_APPLICATION = "backend.wsgi.application"
 
 DATABASES = {
     "default": {
-        "ENGINE": "django.db.backends.postgresql",
+        "ENGINE": "backend.dbengine",
         "NAME": os.getenv("DB_NAME"),
         "USER": os.getenv("DB_USER"),
         "PASSWORD": os.getenv("DB_PASSWORD"),
@@ -116,6 +116,7 @@ DATABASES = {
     }
 }
 
+DATABASE_SECRETSMANAGER_ARN = os.getenv("DB_SECRETSMANAGER_ARN")
 
 
 # Google cloud settings - used in recaptcha flows
