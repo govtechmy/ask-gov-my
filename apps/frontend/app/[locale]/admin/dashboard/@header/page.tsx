@@ -1,6 +1,11 @@
 import React from "react";
 import { cn } from "@askgovmy/utils";
-import { AskLogoIcon, StyledDisplay } from "@askgovmy/ui";
+import {
+  AskLogoIcon,
+  Button,
+  QuestionCircleIcon,
+  StyledDisplay,
+} from "@askgovmy/ui";
 import { Link } from "@/lib/i18n";
 import { route } from "@/lib/routes";
 import ThemeToggle from "@/components/layout/header/theme-toggle";
@@ -44,6 +49,19 @@ const AdminHeader: FSP = ({ params, context }) => {
           <NavLinks />
         </div>
         <div className="flex gap-2 items-center">
+          {session && (
+            <Link
+              href={
+                session.user.role === "super_admin"
+                  ? route("guide.superAdmin", {})
+                  : route("guide.staff", {})
+              }
+            >
+              <Button title="User guide" variant="tertiary" size="icon">
+                <QuestionCircleIcon />
+              </Button>
+            </Link>
+          )}
           <ThemeToggle />
           <LocaleSwitch />
           <UserPopover />

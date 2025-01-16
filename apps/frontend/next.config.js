@@ -1,5 +1,6 @@
 const createNextIntlPlugin = require("next-intl/plugin");
 const path = require("path");
+const createMDX = require("@next/mdx");
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
@@ -19,8 +20,11 @@ const nextConfig = {
     outputFileTracingRoot: path.join(__dirname, "../../"),
     instrumentationHook: true,
   },
+  pageExtensions: ["js", "jsx", "md", "mdx", "ts", "tsx"],
 };
+
+const withMDX = createMDX({});
 
 const withNextIntl = createNextIntlPlugin("./lib/i18n.ts");
 
-module.exports = withNextIntl(nextConfig);
+module.exports = withNextIntl(withMDX(nextConfig));
