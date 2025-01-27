@@ -1,6 +1,5 @@
 "use client";
 import React, { useState } from "react";
-import { submitQuestion } from "@/actions/public/question";
 import { useTranslations } from "next-intl";
 import {
   Button,
@@ -11,46 +10,18 @@ import {
   DialogFooter,
   DialogHeader,
   DialogTitle,
-  InfoIcon,
-  MailLogoIcon,
   PlusIcon,
   QuestionCircleIcon,
   QuestionMarkBoxIcon,
   TickCheckCircleIcon,
 } from "@askgovmy/ui";
+import { AskQuestionForm } from "./AskQuestionForm";
 
 const AskQuestion = () => {
   const [isClicked, setIsClicked] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isSuccessModalOpen, setIsSuccessModalOpen] = useState(false);
-  const [question, setQuestion] = useState("");
-  const [email, setEmail] = useState("");
   const t = useTranslations("Askquestions");
-  const [isFocused, setIsFocused] = useState(false);
-  const [isSubmitting, setIsSubmitting] = useState(false);
-
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (question && email) {
-      try {
-        setIsSubmitting(true);
-        const recaptchaToken = await window.grecaptcha.enterprise.execute(
-          process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY!,
-          { action: "SUBMIT_QUESTION" }
-        );
-        await submitQuestion({
-          question,
-          email,
-          recaptcha_token: recaptchaToken,
-        });
-        handleModalCloseOpenModalSubmit();
-      } catch (error) {
-        console.error("Error submitting question:", error);
-      } finally {
-        setIsSubmitting(false);
-      }
-    }
-  };
 
   const handleClick = () => {
     setIsClicked(true);
@@ -119,119 +90,7 @@ const AskQuestion = () => {
               {t("ask_new_question")}
             </DialogDescription>
           </DialogHeader>
-          <form onSubmit={handleSubmit} className="flex-1 relative">
-            <div className="text-left">
-              <div className="text-base font-medium pb-0 mb-0 text-black-700">
-                {t("your_question")}
-              </div>
-              <textarea
-                placeholder={t("type_your_question")}
-                className="mt-[6px] h-[120px] text-left pl-3 pt-2 w-full rounded-lg shadow-sm border-[1px] border-outline-200
-                     focus:border-none focus:outline-none focus:shadow-[0_0_0_1px_#B794FF,0_0_0_4px_#DED1FA] focus:dark:shadow-[0_0_0_1px_#4F20B2,0_0_0_4px_#281B46]
-                     placeholder:text-black-900 placeholder:font-normal placeholder:text-base"
-                name="question"
-                value={question}
-                onChange={(e) => setQuestion(e.target.value)}
-                required
-              ></textarea>
-            </div>
-
-            <div className="text-left mt-4">
-              {/* this is email input  */}
-              <div className="mb-[4px] text-base font-medium pb-0 text-black-700">
-                {t("notify_me")}
-              </div>
-              <div
-                className={`flex items-center border-[1px] border-outline-200 shadow-sm rounded-md h-10 w-full ${
-                  isFocused
-                    ? "shadow-[0_0_0_1px_#B794FF,0_0_0_4px_#DED1FA] dark:shadow-[0_0_0_1px_#4F20B2,0_0_0_4px_#281B46]"
-                    : ""
-                }`}
-              >
-                <div className="pl-3 pr-2">
-                  <MailLogoIcon />
-                </div>
-                <input
-                  placeholder={t("your_email")}
-                  className="w-full outline-none"
-                  name="email"
-                  type="email"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  onFocus={() => setIsFocused(true)}
-                  onBlur={() => setIsFocused(false)}
-                  required
-                />
-              </div>
-
-              <div className="text-sm font-normal pt-[6px] mb-6 text-dim-500">
-                {t("email_updates")}
-              </div>
-
-              <div className="flex border-[1px] border-askmygovbrand-200 shadow-sm rounded-md w-full bg-askmygovbrand-50">
-                <div className="pl-3 pt-3 pr-[10px]">
-                  <InfoIcon className="stroke-askmygovbrand-600" />
-                </div>
-                <div className="items-center text-sm font-normal text-black-700 py-3 pr-3">
-                  <div>
-                    <div>
-                      {t("response_time_p1")}
-                      <span className="text-askmygovbrand-600 font-semibold">
-                        {" "}
-                        {t("response_time_p2")}{" "}
-                      </span>
-                      {t("response_time_p3")}
-                    </div>
-
-                    <div className="pt-3">
-                      {t("response_public_p1")}
-                      <span className="text-askmygovbrand-600 font-semibold">
-                        {" "}
-                        {t("response_public_p2")}{" "}
-                      </span>
-                      {t("response_public_p3")}
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <div className="absolute bottom-0 md:static flex flex-col items-center pt-9 pb-[18px]">
-              <Button
-                type="submit"
-                onClick={handleSubmit}
-                variant={"primary"}
-                disabled={isSubmitting}
-              >
-                {t("submit")}
-              </Button>
-              <div className="text-dim-500 font-normal text-sm text-pretty text-center mt-3">
-                <p className="mb-3">{t("terms")}</p>
-                <p>
-                  {t.rich("recaptcha_terms", {
-                    ["privacy-policy"]: (chunks) => (
-                      <a
-                        target="_blank"
-                        href="https://policies.google.com/privacy"
-                        className="underline"
-                      >
-                        {chunks}
-                      </a>
-                    ),
-                    ["terms-of-service"]: (chunks) => (
-                      <a
-                        target="_blank"
-                        href="https://policies.google.com/terms"
-                        className="underline"
-                      >
-                        {chunks}
-                      </a>
-                    ),
-                  })}
-                </p>
-              </div>
-            </div>
-          </form>
+          <AskQuestionForm onSubmit={handleModalCloseOpenModalSubmit} />
         </DialogContent>
       </Dialog>
 
