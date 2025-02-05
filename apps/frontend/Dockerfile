@@ -4,6 +4,7 @@ ENV PNPM_HOME="/pnpm"
 ENV PATH="$PNPM_HOME:$PATH"
 
 RUN corepack enable
+RUN corepack prepare pnpm@9.11.0 --activate
 WORKDIR /app
 
 # Install turbo
@@ -51,4 +52,4 @@ COPY --from=builder --chown=nextjs:nodejs /app/apps/frontend/public ./apps/front
 
 WORKDIR /app/apps/frontend
 
-CMD node server.js
+CMD ["node", "server.js"]
